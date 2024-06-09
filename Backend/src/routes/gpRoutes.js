@@ -1,9 +1,9 @@
 import express from "express";
-import { getGpByDistrict, getGpByTaluk } from "../controllers/gpController.js";
+import { createGP, getGpByLocation } from "../controllers/gpController.js";
 
 const router = express.Router();
 
-router.route("/dist/:dist").get(getGpByDistrict);
-router.route("/taluk/:taluk").get(getGpByTaluk);
+router.route("/get").get(getGpByLocation);
+router.route("/create").post(createGP);
 
 export default router;

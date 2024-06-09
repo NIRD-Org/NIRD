@@ -1,43 +1,21 @@
 import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
 import { KPIQuestionsModel } from "../models/kpiQuestionsModel.js";
 import { Errorhandler } from "../utils/errorHandler.js";
-
+const getNewId = async () => {
+  try {
+    const maxDoc = await KPIQuestionsModel.findOne().sort("-id").exec();
+    const maxId = maxDoc ? maxDoc.id : 0;
+    return maxId + 1;
+  } catch (error) {
+    return next(new Errorhandler("failed to get new id", 500));
+  }
+};
 export const createKPIQuestion = CatchAsyncError(async (req, res, next) => {
   try {
-    const {
-      id,
-      theme_id,
-      kpi_id,
-      question_name,
-      input_type,
-      max_range,
-      question_type,
-      status,
-      created_by,
-      created_at,
-      modified_by,
-      modified_at,
-      flag,
-    } = req.body;
-
-    const newKPIQuestion = new KPIQuestionsModel({
-      id,
-      theme_id,
-      kpi_id,
-      question_name,
-      input_type,
-      max_range,
-      question_type,
-      status,
-      created_by,
-      created_at,
-      modified_by,
-      modified_at,
-      flag,
-    });
-
+    const id = await getNewId();
+    req.body.id = id.toString();
+    const newKPIQuestion = new KPIQuestionsModel(req.body);
     await newKPIQuestion.save();
-
     res.status(201).json({
       success: true,
       message: "KPI Question created successfully",

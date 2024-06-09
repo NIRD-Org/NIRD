@@ -1,39 +1,21 @@
 import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
 import { StateModel } from "../models/statesModel.js";
 import { Errorhandler } from "../utils/errorHandler.js";
-
+const getNewId = async () => {
+  try {
+    const maxDoc = await StateModel.findOne().sort("-id").exec();
+    const maxId = maxDoc ? maxDoc.id : 0;
+    return maxId + 1;
+  } catch (error) {
+    return next(new Errorhandler("failed to get new id", 500));
+  }
+};
 export const createState = CatchAsyncError(async (req, res, next) => {
   try {
-    const {
-      id,
-      lgd_code,
-      name,
-      state_shortcode,
-      country_id,
-      state_icon,
-      status,
-      created_by,
-      created_at,
-      modified_by,
-      modified_at,
-    } = req.body;
-
-    const newState = new StateModel({
-      id,
-      lgd_code,
-      name,
-      state_shortcode,
-      country_id,
-      state_icon,
-      status,
-      created_by,
-      created_at,
-      modified_by,
-      modified_at,
-    });
-
+    const id = await getNewId();
+    req.body.id = id.toString();
+    const newState = new StateModel(req.body);
     await newState.save();
-
     res.status(201).json({
       success: true,
       message: "State created successfully",

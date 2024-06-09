@@ -1,45 +1,21 @@
 import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
 import { KPIApprovalModel } from "../models/kpiApprovalModel.js";
 import { Errorhandler } from "../utils/errorHandler.js";
-
+const getNewId = async () => {
+  try {
+    const maxDoc = await KPIApprovalModel.findOne().sort("-id").exec();
+    const maxId = maxDoc ? maxDoc.id : 0;
+    return maxId + 1;
+  } catch (error) {
+    return next(new Errorhandler("failed to get new id", 500));
+  }
+};
 export const createKPIApproval = CatchAsyncError(async (req, res, next) => {
   try {
-    const {
-      id,
-      state_id,
-      district_id,
-      taluk_id,
-      gp_id,
-      theme_id,
-      decision,
-      submitted_id,
-      remarks,
-      status,
-      created_by,
-      created_at,
-      modified_by,
-      modified_at,
-    } = req.body;
-
-    const newKPIApproval = new KPIApprovalModel({
-      id,
-      state_id,
-      district_id,
-      taluk_id,
-      gp_id,
-      theme_id,
-      decision,
-      submitted_id,
-      remarks,
-      status,
-      created_by,
-      created_at,
-      modified_by,
-      modified_at,
-    });
-
+    const id = await getNewId();
+    req.body.id = id.toString();
+    const newKPIApproval = new KPIApprovalModel(req.body);
     await newKPIApproval.save();
-
     res.status(201).json({
       success: true,
       message: "KPI Approval created successfully",

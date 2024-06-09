@@ -1,5 +1,4 @@
 import mongoose, { Schema } from "mongoose";
-
 const districtSchema = new Schema({
   id: {
     type: String,

@@ -2,42 +2,22 @@ import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
 import { GpModel } from "../models/gpModel.js";
 import { Errorhandler } from "../utils/errorHandler.js";
 
+const getNewId = async () => {
+  try {
+    const maxDoc = await GpModel.findOne().sort("-id").exec();
+    const maxId = maxDoc ? maxDoc.id : 0;
+    return maxId + 1;
+  } catch (error) {
+    return next(new Errorhandler("failed to get new id", 500));
+  }
+};
+
 export const createGP = CatchAsyncError(async (req, res, next) => {
   try {
-    const {
-      id,
-      state_id,
-      district_id,
-      taluk_id,
-      lgd_code,
-      lgd_code_feb11_2021,
-      name,
-      is_maped_to_another_district,
-      status,
-      created_by,
-      created_at,
-      modified_by,
-      modified_at,
-    } = req.body;
-
-    const newGP = new GP({
-      id,
-      state_id,
-      district_id,
-      taluk_id,
-      lgd_code,
-      lgd_code_feb11_2021,
-      name,
-      is_maped_to_another_district,
-      status,
-      created_by,
-      created_at,
-      modified_by,
-      modified_at,
-    });
-
+    const id = await getNewId();
+    req.body.id = id.toString();
+    const newGP = new GpModel(req.body);
     await newGP.save();
-
     res.status(201).json({
       success: true,
       message: "GP created successfully",
@@ -48,28 +28,24 @@ export const createGP = CatchAsyncError(async (req, res, next) => {
   }
 });
 
-export const getGpByDistrict = CatchAsyncError(async (req, res, next) => {
+export const getGpByLocation = CatchAsyncError(async (req, res, next) => {
   try {
-    const gram = await GpModel.find({ dist_id: req.params.dist });
-    if (!gram || gram.length === 0) {
-      return next(new Errorhandler("No Gram Panchayat Found", 404));
-    }
-    res.status(200).json({
-      success: true,
-      message: "Gram Panchayat Fetched Successfully",
-      gram,
-    });
-  } catch (error) {
-    return next(new Errorhandler("Failed to get Gram Panchayat", 500));
-  }
-});
+    const { state, dist, taluk } = req.query;
 
-export const getGpByTaluk = CatchAsyncError(async (req, res, next) => {
-  try {
-    const gram = await GpModel.find({ taluk_id: req.params.taluk });
+    let filter = {};
+    if (state) filter.state_id = state;
+    if (dist) {
+      filter.dist_id = dist;
+    }
+    if (taluk) {
+      filter.taluk_id = taluk;
+    }
+
+    const gram = await GpModel.find(filter);
     if (!gram || gram.length === 0) {
       return next(new Errorhandler("No Gram Panchayat Found", 404));
     }
+
     res.status(200).json({
       success: true,
       message: "Gram Panchayat Fetched Successfully",

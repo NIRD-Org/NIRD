@@ -3,41 +3,21 @@
 import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
 import { KPIModel } from "../models/kpiModel.js";
 import { Errorhandler } from "../utils/errorHandler.js";
-
+const getNewId = async () => {
+  try {
+    const maxDoc = await KPIModel.findOne().sort("-id").exec();
+    const maxId = maxDoc ? maxDoc.id : 0;
+    return maxId + 1;
+  } catch (error) {
+    return next(new Errorhandler("failed to get new id", 500));
+  }
+};
 export const createKPI = CatchAsyncError(async (req, res, next) => {
   try {
-    const {
-      id,
-      theme_id,
-      kpi_name,
-      max_range,
-      Input_Type,
-      status,
-      weightage,
-      created_by,
-      created_at,
-      modified_by,
-      modified_at,
-      flag,
-    } = req.body;
-
-    const newKPI = new KPIModel({
-      id,
-      theme_id,
-      kpi_name,
-      max_range,
-      Input_Type,
-      status,
-      weightage,
-      created_by,
-      created_at,
-      modified_by,
-      modified_at,
-      flag,
-    });
-
+    const id = await getNewId();
+    req.body.id = id.toString();
+    const newKPI = new KPIModel(req.body);
     await newKPI.save();
-
     res.status(201).json({
       success: true,
       message: "KPI created successfully",

@@ -2,40 +2,22 @@ import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
 import { DistrictModel } from "../models/districtModel.js";
 import { Errorhandler } from "../utils/errorHandler.js";
 
+const getNewId = async () => {
+  try {
+    const maxDoc = await DistrictModel.findOne().sort("-id").exec();
+    const maxId = maxDoc ? maxDoc.id : 0;
+    return maxId + 1;
+  } catch (error) {
+    return next(new Errorhandler("failed to get new id", 500));
+  }
+};
+
 export const createDistrict = CatchAsyncError(async (req, res, next) => {
   try {
-    const {
-      id,
-      lgd_code,
-      state_id,
-      name,
-      special_area,
-      special_area_id,
-      aspirational_district,
-      status,
-      created_by,
-      created_at,
-      modified_by,
-      modified_at,
-    } = req.body;
-
-    const newDistrict = new DistrictModel({
-      id,
-      lgd_code,
-      state_id,
-      name,
-      special_area,
-      special_area_id,
-      aspirational_district,
-      status,
-      created_by,
-      created_at,
-      modified_by,
-      modified_at,
-    });
-
+    const id = await getNewId();
+    req.body.id = id.toString();
+    const newDistrict = new DistrictModel(req.body);
     await newDistrict.save();
-
     res.status(201).json({
       success: true,
       message: "District created successfully",

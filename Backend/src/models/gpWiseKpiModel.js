@@ -43,7 +43,7 @@ const gpWiseKpiSchema = new mongoose.Schema({
   question_id: {
     type: String,
     required: true,
-    ref: "Question",
+    // ref: "Question",
   },
   max_range: {
     type: Number,
