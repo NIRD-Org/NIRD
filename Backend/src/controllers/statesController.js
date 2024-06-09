@@ -2,6 +2,48 @@ import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
 import { StateModel } from "../models/statesModel.js";
 import { Errorhandler } from "../utils/errorHandler.js";
 
+export const createState = CatchAsyncError(async (req, res, next) => {
+  try {
+    const {
+      id,
+      lgd_code,
+      name,
+      state_shortcode,
+      country_id,
+      state_icon,
+      status,
+      created_by,
+      created_at,
+      modified_by,
+      modified_at,
+    } = req.body;
+
+    const newState = new StateModel({
+      id,
+      lgd_code,
+      name,
+      state_shortcode,
+      country_id,
+      state_icon,
+      status,
+      created_by,
+      created_at,
+      modified_by,
+      modified_at,
+    });
+
+    await newState.save();
+
+    res.status(201).json({
+      success: true,
+      message: "State created successfully",
+      state: newState,
+    });
+  } catch (error) {
+    return next(new Errorhandler("Failed to create state", 500));
+  }
+});
+
 export const getAllStates = CatchAsyncError(async (req, res, next) => {
   try {
     const states = await StateModel.find();

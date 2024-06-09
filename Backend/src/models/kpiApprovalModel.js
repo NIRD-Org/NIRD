@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
-const gpWiseKpiSchema = new mongoose.Schema({
+const kpiApprovalSchema = new Schema({
   id: {
     type: String,
     required: true,
@@ -26,46 +26,24 @@ const gpWiseKpiSchema = new mongoose.Schema({
     required: true,
     ref: "GramPanchayat",
   },
-  date: {
-    type: Date,
-    required: true,
-  },
   theme_id: {
     type: String,
     required: true,
     ref: "Theme",
   },
-  kpi_id: {
+  decision: {
     type: String,
     required: true,
-    ref: "KPI",
   },
-  question_id: {
+  submitted_id: {
     type: String,
     required: true,
-    ref: "Question",
-  },
-  max_range: {
-    type: Number,
-    required: true,
-  },
-  input_data: {
-    type: Number,
-    required: true,
-  },
-  score: {
-    type: Number,
-    default: null,
   },
   remarks: {
     type: String,
-    default: "",
+    default: null,
   },
   status: {
-    type: String,
-    required: true,
-  },
-  submitteed_id: {
     type: String,
     required: true,
   },
@@ -76,6 +54,7 @@ const gpWiseKpiSchema = new mongoose.Schema({
   created_at: {
     type: Date,
     required: true,
+    default: Date.now,
   },
   modified_by: {
     type: String,
@@ -84,7 +63,11 @@ const gpWiseKpiSchema = new mongoose.Schema({
   modified_at: {
     type: Date,
     required: true,
+    default: Date.now,
   },
 });
 
-export const GpWiseKpiModel = mongoose.model("GpWiseKpi", gpWiseKpiSchema);
+export const KPIApprovalModel = mongoose.model(
+  "KPIApproval",
+  kpiApprovalSchema
+);

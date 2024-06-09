@@ -2,6 +2,50 @@ import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
 import { TalukModel } from "../models/talukModel.js";
 import { Errorhandler } from "../utils/errorHandler.js";
 
+export const createTaluk = CatchAsyncError(async (req, res, next) => {
+  try {
+    const {
+      id,
+      state_id,
+      dist_id,
+      lgd_code,
+      lgd_code_feb11_2021,
+      name,
+      is_maped_to_another_district,
+      status,
+      created_by,
+      created_at,
+      modified_by,
+      modified_at,
+    } = req.body;
+
+    const newTaluk = new TalukModel({
+      id,
+      state_id,
+      dist_id,
+      lgd_code,
+      lgd_code_feb11_2021,
+      name,
+      is_maped_to_another_district,
+      status,
+      created_by,
+      created_at,
+      modified_by,
+      modified_at,
+    });
+
+    await newTaluk.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Taluk created successfully",
+      taluk: newTaluk,
+    });
+  } catch (error) {
+    return next(new Errorhandler("Failed to create taluk", 500));
+  }
+});
+
 // Controller to get all taluks
 export const getAllTaluks = CatchAsyncError(async (req, res, next) => {
   try {
