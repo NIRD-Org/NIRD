@@ -132,7 +132,6 @@ export const taluks = [
   },
 ];
 
-
 export const states = [
   {
     id: "S001",
@@ -278,6 +277,26 @@ export const gpWiseKpi = [
   },
 ];
 
+export const kpiApprovals = [
+  {
+    id: "1",
+    state_id: "State1",
+    district_id: "District1",
+    taluk_id: "Taluk1",
+    gp_id: "GP1",
+    theme_id: "Theme1",
+    decision: "Approved",
+    submitted_id: "User1",
+    remarks: "Well done",
+    status: "Active",
+    created_by: "Admin",
+    created_at: "2021-01-01T00:00:00Z",
+    modified_by: "Admin",
+    modified_at: "2021-01-01T00:00:00Z",
+  },
+  // Add more KPI approvals
+];
+
 
 export const kpiData = [
   {
@@ -313,6 +332,11 @@ export const kpiData = [
 export const sidebarItems = [
     {
       icon: Home,
+      title: "Districts",
+      link: "/admin/districts",
+    },
+    {
+      icon: Home,
       title: "Taluks",
       link: "/admin/taluks",
     },
@@ -335,5 +359,10 @@ export const sidebarItems = [
       icon: Home,
       title: "Gp wise kpi",
       link: "/admin/gp-wise-kpi",
+    },
+    {
+      icon: Home,
+      title: "Kpi approvals",
+      link: "/admin/kpi-approvals",
     },
   ];

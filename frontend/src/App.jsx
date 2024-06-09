@@ -9,11 +9,13 @@ import "./App.css";
 import Layout from "./Layout";
 import HomePage from "./Pages/HomePage";
 import AdminPage from "./Pages/admin/AdminPage";
-import TalukPage from "./components/admin/TalukPage";
-import GpPage from "./components/admin/GpPage";
-import KpiPage from "./components/admin/KpiPage";
-import ThemePage from "./components/admin/ThemePage";
-import GpWiseKpiPage from "./components/admin/GpWiseKpiPage";
+import TalukPage from "./components/admin/taluka/TalukPage";
+import GpPage from "./components/admin/gp/GpPage";
+import KpiPage from "./components/admin/kpi/KpiPage";
+import ThemePage from "./components/admin/theme/ThemePage";
+import GpWiseKpiPage from "./components/admin/gp-wise-taluka/GpWiseKpiPage";
+import DistrictPage from "./components/admin/district/DistrictPage";
+import KPIApprovalPage from "./components/admin/kpi-approval/KPIApprovalPage";
 
 function App() {
   const router = createBrowserRouter(
@@ -29,6 +31,8 @@ function App() {
           <Route path="kpi" element={<KpiPage />} />
           <Route path="themes" element={<ThemePage />} />
           <Route path="gp-wise-kpi" element={<GpWiseKpiPage />} />
+          <Route path="districts" element={<DistrictPage />} />
+          <Route path="kpi-approvals" element={<KPIApprovalPage />} />
         </Route>
       </Route>
     )
