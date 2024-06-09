@@ -1,34 +1,36 @@
 import mongoose, { Schema } from "mongoose";
-const districtSchema = new Schema({
+
+const kpiQuestionsSchema = new Schema({
   id: {
     type: String,
     required: true,
     unique: true,
   },
-  lgd_code: {
+  theme_id: {
+    type: String,
+    required: true,
+    ref: "Theme",
+  },
+  kpi_id: {
+    type: String,
+    required: true,
+    ref: "KPI",
+  },
+  question_name: {
     type: String,
     required: true,
   },
-  state_id: {
-    type: String,
-    required: true,
-    ref: "State",
-  },
-  name: {
+  input_type: {
     type: String,
     required: true,
   },
-  special_area: {
-    type: String,
-    default: "",
+  max_range: {
+    type: Number,
+    default: 0,
   },
-  special_area_id: {
+  question_type: {
     type: String,
-    default: "",
-  },
-  aspirational_district: {
-    type: String,
-    default: null,
+    required: true,
   },
   status: {
     type: String,
@@ -52,6 +54,13 @@ const districtSchema = new Schema({
     required: true,
     default: Date.now,
   },
+  flag: {
+    type: String,
+    default: null,
+  },
 });
 
-export const DistrictModel = mongoose.model("District", districtSchema);
+export const KPIQuestionsModel = mongoose.model(
+  "KPIQuestion",
+  kpiQuestionsSchema
+);

@@ -1,6 +1,18 @@
-import React from "react";
-import MultiSelect from "../../MultiSelect";
+import React, { useEffect, useState } from "react";
+import SelectComponent from "../../SelectComponent";
+import GpProfileCard from "../GpProfileCard";
+import API from "../../../utils/API";
 const GpProfile = () => {
+  const [gpData, setGpData] = useState([]);
+  const getAllKpiData = async () => {
+    const { data } = await API.get(`/api/v1/gp-wise-kpi?page=${1}`);
+    setGpData(data?.data);
+  };
+
+  useEffect(() => {
+    getAllKpiData();
+  }, []);
+
   const stateOptions = [
     { value: "all", label: "All States" },
     { value: "state1", label: "State 1" },
@@ -29,30 +41,29 @@ const GpProfile = () => {
     { value: "Gram3", label: "Gram 3" },
   ];
 
+  const handlePageClick = () => {};
+
   return (
     <div>
       <div className="flex flex-col md:flex-row items-center gap-10 justify-between mb-4">
-        <div className="flex flex-wrap items-center gap-2 sm:gap-5 lg:space-x-10">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-5">
           <div className="flex flex-col">
             <label className="text-gray-600 text-sm mb-1">Select State</label>
-            <MultiSelect options={stateOptions} placeholder="Select States" />
+            <SelectComponent data={stateOptions} name="District" />
           </div>
           <div className="flex flex-col">
             <label className="text-gray-600 text-sm mb-1">
               Select District
             </label>
-            <MultiSelect
-              options={districtOptions}
-              placeholder="Select Districts"
-            />
+            <SelectComponent data={districtOptions} name="District" />
           </div>
           <div className="flex flex-col">
             <label className="text-gray-600 text-sm mb-1">Select Blocks</label>
-            <MultiSelect options={blockOptions} placeholder="Select Block" />
+            <SelectComponent data={blockOptions} name="District" />
           </div>
           <div className="flex flex-col">
             <label className="text-gray-600 text-sm mb-1">Select GP</label>
-            <MultiSelect options={GpOptions} placeholder="Select GP" />
+            <SelectComponent data={GpOptions} name="District" />
           </div>
         </div>
         <div className="flex items-center space-x-2">
@@ -79,7 +90,22 @@ const GpProfile = () => {
           </button>
         </div>
       </div>
+      <hr />
       <p>Showing 1 to 12 of 500 Results</p>
+      <div className="w-fit mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 md:grid-cols-3 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-5">
+        {Array.isArray(gpData) &&
+          gpData?.map((gp) => (
+            <GpProfileCard
+              key={gp._id}
+              gpDistrict={gp?.district.name}
+              gpName={gp?.gp.name}
+              gpState={gp?.state.name}
+              gptaluk={gp?.taluk.name}
+            />
+          ))}
+      </div>
+
+      {/* Pagination */}
     </div>
   );
 };

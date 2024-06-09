@@ -1,32 +1,45 @@
 import mongoose, { Schema } from "mongoose";
-const districtSchema = new Schema({
+
+const kpiApprovalSchema = new Schema({
   id: {
     type: String,
     required: true,
     unique: true,
-  },
-  lgd_code: {
-    type: String,
-    required: true,
   },
   state_id: {
     type: String,
     required: true,
     ref: "State",
   },
-  name: {
+  district_id: {
+    type: String,
+    required: true,
+    ref: "District",
+  },
+  taluk_id: {
+    type: String,
+    required: true,
+    ref: "Taluk",
+  },
+  gp_id: {
+    type: String,
+    required: true,
+    ref: "GramPanchayat",
+  },
+  theme_id: {
+    type: String,
+    required: true,
+    ref: "Theme",
+  },
+  decision: {
     type: String,
     required: true,
   },
-  special_area: {
+  submitted_id: {
     type: String,
-    default: "",
+    required: true,
   },
-  special_area_id: {
-    type: String,
-    default: "",
-  },
-  aspirational_district: {
+  remarks: {
     type: String,
     default: null,
   },
@@ -54,4 +67,7 @@ const districtSchema = new Schema({
   },
 });
 
-export const DistrictModel = mongoose.model("District", districtSchema);
+export const KPIApprovalModel = mongoose.model(
+  "KPIApproval",
+  kpiApprovalSchema
+);

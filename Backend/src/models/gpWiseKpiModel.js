@@ -9,18 +9,22 @@ const gpWiseKpiSchema = new mongoose.Schema({
   state_id: {
     type: String,
     required: true,
+    ref: "State",
   },
   district_id: {
     type: String,
     required: true,
+    ref: "District",
   },
   taluk_id: {
     type: String,
     required: true,
+    ref: "Taluk",
   },
   gp_id: {
     type: String,
     required: true,
+    ref: "GramPanchayat",
   },
   date: {
     type: Date,
@@ -29,14 +33,17 @@ const gpWiseKpiSchema = new mongoose.Schema({
   theme_id: {
     type: String,
     required: true,
+    ref: "Theme",
   },
   kpi_id: {
     type: String,
     required: true,
+    ref: "KPI",
   },
   question_id: {
     type: String,
     required: true,
+    // ref: "Question",
   },
   max_range: {
     type: Number,
