@@ -23,6 +23,8 @@ function App() {
       <Route>
         <Route path="/" element={<Layout />}>
           <Route path="" element={<HomePage />} />
+        <Route path="/gp-profile/:id" element={<KPIDetails />} />
+
         </Route>
         <Route path="/admin" element={<AdminPage />}>
           <Route index element={<TalukPage />} />
