@@ -32,7 +32,7 @@ function App() {
           <Route path="" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/gp-profile/:id" element={<KPIDetails />} />
+          <Route path="/gp-profile" element={<KPIDetails />} />
           <Route path="project" element={<ProjectPage />} />
         </Route>
         <Route path="/admin" element={<AdminPage />}>
