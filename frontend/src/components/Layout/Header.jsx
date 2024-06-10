@@ -4,7 +4,7 @@ import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { useAuthContext } from "@/context/AuthContext";
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const {user} = useAuthContext();
+  const { user } = useAuthContext();
   console.log(user);
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -18,7 +18,7 @@ const Header = () => {
           {" "}
           <div className="">
             <img
-              src="src\assets\images\logo\nirdpr.png"
+              src="/logo/nirdpr.png"
               alt="NIRDPR Logo"
               className="h-12 w-auto"
             />
@@ -101,9 +101,16 @@ const Header = () => {
 
       <div className="md:hidden  bg-[#004B86] p-4 flex justify-between items-center">
         <div className="flex-shrink-0">
-          <img src="src\assets\images\logo\nirdpr.png" alt="NIRDPR Logo" className="h-12 w-auto" />
+          <img
+            src="src\assets\images\logo\nirdpr.png"
+            alt="NIRDPR Logo"
+            className="h-12 w-auto"
+          />
         </div>
-        <button onClick={toggleSidebar} className="text-white focus:outline-none">
+        <button
+          onClick={toggleSidebar}
+          className="text-white focus:outline-none"
+        >
           {isOpen ? <AiOutlineClose size={24} /> : <AiOutlineMenu size={24} />}
         </button>
         {isOpen && (

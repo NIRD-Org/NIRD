@@ -2,9 +2,10 @@ import ThemeData from "@/components/KIP/ThemeData";
 import Themes from "@/components/KIP/Themes";
 import API from "@/utils/API";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 
 const KPIDetails = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [gpData, setGpData] = useState([]);
   const [stateOptions, setStateOptions] = useState([]);
   const [districtOptions, setDistrictOptions] = useState([]);
@@ -43,7 +44,7 @@ const KPIDetails = () => {
 
   const getAllGp = async () => {
     const { data } = await API.get(
-      `/api/v1/gram/get?state=${state}&dist=${district}`
+      `/api/v1/gram/get?state=${state}&taluk=${taluk}&dist=${district}`
     );
     setGpOptions(data.gram);
   };
@@ -57,11 +58,32 @@ const KPIDetails = () => {
   }, [state]);
 
   useEffect(() => {
+    setTaluk("");
+    setGp("");
     if (district) {
       getAllBlocks();
       getAllGp();
     }
   }, [district]);
+
+  useEffect(() => {
+    setGp("");
+    getAllGp();
+  }, [taluk]);
+
+  const handleApply = () => {
+    searchParams.set("state", state);
+    setSearchParams(searchParams);
+
+    searchParams.set("dist", dist);
+    setSearchParams(searchParams);
+
+    searchParams.set("taluk", taluk);
+    setSearchParams(searchParams);
+
+    searchParams.set("gp", gp);
+    setSearchParams(searchParams);
+  };
 
   return (
     <div className="py-10 px-5 lg:px-20">
@@ -122,6 +144,12 @@ const KPIDetails = () => {
                 ))}
               </select>
             </div>
+            <button
+              onClick={handleApply}
+              className="bg-sky-900 rounded text-white text-sm p-2 px-4"
+            >
+              Apply
+            </button>
 
             {/* Gram panchayat Profile */}
           </div>

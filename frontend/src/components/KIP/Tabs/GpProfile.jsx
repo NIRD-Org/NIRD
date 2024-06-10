@@ -214,7 +214,7 @@ const GpProfile = () => {
               gpName={gp?.gp}
               gpState={gp?.state}
               gptaluk={gp?.taluk}
-              gpId={gp?.id}
+              gp={gp?.gp}
             />
           ))}
       </div>

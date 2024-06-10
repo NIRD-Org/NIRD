@@ -3,8 +3,21 @@ import { TalukModel } from "../models/talukModel.js";
 import { Errorhandler } from "../utils/errorHandler.js";
 const getNewId = async () => {
   try {
-    const maxDoc = await TalukModel.findOne().sort("-id").exec();
-    const maxId = parseInt(maxDoc ? maxDoc.id : 0);
+    const maxDoc = await TalukModel.aggregate([
+      {
+        $addFields: {
+          numericId: { $toInt: "$id" },
+        },
+      },
+      {
+        $sort: { numericId: -1 },
+      },
+      {
+        $limit: 1,
+      },
+    ]).exec();
+
+    const maxId = maxDoc.length > 0 ? maxDoc[0].numericId : 0;
     return maxId + 1;
   } catch (error) {
     return next(new Errorhandler("failed to get new id", 500));

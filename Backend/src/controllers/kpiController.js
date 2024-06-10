@@ -5,8 +5,21 @@ import { KPIModel } from "../models/kpiModel.js";
 import { Errorhandler } from "../utils/errorHandler.js";
 const getNewId = async () => {
   try {
-    const maxDoc = await KPIModel.findOne().sort("-id").exec();
-    const maxId = parseInt(maxDoc ? maxDoc.id : 0);
+    const maxDoc = await KPIModel.aggregate([
+      {
+        $addFields: {
+          numericId: { $toInt: "$id" },
+        },
+      },
+      {
+        $sort: { numericId: -1 },
+      },
+      {
+        $limit: 1,
+      },
+    ]).exec();
+
+    const maxId = maxDoc.length > 0 ? maxDoc[0].numericId : 0;
     return maxId + 1;
   } catch (error) {
     return next(new Errorhandler("failed to get new id", 500));
@@ -30,7 +43,9 @@ export const createKPI = CatchAsyncError(async (req, res, next) => {
 
 export const getAllKPI = CatchAsyncError(async (req, res, next) => {
   try {
-    const KPI = await KPIModel.find();
+    const KPI = await KPIModel.find({
+      theme_id: "1",
+    });
     if (!KPI || KPI.length === 0) {
       return next(new Errorhandler("No KPI Found", 404));
     }
