@@ -1,14 +1,21 @@
 import React from "react";
+import ManregsChart from "./charts/theme1/MenregsChart";
+import { useSearchParams } from "react-router-dom";
 
-const ThemeData = () => {
+const ThemeData = ({ kpi }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const dist = searchParams.get("dist");
+  const state = searchParams.get("state");
+  const gp = searchParams.get("gp");
   return (
     <div className="px-4 md:px-10">
       <h1 className="text-2xl mb-5 md:text-3xl font-semibold">
         Poverty Free and Enhanced Livelihoods Village
       </h1>
       <div className="w-fit mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-5">
-        {/* Card */}
-        <div className="w-80 min-h-72 h-auto border rounded ">
+        {/* Kpi Card */}
+        <div className="w-80 min-h-72 flex flex-col justify-between items-center  h-auto border rounded ">
           <div className="rounded-sm bg-[#004B86] flex gap-2 justify-between items-center font-semibold">
             <img src="/theme1/logo1.png" alt="graph" className="w-20 h-20 " />
             <p className="text-sm text-white">
@@ -16,12 +23,20 @@ const ThemeData = () => {
               employment under MGNREGS
             </p>
           </div>
-          <div className="w-fit  flex flex-col justify-center items-center">
-            <img src="/theme1/1.png" alt="graph" className="w-7/12" />
+          <div className="w-fit  flex justify-center items-center">
+            {/* <img src="/theme1/1.png" alt="graph" className="w-7/12" />
+             */}
+            <ManregsChart
+              dist={dist}
+              chartType={"Pie"}
+              state={state}
+              gp={gp}
+              kpi={1}
+            />
           </div>
         </div>
         {/* Card */}
-        <div className="w-80 min-h-72 h-auto border rounded ">
+        <div className="w-80 min-h-72 flex flex-col justify-between items-center  h-auto border rounded ">
           <div className="rounded-sm bg-[#004B86] flex gap-2 justify-between items-center font-semibold">
             <img src="/theme1/logo2.png" alt="graph" className="w-20 h-20 " />
             <p className="text-sm text-white">
@@ -29,17 +44,19 @@ const ThemeData = () => {
               Mantri Awas Yojana-Grameen (PMAY-G)/ Similar State schemes
             </p>
           </div>
-          <div className="w-fit  flex flex-col justify-center items-center">
-            <img
-              src="/theme1/2.png"
-              alt="graph"
-              className="w-8/12 object-cover h-fit"
+          <div className="w-fit  flex justify-center items-center">
+            <ManregsChart
+              dist={dist}
+              chartType={"Bar"}
+              state={state}
+              gp={gp}
+              kpi={2}
             />
           </div>
         </div>
 
         {/* Card */}
-        <div className="w-80 min-h-72 h-auto border rounded ">
+        <div className="w-80 min-h-72 flex flex-col justify-between items-center  h-auto border rounded ">
           <div className="rounded-sm bg-[#004B86] flex gap-2 justify-between items-center font-semibold">
             <img src="/theme1/logo3.jpg" alt="graph" className="w-20 h-20 " />
             <p className="text-sm text-white">
@@ -48,12 +65,18 @@ const ThemeData = () => {
             </p>
           </div>
           <div className="w-fit border-4 flex flex-col justify-center items-center">
-            <img src="/theme1/3.png" alt="graph" className="w-full h-fit" />
+            <ManregsChart
+              dist={dist}
+              chartType={"Line"}
+              state={state}
+              gp={gp}
+              kpi={3}
+            />
           </div>
         </div>
 
         {/* Card */}
-        <div className="w-80 min-h-72 h-auto border rounded ">
+        <div className="w-80 min-h-72 flex flex-col justify-between items-center  h-auto border rounded ">
           <div className="rounded-sm bg-[#004B86] flex gap-2 justify-between items-center font-semibold">
             <img src="/theme1/logo4.png" alt="graph" className="w-20 h-20 " />
             <p className="text-sm text-white">
@@ -61,13 +84,19 @@ const ThemeData = () => {
               Security Act, 2013
             </p>
           </div>
-          <div className="w-fit  flex flex-col justify-center items-center">
-            <img src="/theme1/4.png" alt="graph" className="w-full h-fit" />
+          <div className="w-fit  flex justify-center items-center">
+            <ManregsChart
+              dist={dist}
+              chartType={"Pie"}
+              state={state}
+              gp={gp}
+              kpi={4}
+            />
           </div>
         </div>
 
         {/* Card */}
-        <div className="w-80 min-h-72 h-auto border rounded ">
+        <div className="w-80 min-h-72 flex flex-col justify-between items-center  rounded ">
           <div className="rounded-sm bg-[#004B86] flex gap-2 justify-between items-center font-semibold">
             <img src="/theme1/logo5.png" alt="graph" className="w-20 h-20 " />
             <p className="text-sm text-white">
@@ -76,13 +105,19 @@ const ThemeData = () => {
               State/UT
             </p>
           </div>
-          <div className="w-fit  flex flex-col justify-center items-center">
-            <img src="/theme1/5.png" alt="graph" className="w-full h-fit" />
+          <div className="w-fit  flex justify-end items-end">
+            <ManregsChart
+              dist={dist}
+              chartType={"Doughnut"}
+              state={state}
+              gp={gp}
+              kpi={5}
+            />
           </div>
         </div>
 
         {/* Card */}
-        <div className="w-80 min-h-72 h-auto border rounded ">
+        <div className="w-80 min-h-72 flex flex-col justify-between items-center  h-auto border rounded ">
           <div className="rounded-sm bg-[#004B86] flex gap-2 justify-between items-center font-semibold">
             <img src="/theme1/logo6.png" alt="graph" className="w-20 h-20 " />
             <p className="text-sm text-white">
@@ -90,12 +125,18 @@ const ThemeData = () => {
               Jan-Dhan Yojana (PMJDY)
             </p>
           </div>
-          <div className="w-fit  flex flex-col justify-center items-center">
-            <img src="/theme1/6.png" alt="graph" className="w-full h-fit" />
+          <div className="w-fit  flex justify-center items-center">
+            <ManregsChart
+              dist={dist}
+              chartType={"Polar"}
+              state={state}
+              gp={gp}
+              kpi={6}
+            />
           </div>
         </div>
         {/* Card */}
-        <div className="w-80 min-h-72 h-auto border rounded ">
+        <div className="w-80 min-h-72 flex flex-col justify-between items-center  h-auto border rounded ">
           <div className="rounded-sm bg-[#004B86] flex gap-2 justify-between items-center font-semibold">
             <img src="/theme1/logo7.png" alt="graph" className="w-20 h-20 " />
             <p className="text-sm text-white">
@@ -103,12 +144,18 @@ const ThemeData = () => {
               GP who became members of Self-Help Groups (SHGs) in the GP.
             </p>
           </div>
-          <div className="w-fit  flex flex-col justify-center items-center">
-            <img src="/theme1/7.png" alt="graph" className="w-full h-fit" />
+          <div className="w-fit  flex justify-center items-center">
+            <ManregsChart
+              dist={dist}
+              chartType={"Pie"}
+              state={state}
+              gp={gp}
+              kpi={7}
+            />
           </div>
         </div>
         {/* Card */}
-        <div className="w-80 min-h-72 h-auto border rounded ">
+        <div className="w-80 min-h-72 flex flex-col justify-between items-center  h-auto border rounded ">
           <div className="rounded-sm bg-[#004B86] flex gap-2 justify-between items-center font-semibold">
             <img src="/theme1/logo7.png" alt="graph" className="w-20 h-20 " />
             <p className="text-sm text-white">
@@ -116,12 +163,18 @@ const ThemeData = () => {
               loan.
             </p>
           </div>
-          <div className="w-fit  flex flex-col justify-center items-center">
-            <img src="/theme1/8.png" alt="graph" className="w-full h-fit" />
+          <div className="w-fit  flex justify-center items-center">
+            <ManregsChart
+              dist={dist}
+              chartType={"Bar"}
+              state={state}
+              gp={gp}
+              kpi={8}
+            />
           </div>
         </div>
         {/* Card */}
-        <div className="w-80 min-h-72 h-auto border rounded ">
+        <div className="w-80 min-h-72 flex flex-col justify-between items-center  h-auto border rounded ">
           <div className="rounded-sm bg-[#004B86] flex gap-2 justify-between items-center font-semibold">
             <img src="/theme1/logo7.png" alt="graph" className="w-20 h-20 " />
             <p className="text-sm text-white">
@@ -129,12 +182,18 @@ const ThemeData = () => {
               in the GP
             </p>
           </div>
-          <div className="w-fit  flex flex-col justify-center items-center">
-            <img src="/theme1/9.png" alt="graph" className="w-full h-fit" />
+          <div className="w-fit  flex justify-center items-center">
+            <ManregsChart
+              dist={dist}
+              chartType={"Scatter"}
+              state={state}
+              gp={gp}
+              kpi={9}
+            />
           </div>
         </div>
         {/* Card */}
-        <div className="w-80 min-h-72 h-auto border rounded ">
+        <div className="w-80 min-h-72 flex flex-col justify-between items-center  h-auto border rounded ">
           <div className="rounded-sm bg-[#004B86] flex gap-2 justify-between items-center font-semibold">
             <img src="/theme1/logo10.png" alt="graph" className="w-20 h-20 " />
             <p className="text-sm text-white">
@@ -142,12 +201,18 @@ const ThemeData = () => {
               training institutes/ITIs in the GP
             </p>
           </div>
-          <div className="w-fit  flex flex-col justify-center items-center">
-            <img src="/theme1/10.png" alt="graph" className="w-full h-fit" />
+          <div className="w-fit  flex justify-center items-center">
+            <ManregsChart
+              dist={dist}
+              chartType={"Bubble"}
+              state={state}
+              gp={gp}
+              kpi={10}
+            />
           </div>
         </div>
         {/* Card */}
-        <div className="w-80 min-h-72 h-auto border rounded ">
+        <div className="w-80 min-h-72 flex flex-col justify-between items-center  h-auto border rounded ">
           <div className="rounded-sm bg-[#004B86] flex gap-2 justify-between items-center font-semibold">
             <img src="/theme1/logo1.png" alt="graph" className="w-20 h-20 " />
             <p className="text-sm text-white">
@@ -156,12 +221,18 @@ const ThemeData = () => {
               other than MGNREGS & NRLM
             </p>
           </div>
-          <div className="w-fit  flex flex-col justify-center items-center">
-            <img src="/theme1/11.png" alt="graph" className="w-full h-fit" />
+          <div className="w-fit  flex justify-center items-center">
+            <ManregsChart
+              dist={dist}
+              chartType={"Ploar"}
+              state={state}
+              gp={gp}
+              kpi={11}
+            />
           </div>
         </div>
         {/* Card */}
-        <div className="w-80 min-h-72 h-auto border rounded ">
+        <div className="w-80 min-h-72 flex flex-col justify-between items-center  h-auto border rounded ">
           <div className="rounded-sm bg-[#004B86] flex gap-2 justify-between items-center font-semibold">
             <img src="/theme1/logo12.jpg" alt="graph" className="w-20 h-20 " />
             <p className="text-sm text-white">
@@ -170,8 +241,14 @@ const ThemeData = () => {
               GP.
             </p>
           </div>
-          <div className="w-fit  flex flex-col justify-center items-center">
-            <img src="/theme1/12.png" alt="graph" className="w-full h-fit" />
+          <div className="w-fit  flex justify-center items-center">
+            <ManregsChart
+              dist={dist}
+              chartType={"Pie"}
+              state={state}
+              gp={gp}
+              kpi={12}
+            />
           </div>
         </div>
       </div>

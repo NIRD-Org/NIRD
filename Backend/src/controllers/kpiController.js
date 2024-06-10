@@ -30,7 +30,9 @@ export const createKPI = CatchAsyncError(async (req, res, next) => {
 
 export const getAllKPI = CatchAsyncError(async (req, res, next) => {
   try {
-    const KPI = await KPIModel.find();
+    const KPI = await KPIModel.find({
+      theme_id: "1",
+    });
     if (!KPI || KPI.length === 0) {
       return next(new Errorhandler("No KPI Found", 404));
     }

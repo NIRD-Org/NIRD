@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { RiArrowRightLine } from "react-icons/ri";
-const GpProfileCard = ({ gpName, gpState, gpDistrict, gptaluk, gpId }) => {
+const GpProfileCard = ({ gpName, gpState, gpDistrict, gptaluk, gp }) => {
   return (
     <div className="w-[15rem] group h-56  hover:bg-[#004B86]/75 bg-slate-100 border flex flex-col justify-between p-4">
       <div className="flex flex-col font-semibold">
@@ -16,7 +16,7 @@ const GpProfileCard = ({ gpName, gpState, gpDistrict, gptaluk, gpId }) => {
         </p>
       </div>
       <Link
-        to={`/gp-profile/${gpId}?state=${gpState.id}&dist=${gpDistrict.id}&taluk=${gptaluk.id}`}
+        to={`/gp-profile?gp=${gp.id}&state=${gpState.id}&dist=${gpDistrict.id}&taluk=${gptaluk.id}`}
         className="flex group-hover:text-white items-center gap-2 hover:text-orange-600 hover:scale-[1.01] transition-all ease-in-out duration-100"
       >
         {" "}
