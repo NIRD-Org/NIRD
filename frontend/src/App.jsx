@@ -22,6 +22,7 @@ import StatePage from "./components/admin/state/StatePage";
 import { Toaster } from "react-hot-toast";
 import LoginPage from "./Pages/LoginPage";
 import RegisterPage from "./Pages/RegisterPage";
+import ProjectPage from "./Pages/ProjectPage";
 
 function App() {
   const router = createBrowserRouter(
@@ -33,6 +34,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/gp-profile/:id" element={<KPIDetails />} />
+          <Route path="project" element={<ProjectPage />} />
         </Route>
         <Route path="/admin" element={<AdminPage />}>
           <Route index element={<TalukPage />} />
