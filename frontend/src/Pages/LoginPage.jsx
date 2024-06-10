@@ -32,7 +32,7 @@ const LoginPage = () => {
         localStorage.setItem("token", token);
       } */
       login();
-      navigate("/");
+      navigate("/admin");
     } catch (error) {
       tst.error(error);
       console.error("Login failed:", error.message);

@@ -167,7 +167,6 @@ const RegisterPage = () => {
               id="DOB"
               placeholder="Enter Date of Birth"
               className="col-span-3"
-              required
             />
           </div>
           <div className="flex flex-col space-y-2">
@@ -181,7 +180,6 @@ const RegisterPage = () => {
               onChange={handleChange}
               id="Ef_date_from"
               placeholder="Enter Effective Date From"
-              required
             />
           </div>
           <div className="flex flex-col space-y-2">
@@ -195,7 +193,6 @@ const RegisterPage = () => {
               onChange={handleChange}
               id="AadharNo"
               placeholder="Enter Aadhar Number"
-              required
             />
           </div>
           <div className="flex flex-col space-y-2">
@@ -209,7 +206,6 @@ const RegisterPage = () => {
               onChange={handleChange}
               id="office_contact_no"
               placeholder="Enter Office Contact Number"
-              required
             />
           </div>
           <div className="flex flex-col space-y-2">
@@ -223,7 +219,6 @@ const RegisterPage = () => {
               onChange={handleChange}
               id="hr_profile_id"
               placeholder="Enter HR Profile ID"
-              required
             />
           </div>
           <div className="flex items-center gap-4 pt-10 ">
