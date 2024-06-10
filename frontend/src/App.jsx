@@ -16,6 +16,12 @@ import ThemePage from "./components/admin/theme/ThemePage";
 import GpWiseKpiPage from "./components/admin/gp-wise-kpi/GpWiseKpiPage";
 import DistrictPage from "./components/admin/district/DistrictPage";
 import KPIApprovalPage from "./components/admin/kpi-approval/KPIApprovalPage";
+import KPIDetails from "./Pages/KPIDetails";
+import KPIQuestionPage from "./components/admin/kpi-question/KPIQuestionPage";
+import StatePage from "./components/admin/state/StatePage";
+import { Toaster } from "react-hot-toast";
+import LoginPage from "./Pages/LoginPage";
+import RegisterPage from "./Pages/RegisterPage";
 
 function App() {
   const router = createBrowserRouter(
@@ -23,6 +29,8 @@ function App() {
       <Route>
         <Route path="/" element={<Layout />}>
           <Route path="" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
         <Route path="/gp-profile/:id" element={<KPIDetails />} />
 
         </Route>
