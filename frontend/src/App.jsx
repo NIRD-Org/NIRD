@@ -34,7 +34,6 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/gp-profile/:id" element={<KPIDetails />} />
           <Route path="project" element={<ProjectPage />} />
-          <Route path="gp-profile" element={<KPIDetails />} />
         </Route>
         <Route path="/admin" element={<AdminPage />}>
           <Route index element={<TalukPage />} />
