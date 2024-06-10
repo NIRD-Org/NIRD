@@ -14,15 +14,15 @@ const Header = () => {
 
         <div className="">
           <img
-            src="src\assets\images\logo\nirdpr.png"
+            src="/logo/nirdpr.png"
             alt="NIRDPR Logo"
             className="h-12 w-auto"
           />
         </div>
         <div className="flex justify-around  text-white">
           <NavLink
-            //   to="/project"
-            to="/"
+            to="/project"
+            // to="/"
             className={({ isActive }) =>
               `block px-3 text-center text-sm py-2 font-normal duration-200 ${
                 isActive ? " text-white font-bold" : "text-gray-300 "
@@ -32,7 +32,7 @@ const Header = () => {
             Project for Creating 250 Model GP Clusters
           </NavLink>
           <NavLink
-            to="/kpi"
+            to="/"
             className={({ isActive }) =>
               `block px-3 text-center text-sm py-2 font-normal duration-200 ${
                 isActive ? " text-white font-bold" : "text-gray-300 "
@@ -74,7 +74,7 @@ const Header = () => {
         </div>
         <div className="flex-shrink-0">
           <img
-            src="src\assets\images\logo\MOPR-NEW-LOGO.png"
+            src="/logo/MOPR-NEW-LOGO.png"
             alt="MoPR Logo"
             className="h-12 w-auto"
           />

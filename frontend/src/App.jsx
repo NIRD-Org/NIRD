@@ -16,6 +16,7 @@ import ThemePage from "./components/admin/theme/ThemePage";
 import GpWiseKpiPage from "./components/admin/gp-wise-taluka/GpWiseKpiPage";
 import DistrictPage from "./components/admin/district/DistrictPage";
 import KPIApprovalPage from "./components/admin/kpi-approval/KPIApprovalPage";
+import KPIDetails from "./Pages/KPIDetails";
 
 function App() {
   const router = createBrowserRouter(
@@ -23,8 +24,7 @@ function App() {
       <Route>
         <Route path="/" element={<Layout />}>
           <Route path="" element={<HomePage />} />
-        <Route path="/gp-profile/:id" element={<KPIDetails />} />
-
+          <Route path="gp-profile/:id" element={<KPIDetails />} />
         </Route>
         <Route path="/admin" element={<AdminPage />}>
           <Route index element={<TalukPage />} />
