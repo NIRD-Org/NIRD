@@ -29,14 +29,10 @@ function App() {
       <Route>
         <Route path="/" element={<Layout />}>
           <Route path="" element={<HomePage />} />
-<<<<<<< HEAD
           <Route path="gp-profile" element={<KPIDetails />} />
-=======
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-        <Route path="/gp-profile/:id" element={<KPIDetails />} />
-
->>>>>>> 6d9f273934bf4ad2de6dab1cf7f6c65b9e15a0d8
+          <Route path="/gp-profile/:id" element={<KPIDetails />} />
         </Route>
         <Route path="/admin" element={<AdminPage />}>
           <Route index element={<TalukPage />} />

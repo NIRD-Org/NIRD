@@ -4,7 +4,6 @@ import { Errorhandler } from "../utils/errorHandler.js";
 
 const getNewId = async () => {
   try {
-<<<<<<< HEAD
     const maxDoc = await DistrictModel.aggregate([
       {
         $addFields: {
@@ -20,10 +19,6 @@ const getNewId = async () => {
     ]).exec();
 
     const maxId = maxDoc.length > 0 ? maxDoc[0].numericId : 0;
-=======
-    const maxDoc = await DistrictModel.findOne().sort("-id").exec();
-    const maxId = parseInt(maxDoc ? maxDoc.id : 0);
->>>>>>> 6d9f273934bf4ad2de6dab1cf7f6c65b9e15a0d8
     return maxId + 1;
   } catch (error) {
     return next(new Errorhandler("failed to get new id", 500));
