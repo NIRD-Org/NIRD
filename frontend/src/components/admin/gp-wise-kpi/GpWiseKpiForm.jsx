@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DialogHeader, DialogFooter, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import API from "@/utils/API";
 
 function GpWiseKpiForm({ type, onSubmit, gpWiseKpi }) {
   const [formData, setFormData] = useState({
     state_id: gpWiseKpi ? gpWiseKpi.state_id : "",
-    district_id: gpWiseKpi ? gpWiseKpi.district_id : "",
+    dist_id: gpWiseKpi ? gpWiseKpi.dist_id : "",
     taluk_id: gpWiseKpi ? gpWiseKpi.taluk_id : "",
     gp_id: gpWiseKpi ? gpWiseKpi.gp_id : "",
     date: gpWiseKpi ? gpWiseKpi.date : "",
@@ -24,6 +25,47 @@ function GpWiseKpiForm({ type, onSubmit, gpWiseKpi }) {
   });
 
   const [pending, setPending] = useState(false);
+  const [states, setStates] = useState([]);
+  const [districts, setDistricts] = useState([]);
+  const [taluks, setTaluks] = useState([]);
+  const [themes, setThemes] = useState([]);
+  const [gps, setGps] = useState([]);
+
+  const getAllStates = async () => {
+    const { data } = await API.get(`/api/v1/state/all`);
+    setStates(data?.states);
+  };
+
+  const getAllDistricts = async () => {
+    const { data } = await API.get(`/api/v1/dist/state/${formData.state_id}`);
+    setDistricts(data?.districts);
+  };
+
+  const getAllThemes = async () => {
+    const { data } = await API.get(`/api/v1/theme/all`);
+    setThemes(data?.themes);
+  };
+
+  const getAllGp = async () => {
+    try {
+      const { data } = await API.get(
+        `/api/v1/gram/get?dist=${formData.dist_id}&state=${formData.state_id}&taluk=${formData.taluk_id}`
+      );
+      setGps(data?.gram);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getAllTaluks = async () => {
+    try {
+      const url = `/api/v1/taluk/get?state=${formData.state_id}&dist=${formData.dist_id}`;
+      const { data } = await API.get(url);
+      setTaluks(data?.taluks);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -32,6 +74,20 @@ function GpWiseKpiForm({ type, onSubmit, gpWiseKpi }) {
       [name]: value,
     }));
   };
+
+  useEffect(() => {
+    getAllStates();
+    getAllThemes();
+  }, []);
+
+  useEffect(() => {
+    getAllDistricts();
+  }, [formData.state_id]);
+
+  useEffect(() => {
+    getAllTaluks();
+    getAllGp();
+  }, [formData.dist_id, formData.state_id]);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -51,59 +107,98 @@ function GpWiseKpiForm({ type, onSubmit, gpWiseKpi }) {
       <div className="grid gap-4 py-4">
         <div className="grid grid-cols-4 gap-4">
           <Label htmlFor="state_id" className="text-right mt-2">
-            State ID
+            State
           </Label>
-          <Input
-            type="text"
-            name="state_id"
+          <select
+            className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
             value={formData.state_id}
-            onChange={handleChange}
-            id="state_id"
-            placeholder="Enter State ID"
-            className="col-span-3"
-          />
+            onChange={e => setFormData(prevData => ({ ...prevData, state_id: e.target.value }))}
+          >
+            <option value="" disabled>
+              Select a state
+            </option>
+            {states?.map(state => (
+              <option key={state.id} value={state.id}>
+                {state.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="district_id" className="text-right mt-2">
-            District ID
+          <Label htmlFor="dist_id" className="text-right mt-2">
+            District
           </Label>
-          <Input
-            type="text"
-            name="district_id"
-            value={formData.district_id}
-            onChange={handleChange}
-            id="district_id"
-            placeholder="Enter District ID"
-            className="col-span-3"
-          />
+          <select
+            className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
+            value={formData.dist_id}
+            onChange={e => setFormData(prevData => ({ ...prevData, dist_id: e.target.value }))}
+          >
+            <option value="" disabled>
+              Select a district
+            </option>
+            {districts?.map(district => (
+              <option key={district.id} value={district.id}>
+                {district.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="grid grid-cols-4 gap-4">
           <Label htmlFor="taluk_id" className="text-right mt-2">
-            Taluk ID
+            Taluk
           </Label>
-          <Input
-            type="text"
-            name="taluk_id"
+          <select
+            className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
             value={formData.taluk_id}
-            onChange={handleChange}
-            id="taluk_id"
-            placeholder="Enter Taluk ID"
-            className="col-span-3"
-          />
+            onChange={e => setFormData(prevData => ({ ...prevData, taluk_id: e.target.value }))}
+          >
+            <option value="" disabled>
+              Select a taluk
+            </option>
+            {taluks?.map(taluk => (
+              <option key={taluk.id} value={taluk.id}>
+                {taluk.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="grid grid-cols-4 gap-4">
           <Label htmlFor="gp_id" className="text-right mt-2">
-            GP ID
+            Gram
           </Label>
-          <Input
-            type="text"
-            name="gp_id"
+          <select
+            className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
             value={formData.gp_id}
-            onChange={handleChange}
-            id="gp_id"
-            placeholder="Enter GP ID"
-            className="col-span-3"
-          />
+            onChange={e => setFormData(prevData => ({ ...prevData, gp_id: e.target.value }))}
+          >
+            <option value="" disabled>
+              Select a Gram
+            </option>
+            {gps?.map(gp => (
+              <option key={gp.id} value={gp.id}>
+                {gp.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="grid grid-cols-4 gap-4">
+          <Label htmlFor="themes_id" className="text-right mt-2">
+            Themes
+          </Label>
+          <select
+            className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
+            value={formData.theme_id}
+            onChange={e => setFormData(prevData => ({ ...prevData, theme_id: e.target.value }))}
+          >
+            <option value="" disabled>
+              Select a Theme
+            </option>
+            {themes?.map(theme => (
+              <option key={theme.id} value={theme.id}>
+                {theme.theme_name}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="grid grid-cols-4 gap-4">
           <Label htmlFor="date" className="text-right mt-2">
@@ -118,20 +213,7 @@ function GpWiseKpiForm({ type, onSubmit, gpWiseKpi }) {
             className="col-span-3"
           />
         </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="theme_id" className="text-right mt-2">
-            Theme ID
-          </Label>
-          <Input
-            type="text"
-            name="theme_id"
-            value={formData.theme_id}
-            onChange={handleChange}
-            id="theme_id"
-            placeholder="Enter Theme ID"
-            className="col-span-3"
-          />
-        </div>
+
         <div className="grid grid-cols-4 gap-4">
           <Label htmlFor="kpi_id" className="text-right mt-2">
             KPI ID

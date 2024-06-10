@@ -13,10 +13,21 @@ import {
 } from "@/components/ui/table";
 import TableSkeleton from "@/components/ui/tableskeleton";
 import TalukForm from "./TalukForm";
-import { taluks } from "@/lib/data"; 
+import API from "@/utils/API";
+import { tst } from "@/lib/utils";
 
 const TalukPage = ({}) => {
   const [isLoading, setIsLoading] = useState(false);
+  const taluks = [];
+  const handleCreateTaluka = async formData => {
+    try {
+      await API.post("/api/v1/taluk/create", formData);
+      tst.success("Taluk created successfully");
+    } catch (error) {
+      tst.error(error);
+      console.log(error);
+    }
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -27,7 +38,7 @@ const TalukPage = ({}) => {
             <Button variant="outline">Add Taluk</Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[800px] h-[90vh] scrollbar overflow-y-scroll">
-            <TalukForm type={"add"} />
+            <TalukForm type={"add"} onSubmit={handleCreateTaluka} />
           </DialogContent>
         </Dialog>
       </div>
@@ -35,7 +46,7 @@ const TalukPage = ({}) => {
         <TableCaption>List of all taluks.</TableCaption>
         <TableHeader>
           <TableRow>
-          <TableHead>ID</TableHead>
+            <TableHead>ID</TableHead>
             <TableHead>LGD Code</TableHead>
             <TableHead>State ID</TableHead>
             <TableHead>District ID</TableHead>

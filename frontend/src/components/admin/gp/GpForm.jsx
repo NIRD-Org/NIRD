@@ -1,16 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DialogHeader, DialogFooter, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { districts, states, taluks } from "@/lib/data";
+import API from "@/utils/API";
 
 function GpForm({ type, onSubmit, gp }) {
   const [formData, setFormData] = useState({
@@ -26,9 +19,47 @@ function GpForm({ type, onSubmit, gp }) {
     created_by: gp ? gp.created_by : "",
     modified_by: gp ? gp.modified_by : "",
   });
-
+  const [states, setStates] = useState([]);
+  const [districts, setDistricts] = useState([]);
+  const [taluks, setTaluks] = useState([]);
   const [pending, setPending] = useState(false);
 
+  const getAllStates = async () => {
+    const { data } = await API.get(`/api/v1/state/all`);
+    setStates(data?.states);
+  };
+
+  const getAllDistricts = async () => {
+    const { data } = await API.get(`/api/v1/dist/state/${formData.state_id}`);
+    setDistricts(data?.districts);
+  };
+
+  const getAllTaluks = async () => {
+    try {
+      const url = `/api/v1/taluk/get?state=${formData.state_id}&dist=${formData.dist_id}`;
+      const { data } = await API.get(url);
+      setTaluks(data?.taluks);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getAllStates();
+  }, []);
+
+  useEffect(() => {
+    getAllDistricts();
+  }, [formData.state_id]);
+
+  useEffect(() => {
+    getAllTaluks();
+  }, [formData.dist_id]);
+
+  /*  useState(() => {
+    getAllGp();
+  }, [formData.taluk_id]);
+ */
   const handleChange = e => {
     const { name, value } = e.target;
     setFormData(prevData => ({
@@ -71,80 +102,58 @@ function GpForm({ type, onSubmit, gp }) {
           <Label htmlFor="state_id" className="text-right mt-2">
             State
           </Label>
-          <Select
-            className="w-full"
+          <select
+            className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
             value={formData.state_id}
-            onValueChange={value =>
-              setFormData(prevData => ({
-                ...prevData,
-                state_id: value,
-              }))
-            }
+            onChange={e => setFormData(prevData => ({ ...prevData, state_id: e.target.value }))}
           >
-            <SelectTrigger className="col-span-3">
-              <SelectValue placeholder="Select a state" />
-            </SelectTrigger>
-            <SelectContent>
-              {states?.map(state => (
-                <SelectItem key={state.id} value={state.id}>
-                  {state.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            <option value="" disabled>
+              Select a state
+            </option>
+            {states?.map(state => (
+              <option key={state.id} value={state.id}>
+                {state.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="grid grid-cols-4 gap-4">
           <Label htmlFor="dist_id" className="text-right mt-2">
             District
           </Label>
-          <Select
-            className="w-full"
+          <select
+            className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
             value={formData.dist_id}
-            onValueChange={value =>
-              setFormData(prevData => ({
-                ...prevData,
-                dist_id: value,
-              }))
-            }
+            onChange={e => setFormData(prevData => ({ ...prevData, dist_id: e.target.value }))}
           >
-            <SelectTrigger className="col-span-3">
-              <SelectValue placeholder="Select a district" />
-            </SelectTrigger>
-            <SelectContent>
-              {districts?.map(district => (
-                <SelectItem key={district.id} value={district.id}>
-                  {district.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            <option value="" disabled>
+              Select a district
+            </option>
+            {districts?.map(district => (
+              <option key={district.id} value={district.id}>
+                {district.name}
+              </option>
+            ))}
+          </select>
         </div>
-        {/* Similar structure for other form fields */}
         <div className="grid grid-cols-4 gap-4">
           <Label htmlFor="taluk_id" className="text-right mt-2">
             Taluk
           </Label>
-          <Select
-            className="w-full"
+          <select
+            className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
             value={formData.taluk_id}
-            onValueChange={value =>
-              setFormData(prevData => ({
-                ...prevData,
-                taluk_id: value,
-              }))
-            }
+            onChange={e => setFormData(prevData => ({ ...prevData, taluk_id: e.target.value }))}
           >
-            <SelectTrigger className="col-span-3">
-              <SelectValue placeholder="Select a taluk" />
-            </SelectTrigger>
-            <SelectContent>
-              {taluks?.map(taluk => (
-                <SelectItem key={taluk.id} value={taluk.id}>
-                  {taluk.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            <option value="" disabled>
+              Select a taluk
+            </option>
+            {taluks?.map(taluk => (
+              <option key={taluk.id} value={taluk.id}>
+                {taluk.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="grid grid-cols-4 gap-4">
           <Label htmlFor="lgd_code_feb11_2021" className="text-right mt-2">

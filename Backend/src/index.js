@@ -12,6 +12,8 @@ import kpiRoutes from "./routes/kpiRoutes.js";
 import themeRoutes from "./routes/themeRoutes.js";
 import kpiApprovalRoutes from "./routes/kpiApprovalRoutes.js";
 import kpiQuestionsRoutes from "./routes/kpiQuestionsRoutes.js";
+import authRoutes from "./routes/authRoute.js";
+
 const app = express();
 
 dotenv.config();
@@ -30,6 +32,8 @@ app.use("/api/v1/kpi", kpiRoutes);
 app.use("/api/v1/theme", themeRoutes);
 app.use("/api/v1/kpi-approvals", kpiApprovalRoutes);
 app.use("/api/v1/kpi-questions", kpiQuestionsRoutes);
+app.use("/api/v1/auth", authRoutes);
+
 app.get("/", (req, res) => {
   res.status(200).json({ message: "Server is running" });
 });

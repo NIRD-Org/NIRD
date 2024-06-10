@@ -7,7 +7,7 @@ function Sidebar({ className }) {
     <aside
       aria-label="sidebar "
       aria-controls="default-sidebar"
-      className={`${className} scrollbar bg-white font-urbanist min-w-[200px] px-6  shadow-md rounded-md `}
+      className={`${className} scrollbar bg-white font-urbanist  px-6  shadow-md rounded-md  z-[20]`}
     >
       <div className="pt-10 hover:text-slate-100 text-slate-600">
         <Link
@@ -24,8 +24,8 @@ function Sidebar({ className }) {
                 to={item.link}
                 className={`flex mb-4 items-center px-4 py-3 rounded-xl text-slate-700 hover:bg-[#004B86]/70 hover:text-white transition duration-150 cursor-pointer`}
               >
-                <item.icon />
-                <span className="ml-8  text-[0.9rem] font-semibold  tracking-wider">
+                {<item.icon />}
+                <span className="ml-8   text-[0.9rem] font-semibold  tracking-wider">
                   {item.title}
                 </span>
               </Link>

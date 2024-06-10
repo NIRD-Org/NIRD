@@ -4,7 +4,7 @@ import { Errorhandler } from "../utils/errorHandler.js";
 const getNewId = async () => {
   try {
     const maxDoc = await KPIApprovalModel.findOne().sort("-id").exec();
-    const maxId = maxDoc ? maxDoc.id : 0;
+    const maxId = parseInt(maxDoc ? maxDoc.id : 0);
     return maxId + 1;
   } catch (error) {
     return next(new Errorhandler("failed to get new id", 500));
@@ -22,6 +22,7 @@ export const createKPIApproval = CatchAsyncError(async (req, res, next) => {
       kpiApproval: newKPIApproval,
     });
   } catch (error) {
+    console.log(error);
     return next(new Errorhandler("Failed to create KPI approval", 500));
   }
 });

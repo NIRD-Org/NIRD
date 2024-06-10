@@ -9,6 +9,9 @@ function StateForm({ type, onSubmit, state }) {
     id: state ? state.id : "",
     lgd_code: state ? state.lgd_code : "",
     name: state ? state.name : "",
+    state_shortcode: state ? state.state_shortcode : "",
+    country_id: state ? state.country_id : "",
+    state_icon: state ? state.state_icon : "",
     status: state ? state.status : "",
     created_by: state ? state.created_by : "",
     modified_by: state ? state.modified_by : "",
@@ -65,6 +68,34 @@ function StateForm({ type, onSubmit, state }) {
             onChange={handleChange}
             id="name"
             placeholder="Enter Name"
+            className="col-span-3"
+          />
+        </div>
+        <div className="grid grid-cols-4 gap-4">
+          <Label htmlFor="state_shortcode" className="text-right mt-2">
+            State Shortcode
+          </Label>
+          <Input
+            type="text"
+            name="state_shortcode"
+            value={formData.state_shortcode}
+            onChange={handleChange}
+            id="state_shortcode"
+            placeholder="Enter State Shortcode"
+            className="col-span-3"
+          />
+        </div>
+        <div className="grid grid-cols-4 gap-4">
+          <Label htmlFor="country_id" className="text-right mt-2">
+            Country ID
+          </Label>
+          <Input
+            type="text"
+            name="country_id"
+            value={formData.country_id}
+            onChange={handleChange}
+            id="country_id"
+            placeholder="Enter Country ID"
             className="col-span-3"
           />
         </div>

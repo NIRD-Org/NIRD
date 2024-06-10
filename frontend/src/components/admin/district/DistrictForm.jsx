@@ -1,13 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DialogHeader, DialogFooter, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { states } from "@/lib/data"; 
+import API from "@/utils/API";
 
 function DistrictForm({ type, onSubmit, district }) {
-    
+
   const [formData, setFormData] = useState({
     id: district ? district.id : "",
     lgd_code: district ? district.lgd_code : "",
@@ -20,8 +19,13 @@ function DistrictForm({ type, onSubmit, district }) {
     created_by: district ? district.created_by : "",
     modified_by: district ? district.modified_by : "",
   });
-
+  const [states, setStates] = useState()
   const [pending, setPending] = useState(false);
+
+  const getAllStates = async () => {
+    const { data } = await API.get(`/api/v1/state/all`);
+    setStates(data?.states);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,6 +41,10 @@ function DistrictForm({ type, onSubmit, district }) {
     onSubmit(formData);
     setPending(false);
   };
+
+  useEffect(()=>{
+    getAllStates()
+  },[])
 
   return (
     <form onSubmit={handleSubmit}>
@@ -65,27 +73,20 @@ function DistrictForm({ type, onSubmit, district }) {
           <Label htmlFor="state_id" className="text-right mt-2">
             State
           </Label>
-          <Select
-            className="w-full"
+          <select
+            className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
             value={formData.state_id}
-            onValueChange={(value) =>
-              setFormData((prevData) => ({
-                ...prevData,
-                state_id: value,
-              }))
-            }
+            onChange={e => setFormData(prevData => ({ ...prevData, state_id: e.target.value }))}
           >
-            <SelectTrigger className="col-span-3">
-              <SelectValue placeholder="Select a state" />
-            </SelectTrigger>
-            <SelectContent>
-              {states?.map((state) => (
-                <SelectItem key={state.id} value={state.id}>
-                  {state.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            <option value="" disabled>
+              Select a state
+            </option>
+            {states?.map(state => (
+              <option key={state.id} value={state.id}>
+                {state.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="grid grid-cols-4 gap-4">
           <Label htmlFor="name" className="text-right mt-2">

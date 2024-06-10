@@ -4,30 +4,23 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Table, TableBody, TableCaption, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import TableSkeleton from "@/components/ui/tableskeleton";
 import ThemeRow from "./ThemeRow"; 
-import { themes } from "@/lib/data";
 import ThemeForm from "./ThemeForm";
+import API from "@/utils/API";
+import { tst } from "@/lib/utils";
 
 const ThemePage = () => {
-//   const [themeList, setThemeList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const themes = []
 
- /*  useEffect(() => {
-    // Fetch theme data from your backend API
-    async function fetchThemeList() {
-      try {
-        const response = await fetch("/api/theme"); // Adjust the API endpoint accordingly
-        const data = await response.json();
-        setThemeList(data);
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error fetching theme data:", error);
-        setIsLoading(false);
-      }
+  const handleCreateGp = async formData => {
+    try {
+      await API.post("/api/v1/theme/create", formData);
+      tst.success("Theme created successfully");
+    } catch (error) {
+      tst.error(error);
     }
+  };
 
-    fetchThemeList();
-  }, []);
- */
   return (
     <div className="container mx-auto p-4">
       <div className="flex justify-between text-center mb-6">
@@ -36,8 +29,8 @@ const ThemePage = () => {
           <DialogTrigger asChild>
             <Button variant="outline">Add Theme</Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[800px] h-[90vh] scrollbar overflow-y-scroll">
-            <ThemeForm type={"add"} />
+          <DialogContent className="sm:max-w-[800px]  scrollbar overflow-y-scroll">
+            <ThemeForm type={"add"} onSubmit={handleCreateGp}/>
           </DialogContent>
         </Dialog>
       </div>

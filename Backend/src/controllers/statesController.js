@@ -4,7 +4,8 @@ import { Errorhandler } from "../utils/errorHandler.js";
 const getNewId = async () => {
   try {
     const maxDoc = await StateModel.findOne().sort("-id").exec();
-    const maxId = maxDoc ? maxDoc.id : 0;
+    console.log(maxDoc);
+    const maxId = parseInt(maxDoc ? maxDoc.id : 0);
     return maxId + 1;
   } catch (error) {
     return next(new Errorhandler("failed to get new id", 500));
@@ -22,6 +23,7 @@ export const createState = CatchAsyncError(async (req, res, next) => {
       state: newState,
     });
   } catch (error) {
+    console.log(error);
     return next(new Errorhandler("Failed to create state", 500));
   }
 });
