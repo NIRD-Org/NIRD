@@ -6,7 +6,7 @@ const Footer = () => {
       <div className="flex flex-wrap justify-between items-center p-4">
         <div className="mb-4 lg:mb-0">
           <img
-            src="src\assets\images\logo\LSDG Logo.png"
+            src="/logo/LSDG Logo.png"
             alt="LSDGs Logo"
             className="h-12 w-auto"
           />

@@ -12,12 +12,14 @@ const GpProfile = () => {
   const [GpOptions, setGpOptions] = useState([]);
 
   const [state, setState] = useState("");
-  const [district, setDistrict] = useState();
-  const [block, setBlock] = useState();
-  const [gp, setGp] = useState();
+  const [district, setDistrict] = useState("");
+  const [taluk, setTaluk] = useState("");
+  const [gp, setGp] = useState("");
 
   const getAllKpiData = async () => {
-    const { data } = await API.get(`/api/v1/gp-wise-kpi?page=${1}`);
+    const { data } = await API.get(
+      `/api/v1/gp-wise-kpi?page=${1}&state=${state}&taluk=${taluk}&dist=${district}&gp=${gp}`
+    );
     setGpData(data?.data);
   };
 
@@ -26,9 +28,9 @@ const GpProfile = () => {
     setStateOptions(data?.states);
     console.log(data?.states);
   };
-  const getAllDistricts = async (s) => {
+  const getAllDistricts = async () => {
     console.log(state);
-    const { data } = await API.get(`/api/v1/dist/state/${s}`);
+    const { data } = await API.get(`/api/v1/dist/state/${state}`);
     setDistrictOptions(data?.districts);
   };
 
@@ -40,23 +42,31 @@ const GpProfile = () => {
   };
 
   const getAllGp = async () => {
-    const { data } = await API.get(`/api/v1/gram/get?dist=${district}`);
+    const { data } = await API.get(
+      `/api/v1/gram/get?state=${state}&dist=${district}`
+    );
     setGpOptions(data?.gram);
   };
 
   useEffect(() => {
+    setDistrict("");
+    setTaluk("");
+    setGp("");
     getAllKpiData();
     getAllStates();
-  }, []);
+    getAllDistricts();
+  }, [state]);
 
-  // getAllBlocks();
-  // getAllGp();
-  const handleStateChange = (v) => {
-    setState(v.value);
-    getAllDistricts(v.value);
-  };
+  useEffect(() => {
+    if (district) {
+      getAllBlocks();
+      getAllGp();
+    }
+  }, [district]);
 
-  const handleDistrictChange = (v) => {};
+  useEffect(() => {
+    if (taluk) getAllGp();
+  }, [taluk]);
 
   const stateOptions1 = stateOptions.map((item) => ({
     value: item.id,
@@ -67,19 +77,15 @@ const GpProfile = () => {
     label: item.name,
   }));
 
-  const blockOptions1 = [
-    { value: "all", label: "All Blocks" },
-    { value: "block1", label: "Block 1" },
-    { value: "block2", label: "Block 2" },
-    { value: "block3", label: "Block 3" },
-  ];
+  const blockOptions1 = blockOptions.map((item) => ({
+    value: item.id,
+    label: item.name,
+  }));
 
-  const GpOption1s = [
-    { value: "all", label: "All GPs" },
-    { value: "Gram1", label: "Gram 1" },
-    { value: "Gram2", label: "Gram 2" },
-    { value: "Gram3", label: "Gram 3" },
-  ];
+  const GpOptions1 = GpOptions.map((item) => ({
+    value: item.id,
+    label: item.name,
+  }));
 
   const customStyles = {
     control: (provided) => ({
@@ -114,11 +120,11 @@ const GpProfile = () => {
               className="basic-single"
               classNamePrefix="select"
               defaultValue={stateOptions1[0]}
-              isClearable={true}
-              isSearchable={true}
+              isClearable="true"
+              isSearchable="true"
               name="States"
               options={stateOptions1}
-              onChange={handleStateChange}
+              onChange={(e) => setState(e.value)}
               classNames="text-black w-full text-sm"
               styles={customStyles}
             />
@@ -136,21 +142,23 @@ const GpProfile = () => {
               isSearchable={true}
               name="States"
               options={districtOptions1}
-              onChange={handleDistrictChange}
+              onChange={(e) => setDistrict(e.value)}
               classNames="text-black w-full"
             />
           </div>
           <div className="flex flex-col">
-            <label className="text-gray-600 text-sm mb-1">Select Blocks</label>
+            <label className="text-gray-600 text-sm mb-1">
+              Select Block/Taluk
+            </label>
             <Select
               className="basic-single"
               classNamePrefix="select"
-              defaultValue={stateOptions1[0]}
+              defaultValue={blockOptions1[0]}
               isClearable={true}
               isSearchable={true}
               name="States"
-              options={stateOptions1}
-              onChange={handleStateChange}
+              options={blockOptions1}
+              onChange={(e) => setTaluk(e.value)}
               classNames="text-black w-full text-sm"
               styles={customStyles}
             />
@@ -160,12 +168,12 @@ const GpProfile = () => {
             <Select
               className="basic-single"
               classNamePrefix="select"
-              defaultValue={stateOptions1[0]}
+              defaultValue={GpOptions1[0]}
               isClearable={true}
               isSearchable={true}
               name="States"
-              options={stateOptions1}
-              onChange={handleStateChange}
+              options={GpOptions1}
+              onChange={(e) => setGp(e.value)}
               classNames="text-black w-full text-sm"
               styles={customStyles}
             />
@@ -202,10 +210,10 @@ const GpProfile = () => {
           gpData?.map((gp) => (
             <GpProfileCard
               key={gp._id}
-              gpDistrict={gp?.district.name}
-              gpName={gp?.gp.name}
-              gpState={gp?.state.name}
-              gptaluk={gp?.taluk.name}
+              gpDistrict={gp?.district}
+              gpName={gp?.gp}
+              gpState={gp?.state}
+              gptaluk={gp?.taluk}
               gpId={gp?.id}
             />
           ))}

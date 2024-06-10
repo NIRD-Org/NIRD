@@ -7,7 +7,17 @@ export const getGpWiseKpi = CatchAsyncError(async (req, res, next) => {
     const limit = req.query.limit || 50;
     const pageNumber = req.query.page || 1;
     const startIndex = (pageNumber - 1) * limit;
+    const { state, dist, taluk, gp } = req.query;
+
+    // filter object
+    const filter = {};
+    if (state) filter.state_id = state;
+    if (dist) filter.district_id = dist;
+    if (taluk) filter.taluk_id = taluk;
+    if (gp) filter.gp_id = gp;
+
     const gpWiseKpiData = await GpWiseKpiModel.aggregate([
+      { $match: filter },
       {
         $group: {
           _id: "$gp_id",

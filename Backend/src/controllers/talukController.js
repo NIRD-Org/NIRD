@@ -58,17 +58,9 @@ export const getTaluksByLocation = CatchAsyncError(async (req, res, next) => {
   try {
     const { state, dist } = req.query;
 
-    let filter = {};
-    if (state) {
-      filter.state_id = state;
-    }
-    if (dist) {
-      filter.dist_id = dist;
-    }
-
-    const taluks = await TalukModel.find(filter);
+    const taluks = await TalukModel.find({ dist_id: dist });
     if (!taluks || taluks.length === 0) {
-      return next(new Errorhandler("Taluks data not found", 400));
+      return next(new Errorhandler("Taluks data not found", 404));
     }
 
     res.status(200).json({
