@@ -56,6 +56,7 @@ export const login = CatchAsyncError(async (req, res, next) => {
     const payload = {
       user: {
         id: user.id,
+        name:user.name
       },
     };
 

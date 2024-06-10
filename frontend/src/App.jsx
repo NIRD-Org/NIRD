@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import {
   Route,
   RouterProvider,
@@ -30,7 +30,6 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route path="" element={<HomePage />} />
           <Route path="/gp-profile/:id" element={<KPIDetails />} />
-          {/* <Route path="/login" element={<Loginpage />} /> */}
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />} />
         </Route>
@@ -46,8 +45,7 @@ function App() {
           <Route path="kpi-questions" element={<KPIQuestionPage />} />
           <Route path="states" element={<StatePage />} />
         </Route>
-        <Route path="/">
-        </Route>
+        <Route path="/"></Route>
       </Route>
     )
   );

@@ -3,12 +3,16 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import API from "@/utils/API";
 import { tst } from "@/lib/utils";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuthContext } from "@/context/AuthContext";
+
 const LoginPage = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  const { login } = useAuthContext();
+  const navigate = useNavigate();
 
   const handleChange = e => {
     setFormData({
@@ -20,8 +24,15 @@ const LoginPage = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      await API.post("/api/v1/auth/login", formData);
+      const response = await API.post("/api/v1/auth/login", formData);
       tst.success("User login successful");
+      const authHeader = response.headers.get("Authorization");
+   /*    if (authHeader) {
+        const token = authHeader.replace("Bearer ", "");
+        localStorage.setItem("token", token);
+      } */
+      login();
+      navigate("/");
     } catch (error) {
       tst.error(error);
       console.error("Login failed:", error.message);
