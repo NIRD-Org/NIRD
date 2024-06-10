@@ -15,28 +15,18 @@ import { gpWiseKpi } from "@/lib/data";
 import GpWiseKpiForm from "./GpWiseKpiForm";
 
 const GpWiseKpiPage = () => {
-  //   const [gpWiseKpiList, setGpWiseKpiList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  //   useEffect(() => {
-  //     // Fetch gp-wise kpi data from your backend API
-  //     async function fetchGpWiseKpiList() {
-  //       try {
-  //         const response = await fetch("/api/gpwisekpi"); // Adjust the API endpoint accordingly
-  //         const data = await response.json();
-  //         setGpWiseKpiList(data);
-  //         setIsLoading(false);
-  //       } catch (error) {
-  //         console.error("Error fetching gp-wise kpi data:", error);
-  //         setIsLoading(false);
-  //       }
-  //     }
-
-  //     fetchGpWiseKpiList();
-  //   }, []);
-
+  const handleCreateGpWiseKpi = async formData => {
+    try {
+      await API.post("/api/v1/gram/create", formData);
+      tst.success("GP created successfully");
+    } catch (error) {
+      tst.error(error);
+    }
+  };
   return (
-    <div className=" p-4 w-[80%]">
+    <div className=" p-4 w-[90%]">
       <div className="flex justify-between text-center mb-6">
         <h2 className="text-xl font-semibold mb-4">GP-wise KPI</h2>
         <Dialog>
@@ -51,7 +41,7 @@ const GpWiseKpiPage = () => {
       <div className=" ">
         <Table>
           <TableCaption>List of GP-wise KPIs.</TableCaption>
-          <TableHeader className="w-[400px]">
+          <TableHeader >
             <TableRow>
               <TableHead>ID</TableHead>
               <TableHead>State ID</TableHead>

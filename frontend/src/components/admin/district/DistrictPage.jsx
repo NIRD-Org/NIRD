@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import {
@@ -13,15 +13,18 @@ import TableSkeleton from "@/components/ui/tableskeleton";
 import DistrictRow from "./DistrictRow";
 import DistrictForm from "./DistrictForm";
 import { districts } from "@/lib/data";
-import api from "@/lib/api";
+import { tst } from "@/lib/utils";
+import API from "@/utils/API";
 
 const DistrictPage = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const districts = [];
   const handleCreateDistrict = async formData => {
     try {
-      const response = await api.post("/api/v1/district/create", formData);
-      console.log(response);
+      await API.post("/api/v1/dist/create", formData);
+      tst.success("District created successfully");
     } catch (error) {
+      tst.error(error);
       console.log(error);
     }
   };

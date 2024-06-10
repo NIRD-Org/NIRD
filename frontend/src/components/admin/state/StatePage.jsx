@@ -1,14 +1,43 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Table, TableBody, TableCaption, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import TableSkeleton from "@/components/ui/tableskeleton";
 import StateRow from "./StateRow";
 import StateForm from "./StateForm";
 import { states } from "@/lib/data"; // Import states data
+import API from "@/utils/API";
+import { tst } from "@/lib/utils";
 
 const StatePage = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [states, setState] = useState([]);
+
+  const getAllStates = async () => {
+    const { data } = await API.get(`/api/v1/state/all`);
+    setState(data?.states);
+    console.log(data?.states);
+  };
+
+  useEffect(() => {
+    getAllStates();
+  }, []);
+
+  const handleCreateState = async formData => {
+    try {
+      await API.post("/api/v1/state/create", formData);
+      tst.success("State created success");
+    } catch (error) {
+      tst.error(error);
+    }
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -19,7 +48,7 @@ const StatePage = () => {
             <Button variant="outline">Add State</Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[800px] h-[90vh] scrollbar overflow-y-scroll">
-            <StateForm type={"add"} />
+            <StateForm onSubmit={handleCreateState} type={"add"} />
           </DialogContent>
         </Dialog>
       </div>
@@ -41,7 +70,7 @@ const StatePage = () => {
           <TableSkeleton columnCount={Object.keys(states[0]).length} />
         ) : (
           <TableBody>
-            {states.map((state) => (
+            {states.map(state => (
               <StateRow key={state.id} state={state} />
             ))}
           </TableBody>

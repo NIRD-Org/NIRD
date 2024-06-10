@@ -252,7 +252,6 @@ export const themes = [
   },
 ];
 
-
 export const gpWiseKpi = [
   {
     id: "GK001",
@@ -297,7 +296,6 @@ export const kpiApprovals = [
   // Add more KPI approvals
 ];
 
-
 export const kpiData = [
   {
     id: "K001",
@@ -330,39 +328,44 @@ export const kpiData = [
 ];
 
 export const sidebarItems = [
-    {
-      icon: Home,
-      title: "Districts",
-      link: "/admin/districts",
-    },
-    {
-      icon: Home,
-      title: "Taluks",
-      link: "/admin/taluks",
-    },
-    {
-      icon: Home,
-      title: "Gram Panchayats",
-      link: "/admin/gram-panchayats",
-    },
-    {
-      icon: Home,
-      title: "Themes",
-      link: "/admin/themes",
-    },
-    {
-      icon: Home,
-      title: "KPI",
-      link: "/admin/kpi",
-    },
-    {
-      icon: Home,
-      title: "Gp wise kpi",
-      link: "/admin/gp-wise-kpi",
-    },
-    {
-      icon: Home,
-      title: "Kpi approvals",
-      link: "/admin/kpi-approvals",
-    },
-  ];
+  {
+    icon: Home,
+    title: "States",
+    link: "/admin/states",
+  },
+  {
+    icon: Home,
+    title: "Districts",
+    link: "/admin/districts",
+  },
+  {
+    icon: Home,
+    title: "Taluks",
+    link: "/admin/taluks",
+  },
+  {
+    icon: Home,
+    title: "Gram Panchayats",
+    link: "/admin/gram-panchayats",
+  },
+  {
+    icon: Home,
+    title: "Themes",
+    link: "/admin/themes",
+  },
+  {
+    icon: Home,
+    title: "KPI",
+    link: "/admin/kpi",
+  },
+  {
+    icon: Home,
+    title: "Kpi questions",
+    link: "/admin/kpi-questions",
+  },
+  {
+    icon: Home,
+    title: "Kpi approvals",
+    link: "/admin/kpi-approvals",
+  },
+];

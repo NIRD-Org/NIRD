@@ -6,9 +6,20 @@ import TableSkeleton from "@/components/ui/tableskeleton";
 import KpiRow from "./KpiRow"; 
 import KpiForm from "./KpiForm";
 import { kpiData } from "@/lib/data";
+import API from "@/utils/API";
+import { tst } from "@/lib/utils";
 
 const KpiPage = () => {
   const [isLoading, setIsLoading] = useState(false);
+  
+  const handleCreateGp = async formData => {
+    try {
+      await API.post("/api/v1/kpi/create", formData);
+      tst.success("Kpi created successfully");
+    } catch (error) {
+      tst.error(error);
+    }
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -19,7 +30,7 @@ const KpiPage = () => {
             <Button variant="outline">Add KPI</Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[800px] h-[90vh] scrollbar overflow-y-scroll">
-            <KpiForm type={"add"} />
+            <KpiForm type={"add"} onSubmit={handleCreateGp} />
           </DialogContent>
         </Dialog>
       </div>

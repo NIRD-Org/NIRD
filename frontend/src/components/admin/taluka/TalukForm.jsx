@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DialogHeader, DialogFooter, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,6 +11,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { districts, states } from "@/lib/data";
+import API from "@/utils/API";
+
 function TalukForm({ type, onSubmit, taluk }) {
   const [formData, setFormData] = useState({
     id: taluk ? taluk.id : "",
@@ -25,13 +27,29 @@ function TalukForm({ type, onSubmit, taluk }) {
     modified_by: taluk ? taluk.modified_by : "",
   });
 
-  const options = [
-    { value: "chocolate", label: "Chocolate" },
-    { value: "strawberry", label: "Strawberry" },
-    { value: "vanilla", label: "Vanilla" },
-  ];
-
   const [pending, setPending] = useState(false);
+  const [states, setStates] = useState([]);
+  const [districts, setDistricts] = useState([]);
+
+  const getAllStates = async () => {
+    const { data } = await API.get(`/api/v1/state/all`);
+    setStates(data?.states);
+    console.log(data?.states);
+  };
+
+  const getAllDistricts = async s => {
+    const { data } = await API.get(`/api/v1/dist/state/${formData.state_id}`);
+    setDistricts(data?.districts);
+    console.log(data?.districts);
+  };
+
+  useEffect(() => {
+    getAllStates();
+  }, []);
+
+  useEffect(() => {
+    getAllDistricts();
+  }, [formData.state_id]);
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -75,53 +93,39 @@ function TalukForm({ type, onSubmit, taluk }) {
           <Label htmlFor="dist_id" className="text-right mt-2">
             State
           </Label>
-          <Select
-            className="w-full"
-            value={formData.dist_id}
-            onValueChange={value =>
-              setFormData(prevData => ({
-                ...prevData,
-                dist_id: value,
-              }))
-            }
+          <select
+            className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
+            value={formData.state_id}
+            onChange={e => setFormData(prevData => ({ ...prevData, state_id: e.target.value }))}
           >
-            <SelectTrigger className="col-span-3">
-              <SelectValue placeholder="Select a state" />
-            </SelectTrigger>
-            <SelectContent>
-              {states?.map(states => (
-                <SelectItem key={states.id} value={states.name}>
-                  {states.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            <option value="" disabled>
+              Select a state
+            </option>
+            {states?.map(state => (
+              <option key={state.id} value={state.id}>
+                {state.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="state_id" className="text-right mt-2">
+          <Label htmlFor="dist_id" className="text-right mt-2">
             District
           </Label>
-          <Select
-            className="w-full"
+          <select
+            className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
             value={formData.dist_id}
-            onValueChange={value =>
-              setFormData(prevData => ({
-                ...prevData,
-                dist_id: value,
-              }))
-            }
+            onChange={e => setFormData(prevData => ({ ...prevData, dist_id: e.target.value }))}
           >
-            <SelectTrigger className="col-span-3">
-              <SelectValue placeholder="Select a district" />
-            </SelectTrigger>
-            <SelectContent>
-              {districts?.map(districts => (
-                <SelectItem key={districts.id} value={districts.name}>
-                  {districts.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            <option value="" disabled>
+              Select a District
+            </option>
+            {districts?.map(district => (
+              <option key={district.id} value={district.id}>
+                {district.name}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="grid grid-cols-4 gap-4">
