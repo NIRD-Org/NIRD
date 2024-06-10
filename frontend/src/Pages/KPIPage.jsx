@@ -1,7 +1,7 @@
 import React from "react";
 import KipTabs from "../components/KIP/KipTabs";
 
-const HomePage = () => {
+const KPIPage = () => {
   return (
     <div className="h-full px-10 py-8 lg:px-20 lg:py-12">
       <div className="flex flex-col md:flex-row justify-between pb-10 gap-10">
@@ -20,4 +20,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default KPIPage;

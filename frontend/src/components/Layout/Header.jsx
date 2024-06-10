@@ -14,7 +14,7 @@ const Header = () => {
       <div className="hidden md:flex bg-[#004B86] w-full p-4  items-center justify-between">
         {/* Desktop navigation */}
 
-        <Link to={"/"}>
+        <NavLink to={"/"}>
           {" "}
           <div className="">
             <img
@@ -23,7 +23,7 @@ const Header = () => {
               className="h-12 w-auto"
             />
           </div>
-        </Link>
+        </NavLink>
         <div className="flex justify-around  text-white">
           <NavLink
             to="/project"
@@ -37,7 +37,7 @@ const Header = () => {
             Project for Creating 250 Model GP Clusters
           </NavLink>
           <NavLink
-            to="/"
+            to="/kpi"
             className={({ isActive }) =>
               `block px-3 text-center text-sm py-2 font-normal duration-200 ${
                 isActive ? " text-white font-bold" : "text-gray-300 "

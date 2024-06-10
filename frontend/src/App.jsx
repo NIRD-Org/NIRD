@@ -7,7 +7,6 @@ import {
 } from "react-router-dom";
 import "./App.css";
 import Layout from "./Layout";
-import HomePage from "./Pages/HomePage";
 import AdminPage from "./Pages/admin/AdminPage";
 import TalukPage from "./components/admin/taluka/TalukPage";
 import GpPage from "./components/admin/gp/GpPage";
@@ -23,13 +22,16 @@ import { Toaster } from "react-hot-toast";
 import LoginPage from "./Pages/LoginPage";
 import RegisterPage from "./Pages/RegisterPage";
 import ProjectPage from "./Pages/ProjectPage";
+import Home from "./Pages/Home";
+import KPIPage from "./Pages/KPIPage";
 
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route>
         <Route path="/" element={<Layout />}>
-          <Route path="" element={<HomePage />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/kpi" element={<KPIPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/gp-profile" element={<KPIDetails />} />
