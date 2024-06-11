@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function Home() {
   return (
@@ -16,12 +17,12 @@ function Home() {
                 empowering communities across India. Together, we can make a
                 lasting impact.
               </p>
-              <a
-                href="#learn-more"
+              <Link
+                to={"/project"}
                 class="mt-6 inline-block bg-[#004B86] text-white px-6 py-3 rounded-md text-lg font-medium hover:bg-blue-900"
               >
                 Learn More
-              </a>
+              </Link>
             </div>
             <div className="flex-1"></div>
             <img
