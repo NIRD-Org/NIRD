@@ -1,16 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Table, TableBody, TableCaption, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import TableSkeleton from "@/components/ui/tableskeleton";
 import KPIApprovalRow from "./KPIApprovalRow";
 import KPIApprovalForm from "./KPIApprovalForm";
-import { kpiApprovals } from "@/lib/data"; 
+import { kpiApprovals } from "@/lib/data";
 import API from "@/utils/API";
 import { tst } from "@/lib/utils";
+import { useFetcher, useSearchParams } from "react-router-dom";
 
 const KPIApprovalPage = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [kpiApprovals, setKpiApprovals] = useState([]);
+  const [searchParams] = useSearchParams();
+  const theme_id = searchParams.get("theme_id") || "";
+
   const handleCreateKpApproval = async formData => {
     try {
       await API.post("/api/v1/kpi-approvals/create", formData);
@@ -19,6 +31,22 @@ const KPIApprovalPage = () => {
       tst.error(error);
     }
   };
+
+  const getAllKpiApprovals = async () => {
+    try {
+      setIsLoading(true);
+      const { data } = await API.get(`/api/v1/kpi-approvals/all`);
+      setKpiApprovals(data?.KPIApprovals);
+    } catch (error) {
+      // console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    getAllKpiApprovals();
+  }, []);
+
   return (
     <div className="container mx-auto p-4">
       <div className="flex justify-between text-center mb-6">
@@ -53,12 +81,18 @@ const KPIApprovalPage = () => {
           </TableRow>
         </TableHeader>
         {isLoading ? (
-          <TableSkeleton columnCount={Object.keys(kpiApprovals[0]).length} />
+          <TableSkeleton columnCount={14} />
         ) : (
           <TableBody>
-            {kpiApprovals.map((kpiApproval) => (
-              <KPIApprovalRow key={kpiApproval.id} kpiApproval={kpiApproval} />
-            ))}
+            {kpiApprovals?.length == 0 ? (
+              <tr>
+                <td colSpan="14">No KPI approval found</td>
+              </tr>
+            ) : (
+              kpiApprovals.map(kpiApproval => (
+                <KPIApprovalRow key={kpiApproval.id} kpiApproval={kpiApproval} />
+              ))
+            )}
           </TableBody>
         )}
       </Table>

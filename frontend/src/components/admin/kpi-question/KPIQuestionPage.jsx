@@ -1,16 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Table, TableBody, TableCaption, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import TableSkeleton from "@/components/ui/tableskeleton";
 import KpiRow from "./KpiQuestionRow";
 import KpiForm from "./KpiQuestionForm";
 import API from "@/utils/API";
 import { tst } from "@/lib/utils";
+import { useFetcher, useSearchParams } from "react-router-dom";
 
 const KPIQuestionPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [kpiQuestions, setKpiQuestions] = useState([]);
+  const [searchParams] = useSearchParams();
+  const theme_id = searchParams.get("theme_id") || "";
 
   const handleCreateKpiQuestion = async formData => {
     try {
@@ -22,6 +32,24 @@ const KPIQuestionPage = () => {
     }
   };
 
+  const getAllKpiQuestions = async () => {
+    try {
+      setIsLoading(true);
+
+      const { data } = await API.get(`/api/v1/kpi-questions/all`);
+      setKpiQuestions(data?.questions);
+    } catch (error) {
+      console.log(error);
+    }
+    finally{
+      setIsLoading(false);
+
+    }
+  };
+
+  useEffect(() => {
+    getAllKpiQuestions();
+  }, []);
 
   return (
     <div className="container mx-auto p-4">
@@ -40,13 +68,26 @@ const KPIQuestionPage = () => {
         <TableCaption>List of all KPI Questions.</TableCaption>
         <TableHeader>
           <TableRow>
-            {["ID", "Theme ID", "KPI ID", "Question Name", "Input Type", "Max Range", "Question Type", "Status", "Created By", "Created At", "Modified By", "Modified At"].map((header, index) => (
+            {[
+              "ID",
+              "Theme ID",
+              "KPI ID",
+              "Question Name",
+              "Input Type",
+              "Max Range",
+              "Question Type",
+              "Status",
+              "Created By",
+              "Created At",
+              "Modified By",
+              "Modified At",
+            ].map((header, index) => (
               <TableHead key={index}>{header}</TableHead>
             ))}
           </TableRow>
         </TableHeader>
         {isLoading ? (
-          <TableSkeleton columnCount={12} />
+          <TableSkeleton columnCount={11} />
         ) : (
           <TableBody>
             {kpiQuestions.map(kpiQuestion => (
