@@ -50,9 +50,9 @@ export const getGpByLocation = CatchAsyncError(async (req, res, next) => {
     if (dist) {
       filter.dist_id = dist;
     }
-    // if (taluk) {
-    //   filter.taluk_id = taluk;
-    // }
+    if (taluk) {
+      filter.taluk_id = taluk;
+    }
 
     const gram = await GpModel.find(filter);
     if (!gram || gram.length === 0) {

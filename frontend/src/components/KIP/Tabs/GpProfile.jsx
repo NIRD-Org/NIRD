@@ -35,16 +35,12 @@ const GpProfile = () => {
   };
 
   const getAllBlocks = async () => {
-    const { data } = await API.get(
-      `/api/v1/taluk/get?dist=${district}&state=${state}`
-    );
+    const { data } = await API.get(`/api/v1/taluk/get?dist=${district}`);
     setBlockOptions(data?.taluks);
   };
 
   const getAllGp = async () => {
-    const { data } = await API.get(
-      `/api/v1/gram/get?state=${state}&dist=${district}`
-    );
+    const { data } = await API.get(`/api/v1/gram/get?taluk=${taluk}`);
     setGpOptions(data?.gram);
   };
 
@@ -58,9 +54,12 @@ const GpProfile = () => {
   }, [state]);
 
   useEffect(() => {
+    getAllKpiData();
+  }, [district, taluk, gp]);
+
+  useEffect(() => {
     if (district) {
       getAllBlocks();
-      getAllGp();
     }
   }, [district]);
 
@@ -110,7 +109,7 @@ const GpProfile = () => {
   const handlePageClick = () => {};
 
   return (
-    <div>
+    <div className="px-10 pb-8 lg:px-20 lg:pb-12">
       <div className="flex flex-col md:flex-row items-center gap-10 justify-between mb-4">
         <div className="flex flex-wrap items-center gap-2 sm:gap-5">
           <div className="flex flex-col">

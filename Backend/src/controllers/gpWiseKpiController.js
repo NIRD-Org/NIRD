@@ -100,6 +100,28 @@ export const getGpWiseKpi = CatchAsyncError(async (req, res, next) => {
   }
 });
 
+export const getGpWiseKpiData = CatchAsyncError(async (req, res, next) => {
+  try {
+    const data = await GpWiseKpiModel.aggregate([
+      {
+        $group: {
+          _id: "$gp_id", // Group by gp_id
+          doc: { $first: "$$ROOT" }, // Take the first document for each gp_id
+        },
+      },
+      {
+        $replaceRoot: { newRoot: "$doc" }, // Replace the root with the grouped document
+      },
+      {
+        $limit: 30, // Limit the results to 30 documents
+      },
+    ]);
+    res.status(200).json(data);
+  } catch (error) {
+    return next(new Errorhandler("Failed to get data", 500));
+  }
+});
+
 // Charts for different KPIs
 
 export const getGpWiseKpiChart = CatchAsyncError(async (req, res, next) => {
@@ -190,7 +212,7 @@ const getGpWiseKpiDataWithPercentage = async (query) => {
   if (taluk) filter.taluk_id = taluk;
   if (gp) filter.gp_id = gp;
   if (kpi) filter.kpi_id = kpi;
-  filter.theme_id = "1";
+  filter.theme_id = "10";
 
   const gpWiseKpiData = await GpWiseKpiModel.aggregate([
     { $match: filter },
