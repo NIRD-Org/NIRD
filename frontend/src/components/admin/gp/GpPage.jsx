@@ -29,29 +29,26 @@ const GpPage = () => {
   const [gp, setGrams] = useState([]);
 
   useEffect(() => {
-    if (state_id && dist_id && taluk_id) {
-      getAllGp(state_id, dist_id, taluk_id);
+    if (taluk_id) {
+      getAllGp(taluk_id);
     } else {
       setGrams([]);
     }
-  }, [state_id, dist_id, taluk_id]);
+  }, [taluk_id]);
 
-  const getAllGp = async (stateId, distId, talukId) => {
+  const getAllGp = async (talukId) => {
     try {
       setIsLoading(true);
-      const { data } = await API.get(
-        `/api/v1/gram/get?state=${stateId}&dist=${distId}&taluk=${talukId}`
-      );
+      const { data } = await API.get(`/api/v1/gram/get?taluk=${talukId}`);
       setGrams(data?.gram || []);
     } catch (error) {
       setGrams([]);
-    }
-    finally{
+    } finally {
       setIsLoading(false);
     }
   };
 
-  const handleCreateGp = async formData => {
+  const handleCreateGp = async (formData) => {
     try {
       await API.post("/api/v1/gram/create", formData);
       tst.success("GP created successfully");
@@ -101,7 +98,7 @@ const GpPage = () => {
           <TableSkeleton columnCount={10} />
         ) : (
           <TableBody>
-            {gp.map(gp => (
+            {gp.map((gp) => (
               <GpRow key={gp.id} gp={gp} />
             ))}
           </TableBody>

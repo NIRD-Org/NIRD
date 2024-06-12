@@ -16,7 +16,7 @@ const StateFilter = ({ className }) => {
     setStates(data?.states);
   };
 
-  const handleStateChange = event => {
+  const handleStateChange = (event) => {
     const selectedStateId = event.target.value;
     if (selectedStateId) {
       setSearchParams({ state_id: selectedStateId });
@@ -27,12 +27,15 @@ const StateFilter = ({ className }) => {
 
   return (
     <select
-      className={cn(className, "text-sm px-4 py-2 rounded-md bg-transparent border w-48")}
+      className={cn(
+        className,
+        "text-sm px-4 py-2 rounded-md bg-transparent border w-48"
+      )}
       value={state_id}
       onChange={handleStateChange}
     >
       <option value="">Select a state</option>
-      {states?.map(state => (
+      {states?.map((state) => (
         <option key={state.id} value={state.id}>
           {state.name}
         </option>
