@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TalukRow from "./TalukRow";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
@@ -15,10 +15,16 @@ import TableSkeleton from "@/components/ui/tableskeleton";
 import TalukForm from "./TalukForm";
 import API from "@/utils/API";
 import { tst } from "@/lib/utils";
-
+import { useSearchParams } from "react-router-dom";
+import StateFilter from "@/components/admin/filter/StateFilter";
+import DistrictFilter from "@/components/admin/filter/DistrictFilter";
 const TalukPage = ({}) => {
   const [isLoading, setIsLoading] = useState(false);
-  const taluks = [];
+  const [taluks, setTaluks] = useState([]);
+  const [searchParams] = useSearchParams();
+  const dist_id = searchParams.get("dist_id");
+  const state_id = searchParams.get("state_id");
+
   const handleCreateTaluka = async formData => {
     try {
       await API.post("/api/v1/taluk/create", formData);
@@ -29,10 +35,34 @@ const TalukPage = ({}) => {
     }
   };
 
+  const getAllTaluks = async (stateId, dist_id) => {
+    try {
+      setIsLoading(true)
+      const url = `/api/v1/taluk/get?state=${state_id}&dist=${dist_id}`;
+      const { data } = await API.get(url);
+      setTaluks(data?.taluks);
+    } catch (error) {
+      console.log(error);
+    }
+    finally{
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (dist_id && state_id) {
+      getAllTaluks(state_id, dist_id);
+    }
+  }, [dist_id, state_id]);
+
   return (
     <div className="container mx-auto p-4">
       <div className="flex justify-between text-center mb-6">
-        <h2 className="text-xl font-semibold mb-4">All Taluks</h2>
+        <div className="flex items-center gap-4">
+          <h2 className="text-xl font-semibold ">All Taluks</h2>
+          <StateFilter />
+          <DistrictFilter />
+        </div>
         <Dialog>
           <DialogTrigger asChild>
             <Button variant="outline">Add Taluk</Button>
@@ -60,7 +90,7 @@ const TalukPage = ({}) => {
           </TableRow>
         </TableHeader>
         {isLoading ? (
-          <TableSkeleton columnCount={Object.keys(taluks[0]).length} />
+          <TableSkeleton columnCount={10} />
         ) : (
           <TableBody>
             {taluks.map(taluk => (

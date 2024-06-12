@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Table, TableBody, TableCaption, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import TableSkeleton from "@/components/ui/tableskeleton";
-import KpiRow from "./KpiRow"; 
+import KpiRow from "./KpiRow";
 import KpiForm from "./KpiForm";
 import { kpiData } from "@/lib/data";
 import API from "@/utils/API";
@@ -11,7 +18,7 @@ import { tst } from "@/lib/utils";
 
 const KpiPage = () => {
   const [isLoading, setIsLoading] = useState(false);
-  
+  const [kpiData, setKpi] = useState([]);
   const handleCreateGp = async formData => {
     try {
       await API.post("/api/v1/kpi/create", formData);
@@ -20,6 +27,23 @@ const KpiPage = () => {
       tst.error(error);
     }
   };
+
+  const getAllKpi = async () => {
+    try {
+      setIsLoading(true);
+      const { data } = await API.get(`/api/v1/kpi/all`);
+      setKpi(data?.KPI);
+    } catch (error) {
+      console.log(error);
+    }
+    finally{
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getAllKpi();
+  }, []);
 
   return (
     <div className="container mx-auto p-4">
@@ -53,7 +77,7 @@ const KpiPage = () => {
           </TableRow>
         </TableHeader>
         {isLoading ? (
-          <TableSkeleton columnCount={Object.keys(kpiData[0]).length} />
+          <TableSkeleton columnCount={10} />
         ) : (
           <TableBody>
             {kpiData.map(kpi => (

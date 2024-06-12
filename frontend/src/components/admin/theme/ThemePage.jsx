@@ -7,10 +7,11 @@ import ThemeRow from "./ThemeRow";
 import ThemeForm from "./ThemeForm";
 import API from "@/utils/API";
 import { tst } from "@/lib/utils";
+import { useToaster } from "react-hot-toast";
 
 const ThemePage = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const themes = []
+  const [themes,setThemes] = useState([]);
 
   const handleCreateGp = async formData => {
     try {
@@ -21,6 +22,22 @@ const ThemePage = () => {
     }
   };
 
+  const getAllThemes = async () => {
+    try {
+      setIsLoading(true);
+      const { data } = await API.get(`/api/v1/theme/all`);
+      setThemes(data?.themes);
+    } catch (error) {
+      console.log(error);
+    }
+    finally{
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(()=>{
+    getAllThemes();
+  },[])
   return (
     <div className="container mx-auto p-4">
       <div className="flex justify-between text-center mb-6">
@@ -49,7 +66,7 @@ const ThemePage = () => {
           </TableRow>
         </TableHeader>
         {isLoading ? (
-          <TableSkeleton columnCount={Object.keys(themes[0]).length} />
+          <TableSkeleton columnCount={7} />
         ) : (
           <TableBody>
             {themes.map(theme => (

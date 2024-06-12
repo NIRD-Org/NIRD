@@ -21,9 +21,15 @@ const StatePage = () => {
   const [states, setState] = useState([]);
 
   const getAllStates = async () => {
-    const { data } = await API.get(`/api/v1/state/all`);
-    setState(data?.states);
-    console.log(data?.states);
+    try {
+      setIsLoading(false);
+      const { data } = await API.get(`/api/v1/state/all`);
+      setState(data?.states);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(true);
+    }
   };
 
   useEffect(() => {
@@ -67,7 +73,7 @@ const StatePage = () => {
           </TableRow>
         </TableHeader>
         {isLoading ? (
-          <TableSkeleton columnCount={Object.keys(states[0]).length} />
+          <TableSkeleton columnCount={7} />
         ) : (
           <TableBody>
             {states.map(state => (

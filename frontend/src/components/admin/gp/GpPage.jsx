@@ -14,10 +14,42 @@ import GpRow from "./GpRow";
 import GpForm from "./GpForm";
 import API from "@/utils/API";
 import { tst } from "@/lib/utils";
+import { useSearchParams } from "react-router-dom";
+import StateFilter from "@/components/admin/filter/StateFilter";
+import GramFilter from "@/components/admin/filter/GramFilter";
+import DistrictFilter from "@/components/admin/filter/DistrictFilter";
+import TalukFilter from "@/components/admin/filter/TalukFilter";
 
 const GpPage = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const gp = [];
+  const [searchParams, setSearchParams] = useSearchParams();
+  const state_id = searchParams.get("state_id") || "";
+  const dist_id = searchParams.get("dist_id") || "";
+  const taluk_id = searchParams.get("taluk_id") || "";
+  const [gp, setGrams] = useState([]);
+
+  useEffect(() => {
+    if (state_id && dist_id && taluk_id) {
+      getAllGp(state_id, dist_id, taluk_id);
+    } else {
+      setGrams([]);
+    }
+  }, [state_id, dist_id, taluk_id]);
+
+  const getAllGp = async (stateId, distId, talukId) => {
+    try {
+      setIsLoading(true);
+      const { data } = await API.get(
+        `/api/v1/gram/get?state=${stateId}&dist=${distId}&taluk=${talukId}`
+      );
+      setGrams(data?.gram || []);
+    } catch (error) {
+      setGrams([]);
+    }
+    finally{
+      setIsLoading(false);
+    }
+  };
 
   const handleCreateGp = async formData => {
     try {
@@ -27,11 +59,16 @@ const GpPage = () => {
       tst.error(error);
     }
   };
-  
+
   return (
     <div className="container mx-auto p-4">
       <div className="flex justify-between text-center mb-6">
-        <h2 className="text-xl font-semibold mb-4">All Gram Panchayats</h2>
+        <div className="flex items-center gap-4">
+          <h2 className="text-xl font-semibold ">All Gram Panchayats</h2>
+          <StateFilter />
+          <DistrictFilter />
+          <TalukFilter />
+        </div>
         <Dialog>
           <DialogTrigger asChild>
             <Button variant="outline">Add Gram Panchayat</Button>
@@ -61,7 +98,7 @@ const GpPage = () => {
           </TableRow>
         </TableHeader>
         {isLoading ? (
-          <TableSkeleton columnCount={Object.keys(gp[0]).length} />
+          <TableSkeleton columnCount={10} />
         ) : (
           <TableBody>
             {gp.map(gp => (
