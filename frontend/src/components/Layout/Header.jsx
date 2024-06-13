@@ -121,12 +121,12 @@ const Header = () => {
           />
         </div>
 
-        <div className="md:w-[15%] w-[20%] z-50  bg-white">
+        <div className="sm:w-[15%] w-[28%] z-50  bg-white">
           <NavLink to={"/"}>
             <img
               src="/logo/nirdpr.png"
               alt="NIRDPR Logo"
-              className="min-h-[10vh] w-full"
+              className="min-h-[8vh]  md:min-h-[10vh] w-full"
             />
           </NavLink>
         </div>
