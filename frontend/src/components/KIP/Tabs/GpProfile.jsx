@@ -109,7 +109,7 @@ const GpProfile = () => {
   const handlePageClick = () => {};
 
   return (
-    <div className="px-10 pb-8 lg:px-20 lg:pb-12">
+    <div className="px-5 pb-8 lg:px-20 lg:pb-12">
       <div className="flex flex-col md:flex-row items-center gap-10 justify-between mb-4">
         <div className="flex flex-wrap items-center gap-2 sm:gap-5">
           <div className="flex flex-col">

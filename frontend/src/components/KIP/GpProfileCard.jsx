@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { RiArrowRightLine } from "react-icons/ri";
 const GpProfileCard = ({ gpName, gpState, gpDistrict, gptaluk, gp }) => {
   return (
-    <div className="w-[15rem] relative group h-56  hover:bg-[#004B86]/75 border flex flex-col justify-between p-4">
+    <div className="w-[16rem] h-[15rem] md:w-[15rem] relative group md:h-56  hover:bg-[#004B86]/75 border flex flex-col justify-between p-4">
       <div className={`flex  flex-col font-semibold`}>
         <h4 className="text-[#004B86] group-hover:text-white text-lg">
           {gpName.name}
