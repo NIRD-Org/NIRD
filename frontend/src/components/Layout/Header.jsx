@@ -115,9 +115,9 @@ const Header = () => {
       <div className="lg:hidden bg-[#004B86] flex justify-between items-center">
         <div className="w-[10%]">
           <img
-            src="/logo/nirdpr.png"
-            alt="NIRDPR Logo"
-            className="h-12 w-auto"
+            src="/logo/niti-logo-white.svg"
+            alt="Ashoka Logo"
+            className="h-full mt-4 w-[5rem]"
           />
         </div>
 
