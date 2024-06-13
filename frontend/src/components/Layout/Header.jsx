@@ -11,7 +11,7 @@ const Header = () => {
 
   return (
     <>
-      <div className="hidden lg:flex bg-[#004B86] w-full items-center justify-between">
+      <div className="hidden lg:flex h-[14vh]  xl:h-[12vh] bg-[#004B86] w-full items-center justify-between">
         {/* Desktop navigation */}
         <div className="flex items-center justify-between w-[45%]">
           <NavLink to={"/"}>
@@ -56,7 +56,7 @@ const Header = () => {
           </NavLink>
         </div>
 
-        <div className="px-3  flex justify-center items-center min-h-[15vh] max-h-[15vh] bg-white">
+        <div className="px-3  flex justify-center items-center min-h-[14vh] xl:min-h-[12vh]  bg-white">
           <NavLink to={"/"}>
             <img
               src="/logo/nirdpr.png"
