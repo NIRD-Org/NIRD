@@ -101,7 +101,7 @@ const ProjectPage = () => {
   return (
     <div className="p-5 sm:px-10 md:px-20 lg:px-32 md:py-10">
       <div>
-        <h1 className="mb-10 font-semibold text-[#004B86] text-5xl">
+        <h1 className="mb-10 font-semibold text-[#004B86] text-[2.5rem]">
           Overview of the Project{" "}
         </h1>
         <p className="text-justify text-md text-wrap">
@@ -124,7 +124,7 @@ const ProjectPage = () => {
       </div>
 
       <div>
-        <h1 className="my-8 font-semibold text-[#004B86] text-4xl">
+        <h1 className="my-8 font-semibold text-[#004B86] text-[2rem]">
           Goal of the Project
         </h1>
         <p className="text-justify">
@@ -144,7 +144,7 @@ const ProjectPage = () => {
         {sections.map((section, index) => (
           <div key={index}>
             <div className="flex gap-5 items-center justify-start">
-              <h1 className="my-8 font-semibold text-[#004B86] text-4xl">
+              <h1 className="my-8 font-semibold text-[#004B86] text-[1.8rem]">
                 {section.title}
               </h1>
               <button

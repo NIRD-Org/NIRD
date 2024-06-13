@@ -203,7 +203,7 @@ const GpProfile = () => {
         </div>
       </div>
       <hr />
-      <p>Showing 1 to 12 of 500 Results</p>
+      <p>Showing 1 to 35 of 500 Results</p>
       <div className="w-fit mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 md:grid-cols-3 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-5">
         {Array.isArray(gpData) &&
           gpData?.map((gp) => (

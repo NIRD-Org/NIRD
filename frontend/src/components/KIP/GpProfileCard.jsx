@@ -25,10 +25,11 @@ const GpProfileCard = ({ gpName, gpState, gpDistrict, gptaluk, gp }) => {
       />
       <Link
         to={`/gp-profile?gp=${gp.id}&state=${gpState.id}&dist=${gpDistrict.id}&taluk=${gptaluk.id}`}
-        className="flex group-hover:text-white items-center gap-2 hover:text-orange-600 hover:scale-[1.01] transition-all ease-in-out duration-100"
+        className=" group-hover:text-white items-center gap-2 hover:text-orange-600 hover:scale-[1.01] transition-all ease-in-out duration-100"
       >
         {" "}
-        View Profile <RiArrowRightLine className="text-orange-600" />
+        View Profile
+        <RiArrowRightLine className="text-orange-600" />
       </Link>
     </div>
   );

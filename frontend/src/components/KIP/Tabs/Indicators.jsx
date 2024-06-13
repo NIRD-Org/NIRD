@@ -261,7 +261,7 @@ const Indicators = () => {
                               (item) => item.kpi_id === k.id
                             );
                             return (
-                              <td className="px-8" key={k.id}>
+                              <td className="px-4" key={k.id}>
                                 {kpiData ? (
                                   <Progress
                                     value={kpiData.percentage.toFixed(2)}

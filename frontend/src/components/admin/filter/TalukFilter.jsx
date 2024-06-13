@@ -26,7 +26,7 @@ const TalukFilter = ({ className }) => {
     }
   };
 
-  const handleTalukChange = event => {
+  const handleTalukChange = (event) => {
     const selectedTalukId = event.target.value;
     if (selectedTalukId) {
       setSearchParams({ state_id, dist_id, taluk_id: selectedTalukId });
@@ -37,13 +37,16 @@ const TalukFilter = ({ className }) => {
 
   return (
     <select
-      className={cn(className, "text-sm px-4 py-2 rounded-md bg-transparent border w-48")}
+      className={cn(
+        className,
+        "text-sm px-4 py-2 rounded-md bg-transparent border w-48"
+      )}
       value={taluk_id}
       onChange={handleTalukChange}
       disabled={!state_id || !dist_id}
     >
       <option value="">Select a taluk</option>
-      {taluks.map(taluk => (
+      {taluks.map((taluk) => (
         <option key={taluk.id} value={taluk.id}>
           {taluk.name}
         </option>

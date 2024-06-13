@@ -11,25 +11,23 @@ const Header = () => {
   };
   return (
     <>
-      <div className="hidden md:flex bg-[#004B86] w-full p-4  items-center justify-between">
+      <div className="hidden  lg:flex bg-[#004B86] w-full items-center justify-between">
         {/* Desktop navigation */}
 
-        <NavLink to={"/"}>
-          {" "}
-          <div className="">
+        <div className="flex items-center justify-between  w-[55%] ">
+          <NavLink to={"/"}>
+            {" "}
             <img
-              src="/logo/nirdpr.png"
-              alt="NIRDPR Logo"
-              className="h-12 w-auto"
+              src="/logo/niti-logo-white.svg"
+              alt="Ashoka Logo"
+              className="h-full mt-4 w-[5rem]"
             />
-          </div>
-        </NavLink>
-        <div className="flex justify-around  text-white">
+          </NavLink>
           <NavLink
             to="/project"
             // to="/"
             className={({ isActive }) =>
-              `block px-3 text-center text-sm py-2 font-normal duration-200 ${
+              `block px-3  text-md py-2 font-normal duration-200 ${
                 isActive ? " text-white font-bold" : "text-gray-300 "
               } hover:text-white`
             }
@@ -39,7 +37,7 @@ const Header = () => {
           <NavLink
             to="/kpi"
             className={({ isActive }) =>
-              `block px-3 text-center text-sm py-2 font-normal duration-200 ${
+              `block px-3  text-md py-2 font-normal duration-200 ${
                 isActive ? " text-white font-bold" : "text-gray-300 "
               } hover:text-white`
             }
@@ -49,17 +47,29 @@ const Header = () => {
           <NavLink
             to="/voluntary"
             className={({ isActive }) =>
-              `block px-3 text-center text-sm py-2 font-normal duration-200 ${
+              `block px-3  text-md py-2 font-normal duration-200 ${
                 isActive ? " text-white font-bold" : "text-gray-300 "
               } hover:text-white`
             }
           >
             Low cost Voluntary Activities
           </NavLink>
+        </div>
+
+        <div className="px-3 w-[10%] flex justify-center items-center min-h-[12vh] max-h-[15vh] bg-white">
+          <NavLink to={"/"}>
+            <img
+              src="/logo/nirdpr.png"
+              alt="NIRDPR Logo"
+              className="h-12 w-auto"
+            />
+          </NavLink>
+        </div>
+        <div className="flex justify-between w-[30%]">
           <NavLink
             to="/training"
             className={({ isActive }) =>
-              `block px-3 text-center text-sm py-2 font-normal duration-200 ${
+              `block px-3  text-md py-2 font-normal duration-200 ${
                 isActive ? " text-white font-bold" : "text-gray-300 "
               } hover:text-white`
             }
@@ -69,7 +79,7 @@ const Header = () => {
           <NavLink
             to="/practices"
             className={({ isActive }) =>
-              `block px-3 text-center text-sm py-2 font-normal duration-200 ${
+              `block px-3  text-md py-2 font-normal duration-200 ${
                 isActive ? " text-white font-bold" : "text-gray-300 "
               } hover:text-white`
             }
@@ -84,32 +94,40 @@ const Header = () => {
             className="h-12 w-auto"
           />
         </div>
-        <div className="flex-shrink-0 text-white">
-          <NavLink
-            to="/login"
-            className={({ isActive }) =>
-              `block px-3 text-center text-sm py-2 font-normal duration-200 ${
-                isActive ? " text-white font-bold" : "text-gray-300 "
-              } hover:text-white`
-            }
-          >
-            Login
-          </NavLink>
-        </div>
+        <NavLink
+          to="/login"
+          className={({ isActive }) =>
+            `block px-3  text-md py-2 font-normal duration-200 ${
+              isActive ? " text-white font-bold" : "text-gray-300 "
+            } hover:text-white`
+          }
+        >
+          Login
+        </NavLink>
       </div>
+
       {/* Mobile navigation */}
 
-      <div className="md:hidden  bg-[#004B86] p-4 flex justify-between items-center">
-        <div className="flex-shrink-0">
+      <div className="lg:hidden  bg-[#004B86] flex justify-between items-center">
+        <div className="w-[10%]">
           <img
             src="src\assets\images\logo\nirdpr.png"
             alt="NIRDPR Logo"
             className="h-12 w-auto"
           />
         </div>
+        <div className="w-[20%] h-max bg-white">
+          <NavLink to={"/"}>
+            <img
+              src="/logo/nirdpr.png"
+              alt="NIRDPR Logo"
+              className="h-12 w-full"
+            />
+          </NavLink>
+        </div>
         <button
           onClick={toggleSidebar}
-          className="text-white focus:outline-none"
+          className="text-white w-[10%] focus:outline-none"
         >
           {isOpen ? <AiOutlineClose size={24} /> : <AiOutlineMenu size={24} />}
         </button>

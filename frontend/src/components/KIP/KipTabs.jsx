@@ -26,9 +26,9 @@ const KipTabs = ({ setTagline }) => {
         {tabs.map((tab) => (
           <button
             key={tab}
-            className={`px-4 py-2 focus:outline-none ${
+            className={`px-4 py-4 text-xl focus:outline-none ${
               activeTab === tab
-                ? "bg-gray-100 text-black font-semibold"
+                ? "bg-gray-100 text-black  font-semibold"
                 : "text-gray-600"
             }`}
             onClick={() => setActiveTab(tab)}

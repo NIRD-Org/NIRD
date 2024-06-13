@@ -2,7 +2,7 @@ import React from "react";
 
 const Progress = ({ value }) => {
   return (
-    <div className="w-[12rem]">
+    <div className="w-[10rem]">
       <div
         className={`inline-block mb-2 ms-[calc(90%-1.25rem)] py-0.5 px-1.5 bg-blue-50 border border-blue-200 text-xs font-medium text-blue-600 rounded-lg dark:bg-blue-800/30 dark:border-blue-800 dark:text-blue-500`}
       >

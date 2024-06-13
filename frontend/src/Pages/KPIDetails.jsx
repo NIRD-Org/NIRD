@@ -1,9 +1,17 @@
-import ThemeData from "@/components/KIP/ThemeData";
+import ThemeData from "@/components/KIP/Theme1Data";
 import Themes from "@/components/KIP/Themes";
+import Theme2Data from "../components/KIP/themeData/Theme2Data";
 import API from "@/utils/API";
 import React, { useEffect, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-
+import Theme3Data from "@/components/KIP/themeData/Theme3Data";
+import Theme4Data from "@/components/KIP/themeData/Theme4Data";
+import Theme5Data from "@/components/KIP/themeData/Theme5Data";
+import Theme6Data from "@/components/KIP/themeData/Theme6Data";
+import Theme7Data from "@/components/KIP/themeData/Theme7Data";
+import Theme8Data from "@/components/KIP/themeData/Theme8Data";
+import Theme9Data from "@/components/KIP/themeData/Theme9Data";
+import { usePDF } from "react-to-pdf";
 const KPIDetails = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [gpData, setGpData] = useState([]);
@@ -11,17 +19,23 @@ const KPIDetails = () => {
   const [districtOptions, setDistrictOptions] = useState([]);
   const [blockOptions, setBlockOptions] = useState([]);
   const [GpOptions, setGpOptions] = useState([]);
+  const [stateData, setStateData] = useState();
 
-  const [state, setState] = useState("");
-  const [district, setDistrict] = useState("");
-  const [taluk, setTaluk] = useState("");
-  const [gp, setGp] = useState("");
+  const state = searchParams.get("state") || "";
+  const dist = searchParams.get("dist") || "";
+  const taluk = searchParams.get("taluk") || "";
+  const gp = searchParams.get("gp") || "";
 
   const getAllKpiData = async () => {
-    const { data } = await API.get(
-      `/api/v1/gp-wise-kpi?page=${1}&state=${state}&taluk=${taluk}&dist=${district}&gp=${gp}`
-    );
-    setGpData(data?.data);
+    try {
+      const { data } = await API.get(
+        `/api/v1/gp-wise-kpi?page=${1}&state=${state}&taluk=${taluk}&dist=${dist}&gp=${gp}`
+      );
+      setGpData(data?.data);
+    } catch (error) {
+      setGpData(null);
+      console.log(error);
+    }
   };
 
   const getAllStates = async () => {
@@ -30,71 +44,71 @@ const KPIDetails = () => {
     console.log(data?.states);
   };
   const getAllDistricts = async () => {
-    console.log(state);
     const { data } = await API.get(`/api/v1/dist/state/${state}`);
     setDistrictOptions(data?.districts);
   };
 
   const getAllBlocks = async () => {
-    const { data } = await API.get(
-      `/api/v1/taluk/get?dist=${district}&state=${state}`
-    );
+    const { data } = await API.get(`/api/v1/taluk/get?dist=${dist}`);
     setBlockOptions(data.taluks);
   };
 
   const getAllGp = async () => {
-    const { data } = await API.get(
-      `/api/v1/gram/get?state=${state}&taluk=${taluk}&dist=${district}`
-    );
+    const { data } = await API.get(`/api/v1/gram/get?taluk=${taluk}`);
     setGpOptions(data.gram);
   };
 
   useEffect(() => {
-    setDistrict("");
-    setTaluk("");
     getAllKpiData();
     getAllStates();
     getAllDistricts();
   }, [state]);
 
   useEffect(() => {
-    setTaluk("");
-    setGp("");
-    if (district) {
+    if (dist) {
       getAllBlocks();
-      getAllGp();
     }
-  }, [district]);
+  }, [dist]);
 
   useEffect(() => {
-    setGp("");
     getAllGp();
   }, [taluk]);
 
   const handleApply = () => {
-    searchParams.set("state", state);
-    setSearchParams(searchParams);
-
-    searchParams.set("dist", dist);
-    setSearchParams(searchParams);
-
-    searchParams.set("taluk", taluk);
-    setSearchParams(searchParams);
-
-    searchParams.set("gp", gp);
-    setSearchParams(searchParams);
+    setSearchParams({ state, dist, taluk, gp });
+    getAllKpiData();
   };
+
+  const getStateById = async (stateId) => {
+    try {
+      const { data } = await API.get(`/api/v1/state/${stateId}`);
+      setStateData(data.state);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    const stateId = searchParams.get("state");
+    getStateById(stateId);
+  }, []);
+
+  const { toPDF, targetRef } = usePDF({ filename: "kpi.pdf" });
 
   return (
     <div className="py-10 px-5 lg:px-20">
-      <div className="flex flex-col justify-between lg:flex-row text-center text-3xl h-full">
+      <div className="flex flex-col justify-between items-center lg:flex-row text-center text-3xl h-full">
         {/* Info */}
         <div className="w-full lg:w-full h-fit">
           <div className="flex flex-wrap items-start py-10 gap-2 sm:gap-5">
             <div className="flex flex-col">
               <select
                 className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
-                onChange={(e) => setState(e.target.value)}
+                value={state}
+                onChange={(e) => {
+                  searchParams.set("state", e.target.value);
+                  setSearchParams(searchParams);
+                }}
               >
                 <option>All States</option>
                 {stateOptions.map((item) => (
@@ -108,7 +122,11 @@ const KPIDetails = () => {
               {/* <SelectComponent data={districtOptions} name="District" /> */}
               <select
                 className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
-                onChange={(e) => setDistrict(e.target.value)}
+                value={dist}
+                onChange={(e) => {
+                  searchParams.set("dist", e.target.value);
+                  setSearchParams(searchParams);
+                }}
               >
                 <option>All Districts</option>
                 {districtOptions.map((item) => (
@@ -121,7 +139,11 @@ const KPIDetails = () => {
             <div className="flex flex-col">
               <select
                 className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
-                onChange={(e) => setTaluk(e.target.value)}
+                value={taluk}
+                onChange={(e) => {
+                  searchParams.set("taluk", e.target.value);
+                  setSearchParams(searchParams);
+                }}
               >
                 <option>All Blocks</option>
                 {blockOptions.map((item) => (
@@ -134,7 +156,11 @@ const KPIDetails = () => {
             <div className="flex flex-col">
               <select
                 className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
-                onChange={(e) => setGp(e.target.value)}
+                value={gp}
+                onChange={(e) => {
+                  searchParams.set("gp", e.target.value);
+                  setSearchParams(searchParams);
+                }}
               >
                 <option>All GPs</option>
                 {GpOptions.map((item) => (
@@ -153,18 +179,23 @@ const KPIDetails = () => {
 
             {/* Gram panchayat Profile */}
           </div>
-          <div className="bg-white shadow-sm h-40 border w-[75%] flex flex-col justify-center items-center">
+          <div className="bg-white shadow-sm h-40 border w-full md:w-[75%] flex flex-col justify-center items-center">
             <Link className="text-blue-900 font-semibold">
               Gram Panchayat Profile
             </Link>
+            <button
+              onClick={() => toPDF()}
+              className="bg-sky-900 mt-5 rounded text-white text-sm p-2 px-4 mb-4"
+            >
+              Download PDF
+            </button>
+            <p className="text-sm text-gray-400">
+              (It may take time to download, Please Wait)
+            </p>
           </div>
         </div>
-        <div className="w-full lg:w-4/12 h-full lg:max-h-[60vh]">
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Devbhumi_Dwarka_Gujarat_map.svg/2540px-Devbhumi_Dwarka_Gujarat_map.svg.png"
-            alt=""
-            className="w-full h-full"
-          />
+        <div className="w-1/2 mt-10 lg:mt-0 flex justify-center items-center lg:w-4/12 h-full lg:max-h-[60vh]">
+          <img src={stateData?.state_icon} alt="" className="w-full h-full" />
         </div>
       </div>
 
@@ -173,8 +204,16 @@ const KPIDetails = () => {
       <div className="py-14">
         <Themes />
       </div>
-      <div>
+      <div ref={targetRef}>
         <ThemeData />
+        <Theme2Data />
+        <Theme3Data />
+        <Theme4Data />
+        <Theme5Data />
+        <Theme6Data />
+        <Theme7Data />
+        <Theme8Data />
+        <Theme9Data />
       </div>
     </div>
   );

@@ -2,12 +2,14 @@ import React from "react";
 
 const ThemeCard = ({ imgUrl, theme }) => {
   return (
-    <div className="hover:cursor-pointer relative min-w-48 h-[5.5rem]   rounded-lg overflow-hidden">
-      <img src={imgUrl} alt="" className="h-full w-full object-cover " />
-      <div className="absolute text-sm z-10 inset-0 w-full h-full flex items-center justify-center text-center bg-black/50 text-white font-semibold">
-        {theme}
+    <a href={`#${theme}`}>
+      <div className="hover:cursor-pointer relative min-w-48 h-[5.5rem]   rounded-lg overflow-hidden">
+        <img src={imgUrl} alt="" className="h-full w-full object-cover " />
+        <div className="absolute text-sm z-10 inset-0 w-full h-full flex items-center justify-center text-center bg-black/50 text-white font-semibold">
+          {theme}
+        </div>
       </div>
-    </div>
+    </a>
   );
 };
 
@@ -15,7 +17,7 @@ const Themes = () => {
   const images = [
     {
       imgUrl:
-        "https://res.cloudinary.com/dtbbuevez/image/upload/v1717957878/themes/sqoylgq7pcbst3otk2h8.jpg",
+        "https://res.cloudinary.com/dtbbuevez/image/upload/v1718221368/WhatsApp_Image_2024-06-12_at_14.47.14_1_hdc1fi.jpg",
       theme: "Poverty Free and Enhanced Livelihoods Village",
     },
     {

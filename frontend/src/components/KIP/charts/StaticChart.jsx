@@ -16,31 +16,13 @@ import API from "@/utils/API";
 
 Chart.register(ArcElement, Tooltip, Legend);
 
-const ManregsChart = ({ kpi, chartType, state, gp, dist }) => {
-  const [gpwiseKpiChart, setGpwiseKpiChart] = useState();
+const StaticChart = ({
+  gpPercentage,
+  chartType,
+  statePercentage,
+  countryPercentage,
+}) => {
   const chartRef = useRef();
-  const getChartData = async () => {
-    try {
-      const { data } = await API.get(
-        `/api/v1/gp-wise-kpi/chart?state=${state}&dist=${dist}&gp=${gp}&kpi=${kpi}`
-      );
-      setGpwiseKpiChart(data);
-    } catch (error) {
-      console.error(error);
-      setGpwiseKpiChart();
-    }
-  };
-
-  useEffect(() => {
-    // Destroy the previous chart instance if it exists
-    if (chartRef.current) {
-      chartRef.current.destroy();
-    }
-  }, [gpwiseKpiChart]);
-
-  useEffect(() => {
-    getChartData();
-  }, []);
 
   // Data for the doughnut chart
   const data = {
@@ -48,11 +30,7 @@ const ManregsChart = ({ kpi, chartType, state, gp, dist }) => {
     datasets: [
       {
         label: "Percentage of Job Card Holders Employed",
-        data: [
-          gpwiseKpiChart?.gp.percentage,
-          gpwiseKpiChart?.state.percentage,
-          gpwiseKpiChart?.country.percentage,
-        ],
+        data: [gpPercentage, statePercentage, countryPercentage],
         fill: true,
         backgroundColor: ["#004B86", "darkOrange", "gray"],
         borderColor: [
@@ -112,4 +90,4 @@ const ManregsChart = ({ kpi, chartType, state, gp, dist }) => {
   );
 };
 
-export default ManregsChart;
+export default StaticChart;
