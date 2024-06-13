@@ -117,16 +117,16 @@ const Header = () => {
           <img
             src="/logo/niti-logo-white.svg"
             alt="Ashoka Logo"
-            className="h-full mt-4 w-[5rem]"
+            className="h-full mt-4 w-[3rem]"
           />
         </div>
 
-        <div className="w-[20%] h-max bg-white">
+        <div className="md:w-[20%] w-[25%] h-max bg-white">
           <NavLink to={"/"}>
             <img
               src="/logo/nirdpr.png"
               alt="NIRDPR Logo"
-              className="h-12 w-full"
+              className="min-h-[10vh] md:min-h-[14vh] w-full"
             />
           </NavLink>
         </div>
