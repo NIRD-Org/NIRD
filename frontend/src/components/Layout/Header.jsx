@@ -121,12 +121,12 @@ const Header = () => {
           />
         </div>
 
-        <div className="md:w-[20%] w-[25%] h-max bg-white">
+        <div className="md:w-[15%] w-[20%] z-50  bg-white">
           <NavLink to={"/"}>
             <img
               src="/logo/nirdpr.png"
               alt="NIRDPR Logo"
-              className="min-h-[10vh] md:min-h-[14vh] w-full"
+              className="min-h-[10vh] w-full"
             />
           </NavLink>
         </div>
@@ -139,7 +139,7 @@ const Header = () => {
         </button>
 
         {isOpen && (
-          <div className="absolute top-20 left-0 w-full h-full bg-[#004B86] flex flex-col items-start pb-20 z-20">
+          <div className="absolute top-[10vh]  left-0 w-full h-full bg-[#004B86] flex flex-col items-start pb-20 z-20">
             <div className="mt-4">
               <NavLink
                 to="/project"
