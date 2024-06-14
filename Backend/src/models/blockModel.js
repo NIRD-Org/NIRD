@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const gpSchema = new Schema(
+const blockSchema = new Schema(
   {
     id: {
       type: String,
@@ -17,11 +17,6 @@ const gpSchema = new Schema(
       required: true,
       ref: "District",
     },
-    block_id: {
-      type: String,
-      required: true,
-      ref: "Block",
-    },
     lgd_code: {
       type: String,
       required: true,
@@ -34,7 +29,7 @@ const gpSchema = new Schema(
       type: String,
       required: true,
     },
-    is_maped_to_another_distrcit: {
+    is_maped_to_another_district: {
       type: String,
       default: null,
     },
@@ -66,4 +61,4 @@ const gpSchema = new Schema(
   }
 );
 
-export const GpModel = mongoose.model("GramPanchayat", gpSchema);
+export const BlockModel = mongoose.model("Block", blockSchema);

@@ -22,7 +22,7 @@ const KPIApprovalPage = () => {
   const [searchParams] = useSearchParams();
   const theme_id = searchParams.get("theme_id") || "";
 
-  const handleCreateKpApproval = async formData => {
+  const handleCreateKpApproval = async (formData) => {
     try {
       await API.post("/api/v1/kpi-approvals/create", formData);
       tst.success("Kp created successfully");
@@ -65,7 +65,7 @@ const KPIApprovalPage = () => {
             <TableHead>ID</TableHead>
             <TableHead>State ID</TableHead>
             <TableHead>District ID</TableHead>
-            <TableHead>Taluk ID</TableHead>
+            <TableHead>block ID</TableHead>
             <TableHead>GP ID</TableHead>
             <TableHead>Theme ID</TableHead>
             <TableHead>Decision</TableHead>
@@ -82,8 +82,11 @@ const KPIApprovalPage = () => {
                 <td colSpan="14">No KPI approval found</td>
               </tr>
             ) : (
-              kpiApprovals.map(kpiApproval => (
-                <KPIApprovalRow key={kpiApproval.id} kpiApproval={kpiApproval} />
+              kpiApprovals.map((kpiApproval) => (
+                <KPIApprovalRow
+                  key={kpiApproval.id}
+                  kpiApproval={kpiApproval}
+                />
               ))
             )}
           </TableBody>

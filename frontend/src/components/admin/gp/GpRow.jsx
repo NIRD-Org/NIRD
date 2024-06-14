@@ -7,7 +7,7 @@ function GpRow({ gp }) {
       <TableCell>{gp.id}</TableCell>
       <TableCell>{gp.state_id}</TableCell>
       <TableCell>{gp.dist_id}</TableCell>
-      <TableCell>{gp.taluk_id}</TableCell>
+      <TableCell>{gp.block_id}</TableCell>
       <TableCell>{gp.lgd_code}</TableCell>
       <TableCell>{gp.name}</TableCell>
       <TableCell>{gp.is_maped_to_another_district}</TableCell>

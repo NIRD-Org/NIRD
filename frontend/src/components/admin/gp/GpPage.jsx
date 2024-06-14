@@ -18,28 +18,28 @@ import { useSearchParams } from "react-router-dom";
 import StateFilter from "@/components/admin/filter/StateFilter";
 import GramFilter from "@/components/admin/filter/GramFilter";
 import DistrictFilter from "@/components/admin/filter/DistrictFilter";
-import TalukFilter from "@/components/admin/filter/TalukFilter";
+import BlockFilter from "@/components/admin/filter/BlockFilter";
 
 const GpPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const state_id = searchParams.get("state_id") || "";
   const dist_id = searchParams.get("dist_id") || "";
-  const taluk_id = searchParams.get("taluk_id") || "";
+  const block_id = searchParams.get("block_id") || "";
   const [gp, setGrams] = useState([]);
 
   useEffect(() => {
-    if (taluk_id) {
-      getAllGp(taluk_id);
+    if (block_id) {
+      getAllGp(block_id);
     } else {
       setGrams([]);
     }
-  }, [taluk_id]);
+  }, [block_id]);
 
-  const getAllGp = async (talukId) => {
+  const getAllGp = async (blockId) => {
     try {
       setIsLoading(true);
-      const { data } = await API.get(`/api/v1/gram/get?taluk=${talukId}`);
+      const { data } = await API.get(`/api/v1/gram/get?block=${blockId}`);
       setGrams(data?.gram || []);
     } catch (error) {
       setGrams([]);
@@ -64,7 +64,7 @@ const GpPage = () => {
           <h2 className="text-xl font-semibold ">All Gram Panchayats</h2>
           <StateFilter />
           <DistrictFilter />
-          <TalukFilter />
+          <BlockFilter />
         </div>
         <Dialog>
           <DialogTrigger asChild>
@@ -82,7 +82,7 @@ const GpPage = () => {
             <TableHead>ID</TableHead>
             <TableHead>State ID</TableHead>
             <TableHead>District ID</TableHead>
-            <TableHead>Taluk ID</TableHead>
+            <TableHead>block ID</TableHead>
             <TableHead>LGD Code</TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Mapped to Another District</TableHead>

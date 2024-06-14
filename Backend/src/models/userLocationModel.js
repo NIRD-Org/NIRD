@@ -1,22 +1,26 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
 
-const themeSchema = new Schema(
+const usersLocationSchema = new mongoose.Schema(
   {
-    id: {
-      type: String,
+    user_id: {
+      type: Number,
       required: true,
-      unique: true,
     },
-    theme_name: {
-      type: String,
+    state_id: {
+      type: Number,
+      required: true,
+    },
+    dist_id: {
+      type: Number,
       required: true,
     },
     status: {
       type: String,
       required: true,
+      maxlength: 1,
     },
     created_by: {
-      type: String,
+      type: Number,
       required: true,
     },
     created_at: {
@@ -25,7 +29,7 @@ const themeSchema = new Schema(
       default: Date.now,
     },
     modified_by: {
-      type: String,
+      type: Number,
       required: true,
     },
     modified_at: {
@@ -33,14 +37,13 @@ const themeSchema = new Schema(
       required: true,
       default: Date.now,
     },
-    flag: {
-      type: String,
-      default: null,
-    },
   },
   {
     timestamps: { createdAt: "created_at", updatedAt: "modified_at" },
   }
 );
 
-export const ThemeModel = mongoose.model("Theme", themeSchema);
+export const UsersLocation = mongoose.model(
+  "UsersLocation",
+  usersLocationSchema
+);

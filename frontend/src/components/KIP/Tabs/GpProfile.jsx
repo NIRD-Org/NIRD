@@ -13,12 +13,12 @@ const GpProfile = () => {
 
   const [state, setState] = useState("");
   const [district, setDistrict] = useState("");
-  const [taluk, setTaluk] = useState("");
+  const [block, setblock] = useState("");
   const [gp, setGp] = useState("");
 
   const getAllKpiData = async () => {
     const { data } = await API.get(
-      `/api/v1/gp-wise-kpi?page=${1}&state=${state}&taluk=${taluk}&dist=${district}&gp=${gp}`
+      `/api/v1/gp-wise-kpi?page=${1}&state=${state}&block=${block}&dist=${district}&gp=${gp}`
     );
     setGpData(data?.data);
   };
@@ -35,18 +35,18 @@ const GpProfile = () => {
   };
 
   const getAllBlocks = async () => {
-    const { data } = await API.get(`/api/v1/taluk/get?dist=${district}`);
-    setBlockOptions(data?.taluks);
+    const { data } = await API.get(`/api/v1/block/get?dist=${district}`);
+    setBlockOptions(data?.blocks);
   };
 
   const getAllGp = async () => {
-    const { data } = await API.get(`/api/v1/gram/get?taluk=${taluk}`);
+    const { data } = await API.get(`/api/v1/gram/get?block=${block}`);
     setGpOptions(data?.gram);
   };
 
   useEffect(() => {
     setDistrict("");
-    setTaluk("");
+    setblock("");
     setGp("");
     getAllKpiData();
     getAllStates();
@@ -55,7 +55,7 @@ const GpProfile = () => {
 
   useEffect(() => {
     getAllKpiData();
-  }, [district, taluk, gp]);
+  }, [district, block, gp]);
 
   useEffect(() => {
     if (district) {
@@ -64,8 +64,8 @@ const GpProfile = () => {
   }, [district]);
 
   useEffect(() => {
-    if (taluk) getAllGp();
-  }, [taluk]);
+    if (block) getAllGp();
+  }, [block]);
 
   const stateOptions1 = stateOptions.map((item) => ({
     value: item.id,
@@ -147,7 +147,7 @@ const GpProfile = () => {
           </div>
           <div className="flex flex-col">
             <label className="text-gray-600 text-sm mb-1">
-              Select Block/Taluk
+              Select Block/block
             </label>
             <Select
               className="basic-single"
@@ -157,7 +157,7 @@ const GpProfile = () => {
               isSearchable={true}
               name="States"
               options={blockOptions1}
-              onChange={(e) => setTaluk(e.value)}
+              onChange={(e) => setblock(e.value)}
               classNames="text-black w-full text-sm"
               styles={customStyles}
             />
@@ -212,7 +212,7 @@ const GpProfile = () => {
               gpDistrict={gp?.district}
               gpName={gp?.gp}
               gpState={gp?.state}
-              gptaluk={gp?.taluk}
+              gpblock={gp?.block}
               gp={gp?.gp}
             />
           ))}

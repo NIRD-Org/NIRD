@@ -23,13 +23,13 @@ const KPIDetails = () => {
 
   const state = searchParams.get("state") || "";
   const dist = searchParams.get("dist") || "";
-  const taluk = searchParams.get("taluk") || "";
+  const block = searchParams.get("block") || "";
   const gp = searchParams.get("gp") || "";
 
   const getAllKpiData = async () => {
     try {
       const { data } = await API.get(
-        `/api/v1/gp-wise-kpi?page=${1}&state=${state}&taluk=${taluk}&dist=${dist}&gp=${gp}`
+        `/api/v1/gp-wise-kpi?page=${1}&state=${state}&block=${block}&dist=${dist}&gp=${gp}`
       );
       setGpData(data?.data);
     } catch (error) {
@@ -49,12 +49,12 @@ const KPIDetails = () => {
   };
 
   const getAllBlocks = async () => {
-    const { data } = await API.get(`/api/v1/taluk/get?dist=${dist}`);
-    setBlockOptions(data.taluks);
+    const { data } = await API.get(`/api/v1/block/get?dist=${dist}`);
+    setBlockOptions(data.blocks);
   };
 
   const getAllGp = async () => {
-    const { data } = await API.get(`/api/v1/gram/get?taluk=${taluk}`);
+    const { data } = await API.get(`/api/v1/gram/get?block=${block}`);
     setGpOptions(data.gram);
   };
 
@@ -72,10 +72,10 @@ const KPIDetails = () => {
 
   useEffect(() => {
     getAllGp();
-  }, [taluk]);
+  }, [block]);
 
   const handleApply = () => {
-    setSearchParams({ state, dist, taluk, gp });
+    setSearchParams({ state, dist, block, gp });
     getAllKpiData();
   };
 
@@ -139,9 +139,9 @@ const KPIDetails = () => {
             <div className="flex flex-col">
               <select
                 className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
-                value={taluk}
+                value={block}
                 onChange={(e) => {
-                  searchParams.set("taluk", e.target.value);
+                  searchParams.set("block", e.target.value);
                   setSearchParams(searchParams);
                 }}
               >

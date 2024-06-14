@@ -8,7 +8,7 @@ import {
 import "./App.css";
 import Layout from "./Layout";
 import AdminPage from "./Pages/admin/AdminPage";
-import TalukPage from "./components/admin/taluka/TalukPage";
+import BlockPage from "./components/admin/block/BlockPage";
 import GpPage from "./components/admin/gp/GpPage";
 import KpiPage from "./components/admin/kpi/KpiPage";
 import ThemePage from "./components/admin/theme/ThemePage";
@@ -50,8 +50,8 @@ function App() {
           <Route path="project" element={<ProjectPage />} />
         </Route>
         <Route path="/admin" element={<AdminPage />}>
-          <Route index element={<TalukPage />} />
-          <Route path="taluks" element={<TalukPage />} />
+          <Route index element={<BlockPage />} />
+          <Route path="blocks" element={<BlockPage />} />
           <Route path="gram-panchayats" element={<GpPage />} />
           <Route path="kpi" element={<KpiPage />} />
           <Route path="themes" element={<ThemePage />} />

@@ -11,7 +11,7 @@ const Indicators = () => {
 
   const [state, setState] = useState("");
   const [district, setDistrict] = useState("");
-  const [taluk, setTaluk] = useState("");
+  const [block, setblock] = useState("");
   const [gp, setGp] = useState("");
 
   const getAllStates = async () => {
@@ -25,18 +25,18 @@ const Indicators = () => {
   };
 
   const getAllBlocks = async () => {
-    const { data } = await API.get(`/api/v1/taluk/get?dist=${district}`);
-    setBlockOptions(data?.taluks);
+    const { data } = await API.get(`/api/v1/block/get?dist=${district}`);
+    setBlockOptions(data?.blocks);
   };
 
   const getAllGp = async () => {
-    const { data } = await API.get(`/api/v1/gram/get?taluk=${taluk}`);
+    const { data } = await API.get(`/api/v1/gram/get?block=${block}`);
     setGpOptions(data?.gram);
   };
 
   useEffect(() => {
     setDistrict("");
-    setTaluk("");
+    setblock("");
     setGp("");
     // getAllKpiData();
     getAllStates();
@@ -50,8 +50,8 @@ const Indicators = () => {
   }, [district]);
 
   useEffect(() => {
-    if (taluk) getAllGp();
-  }, [taluk]);
+    if (block) getAllGp();
+  }, [block]);
 
   const stateOptions1 = stateOptions.map((item) => ({
     value: item.id,
@@ -165,7 +165,7 @@ const Indicators = () => {
           </div>
           <div className="flex flex-col">
             <label className="text-gray-600 text-sm mb-1">
-              Select Block/Taluk
+              Select Block/block
             </label>
             <Select
               className="basic-single"
@@ -175,7 +175,7 @@ const Indicators = () => {
               isSearchable={true}
               name="States"
               options={blockOptions1}
-              onChange={(e) => setTaluk(e.value)}
+              onChange={(e) => setblock(e.value)}
               classNames="text-black w-full text-sm"
               styles={customStyles}
             />
@@ -251,7 +251,7 @@ const Indicators = () => {
                               <h3 class="text-xl font-semibold">
                                 {gpData.gp_name}
                               </h3>
-                              <p>{gpData.taluk_name}</p>
+                              <p>{gpData.block_name}</p>
                               <p className="text-lg">{gpData.district_name} </p>
                               <p className="text-sm">{gpData.state_name}</p>
                             </div>
