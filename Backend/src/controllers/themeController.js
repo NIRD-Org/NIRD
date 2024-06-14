@@ -56,3 +56,25 @@ export const getAllThemes = CatchAsyncError(async (req, res, next) => {
     return next(new Errorhandler("Failed to get all the themes", 500));
   }
 });
+
+// Delete theme - set status to "0"
+
+export const deleteTheme = CatchAsyncError(async (req, res, next) => {
+  try {
+    const theme = await ThemeModel.findOneAndUpdate(
+      { id: req.params.id },
+      { status: 0 },
+      { new: true }
+    );
+    if (!theme) {
+      return next(new Errorhandler("Theme not found", 404));
+    }
+    res.status(200).json({
+      status: "success",
+      message: "Theme deleted successfully",
+      theme,
+    });
+  } catch (error) {
+    return next(new Errorhandler("Failed to delete theme", 500));
+  }
+});

@@ -17,21 +17,11 @@ const themeSchema = new Schema(
     },
     created_by: {
       type: String,
-      required: true,
-    },
-    created_at: {
-      type: Date,
-      required: true,
-      default: Date.now,
+      required: false,
     },
     modified_by: {
       type: String,
-      required: true,
-    },
-    modified_at: {
-      type: Date,
-      required: true,
-      default: Date.now,
+      required: false,
     },
     flag: {
       type: String,

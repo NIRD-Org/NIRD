@@ -73,6 +73,26 @@ export const getKPIByTheme = CatchAsyncError(async (req, res, next) => {
       KPI,
     });
   } catch (error) {
-    next();
+    return next(new Errorhandler("Failed to fetch KPI", 500));
+  }
+});
+
+// Delete teh kpi - set status to "0"
+
+export const deleteKPI = CatchAsyncError(async (req, res, next) => {
+  try {
+    const KPI = await KPIModel.findOneAndUpdate(
+      { _id: req.params.id },
+      { status: "0" }
+    );
+    if (!KPI) {
+      return next(new Errorhandler("No KPI Found", 404));
+    }
+    res.status(200).json({
+      success: true,
+      message: "KPI Deleted Successfully",
+    });
+  } catch (error) {
+    return next(new Errorhandler("Failed to delete KPI", 500));
   }
 });

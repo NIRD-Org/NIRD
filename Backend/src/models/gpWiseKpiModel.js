@@ -56,7 +56,7 @@ const gpWiseKpiSchema = new mongoose.Schema(
     },
     score: {
       type: Number,
-      default: null,
+      default: 0,
     },
     remarks: {
       type: String,
@@ -66,7 +66,7 @@ const gpWiseKpiSchema = new mongoose.Schema(
       type: String,
       default: "0",
     },
-    submitteed_id: {
+    submitted_id: {
       type: String,
       required: true,
     },
@@ -74,17 +74,8 @@ const gpWiseKpiSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    created_at: {
-      type: Date,
-      required: true,
-    },
     modified_by: {
       type: String,
-      required: true,
-    },
-    modified_at: {
-      type: Date,
-      required: true,
     },
   },
   {

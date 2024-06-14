@@ -81,3 +81,27 @@ export const getQuestionsById = CatchAsyncError(async (req, res, next) => {
     return next(new Errorhandler("Failed to get all questions", 500));
   }
 });
+
+// Delete the kpi questions - set status to "0"
+
+export const deleteKPIQuestion = CatchAsyncError(async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const question = await KPIQuestionsModel.findOneAndUpdate(
+      id,
+      {
+        status: "0",
+      },
+      { new: true }
+    );
+    if (!question) {
+      return next(new Errorhandler("Question not found", 404));
+    }
+    res.status(200).json({
+      success: true,
+      message: "Question deleted successfully",
+    });
+  } catch (error) {
+    return next(new Errorhandler("Failed to delete question", 500));
+  }
+});

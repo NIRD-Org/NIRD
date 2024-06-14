@@ -3,22 +3,76 @@ import { GpWiseKpiModel } from "../models/gpWiseKpiModel.js";
 import { KPIApprovalModel } from "../models/kpiApprovalModel.js";
 import { Errorhandler } from "../utils/errorHandler.js";
 
-// export const createGpWiseKpiData = CatchAsyncError(async (req, res, next) => {
-//   try {
-//     const gpWiseKpiData = await GpWiseKpiModel.create(req.body);
-//     if (!gpWiseKpiData) {
-//       return next(new Errorhandler("Failed to create  GpWiseKpi data", 500));
-//     }
+const getNewIdKPI = async () => {
+  try {
+    const maxDoc = await GpWiseKpiModel.aggregate([
+      {
+        $addFields: {
+          numericId: { $toInt: "$id" },
+        },
+      },
+      {
+        $sort: { numericId: -1 },
+      },
+      {
+        $limit: 1,
+      },
+    ]).exec();
 
-//     res.status(200).json({
-//       success: true,
-//       message: "Gp Wise KPI Data Created Successfully",
-//       data: gpWiseKpiData,
-//     });
-//   } catch (error) {
-//     return next(new Errorhandler("Failed to create  GpWiseKpi data", 500));
-//   }
-// });
+    const maxId = maxDoc.length > 0 ? maxDoc[0].numericId : 0;
+    return maxId + 1;
+  } catch (error) {
+    return next(new Errorhandler("failed to get new id", 500));
+  }
+};
+
+const getNewIdApproval = async () => {
+  try {
+    const maxDoc = await KPIApprovalModel.aggregate([
+      {
+        $addFields: {
+          numericId: { $toInt: "$id" },
+        },
+      },
+      {
+        $sort: { numericId: -1 },
+      },
+      {
+        $limit: 1,
+      },
+    ]).exec();
+
+    const maxId = maxDoc.length > 0 ? maxDoc[0].numericId : 0;
+    return maxId + 1;
+  } catch (error) {
+    return next(new Errorhandler("failed to get new id", 500));
+  }
+};
+
+// Generate new submitted id
+
+const getNewSubmittedId = async () => {
+  try {
+    const maxDoc = await KPIApprovalModel.aggregate([
+      {
+        $addFields: {
+          numericId: { $toInt: "$submitted_id" },
+        },
+      },
+      {
+        $sort: { numericId: -1 },
+      },
+      {
+        $limit: 1,
+      },
+    ]).exec();
+
+    const maxId = maxDoc.length > 0 ? maxDoc[0].numericId : 0;
+    return maxId + 1;
+  } catch (error) {
+    return next(new Errorhandler("failed to get new id", 500));
+  }
+};
 
 // Submit the kpi data created by the young fellow
 
@@ -32,44 +86,47 @@ export const submitKpiData = CatchAsyncError(async (req, res, next) => {
       date,
       theme_id,
       user_id,
-      submitteed_id,
       formData,
     } = req.body;
+    const submitted_id = await getNewSubmittedId();
 
     // Validate if formData is empty
     if (!formData || formData.length === 0) {
       return next(new Errorhandler("Form data cannot be empty", 400));
     }
-
     // Prepare the GpWiseKPI documents for insertion
-    const kpiDocuments = formData.map((kpi) => ({
-      state_id: state_id,
-      dist_id: dist_id,
-      block_id: block_id,
-      gp_id: gp_id,
-      date: date,
-      theme_id: theme_id,
-      kpi_id: kpi.kpi_id,
-      question_id: kpi.question_id,
-      max_range: kpi.max_range,
-      input_data: kpi.input_data,
-      remarks: kpi.remarks,
-      submitteed_id,
-      created_by: user_id,
-    }));
+    let currentMaxId = await getNewIdKPI();
+    const kpiDocuments = await Promise.all(
+      formData.map(async (kpi) => ({
+        id: currentMaxId++,
+        state_id: state_id,
+        dist_id: dist_id,
+        block_id: block_id,
+        gp_id: gp_id,
+        date: date,
+        theme_id: theme_id,
+        kpi_id: kpi.kpi_id,
+        question_id: kpi.question_id,
+        max_range: kpi.max_range,
+        input_data: kpi.input_data,
+        remarks: kpi.remarks,
+        submitted_id: submitted_id,
+        created_by: user_id,
+      }))
+    );
 
     // Inserting the KPI documents into the gpWiseKpi collection
     await GpWiseKpiModel.insertMany(kpiDocuments);
-
+    const approvalId = await getNewIdApproval();
     // Create the approval request document
     const approvalDocument = {
-      id,
+      id: approvalId,
       state_id,
       dist_id,
       block_id,
       gp_id,
       theme_id,
-      submitteed_id: user_id,
+      submitted_id,
       created_by: user_id,
     };
 
@@ -424,3 +481,25 @@ export const getGpWiseKpiDataWithPercentageController = CatchAsyncError(
     }
   }
 );
+
+// Delete gpwise data - set the status to "0"
+
+export const deleteGpWiseKpiData = CatchAsyncError(async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const gpWiseKpi = await GpModel.findOneAndUpdate(
+      id,
+      { status: "0" },
+      { new: true }
+    );
+    if (!gpWiseKpi) {
+      return next(new Errorhandler("No Gram Panchayat Found", 404));
+    }
+    res.status(200).json({
+      success: true,
+      message: "GP Wise Kpi data Deleted Successfully",
+    });
+  } catch (error) {
+    return next(new Errorhandler("Failed to delete Gram Panchayat", 500));
+  }
+});
