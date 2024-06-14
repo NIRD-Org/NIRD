@@ -45,7 +45,7 @@ export const getAllKPIApprovals = CatchAsyncError(async (req, res, next) => {
 
 export const getKPIApprovals = CatchAsyncError(async (req, res, next) => {
   try {
-    const { state, dist, block, gp, theme } = req.query;
+    const { state, dist, block, gp } = req.query;
     const match = {};
 
     if (state) match.state_id = state;
@@ -56,14 +56,27 @@ export const getKPIApprovals = CatchAsyncError(async (req, res, next) => {
     const pipeline = [
       { $match: match },
       {
+        $lookup: {
+          from: "themes",
+          localField: "theme_id",
+          foreignField: "id",
+          as: "theme_info",
+        },
+      },
+      { $unwind: "$theme_info" },
+      {
         $group: {
-          _id: "$theme_id",
+          _id: {
+            theme_id: "$theme_id",
+            theme_name: "$theme_info.name",
+          },
           approvals: { $push: "$$ROOT" },
         },
       },
       {
         $project: {
-          theme_id: "$_id",
+          theme_id: "$_id.theme_id",
+          theme_name: "$_id.theme_name",
           approvals: 1,
           _id: 0,
         },
