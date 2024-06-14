@@ -82,3 +82,19 @@ export const deleteState = CatchAsyncError(async (req, res, next) => {
     return next(new Errorhandler("Failed to delete state", 500));
   }
 });
+
+// Update state
+
+export const updateState = CatchAsyncError(async (req, res, next) => {
+  try {
+    const state = await StateModel.findOne({ id: req.params.id });
+    if (!state) {
+      return next(new Errorhandler("State not found", 404));
+    }
+    state.name = req.body.name;
+    await state.save();
+    res.status(200).json({ success: true, message: "State updated" });
+  } catch (err) {
+    return next(new Errorhandler("Failed to update state", 500));
+  }
+});

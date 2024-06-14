@@ -90,3 +90,22 @@ export const deleteGP = CatchAsyncError(async (req, res, next) => {
     return next(new Errorhandler("Failed to delete Gram Panchayat", 500));
   }
 });
+
+// update the gp
+
+export const updateGP = CatchAsyncError(async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const gp = await GpModel.findOneAndUpdate(id, req.body, { new: true });
+    if (!gp) {
+      return next(new Errorhandler("No Gram Panchayat Found", 404));
+    }
+    res.status(200).json({
+      success: true,
+      message: "Gram Panchayat Updated Successfully",
+      gp,
+    });
+  } catch (error) {
+    return next(new Errorhandler("Failed to update Gram Panchayat", 500));
+  }
+});
