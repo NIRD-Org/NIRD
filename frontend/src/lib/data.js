@@ -339,7 +339,7 @@ export const sidebarItems = [
     link: "/admin/districts",
   },
   {
-    icon: Home,
+    icon: ArrowBigRight,
     title: "Taluks",
     link: "/admin/taluks",
   },

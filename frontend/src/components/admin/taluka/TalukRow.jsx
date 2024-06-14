@@ -1,17 +1,17 @@
 import React from "react";
 import { TableCell, TableRow } from "@/components/ui/table";
 
-function TalukRow({ taluk }) {
+function BlockRow({ block }) {
   return (
     <TableRow>
-      <TableCell>{taluk.id}</TableCell>
-      <TableCell>{taluk.lgd_code}</TableCell>
-      <TableCell>{taluk.state_id}</TableCell>
-      <TableCell>{taluk.dist_id}</TableCell>
-      <TableCell>{taluk.name}</TableCell>
-      <TableCell>{taluk.is_maped_to_another_district}</TableCell>
+      <TableCell>{block.id}</TableCell>
+      <TableCell>{block.lgd_code}</TableCell>
+      <TableCell>{block.state_id}</TableCell>
+      <TableCell>{block.dist_id}</TableCell>
+      <TableCell>{block.name}</TableCell>
+      <TableCell>{block.is_maped_to_another_district}</TableCell>
     </TableRow>
   );
 }
 
-export default TalukRow;
+export default BlockRow;

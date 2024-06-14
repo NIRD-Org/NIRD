@@ -8,7 +8,7 @@ import ThemeRow from "../theme/ThemeRow";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import StateFilter from "../filter/StateFilter";
 import DistrictFilter from "../filter/DistrictFilter";
-import TalukFilter from "../filter/TalukFilter";
+import BlockFilter from "../filter/BlockFilter";
 import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
 import GramFilter from "../filter/GramFilter";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -18,7 +18,7 @@ function YoungFellowForm({ type, onSubmit, kpiApproval }) {
     id: kpiApproval ? kpiApproval.id : "",
     state_id: kpiApproval ? kpiApproval.state_id : "",
     district_id: kpiApproval ? kpiApproval.district_id : "",
-    taluk_id: kpiApproval ? kpiApproval.taluk_id : "",
+    block_id: kpiApproval ? kpiApproval.block_id : "",
     gp_id: kpiApproval ? kpiApproval.gp_id : "",
     theme_id: kpiApproval ? kpiApproval.theme_id : "",
     decision: kpiApproval ? kpiApproval.decision : "",
@@ -28,13 +28,13 @@ function YoungFellowForm({ type, onSubmit, kpiApproval }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const state_id = searchParams.get("state_id") || "";
   const dist_id = searchParams.get("dist_id") || "";
-  const taluk_id = searchParams.get("taluk_id") || "";
+  const block_id = searchParams.get("block_id") || "";
   const gram_id = searchParams.get("gram_id") || "";
   const [pending, setPending] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [states, setStates] = useState([]);
   const [districts, setDistricts] = useState([]);
-  const [taluks, setTaluks] = useState([]);
+  const [blocks, setBlocks] = useState([]);
   const [themes, setThemes] = useState([]);
   const [gps, setGps] = useState([]);
   const navigate = useNavigate();
@@ -49,17 +49,19 @@ function YoungFellowForm({ type, onSubmit, kpiApproval }) {
     setDistricts(data?.districts);
   };
 
-  const getAllTaluks = async () => {
+  const getAllBlocks = async () => {
     try {
-      const url = `/api/v1/taluk/get?state=${formData.state_id}&dist=${formData.dist_id}`;
+      const url = `/api/v1/block/get?state=${formData.state_id}&dist=${formData.dist_id}`;
       const { data } = await API.get(url);
-      setTaluks(data?.taluks);
-    } catch (error) {}
+      setBlocks(data?.blocks);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const getAllGp = async () => {
     try {
-      const { data } = await API.get(`/api/v1/gram/get?dist=${formData.dist_id}&state=${formData.state_id}&taluk=${formData.taluk_id}`);
+      const { data } = await API.get(`/api/v1/gram/get?dist=${formData.dist_id}&state=${formData.state_id}&block=${formData.block_id}`);
       setGps(data?.gram);
     } catch (error) {}
   };
@@ -86,7 +88,7 @@ function YoungFellowForm({ type, onSubmit, kpiApproval }) {
   }, [formData.state_id]);
 
   useEffect(() => {
-    getAllTaluks();
+    getAllBlocks();
     getAllGp();
   }, [formData.dist_id]);
 
@@ -102,7 +104,7 @@ function YoungFellowForm({ type, onSubmit, kpiApproval }) {
   }
 
   const handleGpWiseKpiEdit = (id) => {
-    navigate(`/admin/gp-wise-kpi?state_id=${state_id}&dist_id=${dist_id}&taluk_id=${taluk_id}&gram_id=${gram_id}&theme_id=${id}`);
+    navigate(`/admin/gp-wise-kpi?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${id}`);
   };
 
   return (
@@ -112,7 +114,7 @@ function YoungFellowForm({ type, onSubmit, kpiApproval }) {
         <div className="w-full grid grid-cols-5 gap-10">
           <StateFilter />
           <DistrictFilter />
-          <TalukFilter />
+          <BlockFilter />
           <GramFilter />
           <Button onClick={handleSubmit}>Search</Button>
         </div>

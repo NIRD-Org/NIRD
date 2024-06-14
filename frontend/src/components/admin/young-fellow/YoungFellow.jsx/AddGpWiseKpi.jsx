@@ -1,3 +1,9 @@
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useAuthContext } from "@/context/AuthContext";
+import API from "@/utils/API";
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
@@ -5,29 +11,20 @@ function AddGpWiseKpi() {
   const [searchParams, setSearchParams] = useSearchParams();
   const state_id = searchParams.get("state_id") || "";
   const dist_id = searchParams.get("dist_id") || "";
-  const taluk_id = searchParams.get("taluk_id") || "";
-  const gram_id = searchParams.get("gram_id") || "";
+  const block_id = searchParams.get("block_id") || "";
+  const gp_id = searchParams.get("gram_id") || "";
   const theme_id = searchParams.get("theme_id") || "";
   const [kpis, setKpis] = useState([]);
   const [questions, setQuestions] = useState([]);
+  const [data, setData] = useState([]);
   const [formData, setFormData] = useState([]);
-
+  const [date,setDate] = useState(null)
+  const {user} = useAuthContext();
   useEffect(() => {
     const fetchKpis = async () => {
       try {
-        const response = await axios.get("/api/getKpis", {
-          params: { theme_id },
-        });
-        setKpis(response.data.kpis);
-
-        const initialFormData = response.data.kpis.map(kpi => ({
-          kpi_id: kpi.id,
-          question_id: null,
-          max_range: "",
-          input_range: "",
-          remarks: "",
-        }));
-        setFormData(initialFormData);
+        const response = await API.get(`/api/v1/kpi/theme/${theme_id}`);
+        setKpis(response.data.KPI);
       } catch (error) {
         console.error("Error fetching KPIs:", error);
       }
@@ -35,19 +32,19 @@ function AddGpWiseKpi() {
 
     const fetchQuestions = async () => {
       try {
-        const response = await axios.get("/api/getQuestions", {
-          params: { theme_id },
-        });
+        const response = await API.get(`/api/v1/kpi-questions/get?theme=${theme_id}`);
         setQuestions(response.data.questions);
 
-        const updatedFormData = formData.map(item => {
-          const question = response.data.questions.find(q => q.kpi_id === item.kpi_id);
+        const updatedFormData = kpis.map(item => {
+          const question = questions.find(q => q.kpi_id === item.id);
           return {
             ...item,
             question_id: question ? question.id : null,
+            question_name: question ? question.question_name : null,
           };
         });
-        setFormData(updatedFormData);
+
+        setData(updatedFormData);
       } catch (error) {
         console.error("Error fetching questions:", error);
       }
@@ -55,12 +52,18 @@ function AddGpWiseKpi() {
 
     fetchKpis();
     fetchQuestions();
-  }, [theme_id]);
+  }, []);
 
-  const handleInputChange = (index, event) => {
-    const newFormData = [...formData];
-    newFormData[index].data = event.target.value;
-    setFormData(newFormData);
+  const handleChange = (e, index) => {
+    const { name, value } = e.target;
+    setFormData(prevData => {
+      const updatedData = [...prevData];
+      updatedData[index] = {
+        ...updatedData[index],
+        [name]: value,
+      };
+      return updatedData;
+    });
   };
 
   const handleSubmit = async event => {
@@ -71,15 +74,14 @@ function AddGpWiseKpi() {
       block_id,
       gp_id,
       theme_id,
-      user_id,
-      date: "2024-06-14",
+      user_id:user.id,
+      date: formData.date,
       theme_id,
-      submitted_id,
       formData: formData,
     };
 
     try {
-      const response = await axios.post("/api/submitKpiData", dataToSend);
+      const response = await API.post("/api/v1/gp-wise-kpi/submit", dataToSend);
       console.log("Success:", response.data);
     } catch (error) {
       console.error("Error submitting data:", error);
@@ -93,27 +95,47 @@ function AddGpWiseKpi() {
           <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">Young Fellow Form - Edit</h2>
         </div>
         <form onSubmit={handleSubmit}>
-          <table>
-            <thead>
-              <tr>
-                <th>KPI Name</th>
-                <th>Question</th>
-                <th>Data</th>
-              </tr>
-            </thead>
-            <tbody>
-              {kpis.map((kpi, index) => (
-                <tr key={kpi.id}>
-                  <td>{kpi.kpi_name}</td>
-                  <td>{questions.find(q => q.kpi_id === kpi.id)?.question_text || "No question"}</td>
-                  <td>
-                    <input type="text" value={formData[index] ? formData[index].data : ""} onChange={event => handleInputChange(index, event)} />
-                  </td>
-                </tr>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>KPI Name</TableHead>
+                <TableHead>Question</TableHead>
+                <TableHead>Input type</TableHead>
+                <TableHead>Max Number (Total Number)</TableHead>
+                <TableHead>Cumulative Achived Number</TableHead>
+                <TableHead>Score</TableHead>
+                <TableHead>Remarks</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {data.map((data, index) => (
+                <TableRow key={data.id}>
+                  <TableCell>{data.kpi_name}</TableCell>
+                  <TableCell>{data.question_name || "No question"}</TableCell>
+                  <TableCell>Percentage</TableCell>
+                  <TableCell>
+                    <Input type="number" name="max_range" value={formData[index]?.max_range || ""} onChange={e => handleChange(e, index)} />
+                  </TableCell>
+                  <TableCell>
+                    <Input type="number" name="input_data" value={formData[index]?.input_data || ""} onChange={e => handleChange(e, index)} />
+                  </TableCell>
+                  <TableCell>
+                    <Input type="text" disabled />
+                  </TableCell>
+                  <TableCell>
+                    <Input type="text" name="remarks" value={formData[index]?.remarks || ""} onChange={e => handleChange(e, index)} />
+                  </TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
-          <button type="submit">Submit</button>
+            </TableBody>
+          </Table>
+          <div className="w-max my-4">
+            <Label htmlFor="date" className="text-right mt-2">
+              Date
+            </Label>
+            <Input type="date" name="date" value={date || ""} onChange={()=>setDate(event.target.value)} id="date" placeholder="Enter datte" className="px-10" />
+          </div>
+          <Button type="submit">Submit</Button>
         </form>
       </div>
     </div>
