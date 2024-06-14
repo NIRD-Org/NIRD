@@ -85,3 +85,27 @@ export const getblocksByLocation = CatchAsyncError(async (req, res, next) => {
     return next(new Errorhandler("Failed to get blocks data", 500));
   }
 });
+
+// deleteblock
+
+export const deleteblock = CatchAsyncError(async (req, res, next) => {
+  try {
+    const block = await BlockModel.findOneAndUpdate(
+      { id: req.params.id },
+      {
+        status: "0",
+      },
+      { new: true }
+    );
+    if (!block) {
+      return next(new Errorhandler("Block not found", 404));
+    }
+    res.status(200).json({
+      success: true,
+      message: "block deleted successfully",
+      block,
+    });
+  } catch (err) {
+    return next(new Errorhandler("Failed to delete block", 500));
+  }
+});

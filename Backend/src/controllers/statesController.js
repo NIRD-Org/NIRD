@@ -66,3 +66,19 @@ export const getStateById = CatchAsyncError(async (req, res, next) => {
     return next(new Errorhandler("Failed to fetch state", 500));
   }
 });
+
+// Delete a state - set the status to "0"
+
+export const deleteState = CatchAsyncError(async (req, res, next) => {
+  try {
+    const state = await StateModel.findOne({ id: req.params.id });
+    if (!state) {
+      return next(new Errorhandler("State not found", 404));
+    }
+    state.status = "0";
+    await state.save();
+    res.status(200).json({ success: true, message: "State deleted" });
+  } catch (err) {
+    return next(new Errorhandler("Failed to delete state", 500));
+  }
+});

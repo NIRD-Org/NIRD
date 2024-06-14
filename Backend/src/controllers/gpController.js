@@ -68,3 +68,25 @@ export const getGpByLocation = CatchAsyncError(async (req, res, next) => {
     return next(new Errorhandler("Failed to get Gram Panchayat", 500));
   }
 });
+
+// Delete the gp - set the status to 0
+
+export const deleteGP = CatchAsyncError(async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const gp = await GpModel.findOneAndUpdate(
+      id,
+      { status: "0" },
+      { new: true }
+    );
+    if (!gp) {
+      return next(new Errorhandler("No Gram Panchayat Found", 404));
+    }
+    res.status(200).json({
+      success: true,
+      message: "Gram Panchayat Deleted Successfully",
+    });
+  } catch (error) {
+    return next(new Errorhandler("Failed to delete Gram Panchayat", 500));
+  }
+});

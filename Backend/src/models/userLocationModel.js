@@ -2,6 +2,11 @@ import mongoose from "mongoose";
 
 const usersLocationSchema = new mongoose.Schema(
   {
+    id: {
+      type: "string",
+      required: true,
+      unique: true,
+    },
     user_id: {
       type: Number,
       required: true,
@@ -17,25 +22,15 @@ const usersLocationSchema = new mongoose.Schema(
     status: {
       type: String,
       required: true,
+      default: "1",
       maxlength: 1,
     },
     created_by: {
       type: Number,
-      required: true,
     },
-    created_at: {
-      type: Date,
-      required: true,
-      default: Date.now,
-    },
+
     modified_by: {
       type: Number,
-      required: true,
-    },
-    modified_at: {
-      type: Date,
-      required: true,
-      default: Date.now,
     },
   },
   {
@@ -43,7 +38,7 @@ const usersLocationSchema = new mongoose.Schema(
   }
 );
 
-export const UsersLocation = mongoose.model(
+export const UserLocationModel = mongoose.model(
   "UsersLocation",
   usersLocationSchema
 );

@@ -39,19 +39,9 @@ const districtSchema = new Schema(
       type: String,
       required: true,
     },
-    created_at: {
-      type: Date,
-      required: true,
-      default: Date.now,
-    },
     modified_by: {
       type: String,
       required: true,
-    },
-    modified_at: {
-      type: Date,
-      required: true,
-      default: Date.now,
     },
   },
   {

@@ -58,3 +58,28 @@ export const getDistrictByState = CatchAsyncError(async (req, res, next) => {
     return next(new Errorhandler("Failed to fetch District", 500));
   }
 });
+
+// Delete the district data - set status to 0
+
+export const deleteDistrict = CatchAsyncError(async (req, res, next) => {
+  try {
+    const districtData = await DistrictModel.findOneAndUpdate(
+      { id: req.params.id },
+      {
+        status: "0",
+      },
+      {
+        new: true,
+      }
+    );
+    if (!districtData) {
+      return next(new Errorhandler("No District Data Found", 404));
+    }
+    res.status(200).json({
+      success: true,
+      message: "District Deleted Successfully",
+    });
+  } catch (error) {
+    return next(new Errorhandler("Failed to delete District", 500));
+  }
+});
