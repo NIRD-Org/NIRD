@@ -27,8 +27,8 @@ const stateSchema = new Schema({
     default: null,
   },
   status: {
-    type: String,
-    required: true,
+    type: Number,
+    default: 1,
   },
   created_by: {
     type: String,
@@ -41,7 +41,6 @@ const stateSchema = new Schema({
   },
   modified_by: {
     type: String,
-    required: true,
   },
   modified_at: {
     type: Date,

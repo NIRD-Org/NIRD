@@ -9,14 +9,8 @@ function GpRow({ gp }) {
       <TableCell>{gp.dist_id}</TableCell>
       <TableCell>{gp.taluk_id}</TableCell>
       <TableCell>{gp.lgd_code}</TableCell>
-      <TableCell>{gp.lgd_code_feb11_2021}</TableCell>
       <TableCell>{gp.name}</TableCell>
       <TableCell>{gp.is_maped_to_another_district}</TableCell>
-      <TableCell>{gp.status}</TableCell>
-      <TableCell>{gp.created_by}</TableCell>
-      <TableCell>{new Date(gp.created_at).toLocaleDateString()}</TableCell>
-      <TableCell>{gp.modified_by}</TableCell>
-      <TableCell>{new Date(gp.modified_at).toLocaleDateString()}</TableCell>
     </TableRow>
   );
 }

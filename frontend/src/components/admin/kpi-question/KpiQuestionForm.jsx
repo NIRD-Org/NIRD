@@ -14,9 +14,6 @@ function KpiForm({ type, onSubmit, kpiQuestion }) {
     input_type: kpiQuestion ? kpiQuestion.input_type : "",
     max_range: kpiQuestion ? kpiQuestion.max_range : "",
     question_type: kpiQuestion ? kpiQuestion.question_type : "",
-    status: kpiQuestion ? kpiQuestion.status : "",
-    created_by: kpiQuestion ? kpiQuestion.created_by : "",
-    modified_by: kpiQuestion ? kpiQuestion.modified_by : "",
   });
   const [themes, setThemes] = useState([]);
   const [kpi, setKpi] = useState([]);
@@ -160,48 +157,6 @@ function KpiForm({ type, onSubmit, kpiQuestion }) {
             onChange={handleChange}
             id="question_type"
             placeholder="Enter Question Type"
-            className="col-span-3"
-          />
-        </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="status" className="text-right mt-2">
-            Status
-          </Label>
-          <Input
-            type="text"
-            name="status"
-            value={formData.status}
-            onChange={handleChange}
-            id="status"
-            placeholder="Enter Status"
-            className="col-span-3"
-          />
-        </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="created_by" className="text-right mt-2">
-            Created By
-          </Label>
-          <Input
-            type="text"
-            name="created_by"
-            value={formData.created_by}
-            onChange={handleChange}
-            id="created_by"
-            placeholder="Enter Created By"
-            className="col-span-3"
-          />
-        </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="modified_by" className="text-right mt-2">
-            Modified By
-          </Label>
-          <Input
-            type="text"
-            name="modified_by"
-            value={formData.modified_by}
-            onChange={handleChange}
-            id="modified_by"
-            placeholder="Enter Modified By"
             className="col-span-3"
           />
         </div>

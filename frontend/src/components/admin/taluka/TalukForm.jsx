@@ -3,14 +3,6 @@ import { DialogHeader, DialogFooter, DialogTitle, DialogDescription } from "@/co
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { districts, states } from "@/lib/data";
 import API from "@/utils/API";
 
 function TalukForm({ type, onSubmit, taluk }) {
@@ -22,9 +14,6 @@ function TalukForm({ type, onSubmit, taluk }) {
     lgd_code_feb11_2021: taluk ? taluk.lgd_code_feb11_2021 : "",
     name: taluk ? taluk.name : "",
     is_maped_to_another_district: taluk ? taluk.is_maped_to_another_district : "",
-    status: taluk ? taluk.status : "",
-    created_by: taluk ? taluk.created_by : "",
-    modified_by: taluk ? taluk.modified_by : "",
   });
 
   const [pending, setPending] = useState(false);
@@ -146,15 +135,16 @@ function TalukForm({ type, onSubmit, taluk }) {
           <Label htmlFor="is_maped_to_another_district" className="text-right mt-2">
             Mapped to Another District
           </Label>
-          <Input
-            type="text"
-            name="is_maped_to_another_district"
+          <select
+            className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
             value={formData.is_maped_to_another_district}
-            onChange={handleChange}
-            id="is_maped_to_another_district"
-            placeholder="Enter Mapping Status"
-            className="col-span-3"
-          />
+            name="is_maped_to_another_district"
+            onChange={e => handleChange}
+          >
+            <option value="">Select a Mapping Status</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
         </div>
         <div className="grid grid-cols-4 gap-4">
           <Label htmlFor="status" className="text-right mt-2">
@@ -167,34 +157,6 @@ function TalukForm({ type, onSubmit, taluk }) {
             onChange={handleChange}
             id="status"
             placeholder="Enter Status"
-            className="col-span-3"
-          />
-        </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="created_by" className="text-right mt-2">
-            Created By
-          </Label>
-          <Input
-            type="text"
-            name="created_by"
-            value={formData.created_by}
-            onChange={handleChange}
-            id="created_by"
-            placeholder="Enter Created By"
-            className="col-span-3"
-          />
-        </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="modified_by" className="text-right mt-2">
-            Modified By
-          </Label>
-          <Input
-            type="text"
-            name="modified_by"
-            value={formData.modified_by}
-            onChange={handleChange}
-            id="modified_by"
-            placeholder="Enter Modified By"
             className="col-span-3"
           />
         </div>

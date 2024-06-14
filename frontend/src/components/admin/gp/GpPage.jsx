@@ -70,7 +70,7 @@ const GpPage = () => {
           <DialogTrigger asChild>
             <Button variant="outline">Add Gram Panchayat</Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[800px] h-[90vh] scrollbar overflow-y-scroll">
+          <DialogContent className="sm:max-w-[600px] max-h-[90vh] scrollbar overflow-y-scroll">
             <GpForm type={"add"} onSubmit={handleCreateGp} />
           </DialogContent>
         </Dialog>
@@ -84,14 +84,8 @@ const GpPage = () => {
             <TableHead>District ID</TableHead>
             <TableHead>Taluk ID</TableHead>
             <TableHead>LGD Code</TableHead>
-            <TableHead>LGD Code (Feb 11, 2021)</TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Mapped to Another District</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Created By</TableHead>
-            <TableHead>Created At</TableHead>
-            <TableHead>Modified By</TableHead>
-            <TableHead>Modified At</TableHead>
           </TableRow>
         </TableHeader>
         {isLoading ? (

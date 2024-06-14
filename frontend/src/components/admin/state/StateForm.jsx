@@ -6,15 +6,10 @@ import { Button } from "@/components/ui/button";
 
 function StateForm({ type, onSubmit, state }) {
   const [formData, setFormData] = useState({
-    id: state ? state.id : "",
-    lgd_code: state ? state.lgd_code : "",
-    name: state ? state.name : "",
-    state_shortcode: state ? state.state_shortcode : "",
-    country_id: state ? state.country_id : "",
-    state_icon: state ? state.state_icon : "",
-    status: state ? state.status : "",
-    created_by: state ? state.created_by : "",
-    modified_by: state ? state.modified_by : "",
+    lgd_code: state?.lgd_code || "",
+    name: state?.name || "",
+    state_shortcode: state?.state_shortcode || "",
+    country_id: state?.country_id || "",
   });
 
   const [pending, setPending] = useState(false);
@@ -34,6 +29,25 @@ function StateForm({ type, onSubmit, state }) {
     setPending(false);
   };
 
+  const formFields = [
+    {
+      name: "lgd_code",
+      label: "LGD Code",
+    },
+    {
+      name: "name",
+      label: "Name",
+    },
+    {
+      name: "state_shortcode",
+      label: "State Shortcode",
+    },
+    {
+      name: "country_id",
+      label: "Country ID",
+    },
+  ];
+
   return (
     <form onSubmit={handleSubmit}>
       <DialogHeader>
@@ -43,104 +57,22 @@ function StateForm({ type, onSubmit, state }) {
         </DialogDescription>
       </DialogHeader>
       <div className="grid gap-4 py-4">
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="lgd_code" className="text-right mt-2">
-            LGD Code
-          </Label>
-          <Input
-            type="text"
-            name="lgd_code"
-            value={formData.lgd_code}
-            onChange={handleChange}
-            id="lgd_code"
-            placeholder="Enter LGD Code"
-            className="col-span-3"
-          />
-        </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="name" className="text-right mt-2">
-            Name
-          </Label>
-          <Input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            id="name"
-            placeholder="Enter Name"
-            className="col-span-3"
-          />
-        </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="state_shortcode" className="text-right mt-2">
-            State Shortcode
-          </Label>
-          <Input
-            type="text"
-            name="state_shortcode"
-            value={formData.state_shortcode}
-            onChange={handleChange}
-            id="state_shortcode"
-            placeholder="Enter State Shortcode"
-            className="col-span-3"
-          />
-        </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="country_id" className="text-right mt-2">
-            Country ID
-          </Label>
-          <Input
-            type="text"
-            name="country_id"
-            value={formData.country_id}
-            onChange={handleChange}
-            id="country_id"
-            placeholder="Enter Country ID"
-            className="col-span-3"
-          />
-        </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="status" className="text-right mt-2">
-            Status
-          </Label>
-          <Input
-            type="text"
-            name="status"
-            value={formData.status}
-            onChange={handleChange}
-            id="status"
-            placeholder="Enter Status"
-            className="col-span-3"
-          />
-        </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="created_by" className="text-right mt-2">
-            Created By
-          </Label>
-          <Input
-            type="text"
-            name="created_by"
-            value={formData.created_by}
-            onChange={handleChange}
-            id="created_by"
-            placeholder="Enter Created By"
-            className="col-span-3"
-          />
-        </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="modified_by" className="text-right mt-2">
-            Modified By
-          </Label>
-          <Input
-            type="text"
-            name="modified_by"
-            value={formData.modified_by}
-            onChange={handleChange}
-            id="modified_by"
-            placeholder="Enter Modified By"
-            className="col-span-3"
-          />
-        </div>
+        {formFields.map((field) => (
+          <div key={field.name} className="grid grid-cols-4 gap-4">
+            <Label htmlFor={field.name} className="text-right mt-2">
+              {field.label}
+            </Label>
+            <Input
+              type="text"
+              name={field.name}
+              value={formData[field.name]}
+              onChange={handleChange}
+              id={field.name}
+              placeholder={`Enter ${field.label.toLowerCase()}`}
+              className="col-span-3"
+            />
+          </div>
+        ))}
       </div>
       <DialogFooter>
         <Button pending={pending} type="submit">
@@ -152,3 +84,4 @@ function StateForm({ type, onSubmit, state }) {
 }
 
 export default StateForm;
+

@@ -1,4 +1,4 @@
-import { Home, LogOut } from "lucide-react";
+import { ArrowBigRight } from "lucide-react";
 
 export const districts = [
   {
@@ -329,43 +329,48 @@ export const kpiData = [
 
 export const sidebarItems = [
   {
-    icon: Home,
+    icon: ArrowBigRight,
     title: "States",
     link: "/admin/states",
   },
   {
-    icon: Home,
+    icon: ArrowBigRight,
     title: "Districts",
     link: "/admin/districts",
   },
   {
-    icon: Home,
+    icon: ArrowBigRight,
     title: "Taluks",
     link: "/admin/taluks",
   },
   {
-    icon: Home,
+    icon: ArrowBigRight,
     title: "Gram Panchayats",
     link: "/admin/gram-panchayats",
   },
   {
-    icon: Home,
+    icon: ArrowBigRight,
     title: "Themes",
     link: "/admin/themes",
   },
   {
-    icon: Home,
+    icon: ArrowBigRight,
     title: "KPI",
     link: "/admin/kpi",
   },
   {
-    icon: Home,
+    icon: ArrowBigRight,
     title: "Kpi questions",
     link: "/admin/kpi-questions",
   },
   {
-    icon: Home,
+    icon: ArrowBigRight,
     title: "Kpi approvals",
     link: "/admin/kpi-approvals",
+  },
+  {
+    icon: ArrowBigRight,
+    title: "Create User",
+    link: "/admin/users/create",
   },
 ];

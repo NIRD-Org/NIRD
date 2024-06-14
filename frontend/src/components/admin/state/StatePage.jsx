@@ -1,14 +1,7 @@
 import React, { useEffect, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCaption, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import TableSkeleton from "@/components/ui/tableskeleton";
 import StateRow from "./StateRow";
 import StateForm from "./StateForm";
@@ -18,17 +11,17 @@ import { tst } from "@/lib/utils";
 
 const StatePage = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [states, setState] = useState([]);
+  const [states, setStates] = useState([]);
 
   const getAllStates = async () => {
     try {
-      setIsLoading(false);
+      setIsLoading(true);
       const { data } = await API.get(`/api/v1/state/all`);
-      setState(data?.states);
+      setStates(data?.states);
     } catch (error) {
       console.log(error);
     } finally {
-      setIsLoading(true);
+      setIsLoading(false);
     }
   };
 
@@ -53,23 +46,18 @@ const StatePage = () => {
           <DialogTrigger asChild>
             <Button variant="outline">Add State</Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[800px] h-[90vh] scrollbar overflow-y-scroll">
+          <DialogContent className="sm:max-w-[700px] max-h-[90vh]  ">
             <StateForm onSubmit={handleCreateState} type={"add"} />
           </DialogContent>
         </Dialog>
       </div>
-      <Table className="overscroll-x-scroll">
+      <Table>
         <TableCaption>List of all states.</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead>ID</TableHead>
             <TableHead>LGD Code</TableHead>
             <TableHead>Name</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Created By</TableHead>
-            <TableHead>Created At</TableHead>
-            <TableHead>Modified By</TableHead>
-            <TableHead>Modified At</TableHead>
           </TableRow>
         </TableHeader>
         {isLoading ? (

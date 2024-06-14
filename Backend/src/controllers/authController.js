@@ -16,7 +16,7 @@ const getNewId = async () => {
 
 export const register = CatchAsyncError(async (req, res, next) => {
   try {
-    let user = await User.findOne({ email: req.body.email });
+    let user = await User.findOne({ email: req.body.username });
     if (user) {
       return next(new Errorhandler("User already exists", 400));
     }
@@ -27,6 +27,7 @@ export const register = CatchAsyncError(async (req, res, next) => {
     user = new User(req.body);
 
     const salt = await bcrypt.genSalt(10);
+    if (!req.body.password) req.body.password = "123456";
     user.password = await bcrypt.hash(req.body.password, salt);
 
     await user.save();
@@ -41,9 +42,9 @@ export const register = CatchAsyncError(async (req, res, next) => {
 export const login = CatchAsyncError(async (req, res, next) => {
   try {
     console.log(req.body);
-    const { email, password } = req.body;
+    const { username, password } = req.body;
 
-    let user = await User.findOne({ email });
+    let user = await User.findOne({ username });
     if (!user) {
       return next(new Errorhandler("Invalid credentials", 400));
     }
@@ -54,16 +55,16 @@ export const login = CatchAsyncError(async (req, res, next) => {
     }
 
     const payload = {
-      user: {
         id: user.id,
-        name:user.name
-      },
+        name: user.name,
+        username: user.username,
+        role: user.role,
     };
 
-    jwt.sign(payload, "secret", { expiresIn: 3600 }, (err, token) => {
-      if (err) return next(new Errorhandler("Token generation failed", 500));
-      res.json({ token });
-    });
+    const token = jwt.sign(payload, "secret", { expiresIn: 3600 });
+    res.setHeader("Authorization", `Bearer ${token}`);
+    res.set("Access-Control-Expose-Headers", "Authorization");
+    res.json({ token });
   } catch (error) {
     console.log(error);
     return next(new Errorhandler("Failed to login", 500));

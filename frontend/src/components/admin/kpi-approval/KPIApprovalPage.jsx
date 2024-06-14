@@ -12,10 +12,9 @@ import {
 import TableSkeleton from "@/components/ui/tableskeleton";
 import KPIApprovalRow from "./KPIApprovalRow";
 import KPIApprovalForm from "./KPIApprovalForm";
-import { kpiApprovals } from "@/lib/data";
 import API from "@/utils/API";
 import { tst } from "@/lib/utils";
-import { useFetcher, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 const KPIApprovalPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -38,7 +37,6 @@ const KPIApprovalPage = () => {
       const { data } = await API.get(`/api/v1/kpi-approvals/all`);
       setKpiApprovals(data?.KPIApprovals);
     } catch (error) {
-      // console.log(error);
     } finally {
       setIsLoading(false);
     }
@@ -55,7 +53,7 @@ const KPIApprovalPage = () => {
           <DialogTrigger asChild>
             <Button variant="outline">Add KPI Approval</Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[800px] h-[90vh] scrollbar overflow-y-scroll">
+          <DialogContent className="sm:max-w-[600px] max-h-[90vh] scrollbar overflow-y-scroll">
             <KPIApprovalForm type={"add"} onSubmit={handleCreateKpApproval} />
           </DialogContent>
         </Dialog>
@@ -73,11 +71,6 @@ const KPIApprovalPage = () => {
             <TableHead>Decision</TableHead>
             <TableHead>Submitted ID</TableHead>
             <TableHead>Remarks</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Created By</TableHead>
-            <TableHead>Created At</TableHead>
-            <TableHead>Modified By</TableHead>
-            <TableHead>Modified At</TableHead>
           </TableRow>
         </TableHeader>
         {isLoading ? (

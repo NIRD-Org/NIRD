@@ -8,11 +8,12 @@ import { useAuthContext } from "@/context/AuthContext";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
-    email: "",
+    username: "",
     password: "",
   });
-  const { login } = useAuthContext();
+  const { login,isAuthenticated } = useAuthContext();
   const navigate = useNavigate();
+
 
   const handleChange = e => {
     setFormData({
@@ -27,10 +28,10 @@ const LoginPage = () => {
       const response = await API.post("/api/v1/auth/login", formData);
       tst.success("User login successful");
       const authHeader = response.headers.get("Authorization");
-   /*    if (authHeader) {
+      if (authHeader) {
         const token = authHeader.replace("Bearer ", "");
         localStorage.setItem("token", token);
-      } */
+      }
       login();
       navigate("/admin");
     } catch (error) {
@@ -39,21 +40,23 @@ const LoginPage = () => {
     }
   };
 
+  // if(isAuthenticated)  navigate("/admin");
+
   return (
     <div className="max-w-xl mx-auto py-20 px-16 ">
-      <h1 className="text-2xl font-bold mb-4">Login</h1>
+      <h1 className="text-2xl font-bold mb-8 text-center">Login to your account</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="flex flex-col space-y-2">
-          <Label htmlFor="email" className="mt-2">
-            Email
+          <Label htmlFor="username" className="mt-2">
+            Username
           </Label>
           <Input
-            type="email"
-            name="email"
-            value={formData.email}
+            type="username"
+            name="username"
+            value={formData.username}
             onChange={handleChange}
-            id="email"
-            placeholder="Enter Email"
+            id="username"
+            placeholder="Enter Username"
             className="col-span-3"
             required
           />
@@ -73,10 +76,7 @@ const LoginPage = () => {
             required
           />
         </div>
-        <Link to="/register" className="block ">
-          <p className="under text-blue-800 text-sm">Don't have an account? Sign up </p>
-        </Link>
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 mt-4 rounded-md">
+        <button type="submit" className="bg-primary w-full text-white px-4 py-2 mt-4 rounded-md">
           Login
         </button>
       </form>

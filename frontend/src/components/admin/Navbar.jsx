@@ -1,44 +1,20 @@
-"use client";
+import { useAuthContext } from "@/context/AuthContext";
+import { Button } from "../ui/button";
+import { useNavigate } from "react-router-dom";
 
 function Navbar() {
-
+  const { logout } = useAuthContext();
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
   return (
     <>
-      <header
-        className="sticky z-[3] top-0 left-0 w-full gap-4 h-16 rounded-md shadow-md bg-white flex items-center px-6 justify-between"
-      >
-       {/*  <Sheet>
-          <SheetTrigger asChild>
-            <Icon
-              icon="mingcute:menu-fill"
-              className="text-3xl lg:hidden text-slate-700"
-            />
-          </SheetTrigger>
-          <SheetContent>
-            <Sidebar className={` lg:hidden absolute top-0 left-0 min-h-screen `} />
-          </SheetContent>
-        </Sheet>
- */}
-          {/* <SearchInput className={'md:w-[500px]'} /> */}
-
-        <div className="max-w-[230px] max-sm:hidden flex gap-10 justify-between items-center rounded-lg bg-white border border-slate-200 px-2 py-1 ">
-          <div className="flex  items-center gap-4">
-            <img
-              width={40}
-              height={40}
-              src="/avatar.png"
-              className=" rounded-full"
-              alt="profile image"
-            />
-
-            <div className="flex flex-col max-sm:hidden ">
-              <span className="text-xs">Welcome back</span>
-            </div>
-          </div>
-          <div>
-            {/* <Icon icon="bx:arrow-back" /> */}
-          </div>
-        </div>
+      <header className="z-[3] w-full gap-4 h-16 rounded-md shadow-md bg-white flex items-center px-6 justify-between">
+        <Button onClick={handleLogout} className="ml-auto">
+          Logout
+        </Button>
       </header>
     </>
   );

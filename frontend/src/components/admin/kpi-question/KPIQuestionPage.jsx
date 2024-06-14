@@ -59,7 +59,7 @@ const KPIQuestionPage = () => {
           <DialogTrigger asChild>
             <Button variant="outline">Add KPI Question</Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[800px] h-[90vh] scrollbar overflow-y-scroll">
+          <DialogContent className="sm:max-w-[600px] max-h-[90vh] scrollbar overflow-y-scroll">
             <KpiForm type={"add"} onSubmit={handleCreateKpiQuestion} />
           </DialogContent>
         </Dialog>
@@ -73,14 +73,7 @@ const KPIQuestionPage = () => {
               "Theme ID",
               "KPI ID",
               "Question Name",
-              "Input Type",
-              "Max Range",
               "Question Type",
-              "Status",
-              "Created By",
-              "Created At",
-              "Modified By",
-              "Modified At",
             ].map((header, index) => (
               <TableHead key={index}>{header}</TableHead>
             ))}

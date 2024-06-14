@@ -24,8 +24,20 @@ import RegisterPage from "./Pages/RegisterPage";
 import ProjectPage from "./Pages/ProjectPage";
 import Home from "./Pages/Home";
 import KPIPage from "./Pages/KPIPage";
+import CreateUserForm from "./components/admin/create-user/CreateUserForm";
+import YoungFellowForm from "./components/admin/young-fellow/YoungFellowForm";
+import { useAuthContext } from "./context/AuthContext";
+import GpWiseKpiList from "./components/admin/young-fellow/YoungFellow.jsx/GpWiseKpiList";
+import AddGpWiseKpi from "./components/admin/young-fellow/YoungFellow.jsx/AddGpWiseKpi";
 
 function App() {
+
+  const {login } = useAuthContext();
+
+  useEffect(()=>{
+    login();
+  },[])
+
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route>
@@ -43,11 +55,15 @@ function App() {
           <Route path="gram-panchayats" element={<GpPage />} />
           <Route path="kpi" element={<KpiPage />} />
           <Route path="themes" element={<ThemePage />} />
-          <Route path="gp-wise-kpi" element={<GpWiseKpiPage />} />
+          {/* <Route path="gp-wise-kpi" element={<GpWiseKpiPage />} /> */}
           <Route path="districts" element={<DistrictPage />} />
           <Route path="kpi-approvals" element={<KPIApprovalPage />} />
           <Route path="kpi-questions" element={<KPIQuestionPage />} />
           <Route path="states" element={<StatePage />} />
+          <Route path="users/create" element={<CreateUserForm />} />
+          <Route path="young-professionals" element={<YoungFellowForm />} />
+          <Route path="gp-wise-kpi" element={<GpWiseKpiList />} />
+          <Route path="add-gp-wise-kpi" element={<AddGpWiseKpi />} />
         </Route>
         <Route path="/"></Route>
       </Route>

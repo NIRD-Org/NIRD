@@ -27,6 +27,8 @@ export const createState = CatchAsyncError(async (req, res, next) => {
   try {
     const id = await getNewId();
     req.body.id = id.toString();
+    console.log(req.userId);
+    req.body.createdBy = req.userId;
     const newState = new StateModel(req.body);
     await newState.save();
     res.status(201).json({

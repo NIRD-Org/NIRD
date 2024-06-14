@@ -12,7 +12,6 @@ import {
 import TableSkeleton from "@/components/ui/tableskeleton";
 import KpiRow from "./KpiRow";
 import KpiForm from "./KpiForm";
-import { kpiData } from "@/lib/data";
 import API from "@/utils/API";
 import { tst } from "@/lib/utils";
 
@@ -53,7 +52,7 @@ const KpiPage = () => {
           <DialogTrigger asChild>
             <Button variant="outline">Add KPI</Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[800px] h-[90vh] scrollbar overflow-y-scroll">
+          <DialogContent className="sm:max-w-[600px] max-h-[90vh] scrollbar overflow-y-scroll">
             <KpiForm type={"add"} onSubmit={handleCreateGp} />
           </DialogContent>
         </Dialog>
@@ -69,11 +68,6 @@ const KpiPage = () => {
             <TableHead>Input Type</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Weightage</TableHead>
-            <TableHead>Created By</TableHead>
-            <TableHead>Created At</TableHead>
-            <TableHead>Modified By</TableHead>
-            <TableHead>Modified At</TableHead>
-            <TableHead>Flag</TableHead>
           </TableRow>
         </TableHeader>
         {isLoading ? (

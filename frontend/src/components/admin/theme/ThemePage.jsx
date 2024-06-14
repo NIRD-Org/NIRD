@@ -46,7 +46,7 @@ const ThemePage = () => {
           <DialogTrigger asChild>
             <Button variant="outline">Add Theme</Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[800px]  scrollbar overflow-y-scroll">
+          <DialogContent className="sm:max-w-[500px]  scrollbar overflow-y-scroll">
             <ThemeForm type={"add"} onSubmit={handleCreateGp}/>
           </DialogContent>
         </Dialog>
@@ -57,12 +57,6 @@ const ThemePage = () => {
           <TableRow>
             <TableHead>ID</TableHead>
             <TableHead>Theme Name</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Created By</TableHead>
-            <TableHead>Created At</TableHead>
-            <TableHead>Modified By</TableHead>
-            <TableHead>Modified At</TableHead>
-            <TableHead>Flag</TableHead>
           </TableRow>
         </TableHeader>
         {isLoading ? (

@@ -16,9 +16,6 @@ function KPIApprovalForm({ type, onSubmit, kpiApproval }) {
     decision: kpiApproval ? kpiApproval.decision : "",
     submitted_id: kpiApproval ? kpiApproval.submitted_id : "",
     remarks: kpiApproval ? kpiApproval.remarks : "",
-    status: kpiApproval ? kpiApproval.status : "",
-    created_by: kpiApproval ? kpiApproval.created_by : "",
-    modified_by: kpiApproval ? kpiApproval.modified_by : "",
   });
 
   const [pending, setPending] = useState(false);

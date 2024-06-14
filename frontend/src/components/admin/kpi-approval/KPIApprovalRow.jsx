@@ -13,11 +13,6 @@ function KPIApprovalRow({ kpiApproval }) {
       <TableCell>{kpiApproval.decision}</TableCell>
       <TableCell>{kpiApproval.submitted_id}</TableCell>
       <TableCell>{kpiApproval.remarks}</TableCell>
-      <TableCell>{kpiApproval.status}</TableCell>
-      <TableCell>{kpiApproval.created_by}</TableCell>
-      <TableCell>{new Date(kpiApproval.created_at).toLocaleDateString()}</TableCell>
-      <TableCell>{kpiApproval.modified_by}</TableCell>
-      <TableCell>{new Date(kpiApproval.modified_at).toLocaleDateString()}</TableCell>
     </TableRow>
   );
 }

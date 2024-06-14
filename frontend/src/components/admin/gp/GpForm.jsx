@@ -12,12 +12,8 @@ function GpForm({ type, onSubmit, gp }) {
     dist_id: gp ? gp.dist_id : "",
     taluk_id: gp ? gp.taluk_id : "",
     lgd_code: gp ? gp.lgd_code : "",
-    lgd_code_feb11_2021: gp ? gp.lgd_code_feb11_2021 : "",
     name: gp ? gp.name : "",
     is_maped_to_another_district: gp ? gp.is_maped_to_another_district : "",
-    status: gp ? gp.status : "",
-    created_by: gp ? gp.created_by : "",
-    modified_by: gp ? gp.modified_by : "",
   });
   const [states, setStates] = useState([]);
   const [districts, setDistricts] = useState([]);
@@ -156,20 +152,6 @@ function GpForm({ type, onSubmit, gp }) {
           </select>
         </div>
         <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="lgd_code_feb11_2021" className="text-right mt-2">
-            LGD Code (Feb 11, 2021)
-          </Label>
-          <Input
-            type="text"
-            name="lgd_code_feb11_2021"
-            value={formData.lgd_code_feb11_2021}
-            onChange={handleChange}
-            id="lgd_code_feb11_2021"
-            placeholder="Enter LGD Code (Feb 11, 2021)"
-            className="col-span-3"
-          />
-        </div>
-        <div className="grid grid-cols-4 gap-4">
           <Label htmlFor="name" className="text-right mt-2">
             Name
           </Label>
@@ -187,57 +169,16 @@ function GpForm({ type, onSubmit, gp }) {
           <Label htmlFor="is_maped_to_another_district" className="text-right mt-2">
             Mapped to Another District
           </Label>
-          <Input
-            type="text"
-            name="is_maped_to_another_district"
+          <select
+            className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
             value={formData.is_maped_to_another_district}
+            name="is_maped_to_another_district"
             onChange={handleChange}
-            id="is_maped_to_another_district"
-            placeholder="Enter Mapping Status"
-            className="col-span-3"
-          />
-        </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="status" className="text-right mt-2">
-            Status
-          </Label>
-          <Input
-            type="text"
-            name="status"
-            value={formData.status}
-            onChange={handleChange}
-            id="status"
-            placeholder="Enter Status"
-            className="col-span-3"
-          />
-        </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="created_by" className="text-right mt-2">
-            Created By
-          </Label>
-          <Input
-            type="text"
-            name="created_by"
-            value={formData.created_by}
-            onChange={handleChange}
-            id="created_by"
-            placeholder="Enter Created By"
-            className="col-span-3"
-          />
-        </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="modified_by" className="text-right mt-2">
-            Modified By
-          </Label>
-          <Input
-            type="text"
-            name="modified_by"
-            value={formData.modified_by}
-            onChange={handleChange}
-            id="modified_by"
-            placeholder="Enter Modified By"
-            className="col-span-3"
-          />
+          >
+            <option value="">Select a mapping status</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
         </div>
       </div>
       <DialogFooter>

@@ -17,6 +17,14 @@ import API from "@/utils/API";
 import StateFilter from "@/components/admin/filter/StateFilter";
 import { useSearchParams } from "react-router-dom";
 
+const districtHeaders = [
+  "ID",
+  "LGD Code",
+  "State ID",
+  "Name",
+  "Special Area",
+];
+
 const DistrictPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [districts, setDistricts] = useState([]);
@@ -51,6 +59,19 @@ const DistrictPage = () => {
     }
   };
 
+  const renderTableContent = () => {
+    if (isLoading) {
+      return <TableSkeleton columnCount={districtHeaders.length} />;
+    }
+    return (
+      <TableBody>
+        {districts.map(district => (
+          <DistrictRow key={district.id} district={district} />
+        ))}
+      </TableBody>
+    );
+  };
+
   return (
     <div className="container mx-auto p-4">
       <div className="flex justify-between text-center mb-6">
@@ -62,7 +83,7 @@ const DistrictPage = () => {
           <DialogTrigger asChild>
             <Button variant="outline">Add District</Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[800px] h-[90vh] scrollbar overflow-y-scroll">
+          <DialogContent className="sm:max-w-[600px] max-h-[90vh] scrollbar overflow-y-scroll">
             <DistrictForm type={"add"} onSubmit={handleCreateDistrict} />
           </DialogContent>
         </Dialog>
@@ -71,32 +92,16 @@ const DistrictPage = () => {
         <TableCaption>List of all districts.</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead>ID</TableHead>
-            <TableHead>LGD Code</TableHead>
-            <TableHead>State ID</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Special Area</TableHead>
-            <TableHead>Special Area ID</TableHead>
-            <TableHead>Aspirational District</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Created By</TableHead>
-            <TableHead>Created At</TableHead>
-            <TableHead>Modified By</TableHead>
-            <TableHead>Modified At</TableHead>
+            {districtHeaders.map(header => (
+              <TableHead key={header}>{header}</TableHead>
+            ))}
           </TableRow>
         </TableHeader>
-        {isLoading ? (
-          <TableSkeleton columnCount={11} />
-        ) : (
-          <TableBody>
-            {districts.map(district => (
-              <DistrictRow key={district.id} district={district} />
-            ))}
-          </TableBody>
-        )}
+        {renderTableContent()}
       </Table>
     </div>
   );
 };
 
 export default DistrictPage;
+

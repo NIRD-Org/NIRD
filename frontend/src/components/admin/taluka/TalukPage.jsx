@@ -3,14 +3,7 @@ import React, { useEffect, useState } from "react";
 import TalukRow from "./TalukRow";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCaption, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import TableSkeleton from "@/components/ui/tableskeleton";
 import TalukForm from "./TalukForm";
 import API from "@/utils/API";
@@ -18,6 +11,7 @@ import { tst } from "@/lib/utils";
 import { useSearchParams } from "react-router-dom";
 import StateFilter from "@/components/admin/filter/StateFilter";
 import DistrictFilter from "@/components/admin/filter/DistrictFilter";
+
 const TalukPage = ({}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [taluks, setTaluks] = useState([]);
@@ -37,14 +31,13 @@ const TalukPage = ({}) => {
 
   const getAllTaluks = async (stateId, dist_id) => {
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       const url = `/api/v1/taluk/get?state=${state_id}&dist=${dist_id}`;
       const { data } = await API.get(url);
       setTaluks(data?.taluks);
     } catch (error) {
       console.log(error);
-    }
-    finally{
+    } finally {
       setIsLoading(false);
     }
   };
@@ -67,7 +60,7 @@ const TalukPage = ({}) => {
           <DialogTrigger asChild>
             <Button variant="outline">Add Taluk</Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[800px] h-[90vh] scrollbar overflow-y-scroll">
+          <DialogContent className="sm:max-w-[800px] max-h-[90vh] scrollbar overflow-y-scroll">
             <TalukForm type={"add"} onSubmit={handleCreateTaluka} />
           </DialogContent>
         </Dialog>
@@ -82,11 +75,6 @@ const TalukPage = ({}) => {
             <TableHead>District ID</TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Mapped to Another District</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Created By</TableHead>
-            <TableHead>Created At</TableHead>
-            <TableHead>Modified By</TableHead>
-            <TableHead>Modified At</TableHead>
           </TableRow>
         </TableHeader>
         {isLoading ? (

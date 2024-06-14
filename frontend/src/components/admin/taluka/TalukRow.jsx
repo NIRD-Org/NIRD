@@ -10,12 +10,6 @@ function TalukRow({ taluk }) {
       <TableCell>{taluk.dist_id}</TableCell>
       <TableCell>{taluk.name}</TableCell>
       <TableCell>{taluk.is_maped_to_another_district}</TableCell>
-      <TableCell>{taluk.status}</TableCell>
-      <TableCell>{taluk.created_by}</TableCell>
-      <TableCell>{new Date(taluk.created_at).toLocaleDateString()}</TableCell>
-      <TableCell>{taluk.modified_by}</TableCell>
-      <TableCell>{new Date(taluk.modified_at).toLocaleDateString()}</TableCell>
-  
     </TableRow>
   );
 }
