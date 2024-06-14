@@ -24,10 +24,11 @@ function AddGpWiseKpi() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    let kpis, questions;
     const fetchKpis = async () => {
       try {
         const response = await API.get(`/api/v1/kpi/theme/${theme_id}`);
-        setKpis(prev => response.data.KPI);
+        kpis = response.data.KPI;
       } catch (error) {
         console.error("Error fetching KPIs:", error);
       }
@@ -36,7 +37,7 @@ function AddGpWiseKpi() {
     const fetchQuestions = async () => {
       try {
         const response = await API.get(`/api/v1/kpi-questions/get?theme=${theme_id}`);
-        setQuestions(response.data.questions);
+        questions = response.data.questions;
 
         let updatedFormData = kpis.map(item => {
           const question = response.data.questions.find(q => q.kpi_id === item.id);
@@ -48,7 +49,7 @@ function AddGpWiseKpi() {
             };
         });
         updatedFormData = updatedFormData.filter(item => item.question_id != null);
-        setData(prev => updatedFormData);
+        setData(updatedFormData);
       } catch (error) {
         console.error("Error fetching questions:", error);
       }
@@ -118,7 +119,6 @@ function AddGpWiseKpi() {
         <div className="mb-8">
           <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">Young Fellow Form - Edit</h2>
         </div>
-        {/* <div>{ isLoading && "laoding"}</div> */}
         <form onSubmit={handleSubmit}>
           <Table>
             <TableHeader>

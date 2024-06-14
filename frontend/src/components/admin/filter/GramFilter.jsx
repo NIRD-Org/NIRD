@@ -12,15 +12,15 @@ const GramFilter = ({ className }) => {
   const [grams, setGrams] = useState([]);
 
   useEffect(() => {
-    if (state_id && district_id && block_id) {
+    if (block_id) {
       getAllGp(state_id, district_id, block_id);
     }
   }, [state_id, district_id, block_id]);
 
-  const getAllGp = async (stateId, distId, blockId) => {
+  const getAllGp = async (blockId) => {
     try {
       const { data } = await API.get(
-        `/api/v1/gram/get?state=${stateId}&dist=${distId}&block=${blockId}`
+        `/api/v1/gram/get?block=${blockId}`
       );
       setGrams(data?.gram || []);
     } catch (error) {
@@ -50,7 +50,7 @@ const GramFilter = ({ className }) => {
       )}
       value={gram_id}
       onChange={handleGramChange}
-      disabled={!state_id || !district_id || !block_id}
+      disabled={!block_id}
     >
       <option value="">Select a gram</option>
       {grams.map((gram) => (

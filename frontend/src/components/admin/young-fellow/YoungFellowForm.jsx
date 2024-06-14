@@ -32,39 +32,8 @@ function YoungFellowForm({ type, onSubmit, kpiApproval }) {
   const gram_id = searchParams.get("gram_id") || "";
   const [pending, setPending] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [states, setStates] = useState([]);
-  const [districts, setDistricts] = useState([]);
-  const [blocks, setBlocks] = useState([]);
   const [themes, setThemes] = useState([]);
-  const [gps, setGps] = useState([]);
   const navigate = useNavigate();
-
-  const getAllStates = async () => {
-    const { data } = await API.get(`/api/v1/state/all`);
-    setStates(data?.states);
-  };
-
-  const getAllDistricts = async () => {
-    const { data } = await API.get(`/api/v1/dist/state/${formData.state_id}`);
-    setDistricts(data?.districts);
-  };
-
-  const getAllBlocks = async () => {
-    try {
-      const url = `/api/v1/block/get?state=${formData.state_id}&dist=${formData.dist_id}`;
-      const { data } = await API.get(url);
-      setBlocks(data?.blocks);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getAllGp = async () => {
-    try {
-      const { data } = await API.get(`/api/v1/gram/get?dist=${formData.dist_id}&state=${formData.state_id}&block=${formData.block_id}`);
-      setGps(data?.gram);
-    } catch (error) {}
-  };
 
   const getAllThemes = async () => {
     const { data } = await API.get(`/api/v1/theme/all`);
@@ -79,19 +48,6 @@ function YoungFellowForm({ type, onSubmit, kpiApproval }) {
     }));
   };
 
-  useEffect(() => {
-    getAllStates();
-  }, []);
-
-  useEffect(() => {
-    getAllDistricts();
-  }, [formData.state_id]);
-
-  useEffect(() => {
-    getAllBlocks();
-    getAllGp();
-  }, [formData.dist_id]);
-
   const handleSubmit = e => {
     e.preventDefault();
     setPending(true);
@@ -104,7 +60,7 @@ function YoungFellowForm({ type, onSubmit, kpiApproval }) {
   }
 
   const handleGpWiseKpiEdit = (id) => {
-    navigate(`/admin/gp-wise-kpi?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${id}`);
+    navigate(`/admin/gp-wise-kpi?state_id=${state_id}&dist_id=${'1'}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${id}`);
   };
 
   return (
