@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { RiArrowRightLine } from "react-icons/ri";
-const GpProfileCard = ({ gpName, gpState, gpDistrict, gptaluk, gp }) => {
+const GpProfileCard = ({ gpName, gpState, gpDistrict, gpblock, gp }) => {
   return (
     <div className="w-[19rem] h-[18rem] md:w-[15rem] relative group md:h-56  hover:bg-[#004B86]/75 border flex flex-col justify-between p-4">
       <div className={`flex  flex-col font-semibold`}>
@@ -12,7 +12,7 @@ const GpProfileCard = ({ gpName, gpState, gpDistrict, gptaluk, gp }) => {
           {gpDistrict.name}
         </h5>
         <p className="text-xs font-normal group-hover:text-white text-slate-600">
-          {gptaluk.name}
+          {gpblock.name}
         </p>
         <p className="text-xs font-normal group-hover:text-white text-slate-600">
           {gpState.name}
@@ -24,7 +24,7 @@ const GpProfileCard = ({ gpName, gpState, gpDistrict, gptaluk, gp }) => {
         alt=""
       />
       <Link
-        to={`/gp-profile?gp=${gp.id}&state=${gpState.id}&dist=${gpDistrict.id}&taluk=${gptaluk.id}`}
+        to={`/gp-profile?gp=${gp.id}&state=${gpState.id}&dist=${gpDistrict.id}&block=${gpblock.id}`}
         className=" group-hover:text-white items-center gap-2 hover:text-orange-600 hover:scale-[1.01] transition-all ease-in-out duration-100"
       >
         {" "}

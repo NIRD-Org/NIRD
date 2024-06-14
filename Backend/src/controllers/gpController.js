@@ -43,15 +43,15 @@ export const createGP = CatchAsyncError(async (req, res, next) => {
 
 export const getGpByLocation = CatchAsyncError(async (req, res, next) => {
   try {
-    const { state, dist, taluk } = req.query;
+    const { state, dist, block } = req.query;
 
     let filter = {};
     if (state) filter.state_id = state;
     if (dist) {
       filter.dist_id = dist;
     }
-    if (taluk) {
-      filter.taluk_id = taluk;
+    if (block) {
+      filter.block_id = block;
     }
 
     const gram = await GpModel.find(filter);

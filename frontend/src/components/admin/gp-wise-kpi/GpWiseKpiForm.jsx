@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { DialogHeader, DialogFooter, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import {
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -9,7 +14,7 @@ function GpWiseKpiForm({ type, onSubmit, gpWiseKpi }) {
   const [formData, setFormData] = useState({
     state_id: gpWiseKpi ? gpWiseKpi.state_id : "",
     dist_id: gpWiseKpi ? gpWiseKpi.dist_id : "",
-    taluk_id: gpWiseKpi ? gpWiseKpi.taluk_id : "",
+    block_id: gpWiseKpi ? gpWiseKpi.block_id : "",
     gp_id: gpWiseKpi ? gpWiseKpi.gp_id : "",
     date: gpWiseKpi ? gpWiseKpi.date : "",
     theme_id: gpWiseKpi ? gpWiseKpi.theme_id : "",
@@ -27,7 +32,7 @@ function GpWiseKpiForm({ type, onSubmit, gpWiseKpi }) {
   const [pending, setPending] = useState(false);
   const [states, setStates] = useState([]);
   const [districts, setDistricts] = useState([]);
-  const [taluks, setTaluks] = useState([]);
+  const [blocks, setblocks] = useState([]);
   const [themes, setThemes] = useState([]);
   const [gps, setGps] = useState([]);
 
@@ -49,7 +54,7 @@ function GpWiseKpiForm({ type, onSubmit, gpWiseKpi }) {
   const getAllGp = async () => {
     try {
       const { data } = await API.get(
-        `/api/v1/gram/get?dist=${formData.dist_id}&state=${formData.state_id}&taluk=${formData.taluk_id}`
+        `/api/v1/gram/get?dist=${formData.dist_id}&state=${formData.state_id}&block=${formData.block_id}`
       );
       setGps(data?.gram);
     } catch (error) {
@@ -57,19 +62,19 @@ function GpWiseKpiForm({ type, onSubmit, gpWiseKpi }) {
     }
   };
 
-  const getAllTaluks = async () => {
+  const getAllblocks = async () => {
     try {
-      const url = `/api/v1/taluk/get?state=${formData.state_id}&dist=${formData.dist_id}`;
+      const url = `/api/v1/block/get?state=${formData.state_id}&dist=${formData.dist_id}`;
       const { data } = await API.get(url);
-      setTaluks(data?.taluks);
+      setblocks(data?.blocks);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
@@ -85,11 +90,11 @@ function GpWiseKpiForm({ type, onSubmit, gpWiseKpi }) {
   }, [formData.state_id]);
 
   useEffect(() => {
-    getAllTaluks();
+    getAllblocks();
     getAllGp();
   }, [formData.dist_id, formData.state_id]);
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setPending(true);
     onSubmit(formData);
@@ -99,9 +104,13 @@ function GpWiseKpiForm({ type, onSubmit, gpWiseKpi }) {
   return (
     <form onSubmit={handleSubmit}>
       <DialogHeader>
-        <DialogTitle>{type === "add" ? "Add GP-wise KPI" : "Update GP-wise KPI"}</DialogTitle>
+        <DialogTitle>
+          {type === "add" ? "Add GP-wise KPI" : "Update GP-wise KPI"}
+        </DialogTitle>
         <DialogDescription>
-          {type === "add" ? "Add a new GP-wise KPI" : "Update GP-wise KPI details"}
+          {type === "add"
+            ? "Add a new GP-wise KPI"
+            : "Update GP-wise KPI details"}
         </DialogDescription>
       </DialogHeader>
       <div className="grid gap-4 py-4">
@@ -112,12 +121,17 @@ function GpWiseKpiForm({ type, onSubmit, gpWiseKpi }) {
           <select
             className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
             value={formData.state_id}
-            onChange={e => setFormData(prevData => ({ ...prevData, state_id: e.target.value }))}
+            onChange={(e) =>
+              setFormData((prevData) => ({
+                ...prevData,
+                state_id: e.target.value,
+              }))
+            }
           >
             <option value="" disabled>
               Select a state
             </option>
-            {states?.map(state => (
+            {states?.map((state) => (
               <option key={state.id} value={state.id}>
                 {state.name}
               </option>
@@ -131,12 +145,17 @@ function GpWiseKpiForm({ type, onSubmit, gpWiseKpi }) {
           <select
             className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
             value={formData.dist_id}
-            onChange={e => setFormData(prevData => ({ ...prevData, dist_id: e.target.value }))}
+            onChange={(e) =>
+              setFormData((prevData) => ({
+                ...prevData,
+                dist_id: e.target.value,
+              }))
+            }
           >
             <option value="" disabled>
               Select a district
             </option>
-            {districts?.map(district => (
+            {districts?.map((district) => (
               <option key={district.id} value={district.id}>
                 {district.name}
               </option>
@@ -144,20 +163,25 @@ function GpWiseKpiForm({ type, onSubmit, gpWiseKpi }) {
           </select>
         </div>
         <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="taluk_id" className="text-right mt-2">
-            Taluk
+          <Label htmlFor="block_id" className="text-right mt-2">
+            block
           </Label>
           <select
             className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
-            value={formData.taluk_id}
-            onChange={e => setFormData(prevData => ({ ...prevData, taluk_id: e.target.value }))}
+            value={formData.block_id}
+            onChange={(e) =>
+              setFormData((prevData) => ({
+                ...prevData,
+                block_id: e.target.value,
+              }))
+            }
           >
             <option value="" disabled>
-              Select a taluk
+              Select a block
             </option>
-            {taluks?.map(taluk => (
-              <option key={taluk.id} value={taluk.id}>
-                {taluk.name}
+            {blocks?.map((block) => (
+              <option key={block.id} value={block.id}>
+                {block.name}
               </option>
             ))}
           </select>
@@ -169,12 +193,17 @@ function GpWiseKpiForm({ type, onSubmit, gpWiseKpi }) {
           <select
             className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
             value={formData.gp_id}
-            onChange={e => setFormData(prevData => ({ ...prevData, gp_id: e.target.value }))}
+            onChange={(e) =>
+              setFormData((prevData) => ({
+                ...prevData,
+                gp_id: e.target.value,
+              }))
+            }
           >
             <option value="" disabled>
               Select a Gram
             </option>
-            {gps?.map(gp => (
+            {gps?.map((gp) => (
               <option key={gp.id} value={gp.id}>
                 {gp.name}
               </option>
@@ -188,12 +217,17 @@ function GpWiseKpiForm({ type, onSubmit, gpWiseKpi }) {
           <select
             className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
             value={formData.theme_id}
-            onChange={e => setFormData(prevData => ({ ...prevData, theme_id: e.target.value }))}
+            onChange={(e) =>
+              setFormData((prevData) => ({
+                ...prevData,
+                theme_id: e.target.value,
+              }))
+            }
           >
             <option value="" disabled>
               Select a Theme
             </option>
-            {themes?.map(theme => (
+            {themes?.map((theme) => (
               <option key={theme.id} value={theme.id}>
                 {theme.theme_name}
               </option>

@@ -23,22 +23,6 @@ const getNewId = async () => {
     return next(new Errorhandler("failed to get new id", 500));
   }
 };
-export const createKPIApproval = CatchAsyncError(async (req, res, next) => {
-  try {
-    const id = await getNewId();
-    req.body.id = id.toString();
-    const newKPIApproval = new KPIApprovalModel(req.body);
-    await newKPIApproval.save();
-    res.status(201).json({
-      success: true,
-      message: "KPI Approval created successfully",
-      kpiApproval: newKPIApproval,
-    });
-  } catch (error) {
-    console.log(error);
-    return next(new Errorhandler("Failed to create KPI approval", 500));
-  }
-});
 
 export const getAllKPIApprovals = CatchAsyncError(async (req, res, next) => {
   try {
@@ -57,27 +41,45 @@ export const getAllKPIApprovals = CatchAsyncError(async (req, res, next) => {
   }
 });
 
-// Get kpi approvals by any of state, district, taluk and gp
+// Get kpi approvals by any of state, district, block and gp for a theme
 
 export const getKPIApprovals = CatchAsyncError(async (req, res, next) => {
   try {
-    const { state, dist, taluk, gp } = req.query;
-    const query = {};
+    const { state, dist, block, gp, theme } = req.query;
+    const match = {};
 
-    if (state) query.state_id = state;
-    if (dist) query.district_id = dist;
-    if (taluk) query.taluk_id = taluk;
-    if (gp) query.gp_id = gp;
+    if (state) match.state_id = state;
+    if (dist) match.district_id = dist;
+    if (block) match.block_id = block;
+    if (gp) match.gp_id = gp;
 
-    const KPIApprovals = await KPIApprovalModel.find(query);
-    if (!KPIApprovals || KPIApprovals.length === 0) {
+    const pipeline = [
+      { $match: match },
+      {
+        $group: {
+          _id: "$theme_id",
+          approvals: { $push: "$$ROOT" },
+        },
+      },
+      {
+        $project: {
+          theme_id: "$_id",
+          approvals: 1,
+          _id: 0,
+        },
+      },
+    ];
+
+    const categorizedKPIApprovals = await KPIApprovalModel.aggregate(pipeline);
+
+    if (!categorizedKPIApprovals || categorizedKPIApprovals.length === 0) {
       return next(new Errorhandler("No KPI Approvals Found", 404));
     }
 
     res.status(200).json({
       success: true,
       message: "KPI Approvals Fetched Successfully",
-      KPIApprovals,
+      data: categorizedKPIApprovals,
     });
   } catch (error) {
     return next(new Errorhandler("Failed to get KPI approvals", 500));

@@ -1,30 +1,26 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
 
-const stateSchema = new Schema(
+const usersLocationSchema = new mongoose.Schema(
   {
-    id: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    lgd_code: {
-      type: String,
+    user_id: {
+      type: Number,
       required: true,
     },
-    name: {
-      type: String,
+    state_id: {
+      type: Number,
       required: true,
     },
-    state_icon: {
-      type: String,
-      default: null,
+    dist_id: {
+      type: Number,
+      required: true,
     },
     status: {
       type: String,
       required: true,
+      maxlength: 1,
     },
     created_by: {
-      type: String,
+      type: Number,
       required: true,
     },
     created_at: {
@@ -33,7 +29,7 @@ const stateSchema = new Schema(
       default: Date.now,
     },
     modified_by: {
-      type: String,
+      type: Number,
       required: true,
     },
     modified_at: {
@@ -47,4 +43,7 @@ const stateSchema = new Schema(
   }
 );
 
-export const StateModel = mongoose.model("State", stateSchema);
+export const UsersLocation = mongoose.model(
+  "UsersLocation",
+  usersLocationSchema
+);

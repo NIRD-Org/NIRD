@@ -1,19 +1,104 @@
 import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
 import { GpWiseKpiModel } from "../models/gpWiseKpiModel.js";
+import { KPIApprovalModel } from "../models/kpiApprovalModel.js";
 import { Errorhandler } from "../utils/errorHandler.js";
+
+// export const createGpWiseKpiData = CatchAsyncError(async (req, res, next) => {
+//   try {
+//     const gpWiseKpiData = await GpWiseKpiModel.create(req.body);
+//     if (!gpWiseKpiData) {
+//       return next(new Errorhandler("Failed to create  GpWiseKpi data", 500));
+//     }
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Gp Wise KPI Data Created Successfully",
+//       data: gpWiseKpiData,
+//     });
+//   } catch (error) {
+//     return next(new Errorhandler("Failed to create  GpWiseKpi data", 500));
+//   }
+// });
+
+// Submit the kpi data created by the young fellow
+
+export const submitKpiData = CatchAsyncError(async (req, res, next) => {
+  try {
+    const {
+      state_id,
+      dist_id,
+      gp_id,
+      block_id,
+      date,
+      theme_id,
+      user_id,
+      submitteed_id,
+      formData,
+    } = req.body;
+
+    // Validate if formData is empty
+    if (!formData || formData.length === 0) {
+      return next(new Errorhandler("Form data cannot be empty", 400));
+    }
+
+    // Prepare the GpWiseKPI documents for insertion
+    const kpiDocuments = formData.map((kpi) => ({
+      state_id: state_id,
+      dist_id: dist_id,
+      block_id: block_id,
+      gp_id: gp_id,
+      date: date,
+      theme_id: theme_id,
+      kpi_id: kpi.kpi_id,
+      question_id: kpi.question_id,
+      max_range: kpi.max_range,
+      input_data: kpi.input_data,
+      remarks: kpi.remarks,
+      submitteed_id,
+      created_by: user_id,
+    }));
+
+    // Inserting the KPI documents into the gpWiseKpi collection
+    await GpWiseKpiModel.insertMany(kpiDocuments);
+
+    // Create the approval request document
+    const approvalDocument = {
+      id,
+      state_id,
+      dist_id,
+      block_id,
+      gp_id,
+      theme_id,
+      submitteed_id: user_id,
+      created_by: user_id,
+    };
+
+    // Insert the approval request into the gpWiseKpiApproval collection
+    await KPIApprovalModel.create(approvalDocument);
+
+    // Send success response
+    res.status(201).json({
+      success: true,
+      message: "KPI data submitted and approval request created successfully",
+    });
+  } catch (error) {
+    console.error("Failed to submit KPI data:", error);
+    return next(new Errorhandler("Failed to submit KPI data", 500));
+  }
+});
 
 export const getGpWiseKpi = CatchAsyncError(async (req, res, next) => {
   try {
     const limit = req.query.limit || 50;
     const pageNumber = req.query.page || 1;
     const startIndex = (pageNumber - 1) * limit;
-    const { state, dist, taluk, gp } = req.query;
+    const { state, dist, block, gp } = req.query;
 
     // filter object
     const filter = {};
     if (state) filter.state_id = state;
     if (dist) filter.district_id = dist;
-    if (taluk) filter.taluk_id = taluk;
+    if (block) filter.block_id = block;
     if (gp) filter.gp_id = gp;
 
     const gpWiseKpiData = await GpWiseKpiModel.aggregate([
@@ -45,10 +130,10 @@ export const getGpWiseKpi = CatchAsyncError(async (req, res, next) => {
       },
       {
         $lookup: {
-          from: "taluks",
-          localField: "taluk_id",
+          from: "blocks",
+          localField: "block_id",
           foreignField: "id",
-          as: "taluk",
+          as: "block",
         },
       },
       {
@@ -64,7 +149,7 @@ export const getGpWiseKpi = CatchAsyncError(async (req, res, next) => {
           id: 1,
           state: { $arrayElemAt: ["$state", 0] },
           district: { $arrayElemAt: ["$district", 0] },
-          taluk: { $arrayElemAt: ["$taluk", 0] },
+          block: { $arrayElemAt: ["$block", 0] },
           gp: { $arrayElemAt: ["$gp", 0] },
           date: 1,
           theme_id: 1,
@@ -205,11 +290,11 @@ export const getGpWiseKpiChart = CatchAsyncError(async (req, res, next) => {
 });
 
 const getGpWiseKpiDataWithPercentage = async (query) => {
-  const { state, dist, taluk, gp, kpi } = query;
+  const { state, dist, block, gp, kpi } = query;
   const filter = {};
   if (state) filter.state_id = state;
   if (dist) filter.district_id = dist;
-  if (taluk) filter.taluk_id = taluk;
+  if (block) filter.block_id = block;
   if (gp) filter.gp_id = gp;
   if (kpi) filter.kpi_id = kpi;
   filter.theme_id = "10";
@@ -261,10 +346,10 @@ const getGpWiseKpiDataWithPercentage = async (query) => {
     },
     {
       $lookup: {
-        from: "taluks",
-        localField: "doc.taluk_id",
+        from: "blocks",
+        localField: "doc.block_id",
         foreignField: "id",
-        as: "taluk",
+        as: "block",
       },
     },
     {
@@ -302,7 +387,7 @@ const getGpWiseKpiDataWithPercentage = async (query) => {
         id: "$doc.id",
         state_name: { $arrayElemAt: ["$doc.state.name", 0] },
         district_name: { $arrayElemAt: ["$doc.district.name", 0] },
-        taluk_name: { $arrayElemAt: ["$doc.taluk.name", 0] },
+        block_name: { $arrayElemAt: ["$doc.block.name", 0] },
         gp_name: { $arrayElemAt: ["$doc.gp.name", 0] },
         date: "$doc.date",
         theme_id: "$doc.theme_id",

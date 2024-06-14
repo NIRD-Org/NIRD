@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { DialogHeader, DialogFooter, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import {
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -10,7 +15,7 @@ function GpForm({ type, onSubmit, gp }) {
     id: gp ? gp.id : "",
     state_id: gp ? gp.state_id : "",
     dist_id: gp ? gp.dist_id : "",
-    taluk_id: gp ? gp.taluk_id : "",
+    block_id: gp ? gp.block_id : "",
     lgd_code: gp ? gp.lgd_code : "",
     lgd_code_feb11_2021: gp ? gp.lgd_code_feb11_2021 : "",
     name: gp ? gp.name : "",
@@ -21,7 +26,7 @@ function GpForm({ type, onSubmit, gp }) {
   });
   const [states, setStates] = useState([]);
   const [districts, setDistricts] = useState([]);
-  const [taluks, setTaluks] = useState([]);
+  const [blocks, setblocks] = useState([]);
   const [pending, setPending] = useState(false);
 
   const getAllStates = async () => {
@@ -34,11 +39,11 @@ function GpForm({ type, onSubmit, gp }) {
     setDistricts(data?.districts);
   };
 
-  const getAllTaluks = async () => {
+  const getAllblocks = async () => {
     try {
-      const url = `/api/v1/taluk/get?state=${formData.state_id}&dist=${formData.dist_id}`;
+      const url = `/api/v1/block/get?state=${formData.state_id}&dist=${formData.dist_id}`;
       const { data } = await API.get(url);
-      setTaluks(data?.taluks);
+      setblocks(data?.blocks);
     } catch (error) {
       console.log(error);
     }
@@ -53,22 +58,22 @@ function GpForm({ type, onSubmit, gp }) {
   }, [formData.state_id]);
 
   useEffect(() => {
-    getAllTaluks();
+    getAllblocks();
   }, [formData.dist_id]);
 
   /*  useState(() => {
     getAllGp();
-  }, [formData.taluk_id]);
+  }, [formData.block_id]);
  */
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setPending(true);
     onSubmit(formData);
@@ -78,9 +83,13 @@ function GpForm({ type, onSubmit, gp }) {
   return (
     <form onSubmit={handleSubmit}>
       <DialogHeader>
-        <DialogTitle>{type === "add" ? "Add Gram Panchayat" : "Update Gram Panchayat"}</DialogTitle>
+        <DialogTitle>
+          {type === "add" ? "Add Gram Panchayat" : "Update Gram Panchayat"}
+        </DialogTitle>
         <DialogDescription>
-          {type === "add" ? "Add a new Gram Panchayat" : "Update Gram Panchayat details"}
+          {type === "add"
+            ? "Add a new Gram Panchayat"
+            : "Update Gram Panchayat details"}
         </DialogDescription>
       </DialogHeader>
       <div className="grid gap-4 py-4">
@@ -105,12 +114,17 @@ function GpForm({ type, onSubmit, gp }) {
           <select
             className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
             value={formData.state_id}
-            onChange={e => setFormData(prevData => ({ ...prevData, state_id: e.target.value }))}
+            onChange={(e) =>
+              setFormData((prevData) => ({
+                ...prevData,
+                state_id: e.target.value,
+              }))
+            }
           >
             <option value="" disabled>
               Select a state
             </option>
-            {states?.map(state => (
+            {states?.map((state) => (
               <option key={state.id} value={state.id}>
                 {state.name}
               </option>
@@ -124,12 +138,17 @@ function GpForm({ type, onSubmit, gp }) {
           <select
             className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
             value={formData.dist_id}
-            onChange={e => setFormData(prevData => ({ ...prevData, dist_id: e.target.value }))}
+            onChange={(e) =>
+              setFormData((prevData) => ({
+                ...prevData,
+                dist_id: e.target.value,
+              }))
+            }
           >
             <option value="" disabled>
               Select a district
             </option>
-            {districts?.map(district => (
+            {districts?.map((district) => (
               <option key={district.id} value={district.id}>
                 {district.name}
               </option>
@@ -137,20 +156,25 @@ function GpForm({ type, onSubmit, gp }) {
           </select>
         </div>
         <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="taluk_id" className="text-right mt-2">
-            Taluk
+          <Label htmlFor="block_id" className="text-right mt-2">
+            block
           </Label>
           <select
             className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
-            value={formData.taluk_id}
-            onChange={e => setFormData(prevData => ({ ...prevData, taluk_id: e.target.value }))}
+            value={formData.block_id}
+            onChange={(e) =>
+              setFormData((prevData) => ({
+                ...prevData,
+                block_id: e.target.value,
+              }))
+            }
           >
             <option value="" disabled>
-              Select a taluk
+              Select a block
             </option>
-            {taluks?.map(taluk => (
-              <option key={taluk.id} value={taluk.id}>
-                {taluk.name}
+            {blocks?.map((block) => (
+              <option key={block.id} value={block.id}>
+                {block.name}
               </option>
             ))}
           </select>
@@ -184,7 +208,10 @@ function GpForm({ type, onSubmit, gp }) {
           />
         </div>
         <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="is_maped_to_another_district" className="text-right mt-2">
+          <Label
+            htmlFor="is_maped_to_another_district"
+            className="text-right mt-2"
+          >
             Mapped to Another District
           </Label>
           <Input

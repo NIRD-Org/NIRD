@@ -1,71 +1,77 @@
 import mongoose, { Schema } from "mongoose";
 
-const kpiApprovalSchema = new Schema({
-  id: {
-    type: String,
-    required: true,
-    unique: true,
+const kpiApprovalSchema = new Schema(
+  {
+    id: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    state_id: {
+      type: String,
+      required: true,
+      ref: "State",
+    },
+    dist_id: {
+      type: String,
+      required: true,
+      ref: "District",
+    },
+    block_id: {
+      type: String,
+      required: true,
+      ref: "Block",
+    },
+    gp_id: {
+      type: String,
+      required: true,
+      ref: "GramPanchayat",
+    },
+    theme_id: {
+      type: String,
+      required: true,
+      ref: "Theme",
+    },
+    decision: {
+      type: String,
+      required: true,
+      default: "0",
+    },
+    submitted_id: {
+      type: String,
+      required: true,
+    },
+    remarks: {
+      type: String,
+      default: "",
+    },
+    status: {
+      type: String,
+      required: true,
+    },
+    created_by: {
+      type: String,
+      required: true,
+    },
+    created_at: {
+      type: Date,
+      required: true,
+      default: Date.now,
+    },
+    modified_by: {
+      type: String,
+      required: true,
+    },
+    modified_at: {
+      type: Date,
+      required: true,
+      default: Date.now,
+    },
   },
-  state_id: {
-    type: String,
-    required: true,
-    ref: "State",
-  },
-  district_id: {
-    type: String,
-    required: true,
-    ref: "District",
-  },
-  taluk_id: {
-    type: String,
-    required: true,
-    ref: "Taluk",
-  },
-  gp_id: {
-    type: String,
-    required: true,
-    ref: "GramPanchayat",
-  },
-  theme_id: {
-    type: String,
-    required: true,
-    ref: "Theme",
-  },
-  decision: {
-    type: String,
-    required: true,
-  },
-  submitted_id: {
-    type: String,
-    required: true,
-  },
-  remarks: {
-    type: String,
-    default: null,
-  },
-  status: {
-    type: String,
-    required: true,
-  },
-  created_by: {
-    type: String,
-    required: true,
-  },
-  created_at: {
-    type: Date,
-    required: true,
-    default: Date.now,
-  },
-  modified_by: {
-    type: String,
-    required: true,
-  },
-  modified_at: {
-    type: Date,
-    required: true,
-    default: Date.now,
-  },
-});
+  {
+    timestamps: { createdAt: "created_at", updatedAt: "modified_at" },
+  }
+);
 
 export const KPIApprovalModel = mongoose.model(
   "KPIApproval",

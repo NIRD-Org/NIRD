@@ -17,7 +17,7 @@ import GpWiseKpiForm from "./GpWiseKpiForm";
 const GpWiseKpiPage = () => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleCreateGpWiseKpi = async formData => {
+  const handleCreateGpWiseKpi = async (formData) => {
     try {
       await API.post("/api/v1/gram/create", formData);
       tst.success("GP created successfully");
@@ -41,12 +41,12 @@ const GpWiseKpiPage = () => {
       <div className=" ">
         <Table>
           <TableCaption>List of GP-wise KPIs.</TableCaption>
-          <TableHeader >
+          <TableHeader>
             <TableRow>
               <TableHead>ID</TableHead>
               <TableHead>State ID</TableHead>
               <TableHead>District ID</TableHead>
-              <TableHead>Taluk ID</TableHead>
+              <TableHead>block ID</TableHead>
               <TableHead>GP ID</TableHead>
               <TableHead>Date</TableHead>
               <TableHead>Theme ID</TableHead>
@@ -68,7 +68,7 @@ const GpWiseKpiPage = () => {
             <TableSkeleton columnCount={Object.keys(gpWiseKpi[0]).length} />
           ) : (
             <TableBody>
-              {gpWiseKpi.map(gpWiseKpi => (
+              {gpWiseKpi.map((gpWiseKpi) => (
                 <GpWiseKpiRow key={gpWiseKpi.id} gpWiseKpi={gpWiseKpi} />
               ))}
             </TableBody>

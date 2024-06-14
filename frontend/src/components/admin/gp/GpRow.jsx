@@ -7,7 +7,7 @@ function GpRow({ gp }) {
       <TableCell>{gp.id}</TableCell>
       <TableCell>{gp.state_id}</TableCell>
       <TableCell>{gp.dist_id}</TableCell>
-      <TableCell>{gp.taluk_id}</TableCell>
+      <TableCell>{gp.block_id}</TableCell>
       <TableCell>{gp.lgd_code}</TableCell>
       <TableCell>{gp.lgd_code_feb11_2021}</TableCell>
       <TableCell>{gp.name}</TableCell>
