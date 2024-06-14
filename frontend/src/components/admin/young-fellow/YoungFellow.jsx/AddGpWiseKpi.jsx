@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useAuthContext } from "@/context/AuthContext";
+import { tst } from "@/lib/utils";
 import API from "@/utils/API";
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -18,13 +19,15 @@ function AddGpWiseKpi() {
   const [questions, setQuestions] = useState([]);
   const [data, setData] = useState([]);
   const [formData, setFormData] = useState([]);
-  const [date,setDate] = useState(null)
-  const {user} = useAuthContext();
+  const [date, setDate] = useState(null);
+  const { user } = useAuthContext();
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     const fetchKpis = async () => {
       try {
         const response = await API.get(`/api/v1/kpi/theme/${theme_id}`);
-        setKpis(response.data.KPI);
+        setKpis(prev => response.data.KPI);
       } catch (error) {
         console.error("Error fetching KPIs:", error);
       }
@@ -35,24 +38,30 @@ function AddGpWiseKpi() {
         const response = await API.get(`/api/v1/kpi-questions/get?theme=${theme_id}`);
         setQuestions(response.data.questions);
 
-        const updatedFormData = kpis.map(item => {
-          const question = questions.find(q => q.kpi_id === item.id);
-          return {
-            ...item,
-            question_id: question ? question.id : null,
-            question_name: question ? question.question_name : null,
-          };
+        let updatedFormData = kpis.map(item => {
+          const question = response.data.questions.find(q => q.kpi_id === item.id);
+          if (questions)
+            return {
+              ...item,
+              question_id: question ? question.id : null,
+              question_name: question ? question.question_name : null,
+            };
         });
-
-        setData(updatedFormData);
+        updatedFormData = updatedFormData.filter(item => item.question_id != null);
+        setData(prev => updatedFormData);
       } catch (error) {
         console.error("Error fetching questions:", error);
       }
     };
 
-    fetchKpis();
-    fetchQuestions();
-  }, []);
+    const run = async () => {
+      setIsLoading(true);
+      await fetchKpis();
+      await fetchQuestions();
+      setIsLoading(false);
+    };
+    run();
+  }, [theme_id]);
 
   const handleChange = (e, index) => {
     const { name, value } = e.target;
@@ -66,24 +75,39 @@ function AddGpWiseKpi() {
     });
   };
 
-  const handleSubmit = async event => {
-    event.preventDefault();
+  const handleSubmit = async e => {
+    e.preventDefault();
+
+    let updatedFormData = data.map((item, index) => {
+      if (item.question_id) {
+        return {
+          ...formData[index],
+          kpi_id: item.id,
+          question_id: item.question_id,
+        };
+      }
+      return formData[index];
+    });
+
     const dataToSend = {
       state_id,
       dist_id,
       block_id,
       gp_id,
       theme_id,
-      user_id:user.id,
-      date: formData.date,
+      user_id: user.id,
+      date: date,
       theme_id,
-      formData: formData,
+      formData: updatedFormData,
     };
 
+    console.log(dataToSend);
     try {
       const response = await API.post("/api/v1/gp-wise-kpi/submit", dataToSend);
       console.log("Success:", response.data);
+      tst.success("Form submitted successfully");
     } catch (error) {
+      tst.error(error);
       console.error("Error submitting data:", error);
     }
   };
@@ -94,6 +118,7 @@ function AddGpWiseKpi() {
         <div className="mb-8">
           <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">Young Fellow Form - Edit</h2>
         </div>
+        {/* <div>{ isLoading && "laoding"}</div> */}
         <form onSubmit={handleSubmit}>
           <Table>
             <TableHeader>
@@ -133,7 +158,7 @@ function AddGpWiseKpi() {
             <Label htmlFor="date" className="text-right mt-2">
               Date
             </Label>
-            <Input type="date" name="date" value={date || ""} onChange={()=>setDate(event.target.value)} id="date" placeholder="Enter datte" className="px-10" />
+            <Input type="date" name="date" value={date || ""} onChange={e => setDate(e.target.value)} id="date" placeholder="Enter datte" className="px-10" />
           </div>
           <Button type="submit">Submit</Button>
         </form>

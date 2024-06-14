@@ -15,12 +15,16 @@ const DistrictFilter = ({ className }) => {
     }
   }, [state_id]);
 
-  const getAllDistricts = async (stateId) => {
-    const { data } = await API.get(`/api/v1/dist/state/${stateId}`);
-    setDistricts(data?.districts || []);
+  const getAllDistricts = async stateId => {
+    try {
+      const { data } = await API.get(`/api/v1/dist/state/${stateId}`);
+      setDistricts(data?.districts || []);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleDistrictChange = (event) => {
+  const handleDistrictChange = event => {
     const selectedDistrictId = event.target.value;
     if (selectedDistrictId) {
       setSearchParams({ state_id, dist_id: selectedDistrictId });
@@ -30,14 +34,9 @@ const DistrictFilter = ({ className }) => {
   };
 
   return (
-    <select
-      className={cn(className, "text-sm px-4 py-2 rounded-md bg-transparent border  w-48")}
-      value={dist_id}
-      onChange={handleDistrictChange}
-      disabled={!state_id}
-    >
+    <select className={cn(className, "text-sm px-4 py-2 rounded-md bg-transparent border  w-48")} value={dist_id} onChange={handleDistrictChange} disabled={!state_id}>
       <option value="">Select a district</option>
-      {districts.map((district) => (
+      {districts.map(district => (
         <option key={district.id} value={district.id}>
           {district.name}
         </option>

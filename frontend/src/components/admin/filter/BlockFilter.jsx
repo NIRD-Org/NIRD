@@ -18,7 +18,7 @@ const BlockFilter = ({ className }) => {
 
   const getAllblocks = async (stateId, distId) => {
     try {
-      const url = `/api/v1/block/get?state=${stateId}&dist=${distId}`;
+      const url = `/api/v1/block/get?dist=${distId}`;
       const { data } = await API.get(url);
       setblocks(data?.blocks || []);
     } catch (error) {

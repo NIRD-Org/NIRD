@@ -61,7 +61,7 @@ export const login = CatchAsyncError(async (req, res, next) => {
         role: user.role,
     };
 
-    const token = jwt.sign(payload, "secret", { expiresIn: 3600 });
+    const token = jwt.sign(payload, "secret", { expiresIn: "10 d" });
     res.setHeader("Authorization", `Bearer ${token}`);
     res.set("Access-Control-Expose-Headers", "Authorization");
     res.json({ token });

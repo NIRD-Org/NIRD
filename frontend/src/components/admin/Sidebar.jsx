@@ -41,8 +41,8 @@ function Sidebar({ className }) {
         {
           type: "sub-module",
           icon: ArrowBigRight,
-          title: "Taluks",
-          link: "/admin/taluks",
+          title: "Blocks",
+          link: "/admin/blocks",
         },
         {
           type: "sub-module",
@@ -57,13 +57,18 @@ function Sidebar({ className }) {
         {
           type: "module",
           icon: ArrowBigRight,
-          title: "Master",
+          title: "Access Management",
         },
         {
           type: "sub-module",
           icon: ArrowBigRight,
           title: "Create User",
           link: "/admin/users/create",
+        },
+        {
+          type: "module",
+          icon: ArrowBigRight,
+          title: "Master",
         },
         {
           type: "sub-module",
@@ -96,37 +101,13 @@ function Sidebar({ className }) {
         {
           type: "module",
           icon: ArrowBigRight,
-          title: "Master",
+          title: "Attendance",
         },
         {
           type: "sub-module",
           icon: ArrowBigRight,
-          title: "Create User",
-          link: "/admin/users/create",
-        },
-        {
-          type: "sub-module",
-          icon: ArrowBigRight,
-          title: "Themes",
-          link: "/admin/themes",
-        },
-        {
-          type: "sub-module",
-          icon: ArrowBigRight,
-          title: "KPI",
-          link: "/admin/kpi",
-        },
-        {
-          type: "sub-module",
-          icon: ArrowBigRight,
-          title: "Kpi questions",
-          link: "/admin/kpi-questions",
-        },
-        {
-          type: "sub-module",
-          icon: ArrowBigRight,
-          title: "Kpi approvals",
-          link: "/admin/kpi-approvals",
+          title: "Attendance",
+          link: "/admin/attendance",
         },
         {
           type: "module",
