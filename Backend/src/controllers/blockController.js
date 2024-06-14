@@ -1,6 +1,7 @@
 import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
 import { BlockModel } from "../models/blockModel.js";
 import { Errorhandler } from "../utils/errorHandler.js";
+
 const getNewId = async () => {
   try {
     const maxDoc = await BlockModel.aggregate([
@@ -23,6 +24,7 @@ const getNewId = async () => {
     return next(new Errorhandler("failed to get new id", 500));
   }
 };
+
 export const createblock = CatchAsyncError(async (req, res, next) => {
   try {
     const id = await getNewId();
@@ -107,5 +109,27 @@ export const deleteblock = CatchAsyncError(async (req, res, next) => {
     });
   } catch (err) {
     return next(new Errorhandler("Failed to delete block", 500));
+  }
+});
+
+// Update the block
+
+export const updateblock = CatchAsyncError(async (req, res, next) => {
+  try {
+    const block = await BlockModel.findOneAndUpdate(
+      { id: req.params.id },
+      req.body,
+      { new: true }
+    );
+    if (!block) {
+      return next(new Errorhandler("Block not found", 404));
+    }
+    res.status(200).json({
+      success: true,
+      message: "block updated successfully",
+      block,
+    });
+  } catch (err) {
+    return next(new Errorhandler("Failed to update block", 500));
   }
 });

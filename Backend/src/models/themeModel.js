@@ -13,6 +13,7 @@ const themeSchema = new Schema(
     },
     status: {
       type: String,
+      default: "1",
       required: true,
     },
     created_by: {
@@ -25,7 +26,7 @@ const themeSchema = new Schema(
     },
     flag: {
       type: String,
-      default: null,
+      default: "",
     },
   },
   {

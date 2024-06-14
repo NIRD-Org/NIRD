@@ -96,3 +96,23 @@ export const deleteKPI = CatchAsyncError(async (req, res, next) => {
     return next(new Errorhandler("Failed to delete KPI", 500));
   }
 });
+
+// Update the kpi
+
+export const updateKPI = CatchAsyncError(async (req, res, next) => {
+  try {
+    const KPI = await KPIModel.findOneAndUpdate(
+      { _id: req.params.id },
+      req.body
+    );
+    if (!KPI) {
+      return next(new Errorhandler("No KPI Found", 404));
+    }
+    res.status(200).json({
+      success: true,
+      message: "KPI Updated Successfully",
+    });
+  } catch (error) {
+    return next(new Errorhandler("Failed to update KPI", 500));
+  }
+});

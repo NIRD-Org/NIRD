@@ -78,3 +78,25 @@ export const deleteTheme = CatchAsyncError(async (req, res, next) => {
     return next(new Errorhandler("Failed to delete theme", 500));
   }
 });
+
+// Update theme
+
+export const updateTheme = CatchAsyncError(async (req, res, next) => {
+  try {
+    const theme = await ThemeModel.findOneAndUpdate(
+      { id: req.params.id },
+      req.body,
+      { new: true }
+    );
+    if (!theme) {
+      return next(new Errorhandler("Theme not found", 404));
+    }
+    res.status(200).json({
+      status: "success",
+      message: "Theme updated successfully",
+      theme,
+    });
+  } catch (error) {
+    return next(new Errorhandler("Failed to update theme", 500));
+  }
+});
