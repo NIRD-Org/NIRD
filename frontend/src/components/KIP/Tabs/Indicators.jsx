@@ -232,7 +232,7 @@ const Indicators = () => {
                         <th>
                           <h1 className="text-3xl">Gram Panchayat</h1>
                         </th>
-                        {kpi.map((kpi) => (
+                        {kpi?.map((kpi) => (
                           <th
                             scope="col"
                             class="px-4 w-[10rem] py-3 text-start text-xs font-medium text-gray-500 uppercase"

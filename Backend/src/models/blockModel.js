@@ -19,19 +19,16 @@ const blockSchema = new Schema(
     },
     lgd_code: {
       type: String,
-      required: true,
+      required: false,
     },
-    lgd_code_feb11_2021: {
-      type: String,
-      default: null,
-    },
+
     name: {
       type: String,
       required: true,
     },
     is_maped_to_another_district: {
       type: String,
-      default: null,
+      default: "",
     },
     status: {
       type: String,
@@ -40,11 +37,11 @@ const blockSchema = new Schema(
     },
     created_by: {
       type: String,
-      required: true,
+      required: false,
     },
     modified_by: {
       type: String,
-      required: true,
+      required: false,
     },
   },
   {

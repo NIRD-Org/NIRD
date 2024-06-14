@@ -9,7 +9,7 @@ const stateSchema = new Schema(
     },
     lgd_code: {
       type: String,
-      required: true,
+      required: false,
     },
     name: {
       type: String,
@@ -17,7 +17,7 @@ const stateSchema = new Schema(
     },
     state_icon: {
       type: String,
-      default: null,
+      default: "",
     },
     status: {
       type: String,
@@ -26,11 +26,9 @@ const stateSchema = new Schema(
     },
     created_by: {
       type: String,
-      required: true,
     },
     modified_by: {
       type: String,
-      required: true,
     },
   },
   {
