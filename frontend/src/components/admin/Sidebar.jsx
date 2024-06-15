@@ -79,14 +79,8 @@ function Sidebar({ className }) {
         {
           type: "sub-module",
           icon: ArrowBigRight,
-          title: "KPI",
-          link: "/admin/kpi",
-        },
-        {
-          type: "sub-module",
-          icon: ArrowBigRight,
           title: "Data Point",
-          link: "/admin/kpi-questions",
+          link: "/admin/data-point",
         },
         {
           type: "sub-module",
