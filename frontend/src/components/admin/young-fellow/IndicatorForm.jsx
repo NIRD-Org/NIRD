@@ -5,21 +5,24 @@ import { Button } from "@/components/ui/button";
 import API from "@/utils/API";
 import { tst } from "@/lib/utils";
 import AdminHeader from "../AdminHeader";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Textarea } from "@/components/ui/textarea";
 
 function IndicatorForm({ type = "add" }) {
   const [formData, setFormData] = useState({
     state_id: "",
     dist_id: "",
     block_id: "",
-    gram_id: "",
-    max_range: "",
-    input: "",
+    gp_id: "",
+    date: "",
   });
+  const [indicatorFormData, setIndicatorFormData] = useState([]);
 
   const [states, setStates] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [blocks, setBlocks] = useState([]);
   const [gp, setGp] = useState([]);
+  const [indicators, setIndicators] = useState([]);
   const [pending, setPending] = useState(false);
 
   useEffect(() => {
@@ -28,11 +31,21 @@ function IndicatorForm({ type = "add" }) {
         const response = await API.get("/api/v1/state/all");
         setStates(response.data?.states || []);
       } catch (error) {
-        tst.error("Failed to fetch states.");
+        console.log(error);
+      }
+    }
+
+    async function fetchIndicators() {
+      try {
+        const response = await API.get("/api/v1/indicator/all");
+        setIndicators(response.data?.indicators || []);
+      } catch (error) {
+        console.log(error);
       }
     }
 
     fetchStates();
+    fetchIndicators();
   }, []);
 
   useEffect(() => {
@@ -77,7 +90,7 @@ function IndicatorForm({ type = "add" }) {
     fetchGrams();
   }, [formData.block_id]);
 
-  const handleChange = e => {
+  const handleFormChange = e => {
     const { name, value } = e.target;
     setFormData(prevData => ({
       ...prevData,
@@ -85,31 +98,41 @@ function IndicatorForm({ type = "add" }) {
     }));
   };
 
-  const handleSubmit = async e => {
-    e.preventDefault();
-    setPending(true);
-    try {
-      if (type === "add") {
-        await API.post("/api/v1/gp/create", formData);
-        tst.success("Gram Panchayat created successfully");
-      } else {
-        await API.put(`/api/v1/gp/${formData.id}`, formData);
-        tst.success("Gram Panchayat updated successfully");
-      }
-      setPending(false);
-    } catch (error) {
-      tst.error("Failed to submit form:", error);
-      setPending(false);
-    }
+  const handleChange = (e, index) => {
+    const { name, value } = e.target;
+    setIndicatorFormData(prevData => {
+      const updatedData = [...prevData];
+      updatedData[index] = {
+        ...updatedData[index],
+        [name]: value,
+      };
+      return updatedData;
+    });
   };
 
-  const handleCreateGp = async e => {
+  const handleSubmit = async e => {
     e.preventDefault();
+
+    let updatedFormData = indicators.map((item, index) => {
+      return {
+        ...indicatorFormData[index],
+        indicator_id: item.id,
+      };
+    });
+
+    const dataToSend = {
+      ...formData,
+      formData: updatedFormData,
+    };
+
+    // console.log(dataToSend);
     try {
-      await API.post("/api/v1/gram/create", formData);
-      tst.success("GP created successfully");
+      const response = await API.post("/api/v1/gp-wise-indicator/submit", dataToSend);
+      console.log("Success:", response.data);
+      tst.success("Form submitted successfully");
     } catch (error) {
       tst.error(error);
+      console.error("Error submitting data:", error);
     }
   };
 
@@ -136,32 +159,28 @@ function IndicatorForm({ type = "add" }) {
       required: true,
     },
     {
-      name: "gram_id",
+      name: "gp_id",
       label: "Gram",
       type: "select",
       options: gp.map(gp => ({ value: gp.id, label: gp.name })),
       required: true,
     },
-    { name: "indicator", label: "Indicator", type: "text", disabled :true},
-    { name: "max_range", label: "Max_range", type: "text" },
-    { name: "input", label: "Input", type: "text", required: true},
-    
   ];
 
   return (
     <div className="container mx-auto p-6">
-      <form onSubmit={handleCreateGp}>
+      <div>
         <div className="py-4">
-          <AdminHeader>{type === "add" ? "Add Gram Panchayat" : "Update Gram Panchayat"}</AdminHeader>
+          <AdminHeader>{type === "add" ? "Young Fellow - Add Indicator" : "Update Gram Panchayat"}</AdminHeader>
           <div className="grid grid-cols-1 gap-10 sm:grid-cols-3 md:grid-cols-4">
-            {fields.map(({ name, label, type, options, required ,disabled=false}) => (
+            {fields.map(({ name, label, type, options, required, disabled = false }) => (
               <div key={name}>
                 <Label htmlFor={name} className="inline-block mb-2">
                   {label}
                 </Label>
                 {required && <span className="text-red-500 ml-1">*</span>}
                 {type === "select" ? (
-                  <select required={required} disabled={pending} className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border" value={formData[name]} name={name} onChange={handleChange}>
+                  <select required={required} disabled={pending} className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border" value={formData[name]} name={name} onChange={handleFormChange}>
                     <option value="" disabled>
                       Select {label}
                     </option>
@@ -172,18 +191,52 @@ function IndicatorForm({ type = "add" }) {
                     ))}
                   </select>
                 ) : (
-                  <Input required={required} disabled={pending || disabled} type={type} name={name} value={formData[name]} onChange={handleChange} id={name} placeholder={`Enter ${label}`} className="col-span-3" />
+                  <Input required={required} disabled={pending || disabled} type={type} name={name} value={formData[name]} onChange={handleFormChange} id={name} placeholder={`Enter ${label}`} className="col-span-3" />
                 )}
               </div>
             ))}
           </div>
+          <div className="mt-10">
+              <form onSubmit={handleSubmit} className="overflow-auto ">
+                <Table className=" w-max">
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-[400px]">Indicator</TableHead>
+                      <TableHead className="w-40">Max Range</TableHead>
+                      <TableHead className="w-40">Input</TableHead>
+                      <TableHead className="w-80 ">Remarks</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {indicators.map((data, index) => (
+                      <TableRow key={data.id}>
+                        <TableCell>{data.name}</TableCell>
+                        <TableCell>
+                          <Input type="number" name="max_range" value={indicatorFormData[index]?.max_range || data.max_range} onChange={e => handleChange(e, index)} />
+                        </TableCell>
+                        <TableCell>
+                          <Input type="number" name="input_data" value={indicatorFormData[index]?.input_data || ""} onChange={e => handleChange(e, index)} />
+                        </TableCell>
+                        <TableCell>
+                          <Textarea type="text" name="remarks" value={indicatorFormData[index]?.remarks || ""} onChange={e => handleChange(e, index)} />
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+                <div className="w-max my-4">
+                  <Label htmlFor="date" className="text-right mt-2">
+                    Date
+                  </Label>
+                  <Input type="date" name="date" value={formData.date || ""} onChange={handleFormChange} id="date" placeholder="Enter datte" className="px-10" />
+                </div>
+                <Button className="mt-10 px-20" type="submit">
+                  Submit
+                </Button>
+              </form>
+          </div>
         </div>
-        <div className="mt-6">
-          <Button pending={pending} type="submit">
-            {type === "add" ? "Add Indicator" : "Update Gram Panchayat"}
-          </Button>
-        </div>
-      </form>
+      </div>
     </div>
   );
 }
