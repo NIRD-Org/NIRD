@@ -117,7 +117,7 @@ function Sidebar({ className }) {
         {
           type: "sub-module",
           icon: ArrowBigRight,
-          title: "Young Fellow",
+          title: "Themewise KPI",
           link: "/admin/young-professionals",
         },
         {

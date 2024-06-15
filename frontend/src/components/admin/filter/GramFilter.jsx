@@ -44,7 +44,7 @@ const GramFilter = ({ className }) => {
 
   return (
     <select className={cn(className, "text-sm px-4 py-2 rounded-md bg-transparent border")} value={gram_id} onChange={handleGramChange} disabled={!block_id}>
-      <option value="">Select a gram</option>
+      <option value="">Select a GP</option>
       {grams.map(gram => (
         <option key={gram.id} value={gram.id}>
           {gram.name}
