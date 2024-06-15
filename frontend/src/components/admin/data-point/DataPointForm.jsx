@@ -100,13 +100,25 @@ function DataPointForm({ type = "add", onSubmit, kpi }) {
       type: "number",
       required: true,
     },
+    {
+      name: "score",
+      label: "Score",
+      type: "number",
+      required: true,
+    },
+    {
+        name: "Remark",
+        label: "Remark",
+        type: "textarea",
+        required: true,
+      },
   ];
 
   return (
     <div className="container mx-auto p-6">
       <form onSubmit={handleSubmit}>
         <div className="py-4">
-          <AdminHeader>{type === "add" ? "Add Data Point" : "Update KPI"}</AdminHeader>
+          <AdminHeader>{type === "add" ? "Add KPI" : "Update KPI"}</AdminHeader>
           <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3">
             {fields.map(({ name, label, type, options, required }) => (
               <div key={name}>

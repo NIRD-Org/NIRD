@@ -1,14 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuthContext } from "@/context/AuthContext";
 import { tst } from "@/lib/utils";
@@ -37,6 +30,7 @@ function AddGpWiseKpi() {
       try {
         const response = await API.get(`/api/v1/kpi/theme/${theme_id}`);
         kpis = response.data.KPI;
+        console.log(kpis);
         setKpis(kpis);
         console.log(kpis);
       } catch (error) {
@@ -54,7 +48,7 @@ function AddGpWiseKpi() {
 
   const handleChange = (e, index) => {
     const { name, value } = e.target;
-    setFormData((prevData) => {
+    setFormData(prevData => {
       const updatedData = [...prevData];
       updatedData[index] = {
         ...updatedData[index],
@@ -64,7 +58,7 @@ function AddGpWiseKpi() {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
 
     let updatedFormData = kpis.map((item, index) => {
@@ -98,48 +92,43 @@ function AddGpWiseKpi() {
 
   return (
     <div className="w-full">
-      <div className="p-6 ">
+      <div>
         <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">
-            Young Fellow - KPI Entry Form
-          </h2>
+          <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">Young Fellow - KPI Entry Form</h2>
         </div>
-        <form onSubmit={handleSubmit} className="overflow-x-auto w-[1050px] ">
+        <form onSubmit={handleSubmit} className="overflow-x-auto  ">
           <div>
-            <Table className="w-max ">
+            <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[300px]">KPI Name</TableHead>
-                  <TableHead className="w-[300px]">Data point</TableHead>
-                  <TableHead>Input type</TableHead>
-                  <TableHead className="w-40">Max Number (Total Number)</TableHead>
-                  <TableHead className="w-40">Cumulative Achived Number</TableHead>
-                  {/* <TableHead>Score</TableHead> */}
-                  <TableHead className="w-80 ">Remarks</TableHead>
+                  <TableHead className="w-20">ID</TableHead>
+                  <TableHead className="w-[200px]">KPI Name</TableHead>
+                  <TableHead className="w-[200px]">Data point</TableHead>
+                  <TableHead className="w-20">Input type</TableHead>
+                  <TableHead className="w-32">Max Number (Total Number)</TableHead>
+                  <TableHead className="w-20">Cumulative Achived Number</TableHead>
+                  <TableHead className="w-40">Score</TableHead>
+                  <TableHead className="w-40 ">Remarks</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {kpis.map((data, index) => (
                   <TableRow key={data.id}>
+                    <TableCell>{data.id}</TableCell>
                     <TableCell>{data.name}</TableCell>
                     <TableCell>{data.kpi_datapoint || "No question"}</TableCell>
                     <TableCell>{data?.input_type}</TableCell>
                     <TableCell>
-                      <Input type="number" disabled name="max_range" value={data?.max_range} onChange={e => handleChange(e, index)} />
+                      <Input type="number" name="max_range" value={formData[index]?.max_range || ""} onChange={e => handleChange(e, index)} />
                     </TableCell>
                     <TableCell>
                       <Input required type="number" name="input_data" value={formData[index]?.input_data || ""} onChange={e => handleChange(e, index)} />
                     </TableCell>
-                    {/* <TableCell>
-                      <Input type="text" disabled />
-                    </TableCell> */}
                     <TableCell>
-                      <Textarea
-                        type="text"
-                        name="remarks"
-                        value={formData[index]?.remarks || ""}
-                        onChange={(e) => handleChange(e, index)}
-                      />
+                      <Input disabled type="number" name="score" value={formData[index]?.score || ""} onChange={e => handleChange(e, index)} />
+                    </TableCell>
+                    <TableCell>
+                      <Textarea type="text" name="remarks" value={formData[index]?.remarks || ""} onChange={e => handleChange(e, index)} />
                     </TableCell>
                   </TableRow>
                 ))}
@@ -150,15 +139,7 @@ function AddGpWiseKpi() {
             <Label htmlFor="date" className="text-right mt-2">
               Date
             </Label>
-            <Input
-              type="date"
-              name="date"
-              value={date || ""}
-              onChange={(e) => setDate(e.target.value)}
-              id="date"
-              placeholder="Enter datte"
-              className="px-10"
-            />
+            <Input type="date" name="date" value={date || ""} onChange={e => setDate(e.target.value)} id="date" placeholder="Enter datte" className="px-10" />
           </div>
           <Button type="submit">Submit</Button>
         </form>
@@ -166,5 +147,19 @@ function AddGpWiseKpi() {
     </div>
   );
 }
+
+
+
+const ScoreRules = ({score_rules}) => {
+  const rulesArray = score_rules.split('\n');
+
+  return (
+    <div>
+      {rulesArray.map((rule, index) => (
+        <div key={index}>{rule}</div>
+      ))}
+    </div>
+  );
+};
 
 export default AddGpWiseKpi;

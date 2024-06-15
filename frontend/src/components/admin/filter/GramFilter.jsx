@@ -21,7 +21,7 @@ const GramFilter = ({ className }) => {
 
   const getAllGp = async blockId => {
     try {
-      const { data } = await API.get(`/api/v1/gram/get?block=${blockId}`);
+      const { data } = await API.get(`/api/v1/gram/get?block=${block_id}`);
       setGrams(data?.gram || []);
     } catch (error) {
       console.log(error);

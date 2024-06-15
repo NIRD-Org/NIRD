@@ -79,7 +79,7 @@ function Sidebar({ className }) {
         {
           type: "sub-module",
           icon: ArrowBigRight,
-          title: "Data Point",
+          title: "KPI",
           link: "/admin/data-point",
         },
        /*  {
