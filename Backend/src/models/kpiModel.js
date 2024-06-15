@@ -12,7 +12,7 @@ const kpiSchema = new Schema(
       required: true,
       ref: "Theme",
     },
-    kpi_name: {
+    name: {
       type: String,
       required: true,
     },
@@ -20,13 +20,25 @@ const kpiSchema = new Schema(
       type: String,
       default: "",
     },
-    input_Type: {
+    input_type: {
       type: String,
       default: "",
     },
+    kpi_type: {
+      type: String,
+      default: "",
+    },
+    score_rules: {
+      type: String,
+      default: "",
+    },
+    kpi_datapoint: {
+      type: String,
+      required: true,
+    },
     status: {
       type: String,
-      default:"1",
+      default: "1",
     },
     weightage: {
       type: Number,
