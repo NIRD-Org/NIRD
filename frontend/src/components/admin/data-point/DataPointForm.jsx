@@ -81,11 +81,7 @@ function DataPointForm({ type = "add", onSubmit, kpi }) {
     {
       name: "input_type",
       label: "Input Type",
-      type: "select",
-      options: [
-        { value: "number", label: "Number" },
-        { value: "percentage", label: "Percentage" },
-      ],
+      type: "textarea",
       required: true,
     },
     {
@@ -130,7 +126,7 @@ function DataPointForm({ type = "add", onSubmit, kpi }) {
                     ))}
                   </select>
                 ) : type === "textarea" ? (
-                  <Textarea required={required} disabled={pending}  name={name} value={formData[name]} onChange={handleChange} id={name} placeholder={`Enter ${label}`} />
+                  <Textarea required={required} disabled={pending} name={name} value={formData[name]} onChange={handleChange} id={name} placeholder={`Enter ${label}`} />
                 ) : (
                   <Input required={required} disabled={pending} type={type} name={name} value={formData[name]} onChange={handleChange} id={name} placeholder={`Enter ${label}`} className="col-span-3" />
                 )}
