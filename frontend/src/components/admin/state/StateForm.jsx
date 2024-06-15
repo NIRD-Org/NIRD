@@ -8,7 +8,6 @@ import AdminHeader from "../AdminHeader";
 
 function StateForm({ type = "add", onSubmit, state }) {
   const [formData, setFormData] = useState({
-    lgd_code: state?.lgd_code || "",
     name: state?.name || "",
     state_shortcode: state?.state_shortcode || "",
     country_id: state?.country_id || "",
@@ -38,11 +37,6 @@ function StateForm({ type = "add", onSubmit, state }) {
   };
 
   const formFields = [
-    {
-      name: "lgd_code",
-      label: "LGD Code",
-      required: true,
-    },
     {
       name: "name",
       label: "Name",

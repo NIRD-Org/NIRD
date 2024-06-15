@@ -9,7 +9,6 @@ import AdminHeader from "../AdminHeader";
 function BlockForm({ type = "add", block }) {
   const [formData, setFormData] = useState({
     id: block?.id || "",
-    lgd_code: block?.lgd_code || "",
     state_id: block?.state_id || "",
     dist_id: block?.dist_id || "",
     name: block?.name || "",
@@ -79,7 +78,6 @@ function BlockForm({ type = "add", block }) {
   };
 
   const fields = [
-    { name: "lgd_code", label: "LGD Code", type: "text", required: "true" },
     {
       name: "state_id",
       label: "State",

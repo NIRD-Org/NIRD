@@ -2,7 +2,7 @@ import React from "react";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { NirdDeleteIcon, NirdEditIcon } from "../Icons";
 
-const fields = ["id", "lgd_code", "state_id", "name", "special_area"];
+const fields = ["id",  "state_id", "name", "special_area"];
 
 function DistrictRow({ district }) {
   return (

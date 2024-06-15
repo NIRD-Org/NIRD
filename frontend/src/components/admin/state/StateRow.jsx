@@ -6,7 +6,6 @@ function StateRow({ state }) {
   return (
     <TableRow>
       <TableCell>{state.id}</TableCell>
-      <TableCell>{state.lgd_code}</TableCell>
       <TableCell>{state.name}</TableCell>
       <TableCell className="flex gap-2 items-center">
         <NirdEditIcon />

@@ -67,11 +67,6 @@ const BlockPage = ({}) => {
             <TableHead>District ID</TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Mapped to Another District</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Created By</TableHead>
-            <TableHead>Created At</TableHead>
-            <TableHead>Modified By</TableHead>
-            <TableHead>Modified At</TableHead>
           </TableRow>
         </TableHeader>
         {isLoading ? (
