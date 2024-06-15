@@ -7,6 +7,6 @@ import {
 const router = express.Router();
 
 router.route("/many").post(insertManyIndicator);
-router.route("/get").get(getAllindicators);
+router.route("/all").get(getAllindicators);
 
 export default router;

@@ -15,6 +15,7 @@ import kpiQuestionsRoutes from "./routes/kpiQuestionsRoutes.js";
 import authRoutes from "./routes/authRoute.js";
 import userLocationRoutes from "./routes/userLocationRoutes.js";
 import indicatorRoutes from "./routes/indicatorRoutes.js";
+import gpWiseIndicatorRoutes from "./routes/gpWiseIndicatorRoutes.js";
 const app = express();
 
 dotenv.config();
@@ -24,6 +25,7 @@ app.use(cors());
 // Routes
 
 app.use("/api/v1/gp-wise-kpi", gpWiseKpiRoutes);
+app.use("/api/v1/gp-wise-indicator", gpWiseIndicatorRoutes);
 
 app.use("/api/v1/state", stateRoutes);
 app.use("/api/v1/block", blockRoutes);
