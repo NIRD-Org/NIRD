@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const kpiApprovalSchema = new Schema(
+const indicatorApprovalSchema = new Schema(
   {
     id: {
       type: String,
@@ -26,11 +26,6 @@ const kpiApprovalSchema = new Schema(
       type: String,
       required: true,
       ref: "GramPanchayat",
-    },
-    theme_id: {
-      type: String,
-      required: true,
-      ref: "Theme",
     },
     decision: {
       type: String,
@@ -63,7 +58,7 @@ const kpiApprovalSchema = new Schema(
   }
 );
 
-export const KPIApprovalModel = mongoose.model(
-  "KPIApproval",
-  kpiApprovalSchema
+export const IndicatorApprovalModel = mongoose.model(
+  "IndicatorApproval",
+  indicatorApprovalSchema
 );
