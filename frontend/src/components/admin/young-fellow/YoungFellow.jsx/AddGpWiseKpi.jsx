@@ -47,8 +47,10 @@ function AddGpWiseKpi() {
               ...item,
               question_id: question ? question.id : null,
               question_name: question ? question.question_name : null,
+              input_type:question ? question.input_type : null
             };
         });
+        console.log(questions)
         updatedFormData = updatedFormData.filter(item => item.question_id != null);
         setData(updatedFormData);
       } catch (error) {
@@ -115,46 +117,48 @@ function AddGpWiseKpi() {
   };
 
   return (
-    <div>
-      <div className="container p-6 ">
+    <div className="w-full">
+      <div className="p-6 ">
         <div className="mb-8">
           <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">Young Fellow Form - Edit</h2>
         </div>
-        <form onSubmit={handleSubmit} className="overflow-x-auto ">
-          <Table className=" w-max">
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[400px]">KPI Name</TableHead>
-                <TableHead className="w-[400px]">Question</TableHead>
-                <TableHead>Input type</TableHead>
-                <TableHead className="w-40">Max Number (Total Number)</TableHead>
-                <TableHead className="w-40">Cumulative Achived Number</TableHead>
-                <TableHead>Score</TableHead>
-                <TableHead className="w-80 ">Remarks</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {data.map((data, index) => (
-                <TableRow key={data.id}>
-                  <TableCell>{data.kpi_name}</TableCell>
-                  <TableCell>{data.question_name || "No question"}</TableCell>
-                  <TableCell>Percentage</TableCell>
-                  <TableCell>
-                    <Input type="number" name="max_range" value={formData[index]?.max_range || ""} onChange={e => handleChange(e, index)} />
-                  </TableCell>
-                  <TableCell>
-                    <Input type="number" name="input_data" value={formData[index]?.input_data || ""} onChange={e => handleChange(e, index)} />
-                  </TableCell>
-                  <TableCell>
-                    <Input type="text" disabled />
-                  </TableCell>
-                  <TableCell>
-                    <Textarea type="text" name="remarks" value={formData[index]?.remarks || ""} onChange={e => handleChange(e, index)} />
-                  </TableCell>
+        <form onSubmit={handleSubmit} className="overflow-x-auto w-[1050px] ">
+          <div>
+            <Table className="w-max ">
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[400px]">KPI Name</TableHead>
+                  <TableHead className="w-[400px]">Question</TableHead>
+                  <TableHead>Input type</TableHead>
+                  <TableHead className="w-40">Max Number (Total Number)</TableHead>
+                  <TableHead className="w-40">Cumulative Achived Number</TableHead>
+                  <TableHead>Score</TableHead>
+                  <TableHead className="w-80 ">Remarks</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {data.map((data, index) => (
+                  <TableRow key={data.id}>
+                    <TableCell>{data.kpi_name}</TableCell>
+                    <TableCell>{data.question_name || "No question"}</TableCell>
+                    <TableCell>{data?.input_type}</TableCell>
+                    <TableCell>
+                      <Input type="number" name="max_range" value={formData[index]?.max_range || ""} onChange={e => handleChange(e, index)} />
+                    </TableCell>
+                    <TableCell>
+                      <Input type="number" name="input_data" value={formData[index]?.input_data || ""} onChange={e => handleChange(e, index)} />
+                    </TableCell>
+                    <TableCell>
+                      <Input type="text" disabled />
+                    </TableCell>
+                    <TableCell>
+                      <Textarea type="text" name="remarks" value={formData[index]?.remarks || ""} onChange={e => handleChange(e, index)} />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
           <div className="w-max my-4">
             <Label htmlFor="date" className="text-right mt-2">
               Date
