@@ -13,6 +13,7 @@ const LoginPage = () => {
   });
   const { login,isAuthenticated } = useAuthContext();
   const navigate = useNavigate();
+  const {user} = useAuthContext();
 
 
   const handleChange = e => {
@@ -32,8 +33,8 @@ const LoginPage = () => {
         const token = authHeader.replace("Bearer ", "");
         localStorage.setItem("token", token);
       }
-      login();
-      navigate("/admin");
+      await login();
+      navigate("/admin/");
     } catch (error) {
       tst.error(error);
       console.error("Login failed:", error.message);

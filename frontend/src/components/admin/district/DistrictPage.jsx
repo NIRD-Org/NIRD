@@ -10,7 +10,7 @@ import API from "@/utils/API";
 import StateFilter from "@/components/admin/filter/StateFilter";
 import { Link, useSearchParams } from "react-router-dom";
 
-const districtHeaders = ["ID", "LGD Code", "State ID", "Name", "Special Area","Actions"];
+const districtHeaders = ["ID",  "State ID", "Name", "Special Area","Actions"];
 
 const DistrictPage = () => {
   const [isLoading, setIsLoading] = useState(false);

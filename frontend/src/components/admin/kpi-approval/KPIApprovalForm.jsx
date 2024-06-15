@@ -154,7 +154,7 @@ function KPIApprovalForm({ type, onSubmit, kpiApproval }) {
         </div>
         <div className="grid grid-cols-4 gap-4">
           <Label htmlFor="block_id" className="text-right mt-2">
-            block
+            Block
           </Label>
           <select
             className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
@@ -167,7 +167,7 @@ function KPIApprovalForm({ type, onSubmit, kpiApproval }) {
             }
           >
             <option value="" disabled>
-              Select a block
+              Select a Block
             </option>
             {blocks?.map((block) => (
               <option key={block.id} value={block.id}>
@@ -178,7 +178,7 @@ function KPIApprovalForm({ type, onSubmit, kpiApproval }) {
         </div>
         <div className="grid grid-cols-4 gap-4">
           <Label htmlFor="gp_id" className="text-right mt-2">
-            Gram
+            GP
           </Label>
           <select
             className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
@@ -191,7 +191,7 @@ function KPIApprovalForm({ type, onSubmit, kpiApproval }) {
             }
           >
             <option value="" disabled>
-              Select a Gram
+              Select a GP
             </option>
             {gps?.map((gp) => (
               <option key={gp.id} value={gp.id}>

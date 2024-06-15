@@ -32,6 +32,9 @@ import ThemeForm from "./components/admin/theme/ThemeForm";
 import KpiForm from "./components/admin/kpi/KpiForm";
 import KpiQuestionForm from "./components/admin/kpi-question/KpiQuestionForm";
 import IndicatorForm from "./components/admin/young-fellow/IndicatorForm";
+import AdminMainPage from "./components/admin/AdminMainPage";
+import DataPointForm from "./components/admin/data-point/DataPointForm";
+import DataPointPage from "./components/admin/data-point/DataPointPage";
 
 function App() {
   const { login } = useAuthContext();
@@ -52,7 +55,7 @@ function App() {
           <Route path="project" element={<ProjectPage />} />
 
           <Route path="/admin" element={<AdminPage />}>
-            <Route index element={<BlockPage />} />
+            <Route index element={<AdminMainPage />} />
             <Route path="blocks" element={<BlockPage />} />
             <Route path="gram-panchayats" element={<GpPage />} />
             <Route path="kpi" element={<KpiPage />} />
@@ -74,6 +77,8 @@ function App() {
             <Route path="kpi/create" element={<KpiForm />} />
             <Route path="kpi-question/create" element={<KpiQuestionForm />} />
             <Route path="indicator/create" element={<IndicatorForm />} />
+            <Route path="data-point/create" element={<DataPointForm />} />
+            <Route path="data-point" element={<DataPointPage />} />
           </Route>
         </Route>
 

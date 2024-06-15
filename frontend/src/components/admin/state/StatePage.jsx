@@ -43,7 +43,6 @@ const StatePage = () => {
         <TableHeader>
           <TableRow>
             <TableHead>ID</TableHead>
-            <TableHead>LGD Code</TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Action</TableHead>
           </TableRow>

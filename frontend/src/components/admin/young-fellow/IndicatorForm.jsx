@@ -117,6 +117,7 @@ function IndicatorForm({ type = "add" }) {
       return {
         ...indicatorFormData[index],
         indicator_id: item.id,
+        max_range: item.max_range,
       };
     });
 
@@ -125,7 +126,6 @@ function IndicatorForm({ type = "add" }) {
       formData: updatedFormData,
     };
 
-    // console.log(dataToSend);
     try {
       const response = await API.post("/api/v1/gp-wise-indicator/submit", dataToSend);
       console.log("Success:", response.data);
@@ -160,7 +160,7 @@ function IndicatorForm({ type = "add" }) {
     },
     {
       name: "gp_id",
-      label: "Gram",
+      label: "GP",
       type: "select",
       options: gp.map(gp => ({ value: gp.id, label: gp.name })),
       required: true,
@@ -171,7 +171,7 @@ function IndicatorForm({ type = "add" }) {
     <div className="container mx-auto p-6">
       <div>
         <div className="py-4">
-          <AdminHeader>{type === "add" ? "Young Fellow - Add Indicator" : "Update Gram Panchayat"}</AdminHeader>
+          <AdminHeader>{type === "add" ? "Young Fellow - Indicators Entry" : "Update Gram Panchayat"}</AdminHeader>
           <div className="grid grid-cols-1 gap-10 sm:grid-cols-3 md:grid-cols-4">
             {fields.map(({ name, label, type, options, required, disabled = false }) => (
               <div key={name}>
@@ -197,43 +197,43 @@ function IndicatorForm({ type = "add" }) {
             ))}
           </div>
           <div className="mt-10">
-              <form onSubmit={handleSubmit} className="overflow-auto ">
-                <Table className=" w-max">
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="w-[400px]">Indicator</TableHead>
-                      <TableHead className="w-40">Max Range</TableHead>
-                      <TableHead className="w-40">Input</TableHead>
-                      <TableHead className="w-80 ">Remarks</TableHead>
+            <form onSubmit={handleSubmit} className="overflow-auto ">
+              <Table className=" w-max">
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-[400px]">Indicator</TableHead>
+                    <TableHead className="w-40">Max Range</TableHead>
+                    <TableHead className="w-40">Input</TableHead>
+                    <TableHead className="w-80 ">Remarks</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {indicators.map((data, index) => (
+                    <TableRow key={data.id}>
+                      <TableCell>{data.name}</TableCell>
+                      <TableCell>
+                        <Input type="number" disabled name="max_range" value={indicatorFormData[index]?.max_range || data.max_range} onChange={e => handleChange(e, index)} />
+                      </TableCell>
+                      <TableCell>
+                        <Input required type="number" max={data.max_range} name="input_data" value={indicatorFormData[index]?.input_data || ""} onChange={e => handleChange(e, index)} />
+                      </TableCell>
+                      <TableCell>
+                        <Textarea type="text" name="remarks" value={indicatorFormData[index]?.remarks || ""} onChange={e => handleChange(e, index)} />
+                      </TableCell>
                     </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {indicators.map((data, index) => (
-                      <TableRow key={data.id}>
-                        <TableCell>{data.name}</TableCell>
-                        <TableCell>
-                          <Input type="number" name="max_range" value={indicatorFormData[index]?.max_range || data.max_range} onChange={e => handleChange(e, index)} />
-                        </TableCell>
-                        <TableCell>
-                          <Input type="number" name="input_data" value={indicatorFormData[index]?.input_data || ""} onChange={e => handleChange(e, index)} />
-                        </TableCell>
-                        <TableCell>
-                          <Textarea type="text" name="remarks" value={indicatorFormData[index]?.remarks || ""} onChange={e => handleChange(e, index)} />
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-                <div className="w-max my-4">
-                  <Label htmlFor="date" className="text-right mt-2">
-                    Date
-                  </Label>
-                  <Input type="date" name="date" value={formData.date || ""} onChange={handleFormChange} id="date" placeholder="Enter datte" className="px-10" />
-                </div>
-                <Button className="mt-10 px-20" type="submit">
-                  Submit
-                </Button>
-              </form>
+                  ))}
+                </TableBody>
+              </Table>
+              <div className="w-max my-4">
+                <Label htmlFor="date" className="text-right mt-2">
+                  Date
+                </Label>
+                <Input type="date" name="date" value={formData.date || ""} onChange={handleFormChange} id="date" placeholder="Enter datte" className="px-10" />
+              </div>
+              <Button className="mt-10 px-20" type="submit">
+                Submit
+              </Button>
+            </form>
           </div>
         </div>
       </div>

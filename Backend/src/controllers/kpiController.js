@@ -46,9 +46,7 @@ export const createKPI = CatchAsyncError(async (req, res, next) => {
 
 export const getAllKPI = CatchAsyncError(async (req, res, next) => {
   try {
-    const KPI = await KPIModel.find({
-      theme_id: "10",
-    });
+    const KPI = await KPIModel.find({});
     if (!KPI || KPI.length === 0) {
       return next(new Errorhandler("No KPI Found", 404));
     }
@@ -91,10 +89,7 @@ export const getKPIByTheme = CatchAsyncError(async (req, res, next) => {
 
 export const deleteKPI = CatchAsyncError(async (req, res, next) => {
   try {
-    const KPI = await KPIModel.findOneAndUpdate(
-      { _id: req.params.id },
-      { status: "0" }
-    );
+    const KPI = await KPIModel.findOneAndUpdate({ _id: req.params.id }, { status: "0" });
     if (!KPI) {
       return next(new Errorhandler("No KPI Found", 404));
     }
@@ -111,10 +106,7 @@ export const deleteKPI = CatchAsyncError(async (req, res, next) => {
 
 export const updateKPI = CatchAsyncError(async (req, res, next) => {
   try {
-    const KPI = await KPIModel.findOneAndUpdate(
-      { _id: req.params.id },
-      req.body
-    );
+    const KPI = await KPIModel.findOneAndUpdate({ _id: req.params.id }, req.body);
     if (!KPI) {
       return next(new Errorhandler("No KPI Found", 404));
     }

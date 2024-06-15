@@ -9,7 +9,6 @@ import AdminHeader from "../AdminHeader";
 function DistrictForm({ type = "add", onSubmit, district }) {
   const [formData, setFormData] = useState({
     id: district?.id || "",
-    lgd_code: district?.lgd_code || "",
     state_id: district?.state_id || "",
     name: district?.name || "",
     special_area: district?.special_area || "",
@@ -51,7 +50,6 @@ function DistrictForm({ type = "add", onSubmit, district }) {
 
   const handleUpdateDistrict = {};
   const fields = [
-    { name: "lgd_code", label: "LGD Code", type: "text" },
     {
       name: "state_id",
       label: "State",
