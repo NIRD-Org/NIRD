@@ -16,9 +16,6 @@ module.exports = {
         "2xl": "1400px",
       },
     },
-    colors: {
-      primary: "#00203F",
-    },
     extend: {
       keyframes: {
         "accordion-down": {
