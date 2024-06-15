@@ -75,7 +75,7 @@ export const getblocksByLocation = CatchAsyncError(async (req, res, next) => {
   try {
     const { state, dist } = req.query;
 
-    const blocks = await BlockModel.find({ dist_id: dist });
+    const blocks = await BlockModel.find({ dist_id: dist }).sort({ name: 1 });
     if (!blocks || blocks.length === 0) {
       return next(new Errorhandler("blocks data not found", 404));
     }

@@ -28,7 +28,7 @@ export const createState = CatchAsyncError(async (req, res, next) => {
   try {
     const id = await getNewId();
     req.body.id = id.toString();
-    
+
     req.body.created_by = req.user.id;
     const newState = new StateModel(req.body);
     await newState.save();
@@ -38,7 +38,6 @@ export const createState = CatchAsyncError(async (req, res, next) => {
       message: "State created successfully",
       state: newState,
     });
-
   } catch (error) {
     console.log(error);
     return next(new Errorhandler("Failed to create state", 500));
@@ -47,7 +46,9 @@ export const createState = CatchAsyncError(async (req, res, next) => {
 
 export const getAllStates = CatchAsyncError(async (req, res, next) => {
   try {
-    const states = await StateModel.find();
+    const states = await StateModel.find().sort({
+      name: 1,
+    });
     if (!states || states.length === 0) {
       return next(new Errorhandler("No States Found", 404));
     }

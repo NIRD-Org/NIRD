@@ -30,7 +30,7 @@ export const createTheme = CatchAsyncError(async (req, res, next) => {
     const id = await getNewId();
     req.body.id = id.toString();
     req.body.created_by = req.user.id;
-    
+
     const newTheme = new ThemeModel(req.body);
     await newTheme.save();
     res.status(201).json({
@@ -45,7 +45,8 @@ export const createTheme = CatchAsyncError(async (req, res, next) => {
 
 export const getAllThemes = CatchAsyncError(async (req, res, next) => {
   try {
-    const themes = await ThemeModel.find();
+    const themes = await ThemeModel.find().sort({ id: 1 });
+
     if (!themes || themes.length === 0) {
       return next(new Errorhandler("No themes found", 404));
     }
