@@ -308,7 +308,7 @@ export const getGpWiseKpiChart = CatchAsyncError(async (req, res, next) => {
     }
 
     let gpPercentage = (gpData.input_data / gpData.max_range) * 100;
-
+    console.log(gpPercentage);
     const stateData = await GpWiseKpiModel.find({
       kpi_id: kpi,
       state_id: state,
@@ -338,19 +338,19 @@ export const getGpWiseKpiChart = CatchAsyncError(async (req, res, next) => {
     let countryPercentage =
       (countryTotalInputData / countryTotalMaxRange) * 100;
 
-    // console.log(
-    //   statePercentage,
-    //   "      countryPercentage: ",
-    //   countryPercentage,
-    //   "gp:  ",
-    //   gpPercentage
-    // );
-    const totalPercentage = gpPercentage + statePercentage + countryPercentage;
-    const adjustmentFactor = 100 / totalPercentage;
+    console.log(
+      statePercentage,
+      "      countryPercentage: ",
+      countryPercentage,
+      "gp:  ",
+      gpPercentage
+    );
+    // const totalPercentage = gpPercentage + statePercentage + countryPercentage;
+    // const adjustmentFactor = 100 / totalPercentage;
 
-    gpPercentage *= adjustmentFactor;
-    statePercentage *= adjustmentFactor;
-    countryPercentage *= adjustmentFactor;
+    // gpPercentage *= adjustmentFactor;
+    // statePercentage *= adjustmentFactor;
+    // countryPercentage *= adjustmentFactor;
 
     res.json({
       gp: {
