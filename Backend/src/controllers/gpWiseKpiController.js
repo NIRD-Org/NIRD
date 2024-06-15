@@ -154,7 +154,7 @@ export const getGpWiseKpi = CatchAsyncError(async (req, res, next) => {
     // filter object
     const filter = {};
     if (state) filter.state_id = state;
-    if (dist) filter.district_id = dist;
+    if (dist) filter.dist_id = dist;
     if (block) filter.block_id = block;
     if (gp) filter.gp_id = gp;
 
@@ -180,7 +180,7 @@ export const getGpWiseKpi = CatchAsyncError(async (req, res, next) => {
       {
         $lookup: {
           from: "districts",
-          localField: "district_id",
+          localField: "dist_id",
           foreignField: "id",
           as: "district",
         },
@@ -272,7 +272,7 @@ export const getGpWiseKpiChart = CatchAsyncError(async (req, res, next) => {
     const gpData = await GpWiseKpiModel.findOne({
       kpi_id: kpi,
       state_id: state,
-      district_id: dist,
+      dist_id: dist,
       gp_id: gp,
       theme_id: "1",
     });

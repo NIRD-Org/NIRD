@@ -94,7 +94,7 @@ export const submitIndicatorData = CatchAsyncError(async (req, res, next) => {
     // };
 
     // // Insert the approval request into the gpWiseKpiApproval collection
-    // await KPIApprovalModel.create(approvalDocument);
+    // await IndicatorApprovalModel.create(approvalDocument);
 
     // Send success response
     res.status(201).json({

@@ -93,14 +93,14 @@ const Indicators = () => {
   };
 
   // Old
-  const [kpi, setKpi] = useState([]);
+  const [indicator, setIndicator] = useState([]);
   const [gpData, setGpData] = useState([]);
   const [gpWiseKpiData, setGpWiseKpiData] = useState([]);
   const getAllKpi = async () => {
     try {
-      const { data } = await API.get("/api/v1/kpi/all");
-      setKpi(data.KPI);
-      console.log(data.KPI);
+      const { data } = await API.get("/api/v1/indicator/all");
+      setIndicator(data.indicators);
+      console.log(data);
     } catch (error) {
       console.log("Error: " + error);
     }
@@ -113,7 +113,7 @@ const Indicators = () => {
 
   const getGpWiseKpiData = async () => {
     try {
-      const { data } = await API.get("/api/v1/gp-wise-kpi/indicators");
+      const { data } = await API.get("/api/v1/gp-wise-indicator/indicators");
       setGpWiseKpiData(data.data);
     } catch (error) {
       console.log("Error: " + error);
@@ -232,13 +232,13 @@ const Indicators = () => {
                         <th>
                           <h1 className="text-3xl">Gram Panchayat</h1>
                         </th>
-                        {kpi?.map((kpi) => (
+                        {indicator?.map((i) => (
                           <th
                             scope="col"
                             class="px-4 w-[10rem] py-3 text-start text-xs font-medium text-gray-500 uppercase"
-                            key={kpi.id}
+                            key={i.id}
                           >
-                            {kpi.kpi_name}
+                            {i.name}
                           </th>
                         ))}
                       </tr>
@@ -256,15 +256,15 @@ const Indicators = () => {
                               <p className="text-sm">{gpData.state_name}</p>
                             </div>
                           </td>
-                          {kpi.map((k) => {
-                            const kpiData = gpData.gp_percentage.find(
-                              (item) => item.kpi_id === k.id
+                          {indicator.map((i) => {
+                            const indicatorData = gpData.gp_percentage.find(
+                              (item) => item.indicator_id === i.id
                             );
                             return (
-                              <td className="px-4" key={k.id}>
-                                {kpiData ? (
+                              <td className="px-4" key={i.id}>
+                                {indicatorData ? (
                                   <Progress
-                                    value={kpiData.percentage.toFixed(2)}
+                                    value={indicatorData.percentage.toFixed(2)}
                                   />
                                 ) : (
                                   "N/A"
