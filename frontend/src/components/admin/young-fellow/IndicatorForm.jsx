@@ -160,7 +160,7 @@ function IndicatorForm({ type = "add" }) {
     },
     {
       name: "gp_id",
-      label: "Gram",
+      label: "GP",
       type: "select",
       options: gp.map(gp => ({ value: gp.id, label: gp.name })),
       required: true,

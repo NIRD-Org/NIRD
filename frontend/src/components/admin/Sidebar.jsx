@@ -82,12 +82,12 @@ function Sidebar({ className }) {
           title: "Data Point",
           link: "/admin/data-point",
         },
-        {
+       /*  {
           type: "sub-module",
           icon: ArrowBigRight,
           title: "Kpi approvals",
           link: "/admin/kpi-approvals",
-        },
+        }, */
       ];
       break;
     case 3:
