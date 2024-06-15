@@ -30,7 +30,7 @@ export const createDistrict = CatchAsyncError(async (req, res, next) => {
     const id = await getNewId();
     req.body.id = id.toString();
     req.body.created_by = req.user.id;
-    
+
     const newDistrict = new DistrictModel(req.body);
     await newDistrict.save();
     res.status(201).json({
@@ -47,7 +47,7 @@ export const getDistrictByState = CatchAsyncError(async (req, res, next) => {
   try {
     const districtData = await DistrictModel.find({
       state_id: req.params.state,
-    });
+    }).sort({ name: 1 });
     if (!districtData || districtData.length === 0) {
       return next(new Errorhandler("No District Data Found", 404));
     }

@@ -42,7 +42,7 @@ const gpSchema = new Schema(
     },
     created_by: {
       type: String,
-      required: true,
+      required: false,
     },
     modified_by: {
       type: String,

@@ -144,7 +144,7 @@ const getGpWiseIndicatorDataWithPercentage = async (query) => {
       $group: {
         _id: {
           gp_id: "$gp_id",
-          kpi_id: "$indicator_id",
+          indicator_id: "$indicator_id",
         },
         doc: { $first: "$$ROOT" },
         totalInputData: { $sum: { $toDouble: "$input_data" } },
@@ -232,6 +232,7 @@ const getGpWiseIndicatorDataWithPercentage = async (query) => {
         gp_percentage: "$indicators",
       },
     },
+    { $sort: { "doc.created_at": 1 } },
   ]);
 
   if (!gpWiseKpiData || gpWiseKpiData.length === 0) {

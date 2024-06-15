@@ -167,6 +167,8 @@ export const submitKpiData = CatchAsyncError(async (req, res, next) => {
     return next(new Errorhandler("Failed to submit KPI data", 500));
   }
 });
+
+// Main for getting kpi data
 export const getGpWiseKpi = CatchAsyncError(async (req, res, next) => {
   try {
     const limit = req.query.limit || 50;
@@ -526,3 +528,21 @@ export const deleteGpWiseKpiData = CatchAsyncError(async (req, res, next) => {
     return next(new Errorhandler("Failed to delete Gram Panchayat", 500));
   }
 });
+
+// Get the gpWiseKpi for the approver
+
+export const getGpWiseKpiForApprover = CatchAsyncError(
+  async (req, res, next) => {
+    try {
+      const { state, dist, block, gp, theme } = req.query;
+      const filter = {};
+      if (state) filter.state_id = state;
+      if (dist) filter.district_id = dist;
+      if (block) filter.block_id = block;
+      filter.gp_id = gp;
+      filter.theme_id = theme;
+    } catch (error) {
+      return next(new Errorhandler("Failed to get wise data", 500));
+    }
+  }
+);

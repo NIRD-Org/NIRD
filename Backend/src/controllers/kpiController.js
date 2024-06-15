@@ -64,10 +64,17 @@ export const getAllKPI = CatchAsyncError(async (req, res, next) => {
 
 export const getKPIByTheme = CatchAsyncError(async (req, res, next) => {
   try {
-    const KPI = await KPIModel.find({ theme_id: req.params.theme });
+    const KPI = await KPIModel.aggregate([
+      { $match: { theme_id: req.params.theme } },
+      { $addFields: { numeric_id: { $toInt: "$id" } } },
+      { $sort: { numeric_id: 1 } },
+      { $project: { numeric_id: 0 } },
+    ]);
+
     if (!KPI || KPI.length === 0) {
       return next(new Errorhandler("No KPI Found", 404));
     }
+
     res.status(200).json({
       success: true,
       message: "KPI Fetched Successfully",

@@ -57,7 +57,7 @@ export const getGpByLocation = CatchAsyncError(async (req, res, next) => {
       filter.block_id = block;
     }
 
-    const gram = await GpModel.find(filter);
+    const gram = await GpModel.find(filter).sort({ name: 1 });
     if (!gram || gram.length === 0) {
       return next(new Errorhandler("No Gram Panchayat Found", 404));
     }
