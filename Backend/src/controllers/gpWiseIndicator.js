@@ -146,6 +146,7 @@ const getGpWiseIndicatorDataWithPercentage = async (query) => {
           gp_id: "$gp_id",
           indicator_id: "$indicator_id",
         },
+        original_id: { $first: "$_id" },
         doc: { $first: "$$ROOT" },
         totalInputData: { $sum: { $toDouble: "$input_data" } },
         totalMaxRange: { $sum: { $toDouble: "$max_range" } },
@@ -209,6 +210,7 @@ const getGpWiseIndicatorDataWithPercentage = async (query) => {
           },
         },
         doc: { $first: "$$ROOT" },
+        original_id: { $first: "$original_id" },
       },
     },
     {
@@ -224,15 +226,17 @@ const getGpWiseIndicatorDataWithPercentage = async (query) => {
     {
       $project: {
         id: "$doc.id",
+        new_id: "$original_id",
         state_name: { $arrayElemAt: ["$doc.state.name", 0] },
         dist_name: { $arrayElemAt: ["$doc.dist.name", 0] },
         block_name: { $arrayElemAt: ["$doc.block.name", 0] },
         gp_name: { $arrayElemAt: ["$doc.gp.name", 0] },
         date: "$doc.date",
+
         gp_percentage: "$indicators",
       },
     },
-    { $sort: { "doc.created_at": 1 } },
+    { $sort: { new_id: 1 } }, // Ensure the correct field is being sorted
   ]);
 
   if (!gpWiseKpiData || gpWiseKpiData.length === 0) {

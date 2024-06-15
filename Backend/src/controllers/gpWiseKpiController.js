@@ -476,6 +476,7 @@ const getGpWiseKpiDataWithPercentage = async (query) => {
         gp_percentage: "$kpis",
       },
     },
+    { $sort: { "doc.created_at": 1 } },
   ]);
 
   if (!gpWiseKpiData || gpWiseKpiData.length === 0) {
