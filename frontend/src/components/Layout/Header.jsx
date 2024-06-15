@@ -11,7 +11,7 @@ const Header = () => {
 
   return (
     <>
-      <div className="hidden lg:flex h-[14vh]  xl:h-[12vh] bg-[#004B86] w-full items-center justify-between">
+      <div className="hidden lg:flex h-[14vh]  xl:h-[12vh] bg-primary w-full items-center justify-between">
         {/* Desktop navigation */}
         <div className="flex items-center justify-between w-[45%]">
           <NavLink to={"/"}>
@@ -112,7 +112,7 @@ const Header = () => {
       </div>
 
       {/* Mobile navigation */}
-      <div className="lg:hidden bg-[#004B86] flex justify-between items-center">
+      <div className="lg:hidden bg-primary flex justify-between items-center">
         <div className="w-[10%]">
           <img
             src="/logo/niti-logo-white.svg"
@@ -139,7 +139,7 @@ const Header = () => {
         </button>
 
         {isOpen && (
-          <div className="absolute top-[10vh]  left-0 w-full h-full bg-[#004B86] flex flex-col items-start pb-20 z-20">
+          <div className="absolute top-[10vh]  left-0 w-full h-full bg-primary flex flex-col items-start pb-20 z-20">
             <div className="mt-4">
               <NavLink
                 to="/project"

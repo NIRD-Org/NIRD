@@ -14,6 +14,7 @@ import kpiApprovalRoutes from "./routes/kpiApprovalRoutes.js";
 import kpiQuestionsRoutes from "./routes/kpiQuestionsRoutes.js";
 import authRoutes from "./routes/authRoute.js";
 import userLocationRoutes from "./routes/userLocationRoutes.js";
+import indicatorRoutes from "./routes/indicatorRoutes.js";
 const app = express();
 
 dotenv.config();
@@ -34,7 +35,7 @@ app.use("/api/v1/kpi-approvals", kpiApprovalRoutes);
 app.use("/api/v1/kpi-questions", kpiQuestionsRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/user-location", userLocationRoutes);
-
+app.use("/api/v1/indicator", indicatorRoutes);
 app.get("/", (req, res) => {
   res.status(200).json({ message: "Server is running" });
 });

@@ -2,7 +2,7 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <div className="bg-[#004B86] text-white">
+    <div className="bg-primary text-white">
       <div className="flex flex-wrap justify-between items-center p-4">
         <div className="mb-4 lg:mb-0">
           <img

@@ -24,11 +24,10 @@ const gpSchema = new Schema(
     },
     lgd_code: {
       type: String,
-      required: true,
+      required: false,
     },
     lgd_code_feb11_2021: {
       type: String,
-      default: null,
     },
     name: {
       type: String,
@@ -36,7 +35,6 @@ const gpSchema = new Schema(
     },
     is_maped_to_another_distrcit: {
       type: String,
-      default: null,
     },
     status: {
       type: String,
