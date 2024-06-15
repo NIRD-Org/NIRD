@@ -8,11 +8,9 @@ import AdminHeader from "../AdminHeader";
 
 function GpForm({ type = "add", gp }) {
   const [formData, setFormData] = useState({
-    id: gp?.id || "",
     state_id: gp?.state_id || "",
     dist_id: gp?.dist_id || "",
     block_id: gp?.block_id || "",
-    lgd_code: gp?.lgd_code || "",
     name: gp?.name || "",
     is_maped_to_another_district: gp?.is_maped_to_another_district || "",
   });
@@ -103,7 +101,6 @@ function GpForm({ type = "add", gp }) {
   };
 
   const fields = [
-    { name: "lgd_code", label: "LGD Code", type: "text", required: true },
     {
       name: "state_id",
       label: "State",

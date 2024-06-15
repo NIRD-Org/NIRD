@@ -62,8 +62,7 @@ const GpPage = () => {
             <TableHead>ID</TableHead>
             <TableHead>State ID</TableHead>
             <TableHead>District ID</TableHead>
-            <TableHead>block ID</TableHead>
-            <TableHead>LGD Code</TableHead>
+            <TableHead>Block ID</TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Mapped to Another District</TableHead>
           </TableRow>
