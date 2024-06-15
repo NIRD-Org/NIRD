@@ -272,7 +272,7 @@ export const getGpWiseKpiChart = CatchAsyncError(async (req, res, next) => {
     const gpData = await GpWiseKpiModel.findOne({
       kpi_id: kpi,
       state_id: state,
-      district_id: dist,
+      dist_id: dist,
       gp_id: gp,
       theme_id: "1",
     });
