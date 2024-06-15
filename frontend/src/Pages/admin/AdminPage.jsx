@@ -1,15 +1,22 @@
 import Navbar from "@/components/admin/Navbar";
 import Sidebar from "@/components/admin/Sidebar";
+import { Button } from "@/components/ui/button";
 import { useAuthContext } from "@/context/AuthContext";
-import { useLayoutEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 
 export default function AdminPage({ children }) {
   const { isAuthenticated } = useAuthContext();
-  const navigate = useNavigate();
 
   if (!isAuthenticated) {
-    return <div className="text-slate-900 text-3xl w-full flex items-center justify-center min-h-screen">Unauthorized</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-black  w-full flex-col gap-4">
+        <div className="text-slate-100  text-4xl font-medium  ">Unauthorized</div>
+        <p className="text-slate-100">Please login to access admin dashboard</p>
+        <Link to={"/login"}>
+          <Button className="bg-primary">Login</Button>
+        </Link>
+      </div>
+    );
   }
 
   return (

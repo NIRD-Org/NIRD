@@ -1,10 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import {
-  Route,
-  RouterProvider,
-  createBrowserRouter,
-  createRoutesFromElements,
-} from "react-router-dom";
+import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from "react-router-dom";
 import "./App.css";
 import Layout from "./Layout";
 import AdminPage from "./Pages/admin/AdminPage";
@@ -36,14 +31,14 @@ import GpForm from "./components/admin/gp/GpForm";
 import ThemeForm from "./components/admin/theme/ThemeForm";
 import KpiForm from "./components/admin/kpi/KpiForm";
 import KpiQuestionForm from "./components/admin/kpi-question/KpiQuestionForm";
+import IndicatorForm from "./components/admin/young-fellow/IndicatorForm";
 
 function App() {
+  const { login } = useAuthContext();
 
-  const {login } = useAuthContext();
-
-  useEffect(()=>{
+  useEffect(() => {
     login();
-  },[])
+  }, []);
 
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -55,37 +50,40 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/gp-profile" element={<KPIDetails />} />
           <Route path="project" element={<ProjectPage />} />
+
+          <Route path="/admin" element={<AdminPage />}>
+            <Route index element={<BlockPage />} />
+            <Route path="blocks" element={<BlockPage />} />
+            <Route path="gram-panchayats" element={<GpPage />} />
+            <Route path="kpi" element={<KpiPage />} />
+            <Route path="themes" element={<ThemePage />} />
+            {/* <Route path="gp-wise-kpi" element={<GpWiseKpiPage />} /> */}
+            <Route path="districts" element={<DistrictPage />} />
+            <Route path="kpi-approvals" element={<KPIApprovalPage />} />
+            <Route path="kpi-questions" element={<KPIQuestionPage />} />
+            <Route path="states" element={<StatePage />} />
+            <Route path="users/create" element={<CreateUserForm />} />
+            <Route path="young-professionals" element={<YoungFellowForm />} />
+            <Route path="gp-wise-kpi" element={<GpWiseKpiList />} />
+            <Route path="add-gp-wise-kpi" element={<AddGpWiseKpi />} />
+            <Route path="state/create" element={<StateForm />} />
+            <Route path="district/create" element={<DistrictForm />} />
+            <Route path="block/create" element={<BlockForm />} />
+            <Route path="gram/create" element={<GpForm />} />
+            <Route path="theme/create" element={<ThemeForm />} />
+            <Route path="kpi/create" element={<KpiForm />} />
+            <Route path="kpi-question/create" element={<KpiQuestionForm />} />
+            <Route path="indicator/create" element={<IndicatorForm />} />
+          </Route>
         </Route>
-        <Route path="/admin" element={<AdminPage />}>
-          <Route index element={<BlockPage />} />
-          <Route path="blocks" element={<BlockPage />} />
-          <Route path="gram-panchayats" element={<GpPage />} />
-          <Route path="kpi" element={<KpiPage />} />
-          <Route path="themes" element={<ThemePage />} />
-          {/* <Route path="gp-wise-kpi" element={<GpWiseKpiPage />} /> */}
-          <Route path="districts" element={<DistrictPage />} />
-          <Route path="kpi-approvals" element={<KPIApprovalPage />} />
-          <Route path="kpi-questions" element={<KPIQuestionPage />} />
-          <Route path="states" element={<StatePage />} />
-          <Route path="users/create" element={<CreateUserForm />} />
-          <Route path="young-professionals" element={<YoungFellowForm />} />
-          <Route path="gp-wise-kpi" element={<GpWiseKpiList />} />
-          <Route path="add-gp-wise-kpi" element={<AddGpWiseKpi />} />
-          <Route path="state/create" element={<StateForm />} />
-          <Route path="district/create" element={<DistrictForm />} />
-          <Route path="block/create" element={<BlockForm />} />
-          <Route path="gram/create" element={<GpForm />} />
-          <Route path="theme/create" element={<ThemeForm />} />
-          <Route path="kpi/create" element={<KpiForm />} />
-          <Route path="kpi-question/create" element={<KpiQuestionForm />} />
-        </Route>
+
         <Route path="/"></Route>
       </Route>
     )
   );
 
   return (
-    <main className="dark:bg-dark">
+    <main className="dark:bg-dark bg-gray-100">
       <RouterProvider router={router} />
       <Toaster position="bottom-center" />
     </main>

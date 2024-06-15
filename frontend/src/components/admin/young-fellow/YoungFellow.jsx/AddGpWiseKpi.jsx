@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Textarea } from "@/components/ui/textarea";
 import { useAuthContext } from "@/context/AuthContext";
 import { tst } from "@/lib/utils";
 import API from "@/utils/API";
@@ -115,21 +116,21 @@ function AddGpWiseKpi() {
 
   return (
     <div>
-      <div className="container p-6">
+      <div className="container p-6 ">
         <div className="mb-8">
           <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">Young Fellow Form - Edit</h2>
         </div>
-        <form onSubmit={handleSubmit}>
-          <Table>
+        <form onSubmit={handleSubmit} className="overflow-auto ">
+          <Table className=" w-max">
             <TableHeader>
               <TableRow>
-                <TableHead>KPI Name</TableHead>
-                <TableHead>Question</TableHead>
+                <TableHead className="w-[400px]">KPI Name</TableHead>
+                <TableHead className="w-[400px]">Question</TableHead>
                 <TableHead>Input type</TableHead>
-                <TableHead>Max Number (Total Number)</TableHead>
-                <TableHead>Cumulative Achived Number</TableHead>
+                <TableHead className="w-40">Max Number (Total Number)</TableHead>
+                <TableHead className="w-40">Cumulative Achived Number</TableHead>
                 <TableHead>Score</TableHead>
-                <TableHead>Remarks</TableHead>
+                <TableHead className="w-80 ">Remarks</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -148,7 +149,7 @@ function AddGpWiseKpi() {
                     <Input type="text" disabled />
                   </TableCell>
                   <TableCell>
-                    <Input type="text" name="remarks" value={formData[index]?.remarks || ""} onChange={e => handleChange(e, index)} />
+                    <Textarea type="text" name="remarks" value={formData[index]?.remarks || ""} onChange={e => handleChange(e, index)} />
                   </TableCell>
                 </TableRow>
               ))}

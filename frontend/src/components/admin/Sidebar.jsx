@@ -120,6 +120,12 @@ function Sidebar({ className }) {
           title: "Young Fellow",
           link: "/admin/young-professionals",
         },
+        {
+          type: "sub-module",
+          icon: ArrowBigRight,
+          title: "Indicator",
+          link: "/admin/indicator/create",
+        },
       ];
       break;
   }

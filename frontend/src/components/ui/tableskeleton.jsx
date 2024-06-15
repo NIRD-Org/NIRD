@@ -8,11 +8,11 @@ const TableSkeleton = ({columnCount,rowCount=10}) => {
         <tr key={index}>
           {[...Array(columnCount)].map((_, index) => (
             <td key={index} className="px-6 py-4">
-              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-full text-white" />
             </td>
           ))}
           <td className="px-6 py-4">
-            <Skeleton className="h-4 w-20" />
+            <Skeleton className="h-4 w-20 text-white" />
           </td>
         </tr>
       ))}

@@ -19,7 +19,7 @@ function Home() {
               </p>
               <Link
                 to={"/project"}
-                class="mt-6 inline-block bg-[#004B86] text-white px-6 py-3 rounded-md text-lg font-medium hover:bg-blue-900"
+                class="mt-6 inline-block bg-primary text-white px-6 py-3 rounded-md text-lg font-medium hover:bg-blue-900"
               >
                 Learn More
               </Link>

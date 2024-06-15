@@ -4,22 +4,22 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import API from "@/utils/API";
 import { tst } from "@/lib/utils";
-import AdminHeader from "@/components/admin/AdminHeader";
+import AdminHeader from "../AdminHeader";
 
-function GpForm({ type = "add", gp }) {
+function IndicatorForm({ type = "add" }) {
   const [formData, setFormData] = useState({
-    id: gp?.id || "",
-    state_id: gp?.state_id || "",
-    dist_id: gp?.dist_id || "",
-    block_id: gp?.block_id || "",
-    lgd_code: gp?.lgd_code || "",
-    name: gp?.name || "",
-    is_maped_to_another_district: gp?.is_maped_to_another_district || "",
+    state_id: "",
+    dist_id: "",
+    block_id: "",
+    gram_id: "",
+    max_range: "",
+    input: "",
   });
 
   const [states, setStates] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [blocks, setBlocks] = useState([]);
+  const [gp, setGp] = useState([]);
   const [pending, setPending] = useState(false);
 
   useEffect(() => {
@@ -65,15 +65,27 @@ function GpForm({ type = "add", gp }) {
     fetchBlocks();
   }, [formData.dist_id]);
 
-  const handleChange = (e) => {
+  useEffect(() => {
+    async function fetchGrams() {
+      try {
+        const { data } = await API.get(`/api/v1/gram/get?block=${formData.block_id}`);
+        setGp(data?.gram || []);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchGrams();
+  }, [formData.block_id]);
+
+  const handleChange = e => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
+    setFormData(prevData => ({
       ...prevData,
       [name]: value,
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     setPending(true);
     try {
@@ -91,9 +103,8 @@ function GpForm({ type = "add", gp }) {
     }
   };
 
-
   const handleCreateGp = async e => {
-    e.preventDefault()
+    e.preventDefault();
     try {
       await API.post("/api/v1/gram/create", formData);
       tst.success("GP created successfully");
@@ -103,38 +114,38 @@ function GpForm({ type = "add", gp }) {
   };
 
   const fields = [
-    { name: "lgd_code", label: "LGD Code", type: "text", required: true },
     {
       name: "state_id",
       label: "State",
       type: "select",
-      options: states.map((state) => ({ value: state.id, label: state.name })),
+      options: states.map(state => ({ value: state.id, label: state.name })),
       required: true,
     },
     {
       name: "dist_id",
       label: "District",
       type: "select",
-      options: districts.map((district) => ({ value: district.id, label: district.name })),
+      options: districts.map(district => ({ value: district.id, label: district.name })),
       required: true,
     },
     {
       name: "block_id",
       label: "Block",
       type: "select",
-      options: blocks.map((block) => ({ value: block.id, label: block.name })),
+      options: blocks.map(block => ({ value: block.id, label: block.name })),
       required: true,
     },
-    { name: "name", label: "Name", type: "text", required: true },
     {
-      name: "is_maped_to_another_district",
-      label: "Mapped to Another District",
+      name: "gram_id",
+      label: "Gram",
       type: "select",
-      options: [
-        { value: "Yes", label: "Yes" },
-        { value: "No", label: "No" },
-      ],
+      options: gp.map(gp => ({ value: gp.id, label: gp.name })),
+      required: true,
     },
+    { name: "indicator", label: "Indicator", type: "text", disabled :true},
+    { name: "max_range", label: "Max_range", type: "text" },
+    { name: "input", label: "Input", type: "text", required: true},
+    
   ];
 
   return (
@@ -142,43 +153,26 @@ function GpForm({ type = "add", gp }) {
       <form onSubmit={handleCreateGp}>
         <div className="py-4">
           <AdminHeader>{type === "add" ? "Add Gram Panchayat" : "Update Gram Panchayat"}</AdminHeader>
-          <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3">
-            {fields.map(({ name, label, type, options, required }) => (
+          <div className="grid grid-cols-1 gap-10 sm:grid-cols-3 md:grid-cols-4">
+            {fields.map(({ name, label, type, options, required ,disabled=false}) => (
               <div key={name}>
                 <Label htmlFor={name} className="inline-block mb-2">
                   {label}
                 </Label>
                 {required && <span className="text-red-500 ml-1">*</span>}
                 {type === "select" ? (
-                  <select
-                    required={required}
-                    disabled={pending}
-                    className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
-                    value={formData[name]}
-                    name={name}
-                    onChange={handleChange}
-                  >
+                  <select required={required} disabled={pending} className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border" value={formData[name]} name={name} onChange={handleChange}>
                     <option value="" disabled>
                       Select {label}
                     </option>
-                    {options.map((option) => (
+                    {options.map(option => (
                       <option key={option.value} value={option.value}>
                         {option.label}
                       </option>
                     ))}
                   </select>
                 ) : (
-                  <Input
-                    required={required}
-                    disabled={pending}
-                    type={type}
-                    name={name}
-                    value={formData[name]}
-                    onChange={handleChange}
-                    id={name}
-                    placeholder={`Enter ${label}`}
-                    className="col-span-3"
-                  />
+                  <Input required={required} disabled={pending || disabled} type={type} name={name} value={formData[name]} onChange={handleChange} id={name} placeholder={`Enter ${label}`} className="col-span-3" />
                 )}
               </div>
             ))}
@@ -186,7 +180,7 @@ function GpForm({ type = "add", gp }) {
         </div>
         <div className="mt-6">
           <Button pending={pending} type="submit">
-            {type === "add" ? "Add Gram Panchayat" : "Update Gram Panchayat"}
+            {type === "add" ? "Add Indicator" : "Update Gram Panchayat"}
           </Button>
         </div>
       </form>
@@ -194,4 +188,4 @@ function GpForm({ type = "add", gp }) {
   );
 }
 
-export default GpForm;
+export default IndicatorForm;
