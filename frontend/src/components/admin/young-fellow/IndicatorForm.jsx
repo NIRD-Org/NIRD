@@ -171,7 +171,7 @@ function IndicatorForm({ type = "add" }) {
     <div className="container mx-auto p-6">
       <div>
         <div className="py-4">
-          <AdminHeader>{type === "add" ? "Young Fellow - Add Indicator" : "Update Gram Panchayat"}</AdminHeader>
+          <AdminHeader>{type === "add" ? "Young Fellow - Indicators Entry" : "Update Gram Panchayat"}</AdminHeader>
           <div className="grid grid-cols-1 gap-10 sm:grid-cols-3 md:grid-cols-4">
             {fields.map(({ name, label, type, options, required, disabled = false }) => (
               <div key={name}>
