@@ -6,18 +6,18 @@ import API from "@/utils/API";
 const GramFilter = ({ className }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const state_id = searchParams.get("state_id") || "";
-  const district_id = searchParams.get("district_id") || "";
+  const dist_id = searchParams.get("dist_id") || "";
   const block_id = searchParams.get("block_id") || "";
   const gram_id = searchParams.get("gram_id") || "";
   const [grams, setGrams] = useState([]);
 
   useEffect(() => {
     if (block_id) {
-      getAllGp(state_id, district_id, block_id);
+      getAllGp(state_id, dist_id, block_id);
     } else {
       setGrams([]);
     }
-  }, [state_id, district_id, block_id]);
+  }, [state_id, dist_id, block_id]);
 
   const getAllGp = async blockId => {
     try {
@@ -33,12 +33,12 @@ const GramFilter = ({ className }) => {
     if (selectedGramId) {
       setSearchParams({
         state_id,
-        district_id,
+        dist_id,
         block_id,
         gram_id: selectedGramId,
       });
     } else {
-      setSearchParams({ state_id, district_id, block_id });
+      setSearchParams({ state_id, dist_id, block_id });
     }
   };
 

@@ -6,7 +6,6 @@ import { useAuthContext } from "@/context/AuthContext";
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { isAuthenticated } = useAuthContext();
-
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
@@ -54,9 +53,11 @@ const Header = () => {
           <img src="/logo/MOPR-NEW-LOGO.png" alt="MoPR Logo" className="h-12 w-auto" />
         </div>
 
-        <NavLink to="/login" className={({ isActive }) => `block px-3 text-md py-2 font-normal duration-200 ${isActive ? "text-white font-bold" : "text-gray-300"} hover:text-white`}>
-          Login
-        </NavLink>
+        {!isAuthenticated && (
+          <NavLink to="/login" className={({ isActive }) => `block px-3 text-md py-2 font-normal duration-200 ${isActive ? "text-white font-bold" : "text-gray-300"} hover:text-white`}>
+            Login
+          </NavLink>
+        )}
       </div>
 
       {/* Mobile navigation */}

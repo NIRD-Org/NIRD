@@ -51,7 +51,6 @@ function YoungFellowForm({ type, onSubmit, kpiApproval }) {
   const handleSubmit = e => {
     e.preventDefault();
     setPending(true);
-    onSubmit(formData);
     setPending(false);
   };
 
@@ -60,7 +59,7 @@ function YoungFellowForm({ type, onSubmit, kpiApproval }) {
   }
 
   const handleGpWiseKpiEdit = (id) => {
-    navigate(`/admin/gp-wise-kpi?state_id=${state_id}&dist_id=${'1'}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${id}`);
+    navigate(`/admin/gp-wise-kpi?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${id}`);
   };
 
   return (

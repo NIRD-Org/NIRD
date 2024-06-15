@@ -1,197 +1,227 @@
 import React, { useEffect, useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import API from "@/utils/API";
-import { tst } from "@/lib/utils";
-import AdminHeader from "@/components/admin/AdminHeader";
+import SelectComponent from "../../SelectComponent";
+import GpProfileCard from "../GpProfileCard";
+import API from "../../../utils/API";
+import Select from "react-select";
 
-function GpForm({ type = "add", gp }) {
-  const [formData, setFormData] = useState({
-    id: gp?.id || "",
-    state_id: gp?.state_id || "",
-    dist_id: gp?.dist_id || "",
-    block_id: gp?.block_id || "",
-    lgd_code: gp?.lgd_code || "",
-    name: gp?.name || "",
-    is_maped_to_another_district: gp?.is_maped_to_another_district || "",
-  });
+const GpProfile = () => {
+  const [gpData, setGpData] = useState([]);
+  const [stateOptions, setStateOptions] = useState([]);
+  const [districtOptions, setDistrictOptions] = useState([]);
+  const [blockOptions, setBlockOptions] = useState([]);
+  const [GpOptions, setGpOptions] = useState([]);
 
-  const [states, setStates] = useState([]);
-  const [districts, setDistricts] = useState([]);
-  const [blocks, setBlocks] = useState([]);
-  const [pending, setPending] = useState(false);
+  const [state, setState] = useState("");
+  const [district, setDistrict] = useState("");
+  const [block, setblock] = useState("");
+  const [gp, setGp] = useState("");
 
-  useEffect(() => {
-    async function fetchStates() {
-      try {
-        const response = await API.get("/api/v1/state/all");
-        setStates(response.data?.states || []);
-      } catch (error) {
-        tst.error("Failed to fetch states.");
-      }
-    }
-
-    fetchStates();
-  }, []);
-
-  useEffect(() => {
-    async function fetchDistricts() {
-      if (formData.state_id) {
-        try {
-          const response = await API.get(`/api/v1/dist/state/${formData.state_id}`);
-          setDistricts(response.data?.districts || []);
-        } catch (error) {
-          tst.error("Failed to fetch districts.");
-        }
-      }
-    }
-
-    fetchDistricts();
-  }, [formData.state_id]);
-
-  useEffect(() => {
-    async function fetchBlocks() {
-      if (formData.dist_id) {
-        try {
-          const response = await API.get(`/api/v1/block/get?dist=${formData.dist_id}`);
-          setBlocks(response.data?.blocks || []);
-        } catch (error) {
-          tst.error("Failed to fetch blocks.");
-        }
-      }
-    }
-
-    fetchBlocks();
-  }, [formData.dist_id]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+  const getAllKpiData = async () => {
+    const { data } = await API.get(
+      `/api/v1/gp-wise-kpi?page=${1}&state=${state}&block=${block}&dist=${district}&gp=${gp}`
+    );
+    setGpData(data?.data);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setPending(true);
-    try {
-      if (type === "add") {
-        await API.post("/api/v1/gp/create", formData);
-        tst.success("Gram Panchayat created successfully");
-      } else {
-        await API.put(`/api/v1/gp/${formData.id}`, formData);
-        tst.success("Gram Panchayat updated successfully");
-      }
-      setPending(false);
-    } catch (error) {
-      tst.error("Failed to submit form:", error);
-      setPending(false);
-    }
+  const getAllStates = async () => {
+    const { data } = await API.get(`/api/v1/state/all`);
+    setStateOptions(data?.states);
+    console.log(data?.states);
+  };
+  const getAllDistricts = async () => {
+    console.log(state);
+    const { data } = await API.get(`/api/v1/dist/state/${state}`);
+    setDistrictOptions(data?.districts);
   };
 
-
-  const handleCreateGp = async e => {
-    e.preventDefault()
-    try {
-      await API.post("/api/v1/gram/create", formData);
-      tst.success("GP created successfully");
-    } catch (error) {
-      tst.error(error);
-    }
+  const getAllBlocks = async () => {
+    const { data } = await API.get(`/api/v1/block/get?dist=${district}`);
+    setBlockOptions(data?.blocks);
   };
 
-  const fields = [
-    { name: "lgd_code", label: "LGD Code", type: "text", required: true },
-    {
-      name: "state_id",
-      label: "State",
-      type: "select",
-      options: states.map((state) => ({ value: state.id, label: state.name })),
-      required: true,
-    },
-    {
-      name: "dist_id",
-      label: "District",
-      type: "select",
-      options: districts.map((district) => ({ value: district.id, label: district.name })),
-      required: true,
-    },
-    {
-      name: "block_id",
-      label: "Block",
-      type: "select",
-      options: blocks.map((block) => ({ value: block.id, label: block.name })),
-      required: true,
-    },
-    { name: "name", label: "Name", type: "text", required: true },
-    {
-      name: "is_maped_to_another_district",
-      label: "Mapped to Another District",
-      type: "select",
-      options: [
-        { value: "Yes", label: "Yes" },
-        { value: "No", label: "No" },
-      ],
-    },
-  ];
+  const getAllGp = async () => {
+    const { data } = await API.get(`/api/v1/gram/get?block=${block}`);
+    setGpOptions(data?.gram);
+  };
 
+  useEffect(() => {
+    setDistrict("");
+    setblock("");
+    setGp("");
+    getAllKpiData();
+    getAllStates();
+    getAllDistricts();
+  }, [state]);
+
+  useEffect(() => {
+    getAllKpiData();
+  }, [district, block, gp]);
+
+  useEffect(() => {
+    if (district) {
+      getAllBlocks();
+    }
+  }, [district]);
+
+  useEffect(() => {
+    if (block) getAllGp();
+  }, [block]);
+
+  const stateOptions1 = stateOptions.map((item) => ({
+    value: item.id,
+    label: item.name,
+  }));
+  const districtOptions1 = districtOptions.map((item) => ({
+    value: item.id,
+    label: item.name,
+  }));
+
+  const blockOptions1 = blockOptions.map((item) => ({
+    value: item.id,
+    label: item.name,
+  }));
+
+  const GpOptions1 = GpOptions.map((item) => ({
+    value: item.id,
+    label: item.name,
+  }));
+
+  const customStyles = {
+    control: (provided) => ({
+      ...provided,
+      fontSize: "15px", // Adjust the font size as needed
+      width: "100%", // Adjust the width as needed
+    }),
+    singleValue: (provided) => ({
+      ...provided,
+      fontSize: "15px", // Adjust the font size as needed
+    }),
+    option: (provided) => ({
+      ...provided,
+      fontSize: "14px", // Adjust the font size of the options as needed
+    }),
+    menu: (provided) => ({
+      ...provided,
+      width: "max-content", // Adjust the width of the dropdown menu as needed
+    }),
+  };
+
+  const handlePageClick = () => {};
   return (
-    <div className="container mx-auto p-6">
-      <form onSubmit={handleCreateGp}>
-        <div className="py-4">
-          <AdminHeader>{type === "add" ? "Add Gram Panchayat" : "Update Gram Panchayat"}</AdminHeader>
-          <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3">
-            {fields.map(({ name, label, type, options, required }) => (
-              <div key={name}>
-                <Label htmlFor={name} className="inline-block mb-2">
-                  {label}
-                </Label>
-                {required && <span className="text-red-500 ml-1">*</span>}
-                {type === "select" ? (
-                  <select
-                    required={required}
-                    disabled={pending}
-                    className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
-                    value={formData[name]}
-                    name={name}
-                    onChange={handleChange}
-                  >
-                    <option value="" disabled>
-                      Select {label}
-                    </option>
-                    {options.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                ) : (
-                  <Input
-                    required={required}
-                    disabled={pending}
-                    type={type}
-                    name={name}
-                    value={formData[name]}
-                    onChange={handleChange}
-                    id={name}
-                    placeholder={`Enter ${label}`}
-                    className="col-span-3"
-                  />
-                )}
-              </div>
-            ))}
+    <div className="px-5 pb-8 lg:px-20 lg:pb-12">
+      <div className="flex flex-col md:flex-row items-center gap-10 justify-between mb-4">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-5">
+          <div className="flex flex-col">
+            <label className="text-gray-600 text-sm mb-1">Select State</label>
+
+            <Select
+              className="basic-single"
+              classNamePrefix="select"
+              defaultValue={stateOptions1[0]}
+              isClearable="true"
+              isSearchable="true"
+              name="States"
+              options={stateOptions1}
+              onChange={(e) => setState(e.value)}
+              classNames="text-black w-full text-sm"
+              styles={customStyles}
+            />
+          </div>
+          <div className="flex flex-col">
+            <label className="text-gray-600 text-sm mb-1">
+              Select District
+            </label>
+            {/* <SelectComponent data={districtOptions} name="District" /> */}
+            <Select
+              className="basic-single"
+              classNamePrefix="select"
+              defaultValue={districtOptions1[0]}
+              isClearable={true}
+              isSearchable={true}
+              name="States"
+              options={districtOptions1}
+              onChange={(e) => setDistrict(e.value)}
+              classNames="text-black w-full"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label className="text-gray-600 text-sm mb-1">
+              Select Block/block
+            </label>
+            <Select
+              className="basic-single"
+              classNamePrefix="select"
+              defaultValue={blockOptions1[0]}
+              isClearable={true}
+              isSearchable={true}
+              name="States"
+              options={blockOptions1}
+              onChange={(e) => setblock(e.value)}
+              classNames="text-black w-full text-sm"
+              styles={customStyles}
+            />
+          </div>
+          <div className="flex flex-col">
+            <label className="text-gray-600 text-sm mb-1">Select GP</label>
+            <Select
+              className="basic-single"
+              classNamePrefix="select"
+              defaultValue={GpOptions1[0]}
+              isClearable={true}
+              isSearchable={true}
+              name="States"
+              options={GpOptions1}
+              onChange={(e) => setGp(e.value)}
+              classNames="text-black w-full text-sm"
+              styles={customStyles}
+            />
           </div>
         </div>
-        <div className="mt-6">
-          <Button pending={pending} type="submit">
-            {type === "add" ? "Add Gram Panchayat" : "Update Gram Panchayat"}
-          </Button>
+        <div className="flex items-center space-x-2">
+          <input
+            type="text"
+            placeholder="Search for States, Districts and Blocks"
+            className="border border-gray-300 p-2 rounded w-full lg:w-64 focus:ring focus:ring-orange-200"
+          />
+          <button className="bg-orange-500 text-white p-2 rounded focus:outline-none focus:ring focus:ring-orange-200">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-4.35-4.35M16.65 11a5.65 5.65 0 11-11.3 0 5.65 5.65 0 0111.3 0z"
+              />
+            </svg>
+          </button>
         </div>
-      </form>
+      </div>
+      <hr />
+      <p>Showing 1 to 35 of 500 Results</p>
+      {Array.isArray(gpData) && gpData.length > 0 ? (
+        <div className="w-fit mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 md:grid-cols-3 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-5">
+          {gpData?.map((gp) => (
+            <GpProfileCard
+              key={gp._id}
+              gpDistrict={gp?.district}
+              gpName={gp?.gp}
+              gpState={gp?.state}
+              gpblock={gp?.block}
+              gp={gp?.gp}
+            />
+          ))}
+        </div>
+      ) : (
+        <h1 className="text-center text-gray-600 text-4xl">No Data Found</h1>
+      )}
+
+      {/* Pagination */}
     </div>
   );
-}
-
-export default GpForm;
+};
+export default GpProfile;

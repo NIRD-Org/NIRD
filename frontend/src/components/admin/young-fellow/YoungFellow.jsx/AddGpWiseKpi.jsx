@@ -120,7 +120,7 @@ function AddGpWiseKpi() {
         <div className="mb-8">
           <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">Young Fellow Form - Edit</h2>
         </div>
-        <form onSubmit={handleSubmit} className="overflow-auto ">
+        <form onSubmit={handleSubmit} className="overflow-x-auto ">
           <Table className=" w-max">
             <TableHeader>
               <TableRow>
