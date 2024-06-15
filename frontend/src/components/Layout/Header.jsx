@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { useAuthContext } from "@/context/AuthContext";
+import { Button } from "../ui/button";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -53,9 +54,13 @@ const Header = () => {
           <img src="/logo/MOPR-NEW-LOGO.png" alt="MoPR Logo" className="h-12 w-auto" />
         </div>
 
-        {!isAuthenticated && (
+        {!isAuthenticated ? (
           <NavLink to="/login" className={({ isActive }) => `block px-3 text-md py-2 font-normal duration-200 ${isActive ? "text-white font-bold" : "text-gray-300"} hover:text-white`}>
             Login
+          </NavLink>
+        ) : (
+          <NavLink to="/admin" className={({ isActive }) => `block px-3 text-md py-2 font-normal duration-200 ${isActive ? "text-white font-bold" : "text-gray-300"} hover:text-white`}>
+            <Button variant="outline">Dashboard</Button>
           </NavLink>
         )}
       </div>
