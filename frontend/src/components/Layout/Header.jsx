@@ -76,7 +76,7 @@ const Header = () => {
         </button>
 
         {isOpen && (
-          <div className="absolute top-[10vh]  left-0 w-full h-full bg-[#004B86] flex flex-col items-start pb-20 z-20">
+          <div className="absolute top-[10vh]  left-0 w-full h-full bg-primary flex flex-col items-start pb-20 z-20">
             <div className="mt-4">
               <NavLink to="/project" onClick={toggleSidebar} className={({ isActive }) => `block px-3 text-start py-2 font-normal duration-200 ${isActive ? "text-gray-300" : "text-white"} hover:text-gray-300`}>
                 Project for Creating

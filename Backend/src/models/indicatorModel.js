@@ -1,34 +1,24 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
 
-const stateSchema = new Schema(
+const indicatorSchema = new mongoose.Schema(
   {
     id: {
       type: String,
       required: true,
       unique: true,
     },
-    lgd_code: {
-      type: String,
-      required: false,
-    },
     name: {
       type: String,
       required: true,
     },
-    state_icon: {
+    max_range: {
       type: String,
-      default: "",
+      required: true,
     },
     status: {
       type: String,
       default: "1",
       required: true,
-    },
-    created_by: {
-      type: String,
-    },
-    modified_by: {
-      type: String,
     },
   },
   {
@@ -36,4 +26,4 @@ const stateSchema = new Schema(
   }
 );
 
-export const StateModel = mongoose.model("State", stateSchema);
+export const IndicatorModel = mongoose.model("Indicator", indicatorSchema);

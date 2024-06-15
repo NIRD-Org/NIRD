@@ -23,15 +23,15 @@ const kpiQuestionsSchema = new Schema(
     },
     input_type: {
       type: String,
-      required: true,
+      required: false,
     },
     max_range: {
-      type: Number,
+      type: String,
       default: 0,
     },
     question_type: {
       type: String,
-      required: true,
+      required: false,
     },
     status: {
       type: String,
@@ -39,14 +39,13 @@ const kpiQuestionsSchema = new Schema(
     },
     created_by: {
       type: String,
-      required: true,
     },
     modified_by: {
       type: String,
     },
     flag: {
       type: String,
-      default: null,
+      default: "",
     },
   },
   {

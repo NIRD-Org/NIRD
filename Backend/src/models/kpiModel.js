@@ -17,12 +17,12 @@ const kpiSchema = new Schema(
       required: true,
     },
     max_range: {
-      type: Number,
-      default: null,
-    },
-    Input_Type: {
       type: String,
-      default: null,
+      default: "",
+    },
+    input_Type: {
+      type: String,
+      default: "",
     },
     status: {
       type: String,
@@ -34,14 +34,13 @@ const kpiSchema = new Schema(
     },
     created_by: {
       type: String,
-      required: true,
     },
     modified_by: {
       type: String,
     },
     flag: {
       type: String,
-      default: null,
+      default: "",
     },
   },
   {

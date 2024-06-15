@@ -12,7 +12,7 @@ const router = express.Router();
 router.use("/create", isAuth);
 
 router.route("/all").get(getAllStates);
-router.route("/create",isAuth).post(createState);
+router.route("/create", isAuth).post(createState);
 router.route("/:id").get(getStateById);
 router.route("/delete/:id").put(deleteState);
 router.route("/:id").put(updateState);
