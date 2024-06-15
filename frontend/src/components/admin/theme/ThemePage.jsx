@@ -8,6 +8,7 @@ import ThemeForm from "./ThemeForm";
 import API from "@/utils/API";
 import { tst } from "@/lib/utils";
 import { useToaster } from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 const ThemePage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -42,14 +43,9 @@ const ThemePage = () => {
     <div className="container mx-auto p-4">
       <div className="flex justify-between text-center mb-6">
         <h2 className="text-xl font-semibold mb-4">All Themes</h2>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button variant="outline">Add Theme</Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[500px]  scrollbar overflow-y-scroll">
-            <ThemeForm type={"add"} onSubmit={handleCreateGp}/>
-          </DialogContent>
-        </Dialog>
+        <Link to="/admin/theme/create">
+          <Button>Add Theme</Button>
+        </Link>
       </div>
       <Table className="overscroll-x-scroll">
         <TableCaption>List of all themes.</TableCaption>

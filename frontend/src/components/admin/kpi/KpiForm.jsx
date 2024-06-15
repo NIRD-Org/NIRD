@@ -1,37 +1,37 @@
 import React, { useEffect, useState } from "react";
-import { DialogHeader, DialogFooter, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import API from "@/utils/API";
+import AdminHeader from "../AdminHeader";
+import { tst } from "@/lib/utils";
 
-function KpiForm({ type, onSubmit, kpi }) {
+function KpiForm({ type = "add", onSubmit, kpi }) {
   const [formData, setFormData] = useState({
-    id: kpi ? kpi.id : "",
-    theme_id: kpi ? kpi.theme_id : "",
-    kpi_name: kpi ? kpi.kpi_name : "",
-    max_range: kpi ? kpi.max_range : "",
-    Input_Type: kpi ? kpi.Input_Type : "",
-    status: kpi ? kpi.status : "",
-    weightage: kpi ? kpi.weightage : "",
-    created_by: kpi ? kpi.created_by : "",
-    modified_by: kpi ? kpi.modified_by : "",
-    flag: kpi ? kpi.flag : "",
+    id: kpi?.id || "",
+    theme_id: kpi?.theme_id || "",
+    kpi_name: kpi?.kpi_name || "",
+    max_range: kpi?.max_range || "",
+    Input_Type: kpi?.Input_Type || "",
+    status: kpi?.status || "",
+    weightage: kpi?.weightage || "",
+    created_by: kpi?.created_by || "",
+    modified_by: kpi?.modified_by || "",
+    flag: kpi?.flag || "",
   });
-
-  const [pending, setPending] = useState(false);
   const [themes, setThemes] = useState([]);
-
-  const getAllThemes = async () => {
-    try {
-      const { data } = await API.get(`/api/v1/theme/all`);
-      setThemes(data?.themes);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const [pending, setPending] = useState(false);
 
   useEffect(() => {
+    const getAllThemes = async () => {
+      try {
+        const { data } = await API.get("/api/v1/theme/all");
+        setThemes(data?.themes || []);
+      } catch (error) {
+        console.error("Failed to fetch themes.", error);
+      }
+    };
+
     getAllThemes();
   }, []);
 
@@ -43,107 +43,101 @@ function KpiForm({ type, onSubmit, kpi }) {
     }));
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
     setPending(true);
-    onSubmit(formData);
-    setPending(false);
+    try {
+      if (type === "add") {
+        await API.post("/api/v1/kpi/create", formData);
+        tst.success("KPI created successfully");
+      } else {
+        await API.put(`/api/v1/kpi/${formData.id}`, formData);
+        tst.success("KPI updated successfully");
+      }
+    } catch (error) {
+      tst.error(error);
+    } finally {
+      setPending(false);
+    }
   };
 
+  const fields = [
+    {
+      name: "theme_id",
+      label: "Theme",
+      type: "select",
+      options: themes.map(theme => ({ value: theme.id, label: theme.theme_name })),
+      required: true,
+    },
+    { name: "kpi_name", label: "KPI Name", type: "textarea", required: true },
+    { name: "weightage", label: "Weightage", type: "number", required: true },
+  ];
+
   return (
-    <form onSubmit={handleSubmit}>
-      <DialogHeader>
-        <DialogTitle>{type === "add" ? "Add KPI" : "Update KPI"}</DialogTitle>
-        <DialogDescription>
-          {type === "add"
-            ? "Add a new Key Performance Indicator"
-            : "Update Key Performance Indicator details"}
-        </DialogDescription>
-      </DialogHeader>
-      <div className="grid gap-4 py-4">
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="theme_id" className="text-right mt-2">
-            Theme
-          </Label>
-          <select
-            className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
-            value={formData.theme_id}
-            onChange={e => setFormData(prevData => ({ ...prevData, theme_id: e.target.value }))}
-          >
-            <option value="" disabled>
-              Select a theme
-            </option>
-            {themes?.map(theme => (
-              <option key={theme.id} value={theme.id}>
-                {theme.theme_name}
-              </option>
+    <div className="container mx-auto p-6">
+      <form onSubmit={handleSubmit}>
+        <div className="py-4">
+          <AdminHeader>{type === "add" ? "Add KPI" : "Update KPI"}</AdminHeader>
+          <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3">
+            {fields.map(({ name, label, type, options, required }) => (
+              <div key={name}>
+                <Label htmlFor={name} className="inline-block mb-2">
+                  {label}
+                </Label>
+                {required && <span className="text-red-500 ml-1">*</span>}
+                {type === "select" ? (
+                  <select
+                    required={required}
+                    disabled={pending}
+                    className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
+                    value={formData[name]}
+                    name={name}
+                    onChange={handleChange}
+                  >
+                    <option value="" disabled>
+                      Select {label}
+                    </option>
+                    {options.map(option => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                ) : type === "textarea" ? (
+                  <textarea
+                    required={required}
+                    disabled={pending}
+                    className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
+                    name={name}
+                    value={formData[name]}
+                    onChange={handleChange}
+                    id={name}
+                    placeholder={`Enter ${label}`}
+                  />
+                ) : (
+                  <Input
+                    required={required}
+                    disabled={pending}
+                    type={type}
+                    name={name}
+                    value={formData[name]}
+                    onChange={handleChange}
+                    id={name}
+                    placeholder={`Enter ${label}`}
+                    className="col-span-3"
+                  />
+                )}
+              </div>
             ))}
-          </select>
+          </div>
         </div>
-        {/* Add other form fields similar to the example below */}
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="max_range" className="text-right mt-2">
-            Max Range
-          </Label>
-          <Input
-            type="number"
-            name="max_range"
-            value={formData.max_range}
-            onChange={handleChange}
-            id="max_range"
-            placeholder="Enter Max Range"
-            className="col-span-3"
-          />
+        <div className="mt-6">
+          <Button pending={pending} type="submit">
+            {type === "add" ? "Add KPI" : "Update KPI"}
+          </Button>
         </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="Input_Type" className="text-right mt-2">
-            Input Type
-          </Label>
-          <Input
-            type="text"
-            name="Input_Type"
-            value={formData.Input_Type}
-            onChange={handleChange}
-            id="Input_Type"
-            placeholder="Enter Input Type"
-            className="col-span-3"
-          />
-        </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="weightage" className="text-right mt-2">
-            Weightage
-          </Label>
-          <Input
-            type="number"
-            name="weightage"
-            value={formData.weightage}
-            onChange={handleChange}
-            id="weightage"
-            placeholder="Enter Weightage"
-            className="col-span-3"
-          />
-        </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="kpi_name" className="text-right mt-2">
-            KPI Name
-          </Label>
-          <Input
-            type="text"
-            name="kpi_name"
-            value={formData.kpi_name}
-            onChange={handleChange}
-            id="kpi_name"
-            placeholder="Enter KPI Name"
-            className="col-span-3"
-          />
-        </div>
-      </div>
-      <DialogFooter>
-        <Button pending={pending} type="submit">
-          {type === "add" ? "Add KPI" : "Update KPI"}
-        </Button>
-      </DialogFooter>
-    </form>
+      </form>
+    </div>
   );
 }
 

@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { DialogHeader, DialogFooter, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import API from "@/utils/API";
+import { tst } from "@/lib/utils";
+import AdminHeader from "../AdminHeader";
 
-function StateForm({ type, onSubmit, state }) {
+function StateForm({ type = "add", onSubmit, state }) {
   const [formData, setFormData] = useState({
     lgd_code: state?.lgd_code || "",
     name: state?.name || "",
@@ -14,74 +16,65 @@ function StateForm({ type, onSubmit, state }) {
 
   const [pending, setPending] = useState(false);
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
+    setFormData(prevData => ({
       ...prevData,
       [name]: value,
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleCreateState = async e => {
     e.preventDefault();
-    setPending(true);
-    onSubmit(formData);
-    setPending(false);
+    try {
+      setPending(true);
+      await API.post("/api/v1/state/create", formData);
+      tst.success("State created success");
+    } catch (error) {
+      tst.error(error);
+    } finally {
+      setPending(false);
+    }
   };
 
   const formFields = [
     {
       name: "lgd_code",
       label: "LGD Code",
+      required: true,
     },
     {
       name: "name",
       label: "Name",
-    },
-    {
-      name: "state_shortcode",
-      label: "State Shortcode",
-    },
-    {
-      name: "country_id",
-      label: "Country ID",
+      required: true,
     },
   ];
 
   return (
-    <form onSubmit={handleSubmit}>
-      <DialogHeader>
-        <DialogTitle>{type === "add" ? "Add State" : "Update State"}</DialogTitle>
-        <DialogDescription>
-          {type === "add" ? "Add a new state" : "Update state details"}
-        </DialogDescription>
-      </DialogHeader>
-      <div className="grid gap-4 py-4">
-        {formFields.map((field) => (
-          <div key={field.name} className="grid grid-cols-4 gap-4">
-            <Label htmlFor={field.name} className="text-right mt-2">
-              {field.label}
-            </Label>
-            <Input
-              type="text"
-              name={field.name}
-              value={formData[field.name]}
-              onChange={handleChange}
-              id={field.name}
-              placeholder={`Enter ${field.label.toLowerCase()}`}
-              className="col-span-3"
-            />
+    <div className="container mx-auto p-6">
+      <form onSubmit={handleCreateState}>
+        <div className="py-4">
+          <AdminHeader>{type === "add" ? "Add State" : "Update State"}</AdminHeader>
+          <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3">
+            {formFields.map(field => (
+              <div key={field.name}>
+                <Label htmlFor={field.name} className="inline-block mb-2">
+                  {field.label}
+                </Label>
+                {field.required && <span className="text-red-500 ml-1">*</span>}
+                <Input type="text" name={field.name} value={formData[field.name]} onChange={handleChange} id={field.name} placeholder={`Enter ${field.label.toLowerCase()}`} className="col-span-3" />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <DialogFooter>
-        <Button pending={pending} type="submit">
-          {type === "add" ? "Add State" : "Update State"}
-        </Button>
-      </DialogFooter>
-    </form>
+        </div>
+        <div className="mt-6">
+          <Button disabled={pending} pending={pending} type="submit">
+            {type === "add" ? "Add State" : "Update State"}
+          </Button>
+        </div>
+      </form>
+    </div>
   );
 }
 
 export default StateForm;
-

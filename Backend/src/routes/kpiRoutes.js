@@ -6,9 +6,11 @@ import {
   deleteKPI,
   updateKPI,
 } from "../controllers/kpiController.js";
+import { isAuth } from "../middlewares/auth.js";
 
 const router = express.Router();
 
+router.use('/create',isAuth);
 router.route("/all").get(getAllKPI);
 router.route("/theme/:theme").get(getKPIByTheme);
 router.route("/create").post(createKPI);

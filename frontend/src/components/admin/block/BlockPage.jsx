@@ -3,19 +3,12 @@ import React, { useEffect, useState } from "react";
 import BlockRow from "./BlockRow";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCaption, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import TableSkeleton from "@/components/ui/tableskeleton";
 import BlockForm from "./BlockForm";
 import API from "@/utils/API";
 import { tst } from "@/lib/utils";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import StateFilter from "@/components/admin/filter/StateFilter";
 import DistrictFilter from "@/components/admin/filter/DistrictFilter";
 
@@ -26,20 +19,10 @@ const BlockPage = ({}) => {
   const dist_id = searchParams.get("dist_id");
   const state_id = searchParams.get("state_id");
 
-  const handleCreateblocka = async (formData) => {
-    try {
-      await API.post("/api/v1/block/create", formData);
-      tst.success("block created successfully");
-    } catch (error) {
-      tst.error(error);
-      console.log(error);
-    }
-  };
-
-  const getAllblocks = async (stateId, dist_id) => {
+  const getAllblocks = async (dist_id) => {
     try {
       setIsLoading(true);
-      const url = `/api/v1/block/get?state=${state_id}&dist=${dist_id}`;
+      const url = `/api/v1/block/get?dist=${dist_id}`;
       const { data } = await API.get(url);
       setblocks(data?.blocks);
     } catch (error) {
@@ -63,14 +46,9 @@ const BlockPage = ({}) => {
           <StateFilter />
           <DistrictFilter />
         </div>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button variant="outline">Add block</Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[800px] h-[90vh] scrollbar overflow-y-scroll">
-            <BlockForm type={"add"} onSubmit={handleCreateblocka} />
-          </DialogContent>
-        </Dialog>
+        <Link to="/admin/block/create">
+          <Button>Add Block</Button>
+        </Link>
       </div>
       <Table className="overscroll-x-scroll">
         <TableCaption>List of all blocks.</TableCaption>
@@ -93,7 +71,7 @@ const BlockPage = ({}) => {
           <TableSkeleton columnCount={10} />
         ) : (
           <TableBody>
-            {blocks.map((block) => (
+            {blocks.map(block => (
               <BlockRow key={block.id} block={block} />
             ))}
           </TableBody>

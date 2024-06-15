@@ -36,7 +36,6 @@ const blockSchema = new Schema(
     status: {
       type: String,
       default: "1",
-      required: true,
     },
     created_by: {
       type: String,
@@ -44,7 +43,6 @@ const blockSchema = new Schema(
     },
     modified_by: {
       type: String,
-      required: true,
     },
   },
   {

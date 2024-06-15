@@ -30,7 +30,6 @@ const stateSchema = new Schema(
     },
     modified_by: {
       type: String,
-      required: true,
     },
   },
   {

@@ -29,6 +29,13 @@ import YoungFellowForm from "./components/admin/young-fellow/YoungFellowForm";
 import { useAuthContext } from "./context/AuthContext";
 import GpWiseKpiList from "./components/admin/young-fellow/YoungFellow.jsx/GpWiseKpiList";
 import AddGpWiseKpi from "./components/admin/young-fellow/YoungFellow.jsx/AddGpWiseKpi";
+import StateForm from "./components/admin/state/StateForm";
+import DistrictForm from "./components/admin/district/DistrictForm";
+import BlockForm from "./components/admin/block/BlockForm";
+import GpForm from "./components/admin/gp/GpForm";
+import ThemeForm from "./components/admin/theme/ThemeForm";
+import KpiForm from "./components/admin/kpi/KpiForm";
+import KpiQuestionForm from "./components/admin/kpi-question/KpiQuestionForm";
 
 function App() {
 
@@ -64,6 +71,13 @@ function App() {
           <Route path="young-professionals" element={<YoungFellowForm />} />
           <Route path="gp-wise-kpi" element={<GpWiseKpiList />} />
           <Route path="add-gp-wise-kpi" element={<AddGpWiseKpi />} />
+          <Route path="state/create" element={<StateForm />} />
+          <Route path="district/create" element={<DistrictForm />} />
+          <Route path="block/create" element={<BlockForm />} />
+          <Route path="gram/create" element={<GpForm />} />
+          <Route path="theme/create" element={<ThemeForm />} />
+          <Route path="kpi/create" element={<KpiForm />} />
+          <Route path="kpi-question/create" element={<KpiQuestionForm />} />
         </Route>
         <Route path="/"></Route>
       </Route>

@@ -35,7 +35,7 @@ const kpiQuestionsSchema = new Schema(
     },
     status: {
       type: String,
-      required: true,
+      default:"1"
     },
     created_by: {
       type: String,
@@ -43,7 +43,6 @@ const kpiQuestionsSchema = new Schema(
     },
     modified_by: {
       type: String,
-      required: true,
     },
     flag: {
       type: String,

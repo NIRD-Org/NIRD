@@ -23,19 +23,22 @@ const getNewId = async () => {
     return next(new Errorhandler("failed to get new id", 500));
   }
 };
+
 export const createState = CatchAsyncError(async (req, res, next) => {
   try {
     const id = await getNewId();
     req.body.id = id.toString();
-    console.log(req.userId);
-    req.body.createdBy = req.userId;
+    
+    req.body.created_by = req.user.id;
     const newState = new StateModel(req.body);
     await newState.save();
+
     res.status(201).json({
       success: true,
       message: "State created successfully",
       state: newState,
     });
+
   } catch (error) {
     console.log(error);
     return next(new Errorhandler("Failed to create state", 500));

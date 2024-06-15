@@ -1,171 +1,187 @@
 import React, { useEffect, useState } from "react";
-import { DialogHeader, DialogFooter, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import API from "@/utils/API";
+import AdminHeader from "../AdminHeader";
+import { tst } from "@/lib/utils";
 
-function KpiForm({ type, onSubmit, kpiQuestion }) {
+function KpiQuestionForm({ type = "add", kpiQuestion }) {
   const [formData, setFormData] = useState({
-    id: kpiQuestion ? kpiQuestion.id : "",
-    theme_id: kpiQuestion ? kpiQuestion.theme_id : "",
-    kpi_id: kpiQuestion ? kpiQuestion.kpi_id : "",
-    question_name: kpiQuestion ? kpiQuestion.question_name : "",
-    input_type: kpiQuestion ? kpiQuestion.input_type : "",
-    max_range: kpiQuestion ? kpiQuestion.max_range : "",
-    question_type: kpiQuestion ? kpiQuestion.question_type : "",
+    id: kpiQuestion?.id || "",
+    theme_id: kpiQuestion?.theme_id || "",
+    kpi_id: kpiQuestion?.kpi_id || "",
+    question_name: kpiQuestion?.question_name || "",
+    input_type: kpiQuestion?.input_type || "",
+    question_type: kpiQuestion?.question_type || "",
   });
   const [themes, setThemes] = useState([]);
-  const [kpi, setKpi] = useState([]);
+  const [kpis, setKpis] = useState([]);
+  const [pending, setPending] = useState(false);
 
-  const handleChange = e => {
+  useEffect(() => {
+    async function fetchThemes() {
+      try {
+        const { data } = await API.get("/api/v1/theme/all");
+        setThemes(data?.themes || []);
+      } catch (error) {
+        console.error("Failed to fetch themes.", error);
+      }
+    }
+
+    fetchThemes();
+  }, []);
+
+  useEffect(() => {
+    async function fetchKpis() {
+      if (formData.theme_id) {
+        try {
+          const { data } = await API.get(`/api/v1/kpi/theme/${formData.theme_id}`);
+          setKpis(data?.KPI || []);
+        } catch (error) {
+          console.error("Failed to fetch KPIs.", error);
+        }
+      }
+    }
+
+    fetchKpis();
+  }, [formData.theme_id]);
+
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit(formData);
-  };
-
-  const getAllThemes = async () => {
+    setPending(true);
     try {
-      const { data } = await API.get(`/api/v1/theme/all`);
-      setThemes(data?.themes);
+      if (type === "add") {
+        await API.post("/api/v1/kpi-questions/create", formData);
+        tst.success("KPI Question created successfully");
+      } else {
+        await API.put(`/api/v1/kpi-questions/${formData.id}`, formData);
+        tst.success("KPI Question updated successfully");
+      }
     } catch (error) {
-      console.log(error);
+      tst.error("Failed to submit form:", error);
+    } finally {
+      setPending(false);
     }
   };
 
-  const getAllKpi = async () => {
-    try {
-      const { data } = await API.get(`/api/v1/kpi/theme/${formData.theme_id}`);
-      setKpi(data?.KPI);
-    } catch (error) {
-    }
-  };
-
-  const handleThemeChange = e => {
-    setFormData(prevData => ({ ...prevData, theme_id: e.target.value }));
-    getAllKpi();
-  };
-
-  useEffect(() => {
-    getAllThemes();
-  }, []);
+  const fields = [
+    {
+      name: "theme_id",
+      label: "Theme",
+      type: "select",
+      options: themes.map((theme) => ({ value: theme.id, label: theme.theme_name })),
+      required: true,
+    },
+    {
+      name: "kpi_id",
+      label: "KPI",
+      type: "select",
+      options: kpis.map((kpi) => ({ value: kpi.id, label: kpi.kpi_name })),
+      required: true,
+    },
+    {
+      name: "question_name",
+      label: "Question Name",
+      type: "textarea",
+      required: true,
+    },
+    {
+      name: "input_type",
+      label: "Input Type",
+      type: "select",
+      options: [
+        { value: "number", label: "Number" },
+        { value: "percentage", label: "Percentage" },
+      ],
+      required: true,
+    },
+    {
+      name: "question_type",
+      label: "Question Type",
+      type: "select",
+      options: [
+        { value: "positive", label: "Positive" },
+        { value: "negative", label: "Negative" },
+      ],
+      required: true,
+    },
+  ];
 
   return (
-    <form onSubmit={handleSubmit}>
-      <DialogHeader>
-        <DialogTitle>{type === "add" ? "Add KPI Question" : "Update KPI Question"}</DialogTitle>
-        <DialogDescription>
-          {type === "add" ? "Add a new KPI Question" : "Update KPI Question details"}
-        </DialogDescription>
-      </DialogHeader>
-      <div className="grid gap-4 py-4">
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="theme_id" className="text-right mt-2">
-            Theme ID
-          </Label>
-          <select
-            className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
-            value={formData.theme_id}
-            onChange={e => handleThemeChange(e)}
-          >
-            <option value="" disabled>
-              Select a theme
-            </option>
-            {themes?.map(theme => (
-              <option key={theme.id} value={theme.id}>
-                {theme.theme_name}
-              </option>
+    <div className="container mx-auto p-6">
+      <form onSubmit={handleSubmit}>
+        <div className="py-4">
+          <AdminHeader>{type === "add" ? "Add KPI Question" : "Update KPI Question"}</AdminHeader>
+          <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3">
+            {fields.map(({ name, label, type, options, required }) => (
+              <div key={name}>
+                <Label htmlFor={name} className="inline-block mb-2">
+                  {label}
+                </Label>
+                {required && <span className="text-red-500 ml-1">*</span>}
+                {type === "select" ? (
+                  <select
+                    required={required}
+                    disabled={pending}
+                    className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
+                    value={formData[name]}
+                    name={name}
+                    onChange={handleChange}
+                  >
+                    <option value="" disabled>
+                      Select {label}
+                    </option>
+                    {options.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                ) : type === "textarea" ? (
+                  <textarea
+                    required={required}
+                    disabled={pending}
+                    className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
+                    name={name}
+                    value={formData[name]}
+                    onChange={handleChange}
+                    id={name}
+                    placeholder={`Enter ${label}`}
+                  />
+                ) : (
+                  <Input
+                    required={required}
+                    disabled={pending}
+                    type={type}
+                    name={name}
+                    value={formData[name]}
+                    onChange={handleChange}
+                    id={name}
+                    placeholder={`Enter ${label}`}
+                    className="col-span-3"
+                  />
+                )}
+              </div>
             ))}
-          </select>
+          </div>
         </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="kpi_id" className="text-right mt-2">
-            KPI
-          </Label>
-          <select
-            className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
-            value={formData.kpi_id}
-            onChange={e => setFormData(prevData => ({ ...prevData, kpi_id: e.target.value }))}
-          >
-            <option value="" disabled>
-              Select a kpi
-            </option>
-            {kpi?.map(kpi => (
-              <option key={kpi.id} value={kpi.id}>
-                {kpi.kpi_name}
-              </option>
-            ))}
-          </select>
+        <div className="mt-6">
+          <Button pending={pending} type="submit">
+            {type === "add" ? "Add KPI Question" : "Update KPI Question"}
+          </Button>
         </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="question_name" className="text-right mt-2">
-            Question Name
-          </Label>
-          <Input
-            type="text"
-            name="question_name"
-            value={formData.question_name}
-            onChange={handleChange}
-            id="question_name"
-            placeholder="Enter Question Name"
-            className="col-span-3"
-          />
-        </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="input_type" className="text-right mt-2">
-            Input Type
-          </Label>
-          <Input
-            type="text"
-            name="input_type"
-            value={formData.input_type}
-            onChange={handleChange}
-            id="input_type"
-            placeholder="Enter Input Type"
-            className="col-span-3"
-          />
-        </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="max_range" className="text-right mt-2">
-            Max Range
-          </Label>
-          <Input
-            type="number"
-            name="max_range"
-            value={formData.max_range}
-            onChange={handleChange}
-            id="max_range"
-            placeholder="Enter Max Range"
-            className="col-span-3"
-          />
-        </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="question_type" className="text-right mt-2">
-            Question Type
-          </Label>
-          <Input
-            type="text"
-            name="question_type"
-            value={formData.question_type}
-            onChange={handleChange}
-            id="question_type"
-            placeholder="Enter Question Type"
-            className="col-span-3"
-          />
-        </div>
-      </div>
-      <DialogFooter>
-        <Button type="submit">{type === "add" ? "Add KPI Question" : "Update KPI Question"}</Button>
-      </DialogFooter>
-    </form>
+      </form>
+    </div>
   );
 }
 
-export default KpiForm;
+export default KpiQuestionForm;

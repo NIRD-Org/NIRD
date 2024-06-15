@@ -5,9 +5,10 @@ import {
   deleteDistrict,
   updateDistrict,
 } from "../controllers/districtController.js";
+import { isAuth } from "../middlewares/auth.js";
 
 const router = express.Router();
-
+router.use('/create',isAuth);
 router.route("/state/:state").get(getDistrictByState);
 router.route("/create").post(createDistrict);
 router.route("/delete/:id").put(deleteDistrict);

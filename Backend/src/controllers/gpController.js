@@ -29,6 +29,8 @@ export const createGP = CatchAsyncError(async (req, res, next) => {
   try {
     const id = await getNewId();
     req.body.id = id.toString();
+    req.body.created_by = req.user.id;
+
     const newGP = new GpModel(req.body);
     await newGP.save();
     res.status(201).json({
@@ -37,6 +39,7 @@ export const createGP = CatchAsyncError(async (req, res, next) => {
       gp: newGP,
     });
   } catch (error) {
+    console.log(error);
     return next(new Errorhandler("Failed to create GP", 500));
   }
 });

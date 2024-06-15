@@ -29,6 +29,8 @@ export const createTheme = CatchAsyncError(async (req, res, next) => {
   try {
     const id = await getNewId();
     req.body.id = id.toString();
+    req.body.created_by = req.user.id;
+    
     const newTheme = new ThemeModel(req.body);
     await newTheme.save();
     res.status(201).json({

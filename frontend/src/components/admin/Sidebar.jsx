@@ -85,7 +85,7 @@ function Sidebar({ className }) {
         {
           type: "sub-module",
           icon: ArrowBigRight,
-          title: "Kpi questions",
+          title: "Data Point",
           link: "/admin/kpi-questions",
         },
         {

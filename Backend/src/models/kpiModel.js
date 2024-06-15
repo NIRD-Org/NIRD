@@ -26,7 +26,7 @@ const kpiSchema = new Schema(
     },
     status: {
       type: String,
-      required: true,
+      default:"1",
     },
     weightage: {
       type: Number,
@@ -38,7 +38,6 @@ const kpiSchema = new Schema(
     },
     modified_by: {
       type: String,
-      required: true,
     },
     flag: {
       type: String,

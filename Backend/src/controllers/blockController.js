@@ -29,6 +29,7 @@ export const createblock = CatchAsyncError(async (req, res, next) => {
   try {
     const id = await getNewId();
     req.body.id = id.toString();
+    req.body.created_by = req.user.id;
     const newblock = new BlockModel(req.body);
     await newblock.save();
     res.status(201).json({
@@ -37,6 +38,7 @@ export const createblock = CatchAsyncError(async (req, res, next) => {
       block: newblock,
     });
   } catch (error) {
+    console.log(error);
     return next(new Errorhandler("Failed to create block", 500));
   }
 });

@@ -14,7 +14,7 @@ import KpiRow from "./KpiQuestionRow";
 import KpiForm from "./KpiQuestionForm";
 import API from "@/utils/API";
 import { tst } from "@/lib/utils";
-import { useFetcher, useSearchParams } from "react-router-dom";
+import { Link, useFetcher, useSearchParams } from "react-router-dom";
 
 const KPIQuestionPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -55,14 +55,9 @@ const KPIQuestionPage = () => {
     <div className="container mx-auto p-4">
       <div className="flex justify-between text-center mb-6">
         <h2 className="text-xl font-semibold mb-4">All KPI Questions</h2>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button variant="outline">Add KPI Question</Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[600px] max-h-[90vh] scrollbar overflow-y-scroll">
-            <KpiForm type={"add"} onSubmit={handleCreateKpiQuestion} />
-          </DialogContent>
-        </Dialog>
+        <Link to="/admin/kpi-question/create">
+          <Button>Add Kpi question</Button>
+        </Link>
       </div>
       <Table className="overscroll-x-scroll">
         <TableCaption>List of all KPI Questions.</TableCaption>

@@ -18,11 +18,10 @@ const themeSchema = new Schema(
     },
     created_by: {
       type: String,
-      required: false,
+      required: true,
     },
     modified_by: {
       type: String,
-      required: false,
     },
     flag: {
       type: String,

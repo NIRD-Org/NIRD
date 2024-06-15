@@ -1,66 +1,93 @@
 import React, { useState } from "react";
-import { DialogHeader, DialogFooter, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import AdminHeader from "../AdminHeader";
+import { Textarea } from "@/components/ui/textarea";
+import API from "@/utils/API";
+import { tst } from "@/lib/utils";
 
-function ThemeForm({ type, onSubmit, theme }) {
+function ThemeForm({ type = "add", theme }) {
   const [formData, setFormData] = useState({
-    id: theme ? theme.id : "",
-    theme_name: theme ? theme.theme_name : "",
-    status: theme ? theme.status : "",
-    created_by: theme ? theme.created_by : "",
-    modified_by: theme ? theme.modified_by : "",
-    flag: theme ? theme.flag : "",
+    theme_name: theme?.theme_name || "",
   });
 
   const [pending, setPending] = useState(false);
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setPending(true);
-    onSubmit(formData);
-    setPending(false);
+    try {
+      if (type === "add") {
+        await API.post("/api/v1/theme/create", formData);
+        tst.success("Theme created successfully");
+      } else {
+        await API.put(`/api/v1/theme/${formData.id}`, formData);
+        tst.success("Theme updated successfully");
+      }
+    } catch (error) {
+      tst.error("Failed to submit form:", error);
+    } finally {
+      setPending(false);
+    }
   };
 
+  const handleCreateTheme = async e => {
+    e.preventDefault();
+    try {
+      await API.post("/api/v1/theme/create", formData);
+      tst.success("Theme created successfully");
+    } catch (error) {
+      tst.error(error);
+    }
+  };
+
+  const fields = [
+    { name: "theme_name", label: "Theme Name", type: "text", required: true },
+  ];
+
   return (
-    <form onSubmit={handleSubmit}>
-      <DialogHeader>
-        <DialogTitle>{type === "add" ? "Add Theme" : "Update Theme"}</DialogTitle>
-        <DialogDescription>
-          {type === "add" ? "Add a new theme" : "Update theme details"}
-        </DialogDescription>
-      </DialogHeader>
-      <div className="grid gap-4 py-10">
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="theme_name" className="text-right mt-2">
-            Theme Name
-          </Label>
-          <Input
-            type="text"
-            name="theme_name"
-            value={formData.theme_name}
-            onChange={handleChange}
-            id="theme_name"
-            placeholder="Enter Theme Name"
-            className="col-span-3"
-          />
+    <div className="container mx-auto p-6">
+      <form onSubmit={handleCreateTheme}>
+        <div className="py-4">
+          <AdminHeader>{type === "add" ? "Add Theme" : "Update Theme"}</AdminHeader>
+          <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3">
+            {fields.map(({ name, label, type, required }) => (
+              <div key={name}>
+                <Label htmlFor={name} className="inline-block mb-2">
+                  {label}
+                </Label>
+                {required && <span className="text-red-500 ml-1">*</span>}
+                <Textarea
+                  required={required}
+                  disabled={pending}
+                  type={type}
+                  name={name}
+                  value={formData[name]}
+                  onChange={handleChange}
+                  id={name}
+                  placeholder={`Enter ${label}`}
+                  className="col-span-3"
+                />
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-      <DialogFooter>
-        <Button pending={pending} type="submit">
-          {type === "add" ? "Add Theme" : "Update Theme"}
-        </Button>
-      </DialogFooter>
-    </form>
+        <div className="mt-6">
+          <Button pending={pending} type="submit">
+            {type === "add" ? "Add Theme" : "Update Theme"}
+          </Button>
+        </div>
+      </form>
+    </div>
   );
 }
 

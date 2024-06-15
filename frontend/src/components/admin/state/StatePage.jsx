@@ -8,6 +8,7 @@ import StateForm from "./StateForm";
 import { states } from "@/lib/data"; // Import states data
 import API from "@/utils/API";
 import { tst } from "@/lib/utils";
+import { Link } from "react-router-dom";
 
 const StatePage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -29,27 +30,13 @@ const StatePage = () => {
     getAllStates();
   }, []);
 
-  const handleCreateState = async formData => {
-    try {
-      await API.post("/api/v1/state/create", formData);
-      tst.success("State created success");
-    } catch (error) {
-      tst.error(error);
-    }
-  };
-
   return (
     <div className="container mx-auto p-4">
       <div className="flex justify-between text-center mb-6">
         <h2 className="text-xl font-semibold mb-4">All States</h2>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button variant="outline">Add State</Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[700px] max-h-[90vh]  ">
-            <StateForm onSubmit={handleCreateState} type={"add"} />
-          </DialogContent>
-        </Dialog>
+        <Link to="/admin/state/create">
+          <Button>Add State</Button>
+        </Link>
       </div>
       <Table>
         <TableCaption>List of all states.</TableCaption>
@@ -58,6 +45,7 @@ const StatePage = () => {
             <TableHead>ID</TableHead>
             <TableHead>LGD Code</TableHead>
             <TableHead>Name</TableHead>
+            <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
         {isLoading ? (

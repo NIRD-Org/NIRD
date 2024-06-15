@@ -1,66 +1,70 @@
 import React, { useEffect, useState } from "react";
-import {
-  DialogHeader,
-  DialogFooter,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import API from "@/utils/API";
+import { tst } from "@/lib/utils";
+import AdminHeader from "../AdminHeader";
 
-function GpForm({ type, onSubmit, gp }) {
+function GpForm({ type = "add", gp }) {
   const [formData, setFormData] = useState({
-    id: gp ? gp.id : "",
-    state_id: gp ? gp.state_id : "",
-    dist_id: gp ? gp.dist_id : "",
-    block_id: gp ? gp.block_id : "",
-    lgd_code: gp ? gp.lgd_code : "",
-    name: gp ? gp.name : "",
-    is_maped_to_another_district: gp ? gp.is_maped_to_another_district : "",
+    id: gp?.id || "",
+    state_id: gp?.state_id || "",
+    dist_id: gp?.dist_id || "",
+    block_id: gp?.block_id || "",
+    lgd_code: gp?.lgd_code || "",
+    name: gp?.name || "",
+    is_maped_to_another_district: gp?.is_maped_to_another_district || "",
   });
+
   const [states, setStates] = useState([]);
   const [districts, setDistricts] = useState([]);
-  const [blocks, setblocks] = useState([]);
+  const [blocks, setBlocks] = useState([]);
   const [pending, setPending] = useState(false);
 
-  const getAllStates = async () => {
-    const { data } = await API.get(`/api/v1/state/all`);
-    setStates(data?.states);
-  };
-
-  const getAllDistricts = async () => {
-    const { data } = await API.get(`/api/v1/dist/state/${formData.state_id}`);
-    setDistricts(data?.districts);
-  };
-
-  const getAllblocks = async () => {
-    try {
-      const url = `/api/v1/block/get?state=${formData.state_id}&dist=${formData.dist_id}`;
-      const { data } = await API.get(url);
-      setblocks(data?.blocks);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
-    getAllStates();
+    async function fetchStates() {
+      try {
+        const response = await API.get("/api/v1/state/all");
+        setStates(response.data?.states || []);
+      } catch (error) {
+        tst.error("Failed to fetch states.");
+      }
+    }
+
+    fetchStates();
   }, []);
 
   useEffect(() => {
-    getAllDistricts();
+    async function fetchDistricts() {
+      if (formData.state_id) {
+        try {
+          const response = await API.get(`/api/v1/dist/state/${formData.state_id}`);
+          setDistricts(response.data?.districts || []);
+        } catch (error) {
+          tst.error("Failed to fetch districts.");
+        }
+      }
+    }
+
+    fetchDistricts();
   }, [formData.state_id]);
 
   useEffect(() => {
-    getAllblocks();
+    async function fetchBlocks() {
+      if (formData.dist_id) {
+        try {
+          const response = await API.get(`/api/v1/block/get?dist=${formData.dist_id}`);
+          setBlocks(response.data?.blocks || []);
+        } catch (error) {
+          tst.error("Failed to fetch blocks.");
+        }
+      }
+    }
+
+    fetchBlocks();
   }, [formData.dist_id]);
 
-  /*  useState(() => {
-    getAllGp();
-  }, [formData.block_id]);
- */
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -69,151 +73,124 @@ function GpForm({ type, onSubmit, gp }) {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setPending(true);
-    onSubmit(formData);
-    setPending(false);
+    try {
+      if (type === "add") {
+        await API.post("/api/v1/gp/create", formData);
+        tst.success("Gram Panchayat created successfully");
+      } else {
+        await API.put(`/api/v1/gp/${formData.id}`, formData);
+        tst.success("Gram Panchayat updated successfully");
+      }
+      setPending(false);
+    } catch (error) {
+      tst.error("Failed to submit form:", error);
+      setPending(false);
+    }
   };
 
+
+  const handleCreateGp = async e => {
+    e.preventDefault()
+    try {
+      await API.post("/api/v1/gram/create", formData);
+      tst.success("GP created successfully");
+    } catch (error) {
+      tst.error(error);
+    }
+  };
+
+  const fields = [
+    { name: "lgd_code", label: "LGD Code", type: "text", required: true },
+    {
+      name: "state_id",
+      label: "State",
+      type: "select",
+      options: states.map((state) => ({ value: state.id, label: state.name })),
+      required: true,
+    },
+    {
+      name: "dist_id",
+      label: "District",
+      type: "select",
+      options: districts.map((district) => ({ value: district.id, label: district.name })),
+      required: true,
+    },
+    {
+      name: "block_id",
+      label: "Block",
+      type: "select",
+      options: blocks.map((block) => ({ value: block.id, label: block.name })),
+      required: true,
+    },
+    { name: "name", label: "Name", type: "text", required: true },
+    {
+      name: "is_maped_to_another_district",
+      label: "Mapped to Another District",
+      type: "select",
+      options: [
+        { value: "Yes", label: "Yes" },
+        { value: "No", label: "No" },
+      ],
+    },
+  ];
+
   return (
-    <form onSubmit={handleSubmit}>
-      <DialogHeader>
-        <DialogTitle>
-          {type === "add" ? "Add Gram Panchayat" : "Update Gram Panchayat"}
-        </DialogTitle>
-        <DialogDescription>
-          {type === "add"
-            ? "Add a new Gram Panchayat"
-            : "Update Gram Panchayat details"}
-        </DialogDescription>
-      </DialogHeader>
-      <div className="grid gap-4 py-4">
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="lgd_code" className="text-right mt-2">
-            LGD Code
-          </Label>
-          <Input
-            type="text"
-            name="lgd_code"
-            value={formData.lgd_code}
-            onChange={handleChange}
-            id="lgd_code"
-            placeholder="Enter LGD Code"
-            className="col-span-3"
-          />
-        </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="state_id" className="text-right mt-2">
-            State
-          </Label>
-          <select
-            className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
-            value={formData.state_id}
-            onChange={(e) =>
-              setFormData((prevData) => ({
-                ...prevData,
-                state_id: e.target.value,
-              }))
-            }
-          >
-            <option value="" disabled>
-              Select a state
-            </option>
-            {states?.map((state) => (
-              <option key={state.id} value={state.id}>
-                {state.name}
-              </option>
+    <div className="container mx-auto p-6">
+      <form onSubmit={handleCreateGp}>
+        <div className="py-4">
+          <AdminHeader>{type === "add" ? "Add Gram Panchayat" : "Update Gram Panchayat"}</AdminHeader>
+          <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3">
+            {fields.map(({ name, label, type, options, required }) => (
+              <div key={name}>
+                <Label htmlFor={name} className="inline-block mb-2">
+                  {label}
+                </Label>
+                {required && <span className="text-red-500 ml-1">*</span>}
+                {type === "select" ? (
+                  <select
+                    required={required}
+                    disabled={pending}
+                    className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
+                    value={formData[name]}
+                    name={name}
+                    onChange={handleChange}
+                  >
+                    <option value="" disabled>
+                      Select {label}
+                    </option>
+                    {options.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <Input
+                    required={required}
+                    disabled={pending}
+                    type={type}
+                    name={name}
+                    value={formData[name]}
+                    onChange={handleChange}
+                    id={name}
+                    placeholder={`Enter ${label}`}
+                    className="col-span-3"
+                  />
+                )}
+              </div>
             ))}
-          </select>
+          </div>
         </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="dist_id" className="text-right mt-2">
-            District
-          </Label>
-          <select
-            className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
-            value={formData.dist_id}
-            onChange={(e) =>
-              setFormData((prevData) => ({
-                ...prevData,
-                dist_id: e.target.value,
-              }))
-            }
-          >
-            <option value="" disabled>
-              Select a district
-            </option>
-            {districts?.map((district) => (
-              <option key={district.id} value={district.id}>
-                {district.name}
-              </option>
-            ))}
-          </select>
+        <div className="mt-6">
+          <Button pending={pending} type="submit">
+            {type === "add" ? "Add Gram Panchayat" : "Update Gram Panchayat"}
+          </Button>
         </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="block_id" className="text-right mt-2">
-            block
-          </Label>
-          <select
-            className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
-            value={formData.block_id}
-            onChange={(e) =>
-              setFormData((prevData) => ({
-                ...prevData,
-                block_id: e.target.value,
-              }))
-            }
-          >
-            <option value="" disabled>
-              Select a block
-            </option>
-            {blocks?.map((block) => (
-              <option key={block.id} value={block.id}>
-                {block.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="name" className="text-right mt-2">
-            Name
-          </Label>
-          <Input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            id="name"
-            placeholder="Enter Name"
-            className="col-span-3"
-          />
-        </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label
-            htmlFor="is_maped_to_another_district"
-            className="text-right mt-2"
-          >
-            Mapped to Another District
-          </Label>
-          <select
-            className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
-            value={formData.is_maped_to_another_district}
-            name="is_maped_to_another_district"
-            onChange={handleChange}
-          >
-            <option value="">Select a mapping status</option>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-          </select>
-        </div>
-      </div>
-      <DialogFooter>
-        <Button pending={pending} type="submit">
-          {type === "add" ? "Add Gram Panchayat" : "Update Gram Panchayat"}
-        </Button>
-      </DialogFooter>
-    </form>
+      </form>
+    </div>
   );
 }
 

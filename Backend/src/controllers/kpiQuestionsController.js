@@ -27,6 +27,7 @@ export const createKPIQuestion = CatchAsyncError(async (req, res, next) => {
   try {
     const id = await getNewId();
     req.body.id = id.toString();
+    req.body.created_by = req.user.id;
     const newKPIQuestion = new KPIQuestionsModel(req.body);
     await newKPIQuestion.save();
     res.status(201).json({

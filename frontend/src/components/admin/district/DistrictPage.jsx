@@ -1,29 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCaption, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import TableSkeleton from "@/components/ui/tableskeleton";
 import DistrictRow from "./DistrictRow";
 import DistrictForm from "./DistrictForm";
 import { tst } from "@/lib/utils";
 import API from "@/utils/API";
 import StateFilter from "@/components/admin/filter/StateFilter";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
-const districtHeaders = [
-  "ID",
-  "LGD Code",
-  "State ID",
-  "Name",
-  "Special Area",
-];
+const districtHeaders = ["ID", "LGD Code", "State ID", "Name", "Special Area","Actions"];
 
 const DistrictPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -79,14 +66,9 @@ const DistrictPage = () => {
           <h2 className="text-xl font-semibold ">All Districts</h2>
           <StateFilter />
         </div>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button variant="outline">Add District</Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[600px] max-h-[90vh] scrollbar overflow-y-scroll">
-            <DistrictForm type={"add"} onSubmit={handleCreateDistrict} />
-          </DialogContent>
-        </Dialog>
+        <Link to={"/admin/district/create"}>
+          <Button variant="outline">Add District</Button>
+        </Link>
       </div>
       <Table className="overscroll-x-scroll">
         <TableCaption>List of all districts.</TableCaption>
@@ -104,4 +86,3 @@ const DistrictPage = () => {
 };
 
 export default DistrictPage;
-

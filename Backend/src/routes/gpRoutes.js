@@ -5,9 +5,10 @@ import {
   getGpByLocation,
   updateGP,
 } from "../controllers/gpController.js";
+import { isAuth } from "../middlewares/auth.js";
 
 const router = express.Router();
-
+router.use('/create',isAuth);
 router.route("/get").get(getGpByLocation);
 router.route("/create").post(createGP);
 router.route("/delete/:id").put(deleteGP);

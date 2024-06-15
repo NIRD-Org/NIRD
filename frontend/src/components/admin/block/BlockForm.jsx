@@ -1,54 +1,52 @@
 import React, { useEffect, useState } from "react";
-import { DialogHeader, DialogFooter, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { districts, states } from "@/lib/data";
 import API from "@/utils/API";
+import { tst } from "@/lib/utils";
+import AdminHeader from "../AdminHeader";
 
-function TalukForm({ type, onSubmit, taluk }) {
+function BlockForm({ type = "add", block }) {
   const [formData, setFormData] = useState({
-    id: taluk ? taluk.id : "",
-    state_id: taluk ? taluk.state_id : "",
-    dist_id: taluk ? taluk.dist_id : "",
-    lgd_code: taluk ? taluk.lgd_code : "",
-    lgd_code_feb11_2021: taluk ? taluk.lgd_code_feb11_2021 : "",
-    name: taluk ? taluk.name : "",
-    is_maped_to_another_district: taluk ? taluk.is_maped_to_another_district : "",
-    status: taluk ? taluk.status : "",
-    created_by: taluk ? taluk.created_by : "",
-    modified_by: taluk ? taluk.modified_by : "",
+    id: block?.id || "",
+    lgd_code: block?.lgd_code || "",
+    state_id: block?.state_id || "",
+    dist_id: block?.dist_id || "",
+    name: block?.name || "",
+    is_maped_to_another_district: block?.is_maped_to_another_district || "",
+    status: block?.status || "",
   });
 
-  const [pending, setPending] = useState(false);
   const [states, setStates] = useState([]);
   const [districts, setDistricts] = useState([]);
-
-  const getAllStates = async () => {
-    const { data } = await API.get(`/api/v1/state/all`);
-    setStates(data?.states);
-    console.log(data?.states);
-  };
-
-  const getAllDistricts = async s => {
-    const { data } = await API.get(`/api/v1/dist/state/${formData.state_id}`);
-    setDistricts(data?.districts);
-    console.log(data?.districts);
-  };
+  const [pending, setPending] = useState(false);
 
   useEffect(() => {
-    getAllStates();
+    async function fetchStates() {
+      try {
+        const response = await API.get("/api/v1/state/all");
+        setStates(response.data?.states || []);
+      } catch (error) {
+        tst.error("Failed to fetch states.");
+      }
+    }
+
+    fetchStates();
   }, []);
 
   useEffect(() => {
-    getAllDistricts();
+    async function fetchDistricts() {
+      if (formData.state_id) {
+        try {
+          const response = await API.get(`/api/v1/dist/state/${formData.state_id}`);
+          setDistricts(response.data?.districts || []);
+        } catch (error) {
+          tst.error("Failed to fetch districts.");
+        }
+      }
+    }
+
+    fetchDistricts();
   }, [formData.state_id]);
 
   const handleChange = e => {
@@ -59,153 +57,93 @@ function TalukForm({ type, onSubmit, taluk }) {
     }));
   };
 
-  const handleSubmit = e => {
+  const handleCreateBlock = async e => {
     e.preventDefault();
-    setPending(true);
-    onSubmit(formData);
-    setPending(false);
+    try {
+      await API.post("/api/v1/block/create", formData);
+      tst.success("block created successfully");
+    } catch (error) {
+      tst.error(error);
+      console.log(error);
+    }
   };
 
-  return (
-    <form onSubmit={handleSubmit}>
-      <DialogHeader>
-        <DialogTitle>{type === "add" ? "Add Taluk" : "Update Taluk"}</DialogTitle>
-        <DialogDescription>
-          {type === "add" ? "Add a new taluk" : "Update taluk details"}
-        </DialogDescription>
-      </DialogHeader>
-      <div className="grid gap-4 py-4">
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="lgd_code" className="text-right mt-2">
-            LGD Code
-          </Label>
-          <Input
-            type="text"
-            name="lgd_code"
-            value={formData.lgd_code}
-            onChange={handleChange}
-            id="lgd_code"
-            placeholder="Enter LGD Code"
-            className="col-span-3"
-          />
-        </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="dist_id" className="text-right mt-2">
-            State
-          </Label>
-          <select
-            className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
-            value={formData.state_id}
-            onChange={e => setFormData(prevData => ({ ...prevData, state_id: e.target.value }))}
-          >
-            <option value="" disabled>
-              Select a state
-            </option>
-            {states?.map(state => (
-              <option key={state.id} value={state.id}>
-                {state.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="dist_id" className="text-right mt-2">
-            District
-          </Label>
-          <select
-            className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
-            value={formData.dist_id}
-            onChange={e => setFormData(prevData => ({ ...prevData, dist_id: e.target.value }))}
-          >
-            <option value="" disabled>
-              Select a District
-            </option>
-            {districts?.map(district => (
-              <option key={district.id} value={district.id}>
-                {district.name}
-              </option>
-            ))}
-          </select>
-        </div>
+  const handleUpdateBlock = async e => {
+    e.preventDefault();
+    try {
+      await API.put(`/api/v1/block/${formData.id}`, formData);
+      tst.success("Block updated successfully");
+    } catch (error) {
+      tst.error("Failed to update block.", error);
+    }
+  };
 
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="name" className="text-right mt-2">
-            Name
-          </Label>
-          <Input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            id="name"
-            placeholder="Enter Name"
-            className="col-span-3"
-          />
+  const fields = [
+    { name: "lgd_code", label: "LGD Code", type: "text", required: "true" },
+    {
+      name: "state_id",
+      label: "State",
+      type: "select",
+      options: states.map(state => ({ value: state.id, label: state.name })),
+      required: "true",
+    },
+    {
+      name: "dist_id",
+      label: "District",
+      type: "select",
+      options: districts.map(district => ({ value: district.id, label: district.name })),
+      required: "true",
+    },
+    { name: "name", label: "Name", type: "text", required: true },
+    {
+      name: "is_maped_to_another_district",
+      label: "Mapped to Another District",
+      type: "select",
+      options: [
+        { value: "Yes", label: "Yes" },
+        { value: "No", label: "No" },
+      ],
+    },
+  ];
+
+  return (
+    <div className="container mx-auto p-6">
+      <form onSubmit={type === "add" ? handleCreateBlock : handleUpdateBlock}>
+        <div className="py-4">
+          <AdminHeader>{type === "add" ? "Add Block" : "Update Block"}</AdminHeader>
+          <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3">
+            {fields.map(({ name, label, type, options, required }) => (
+              <div key={name}>
+                <Label htmlFor={name} className="inline-block mb-2">
+                  {label}
+                </Label>
+                {required && <span className="text-red-500 ml-1">*</span>}
+                {type === "select" ? (
+                  <select required={required} disabled={pending} className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border" value={formData[name]} name={name} onChange={handleChange}>
+                    <option value="" disabled>
+                      Select {label}
+                    </option>
+                    {options.map(option => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <Input required={required} disabled={pending} type={type} name={name} value={formData[name]} onChange={handleChange} id={name} placeholder={`Enter ${label}`} className="col-span-3" />
+                )}
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="is_maped_to_another_district" className="text-right mt-2">
-            Mapped to Another District
-          </Label>
-          <Input
-            type="text"
-            name="is_maped_to_another_district"
-            value={formData.is_maped_to_another_district}
-            onChange={handleChange}
-            id="is_maped_to_another_district"
-            placeholder="Enter Mapping Status"
-            className="col-span-3"
-          />
+        <div className="mt-6">
+          <Button pending={pending} type="submit">
+            {type === "add" ? "Add Block" : "Update Block"}
+          </Button>
         </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="status" className="text-right mt-2">
-            Status
-          </Label>
-          <Input
-            type="text"
-            name="status"
-            value={formData.status}
-            onChange={handleChange}
-            id="status"
-            placeholder="Enter Status"
-            className="col-span-3"
-          />
-        </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="created_by" className="text-right mt-2">
-            Created By
-          </Label>
-          <Input
-            type="text"
-            name="created_by"
-            value={formData.created_by}
-            onChange={handleChange}
-            id="created_by"
-            placeholder="Enter Created By"
-            className="col-span-3"
-          />
-        </div>
-        <div className="grid grid-cols-4 gap-4">
-          <Label htmlFor="modified_by" className="text-right mt-2">
-            Modified By
-          </Label>
-          <Input
-            type="text"
-            name="modified_by"
-            value={formData.modified_by}
-            onChange={handleChange}
-            id="modified_by"
-            placeholder="Enter Modified By"
-            className="col-span-3"
-          />
-        </div>
-      </div>
-      <DialogFooter>
-        <Button pending={pending} type="submit">
-          {type === "add" ? "Add Taluk" : "Update Taluk"}
-        </Button>
-      </DialogFooter>
-    </form>
+      </form>
+    </div>
   );
 }
 
-export default TalukForm;
+export default BlockForm;

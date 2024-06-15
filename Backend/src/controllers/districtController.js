@@ -29,6 +29,8 @@ export const createDistrict = CatchAsyncError(async (req, res, next) => {
   try {
     const id = await getNewId();
     req.body.id = id.toString();
+    req.body.created_by = req.user.id;
+    
     const newDistrict = new DistrictModel(req.body);
     await newDistrict.save();
     res.status(201).json({

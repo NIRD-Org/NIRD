@@ -22,6 +22,7 @@ const districtSchema = new Schema(
     special_area: {
       type: String,
       default: "",
+      required:true,
     },
     special_area_id: {
       type: String,
@@ -42,7 +43,6 @@ const districtSchema = new Schema(
     },
     modified_by: {
       type: String,
-      required: true,
     },
   },
   {

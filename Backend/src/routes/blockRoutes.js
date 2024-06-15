@@ -7,9 +7,11 @@ import {
   getblocksByLocation,
   updateblock,
 } from "../controllers/blockController.js";
+import { isAuth } from "../middlewares/auth.js";
 
 const router = express.Router();
 
+router.use('/create',isAuth);
 router.route("/all").get(getAllblocks);
 router.route("/get-block/:id").get(getblockById);
 router.route("/get").get(getblocksByLocation);

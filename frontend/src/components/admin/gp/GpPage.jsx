@@ -1,20 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCaption, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import TableSkeleton from "@/components/ui/tableskeleton";
 import GpRow from "./GpRow";
 import GpForm from "./GpForm";
 import API from "@/utils/API";
 import { tst } from "@/lib/utils";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import StateFilter from "@/components/admin/filter/StateFilter";
 import GramFilter from "@/components/admin/filter/GramFilter";
 import DistrictFilter from "@/components/admin/filter/DistrictFilter";
@@ -36,7 +29,7 @@ const GpPage = () => {
     }
   }, [block_id]);
 
-  const getAllGp = async (blockId) => {
+  const getAllGp = async blockId => {
     try {
       setIsLoading(true);
       const { data } = await API.get(`/api/v1/gram/get?block=${blockId}`);
@@ -48,14 +41,6 @@ const GpPage = () => {
     }
   };
 
-  const handleCreateGp = async (formData) => {
-    try {
-      await API.post("/api/v1/gram/create", formData);
-      tst.success("GP created successfully");
-    } catch (error) {
-      tst.error(error);
-    }
-  };
 
   return (
     <div className="container mx-auto p-4">
@@ -66,14 +51,9 @@ const GpPage = () => {
           <DistrictFilter />
           <BlockFilter />
         </div>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button variant="outline">Add Gram Panchayat</Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[600px] max-h-[90vh] scrollbar overflow-y-scroll">
-            <GpForm type={"add"} onSubmit={handleCreateGp} />
-          </DialogContent>
-        </Dialog>
+        <Link to="/admin/gram/create">
+          <Button>Add Gram</Button>
+        </Link>
       </div>
       <Table className="overscroll-x-scroll">
         <TableCaption>List of all Gram Panchayats.</TableCaption>
@@ -92,7 +72,7 @@ const GpPage = () => {
           <TableSkeleton columnCount={10} />
         ) : (
           <TableBody>
-            {gp.map((gp) => (
+            {gp.map(gp => (
               <GpRow key={gp.id} gp={gp} />
             ))}
           </TableBody>

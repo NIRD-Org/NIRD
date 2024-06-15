@@ -88,7 +88,7 @@ function CreateUserForm({ onSubmit }) {
     <div className="container mx-auto p-6">
       <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">Create User</h2>
       <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-3  gap-10">
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-10">
           {fields.map((field, index) => (
             <div key={index}>
               <Label className="mb-2 inline-block">{field.label}</Label>

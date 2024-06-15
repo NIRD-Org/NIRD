@@ -29,6 +29,8 @@ export const createKPI = CatchAsyncError(async (req, res, next) => {
   try {
     const id = await getNewId();
     req.body.id = id.toString();
+    req.body.created_by = req.user.id;
+
     const newKPI = new KPIModel(req.body);
     await newKPI.save();
     res.status(201).json({
@@ -37,6 +39,7 @@ export const createKPI = CatchAsyncError(async (req, res, next) => {
       kpi: newKPI,
     });
   } catch (error) {
+    console.log(error)
     return next(new Errorhandler("Failed to create KPI", 500));
   }
 });
