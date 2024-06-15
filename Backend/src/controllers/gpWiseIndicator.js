@@ -1,6 +1,30 @@
 import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
 import { GpWiseIndicatorModel } from "../models/gpWiseIndicatorModel.js";
+import { IndicatorApprovalModel } from "../models/indicatorApprovalModel.js";
 import { Errorhandler } from "../utils/errorHandler.js";
+
+const getNewIdApproval = async () => {
+  try {
+    const maxDoc = await IndicatorApprovalModel.aggregate([
+      {
+        $addFields: {
+          numericId: { $toInt: "$id" },
+        },
+      },
+      {
+        $sort: { numericId: -1 },
+      },
+      {
+        $limit: 1,
+      },
+    ]).exec();
+
+    const maxId = maxDoc.length > 0 ? maxDoc[0].numericId : 0;
+    return maxId + 1;
+  } catch (error) {
+    return next(new Errorhandler("failed to get new id", 500));
+  }
+};
 
 const getNewIdIndicator = async () => {
   try {
@@ -80,26 +104,25 @@ export const submitIndicatorData = CatchAsyncError(async (req, res, next) => {
 
     // Inserting the KPI documents into the gpWiseKpi collection
     await GpWiseIndicatorModel.insertMany(indicatorDocuments);
-    // const approvalId = await getNewIdApproval();
-    // // Create the approval request document
-    // const approvalDocument = {
-    //   id: approvalId,
-    //   state_id,
-    //   dist_id,
-    //   block_id,
-    //   gp_id,
-    //   theme_id,
-    //   submitted_id,
-    //   created_by: user_id,
-    // };
+    const approvalId = await getNewIdApproval();
+    // Create the approval request document
+    const approvalDocument = {
+      id: approvalId,
+      state_id,
+      dist_id,
+      block_id,
+      gp_id,
+      submitted_id,
+      created_by: req.user ? req.user.id : "1",
+    };
 
     // // Insert the approval request into the gpWiseKpiApproval collection
-    // await IndicatorApprovalModel.create(approvalDocument);
+    await IndicatorApprovalModel.create(approvalDocument);
 
     // Send success response
     res.status(201).json({
       success: true,
-      message: "Indicator data submitted successfully",
+      message: "Indicator data submitted and sent for approval successfully",
     });
   } catch (error) {
     console.error("Failed to submit Indicator data:", error);
