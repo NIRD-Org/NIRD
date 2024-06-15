@@ -6,7 +6,13 @@ import { Errorhandler } from "../utils/errorHandler.js";
 
 export const getAllindicators = CatchAsyncError(async (req, res, next) => {
   try {
-    const indicators = await IndicatorModel.find();
+    // Sorting don ehere
+    const indicators = await IndicatorModel.aggregate([
+      { $addFields: { numeric_id: { $toInt: "$id" } } },
+      { $sort: { numeric_id: 1 } },
+      { $project: { numeric_id: 0 } },
+    ]);
+
     res.status(200).json({
       success: true,
       indicators,
