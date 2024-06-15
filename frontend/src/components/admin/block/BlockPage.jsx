@@ -3,7 +3,14 @@ import React, { useEffect, useState } from "react";
 import BlockRow from "./BlockRow";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Table, TableBody, TableCaption, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import TableSkeleton from "@/components/ui/tableskeleton";
 import BlockForm from "./BlockForm";
 import API from "@/utils/API";
@@ -55,7 +62,7 @@ const BlockPage = ({}) => {
         <TableHeader>
           <TableRow>
             <TableHead>ID</TableHead>
-            <TableHead>LGD Code</TableHead>
+
             <TableHead>State ID</TableHead>
             <TableHead>District ID</TableHead>
             <TableHead>Name</TableHead>
@@ -71,7 +78,7 @@ const BlockPage = ({}) => {
           <TableSkeleton columnCount={10} />
         ) : (
           <TableBody>
-            {blocks.map(block => (
+            {blocks.map((block) => (
               <BlockRow key={block.id} block={block} />
             ))}
           </TableBody>

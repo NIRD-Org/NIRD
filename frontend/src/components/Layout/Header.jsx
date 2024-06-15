@@ -17,49 +17,106 @@ const Header = () => {
         {/* Desktop navigation */}
         <div className="flex items-center justify-between w-[45%]">
           <NavLink to={"/"}>
-            <img src="/logo/niti-logo-white.svg" alt="Ashoka Logo" className="h-full mt-4 w-[5rem]" />
+            <img
+              src="/logo/niti-logo-white.svg"
+              alt="Ashoka Logo"
+              className="h-full mt-4 w-[5rem]"
+            />
           </NavLink>
-          <NavLink to="/project" className={({ isActive }) => `block px-3 text-md py-2 font-normal duration-200 ${isActive ? "text-white font-bold" : "text-gray-300"} hover:text-white`}>
+          <NavLink
+            to="/project"
+            className={({ isActive }) =>
+              `block px-3 text-md py-2 font-normal duration-200 ${
+                isActive ? "text-white font-bold" : "text-gray-300"
+              } hover:text-white`
+            }
+          >
             Project for Creating
             <br /> 250 Model GP Clusters
           </NavLink>
-          <NavLink to="/kpi" className={({ isActive }) => `block px-3 text-md py-2 font-normal duration-200 ${isActive ? "text-white font-bold" : "text-gray-300"} hover:text-white`}>
+          <NavLink
+            to="/kpi"
+            className={({ isActive }) =>
+              `block px-3 text-md py-2 font-normal duration-200 ${
+                isActive ? "text-white font-bold" : "text-gray-300"
+              } hover:text-white`
+            }
+          >
             Key Performance
             <br /> Indicators (KPI)
           </NavLink>
 
-          <NavLink to="/practices" className={({ isActive }) => `block px-3 text-md py-2 font-normal duration-200 ${isActive ? "text-white font-bold" : "text-gray-300"} hover:text-white`}>
+          <NavLink
+            to="/practices"
+            className={({ isActive }) =>
+              `block px-3 text-md py-2 font-normal duration-200 ${
+                isActive ? "text-white font-bold" : "text-gray-300"
+              } hover:text-white`
+            }
+          >
             Good Practices
           </NavLink>
         </div>
 
         <div className="px-3  flex justify-center items-center min-h-[14vh] xl:min-h-[12vh]  bg-white">
           <NavLink to={"/"}>
-            <img src="/logo/nirdpr.png" alt="NIRDPR Logo" className="h-12 w-auto" />
+            <img
+              src="/logo/nirdpr.png"
+              alt="NIRDPR Logo"
+              className="h-12 w-auto"
+            />
           </NavLink>
         </div>
 
         <div className="flex justify-around">
-          <NavLink to="/training" className={({ isActive }) => `block px-3 text-md py-2 font-normal duration-200 ${isActive ? "text-white font-bold" : "text-gray-300"} hover:text-white`}>
+          <NavLink
+            to="/training"
+            className={({ isActive }) =>
+              `block px-3 text-md py-2 font-normal duration-200 ${
+                isActive ? "text-white font-bold" : "text-gray-300"
+              } hover:text-white`
+            }
+          >
             Training & Capacity
             <br /> Building
           </NavLink>
         </div>
-        <NavLink to="/voluntary" className={({ isActive }) => `block px-3 text-md py-2 font-normal duration-200 ${isActive ? "text-white font-bold" : "text-gray-300"} hover:text-white`}>
+        <NavLink
+          to="/voluntary"
+          className={({ isActive }) =>
+            `block px-3 text-md py-2 font-normal duration-200 ${
+              isActive ? "text-white font-bold" : "text-gray-300"
+            } hover:text-white`
+          }
+        >
           Low cost Voluntary
           <br /> Activities
         </NavLink>
 
         <div>
-          <img src="/logo/MOPR-NEW-LOGO.png" alt="MoPR Logo" className="h-12 w-auto" />
+          <img src="/logo/mopr.png" alt="MoPR Logo" className="h-12 w-auto" />
         </div>
 
         {!isAuthenticated ? (
-          <NavLink to="/login" className={({ isActive }) => `block px-3 text-md py-2 font-normal duration-200 ${isActive ? "text-white font-bold" : "text-gray-300"} hover:text-white`}>
+          <NavLink
+            to="/login"
+            className={({ isActive }) =>
+              `block px-3 text-md py-2 font-normal duration-200 ${
+                isActive ? "text-white font-bold" : "text-gray-300"
+              } hover:text-white`
+            }
+          >
             Login
           </NavLink>
         ) : (
-          <NavLink to="/admin" className={({ isActive }) => `block px-3 text-md py-2 font-normal duration-200 ${isActive ? "text-white font-bold" : "text-gray-300"} hover:text-white`}>
+          <NavLink
+            to="/admin"
+            className={({ isActive }) =>
+              `block px-3 text-md py-2 font-normal duration-200 ${
+                isActive ? "text-white font-bold" : "text-gray-300"
+              } hover:text-white`
+            }
+          >
             <Button variant="outline">Dashboard</Button>
           </NavLink>
         )}
@@ -68,53 +125,116 @@ const Header = () => {
       {/* Mobile navigation */}
       <div className="lg:hidden bg-primary flex justify-between items-center">
         <div className="w-[10%]">
-          <img src="/logo/niti-logo-white.svg" alt="Ashoka Logo" className="h-full mt-4 w-[3rem]" />
+          <img
+            src="/logo/niti-logo-white.svg"
+            alt="Ashoka Logo"
+            className="h-full mt-4 w-[3rem]"
+          />
         </div>
 
         <div className="sm:w-[15%] w-[28%] z-50  bg-white">
           <NavLink to={"/"}>
-            <img src="/logo/nirdpr.png" alt="NIRDPR Logo" className="min-h-[8vh]  md:min-h-[10vh] w-full" />
+            <img
+              src="/logo/nirdpr.png"
+              alt="NIRDPR Logo"
+              className="min-h-[8vh]  md:min-h-[10vh] w-full"
+            />
           </NavLink>
         </div>
 
-        <button onClick={toggleSidebar} className="text-white w-[10%] focus:outline-none">
+        <button
+          onClick={toggleSidebar}
+          className="text-white w-[10%] focus:outline-none"
+        >
           {isOpen ? <AiOutlineClose size={24} /> : <AiOutlineMenu size={24} />}
         </button>
 
         {isOpen && (
           <div className="absolute top-[10vh]  left-0 w-full h-full bg-primary flex flex-col items-start pb-20 z-20">
             <div className="mt-4">
-              <NavLink to="/project" onClick={toggleSidebar} className={({ isActive }) => `block px-3 text-start py-2 font-normal duration-200 ${isActive ? "text-gray-300" : "text-white"} hover:text-gray-300`}>
+              <NavLink
+                to="/project"
+                onClick={toggleSidebar}
+                className={({ isActive }) =>
+                  `block px-3 text-start py-2 font-normal duration-200 ${
+                    isActive ? "text-gray-300" : "text-white"
+                  } hover:text-gray-300`
+                }
+              >
                 Project for Creating
                 <br /> 250 Model GP Clusters
               </NavLink>
-              <NavLink to="/kpi" onClick={toggleSidebar} className={({ isActive }) => `block px-3 text-start py-2 font-normal duration-200 ${isActive ? "text-gray-300" : "text-white"} hover:text-gray-300`}>
+              <NavLink
+                to="/kpi"
+                onClick={toggleSidebar}
+                className={({ isActive }) =>
+                  `block px-3 text-start py-2 font-normal duration-200 ${
+                    isActive ? "text-gray-300" : "text-white"
+                  } hover:text-gray-300`
+                }
+              >
                 Key Performance
                 <br /> Indicators (KPI)
               </NavLink>
-              <NavLink to="/voluntary" onClick={toggleSidebar} className={({ isActive }) => `block px-3 text-start py-2 font-normal duration-200 ${isActive ? "text-gray-300" : "text-white"} hover:text-gray-300`}>
+              <NavLink
+                to="/voluntary"
+                onClick={toggleSidebar}
+                className={({ isActive }) =>
+                  `block px-3 text-start py-2 font-normal duration-200 ${
+                    isActive ? "text-gray-300" : "text-white"
+                  } hover:text-gray-300`
+                }
+              >
                 Low cost Voluntary
                 <br /> Activities
               </NavLink>
-              <NavLink to="/training" onClick={toggleSidebar} className={({ isActive }) => `block px-3 text-start py-2 font-normal duration-200 ${isActive ? "text-gray-300" : "text-white"} hover:text-gray-300`}>
+              <NavLink
+                to="/training"
+                onClick={toggleSidebar}
+                className={({ isActive }) =>
+                  `block px-3 text-start py-2 font-normal duration-200 ${
+                    isActive ? "text-gray-300" : "text-white"
+                  } hover:text-gray-300`
+                }
+              >
                 Training & Capacity
                 <br /> Building
               </NavLink>
-              <NavLink to="/practices" onClick={toggleSidebar} className={({ isActive }) => `block px-3 text-start py-2 font-normal duration-200 ${isActive ? "text-gray-300" : "text-white"} hover:text-gray-300`}>
+              <NavLink
+                to="/practices"
+                onClick={toggleSidebar}
+                className={({ isActive }) =>
+                  `block px-3 text-start py-2 font-normal duration-200 ${
+                    isActive ? "text-gray-300" : "text-white"
+                  } hover:text-gray-300`
+                }
+              >
                 Good Practices
               </NavLink>
             </div>
 
             {!isAuthenticated && (
               <div className="mt-auto mb-4">
-                <NavLink to="/login" onClick={toggleSidebar} className={({ isActive }) => `block px-3 text-start py-2 font-normal duration-200 ${isActive ? "text-gray-300" : "text-white"} hover:text-gray-300`}>
+                <NavLink
+                  to="/login"
+                  onClick={toggleSidebar}
+                  className={({ isActive }) =>
+                    `block px-3 text-start py-2 font-normal duration-200 ${
+                      isActive ? "text-gray-300" : "text-white"
+                    } hover:text-gray-300`
+                  }
+                >
                   Login
                 </NavLink>
               </div>
             )}
 
             <div className="flex-shrink-0">
-              <img src="/logo/MOPR-NEW-LOGO.png" alt="MoPR Logo" className="h-12 w-auto" />
+              <img
+                src="/logo/MOPR-NEW-LOGO.png"
+                alt="MoPR Logo"
+                className="h-12 w-auto"
+              />
             </div>
           </div>
         )}
