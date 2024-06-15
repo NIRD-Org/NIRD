@@ -13,7 +13,7 @@ function DataPointForm({ type = "add", onSubmit, kpi }) {
     theme_id: kpi?.theme_id || "",
     kpi_name: kpi?.kpi_name || "",
     max_range: kpi?.max_range || "",
-    Input_Type: kpi?.Input_Type || "",
+    input_type: kpi?.input_type || "",
     status: kpi?.status || "",
     weightage: kpi?.weightage || "",
     created_by: kpi?.created_by || "",
@@ -70,7 +70,7 @@ function DataPointForm({ type = "add", onSubmit, kpi }) {
       options: themes.map(theme => ({ value: theme.id, label: theme.theme_name })),
       required: true,
     },
-    { name: "kpi_name", label: "KPI Name", type: "textarea", required: true },
+    { name: "name", label: "KPI Name", type: "textarea", required: true },
     { name: "weightage", label: "Weightage", type: "number", required: true },
     {
       name: "kpi_datapoint",

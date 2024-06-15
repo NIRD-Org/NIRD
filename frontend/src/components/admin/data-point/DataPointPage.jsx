@@ -50,6 +50,7 @@ const DataPointPage = () => {
             <TableHead>ID</TableHead>
             <TableHead>Theme ID</TableHead>
             <TableHead>KPI Name</TableHead>
+            <TableHead>Data Point</TableHead>
           </TableRow>
         </TableHeader>
         {isLoading ? (
@@ -60,7 +61,8 @@ const DataPointPage = () => {
                <TableRow>
                <TableCell>{kpi.id}</TableCell>
                <TableCell>{kpi.theme_id}</TableCell>
-               <TableCell>{kpi.kpi_name}</TableCell>
+               <TableCell>{kpi.name}</TableCell>
+               <TableCell>{kpi.kpi_datapoint}</TableCell>
              </TableRow>
             ))}
           </TableBody>
