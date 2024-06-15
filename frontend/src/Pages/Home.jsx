@@ -5,10 +5,10 @@ function Home() {
   return (
     <div>
       <section class="relative bg-cover bg-center h-screen">
-        <div class="absolute inset-0 h-[100vh] bg-gray-900 opacity-50"></div>
+        <div class="absolute inset-0 z-10 h-[100vh]  bg-gray-900 opacity-50"></div>
         <div class="relative w-full mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center h-full">
-          <div className="flex flex-1">
-            <div className="flex-1">
+          <div className="flex flex-1  ">
+            <div className="flex-1 z-20">
               <h1 class="text-white text-4xl md:text-6xl font-bold">
                 Empowering Communities. Transforming Lives.
               </h1>
@@ -26,7 +26,7 @@ function Home() {
             </div>
             <div className="flex-1"></div>
             <img
-              className="absolute w-full top-0 right-0 left-0 z-[-10] bg-opacity-30 h-[100%] object-cover"
+              className="absolute w-full top-0 right-0 left-0 z-0 bg-opacity-30 h-[100%] object-cover"
               src="https://res.cloudinary.com/dtbbuevez/image/upload/v1717957901/themes/hfaiqrqfcbu0lo8pmkvz.jpg"
               alt=""
             />
