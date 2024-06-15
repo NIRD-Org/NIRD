@@ -54,6 +54,13 @@ function IndicatorForm({ type = "add" }) {
         try {
           const response = await API.get(`/api/v1/dist/state/${formData.state_id}`);
           setDistricts(response.data?.districts || []);
+          setFormData(prevData => ({
+            ...prevData,
+            // state_id: "",
+            dist_id: "",
+            block_id: "",
+            gp_id: "",
+          }));
         } catch (error) {
           tst.error("Failed to fetch districts.");
         }
@@ -69,6 +76,13 @@ function IndicatorForm({ type = "add" }) {
         try {
           const response = await API.get(`/api/v1/block/get?dist=${formData.dist_id}`);
           setBlocks(response.data?.blocks || []);
+          setFormData(prevData => ({
+            ...prevData,
+            // state_id: "",
+            // dist_id: "",
+            block_id: "",
+            gp_id: "",
+          }));
         } catch (error) {
           tst.error("Failed to fetch blocks.");
         }
@@ -83,6 +97,13 @@ function IndicatorForm({ type = "add" }) {
       try {
         const { data } = await API.get(`/api/v1/gram/get?block=${formData.block_id}`);
         setGp(data?.gram || []);
+        setFormData(prevData => ({
+            ...prevData,
+            // state_id: "",
+            // dist_id: "",
+            // block_id: "",
+            gp_id: "",
+          }));
       } catch (error) {
         console.log(error);
       }
@@ -167,12 +188,25 @@ function IndicatorForm({ type = "add" }) {
     },
   ];
 
+
+  const resetForm = () => {
+    console.log('first')
+    setFormData(prevData => ({
+      ...prevData,
+      state_id: "",
+      dist_id: "",
+      block_id: "",
+      gp_id: "",
+    }));
+  };
+
+
   return (
     <div className="container mx-auto p-6">
       <div>
         <div className="py-4">
           <AdminHeader>{type === "add" ? "Young Fellow - Indicators Entry" : "Update Gram Panchayat"}</AdminHeader>
-          <div className="grid grid-cols-1 gap-10 sm:grid-cols-3 md:grid-cols-4">
+          <div className="grid  gap-10 grid-cols-2 sm:grid-cols-4 md:grid-cols-5">
             {fields.map(({ name, label, type, options, required, disabled = false }) => (
               <div key={name}>
                 <Label htmlFor={name} className="inline-block mb-2">
@@ -195,12 +229,14 @@ function IndicatorForm({ type = "add" }) {
                 )}
               </div>
             ))}
+            <Button className="self-end" onClick={() => resetForm()}>Reset</Button>
           </div>
           <div className="mt-10">
             <form onSubmit={handleSubmit} className="overflow-auto ">
               <Table className=" w-max">
                 <TableHeader>
                   <TableRow>
+                    <TableHead className="w-10">ID</TableHead>
                     <TableHead className="w-[400px]">Indicator</TableHead>
                     <TableHead className="w-40">Max Range</TableHead>
                     <TableHead className="w-40">Input</TableHead>
@@ -210,6 +246,7 @@ function IndicatorForm({ type = "add" }) {
                 <TableBody>
                   {indicators.map((data, index) => (
                     <TableRow key={data.id}>
+                      <TableCell>{data.id}</TableCell>
                       <TableCell>{data.name}</TableCell>
                       <TableCell>
                         <Input type="number" disabled name="max_range" value={indicatorFormData[index]?.max_range || data.max_range} onChange={e => handleChange(e, index)} />

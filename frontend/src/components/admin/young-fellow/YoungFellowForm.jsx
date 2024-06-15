@@ -54,26 +54,36 @@ function YoungFellowForm({ type, onSubmit, kpiApproval }) {
     setPending(false);
   };
 
-  if (gram_id) {
-    getAllThemes();
-  }
+  useEffect(() => {
+    console.log('first')
+    if (gram_id) {
+      getAllThemes();
+    } else {
+      setThemes([]);
+    }
+  }, [gram_id]);
 
-  const handleGpWiseKpiEdit = (id) => {
+  const handleGpWiseKpiEdit = id => {
     navigate(`/admin/gp-wise-kpi?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${id}`);
+  };
+
+  const resetForm = () => {
+    console.log("first");
+    setSearchParams({});
   };
 
   return (
     <div className="container p-6">
       <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">
-        Young Fellow - KPI Entry Form
-        </h2>
+        <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">Young Fellow - KPI Entry Form</h2>
         <div className="w-full grid grid-cols-5 gap-10">
           <StateFilter />
           <DistrictFilter />
           <BlockFilter />
           <GramFilter />
-          <Button onClick={handleSubmit}>Search</Button>
+          <Button className="self-end" onClick={() => resetForm()}>
+            Reset
+          </Button>
         </div>
       </div>
       <form onSubmit={handleSubmit}>
@@ -95,7 +105,7 @@ function YoungFellowForm({ type, onSubmit, kpiApproval }) {
                   <TableCell>{theme.id}</TableCell>
                   <TableCell>{theme.theme_name}</TableCell>
                   <TableCell>
-                    <Button onClick={()=>handleGpWiseKpiEdit(theme.id)}>Edit</Button>
+                    <Button onClick={() => handleGpWiseKpiEdit(theme.id)}>Edit</Button>
                   </TableCell>
                 </TableRow>
               ))}

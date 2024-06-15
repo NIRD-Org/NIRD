@@ -38,9 +38,9 @@ const DataPointPage = () => {
   return (
     <div className="container mx-auto p-4">
       <div className="flex justify-between text-center mb-6">
-        <h2 className="text-xl font-semibold mb-4">All Data Points</h2>
+        <h2 className="text-xl font-semibold mb-4">All KPI</h2>
         <Link to="/admin/data-point/create">
-          <Button>Add Data Point</Button>
+          <Button>Add KPI</Button>
         </Link>
       </div>
       <Table className="overscroll-x-scroll">
