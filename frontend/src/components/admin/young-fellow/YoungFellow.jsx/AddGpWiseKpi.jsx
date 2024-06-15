@@ -1,7 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuthContext } from "@/context/AuthContext";
 import { tst } from "@/lib/utils";
@@ -37,21 +44,27 @@ function AddGpWiseKpi() {
 
     const fetchQuestions = async () => {
       try {
-        const response = await API.get(`/api/v1/kpi-questions/get?theme=${theme_id}`);
+        const response = await API.get(
+          `/api/v1/kpi-questions/get?theme=${theme_id}`
+        );
         questions = response.data.questions;
 
-        let updatedFormData = kpis.map(item => {
-          const question = response.data.questions.find(q => q.kpi_id === item.id);
+        let updatedFormData = kpis.map((item) => {
+          const question = response.data.questions.find(
+            (q) => q.kpi_id === item.id
+          );
           if (questions)
             return {
               ...item,
               question_id: question ? question.id : null,
               question_name: question ? question.question_name : null,
-              input_type:question ? question.input_type : null
+              input_type: question ? question.input_type : null,
             };
         });
-        console.log(questions)
-        updatedFormData = updatedFormData.filter(item => item.question_id != null);
+        console.log(questions);
+        updatedFormData = updatedFormData.filter(
+          (item) => item.question_id != null
+        );
         setData(updatedFormData);
       } catch (error) {
         console.error("Error fetching questions:", error);
@@ -69,7 +82,7 @@ function AddGpWiseKpi() {
 
   const handleChange = (e, index) => {
     const { name, value } = e.target;
-    setFormData(prevData => {
+    setFormData((prevData) => {
       const updatedData = [...prevData];
       updatedData[index] = {
         ...updatedData[index],
@@ -79,7 +92,7 @@ function AddGpWiseKpi() {
     });
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     let updatedFormData = data.map((item, index) => {
@@ -120,7 +133,9 @@ function AddGpWiseKpi() {
     <div className="w-full">
       <div className="p-6 ">
         <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">Young Fellow Form - Edit</h2>
+          <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">
+            Young Fellow - KPI Entry Form
+          </h2>
         </div>
         <form onSubmit={handleSubmit} className="overflow-x-auto w-[1050px] ">
           <div>
@@ -130,8 +145,12 @@ function AddGpWiseKpi() {
                   <TableHead className="w-[400px]">KPI Name</TableHead>
                   <TableHead className="w-[400px]">Question</TableHead>
                   <TableHead>Input type</TableHead>
-                  <TableHead className="w-40">Max Number (Total Number)</TableHead>
-                  <TableHead className="w-40">Cumulative Achived Number</TableHead>
+                  <TableHead className="w-40">
+                    Max Number (Total Number)
+                  </TableHead>
+                  <TableHead className="w-40">
+                    Cumulative Achived Number
+                  </TableHead>
                   <TableHead>Score</TableHead>
                   <TableHead className="w-80 ">Remarks</TableHead>
                 </TableRow>
@@ -143,16 +162,31 @@ function AddGpWiseKpi() {
                     <TableCell>{data.question_name || "No question"}</TableCell>
                     <TableCell>{data?.input_type}</TableCell>
                     <TableCell>
-                      <Input type="number" name="max_range" value={formData[index]?.max_range || ""} onChange={e => handleChange(e, index)} />
+                      <Input
+                        type="number"
+                        name="max_range"
+                        value={formData[index]?.max_range || ""}
+                        onChange={(e) => handleChange(e, index)}
+                      />
                     </TableCell>
                     <TableCell>
-                      <Input type="number" name="input_data" value={formData[index]?.input_data || ""} onChange={e => handleChange(e, index)} />
+                      <Input
+                        type="number"
+                        name="input_data"
+                        value={formData[index]?.input_data || ""}
+                        onChange={(e) => handleChange(e, index)}
+                      />
                     </TableCell>
                     <TableCell>
                       <Input type="text" disabled />
                     </TableCell>
                     <TableCell>
-                      <Textarea type="text" name="remarks" value={formData[index]?.remarks || ""} onChange={e => handleChange(e, index)} />
+                      <Textarea
+                        type="text"
+                        name="remarks"
+                        value={formData[index]?.remarks || ""}
+                        onChange={(e) => handleChange(e, index)}
+                      />
                     </TableCell>
                   </TableRow>
                 ))}
@@ -163,7 +197,15 @@ function AddGpWiseKpi() {
             <Label htmlFor="date" className="text-right mt-2">
               Date
             </Label>
-            <Input type="date" name="date" value={date || ""} onChange={e => setDate(e.target.value)} id="date" placeholder="Enter datte" className="px-10" />
+            <Input
+              type="date"
+              name="date"
+              value={date || ""}
+              onChange={(e) => setDate(e.target.value)}
+              id="date"
+              placeholder="Enter datte"
+              className="px-10"
+            />
           </div>
           <Button type="submit">Submit</Button>
         </form>
