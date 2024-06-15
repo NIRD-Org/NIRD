@@ -39,7 +39,7 @@ export const createKPI = CatchAsyncError(async (req, res, next) => {
       kpi: newKPI,
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return next(new Errorhandler("Failed to create KPI", 500));
   }
 });
@@ -117,5 +117,19 @@ export const updateKPI = CatchAsyncError(async (req, res, next) => {
     });
   } catch (error) {
     return next(new Errorhandler("Failed to update KPI", 500));
+  }
+});
+
+// insert many
+
+export const insertManyKPI = CatchAsyncError(async (req, res, next) => {
+  try {
+    await KPIModel.insertMany(req.body);
+    res.status(201).json({
+      success: true,
+      message: "KPI created successfully",
+    });
+  } catch (error) {
+    return next(new Errorhandler("Failed to create KPI", 500));
   }
 });

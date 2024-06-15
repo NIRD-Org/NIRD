@@ -45,45 +45,50 @@ export const getAllKPIApprovals = CatchAsyncError(async (req, res, next) => {
 
 export const getKPIApprovals = CatchAsyncError(async (req, res, next) => {
   try {
-    const { state, dist, block, gp } = req.query;
+    const { state, dist, block, gp, theme } = req.query;
     const match = {};
 
     if (state) match.state_id = state;
-    if (dist) match.district_id = dist;
+    if (dist) match.dist_id = dist;
     if (block) match.block_id = block;
     if (gp) match.gp_id = gp;
+    if (theme) match.theme_id = theme;
 
-    const pipeline = [
+    const categorizedKPIApprovals = await KPIApprovalModel.aggregate([
       { $match: match },
       {
         $lookup: {
-          from: "themes",
+          from: "themes", // The name of the Theme collection
           localField: "theme_id",
           foreignField: "id",
-          as: "theme_info",
+          as: "themeDetails",
         },
       },
-      { $unwind: "$theme_info" },
       {
-        $group: {
-          _id: {
-            theme_id: "$theme_id",
-            theme_name: "$theme_info.name",
-          },
-          approvals: { $push: "$$ROOT" },
-        },
+        $unwind: "$themeDetails",
       },
       {
         $project: {
-          theme_id: "$_id.theme_id",
-          theme_name: "$_id.theme_name",
-          approvals: 1,
-          _id: 0,
+          _id: 1,
+          id: 1,
+          state_id: 1,
+          dist_id: 1,
+          block_id: 1,
+          gp_id: 1,
+          theme_id: 1,
+          theme_name: "$themeDetails.theme_name",
+          decision: 1,
+          submitted_id: 1,
+          remarks: 1,
+          status: 1,
+          created_by: 1,
+          created_at: 1,
+          modified_at: 1,
         },
       },
-    ];
-
-    const categorizedKPIApprovals = await KPIApprovalModel.aggregate(pipeline);
+      // Optional: Add sorting by date if needed
+      { $sort: { created_at: -1 } },
+    ]);
 
     if (!categorizedKPIApprovals || categorizedKPIApprovals.length === 0) {
       return next(new Errorhandler("No KPI Approvals Found", 404));
