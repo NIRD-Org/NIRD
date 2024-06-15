@@ -35,15 +35,15 @@ function KpiForm({ type = "add", onSubmit, kpi }) {
     getAllThemes();
   }, []);
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setPending(true);
     try {
@@ -66,7 +66,10 @@ function KpiForm({ type = "add", onSubmit, kpi }) {
       name: "theme_id",
       label: "Theme",
       type: "select",
-      options: themes.map(theme => ({ value: theme.id, label: theme.theme_name })),
+      options: themes.map((theme) => ({
+        value: theme.id,
+        label: theme.theme_name,
+      })),
       required: true,
     },
     { name: "kpi_name", label: "KPI Name", type: "textarea", required: true },
@@ -97,7 +100,7 @@ function KpiForm({ type = "add", onSubmit, kpi }) {
                     <option value="" disabled>
                       Select {label}
                     </option>
-                    {options.map(option => (
+                    {options.map((option) => (
                       <option key={option.value} value={option.value}>
                         {option.label}
                       </option>

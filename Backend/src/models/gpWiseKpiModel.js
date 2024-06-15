@@ -41,11 +41,6 @@ const gpWiseKpiSchema = new mongoose.Schema(
       required: true,
       ref: "KPI",
     },
-    question_id: {
-      type: String,
-      // required: true,
-      // ref: "Question",
-    },
     max_range: {
       type: Number,
       required: true,

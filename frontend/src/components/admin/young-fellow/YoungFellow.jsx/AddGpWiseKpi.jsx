@@ -1,7 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuthContext } from "@/context/AuthContext";
 import { tst } from "@/lib/utils";
@@ -47,7 +54,7 @@ function AddGpWiseKpi() {
 
   const handleChange = (e, index) => {
     const { name, value } = e.target;
-    setFormData(prevData => {
+    setFormData((prevData) => {
       const updatedData = [...prevData];
       updatedData[index] = {
         ...updatedData[index],
@@ -57,7 +64,7 @@ function AddGpWiseKpi() {
     });
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     let updatedFormData = kpis.map((item, index) => {
@@ -93,7 +100,9 @@ function AddGpWiseKpi() {
     <div className="w-full">
       <div className="p-6 ">
         <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">Young Fellow Form - Edit</h2>
+          <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">
+            Young Fellow - KPI Entry Form
+          </h2>
         </div>
         <form onSubmit={handleSubmit} className="overflow-x-auto w-[1050px] ">
           <div>
@@ -125,7 +134,12 @@ function AddGpWiseKpi() {
                       <Input type="text" disabled />
                     </TableCell> */}
                     <TableCell>
-                      <Textarea type="text" name="remarks" value={formData[index]?.remarks || ""} onChange={e => handleChange(e, index)} />
+                      <Textarea
+                        type="text"
+                        name="remarks"
+                        value={formData[index]?.remarks || ""}
+                        onChange={(e) => handleChange(e, index)}
+                      />
                     </TableCell>
                   </TableRow>
                 ))}
@@ -136,7 +150,15 @@ function AddGpWiseKpi() {
             <Label htmlFor="date" className="text-right mt-2">
               Date
             </Label>
-            <Input type="date" name="date" value={date || ""} onChange={e => setDate(e.target.value)} id="date" placeholder="Enter datte" className="px-10" />
+            <Input
+              type="date"
+              name="date"
+              value={date || ""}
+              onChange={(e) => setDate(e.target.value)}
+              id="date"
+              placeholder="Enter datte"
+              className="px-10"
+            />
           </div>
           <Button type="submit">Submit</Button>
         </form>

@@ -88,14 +88,36 @@ export const submitKpiData = CatchAsyncError(async (req, res, next) => {
       user_id,
       formData,
     } = req.body;
-    const submitted_id = await getNewSubmittedId();
 
     // Validate if formData is empty
     if (!formData || formData.length === 0) {
       return next(new Errorhandler("Form data cannot be empty", 400));
     }
-    // Prepare the GpWiseKPI documents for insertion
+
+    // Parse the date from the request body to a Date object
+    const parsedDate = new Date(date);
+
+    // Check for existing data for the same date and theme_id
+    const existingData = await GpWiseKpiModel.findOne({
+      state_id: state_id,
+      dist_id: dist_id,
+      block_id: block_id,
+      gp_id: gp_id,
+      date: parsedDate,
+      theme_id: theme_id,
+    });
+
+    if (existingData) {
+      return next(
+        new Errorhandler("KPI data for this theme and date already exists", 400)
+      );
+    }
+
+    // Generate new submitted_id and currentMaxId
+    const submitted_id = await getNewSubmittedId();
     let currentMaxId = await getNewIdKPI();
+
+    // Prepare the GpWiseKPI documents for insertion
     const kpiDocuments = await Promise.all(
       formData.map(async (kpi) => ({
         id: currentMaxId++,
@@ -103,10 +125,9 @@ export const submitKpiData = CatchAsyncError(async (req, res, next) => {
         dist_id: dist_id,
         block_id: block_id,
         gp_id: gp_id,
-        date: date,
+        date: parsedDate,
         theme_id: theme_id,
         kpi_id: kpi.kpi_id,
-        question_id: kpi.question_id,
         max_range: kpi.max_range,
         input_data: kpi.input_data,
         remarks: kpi.remarks,
@@ -117,7 +138,10 @@ export const submitKpiData = CatchAsyncError(async (req, res, next) => {
 
     // Inserting the KPI documents into the gpWiseKpi collection
     await GpWiseKpiModel.insertMany(kpiDocuments);
+
+    // Generate new approvalId
     const approvalId = await getNewIdApproval();
+
     // Create the approval request document
     const approvalDocument = {
       id: approvalId,
@@ -143,7 +167,6 @@ export const submitKpiData = CatchAsyncError(async (req, res, next) => {
     return next(new Errorhandler("Failed to submit KPI data", 500));
   }
 });
-
 export const getGpWiseKpi = CatchAsyncError(async (req, res, next) => {
   try {
     const limit = req.query.limit || 50;
