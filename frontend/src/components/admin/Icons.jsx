@@ -1,9 +1,9 @@
 import React from "react";
-import { Edit, Trash,HamIcon,List} from "lucide-react";
+import { Edit, Trash,HamIcon,List,Eye} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const NirdEditIcon = ({ props }) => (
-  <Edit {...props} className={cn("hover:cursor-pointer", "text-green-500")} />
+  <Edit {...props} className={cn("hover:cursor-pointer", "text-primary")} />
 );
 
 export const NirdDeleteIcon = ({ props }) => (
@@ -12,4 +12,9 @@ export const NirdDeleteIcon = ({ props }) => (
 
 export const NirdHamIcon = ({ props }) => (
   <List {...props} className={cn("hover:cursor-pointer")} />
+);
+
+
+export const NirdViewIcon = ({ props }) => (
+  <Eye {...props} className={cn("hover:cursor-pointer", "text-primary")} />
 );

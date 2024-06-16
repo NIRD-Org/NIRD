@@ -2,11 +2,11 @@ import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import API from "@/utils/API";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCaption } from "@/components/ui/table";
-import { NirdEditIcon } from "../Icons";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { NirdEditIcon, NirdViewIcon } from "../Icons";
 import YfLayout from "./YfLayout";
 
-function GpWiseKpiList() {
+function KpiApprovalsList() {
   const [searchParams, setSearchParams] = useSearchParams();
   const state_id = searchParams.get("state_id") || "";
   const dist_id = searchParams.get("dist_id") || "";
@@ -26,7 +26,6 @@ function GpWiseKpiList() {
     }
   };
 
-
   useEffect(() => {
     if (state_id && dist_id && block_id && gram_id && theme_id) {
       getAllKpiApprovals();
@@ -36,13 +35,11 @@ function GpWiseKpiList() {
   const handleGpWiseKpiEdit = () => {
     navigate(`/admin/add-gp-wise-kpi?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${theme_id}`);
   };
+
   return (
     <div>
       <div className="p-6">
-      <YfLayout/>
-        <div className="flex justify-center mt-10">
-          <Button onClick={handleGpWiseKpiEdit}>Add New</Button>
-        </div>
+        <YfLayout />
         <div className="mt-8">
           <Table>
             <TableHeader>
@@ -61,7 +58,16 @@ function GpWiseKpiList() {
                   <TableCell>{kpiApproval.theme_name}</TableCell>
                   <TableCell>{new Date(kpiApproval.created_at).toLocaleDateString()}</TableCell>
                   <TableCell>{kpiApproval.decision == 0 ? "Submitted" : "Sent Back"}</TableCell>
-                  <TableCell><NirdEditIcon/></TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-3">
+                      <span onClick={() => navigate(`/admin/kpi-approval-submit/${kpiApproval.id}`)}>
+                        <NirdEditIcon />
+                      </span>
+                      <span onClick={() => navigate(`/admin/kpi-approval-view/${kpiApproval.id}`)}>
+                        <NirdViewIcon />
+                      </span>
+                    </div>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -72,5 +78,4 @@ function GpWiseKpiList() {
   );
 }
 
-export default GpWiseKpiList;
-
+export default KpiApprovalsList;

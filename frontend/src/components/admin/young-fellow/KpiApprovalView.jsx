@@ -10,91 +10,42 @@ import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import YfLayout from "./YfLayout";
 
-function AddGpWiseKpi() {
+function KpiApprovalView() {
   const [searchParams, setSearchParams] = useSearchParams();
   const state_id = searchParams.get("state_id") || "";
   const dist_id = searchParams.get("dist_id") || "";
   const block_id = searchParams.get("block_id") || "";
   const gp_id = searchParams.get("gram_id") || "";
   const theme_id = searchParams.get("theme_id") || "";
-
   const [kpis, setKpis] = useState([]);
+  const [questions, setQuestions] = useState([]);
+  const [data, setData] = useState([]);
   const [formData, setFormData] = useState([]);
   const [date, setDate] = useState(null);
   const { user } = useAuthContext();
   const [isLoading, setIsLoading] = useState(false);
 
-  const [stateName, setStateName] = useState("");
-  const [districtName, setDistrictName] = useState("");
-  const [blockName, setBlockName] = useState("");
-  const [gpName, setGpName] = useState("");
-  const [themeName, setThemeName] = useState("");
-
   useEffect(() => {
+    let kpis;
     const fetchKpis = async () => {
       try {
         const response = await API.get(`/api/v1/kpi/theme/${theme_id}`);
-        const kpis = response.data.KPI;
+        kpis = response.data.KPI;
+        console.log(kpis);
         setKpis(kpis);
+        console.log(kpis);
       } catch (error) {
         console.error("Error fetching KPIs:", error);
-      }
-    };
-
-    const fetchNames = async () => {
-      try {
-        const stateResponse = await API.get(`/api/v1/state/${state_id}`);
-        setStateName(stateResponse.data.name);
-
-        const districtResponse = await API.get(`/api/v1/district/${dist_id}`);
-        setDistrictName(districtResponse.data.name);
-
-        const blockResponse = await API.get(`/api/v1/block/${block_id}`);
-        setBlockName(blockResponse.data.name);
-
-        const gpResponse = await API.get(`/api/v1/gp/${gp_id}`);
-        setGpName(gpResponse.data.name);
-
-        const themeResponse = await API.get(`/api/v1/theme/${theme_id}`);
-        setThemeName(themeResponse.data.name);
-      } catch (error) {
-        console.error("Error fetching names:", error);
       }
     };
 
     const run = async () => {
       setIsLoading(true);
       await fetchKpis();
-      await fetchNames();
       setIsLoading(false);
     };
-
     run();
-  }, [theme_id, state_id, dist_id, block_id, gp_id]);
-
-  const calculateScore = (percentage, thresholds, scores) => {
-    for (let i = 0; i < thresholds.length; i++) {
-      if (percentage > thresholds[i]) {
-        return scores[i];
-      }
-    }
-    return scores[thresholds.length];
-  };
-
-  const kpiScoringRules = {
-    1: { thresholds: [80, 60, 40, 20], scores: [10, 8, 6, 4, 2] },
-    2: { thresholds: [80, 60, 40, 20], scores: [5, 4, 3, 2, 1] },
-    3: { thresholds: [80, 60, 40, 20], scores: [10, 8, 6, 4, 2] },
-    4: { thresholds: [80, 60, 40, 20], scores: [10, 8, 6, 4, 2] },
-    5: { thresholds: [80, 60, 40, 20], scores: [5, 4, 3, 2, 1] },
-    6: { thresholds: [80, 60, 40, 20], scores: [10, 8, 6, 4, 2] },
-    7: { thresholds: [80, 60, 40, 20], scores: [10, 8, 6, 4, 2] },
-    8: { thresholds: [80, 60, 40, 20], scores: [4, 3, 2, 1, 0] },
-    9: { thresholds: [80, 60, 40, 20], scores: [6, 5, 4, 3, 2] },
-    10: { thresholds: [80, 60, 40, 20], scores: [10, 8, 6, 4, 2] },
-    11: { thresholds: [80, 60, 40, 20], scores: [10, 8, 6, 4, 2] },
-    12: { thresholds: [80, 60, 40, 20], scores: [10, 8, 6, 4, 2] },
-  };
+  }, [theme_id]);
 
   const handleChange = (e, index) => {
     const { name, value } = e.target;
@@ -104,17 +55,6 @@ function AddGpWiseKpi() {
         ...updatedData[index],
         [name]: value,
       };
-
-      if (name === 'max_range' || name === 'input_data') {
-        const maxRange = updatedData[index].max_range || 0;
-        const inputData = updatedData[index].input_data || 0;
-        const percentage = (inputData / maxRange) * 100;
-
-        const kpiId = kpis[index].id;
-        const { thresholds, scores } = kpiScoringRules[kpiId];
-        updatedData[index].score = calculateScore(percentage, thresholds, scores);
-      }
-
       return updatedData;
     });
   };
@@ -141,7 +81,6 @@ function AddGpWiseKpi() {
       theme_id,
       formData: updatedFormData,
     };
-
     try {
       const response = await API.post("/api/v1/gp-wise-kpi/submit", dataToSend);
       console.log("Success:", response.data);
@@ -155,11 +94,11 @@ function AddGpWiseKpi() {
   return (
     <div className="w-full">
       <div>
-        <div className="mb-2 text-center">
-          <h2 className="text-xl font-semibold mb-10 bg-slate-100 py-3">Young Fellow - LSG _ Theme wise KPI Entry Form</h2>
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">Young Fellow - KPI Entry Form</h2>
         </div>
         <YfLayout/>
-        <form onSubmit={handleSubmit} className="overflow-x-auto mt-10">
+        <form onSubmit={handleSubmit} className="overflow-x-auto  mt-6">
           <div>
             <Table>
               <TableHeader>
@@ -171,7 +110,7 @@ function AddGpWiseKpi() {
                   <TableHead className="w-32">Max Number (Total Number)</TableHead>
                   <TableHead className="w-20">Cumulative Achived Number</TableHead>
                   <TableHead className="w-40">Score</TableHead>
-                  <TableHead className="w-40">Remarks</TableHead>
+                  <TableHead className="w-40 ">Remarks</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -202,7 +141,7 @@ function AddGpWiseKpi() {
             <Label htmlFor="date" className="text-right mt-2">
               Date
             </Label>
-            <Input type="date" name="date" value={date || ""} onChange={e => setDate(e.target.value)} id="date" placeholder="Enter date" className="px-10" />
+            <Input type="date" name="date" value={date || ""} onChange={e => setDate(e.target.value)} id="date" placeholder="Enter datte" className="px-10" />
           </div>
           <Button type="submit">Submit</Button>
         </form>
@@ -211,4 +150,18 @@ function AddGpWiseKpi() {
   );
 }
 
-export default AddGpWiseKpi;
+
+
+const ScoreRules = ({score_rules}) => {
+  const rulesArray = score_rules.split('\n');
+
+  return (
+    <div>
+      {rulesArray.map((rule, index) => (
+        <div key={index}>{rule}</div>
+      ))}
+    </div>
+  );
+};
+
+export default KpiApprovalView;

@@ -30,6 +30,9 @@ import IndicatorForm from "./components/admin/young-fellow/IndicatorForm";
 import AdminMainPage from "./components/admin/AdminMainPage";
 import DataPointForm from "./components/admin/kpi/DataPointForm";
 import DataPointPage from "./components/admin/kpi/DataPointPage";
+import KpiApprovalsList from "./components/admin/young-fellow/KpiApprovalsList";
+import KpiApprovalSubmit from "./components/admin/young-fellow/KpiApprovalSubmit";
+import KpiApprovalView from "./components/admin/young-fellow/KpiApprovalView";
 
 function App() {
   const { login } = useAuthContext();
@@ -69,6 +72,9 @@ function App() {
             <Route path="indicator/create" element={<IndicatorForm />} />
             <Route path="data-point/create" element={<DataPointForm />} />
             <Route path="data-point" element={<DataPointPage />} />
+            <Route path="kpi-approvals-list" element={<KpiApprovalsList />} />
+            <Route path="kpi-approval-submit/:id" element={<KpiApprovalSubmit />} />
+            <Route path="kpi-approval-view/:id" element={<KpiApprovalView/>} />
           </Route>
         </Route>
 

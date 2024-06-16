@@ -6,4 +6,7 @@
   .bg-primary {
     background-color: #00203F;
   }
+  .text-primary {
+    text-color: #00203F;
+  }
 }
