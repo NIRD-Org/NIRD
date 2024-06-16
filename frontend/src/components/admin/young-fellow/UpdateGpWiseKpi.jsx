@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import API from "@/utils/API";
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import YfLayout from "./YfLayout";
 import { Textarea } from "@/components/ui/textarea";
 import { tst } from "@/lib/utils";
@@ -18,15 +18,18 @@ function KpiApprovalSubmit() {
   const gp_id = searchParams.get("gram_id") || "";
   const date = searchParams.get("date") || "";
   const kpi_approval_id = searchParams.get("kpi_approval_id") || "";
-  const [formData, setFormData] = useState();
+  const [formData, setFormData] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchKpiApprovalData = async () => {
       try {
         const url = `/api/v1/gp-wise-kpi/approval-data?gp=${gp_id}&theme=${theme_id}&date=${new Date(date).toISOString().replace(/Z$/, "+00:00")}`;
         const response = await API.get(url);
-        console.log(response)
         setKpiApprovalData(response.data.data || []);
+        const data = response.data.data;
+        const updatedFormData = data.map(item => ({ id: item.id, kpi_id: item.kpi_id, max_range: item.max_range, input_data: item.input_data, score: item.score, submitted_id: item.submitted_id }));
+        setFormData(updatedFormData);
       } catch (error) {
         console.log(error);
       }
@@ -205,7 +208,7 @@ function KpiApprovalSubmit() {
       scores: [10, 8, 6, 4, 2],
     },
   };
- 
+
   const handleChange = (e, index) => {
     const { name, value } = e.target;
     setFormData(prevData => {
@@ -220,7 +223,7 @@ function KpiApprovalSubmit() {
         const inputData = updatedData[index].input_data || 0;
         const percentage = (inputData / maxRange) * 100;
 
-        const kpiId = kpis[index].id;
+        const kpiId = kpiApprovalData[index].id;
         const { thresholds, scores } = kpiScoringRules[kpiId];
         updatedData[index].score = calculateScore(percentage, thresholds, scores);
       }
@@ -240,22 +243,18 @@ function KpiApprovalSubmit() {
 
   const handleSubmit = async e => {
     e.preventDefault();
+    console.log(formData);
+    // return;
     try {
-      const body = {
-        decision: formData.decision,
-        remarks: formData.remarks,
-      };
-
-      const url = `/api/v1/kpi-approvals/update/${kpi_approval_id}`;
-      const response = await API.put(url, body);
-      console.log(response.data);
+      const response = await API.put("/api/v1/gp-wise-kpi/resubmit", { formData, submitted_id: kpi_approval_id });
+      console.log("Success:", response.data);
       tst.success("Form submitted successfully");
+      // navigate("/admin/young-professionals");
     } catch (error) {
-      tst.error("Failed to submit form");
-      console.log(error);
+      console.error(error);
+      tst.error(error);
     }
   };
-
   return (
     <div className="w-full">
       <div>
@@ -263,55 +262,57 @@ function KpiApprovalSubmit() {
           <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">Young Fellow - KPI Entry Form</h2>
         </div>
         <YfLayout />
-        <div className="overflow-x-auto  mt-6">
-          <div>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                <TableHead className="w-20">ID</TableHead>
-                  <TableHead className="w-[200px]">KPI Name</TableHead>
-                  <TableHead className="w-[200px]">Data point</TableHead>
-                  <TableHead className="w-20">Input type</TableHead>
-                  <TableHead className="w-32">Max Number (Total Number)</TableHead>
-                  <TableHead className="w-20">Cumulative Achived Number</TableHead>
-                  <TableHead className="w-40">Score</TableHead>
-                  <TableHead className="w-40">Remarks</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {kpiApprovalData.map((data, index) => (
-                  <>
-                    <TableRow key={data.id}>
-                      <TableCell>{index + 1}</TableCell>
-                      <TableCell>{data?.kpiDetails?.name}</TableCell>
-                      <TableCell>{data?.kpiDetails?.kpi_datapoint || "No question"}</TableCell>
-                      <TableCell>{data?.kpiDetails?.input_type}</TableCell>
-                      <TableCell>
-                        <Input type="number" name="max_range" value={formData[index]?.max_range || data?.max_range} onChange={e => handleChange(e, index)} />
-                      </TableCell>
-                      <TableCell>
-                        <Input required max={formData[index]?.max_range || data?.input_data} type="number" name="input_data" value={formData[index]?.input_data || data?.input_data} onChange={e => handleChange(e, index)} />
-                      </TableCell>
-                      <TableCell>
-                        <Input disabled type="number" name="score" value={formData[index]?.score || data.score} onChange={e => handleChange(e, index)} />
-                      </TableCell>
-                      <TableCell>
-                        <Textarea type="text" name="remarks" value={formData[index]?.remarks || data.remarks} onChange={e => handleChange(e, index)} />
-                      </TableCell>
-                    </TableRow>
-                  </>
-                ))}
-              </TableBody>
-            </Table>
+        <form action="" onSubmit={handleSubmit}>
+          <div className="overflow-x-auto  mt-6">
+            <div>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-20">ID</TableHead>
+                    <TableHead className="w-[200px]">KPI Name</TableHead>
+                    <TableHead className="w-[200px]">Data point</TableHead>
+                    <TableHead className="w-20">Input type</TableHead>
+                    <TableHead className="w-32">Max Number (Total Number)</TableHead>
+                    <TableHead className="w-20">Cumulative Achived Number</TableHead>
+                    <TableHead className="w-40">Score</TableHead>
+                    <TableHead className="w-40">Remarks</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {kpiApprovalData.map((data, index) => (
+                    <>
+                      <TableRow key={data.id}>
+                        <TableCell>{index + 1}</TableCell>
+                        <TableCell>{data?.kpiDetails?.name}</TableCell>
+                        <TableCell>{data?.kpiDetails?.kpi_datapoint || "No question"}</TableCell>
+                        <TableCell>{data?.kpiDetails?.input_type}</TableCell>
+                        <TableCell>
+                          <Input type="number" name="max_range" value={formData[index]?.max_range || ""} default={data?.max_range} onChange={e => handleChange(e, index)} />
+                        </TableCell>
+                        <TableCell>
+                          <Input required max={formData[index]?.max_range || ""} default={data?.input_data} type="number" name="input_data" value={formData[index]?.input_data || data?.input_data} onChange={e => handleChange(e, index)} />
+                        </TableCell>
+                        <TableCell>
+                          <Input disabled type="number" name="score" value={formData[index]?.score || ""}  default={data.score} onChange={e => handleChange(e, index)} />
+                        </TableCell>
+                        <TableCell>
+                          <Textarea type="text" name="remarks" value={formData[index]?.remarks || ""} default={data.remarks} onChange={e => handleChange(e, index)} />
+                        </TableCell>
+                      </TableRow>
+                    </>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+            <div className="w-max my-4">
+              <Label htmlFor="date" className="text-right mt-2">
+                Date
+              </Label>
+              <Input disabled value={kpiApprovalData[0]?.date} type="date" name="date" onChange={e => setFormData(prevData => ({ ...prevData, date: e.target.value }))} id="date" placeholder="Enter date" className="px-10" />
+            </div>
+            <Button type="submit">Submit</Button>
           </div>
-          <div className="w-max my-4">
-            <Label htmlFor="date" className="text-right mt-2">
-              Date
-            </Label>
-            <Input disabled value={kpiApprovalData[0]?.date} type="date" name="date" onChange={e => setFormData(prevData => ({ ...prevData, date: e.target.value }))} id="date" placeholder="Enter date" className="px-10" />
-          </div>
-          <Button type="submit">Submit</Button>
-        </div>
+        </form>
       </div>
     </div>
   );
