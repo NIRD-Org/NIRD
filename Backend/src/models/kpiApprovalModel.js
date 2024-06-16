@@ -57,6 +57,10 @@ const kpiApprovalSchema = new Schema(
     modified_by: {
       type: String,
     },
+    date: {
+      type: Date,
+      required : true
+    },
   },
   {
     timestamps: { createdAt: "created_at", updatedAt: "modified_at" },

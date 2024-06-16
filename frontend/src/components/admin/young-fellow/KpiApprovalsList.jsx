@@ -61,7 +61,7 @@ function KpiApprovalsList() {
                 <TableRow key={kpiApproval.id}>
                   <TableCell>{kpiApproval.id}</TableCell>
                   <TableCell>{kpiApproval.theme_name}</TableCell>
-                  <TableCell>{new Date(kpiApproval.created_at).toLocaleDateString()}</TableCell>
+                  <TableCell>{new Date(kpiApproval.date || kpiApproval.created_at).toLocaleDateString()}</TableCell>
                   <TableCell>{kpiApproval.decision == 0 ? "Submitted" : kpiApproval.decision == 1 ? "Approved" : "Send for modification"}</TableCell>
                   <TableCell>
                   <div className="flex items-center gap-3">

@@ -255,6 +255,9 @@ function KpiApprovalSubmit() {
       tst.error(error);
     }
   };
+
+  const disabledKpis = [16, 17, 18, 19, 20, 21, 22, 23, 29, 39, 40, 41, 45, 48, 49];
+
   return (
     <div className="w-full">
       <div>
@@ -279,28 +282,35 @@ function KpiApprovalSubmit() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {kpiApprovalData.map((data, index) => (
-                    <>
-                      <TableRow key={data.id}>
-                        <TableCell>{index + 1}</TableCell>
-                        <TableCell>{data?.kpiDetails?.name}</TableCell>
-                        <TableCell>{data?.kpiDetails?.kpi_datapoint || "No question"}</TableCell>
-                        <TableCell>{data?.kpiDetails?.input_type}</TableCell>
-                        <TableCell>
-                          <Input type="number" name="max_range" value={formData[index]?.max_range || ""} default={data?.max_range} onChange={e => handleChange(e, index)} />
-                        </TableCell>
-                        <TableCell>
-                          <Input required max={formData[index]?.max_range || ""} default={data?.input_data} type="number" name="input_data" value={formData[index]?.input_data || data?.input_data} onChange={e => handleChange(e, index)} />
-                        </TableCell>
-                        <TableCell>
-                          <Input disabled type="number" name="score" value={formData[index]?.score || ""}  default={data.score} onChange={e => handleChange(e, index)} />
-                        </TableCell>
-                        <TableCell>
-                          <Textarea type="text" name="remarks" value={formData[index]?.remarks || ""} default={data.remarks} onChange={e => handleChange(e, index)} />
-                        </TableCell>
-                      </TableRow>
-                    </>
-                  ))}
+                  {kpiApprovalData.map((data, index) => {
+                    const isDisabled = disabledKpis.includes(parseInt(data?.kpiDetails?.id));
+                    return (
+                      <>
+                        <TableRow key={data.id}>
+                          <TableCell>{index + 1}</TableCell>
+                          <TableCell>{data?.kpiDetails?.name}</TableCell>
+                          <TableCell>{data?.kpiDetails?.kpi_datapoint || "No question"}</TableCell>
+                          <TableCell>{data?.kpiDetails?.input_type}</TableCell>
+                          <TableCell>
+                            <Input disabled={isDisabled} type="number" name="max_range" value={isDisabled ? "0" : formData[index]?.max_range || ""} onChange={e => handleChange(e, index)} />
+                          </TableCell>
+                          <TableCell>
+                            {!isDisabled ? (
+                              <Input required max={formData[index]?.max_range} type="number" name="input_data" value={formData[index]?.input_data || ""} onChange={e => handleChange(e, index)} />
+                            ) : (
+                              <Input required type="number" name="input_data" value={formData[index]?.input_data || ""} onChange={e => handleChange(e, index)} />
+                            )}{" "}
+                          </TableCell>
+                          <TableCell>
+                            <Input disabled type="number" name="score" value={formData[index]?.score || ""} default={data.score} onChange={e => handleChange(e, index)} />
+                          </TableCell>
+                          <TableCell>
+                            <Textarea type="text" name="remarks" value={formData[index]?.remarks || ""} default={data.remarks} onChange={e => handleChange(e, index)} />
+                          </TableCell>
+                        </TableRow>
+                      </>
+                    );
+                  })}
                 </TableBody>
               </Table>
             </div>

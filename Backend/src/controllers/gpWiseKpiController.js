@@ -153,6 +153,7 @@ export const submitKpiData = CatchAsyncError(async (req, res, next) => {
       theme_id,
       submitted_id,
       created_by: user_id,
+      date: parsedDate
     };
 
     // Insert the approval request into the gpWiseKpiApproval collection
@@ -417,6 +418,7 @@ export const getGpWiseKpiForApprover = CatchAsyncError(
   async (req, res, next) => {
     try {
       const { state, dist, block, gp, theme, date } = req.query;
+      console.log(req.query);
 
       let dateString = null;
 
