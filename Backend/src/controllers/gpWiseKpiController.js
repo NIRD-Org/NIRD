@@ -543,3 +543,68 @@ export const getGpWiseKpiForApprover = CatchAsyncError(
     }
   }
 );
+
+// Resubmit the kpi data
+
+// Submit the kpi data created by the young fellow
+export const reSubmitKpiData = CatchAsyncError(async (req, res, next) => {
+  try {
+    const { formData, submitted_id } = req.body;
+
+    // Validate if formData is empty
+    if (!formData || formData.length === 0) {
+      return next(new Errorhandler("Form data cannot be empty", 400));
+    }
+
+    // Check if the submitted_id exists in the KPIApprovalModel
+    const existingData = await KPIApprovalModel.findOne({ submitted_id });
+
+    if (!existingData) {
+      return next(
+        new Errorhandler(
+          "KPI data with the given submitted_id does not exist",
+          404
+        )
+      );
+    }
+
+    // Prepare the updated GpWiseKPI documents
+    const kpiDocuments = formData.map((kpi) => ({
+      kpi_id: kpi.kpi_id,
+      score: kpi.score,
+      max_range: kpi.max_range,
+      input_data: kpi.input_data,
+      remarks: kpi.remarks,
+      submitted_id,
+    }));
+
+    // Update the KPI documents in the gpWiseKpi collection based on submitted_id and kpi_id
+    await Promise.all(
+      kpiDocuments.map((kpiDocument) =>
+        GpWiseKpiModel.updateOne(
+          { submitted_id, kpi_id: kpiDocument.kpi_id },
+          kpiDocument,
+          { upsert: true }
+        )
+      )
+    );
+
+    // Update the approval request document in the KPIApprovalModel
+    await KPIApprovalModel.findOneAndUpdate(
+      { submitted_id },
+      { decision: "0" },
+      {
+        new: true,
+      }
+    );
+
+    // Send success response
+    res.status(200).json({
+      success: true,
+      message: "KPI data updated and approval request updated successfully",
+    });
+  } catch (error) {
+    console.error("Failed to update KPI data:", error);
+    return next(new Errorhandler("Failed to update KPI data", 500));
+  }
+});

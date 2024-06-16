@@ -61,6 +61,7 @@ const Indicators = () => {
   const [indicator, setIndicator] = useState([]);
   const [gpData, setGpData] = useState([]);
   const [gpWiseKpiData, setGpWiseKpiData] = useState([]);
+  const [search, setSearch] = useState("");
   const getAllKpi = async () => {
     try {
       const { data } = await API.get("/api/v1/indicator/all");
@@ -127,6 +128,27 @@ const Indicators = () => {
     setblock("");
     setGp("");
     getGpWiseKpiData();
+  };
+
+  const getGpWiseKpiSearchData = async () => {
+    try {
+      const { data } = await API.get(
+        `/api/v1/gp-wise-indicator/indicators?search=${search}`
+      );
+      if (data.success) {
+        setGpWiseKpiData(data.data);
+      } else {
+        setGpWiseKpiData([]);
+      }
+    } catch (error) {
+      setGpWiseKpiData([]);
+      console.log("Error: " + error);
+    }
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    getGpWiseKpiSearchData();
   };
 
   return (
@@ -206,9 +228,10 @@ const Indicators = () => {
             Reset
           </button>
         </div>
-        <div className="flex items-center space-x-2">
+        <form onSubmit={handleSearch} className="flex items-center space-x-2">
           <input
             type="text"
+            onChange={(e) => setSearch(e.target.value)}
             placeholder="Search for States, Districts and Blocks"
             className="border border-gray-300 p-2 rounded w-full lg:w-64 focus:ring focus:ring-orange-200"
           />
@@ -228,7 +251,7 @@ const Indicators = () => {
               />
             </svg>
           </button>
-        </div>
+        </form>
       </div>
 
       <div className="flex relative pt-5 pb-20">

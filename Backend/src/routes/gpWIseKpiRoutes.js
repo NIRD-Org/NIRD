@@ -5,6 +5,7 @@ import {
   getGpWiseKpiChart,
   getGpWiseKpiData,
   getGpWiseKpiForApprover,
+  reSubmitKpiData,
   submitKpiData,
 } from "../controllers/gpWiseKpiController.js";
 
@@ -15,6 +16,10 @@ router.route("/data").get(getGpWiseKpiData);
 
 // Submit the data from the YF
 router.route("/submit").post(submitKpiData);
+
+// Resubmit the data from YF
+
+router.route("/resubmit").put(reSubmitKpiData);
 
 // Get teh chart
 

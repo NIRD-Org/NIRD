@@ -130,6 +130,141 @@ export const submitIndicatorData = CatchAsyncError(async (req, res, next) => {
   }
 });
 
+// const getGpWiseIndicatorDataWithPercentage = async (query) => {
+//   const { state, dist, block, gp, search } = query;
+//   const filter = {};
+//   if (state) filter.state_id = state;
+//   if (dist) filter.dist_id = dist;
+//   if (block) filter.block_id = block;
+//   if (gp) filter.gp_id = gp;
+
+//   const pipeline = [
+//     { $match: filter },
+//     {
+//       $group: {
+//         _id: {
+//           gp_id: "$gp_id",
+//           indicator_id: "$indicator_id",
+//         },
+//         original_id: { $first: "$_id" },
+//         doc: { $first: "$$ROOT" },
+//         totalInputData: { $sum: { $toDouble: "$input_data" } },
+//         totalMaxRange: { $sum: { $toDouble: "$max_range" } },
+//       },
+//     },
+//     {
+//       $addFields: {
+//         percentage: {
+//           $cond: {
+//             if: { $eq: ["$totalMaxRange", 0] },
+//             then: 0,
+//             else: {
+//               $multiply: [
+//                 { $divide: ["$totalInputData", "$totalMaxRange"] },
+//                 100,
+//               ],
+//             },
+//           },
+//         },
+//       },
+//     },
+//     {
+//       $lookup: {
+//         from: "states",
+//         localField: "doc.state_id",
+//         foreignField: "id",
+//         as: "state",
+//       },
+//     },
+//     {
+//       $lookup: {
+//         from: "districts",
+//         localField: "doc.dist_id",
+//         foreignField: "id",
+//         as: "dist",
+//       },
+//     },
+//     {
+//       $lookup: {
+//         from: "blocks",
+//         localField: "doc.block_id",
+//         foreignField: "id",
+//         as: "block",
+//       },
+//     },
+//     {
+//       $lookup: {
+//         from: "grampanchayats",
+//         localField: "doc.gp_id",
+//         foreignField: "id",
+//         as: "gp",
+//       },
+//     },
+//     {
+//       $group: {
+//         _id: "$_id.gp_id",
+//         indicators: {
+//           $push: {
+//             indicator_id: "$_id.indicator_id",
+//             input_data: "$totalInputData",
+//             max_range: "$totalMaxRange",
+//             percentage: "$percentage",
+//           },
+//         },
+//         doc: { $first: "$$ROOT" },
+//         original_id: { $first: "$original_id" },
+//       },
+//     },
+//     {
+//       $addFields: {
+//         indicators: {
+//           $sortArray: {
+//             input: "$indicators",
+//             sortBy: { indicator_id: 1 },
+//           },
+//         },
+//       },
+//     },
+//     {
+//       $project: {
+//         id: "$doc.id",
+//         new_id: "$original_id",
+//         state_name: { $arrayElemAt: ["$doc.state.name", 0] },
+//         dist_name: { $arrayElemAt: ["$doc.dist.name", 0] },
+//         block_name: { $arrayElemAt: ["$doc.block.name", 0] },
+//         gp_name: { $arrayElemAt: ["$doc.gp.name", 0] },
+//         date: "$doc.date",
+
+//         gp_percentage: "$indicators",
+//       },
+//     },
+//   ];
+
+//   if (search) {
+//     const regex = new RegExp(search, "i"); // 'i' makes it case-insensitive
+//     console.log("Regex: " + regex);
+//     pipeline.push({
+//       $match: {
+//         $or: [
+//           { "state.name": { $regex: regex } },
+//           { "dist.name": { $regex: regex } },
+//           { "block.name": { $regex: regex } },
+//           { "gp.name": { $regex: regex } },
+//         ],
+//       },
+//     });
+//   }
+
+//   pipeline.push({ $sort: { new_id: 1 } });
+//   const gpWiseKpiData = await GpWiseIndicatorModel.aggregate(pipeline);
+
+//   if (!gpWiseKpiData || gpWiseKpiData.length === 0) {
+//     throw new Errorhandler("No Gp Wise Indicator Data Found", 404);
+//   }
+
+//   return gpWiseKpiData;
+// };
+
 const getGpWiseIndicatorDataWithPercentage = async (query) => {
   const { state, dist, block, gp, search } = query;
   const filter = {};
@@ -201,6 +336,18 @@ const getGpWiseIndicatorDataWithPercentage = async (query) => {
       },
     },
     {
+      $unwind: "$state",
+    },
+    {
+      $unwind: "$dist",
+    },
+    {
+      $unwind: "$block",
+    },
+    {
+      $unwind: "$gp",
+    },
+    {
       $group: {
         _id: "$_id.gp_id",
         indicators: {
@@ -211,8 +358,12 @@ const getGpWiseIndicatorDataWithPercentage = async (query) => {
             percentage: "$percentage",
           },
         },
-        doc: { $first: "$$ROOT" },
         original_id: { $first: "$original_id" },
+        state_name: { $first: "$state.name" },
+        dist_name: { $first: "$dist.name" },
+        block_name: { $first: "$block.name" },
+        gp_name: { $first: "$gp.name" },
+        date: { $first: "$doc.date" },
       },
     },
     {
@@ -227,40 +378,37 @@ const getGpWiseIndicatorDataWithPercentage = async (query) => {
     },
     {
       $project: {
-        id: "$doc.id",
-        new_id: "$original_id",
-        state_name: { $arrayElemAt: ["$doc.state.name", 0] },
-        dist_name: { $arrayElemAt: ["$doc.dist.name", 0] },
-        block_name: { $arrayElemAt: ["$doc.block.name", 0] },
-        gp_name: { $arrayElemAt: ["$doc.gp.name", 0] },
-        date: "$doc.date",
-
+        _id: 0,
+        id: "$original_id",
+        state_name: 1,
+        dist_name: 1,
+        block_name: 1,
+        gp_name: 1,
+        date: 1,
         gp_percentage: "$indicators",
       },
     },
-    { $sort: { new_id: 1 } },
   ];
 
   if (search) {
     const regex = new RegExp(search, "i"); // 'i' makes it case-insensitive
-    console.log("Regex: " + regex);
     pipeline.push({
       $match: {
         $or: [
-          { "state.name": { $regex: regex } },
-          { "district.name": { $regex: regex } },
-          { "block.name": { $regex: regex } },
-          { "gp.name": { $regex: regex } },
+          { state_name: { $regex: regex } },
+          { dist_name: { $regex: regex } },
+          { block_name: { $regex: regex } },
+          { gp_name: { $regex: regex } },
         ],
       },
     });
   }
 
-  pipeline.push({ $sort: { created_at: -1 } });
+  pipeline.push({ $sort: { id: 1 } });
   const gpWiseKpiData = await GpWiseIndicatorModel.aggregate(pipeline);
 
   if (!gpWiseKpiData || gpWiseKpiData.length === 0) {
-    throw new Errorhandler("No Gp Wise KPI Data Found", 404);
+    throw new Errorhandler("No Gp Wise Indicator Data Found", 404);
   }
 
   return gpWiseKpiData;
@@ -277,10 +425,11 @@ export const getGpWiseIndicatorDataWithPercentageController = CatchAsyncError(
         req.query
       );
 
-      const paginatedData = gpWiseIndicatorData.slice(
-        startIndex,
-        startIndex + limit
-      );
+      const paginatedData = gpWiseIndicatorData;
+      // .slice(
+      //   startIndex,
+      //   startIndex + limit
+      // );
 
       res.status(200).json({
         success: true,
