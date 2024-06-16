@@ -536,10 +536,20 @@ export const getGpWiseKpiForApprover = CatchAsyncError(
   async (req, res, next) => {
     try {
       const { state, dist, block, gp, theme, date } = req.query;
+      // Ensure the incoming date is parsed correctly and set to midnight UTC
+      const parsedDate = new Date(date);
+      parsedDate.setUTCHours(0, 0, 0, 0);
+
+      // Constructing the match stage
       const matchStage = {
         gp_id: gp,
         theme_id: theme,
-        date: new Date(date),
+        $expr: {
+          $eq: [
+            { $dateToString: { format: "%Y-%m-%d", date: "$date" } },
+            { $dateToString: { format: "%Y-%m-%d", date: parsedDate } },
+          ],
+        },
       };
 
       if (state) matchStage.state_id = state;
@@ -639,8 +649,8 @@ export const getGpWiseKpiForApprover = CatchAsyncError(
         data: gpWiseKpiData,
       });
     } catch (error) {
-      console.log(error)
-      return next(new Errorhandler("Failed to get wise data", 500));
+      console.log(error);
+      return next(new Errorhandler("Failed to getGp wise data", 500));
     }
   }
 );

@@ -71,12 +71,11 @@ function YfLayout() {
     }
   }, [state_id, dist_id, block_id, gram_id, theme_id]);
 
- 
   return (
     <div>
       <div className="p-6">
         <div className=" mt-4">
-          <div className="flex justify-around">
+          <div className="flex flex-wrap justify-around">
             {[
               { label: "State:", value: state?.name },
               { label: "District:", value: dist?.name },
@@ -100,4 +99,3 @@ function YfLayout() {
 }
 
 export default YfLayout;
-

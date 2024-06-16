@@ -2,7 +2,13 @@ import { useAuthContext } from "@/context/AuthContext";
 import { Button } from "../ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { NirdHamIcon } from "./Icons";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { ArrowBigRight } from "lucide-react";
 function Navbar() {
   const { logout, user } = useAuthContext();
@@ -136,30 +142,48 @@ function Navbar() {
         <div></div>
         <div className="flex items-center gap-3">
           <div>
-            <h2>{user?.role == 1 ? "Superadmin" : user?.role == 2 ? "Admin" : user?.role == 3 ? "Young Fellow" : ""}</h2>
+            <h2>
+              {user?.role == 1
+                ? "Superadmin"
+                : user?.role == 2
+                ? "Admin"
+                : user?.role == 3
+                ? "Young Fellow"
+                : ""}
+            </h2>
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger>
               <NirdHamIcon />
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="bg-primary text-slate-100 rounded-none mt-2 w-60">
+            <DropdownMenuContent
+              align="end"
+              className="bg-primary text-slate-100 rounded-none mt-2 w-60"
+            >
               <DropdownMenuItem>Change Password</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>Change Mobile Number</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <div className="sm:hidden">
-                {sidebarItems.map(item =>
+              <div className="md:hidden">
+                {sidebarItems.map((item) =>
                   item.type === "module" ? (
                     <div key={item.title}>
                       <div className="flex bg-primary text-slate-100 mb-1  items-center px-4 py-3 w-full cursor-not-allowed font-semibold">
-                        <span className="ml-4 text-[0.8rem] tracking-wider">{item.title}</span>
+                        <span className="ml-4 text-[0.8rem] tracking-wider">
+                          {item.title}
+                        </span>
                       </div>
                     </div>
                   ) : (
                     <div key={item.title}>
-                      <Link to={item.link} className="flex mb-2 px-2 mx-6 items-center  py-2 rounded-xl text-slate-100 hover:bg-[#004B86]/70 hover:text-white transition duration-150 cursor-pointer">
+                      <Link
+                        to={item.link}
+                        className="flex mb-2 px-2 mx-6 items-center  py-2 rounded-xl text-slate-100 hover:bg-[#004B86]/70 hover:text-white transition duration-150 cursor-pointer"
+                      >
                         <item.icon size={20} />
-                        <span className="ml-4 text-[0.7rem] font-semibold tracking-wider">{item.title}</span>
+                        <span className="ml-4 text-[0.7rem] font-semibold tracking-wider">
+                          {item.title}
+                        </span>
                       </Link>
                     </div>
                   )

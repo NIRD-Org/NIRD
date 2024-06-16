@@ -120,7 +120,6 @@ export const updateKPIApproval = CatchAsyncError(async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "KPI Approval Updated Successfully",
-      kpiApproval,
     });
   } catch (error) {
     return next(new Errorhandler("Failed to update KPI Approval", 500));
