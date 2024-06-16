@@ -150,7 +150,7 @@ const Header = () => {
         </button>
 
         {isOpen && (
-          <div className="absolute top-[10vh]  left-0 w-full h-full bg-primary flex flex-col items-start pb-20 z-20">
+          <div className="absolute top-[10vh]  left-0 w-full h-full bg-primary flex flex-col items-start pb-20 z-40">
             <div className="mt-4">
               <NavLink
                 to="/project"
