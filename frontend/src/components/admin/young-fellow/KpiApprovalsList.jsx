@@ -18,7 +18,7 @@ function KpiApprovalsList() {
 
   const getAllKpiApprovals = async () => {
     try {
-      const { data } = await API.get(`/api/v1/kpi-approvals/get-kpiapprovals?state=${state_id}&dist=${dist_id}&block=${block_id}&gram=${gram_id}&theme=${theme_id}`);
+      const { data } = await API.get(`/api/v1/kpi-approvals/get-kpiapprovals?state=${state_id}&dist=${dist_id}&block=${block_id}&gp=${gram_id}&theme=${theme_id}`);
     //   console.log(data)
       data?.data?.sort((a, b) => a.id - b.id);
       setKpiApprovals(data?.data || []);
