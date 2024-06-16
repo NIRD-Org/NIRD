@@ -84,6 +84,7 @@ export const getKPIApprovals = CatchAsyncError(async (req, res, next) => {
           created_by: 1,
           created_at: 1,
           modified_at: 1,
+          date :1,
         },
       },
       { $sort: { created_at: -1 } },

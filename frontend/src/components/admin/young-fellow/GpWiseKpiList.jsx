@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import API from "@/utils/API";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCaption } from "@/components/ui/table";
-import { NirdEditIcon } from "../Icons";
+import { NirdEditIcon, NirdViewIcon } from "../Icons";
 import YfLayout from "./YfLayout";
 
 function GpWiseKpiList() {
@@ -18,7 +18,7 @@ function GpWiseKpiList() {
 
   const getAllKpiApprovals = async () => {
     try {
-      const { data } = await API.get(`/api/v1/kpi-approvals/get-kpiapprovals?state=${state_id}&dist=${dist_id}&block=${block_id}&gram=${gram_id}&theme=${theme_id}`);
+      const { data } = await API.get(`/api/v1/kpi-approvals/get-kpiapprovals?state=${state_id}&dist=${dist_id}&block=${block_id}&gp=${gram_id}&theme=${theme_id}`);
       data?.data?.sort((a, b) => a.id - b.id);
       setKpiApprovals(data?.data || []);
     } catch (error) {
@@ -36,6 +36,7 @@ function GpWiseKpiList() {
   const handleGpWiseKpiEdit = () => {
     navigate(`/admin/add-gp-wise-kpi?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${theme_id}`);
   };
+  
   return (
     <div>
       <div className="p-6">
@@ -47,7 +48,7 @@ function GpWiseKpiList() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>ID</TableHead>
+                <TableHead>Submission ID</TableHead>
                 <TableHead>Theme</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Status</TableHead>
@@ -61,7 +62,7 @@ function GpWiseKpiList() {
                   <TableCell>{kpiApproval.theme_name}</TableCell>
                   <TableCell>{new Date(kpiApproval.created_at).toLocaleDateString()}</TableCell>
                   <TableCell>{kpiApproval.decision == 0 ? "Submitted" : "Sent Back"}</TableCell>
-                  <TableCell><NirdEditIcon/></TableCell>
+                  <TableCell><NirdViewIcon/></TableCell>
                 </TableRow>
               ))}
             </TableBody>
