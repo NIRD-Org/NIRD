@@ -625,9 +625,9 @@ export const getGpWiseKpiForApprover = CatchAsyncError(
         },
       ];
 
-      const gpWiseKpiData = await gpWiseKpiModel.aggregate(pipeline);
+      const gpWiseKpiData = await GpWiseKpiModel.aggregate(pipeline);
 
-      if (!gpWiseKpiData || gpWiseKpiData.length === 0) {
+      if (!gpWiseKpiData) {
         return next(
           new Errorhandler("No KPI data found for the specified filters", 404)
         );
@@ -639,6 +639,7 @@ export const getGpWiseKpiForApprover = CatchAsyncError(
         data: gpWiseKpiData,
       });
     } catch (error) {
+      console.log(error)
       return next(new Errorhandler("Failed to get wise data", 500));
     }
   }

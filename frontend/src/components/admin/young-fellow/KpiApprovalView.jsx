@@ -6,30 +6,30 @@ import API from "@/utils/API";
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import YfLayout from "./YfLayout";
+import { kpiApprovals } from "@/lib/data";
 
 function KpiApprovalView() {
   const [searchParams] = useSearchParams();
   const theme_id = searchParams.get("theme_id") || "";
-  const [kpis, setKpis] = useState([]);
+  const [kpiApprovalData, setKpiApprovalData] = useState([]);
+  const state_id = searchParams.get("state_id") || "";
+  const dist_id = searchParams.get("dist_id") || "";
+  const block_id = searchParams.get("block_id") || "";
+  const gp_id = searchParams.get("gram_id") || "";
+  const date = searchParams.get("date") || "";
 
   useEffect(() => {
-    const fetchKpis = async () => {
+    const fetchKpiApprovalData = async () => {
       try {
-        const response = await API.get(`/api/v1/gp-wise-approval/approval-data?theme=${theme_id}&gp=${gp}&date=${date}`);
-        setKpis(response.data.KPI);
+        const url = `/api/v1/gp-wise-kpi/approval-data?state=${state_id}&dist=${dist_id}&block=${block_id}&gp=${gp_id}&theme=${theme_id}&date=${date}`;
+        const response = await API.get(url);
+        console.log(response);
       } catch (error) {
-        console.error("Error fetching KPIs:", error);
+        console.log(error)
       }
     };
-
-    const run = async () => {
-      setIsLoading(true);
-      await fetchKpis();
-      setIsLoading(false);
-    };
-    run();
-  }, [theme_id]);
-
+    fetchKpiApprovalData();
+  }, []);
 
   return (
     <div className="w-full">
@@ -37,8 +37,8 @@ function KpiApprovalView() {
         <div className="mb-8">
           <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">Young Fellow - KPI Entry Form</h2>
         </div>
-        <YfLayout/>
-        <form onSubmit={handleSubmit} className="overflow-x-auto  mt-6">
+        <YfLayout />
+        <form className="overflow-x-auto  mt-6">
           <div>
             <Table>
               <TableHeader>
@@ -54,7 +54,7 @@ function KpiApprovalView() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {kpis.map((data, index) => (
+                {kpiApprovalData.map((data, index) => (
                   <TableRow key={data.id}>
                     <TableCell>{data.id}</TableCell>
                     <TableCell>{data.name}</TableCell>
@@ -64,7 +64,7 @@ function KpiApprovalView() {
                       <Input type="number" disabled />
                     </TableCell>
                     <TableCell>
-                      <Input required type="number" disabled={index % 2 === 0} />
+                      <Input required type="number" disabled />
                     </TableCell>
                     <TableCell>
                       <Input disabled type="number" />
@@ -81,7 +81,7 @@ function KpiApprovalView() {
             <Label htmlFor="date" className="text-right mt-2">
               Date
             </Label>
-            <Input type="date" name="date" value={date || ""} onChange={e => setDate(e.target.value)} id="date" placeholder="Enter datte" className="px-10" />
+            <Input type="date" name="date" value={kpiApprovals?.date || ""} onChange={e => setDate(e.target.value)} id="date" placeholder="Enter datte" className="px-10" />
           </div>
           <Button type="submit">Submit</Button>
         </form>
@@ -90,6 +90,4 @@ function KpiApprovalView() {
   );
 }
 
-
 export default KpiApprovalView;
-

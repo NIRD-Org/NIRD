@@ -129,6 +129,7 @@ function Navbar() {
       ];
       break;
   }
+  
   return (
     <>
       <header className="z-[3] w-full gap-4 h-16 rounded-md shadow-md bg-white flex items-center px-6 justify-between">
