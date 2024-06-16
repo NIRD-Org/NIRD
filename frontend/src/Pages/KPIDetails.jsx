@@ -205,7 +205,7 @@ const KPIDetails = () => {
         <Themes />
       </div>
       <div ref={targetRef}>
-        <ThemeData />
+        {/* <ThemeData />
         <Theme2Data />
         <Theme3Data />
         <Theme4Data />
@@ -213,7 +213,7 @@ const KPIDetails = () => {
         <Theme6Data />
         <Theme7Data />
         <Theme8Data />
-        <Theme9Data />
+        <Theme9Data /> */}
       </div>
     </div>
   );
