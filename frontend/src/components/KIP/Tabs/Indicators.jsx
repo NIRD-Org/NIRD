@@ -17,33 +17,47 @@ const Indicators = () => {
   const getAllStates = async () => {
     const { data } = await API.get(`/api/v1/state/all`);
     setStateOptions(data?.states);
-    console.log(data?.states);
+    // console.log(data?.states);
   };
   const getAllDistricts = async () => {
-    const { data } = await API.get(`/api/v1/dist/state/${state}`);
-    setDistrictOptions(data?.districts);
+    try {
+      const { data } = await API.get(`/api/v1/dist/state/${state}`);
+      setDistrictOptions(data?.districts);
+    } catch (error) {
+      setDistrictOptions([]);
+      console.log("Error gettign district");
+    }
   };
 
   const getAllBlocks = async () => {
-    const { data } = await API.get(`/api/v1/block/get?dist=${district}`);
-    setBlockOptions(data?.blocks);
+    try {
+      const { data } = await API.get(`/api/v1/block/get?dist=${district}`);
+      setBlockOptions(data?.blocks);
+    } catch (error) {
+      setBlockOptions([]);
+    }
   };
 
   const getAllGp = async () => {
-    const { data } = await API.get(`/api/v1/gram/get?block=${block}`);
-    setGpOptions(data?.gram);
+    try {
+      const { data } = await API.get(`/api/v1/gram/get?block=${block}`);
+      setGpOptions(data?.gram);
+    } catch (error) {
+      setGpOptions([]);
+    }
   };
 
   useEffect(() => {
-    setDistrict("");
-    setDistrictOptions([]);
-    setBlockOptions([]);
-    setGpOptions([]);
-    setblock("");
-    setGp("");
-    // getAllKpiData();
-    getAllStates();
-    getAllDistricts();
+    if (state) {
+      setDistrict("");
+      setDistrictOptions([]);
+      setBlockOptions([]);
+      setGpOptions([]);
+      setblock("");
+      setGp("");
+      getAllStates();
+      getAllDistricts();
+    }
   }, [state]);
 
   useEffect(() => {
@@ -66,7 +80,7 @@ const Indicators = () => {
     try {
       const { data } = await API.get("/api/v1/indicator/all");
       setIndicator(data.indicators);
-      console.log(data);
+      // console.log(data);
     } catch (error) {
       console.log("Error: " + error);
     }
