@@ -254,6 +254,7 @@ export const getGpWiseKpi = CatchAsyncError(async (req, res, next) => {
 
     if (search) {
       const regex = new RegExp(search, "i"); // 'i' makes it case-insensitive
+      console.log("Regex: " + regex);
       pipeline.push({
         $match: {
           $or: [
@@ -416,26 +417,6 @@ export const getGpWiseKpiForApprover = CatchAsyncError(
   async (req, res, next) => {
     try {
       const { state, dist, block, gp, theme, date } = req.query;
-
-      // const parsedDate = new Date(date);
-      // if (isNaN(parsedDate)) {
-      //   return next(new Errorhandler("Invalid date format", 400));
-      // }
-
-      // // Extract the date part only, ignoring the time and timezone
-      // const dateString = parsedDate.toISOString().split("T")[0];
-
-      // // Construct the match stage
-      // const matchStage = {
-      //   gp_id: gp,
-      //   theme_id: theme,
-      //   $expr: {
-      //     $eq: [
-      //       { $dateToString: { format: "%Y-%m-%d", date: "$date" } },
-      //       dateString,
-      //     ],
-      //   },
-      // };
 
       let dateString = null;
 
