@@ -1,11 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useAuthContext } from "@/context/AuthContext";
 import { tst } from "@/lib/utils";
 import API from "@/utils/API";
 import { useState } from "react";
 
 function CreateUserForm({ onSubmit }) {
+  const {user} = useAuthContext()
   const [formData, setFormData] = useState({
     username: "",
     name: "",
@@ -43,46 +45,56 @@ function CreateUserForm({ onSubmit }) {
     }
   };
 
-  const fields = [
-    { name: "username", label: "Username", required: true },
-    { name: "name", label: "Name", required: true },
-    {
-      name: "department",
-      label: "Department",
-      options: [
-        { value: "dept1", label: "Department 1" },
-        { value: "dept2", label: "Department 2" },
-      ],
-      required: true,
-    },
-    {
-      name: "designation",
-      label: "Designation",
-      options: [
-        { value: "designation1", label: "Designation 1" },
-        { value: "designation2", label: "Designation 2" },
-      ],
-      type: "select",
-      required: true,
-    },
-    { name: "mobile", label: "Mobile Number", required: true },
-    { name: "email", label: "Email ID", required: true },
-    { name: "dateOfBirth", label: "Date of Birth", type: "date", required: true },
-    { name: "efDateFrom", label: "Date of Joining", type: "date", required: true },
-    { name: "aadharNo", label: "Aadhar Number" },
-    { name: "officeContactNo", label: "Work Phone Number", required: true },
-    {
-      name: "role",
-      label: "Role",
-      options: [
-        { value: 2, label: "Admin" },
-        { value: 3, label: "Young Fellow" },
-        { value: 1, label: "Super Admin" },
-      ],
-      type: "select",
-      required: true,
-    },
-  ];
+function getRoleOptions(userRole) {
+  if (userRole == 1) {
+    return [
+      { value: 1, label: "PMU Admin" },
+      { value: 2, label: "SPC Admin" },
+      { value: 3, label: "Young Fellow" },
+    ];
+  } else {
+    return [
+      { value: 3, label: "Young Fellow" },
+    ];
+  }
+}
+
+const fields = [
+  { name: "username", label: "Username", required: true },
+  { name: "name", label: "Name", required: true },
+  {
+    name: "department",
+    label: "Department",
+    options: [
+      { value: "dept1", label: "Department 1" },
+      { value: "dept2", label: "Department 2" },
+    ],
+    required: true,
+  },
+  {
+    name: "designation",
+    label: "Designation",
+    options: [
+      { value: "designation1", label: "Designation 1" },
+      { value: "designation2", label: "Designation 2" },
+    ],
+    type: "select",
+    required: true,
+  },
+  { name: "mobile", label: "Mobile Number", required: true },
+  { name: "email", label: "Email ID", required: true },
+  { name: "dateOfBirth", label: "Date of Birth", type: "date", required: true },
+  { name: "efDateFrom", label: "Date of Joining", type: "date", required: true },
+  { name: "aadharNo", label: "Aadhar Number" },
+  { name: "officeContactNo", label: "Work Phone Number", required: true },
+  {
+    name: "role",
+    label: "Role",
+    options: getRoleOptions(user.role),
+    type: "select",
+    required: true,
+  },
+];
 
   return (
     <div className="container mx-auto p-6">

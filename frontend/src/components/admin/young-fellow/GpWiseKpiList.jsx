@@ -18,14 +18,15 @@ function GpWiseKpiList() {
 
   const getAllKpiApprovals = async () => {
     try {
-      const { data } = await API.get(`/api/v1/kpi-approvals/get-kpiapprovals?state=${state_id}&dist=${dist_id}&block=${block_id}&gp=${gram_id}&theme=${theme_id}`);
-      data?.data?.sort((a, b) => a.id - b.id);
-      setKpiApprovals(data?.data || []);
+      const response = await API.get(`/api/v1/kpi-approvals/get-kpiapprovals?state=${state_id}&dist=${dist_id}&block=${block_id}&gp=${gram_id}&theme=${theme_id}`);
+      let data = response.data.data;
+      data?.sort((a, b) => a.id - b.id);
+      data = data?.filter(item => item.decision != 1);
+      setKpiApprovals(data || []);
     } catch (error) {
       console.log(error);
     }
   };
-
 
   useEffect(() => {
     if (state_id && dist_id && block_id && gram_id && theme_id) {
@@ -36,11 +37,19 @@ function GpWiseKpiList() {
   const handleGpWiseKpiEdit = () => {
     navigate(`/admin/add-gp-wise-kpi?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${theme_id}`);
   };
-  
+
+  const handleNavigate = (id, date, kpiApprovalId) => {
+    if (id === 1) {
+      navigate(`/admin/update-gp-wise-kpi?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${theme_id}&date=${date}&kpi_approval_id=${kpiApprovalId}`);
+    } else if (id === 2) {
+      navigate(`/admin/view-gp-wise-kpi?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${theme_id}&date=${date}&kpi_approval_id=${kpiApprovalId}`);
+    }
+  };
+
   return (
     <div>
       <div className="p-6">
-      <YfLayout/>
+        <YfLayout />
         <div className="flex justify-center mt-10">
           <Button onClick={handleGpWiseKpiEdit}>Add New</Button>
         </div>
@@ -61,8 +70,25 @@ function GpWiseKpiList() {
                   <TableCell>{kpiApproval.id}</TableCell>
                   <TableCell>{kpiApproval.theme_name}</TableCell>
                   <TableCell>{new Date(kpiApproval.created_at).toLocaleDateString()}</TableCell>
-                  <TableCell>{kpiApproval.decision == 0 ? "Submitted" : "Sent Back"}</TableCell>
-                  <TableCell><NirdViewIcon/></TableCell>
+                  <TableCell>{kpiApproval.decision == 0 ? "Submitted" : kpiApproval.decision == 1 ? "Approved" : "Send for modification"}</TableCell>
+                  <TableCell>
+                    {kpiApproval.decision != 0 ? (
+                      <div className="flex gap-2">
+                        <span onClick={() => handleNavigate(2, kpiApproval.created_at, kpiApproval.id)}>
+                          <NirdViewIcon />
+                        </span>
+                        <span onClick={() => handleNavigate(1, kpiApproval.created_at, kpiApproval.id)}>
+                          <NirdEditIcon />
+                        </span>
+                      </div>
+                    ) : (
+                      <span
+                      // onClick={() => handleNavigate(2, kpiApproval.created_at, kpiApproval.id)}
+                      >
+                        <NirdViewIcon />
+                      </span>
+                    )}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -74,4 +100,3 @@ function GpWiseKpiList() {
 }
 
 export default GpWiseKpiList;
-

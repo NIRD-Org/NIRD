@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import YfLayout from "./YfLayout";
 import { Textarea } from "@/components/ui/textarea";
+import { tst } from "@/lib/utils";
 function KpiApprovalSubmit() {
   const [searchParams] = useSearchParams();
   const theme_id = searchParams.get("theme_id") || "";
@@ -16,7 +17,8 @@ function KpiApprovalSubmit() {
   const block_id = searchParams.get("block_id") || "";
   const gp_id = searchParams.get("gram_id") || "";
   const date = searchParams.get("date") || "";
-  const [formData, setFormData] = useState([]);
+  const kpi_approval_id = searchParams.get("kpi_approval_id") || "";
+  const [formData, setFormData] = useState({ decision: "", remarks: "" });
 
   useEffect(() => {
     const fetchKpiApprovalData = async () => {
@@ -31,8 +33,24 @@ function KpiApprovalSubmit() {
     fetchKpiApprovalData();
   }, []);
 
-  const handleSubmit = async (e) => {}
-  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+      try {
+        const body = {
+          decision :formData.decision,
+          remarks:formData.remarks
+        };
+
+        const url = `/api/v1/kpi-approvals/update/${kpi_approval_id}`;
+        const response = await API.put(url, body);
+        console.log(response.data);
+        tst.success("Form submitted successfully");
+      } catch (error) {
+        tst.error("Failed to submit form");
+        console.log(error);
+      }
+  }
+
   return (
     <div className="w-full">
       <div>
@@ -94,12 +112,12 @@ function KpiApprovalSubmit() {
               <Label htmlFor="decision" className="mb-2 block">
                 Decision
               </Label>
-              <select className="px-4 py-2 rounded-md bg-white " id="decision" name="decision" value={formData.decision || ""} onChange={e => setFormData(prevData => ({ ...prevData, decision: e.target.value }))}>
+              <select required className="px-4 py-2 rounded-md bg-white " id="decision" name="decision" value={formData.decision || ""} onChange={e => setFormData(prevData => ({ ...prevData, decision: e.target.value }))}>
                 <option value="" disabled>
                   Select
                 </option>
-                <option value="approve">Approve</option>
-                <option value="send for modification">Send for Modification</option>
+                <option value="1">Approve</option>
+                <option value="2">Send for Modification</option>
               </select>
             </div>
             <div>

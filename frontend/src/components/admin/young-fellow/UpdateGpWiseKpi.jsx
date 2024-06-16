@@ -2,59 +2,38 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Textarea } from "@/components/ui/textarea";
-import { useAuthContext } from "@/context/AuthContext";
-import { tst } from "@/lib/utils";
 import API from "@/utils/API";
 import React, { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import YfLayout from "./YfLayout";
-
-function AddGpWiseKpi({update}) {
-  const [searchParams, setSearchParams] = useSearchParams();
+import { Textarea } from "@/components/ui/textarea";
+import { tst } from "@/lib/utils";
+function KpiApprovalSubmit() {
+  const [searchParams] = useSearchParams();
+  const theme_id = searchParams.get("theme_id") || "";
+  const [kpiApprovalData, setKpiApprovalData] = useState([]);
   const state_id = searchParams.get("state_id") || "";
   const dist_id = searchParams.get("dist_id") || "";
   const block_id = searchParams.get("block_id") || "";
   const gp_id = searchParams.get("gram_id") || "";
-  const theme_id = searchParams.get("theme_id") || "";
-  const navigate = useNavigate();
-
-  const [kpis, setKpis] = useState([]);
-  const [formData, setFormData] = useState([]);
-  const [date, setDate] = useState(null);
-  const { user } = useAuthContext();
-  const [isLoading, setIsLoading] = useState(false);
+  const date = searchParams.get("date") || "";
+  const kpi_approval_id = searchParams.get("kpi_approval_id") || "";
+  const [formData, setFormData] = useState();
 
   useEffect(() => {
-    const fetchKpis = async () => {
+    const fetchKpiApprovalData = async () => {
       try {
-        const response = await API.get(`/api/v1/kpi/theme/${theme_id}`);
-        const kpis = response.data.KPI;
-        setKpis(kpis);
+        const url = `/api/v1/gp-wise-kpi/approval-data?gp=${gp_id}&theme=${theme_id}&date=${new Date(date).toISOString().replace(/Z$/, "+00:00")}`;
+        const response = await API.get(url);
+        console.log(response)
+        setKpiApprovalData(response.data.data || []);
       } catch (error) {
-        console.error("Error fetching KPIs:", error);
+        console.log(error);
       }
     };
+    fetchKpiApprovalData();
+  }, []);
 
-    const run = async () => {
-      setIsLoading(true);
-      await fetchKpis();
-      setIsLoading(false);
-    };
-
-    run();
-  }, [theme_id, state_id, dist_id, block_id, gp_id]);
-
-  const calculateScore = (percentage, thresholds, scores) => {
-    for (let i = 0; i < thresholds.length; i++) {
-      if (percentage > thresholds[i]) {
-        return scores[i];
-      }
-    }
-    return scores[thresholds.length];
-  };
-
-  
   const kpiScoringRules = {
     1: { thresholds: [80, 60, 40, 20], scores: [10, 8, 6, 4, 2] },
     2: { thresholds: [80, 60, 40, 20], scores: [5, 4, 3, 2, 1] },
@@ -226,7 +205,7 @@ function AddGpWiseKpi({update}) {
       scores: [10, 8, 6, 4, 2],
     },
   };
-
+ 
   const handleChange = (e, index) => {
     const { name, value } = e.target;
     setFormData(prevData => {
@@ -250,53 +229,46 @@ function AddGpWiseKpi({update}) {
     });
   };
 
+  const calculateScore = (percentage, thresholds, scores) => {
+    for (let i = 0; i < thresholds.length; i++) {
+      if (percentage > thresholds[i]) {
+        return scores[i];
+      }
+    }
+    return scores[thresholds.length];
+  };
+
   const handleSubmit = async e => {
     e.preventDefault();
-
-    let updatedFormData = kpis.map((item, index) => {
-      return {
-        ...formData[index],
-        kpi_id: item.id,
-        max_range: item.max_range,
-      };
-    });
-
-    const dataToSend = {
-      state_id,
-      dist_id,
-      block_id,
-      gp_id,
-      theme_id,
-      user_id: user.id,
-      date: date,
-      theme_id,
-      formData: updatedFormData,
-    };
-
     try {
-      const response = await API.post("/api/v1/gp-wise-kpi/submit", dataToSend);
-      console.log("Success:", response.data);
+      const body = {
+        decision: formData.decision,
+        remarks: formData.remarks,
+      };
+
+      const url = `/api/v1/kpi-approvals/update/${kpi_approval_id}`;
+      const response = await API.put(url, body);
+      console.log(response.data);
       tst.success("Form submitted successfully");
-      navigate('/admin/young-professionals');
     } catch (error) {
-      tst.error(error);
-      console.error("Error submitting data:", error);
+      tst.error("Failed to submit form");
+      console.log(error);
     }
   };
 
   return (
     <div className="w-full">
       <div>
-        <div className="mb-2 text-center">
-          <h2 className="text-xl font-semibold mb-10 bg-slate-100 py-3">Young Fellow - LSG _ Theme wise KPI Entry Form</h2>
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">Young Fellow - KPI Entry Form</h2>
         </div>
         <YfLayout />
-        <form onSubmit={handleSubmit} className="overflow-x-auto mt-10">
+        <div className="overflow-x-auto  mt-6">
           <div>
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-20">ID</TableHead>
+                <TableHead className="w-20">ID</TableHead>
                   <TableHead className="w-[200px]">KPI Name</TableHead>
                   <TableHead className="w-[200px]">Data point</TableHead>
                   <TableHead className="w-20">Input type</TableHead>
@@ -307,25 +279,27 @@ function AddGpWiseKpi({update}) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {kpis.map((data, index) => (
-                  <TableRow key={data.id}>
-                    <TableCell>{data.id}</TableCell>
-                    <TableCell>{data.name}</TableCell>
-                    <TableCell>{data.kpi_datapoint || "No question"}</TableCell>
-                    <TableCell>{data?.input_type}</TableCell>
-                    <TableCell>
-                      <Input type="number" name="max_range" value={formData[index]?.max_range || ""} onChange={e => handleChange(e, index)} />
-                    </TableCell>
-                    <TableCell>
-                      <Input required max={formData[index]?.max_range} type="number" name="input_data" value={formData[index]?.input_data || ""} onChange={e => handleChange(e, index)} />
-                    </TableCell>
-                    <TableCell>
-                      <Input disabled type="number" name="score" value={formData[index]?.score || "0"} onChange={e => handleChange(e, index)} />
-                    </TableCell>
-                    <TableCell>
-                      <Textarea type="text" name="remarks" value={formData[index]?.remarks || ""} onChange={e => handleChange(e, index)} />
-                    </TableCell>
-                  </TableRow>
+                {kpiApprovalData.map((data, index) => (
+                  <>
+                    <TableRow key={data.id}>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>{data?.kpiDetails?.name}</TableCell>
+                      <TableCell>{data?.kpiDetails?.kpi_datapoint || "No question"}</TableCell>
+                      <TableCell>{data?.kpiDetails?.input_type}</TableCell>
+                      <TableCell>
+                        <Input type="number" name="max_range" value={formData[index]?.max_range || data?.max_range} onChange={e => handleChange(e, index)} />
+                      </TableCell>
+                      <TableCell>
+                        <Input required max={formData[index]?.max_range || data?.input_data} type="number" name="input_data" value={formData[index]?.input_data || data?.input_data} onChange={e => handleChange(e, index)} />
+                      </TableCell>
+                      <TableCell>
+                        <Input disabled type="number" name="score" value={formData[index]?.score || data.score} onChange={e => handleChange(e, index)} />
+                      </TableCell>
+                      <TableCell>
+                        <Textarea type="text" name="remarks" value={formData[index]?.remarks || data.remarks} onChange={e => handleChange(e, index)} />
+                      </TableCell>
+                    </TableRow>
+                  </>
                 ))}
               </TableBody>
             </Table>
@@ -334,13 +308,13 @@ function AddGpWiseKpi({update}) {
             <Label htmlFor="date" className="text-right mt-2">
               Date
             </Label>
-            <Input type="date" name="date" value={date || ""} onChange={e => setDate(e.target.value)} id="date" placeholder="Enter date" className="px-10" />
+            <Input disabled value={kpiApprovalData[0]?.date} type="date" name="date" onChange={e => setFormData(prevData => ({ ...prevData, date: e.target.value }))} id="date" placeholder="Enter date" className="px-10" />
           </div>
           <Button type="submit">Submit</Button>
-        </form>
+        </div>
       </div>
     </div>
   );
 }
 
-export default AddGpWiseKpi;
+export default KpiApprovalSubmit;
