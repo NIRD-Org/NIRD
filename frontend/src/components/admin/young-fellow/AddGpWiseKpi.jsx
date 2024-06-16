@@ -10,7 +10,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import YfLayout from "./YfLayout";
 
-function AddGpWiseKpi({update}) {
+function AddGpWiseKpi({ update }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const state_id = searchParams.get("state_id") || "";
   const dist_id = searchParams.get("dist_id") || "";
@@ -54,7 +54,6 @@ function AddGpWiseKpi({update}) {
     return scores[thresholds.length];
   };
 
-  
   const kpiScoringRules = {
     1: { thresholds: [80, 60, 40, 20], scores: [10, 8, 6, 4, 2] },
     2: { thresholds: [80, 60, 40, 20], scores: [5, 4, 3, 2, 1] },
@@ -257,7 +256,6 @@ function AddGpWiseKpi({update}) {
       return {
         ...formData[index],
         kpi_id: item.id,
-        max_range: item.max_range,
       };
     });
 
@@ -277,12 +275,14 @@ function AddGpWiseKpi({update}) {
       const response = await API.post("/api/v1/gp-wise-kpi/submit", dataToSend);
       console.log("Success:", response.data);
       tst.success("Form submitted successfully");
-      navigate('/admin/young-professionals');
+      navigate("/admin/young-professionals");
     } catch (error) {
       tst.error(error);
       console.error("Error submitting data:", error);
     }
   };
+
+  const disabledKpis = [16, 17, 18, 19, 20, 21, 22, 23, 29, 39, 40, 41, 45, 48, 49];
 
   return (
     <div className="w-full">
@@ -307,26 +307,33 @@ function AddGpWiseKpi({update}) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {kpis.map((data, index) => (
-                  <TableRow key={data.id}>
-                    <TableCell>{data.id}</TableCell>
-                    <TableCell>{data.name}</TableCell>
-                    <TableCell>{data.kpi_datapoint || "No question"}</TableCell>
-                    <TableCell>{data?.input_type}</TableCell>
-                    <TableCell>
-                      <Input type="number" name="max_range" value={formData[index]?.max_range || ""} onChange={e => handleChange(e, index)} />
-                    </TableCell>
-                    <TableCell>
-                      <Input required max={formData[index]?.max_range} type="number" name="input_data" value={formData[index]?.input_data || ""} onChange={e => handleChange(e, index)} />
-                    </TableCell>
-                    <TableCell>
-                      <Input disabled type="number" name="score" value={formData[index]?.score || "0"} onChange={e => handleChange(e, index)} />
-                    </TableCell>
-                    <TableCell>
-                      <Textarea type="text" name="remarks" value={formData[index]?.remarks || ""} onChange={e => handleChange(e, index)} />
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {kpis.map((data, index) => {
+                  const isDisabled = disabledKpis.includes(parseInt(data.id));
+                  return (
+                    <TableRow key={data.id}>
+                      <TableCell>{data.id}</TableCell>
+                      <TableCell>{data.name}</TableCell>
+                      <TableCell>{data.kpi_datapoint || "No question"}</TableCell>
+                      <TableCell>{data?.input_type}</TableCell>
+                      <TableCell>
+                        <Input disabled={isDisabled} type="number" name="max_range" value={isDisabled ? "0" : formData[index]?.max_range || ""} onChange={e => handleChange(e, index)} />
+                      </TableCell>
+                      <TableCell>
+                        {!isDisabled ? (
+                          <Input required max={formData[index]?.max_range} type="number" name="input_data" value={formData[index]?.input_data || ""} onChange={e => handleChange(e, index)} />
+                        ) : (
+                          <Input required type="number" name="input_data" value={formData[index]?.input_data || ""} onChange={e => handleChange(e, index)} />
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <Input disabled type="number" name="score" value={formData[index]?.score || "0"} onChange={e => handleChange(e, index)} />
+                      </TableCell>
+                      <TableCell>
+                        <Textarea type="text" name="remarks" value={formData[index]?.remarks || ""} onChange={e => handleChange(e, index)} />
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </div>

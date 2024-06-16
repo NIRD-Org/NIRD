@@ -16,7 +16,7 @@ function KpiApprovalSubmit() {
   const dist_id = searchParams.get("dist_id") || "";
   const block_id = searchParams.get("block_id") || "";
   const gp_id = searchParams.get("gram_id") || "";
-  const date = searchParams.get("date") || "";
+  const submitted_id = searchParams.get("submitted_id") || "";
   const kpi_approval_id = searchParams.get("kpi_approval_id") || "";
   const [formData, setFormData] = useState([]);
   const navigate = useNavigate();
@@ -24,11 +24,19 @@ function KpiApprovalSubmit() {
   useEffect(() => {
     const fetchKpiApprovalData = async () => {
       try {
-        const url = `/api/v1/gp-wise-kpi/approval-data?gp=${gp_id}&theme=${theme_id}&date=${new Date(date).toISOString().replace(/Z$/, "+00:00")}`;
+        const url = `/api/v1/gp-wise-kpi/approval-data?gp=${gp_id}&theme=${theme_id}&submitted_id=${submitted_id}`;
         const response = await API.get(url);
         setKpiApprovalData(response.data.data || []);
         const data = response.data.data;
-        const updatedFormData = data.map(item => ({ id: item.id, kpi_id: item.kpi_id, max_range: item.max_range, input_data: item.input_data, score: item.score, submitted_id: item.submitted_id }));
+        const updatedFormData = data.map(item => ({
+          id: item.id,
+          kpi_id: item.kpi_id,
+          max_range: item.max_range,
+          input_data: item.input_data,
+          score: item.score,
+          submitted_id: item.submitted_id,
+          remarks: item.remarks || ""  // Ensure remarks are initialized
+        }));
         setFormData(updatedFormData);
       } catch (error) {
         console.log(error);
@@ -255,6 +263,9 @@ function KpiApprovalSubmit() {
       tst.error(error);
     }
   };
+
+  const disabledKpis = [16, 17, 18, 19, 20, 21, 22, 23, 29, 39, 40, 41, 45, 48, 49];
+
   return (
     <div className="w-full">
       <div>
@@ -279,28 +290,35 @@ function KpiApprovalSubmit() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {kpiApprovalData.map((data, index) => (
-                    <>
-                      <TableRow key={data.id}>
-                        <TableCell>{index + 1}</TableCell>
-                        <TableCell>{data?.kpiDetails?.name}</TableCell>
-                        <TableCell>{data?.kpiDetails?.kpi_datapoint || "No question"}</TableCell>
-                        <TableCell>{data?.kpiDetails?.input_type}</TableCell>
-                        <TableCell>
-                          <Input type="number" name="max_range" value={formData[index]?.max_range || ""} default={data?.max_range} onChange={e => handleChange(e, index)} />
-                        </TableCell>
-                        <TableCell>
-                          <Input required max={formData[index]?.max_range || ""} default={data?.input_data} type="number" name="input_data" value={formData[index]?.input_data || data?.input_data} onChange={e => handleChange(e, index)} />
-                        </TableCell>
-                        <TableCell>
-                          <Input disabled type="number" name="score" value={formData[index]?.score || ""}  default={data.score} onChange={e => handleChange(e, index)} />
-                        </TableCell>
-                        <TableCell>
-                          <Textarea type="text" name="remarks" value={formData[index]?.remarks || ""} default={data.remarks} onChange={e => handleChange(e, index)} />
-                        </TableCell>
-                      </TableRow>
-                    </>
-                  ))}
+                  {kpiApprovalData.map((data, index) => {
+                    const isDisabled = disabledKpis.includes(parseInt(data?.kpiDetails?.id));
+                    return (
+                      <>
+                        <TableRow key={data.id}>
+                          <TableCell>{index + 1}</TableCell>
+                          <TableCell>{data?.kpiDetails?.name}</TableCell>
+                          <TableCell>{data?.kpiDetails?.kpi_datapoint || "No question"}</TableCell>
+                          <TableCell>{data?.kpiDetails?.input_type}</TableCell>
+                          <TableCell>
+                            <Input disabled={isDisabled} type="number" name="max_range" value={isDisabled ? "0" : formData[index]?.max_range || ""} onChange={e => handleChange(e, index)} />
+                          </TableCell>
+                          <TableCell>
+                            {!isDisabled ? (
+                              <Input required max={formData[index]?.max_range} type="number" name="input_data" value={formData[index]?.input_data || ""} onChange={e => handleChange(e, index)} />
+                            ) : (
+                              <Input required type="number" name="input_data" value={formData[index]?.input_data || ""} onChange={e => handleChange(e, index)} />
+                            )}{" "}
+                          </TableCell>
+                          <TableCell>
+                            <Input disabled type="number" name="score" value={formData[index]?.score || ""} default={data.score} onChange={e => handleChange(e, index)} />
+                          </TableCell>
+                          <TableCell>
+                            <Textarea type="text" name="remarks" value={formData[index]?.remarks || ""} default={data.remarks} onChange={e => handleChange(e, index)} />
+                          </TableCell>
+                        </TableRow>
+                      </>
+                    );
+                  })}
                 </TableBody>
               </Table>
             </div>

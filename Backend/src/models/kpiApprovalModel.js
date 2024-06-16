@@ -59,7 +59,7 @@ const kpiApprovalSchema = new Schema(
     },
     date: {
       type: Date,
-      required: true,
+      required : true
     },
   },
   {
