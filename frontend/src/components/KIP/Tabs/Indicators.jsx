@@ -239,7 +239,7 @@ const Indicators = () => {
                 <div className="overflow-x-hidden max-h-screen">
                   {gpWiseKpiData && gpWiseKpiData.length > 0 ? (
                     <table className="min-w-full divide-y divide-gray-200">
-                      <thead className="bg-white sticky top-0 z-0">
+                      <thead className="bg-primary text-white sticky top-0 z-0">
                         <tr>
                           <th className="pl-5">
                             <h1 className="text-3xl">Gram Panchayat</h1>
@@ -247,7 +247,7 @@ const Indicators = () => {
                           {indicator?.map((i) => (
                             <th
                               scope="col"
-                              className="px-4 w-[10rem] py-3 text-start text-xs font-medium text-gray-500 uppercase"
+                              className="px-4 w-[10rem] py-3 text-start text-xs font-medium text-white uppercase"
                               key={i.id}
                             >
                               {i.name}
@@ -264,9 +264,7 @@ const Indicators = () => {
                                   {gpData.gp_name}
                                 </h3>
                                 <p>{gpData.block_name}</p>
-                                <p className="text-lg">
-                                  {gpData.district_name}
-                                </p>
+                                <p className="text-md">{gpData.dist_name}</p>
                                 <p className="text-sm">{gpData.state_name}</p>
                               </div>
                             </td>
@@ -277,11 +275,20 @@ const Indicators = () => {
                               return (
                                 <td className="px-4" key={i.id}>
                                   {indicatorData ? (
-                                    <Progress
-                                      value={indicatorData.percentage.toFixed(
-                                        2
-                                      )}
-                                    />
+                                    <>
+                                      <p className="text-[0.8em] font-semibold">
+                                        Max Range: {indicatorData.max_range}
+                                      </p>
+                                      <p className="text-[0.8rem] font-semibold">
+                                        Input: {indicatorData.input_data}
+                                      </p>
+
+                                      <Progress
+                                        value={indicatorData.percentage.toFixed(
+                                          2
+                                        )}
+                                      />
+                                    </>
                                   ) : (
                                     "N/A"
                                   )}

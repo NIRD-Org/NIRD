@@ -206,6 +206,8 @@ const getGpWiseIndicatorDataWithPercentage = async (query) => {
         indicators: {
           $push: {
             indicator_id: "$_id.indicator_id",
+            input_data: "$totalInputData",
+            max_range: "$totalMaxRange",
             percentage: "$percentage",
           },
         },
@@ -236,7 +238,7 @@ const getGpWiseIndicatorDataWithPercentage = async (query) => {
         gp_percentage: "$indicators",
       },
     },
-    { $sort: { new_id: 1 } }, // Ensure the correct field is being sorted
+    { $sort: { new_id: 1 } },
   ]);
 
   if (!gpWiseKpiData || gpWiseKpiData.length === 0) {

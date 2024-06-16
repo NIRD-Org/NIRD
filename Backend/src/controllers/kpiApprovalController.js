@@ -58,7 +58,7 @@ export const getKPIApprovals = CatchAsyncError(async (req, res, next) => {
       { $match: match },
       {
         $lookup: {
-          from: "themes", // The name of the Theme collection
+          from: "themes",
           localField: "theme_id",
           foreignField: "id",
           as: "themeDetails",
@@ -86,7 +86,6 @@ export const getKPIApprovals = CatchAsyncError(async (req, res, next) => {
           modified_at: 1,
         },
       },
-      // Optional: Add sorting by date if needed
       { $sort: { created_at: -1 } },
     ]);
 
@@ -101,5 +100,22 @@ export const getKPIApprovals = CatchAsyncError(async (req, res, next) => {
     });
   } catch (error) {
     return next(new Errorhandler("Failed to get KPI approvals", 500));
+  }
+});
+
+export const getKPIApprovalDetails = CatchAsyncError(async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const KPIApproval = await KPIApprovalModel.findOne({ id });
+    if (!KPIApproval) {
+      return next(new Errorhandler("No KPI Approval Found", 404));
+    }
+    res.status(200).json({
+      success: true,
+      message: "KPI Approval Fetched Successfully",
+      KPIApproval,
+    });
+  } catch (error) {
+    return next(new Errorhandler("Failed to get KPI Approval", 500));
   }
 });

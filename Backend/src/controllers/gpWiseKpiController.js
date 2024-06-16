@@ -338,13 +338,13 @@ export const getGpWiseKpiChart = CatchAsyncError(async (req, res, next) => {
     let countryPercentage =
       (countryTotalInputData / countryTotalMaxRange) * 100;
 
-    console.log(
-      statePercentage,
-      "      countryPercentage: ",
-      countryPercentage,
-      "gp:  ",
-      gpPercentage
-    );
+    // console.log(
+    //   statePercentage,
+    //   "      countryPercentage: ",
+    //   countryPercentage,
+    //   "gp:  ",
+    //   gpPercentage
+    // );
     // const totalPercentage = gpPercentage + statePercentage + countryPercentage;
     // const adjustmentFactor = 100 / totalPercentage;
 
