@@ -15,12 +15,30 @@ const GpProfile = () => {
   const [district, setDistrict] = useState("");
   const [block, setblock] = useState("");
   const [gp, setGp] = useState("");
+  const [search, setSearch] = useState("");
 
   const getAllKpiData = async () => {
-    const { data } = await API.get(
-      `/api/v1/gp-wise-kpi?page=${1}&state=${state}&block=${block}&dist=${district}&gp=${gp}`
-    );
-    setGpData(data?.data);
+    try {
+      const { data } = await API.get(
+        `/api/v1/gp-wise-kpi?page=${1}&state=${state}&block=${block}&dist=${district}&gp=${gp}`
+      );
+      setGpData(data?.data);
+    } catch (error) {
+      console.log(error.message);
+      setGpData([]);
+    }
+  };
+
+  const getAllKpiSearchData = async () => {
+    try {
+      const { data } = await API.get(
+        `/api/v1/gp-wise-kpi?page=${1}&search=${search}`
+      );
+      setGpData(data?.data);
+    } catch (error) {
+      console.log(error.message);
+      setGpData([]);
+    }
   };
 
   const getAllStates = async () => {
@@ -107,6 +125,11 @@ const GpProfile = () => {
   };
 
   const handlePageClick = () => {};
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    getAllKpiSearchData();
+  };
   return (
     <div className="px-5 pb-8 lg:px-20 lg:pb-12">
       <div className="flex flex-col md:flex-row items-center gap-10 justify-between mb-4">
@@ -177,13 +200,14 @@ const GpProfile = () => {
             />
           </div>
         </div>
-        <div className="flex items-center space-x-2">
+        <form onSubmit={handleSearch} className="flex items-center space-x-2">
           <input
             type="text"
+            onChange={(e) => setSearch(e.target.value)}
             placeholder="Search for States, Districts and Blocks"
             className="border border-gray-300 p-2 rounded w-full lg:w-64 focus:ring focus:ring-orange-200"
           />
-          <button className="bg-orange-500 text-white p-2 rounded focus:outline-none focus:ring focus:ring-orange-200">
+          <button className="bg-primary text-white p-2 rounded focus:outline-none focus:ring focus:ring-orange-200">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -199,7 +223,7 @@ const GpProfile = () => {
               />
             </svg>
           </button>
-        </div>
+        </form>
       </div>
       <hr />
       <p>Showing 1 to 35 of 500 Results</p>
