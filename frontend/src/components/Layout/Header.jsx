@@ -213,20 +213,28 @@ const Header = () => {
               </NavLink>
             </div>
 
-            {!isAuthenticated && (
-              <div className="mt-auto mb-4">
-                <NavLink
-                  to="/login"
-                  onClick={toggleSidebar}
-                  className={({ isActive }) =>
-                    `block px-3 text-start py-2 font-normal duration-200 ${
-                      isActive ? "text-gray-300" : "text-white"
-                    } hover:text-gray-300`
-                  }
-                >
-                  Login
-                </NavLink>
-              </div>
+            {!isAuthenticated ? (
+              <NavLink
+                to="/login"
+                className={({ isActive }) =>
+                  `block px-3 text-md py-2 font-normal duration-200 ${
+                    isActive ? "text-white font-bold" : "text-gray-300"
+                  } hover:text-white`
+                }
+              >
+                Login
+              </NavLink>
+            ) : (
+              <NavLink
+                to="/admin"
+                className={({ isActive }) =>
+                  `block px-3 text-md py-2 font-normal duration-200 ${
+                    isActive ? "text-white font-bold" : "text-gray-300"
+                  } hover:text-white`
+                }
+              >
+                <Button variant="outline">Dashboard</Button>
+              </NavLink>
             )}
 
             <div className="flex-shrink-0">
