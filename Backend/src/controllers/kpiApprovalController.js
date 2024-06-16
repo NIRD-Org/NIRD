@@ -103,19 +103,26 @@ export const getKPIApprovals = CatchAsyncError(async (req, res, next) => {
   }
 });
 
-export const getKPIApprovalDetails = CatchAsyncError(async (req, res, next) => {
+// Update the approval status and decision status
+
+export const updateKPIApproval = CatchAsyncError(async (req, res, next) => {
   try {
     const { id } = req.params;
-    const KPIApproval = await KPIApprovalModel.findOne({ id });
-    if (!KPIApproval) {
-      return next(new Errorhandler("No KPI Approval Found", 404));
+    const { decision, remarks } = req.body;
+    const kpiApproval = await KPIApprovalModel.findOneAndUpdate(
+      { id },
+      { decision, remarks },
+      { new: true }
+    );
+    if (!kpiApproval) {
+      return next(new Errorhandler("KPI Approval not found", 404));
     }
     res.status(200).json({
       success: true,
-      message: "KPI Approval Fetched Successfully",
-      KPIApproval,
+      message: "KPI Approval Updated Successfully",
+      kpiApproval,
     });
   } catch (error) {
-    return next(new Errorhandler("Failed to get KPI Approval", 500));
+    return next(new Errorhandler("Failed to update KPI Approval", 500));
   }
 });
