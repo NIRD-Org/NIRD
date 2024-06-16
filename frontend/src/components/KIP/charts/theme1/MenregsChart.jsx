@@ -12,17 +12,23 @@ import {
 import "chart.js/auto";
 import { Chart, ArcElement, Tooltip, Legend } from "chart.js";
 import API from "@/utils/API";
+import { useSearchParams } from "react-router-dom";
 // import ChartDataLabels from "chartjs-plugin-datalabels";
 
 Chart.register(ArcElement, Tooltip, Legend);
 
-const ManregsChart = ({ kpi, chartType, state, gp, dist }) => {
+const ManregsChart = ({ kpi, kpiId, theme }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [gpwiseKpiChart, setGpwiseKpiChart] = useState();
   const chartRef = useRef();
+
+  const state = searchParams.get("state") || "";
+  const dist = searchParams.get("dist") || "";
+  const gp = searchParams.get("gp") || "";
   const getChartData = async () => {
     try {
       const { data } = await API.get(
-        `/api/v1/gp-wise-kpi/chart?state=${state}&dist=${dist}&gp=${gp}&kpi=${kpi}`
+        `/api/v1/gp-wise-kpi/chart?state=${state}&dist=${dist}&gp=${gp}&kpi=${kpiId}`
       );
       setGpwiseKpiChart(data);
     } catch (error) {
@@ -43,16 +49,51 @@ const ManregsChart = ({ kpi, chartType, state, gp, dist }) => {
   }, []);
 
   // Data for the doughnut chart
-  const data = {
+  const barData = {
+    labels: ["Quarterly 1", "Quarterly 2", "Quarterly 3", "Quarterly 4"],
+    datasets: [
+      {
+        label: kpi.substr(0, 70) + "...",
+        data: [98, 78, 94, 87],
+        backgroundColor: "#00203F",
+
+        borderColor: "#004B86",
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const barOptions = {
+    indexAxis: "x",
+    maintainAspectRatio: false,
+
+    scales: {
+      x: {
+        beginAtZero: true,
+      },
+      y: {
+        beginAtZero: true,
+      },
+    },
+
+    plugins: {
+      legend: {
+        position: "bottom",
+        display: true,
+      },
+      tooltip: {
+        enabled: false,
+      },
+    },
+    barThickness: 30, // This controls the thickness of the bars
+    maxBarThickness: 40, // This sets the maximum thickness of the bars
+  };
+
+  const pieData = {
     labels: ["GP", "State", "Country"],
     datasets: [
       {
-        label: "Percentage of Job Card Holders Employed",
-        data: [
-          gpwiseKpiChart?.gp.percentage,
-          gpwiseKpiChart?.state.percentage,
-          gpwiseKpiChart?.country.percentage,
-        ],
+        data: [54, 34, 56],
         fill: true,
         backgroundColor: ["#004B86", "darkOrange", "gray"],
         borderColor: [
@@ -77,7 +118,7 @@ const ManregsChart = ({ kpi, chartType, state, gp, dist }) => {
           label: function (context) {
             const label = context.label || "";
             const value = context.raw || 0;
-            return `${label}: ${value}%`;
+            return `${label}: ${value}`;
           },
         },
       },
@@ -85,30 +126,45 @@ const ManregsChart = ({ kpi, chartType, state, gp, dist }) => {
   };
 
   return (
-    <>
-      {chartType === "Pie" && (
-        <Pie
-          style={{ width: "95%", height: "95%" }}
-          data={data}
-          options={options}
-        />
-      )}
-      {chartType === "Bar" && <Bar data={data} options={options} />}
-      {chartType === "Line" && <Line data={data} options={options} />}
-      {chartType === "Polar" && <PolarArea data={data} options={options} />}
-      {chartType === "Doughnut" && (
-        <Doughnut
-          style={{ width: "90%", height: "90%" }}
-          data={data}
-          options={options}
-        />
-      )}
-      {chartType === "Scatter" && <Scatter data={data} options={options} />}
-      {chartType === "Bubble" && <Bubble data={data} options={options} />}
-      {/* {chartType === "Chart" && (
-        <Charts data={data}  options={options} />
-      )} */}
-    </>
+    <div className="px-2 md:px-10 md:py-8 lg:px-20 lg:py-10">
+      <div className="max-w-full overflow-auto">
+        <table className="w-full divide-y border border-gray-200 divide-gray-200">
+          <thead>
+            <tr className="text-white w-full bg-primary">
+              <th colspan="4" className="w-full text-center p-2">
+                {kpi}
+              </th>
+            </tr>
+            <tr>
+              <th className="p-2 border-2 text-center">Quarterly 1</th>
+              <th className="p-2 border-2 text-center">Quarterly 2</th>
+              <th className="p-2 border-2 text-center">Quarterly 3</th>
+              <th className="p-2 border-2 text-center">Quarterly 4</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="p-2 border-2 text-center">98%</td>
+              <td className="p-2 border-2 text-center">78%</td>
+              <td className="p-2 border-2 text-center">94%</td>
+              <td className="p-2 border-2 text-center">87%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div className="flex py-10 flex-col md:flex-row justify-between items-center ">
+        <div className="lg:w-1/2  w-full h-screen lg:h-[80vh] border-2 p-1 md:p-10">
+          <Bar data={barData} options={barOptions} />
+        </div>
+        <div className=" flex flex-col justify-center items-center lg:w-1/2 text-center  max-h-screen lg:max-h-[80vh]  border-2 md:p-10 ">
+          <h1 className="text-center py-4  text-gray-700 text-3xl font-semibold">
+            Financial Year - 2023
+          </h1>
+          <Pie data={pieData} options={options} />
+        </div>
+      </div>
+    </div>
   );
 };
 
