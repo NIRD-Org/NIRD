@@ -4,7 +4,6 @@ import {
   getGpWiseKpi,
   getGpWiseKpiChart,
   getGpWiseKpiData,
-  getGpWiseKpiDataWithPercentageController,
   getGpWiseKpiForApprover,
   submitKpiData,
 } from "../controllers/gpWiseKpiController.js";
@@ -20,7 +19,7 @@ router.route("/submit").post(submitKpiData);
 // Get teh chart
 
 router.route("/chart").get(getGpWiseKpiChart);
-router.route("/indicators").get(getGpWiseKpiDataWithPercentageController);
+// router.route("/indicators").get(getGpWiseKpiDataWithPercentageController);
 
 router.route("/delete/:id").put(deleteGpWiseKpiData);
 

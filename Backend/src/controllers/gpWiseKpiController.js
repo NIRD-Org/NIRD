@@ -175,7 +175,7 @@ export const getGpWiseKpi = CatchAsyncError(async (req, res, next) => {
     const limit = req.query.limit || 50;
     const pageNumber = req.query.page || 1;
     const startIndex = (pageNumber - 1) * limit;
-    const { state, dist, block, gp } = req.query;
+    const { state, dist, block, gp, search } = req.query;
 
     // filter object
     const filter = {};
@@ -184,7 +184,7 @@ export const getGpWiseKpi = CatchAsyncError(async (req, res, next) => {
     if (block) filter.block_id = block;
     if (gp) filter.gp_id = gp;
 
-    const gpWiseKpiData = await GpWiseKpiModel.aggregate([
+    const pipeline = [
       { $match: filter },
       {
         $group: {
@@ -250,10 +250,27 @@ export const getGpWiseKpi = CatchAsyncError(async (req, res, next) => {
           modified_at: 1,
         },
       },
-      { $skip: startIndex },
-      { $limit: limit },
-      { $sort: { created_at: -1 } },
-    ]);
+    ];
+
+    if (search) {
+      const regex = new RegExp(search, "i"); // 'i' makes it case-insensitive
+      pipeline.push({
+        $match: {
+          $or: [
+            { "state.name": { $regex: regex } },
+            { "district.name": { $regex: regex } },
+            { "block.name": { $regex: regex } },
+            { "gp.name": { $regex: regex } },
+          ],
+        },
+      });
+    }
+
+    pipeline.push({ $skip: startIndex });
+    pipeline.push({ $limit: limit });
+    pipeline.push({ $sort: { created_at: -1 } });
+
+    const gpWiseKpiData = await GpWiseKpiModel.aggregate(pipeline);
     if (!gpWiseKpiData || gpWiseKpiData.length === 0) {
       return next(new Errorhandler("No Gp Wise KPI Data Found", 404));
     }
@@ -372,143 +389,6 @@ export const getGpWiseKpiChart = CatchAsyncError(async (req, res, next) => {
   }
 });
 
-const getGpWiseKpiDataWithPercentage = async (query) => {
-  const { state, dist, block, gp, kpi } = query;
-  const filter = {};
-  if (state) filter.state_id = state;
-  if (dist) filter.district_id = dist;
-  if (block) filter.block_id = block;
-  if (gp) filter.gp_id = gp;
-  if (kpi) filter.kpi_id = kpi;
-  filter.theme_id = "10";
-
-  const gpWiseKpiData = await GpWiseKpiModel.aggregate([
-    { $match: filter },
-    {
-      $group: {
-        _id: {
-          gp_id: "$gp_id",
-          kpi_id: "$kpi_id",
-        },
-        doc: { $first: "$$ROOT" },
-        totalInputData: { $sum: { $toDouble: "$input_data" } },
-        totalMaxRange: { $sum: { $toDouble: "$max_range" } },
-      },
-    },
-    {
-      $addFields: {
-        percentage: {
-          $cond: {
-            if: { $eq: ["$totalMaxRange", 0] },
-            then: 0,
-            else: {
-              $multiply: [
-                { $divide: ["$totalInputData", "$totalMaxRange"] },
-                100,
-              ],
-            },
-          },
-        },
-      },
-    },
-    {
-      $lookup: {
-        from: "states",
-        localField: "doc.state_id",
-        foreignField: "id",
-        as: "state",
-      },
-    },
-    {
-      $lookup: {
-        from: "districts",
-        localField: "doc.district_id",
-        foreignField: "id",
-        as: "district",
-      },
-    },
-    {
-      $lookup: {
-        from: "blocks",
-        localField: "doc.block_id",
-        foreignField: "id",
-        as: "block",
-      },
-    },
-    {
-      $lookup: {
-        from: "grampanchayats",
-        localField: "doc.gp_id",
-        foreignField: "id",
-        as: "gp",
-      },
-    },
-    {
-      $group: {
-        _id: "$_id.gp_id",
-        kpis: {
-          $push: {
-            kpi_id: "$_id.kpi_id",
-            percentage: "$percentage",
-          },
-        },
-        doc: { $first: "$$ROOT" },
-      },
-    },
-    {
-      $addFields: {
-        kpis: {
-          $sortArray: {
-            input: "$kpis",
-            sortBy: { kpi_id: 1 },
-          },
-        },
-      },
-    },
-    {
-      $project: {
-        id: "$doc.id",
-        state_name: { $arrayElemAt: ["$doc.state.name", 0] },
-        district_name: { $arrayElemAt: ["$doc.district.name", 0] },
-        block_name: { $arrayElemAt: ["$doc.block.name", 0] },
-        gp_name: { $arrayElemAt: ["$doc.gp.name", 0] },
-        date: "$doc.date",
-        theme_id: "$doc.theme_id",
-        gp_percentage: "$kpis",
-      },
-    },
-    { $sort: { "doc.created_at": 1 } },
-  ]);
-
-  if (!gpWiseKpiData || gpWiseKpiData.length === 0) {
-    throw new Errorhandler("No Gp Wise KPI Data Found", 404);
-  }
-
-  return gpWiseKpiData;
-};
-
-export const getGpWiseKpiDataWithPercentageController = CatchAsyncError(
-  async (req, res, next) => {
-    try {
-      const limit = parseInt(req.query.limit) || 50;
-      const pageNumber = parseInt(req.query.page) || 1;
-      const startIndex = (pageNumber - 1) * limit;
-
-      const gpWiseKpiData = await getGpWiseKpiDataWithPercentage(req.query);
-
-      const paginatedData = gpWiseKpiData.slice(startIndex, startIndex + limit);
-
-      res.status(200).json({
-        success: true,
-        message: "Gp Wise KPI Data Fetched Successfully",
-        data: paginatedData,
-      });
-    } catch (error) {
-      return next(new Errorhandler(error.message, 500));
-    }
-  }
-);
-
 // Delete gpwise data - set the status to "0"
 
 export const deleteGpWiseKpiData = CatchAsyncError(async (req, res, next) => {
@@ -536,21 +416,49 @@ export const getGpWiseKpiForApprover = CatchAsyncError(
   async (req, res, next) => {
     try {
       const { state, dist, block, gp, theme, date } = req.query;
-      // Ensure the incoming date is parsed correctly and set to midnight UTC
-      const parsedDate = new Date(date);
-      parsedDate.setUTCHours(0, 0, 0, 0);
 
-      // Constructing the match stage
+      // const parsedDate = new Date(date);
+      // if (isNaN(parsedDate)) {
+      //   return next(new Errorhandler("Invalid date format", 400));
+      // }
+
+      // // Extract the date part only, ignoring the time and timezone
+      // const dateString = parsedDate.toISOString().split("T")[0];
+
+      // // Construct the match stage
+      // const matchStage = {
+      //   gp_id: gp,
+      //   theme_id: theme,
+      //   $expr: {
+      //     $eq: [
+      //       { $dateToString: { format: "%Y-%m-%d", date: "$date" } },
+      //       dateString,
+      //     ],
+      //   },
+      // };
+
+      let dateString = null;
+
+      if (date) {
+        const parsedDate = new Date(date);
+        if (!isNaN(parsedDate)) {
+          dateString = parsedDate.toISOString().split("T")[0];
+        }
+      }
+
       const matchStage = {
         gp_id: gp,
         theme_id: theme,
-        $expr: {
+      };
+
+      if (dateString) {
+        matchStage.$expr = {
           $eq: [
             { $dateToString: { format: "%Y-%m-%d", date: "$date" } },
-            { $dateToString: { format: "%Y-%m-%d", date: parsedDate } },
+            dateString,
           ],
-        },
-      };
+        };
+      }
 
       if (state) matchStage.state_id = state;
       if (dist) matchStage.dist_id = dist;
