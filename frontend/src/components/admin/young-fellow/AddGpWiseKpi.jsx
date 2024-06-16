@@ -24,12 +24,6 @@ function AddGpWiseKpi() {
   const { user } = useAuthContext();
   const [isLoading, setIsLoading] = useState(false);
 
-  const [stateName, setStateName] = useState("");
-  const [districtName, setDistrictName] = useState("");
-  const [blockName, setBlockName] = useState("");
-  const [gpName, setGpName] = useState("");
-  const [themeName, setThemeName] = useState("");
-
   useEffect(() => {
     const fetchKpis = async () => {
       try {
@@ -38,27 +32,6 @@ function AddGpWiseKpi() {
         setKpis(kpis);
       } catch (error) {
         console.error("Error fetching KPIs:", error);
-      }
-    };
-
-    const fetchNames = async () => {
-      try {
-        const stateResponse = await API.get(`/api/v1/state/${state_id}`);
-        setStateName(stateResponse.data.name);
-
-        const districtResponse = await API.get(`/api/v1/district/${dist_id}`);
-        setDistrictName(districtResponse.data.name);
-
-        const blockResponse = await API.get(`/api/v1/block/${block_id}`);
-        setBlockName(blockResponse.data.name);
-
-        const gpResponse = await API.get(`/api/v1/gp/${gp_id}`);
-        setGpName(gpResponse.data.name);
-
-        const themeResponse = await API.get(`/api/v1/theme/${theme_id}`);
-        setThemeName(themeResponse.data.name);
-      } catch (error) {
-        console.error("Error fetching names:", error);
       }
     };
 
@@ -81,6 +54,7 @@ function AddGpWiseKpi() {
     return scores[thresholds.length];
   };
 
+  
   const kpiScoringRules = {
     1: { thresholds: [80, 60, 40, 20], scores: [10, 8, 6, 4, 2] },
     2: { thresholds: [80, 60, 40, 20], scores: [5, 4, 3, 2, 1] },
@@ -94,6 +68,163 @@ function AddGpWiseKpi() {
     10: { thresholds: [80, 60, 40, 20], scores: [10, 8, 6, 4, 2] },
     11: { thresholds: [80, 60, 40, 20], scores: [10, 8, 6, 4, 2] },
     12: { thresholds: [80, 60, 40, 20], scores: [10, 8, 6, 4, 2] },
+
+    13: {
+      thresholds: [80, 60, 40, 20],
+      scores: [10, 8, 6, 4, 2],
+    },
+    14: {
+      thresholds: [80, 60, 40, 20],
+      scores: [10, 8, 6, 4, 2],
+    },
+    15: {
+      thresholds: [80, 60, 40, 20, 0],
+      scores: [5, 4, 3, 2, 1],
+    },
+    16: {
+      thresholds: [12, 1],
+      scores: [2, 1, 0],
+    },
+    17: {
+      thresholds: [500, 1],
+      scores: [2, 1, 0],
+    },
+    18: {
+      thresholds: [12, 1],
+      scores: [2, 1, 0],
+    },
+    19: {
+      thresholds: [12, 1],
+      scores: [2, 1, 0],
+    },
+    20: {
+      thresholds: [12, 1],
+      scores: [2, 1, 0],
+    },
+    21: {
+      thresholds: [12, 1],
+      scores: [2, 1, 0],
+    },
+    22: {
+      thresholds: [12, 1],
+      scores: [2, 1, 0],
+    },
+    23: {
+      thresholds: [4, 2, 1, 0],
+      scores: [6, 4, 2, 0],
+    },
+    24: {
+      thresholds: [80, 60, 40, 20],
+      scores: [5, 4, 3, 2, 1],
+    },
+    25: {
+      thresholds: [80, 60, 40, 20],
+      scores: [5, 4, 3, 2, 1],
+    },
+    26: {
+      thresholds: [80, 60, 40, 20],
+      scores: [5, 4, 3, 2, 1],
+    },
+    27: {
+      thresholds: [80, 60, 40, 20],
+      scores: [5, 4, 3, 2, 1],
+    },
+    28: {
+      thresholds: [80, 61, 41, 21, 0],
+      scores: [10, 8, 6, 4, 2, 0],
+    },
+    29: {
+      thresholds: [12, 10, 7, 4, 1],
+      scores: [5, 4, 3, 2, 1, 0],
+    },
+    30: {
+      thresholds: [80, 61, 41, 21, 0],
+      scores: [10, 8, 6, 4, 2],
+    },
+    31: {
+      thresholds: [80, 61, 41, 21, 0],
+      scores: [10, 8, 6, 4, 2],
+    },
+    32: {
+      thresholds: [60, 40, 20, 10, 0],
+      scores: [0, 1, 2, 3, 4],
+    },
+    33: {
+      thresholds: [40, 20, 10, 0],
+      scores: [0, 1, 2, 3],
+    },
+    34: {
+      thresholds: [40, 20, 10, 0],
+      scores: [0, 1, 2, 3],
+    },
+    35: {
+      thresholds: [80, 60, 40, 20, 0],
+      scores: [5, 4, 3, 2, 1],
+    },
+    36: {
+      thresholds: [80, 60, 40, 20, 0],
+      scores: [5, 4, 3, 2, 1],
+    },
+    37: {
+      thresholds: [80, 60, 40, 20, 0],
+      scores: [0, 2, 4, 6, 8, 10],
+    },
+    38: {
+      thresholds: [80, 60, 40, 20, 0],
+      scores: [5, 4, 3, 2, 1],
+    },
+    39: {
+      thresholds: [4, 1, 0],
+      scores: [2, 1, 0],
+    },
+    40: {
+      thresholds: [4, 1, 0],
+      scores: [2, 1, 0],
+    },
+    41: {
+      thresholds: [100, 2, 0],
+      scores: [2, 1, 0],
+    },
+    42: {
+      thresholds: [50, 10, 0],
+      scores: [2, 1, 0],
+    },
+    43: {
+      thresholds: [80, 60, 40, 20, 0],
+      scores: [0, 2, 4, 6, 8, 10],
+    },
+    44: {
+      thresholds: [80, 60, 40, 20, 0],
+      scores: [5, 4, 3, 2, 1],
+    },
+    45: {
+      thresholds: [12, 9, 6, 3, 0],
+      scores: [4, 3, 2, 1, 0],
+    },
+    46: {
+      thresholds: [80, 60, 40, 20, 0],
+      scores: [8, 6, 4, 2, 0],
+    },
+    47: {
+      thresholds: [80, 60, 40, 20, 0],
+      scores: [4, 3, 2, 1, 0],
+    },
+    48: {
+      thresholds: [12, 9, 6, 3, 0],
+      scores: [4, 3, 2, 1, 0],
+    },
+    49: {
+      thresholds: [4, 1, 0],
+      scores: [2, 1, 0],
+    },
+    50: {
+      thresholds: [80, 60, 40, 20, 0],
+      scores: [10, 8, 6, 4, 2],
+    },
+    51: {
+      thresholds: [80, 60, 40, 20, 0],
+      scores: [10, 8, 6, 4, 2],
+    },
   };
 
   const handleChange = (e, index) => {
@@ -105,7 +236,7 @@ function AddGpWiseKpi() {
         [name]: value,
       };
 
-      if (name === 'max_range' || name === 'input_data') {
+      if (name === "max_range" || name === "input_data") {
         const maxRange = updatedData[index].max_range || 0;
         const inputData = updatedData[index].input_data || 0;
         const percentage = (inputData / maxRange) * 100;
@@ -158,7 +289,7 @@ function AddGpWiseKpi() {
         <div className="mb-2 text-center">
           <h2 className="text-xl font-semibold mb-10 bg-slate-100 py-3">Young Fellow - LSG _ Theme wise KPI Entry Form</h2>
         </div>
-        <YfLayout/>
+        <YfLayout />
         <form onSubmit={handleSubmit} className="overflow-x-auto mt-10">
           <div>
             <Table>

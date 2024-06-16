@@ -1,5 +1,7 @@
 import { ArrowBigRight } from "lucide-react";
 
+
+
 export const districts = [
   {
     id: "d1",

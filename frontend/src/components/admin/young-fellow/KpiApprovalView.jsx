@@ -2,38 +2,21 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Textarea } from "@/components/ui/textarea";
-import { useAuthContext } from "@/context/AuthContext";
-import { tst } from "@/lib/utils";
 import API from "@/utils/API";
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import YfLayout from "./YfLayout";
 
 function KpiApprovalView() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const state_id = searchParams.get("state_id") || "";
-  const dist_id = searchParams.get("dist_id") || "";
-  const block_id = searchParams.get("block_id") || "";
-  const gp_id = searchParams.get("gram_id") || "";
+  const [searchParams] = useSearchParams();
   const theme_id = searchParams.get("theme_id") || "";
   const [kpis, setKpis] = useState([]);
-  const [questions, setQuestions] = useState([]);
-  const [data, setData] = useState([]);
-  const [formData, setFormData] = useState([]);
-  const [date, setDate] = useState(null);
-  const { user } = useAuthContext();
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    let kpis;
     const fetchKpis = async () => {
       try {
-        const response = await API.get(`/api/v1/kpi/theme/${theme_id}`);
-        kpis = response.data.KPI;
-        console.log(kpis);
-        setKpis(kpis);
-        console.log(kpis);
+        const response = await API.get(`/api/v1/gp-wise-approval/approval-data?theme=${theme_id}&gp=${gp}&date=${date}`);
+        setKpis(response.data.KPI);
       } catch (error) {
         console.error("Error fetching KPIs:", error);
       }
@@ -47,49 +30,6 @@ function KpiApprovalView() {
     run();
   }, [theme_id]);
 
-  const handleChange = (e, index) => {
-    const { name, value } = e.target;
-    setFormData(prevData => {
-      const updatedData = [...prevData];
-      updatedData[index] = {
-        ...updatedData[index],
-        [name]: value,
-      };
-      return updatedData;
-    });
-  };
-
-  const handleSubmit = async e => {
-    e.preventDefault();
-
-    let updatedFormData = kpis.map((item, index) => {
-      return {
-        ...formData[index],
-        kpi_id: item.id,
-        max_range: item.max_range,
-      };
-    });
-
-    const dataToSend = {
-      state_id,
-      dist_id,
-      block_id,
-      gp_id,
-      theme_id,
-      user_id: user.id,
-      date: date,
-      theme_id,
-      formData: updatedFormData,
-    };
-    try {
-      const response = await API.post("/api/v1/gp-wise-kpi/submit", dataToSend);
-      console.log("Success:", response.data);
-      tst.success("Form submitted successfully");
-    } catch (error) {
-      tst.error(error);
-      console.error("Error submitting data:", error);
-    }
-  };
 
   return (
     <div className="w-full">
@@ -121,16 +61,16 @@ function KpiApprovalView() {
                     <TableCell>{data.kpi_datapoint || "No question"}</TableCell>
                     <TableCell>{data?.input_type}</TableCell>
                     <TableCell>
-                      <Input type="number" name="max_range" value={formData[index]?.max_range || ""} onChange={e => handleChange(e, index)} />
+                      <Input type="number" disabled />
                     </TableCell>
                     <TableCell>
-                      <Input required type="number" name="input_data" value={formData[index]?.input_data || ""} onChange={e => handleChange(e, index)} />
+                      <Input required type="number" disabled={index % 2 === 0} />
                     </TableCell>
                     <TableCell>
-                      <Input disabled type="number" name="score" value={formData[index]?.score || ""} onChange={e => handleChange(e, index)} />
+                      <Input disabled type="number" />
                     </TableCell>
                     <TableCell>
-                      <Textarea type="text" name="remarks" value={formData[index]?.remarks || ""} onChange={e => handleChange(e, index)} />
+                      <Input disabled type="text" />
                     </TableCell>
                   </TableRow>
                 ))}
@@ -151,17 +91,5 @@ function KpiApprovalView() {
 }
 
 
-
-const ScoreRules = ({score_rules}) => {
-  const rulesArray = score_rules.split('\n');
-
-  return (
-    <div>
-      {rulesArray.map((rule, index) => (
-        <div key={index}>{rule}</div>
-      ))}
-    </div>
-  );
-};
-
 export default KpiApprovalView;
+

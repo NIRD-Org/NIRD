@@ -73,8 +73,8 @@ function App() {
             <Route path="data-point/create" element={<DataPointForm />} />
             <Route path="data-point" element={<DataPointPage />} />
             <Route path="kpi-approvals-list" element={<KpiApprovalsList />} />
-            <Route path="kpi-approval-submit/:id" element={<KpiApprovalSubmit />} />
-            <Route path="kpi-approval-view/:id" element={<KpiApprovalView/>} />
+            <Route path="submit-kpi-approval" element={<KpiApprovalSubmit />} />
+            <Route path="view-kpi-approval" element={<KpiApprovalView/>} />
           </Route>
         </Route>
 

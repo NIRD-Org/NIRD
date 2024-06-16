@@ -32,8 +32,12 @@ function KpiApprovalsList() {
     }
   }, [state_id, dist_id, block_id, gram_id, theme_id]);
 
-  const handleGpWiseKpiEdit = () => {
-    navigate(`/admin/add-gp-wise-kpi?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${theme_id}`);
+  const handleNavigate = id => {
+    if (id === 1) {
+      navigate(`/admin/submit-kpi-approval?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${theme_id}`);
+    } else if (id === 2) {
+      navigate(`/admin/view-kpi-approval?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${theme_id}`);
+    }
   };
 
   return (
@@ -60,10 +64,10 @@ function KpiApprovalsList() {
                   <TableCell>{kpiApproval.decision == 0 ? "Submitted" : "Sent Back"}</TableCell>
                   <TableCell>
                     <div className="flex items-center gap-3">
-                      <span onClick={() => navigate(`/admin/kpi-approval-submit/${kpiApproval.id}`)}>
+                      <span onClick={() => handleNavigate(1,kpiApproval.created_at)}>
                         <NirdEditIcon />
                       </span>
-                      <span onClick={() => navigate(`/admin/kpi-approval-view/${kpiApproval.id}`)}>
+                      <span onClick={() => handleNavigate(2,kpiApproval.created_at)}>
                         <NirdViewIcon />
                       </span>
                     </div>
