@@ -1,5 +1,10 @@
 import React, { useContext, useEffect } from "react";
-import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from "react-router-dom";
+import {
+  Route,
+  RouterProvider,
+  createBrowserRouter,
+  createRoutesFromElements,
+} from "react-router-dom";
 import "./App.css";
 import Layout from "./Layout";
 import AdminPage from "./Pages/admin/AdminPage";
@@ -34,6 +39,7 @@ import KpiApprovalsList from "./components/admin/young-fellow/KpiApprovalsList";
 import KpiApprovalSubmit from "./components/admin/young-fellow/KpiApprovalSubmit";
 import KpiApprovalView from "./components/admin/young-fellow/KpiApprovalView";
 import UpdateGpWiseKpi from "./components/admin/young-fellow/UpdateGpWiseKpi";
+import ThemeDataPage from "./Pages/ThemeDataPage";
 
 function App() {
   const { login } = useAuthContext();
@@ -52,7 +58,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/gp-profile" element={<KPIDetails />} />
           <Route path="project" element={<ProjectPage />} />
-
+          <Route path="/gp-wise-data/theme/:id" element={<ThemeDataPage />} />
           <Route path="/admin" element={<AdminPage />}>
             <Route index element={<AdminMainPage />} />
             <Route path="blocks" element={<BlockPage />} />
@@ -65,7 +71,7 @@ function App() {
             <Route path="young-professionals" element={<YoungFellowForm />} />
             <Route path="gp-wise-kpi" element={<GpWiseKpiList />} />
             <Route path="add-gp-wise-kpi" element={<AddGpWiseKpi />} />
-            <Route path="update-gp-wise-kpi" element={<UpdateGpWiseKpi/>} />
+            <Route path="update-gp-wise-kpi" element={<UpdateGpWiseKpi />} />
             <Route path="state/create" element={<StateForm />} />
             <Route path="district/create" element={<DistrictForm />} />
             <Route path="block/create" element={<BlockForm />} />
@@ -76,7 +82,7 @@ function App() {
             <Route path="data-point" element={<DataPointPage />} />
             <Route path="kpi-approvals-list" element={<KpiApprovalsList />} />
             <Route path="submit-kpi-approval" element={<KpiApprovalSubmit />} />
-            <Route path="view-kpi-approval" element={<KpiApprovalView/>} />
+            <Route path="view-kpi-approval" element={<KpiApprovalView />} />
           </Route>
         </Route>
 

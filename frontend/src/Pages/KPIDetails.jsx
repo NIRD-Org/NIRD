@@ -176,26 +176,14 @@ const KPIDetails = () => {
             >
               Apply
             </button>
-
-            {/* Gram panchayat Profile */}
-          </div>
-          <div className="bg-white shadow-sm h-40 border w-full md:w-[75%] flex flex-col justify-center items-center">
-            <Link className="text-blue-900 font-semibold">
-              Gram Panchayat Profile
-            </Link>
-            <button
-              onClick={() => toPDF()}
-              className="bg-sky-900 mt-5 rounded text-white text-sm p-2 px-4 mb-4"
-            >
-              Download PDF
-            </button>
-            <p className="text-sm text-gray-400">
-              (It may take time to download, Please Wait)
-            </p>
           </div>
         </div>
-        <div className="w-1/2 mt-10 lg:mt-0 flex justify-center items-center lg:w-4/12 h-full lg:max-h-[60vh]">
-          <img src={stateData?.state_icon} alt="" className="w-full h-full" />
+        <div className="w-1/2 mt-10 lg:mt-0 flex justify-center items-center lg:w-3/12 h-full lg:max-h-[40vh]">
+          <img
+            src={stateData?.state_icon}
+            alt=""
+            className="w-full max-h-[40vh]"
+          />
         </div>
       </div>
 
