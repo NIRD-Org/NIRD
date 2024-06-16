@@ -201,7 +201,7 @@ const Indicators = () => {
           </div>
           <button
             onClick={handleReset}
-            className="bg-sky-900 rounded text-white text-sm p-2 px-4"
+            className="bg-primary rounded text-white text-sm p-2 px-4"
           >
             Reset
           </button>
@@ -212,7 +212,7 @@ const Indicators = () => {
             placeholder="Search for States, Districts and Blocks"
             className="border border-gray-300 p-2 rounded w-full lg:w-64 focus:ring focus:ring-orange-200"
           />
-          <button className="bg-orange-500 text-white p-2 rounded focus:outline-none focus:ring focus:ring-orange-200">
+          <button className="bg-primary text-white p-2 rounded focus:outline-none focus:ring focus:ring-orange-200">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
