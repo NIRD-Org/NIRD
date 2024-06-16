@@ -10,6 +10,6 @@ const router = express.Router();
 router.route("/all").get(getAllKPIApprovals);
 
 router.route("/get-kpiapprovals").get(getKPIApprovals);
-router.route("/update").put(updateKPIApproval);
+router.route("/update/:id").put(updateKPIApproval);
 
 export default router;

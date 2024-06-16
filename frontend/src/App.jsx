@@ -33,6 +33,7 @@ import DataPointPage from "./components/admin/kpi/DataPointPage";
 import KpiApprovalsList from "./components/admin/young-fellow/KpiApprovalsList";
 import KpiApprovalSubmit from "./components/admin/young-fellow/KpiApprovalSubmit";
 import KpiApprovalView from "./components/admin/young-fellow/KpiApprovalView";
+import UpdateGpWiseKpi from "./components/admin/young-fellow/UpdateGpWiseKpi";
 
 function App() {
   const { login } = useAuthContext();
@@ -64,6 +65,7 @@ function App() {
             <Route path="young-professionals" element={<YoungFellowForm />} />
             <Route path="gp-wise-kpi" element={<GpWiseKpiList />} />
             <Route path="add-gp-wise-kpi" element={<AddGpWiseKpi />} />
+            <Route path="update-gp-wise-kpi" element={<UpdateGpWiseKpi/>} />
             <Route path="state/create" element={<StateForm />} />
             <Route path="district/create" element={<DistrictForm />} />
             <Route path="block/create" element={<BlockForm />} />
