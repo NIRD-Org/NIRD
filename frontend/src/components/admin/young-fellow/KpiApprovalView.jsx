@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import YfLayout from "./YfLayout";
 import { kpiApprovals } from "@/lib/data";
+import { Textarea } from "@/components/ui/textarea";
 
 function KpiApprovalView() {
   const [searchParams] = useSearchParams();
@@ -16,16 +17,16 @@ function KpiApprovalView() {
   const dist_id = searchParams.get("dist_id") || "";
   const block_id = searchParams.get("block_id") || "";
   const gp_id = searchParams.get("gram_id") || "";
-  const date = searchParams.get("date") || "";
+  const submitted_id = searchParams.get("submitted_id") || "";
 
   useEffect(() => {
     const fetchKpiApprovalData = async () => {
       try {
-        const url = `/api/v1/gp-wise-kpi/approval-data?gp=${gp_id}&theme=${theme_id}&date=${new Date(date).toISOString().replace(/Z$/, '+00:00')}`;
+        const url = `/api/v1/gp-wise-kpi/approval-data?gp=${gp_id}&theme=${theme_id}&submitted_id=${submitted_id}`;
         const response = await API.get(url);
         setKpiApprovalData(response.data.data || []);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     };
     fetchKpiApprovalData();
@@ -56,7 +57,7 @@ function KpiApprovalView() {
               <TableBody>
                 {kpiApprovalData.map((data, index) => (
                   <TableRow key={data.id}>
-                    <TableCell>{index+1}</TableCell>
+                    <TableCell>{index + 1}</TableCell>
                     <TableCell>{data?.kpiDetails.name}</TableCell>
                     <TableCell>{data.kpiDetails.kpi_datapoint || "No question"}</TableCell>
                     {/* <TableCell>{data?.kpiDetails.input_type}</TableCell> */}
@@ -64,10 +65,10 @@ function KpiApprovalView() {
                       <Input value={data?.max_range} disabled />
                     </TableCell>
                     <TableCell>
-                      <Input  value={data?.input_data} type="number" disabled />
+                      <Input value={data?.input_data} type="number" disabled />
                     </TableCell>
                     <TableCell>
-                      <Input value={data?.remarks} disabled type="number" />
+                      <Textarea disabled type="text" name="remarks" value={data?.remarks} />
                     </TableCell>
                     {/* <TableCell>
                       <Input disabled type="text" />

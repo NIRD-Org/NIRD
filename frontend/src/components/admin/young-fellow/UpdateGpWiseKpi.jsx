@@ -16,7 +16,7 @@ function KpiApprovalSubmit() {
   const dist_id = searchParams.get("dist_id") || "";
   const block_id = searchParams.get("block_id") || "";
   const gp_id = searchParams.get("gram_id") || "";
-  const date = searchParams.get("date") || "";
+  const submitted_id = searchParams.get("submitted_id") || "";
   const kpi_approval_id = searchParams.get("kpi_approval_id") || "";
   const [formData, setFormData] = useState([]);
   const navigate = useNavigate();
@@ -24,11 +24,19 @@ function KpiApprovalSubmit() {
   useEffect(() => {
     const fetchKpiApprovalData = async () => {
       try {
-        const url = `/api/v1/gp-wise-kpi/approval-data?gp=${gp_id}&theme=${theme_id}&date=${new Date(date).toISOString().replace(/Z$/, "+00:00")}`;
+        const url = `/api/v1/gp-wise-kpi/approval-data?gp=${gp_id}&theme=${theme_id}&submitted_id=${submitted_id}`;
         const response = await API.get(url);
         setKpiApprovalData(response.data.data || []);
         const data = response.data.data;
-        const updatedFormData = data.map(item => ({ id: item.id, kpi_id: item.kpi_id, max_range: item.max_range, input_data: item.input_data, score: item.score, submitted_id: item.submitted_id }));
+        const updatedFormData = data.map(item => ({
+          id: item.id,
+          kpi_id: item.kpi_id,
+          max_range: item.max_range,
+          input_data: item.input_data,
+          score: item.score,
+          submitted_id: item.submitted_id,
+          remarks: item.remarks || ""  // Ensure remarks are initialized
+        }));
         setFormData(updatedFormData);
       } catch (error) {
         console.log(error);

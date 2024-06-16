@@ -16,14 +16,14 @@ function KpiApprovalSubmit() {
   const dist_id = searchParams.get("dist_id") || "";
   const block_id = searchParams.get("block_id") || "";
   const gp_id = searchParams.get("gram_id") || "";
-  const date = searchParams.get("date") || "";
+  const submitted_id = searchParams.get("submitted_id") || "";
   const kpi_approval_id = searchParams.get("kpi_approval_id") || "";
   const [formData, setFormData] = useState({ decision: "", remarks: "" });
 
   useEffect(() => {
     const fetchKpiApprovalData = async () => {
       try {
-        const url = `/api/v1/gp-wise-kpi/approval-data?gp=${gp_id}&theme=${theme_id}&date=${new Date(date).toISOString().replace(/Z$/, "+00:00")}`;
+        const url = `/api/v1/gp-wise-kpi/approval-data?gp=${gp_id}&theme=${theme_id}&submitted_id=${submitted_id}`;
         const response = await API.get(url);
         setKpiApprovalData(response.data.data || []);
       } catch (error) {
@@ -87,7 +87,8 @@ function KpiApprovalSubmit() {
                       <Input value={data?.input_data} type="number" disabled />
                     </TableCell>
                     <TableCell>
-                      <Input value={data?.remarks} disabled type="number" />
+                      <Textarea disabled type="text" name="remarks" value={data?.remarks} />
+                      {/* <Input value={data?.remarks} disabled type="number" /> */}
                     </TableCell>
                     {/* <TableCell>
                       <Input disabled type="text" />

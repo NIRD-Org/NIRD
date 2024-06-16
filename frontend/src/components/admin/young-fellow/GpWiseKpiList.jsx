@@ -38,11 +38,11 @@ function GpWiseKpiList() {
     navigate(`/admin/add-gp-wise-kpi?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${theme_id}`);
   };
 
-  const handleNavigate = (id, date, kpiApprovalId) => {
+  const handleNavigate = (id, submitted_id, kpiApprovalId) => {
     if (id === 1) {
-      navigate(`/admin/update-gp-wise-kpi?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${theme_id}&date=${date}&kpi_approval_id=${kpiApprovalId}`);
+      navigate(`/admin/update-gp-wise-kpi?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${theme_id}&submitted_id=${submitted_id}&kpi_approval_id=${kpiApprovalId}`);
     } else if (id === 2) {
-      navigate(`/admin/view-gp-wise-kpi?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${theme_id}&date=${date}&kpi_approval_id=${kpiApprovalId}`);
+      navigate(`/admin/view-gp-wise-kpi?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${theme_id}&submitted_id=${submitted_id}&kpi_approval_id=${kpiApprovalId}`);
     }
   };
 
@@ -69,15 +69,15 @@ function GpWiseKpiList() {
                 <TableRow key={kpiApproval.id}>
                   <TableCell>{kpiApproval.id}</TableCell>
                   <TableCell>{kpiApproval.theme_name}</TableCell>
-                  <TableCell>{new Date(kpiApproval.created_at).toLocaleDateString()}</TableCell>
+                  <TableCell>{new Date(kpiApproval.date || kpiApproval.created_at).toLocaleDateString()}</TableCell>
                   <TableCell>{kpiApproval.decision == 0 ? "Submitted" : kpiApproval.decision == 1 ? "Approved" : "Send for modification"}</TableCell>
                   <TableCell>
                     {kpiApproval.decision != 0 ? (
                       <div className="flex gap-2">
-                        <span onClick={() => handleNavigate(2, kpiApproval.created_at, kpiApproval.id)}>
+                        <span onClick={() => handleNavigate(2, kpiApproval.submitted_id, kpiApproval.id)}>
                           <NirdViewIcon />
                         </span>
-                        <span onClick={() => handleNavigate(1, kpiApproval.created_at, kpiApproval.id)}>
+                        <span onClick={() => handleNavigate(1, kpiApproval.submitted_id, kpiApproval.id)}>
                           <NirdEditIcon />
                         </span>
                       </div>
