@@ -128,6 +128,7 @@ export const submitKpiData = CatchAsyncError(async (req, res, next) => {
         date: parsedDate,
         theme_id: theme_id,
         kpi_id: kpi.kpi_id,
+        score: kpi.score,
         max_range: kpi.max_range,
         input_data: kpi.input_data,
         remarks: kpi.remarks,
@@ -338,13 +339,13 @@ export const getGpWiseKpiChart = CatchAsyncError(async (req, res, next) => {
     let countryPercentage =
       (countryTotalInputData / countryTotalMaxRange) * 100;
 
-    console.log(
-      statePercentage,
-      "      countryPercentage: ",
-      countryPercentage,
-      "gp:  ",
-      gpPercentage
-    );
+    // console.log(
+    //   statePercentage,
+    //   "      countryPercentage: ",
+    //   countryPercentage,
+    //   "gp:  ",
+    //   gpPercentage
+    // );
     // const totalPercentage = gpPercentage + statePercentage + countryPercentage;
     // const adjustmentFactor = 100 / totalPercentage;
 
@@ -531,17 +532,112 @@ export const deleteGpWiseKpiData = CatchAsyncError(async (req, res, next) => {
 });
 
 // Get the gpWiseKpi for the approver
-
 export const getGpWiseKpiForApprover = CatchAsyncError(
   async (req, res, next) => {
     try {
-      const { state, dist, block, gp, theme } = req.query;
-      const filter = {};
-      if (state) filter.state_id = state;
-      if (dist) filter.district_id = dist;
-      if (block) filter.block_id = block;
-      filter.gp_id = gp;
-      filter.theme_id = theme;
+      const { state, dist, block, gp, theme, date } = req.query;
+      const matchStage = {
+        gp_id: gp,
+        theme_id: theme,
+        date: new Date(date),
+      };
+
+      if (state) matchStage.state_id = state;
+      if (dist) matchStage.dist_id = dist;
+      if (block) matchStage.block_id = block;
+
+      const pipeline = [
+        { $match: matchStage },
+        {
+          $lookup: {
+            from: "kpis",
+            localField: "kpi_id",
+            foreignField: "id",
+            as: "kpiDetails",
+          },
+        },
+        {
+          $unwind: "$kpiDetails",
+        },
+        {
+          $lookup: {
+            from: "states",
+            localField: "state_id",
+            foreignField: "id",
+            as: "stateDetails",
+          },
+        },
+        { $unwind: "$stateDetails" },
+        {
+          $lookup: {
+            from: "districts",
+            localField: "dist_id",
+            foreignField: "id",
+            as: "districtDetails",
+          },
+        },
+        { $unwind: "$districtDetails" },
+        {
+          $lookup: {
+            from: "blocks",
+            localField: "block_id",
+            foreignField: "id",
+            as: "blockDetails",
+          },
+        },
+        { $unwind: "$blockDetails" },
+        {
+          $lookup: {
+            from: "grampanchayats",
+            localField: "gp_id",
+            foreignField: "id",
+            as: "gpDetails",
+          },
+        },
+        { $unwind: "$gpDetails" },
+        {
+          $project: {
+            _id: 0,
+            id: 1,
+            state_id: 1,
+            "stateDetails.name": 1,
+            dist_id: 1,
+            "districtDetails.name": 1,
+            block_id: 1,
+            "blockDetails.name": 1,
+            gp_id: 1,
+            "gpDetails.name": 1,
+            date: 1,
+            theme_id: 1,
+            kpi_id: 1,
+            max_range: 1,
+            input_data: 1,
+            score: 1,
+            remarks: 1,
+            status: 1,
+            submitted_id: 1,
+            created_by: 1,
+            modified_by: 1,
+            created_at: 1,
+            modified_at: 1,
+            kpiDetails: 1, // Include KPI details
+          },
+        },
+      ];
+
+      const gpWiseKpiData = await gpWiseKpiModel.aggregate(pipeline);
+
+      if (!gpWiseKpiData || gpWiseKpiData.length === 0) {
+        return next(
+          new Errorhandler("No KPI data found for the specified filters", 404)
+        );
+      }
+
+      res.status(200).json({
+        success: true,
+        message: "KPI data fetched successfully",
+        data: gpWiseKpiData,
+      });
     } catch (error) {
       return next(new Errorhandler("Failed to get wise data", 500));
     }
