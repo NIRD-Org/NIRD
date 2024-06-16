@@ -3,7 +3,7 @@ import React from "react";
 const ThemeCard = ({ imgUrl, theme }) => {
   return (
     <a href={`#${theme}`}>
-      <div className="hover:cursor-pointer relative min-w-48 h-[5.5rem]   rounded-lg overflow-hidden">
+      <div className="hover:cursor-pointer relative w-[80vw] sm:w-[17rem] h-[8rem]   rounded-lg overflow-hidden">
         <img src={imgUrl} alt="" className="h-full w-full object-cover " />
         <div className="absolute text-sm z-10 inset-0 w-full h-full flex items-center justify-center text-center bg-black/50 text-white font-semibold">
           {theme}
@@ -63,7 +63,7 @@ const Themes = () => {
   ];
 
   return (
-    <div className="w-[90vw] flex gap-5 items-center overflow-auto lg:flex-wrap lg:overflow-hidden">
+    <div className="w-[90vw] grid place-items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
       {images.map((d) => (
         <ThemeCard imgUrl={d.imgUrl} theme={d.theme} />
       ))}
