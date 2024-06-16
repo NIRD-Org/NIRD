@@ -131,14 +131,14 @@ export const submitIndicatorData = CatchAsyncError(async (req, res, next) => {
 });
 
 const getGpWiseIndicatorDataWithPercentage = async (query) => {
-  const { state, dist, block, gp } = query;
+  const { state, dist, block, gp, search } = query;
   const filter = {};
   if (state) filter.state_id = state;
   if (dist) filter.dist_id = dist;
   if (block) filter.block_id = block;
   if (gp) filter.gp_id = gp;
 
-  const gpWiseKpiData = await GpWiseIndicatorModel.aggregate([
+  const pipeline = [
     { $match: filter },
     {
       $group: {
@@ -239,7 +239,25 @@ const getGpWiseIndicatorDataWithPercentage = async (query) => {
       },
     },
     { $sort: { new_id: 1 } },
-  ]);
+  ];
+
+  if (search) {
+    const regex = new RegExp(search, "i"); // 'i' makes it case-insensitive
+    console.log("Regex: " + regex);
+    pipeline.push({
+      $match: {
+        $or: [
+          { "state.name": { $regex: regex } },
+          { "district.name": { $regex: regex } },
+          { "block.name": { $regex: regex } },
+          { "gp.name": { $regex: regex } },
+        ],
+      },
+    });
+  }
+
+  pipeline.push({ $sort: { created_at: -1 } });
+  const gpWiseKpiData = await GpWiseIndicatorModel.aggregate(pipeline);
 
   if (!gpWiseKpiData || gpWiseKpiData.length === 0) {
     throw new Errorhandler("No Gp Wise KPI Data Found", 404);
