@@ -7,7 +7,7 @@ import { useAuthContext } from "@/context/AuthContext";
 import { tst } from "@/lib/utils";
 import API from "@/utils/API";
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import YfLayout from "./YfLayout";
 
 function AddGpWiseKpi() {
@@ -17,6 +17,7 @@ function AddGpWiseKpi() {
   const block_id = searchParams.get("block_id") || "";
   const gp_id = searchParams.get("gram_id") || "";
   const theme_id = searchParams.get("theme_id") || "";
+  const navigate = useNavigate();
 
   const [kpis, setKpis] = useState([]);
   const [formData, setFormData] = useState([]);
@@ -277,6 +278,7 @@ function AddGpWiseKpi() {
       const response = await API.post("/api/v1/gp-wise-kpi/submit", dataToSend);
       console.log("Success:", response.data);
       tst.success("Form submitted successfully");
+      navigate('/admin/young-professionals');
     } catch (error) {
       tst.error(error);
       console.error("Error submitting data:", error);
@@ -316,10 +318,10 @@ function AddGpWiseKpi() {
                       <Input type="number" name="max_range" value={formData[index]?.max_range || ""} onChange={e => handleChange(e, index)} />
                     </TableCell>
                     <TableCell>
-                      <Input required type="number" name="input_data" value={formData[index]?.input_data || ""} onChange={e => handleChange(e, index)} />
+                      <Input required max={formData[index]?.max_range} type="number" name="input_data" value={formData[index]?.input_data || ""} onChange={e => handleChange(e, index)} />
                     </TableCell>
                     <TableCell>
-                      <Input disabled type="number" name="score" value={formData[index]?.score || ""} onChange={e => handleChange(e, index)} />
+                      <Input disabled type="number" name="score" value={formData[index]?.score || "0"} onChange={e => handleChange(e, index)} />
                     </TableCell>
                     <TableCell>
                       <Textarea type="text" name="remarks" value={formData[index]?.remarks || ""} onChange={e => handleChange(e, index)} />

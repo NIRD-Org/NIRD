@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import API from "@/utils/API";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCaption } from "@/components/ui/table";
-import { NirdEditIcon } from "../Icons";
+import { NirdEditIcon, NirdViewIcon } from "../Icons";
 import YfLayout from "./YfLayout";
 
 function GpWiseKpiList() {
@@ -47,7 +47,7 @@ function GpWiseKpiList() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>ID</TableHead>
+                <TableHead>Submission ID</TableHead>
                 <TableHead>Theme</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Status</TableHead>
@@ -61,7 +61,7 @@ function GpWiseKpiList() {
                   <TableCell>{kpiApproval.theme_name}</TableCell>
                   <TableCell>{new Date(kpiApproval.created_at).toLocaleDateString()}</TableCell>
                   <TableCell>{kpiApproval.decision == 0 ? "Submitted" : "Sent Back"}</TableCell>
-                  <TableCell><NirdEditIcon/></TableCell>
+                  <TableCell><NirdViewIcon/></TableCell>
                 </TableRow>
               ))}
             </TableBody>
