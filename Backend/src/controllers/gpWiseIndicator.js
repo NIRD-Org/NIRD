@@ -134,7 +134,7 @@ const getGpWiseIndicatorDataWithPercentage = async (query) => {
   const { state, dist, block, gp } = query;
   const filter = {};
   if (state) filter.state_id = state;
-  if (dist) filter.district_id = dist;
+  if (dist) filter.dist_id = dist;
   if (block) filter.block_id = block;
   if (gp) filter.gp_id = gp;
 
