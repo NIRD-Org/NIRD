@@ -36,6 +36,9 @@ const Indicators = () => {
 
   useEffect(() => {
     setDistrict("");
+    setDistrictOptions([]);
+    setBlockOptions([]);
+    setGpOptions([]);
     setblock("");
     setGp("");
     // getAllKpiData();
@@ -45,6 +48,7 @@ const Indicators = () => {
 
   useEffect(() => {
     if (district) {
+      setGpOptions([]);
       getAllBlocks();
     }
   }, [district]);
@@ -52,45 +56,6 @@ const Indicators = () => {
   useEffect(() => {
     if (block) getAllGp();
   }, [block]);
-
-  const stateOptions1 = stateOptions.map((item) => ({
-    value: item.id,
-    label: item.name,
-  }));
-  const districtOptions1 = districtOptions.map((item) => ({
-    value: item.id,
-    label: item.name,
-  }));
-
-  const blockOptions1 = blockOptions.map((item) => ({
-    value: item.id,
-    label: item.name,
-  }));
-
-  const GpOptions1 = GpOptions.map((item) => ({
-    value: item.id,
-    label: item.name,
-  }));
-
-  const customStyles = {
-    control: (provided) => ({
-      ...provided,
-      fontSize: "15px", // Adjust the font size as needed
-      width: "100%", // Adjust the width as needed
-    }),
-    singleValue: (provided) => ({
-      ...provided,
-      fontSize: "15px", // Adjust the font size as needed
-    }),
-    option: (provided) => ({
-      ...provided,
-      fontSize: "14px", // Adjust the font size of the options as needed
-    }),
-    menu: (provided) => ({
-      ...provided,
-      width: "max-content", // Adjust the width of the dropdown menu as needed
-    }),
-  };
 
   // Old
   const [indicator, setIndicator] = useState([]);
@@ -113,9 +78,30 @@ const Indicators = () => {
 
   const getGpWiseKpiData = async () => {
     try {
-      const { data } = await API.get("/api/v1/gp-wise-indicator/indicators");
-      setGpWiseKpiData(data.data);
+      const { data } = await API.get(`/api/v1/gp-wise-indicator/indicators`);
+      if (data.success) {
+        setGpWiseKpiData(data.data);
+      } else {
+        setGpWiseKpiData([]);
+      }
     } catch (error) {
+      setGpWiseKpiData([]);
+      console.log("Error: " + error);
+    }
+  };
+
+  const getGpWiseKpiDataFilters = async () => {
+    try {
+      const { data } = await API.get(
+        `/api/v1/gp-wise-indicator/indicators?state=${state}&dist=${district}&block=${block}&gp=${gp}`
+      );
+      if (data.success) {
+        setGpWiseKpiData(data.data);
+      } else {
+        setGpWiseKpiData([]);
+      }
+    } catch (error) {
+      setGpWiseKpiData([]);
       console.log("Error: " + error);
     }
   };
@@ -125,76 +111,100 @@ const Indicators = () => {
     getAllKpi();
   }, []);
 
+  useEffect(() => {
+    if (state === "All States") {
+      getGpWiseKpiData();
+      return;
+    }
+    if (state || district || block || gp) {
+      getGpWiseKpiDataFilters();
+    }
+  }, [state, district, block, gp]);
+
+  const handleReset = () => {
+    setState("");
+    setDistrict("");
+    setblock("");
+    setGp("");
+    getGpWiseKpiData();
+  };
+
   return (
     <div className="px-10 pb-8 lg:px-20 lg:pb-12">
       <h1 className="text-xl font-bold mb-4">Institutional Strengthening</h1>
       <div className="flex flex-col md:flex-row items-center gap-10 justify-between pt-10  ">
-        <div className="flex flex-wrap items-center gap-2 sm:gap-5">
+        <div className="flex flex-wrap items-start py-10 gap-2 sm:gap-5">
           <div className="flex flex-col">
-            <label className="text-gray-600 text-sm mb-1">Select State</label>
-
-            <Select
-              className="basic-single"
-              classNamePrefix="select"
-              defaultValue={stateOptions1[0]}
-              isClearable="true"
-              isSearchable="true"
-              name="States"
-              options={stateOptions1}
-              onChange={(e) => setState(e.value)}
-              classNames="text-black w-full text-sm"
-              styles={customStyles}
-            />
+            <select
+              className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
+              value={state}
+              onChange={(e) => {
+                setState(e.target.value);
+              }}
+            >
+              <option>All States</option>
+              {stateOptions.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="flex flex-col">
-            <label className="text-gray-600 text-sm mb-1">
-              Select District
-            </label>
             {/* <SelectComponent data={districtOptions} name="District" /> */}
-            <Select
-              className="basic-single"
-              classNamePrefix="select"
-              defaultValue={districtOptions1[0]}
-              isClearable={true}
-              isSearchable={true}
-              name="States"
-              options={districtOptions1}
-              onChange={(e) => setDistrict(e.value)}
-              classNames="text-black w-full"
-            />
+            <select
+              className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
+              value={district}
+              onChange={(e) => {
+                setDistrict(e.target.value);
+              }}
+            >
+              <option>All Districts</option>
+              {districtOptions.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="flex flex-col">
-            <label className="text-gray-600 text-sm mb-1">
-              Select Block/block
-            </label>
-            <Select
-              className="basic-single"
-              classNamePrefix="select"
-              defaultValue={blockOptions1[0]}
-              isClearable={true}
-              isSearchable={true}
-              name="States"
-              options={blockOptions1}
-              onChange={(e) => setblock(e.value)}
-              classNames="text-black w-full text-sm"
-              styles={customStyles}
-            />
+            <select
+              className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
+              value={block}
+              onChange={(e) => {
+                setblock(e.target.value);
+              }}
+            >
+              <option>All Blocks</option>
+              {blockOptions.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="flex flex-col">
-            <label className="text-gray-600 text-sm mb-1">Select GP</label>
-            <Select
-              className="basic-single"
-              classNamePrefix="select"
-              defaultValue={GpOptions1[0]}
-              isClearable={true}
-              isSearchable={true}
-              name="States"
-              options={GpOptions1}
-              onChange={(e) => setGp(e.value)}
-              classNames="text-black w-full text-sm"
-              styles={customStyles}
-            />
+            <select
+              className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
+              value={gp}
+              onChange={(e) => {
+                setGp(e.target.value);
+              }}
+            >
+              <option>All GPs</option>
+              {GpOptions.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
           </div>
+          <button
+            onClick={handleReset}
+            className="bg-sky-900 rounded text-white text-sm p-2 px-4"
+          >
+            Reset
+          </button>
         </div>
         <div className="flex items-center space-x-2">
           <input
@@ -220,22 +230,6 @@ const Indicators = () => {
           </button>
         </div>
       </div>
-      {/* <div className="flex relative pt-5 pb-20">
-        <div class="ml-1/4 flex-1 overflow-hidden">
-          <div class="flex flex-col">
-            <div class="-m-1.5 overflow-x-auto">
-              <div class="p-1.5 min-w-full inline-block align-middle">
-                <div class="overflow-hidden">
-                  <table class="min-w-full divide-y divide-gray-200">
-                    <thead>
-                      <tr>
-                        <th>
-                          <h1 className="text-3xl">Gram Panchayat</h1>
-                        </th>
-                    
-                    
-        </div>
-      </div> */}
 
       <div className="flex relative pt-5 pb-20">
         <div className="ml-1/4 flex-1 overflow-hidden">
@@ -243,56 +237,66 @@ const Indicators = () => {
             <div className="overflow-x-auto">
               <div className="min-w-full inline-block align-middle">
                 <div className="overflow-x-hidden max-h-screen">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-white sticky top-0 z-10">
-                      <tr>
-                        <th className="pl-5">
-                          <h1 className="text-3xl">Gram Panchayat</h1>
-                        </th>
-                        {indicator?.map((i) => (
-                          <th
-                            scope="col"
-                            className="px-4 w-[10rem] py-3 text-start text-xs font-medium text-gray-500 uppercase"
-                            key={i.id}
-                          >
-                            {i.name}
+                  {gpWiseKpiData && gpWiseKpiData.length > 0 ? (
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead className="bg-white sticky top-0 z-0">
+                        <tr>
+                          <th className="pl-5">
+                            <h1 className="text-3xl">Gram Panchayat</h1>
                           </th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y border-2 border-red-600 divide-gray-200">
-                      {gpWiseKpiData.map((gpData, index) => (
-                        <tr key={index}>
-                          <td className="pl-5">
-                            <div className="mb-4">
-                              <h3 className="text-xl font-semibold">
-                                {gpData.gp_name}
-                              </h3>
-                              <p>{gpData.block_name}</p>
-                              <p className="text-lg">{gpData.district_name}</p>
-                              <p className="text-sm">{gpData.state_name}</p>
-                            </div>
-                          </td>
-                          {indicator.map((i) => {
-                            const indicatorData = gpData.gp_percentage.find(
-                              (item) => item.indicator_id === i.id
-                            );
-                            return (
-                              <td className="px-4" key={i.id}>
-                                {indicatorData ? (
-                                  <Progress
-                                    value={indicatorData.percentage.toFixed(2)}
-                                  />
-                                ) : (
-                                  "N/A"
-                                )}
-                              </td>
-                            );
-                          })}
+                          {indicator?.map((i) => (
+                            <th
+                              scope="col"
+                              className="px-4 w-[10rem] py-3 text-start text-xs font-medium text-gray-500 uppercase"
+                              key={i.id}
+                            >
+                              {i.name}
+                            </th>
+                          ))}
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody className="divide-y border-2 border-red-600 divide-gray-200">
+                        {gpWiseKpiData.map((gpData, index) => (
+                          <tr key={index}>
+                            <td className="pl-5">
+                              <div className="mb-4">
+                                <h3 className="text-xl font-semibold">
+                                  {gpData.gp_name}
+                                </h3>
+                                <p>{gpData.block_name}</p>
+                                <p className="text-lg">
+                                  {gpData.district_name}
+                                </p>
+                                <p className="text-sm">{gpData.state_name}</p>
+                              </div>
+                            </td>
+                            {indicator.map((i) => {
+                              const indicatorData = gpData.gp_percentage.find(
+                                (item) => item.indicator_id === i.id
+                              );
+                              return (
+                                <td className="px-4" key={i.id}>
+                                  {indicatorData ? (
+                                    <Progress
+                                      value={indicatorData.percentage.toFixed(
+                                        2
+                                      )}
+                                    />
+                                  ) : (
+                                    "N/A"
+                                  )}
+                                </td>
+                              );
+                            })}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  ) : (
+                    <h1 className="text-center font-semibold text-gray-700 text-5xl">
+                      No Data Found
+                    </h1>
+                  )}
                 </div>
               </div>
             </div>
