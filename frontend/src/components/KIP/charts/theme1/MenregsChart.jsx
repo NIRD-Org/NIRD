@@ -28,7 +28,7 @@ const ManregsChart = ({ kpi, kpiId, theme }) => {
   const getChartData = async () => {
     try {
       const { data } = await API.get(
-        `/api/v1/gp-wise-kpi/chart?state=${state}&dist=${dist}&gp=${gp}&kpi=${kpiId}`
+        `/api/v1/gp-wise-kpi/chart?state=${state}&dist=${dist}&gp=${gp}&kpi=${kpiId}&theme=${theme}`
       );
       setGpwiseKpiChart(data);
     } catch (error) {
@@ -54,7 +54,12 @@ const ManregsChart = ({ kpi, kpiId, theme }) => {
     datasets: [
       {
         label: kpi.substr(0, 70) + "...",
-        data: [98, 78, 94, 87],
+        data: [
+          gpwiseKpiChart?.quarterlyPercentage?.quarter1,
+          gpwiseKpiChart?.quarterlyPercentage?.quarter2 || 78,
+          gpwiseKpiChart?.quarterlyPercentage?.quarter3 || 94,
+          gpwiseKpiChart?.quarterlyPercentage?.quarter4 || 87,
+        ],
         backgroundColor: "#00203F",
 
         borderColor: "#004B86",
@@ -93,7 +98,11 @@ const ManregsChart = ({ kpi, kpiId, theme }) => {
     labels: ["GP", "State", "Country"],
     datasets: [
       {
-        data: [54, 34, 56],
+        data: [
+          gpwiseKpiChart.yearlyData.gp.percentage,
+          gpwiseKpiChart.yearlyData.state.percentage,
+          gpwiseKpiChart.yearlyData.country.percentage,
+        ],
         fill: true,
         backgroundColor: ["#004B86", "darkOrange", "gray"],
         borderColor: [
@@ -144,10 +153,18 @@ const ManregsChart = ({ kpi, kpiId, theme }) => {
           </thead>
           <tbody>
             <tr>
-              <td className="p-2 border-2 text-center">98%</td>
-              <td className="p-2 border-2 text-center">78%</td>
-              <td className="p-2 border-2 text-center">94%</td>
-              <td className="p-2 border-2 text-center">87%</td>
+              <td className="p-2 border-2 text-center">
+                {gpwiseKpiChart?.quarterlyPercentage?.quarter1 || "N/A"}
+              </td>
+              <td className="p-2 border-2 text-center">
+                {gpwiseKpiChart?.quarterlyPercentage?.quarter2 || "N/A"}
+              </td>
+              <td className="p-2 border-2 text-center">
+                {gpwiseKpiChart?.quarterlyPercentage?.quarter3 || "N/A"}
+              </td>
+              <td className="p-2 border-2 text-center">
+                {gpwiseKpiChart?.quarterlyPercentage?.quarter4 || "N/A"}
+              </td>
             </tr>
           </tbody>
         </table>

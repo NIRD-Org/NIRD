@@ -153,7 +153,7 @@ export const submitKpiData = CatchAsyncError(async (req, res, next) => {
       theme_id,
       submitted_id,
       created_by: user_id,
-      date: parsedDate
+      date: parsedDate,
     };
 
     // Insert the approval request into the gpWiseKpiApproval collection
@@ -310,72 +310,109 @@ export const getGpWiseKpiData = CatchAsyncError(async (req, res, next) => {
 });
 
 // Charts for different KPIs
-
 export const getGpWiseKpiChart = CatchAsyncError(async (req, res, next) => {
   try {
     const { state, dist, block, theme, gp, kpi } = req.query;
+
+    // Define the query to fetch data based on the provided filters
     const query = {
-      kpi_id: kpi,
-      gp_id: gp,
       theme_id: theme,
     };
     if (state) query.state_id = state;
     if (dist) query.dist_id = dist;
     if (block) query.block_id = block;
-    const gpData = await GpWiseKpiModel.findOne(query);
+    if (gp) query.gp_id = gp;
+    if (kpi) query.kpi_id = kpi;
 
-    // console.log(gpData);
-    if (!gpData || gpData.length === 0) {
-      return next(new Errorhandler("No Gp Wise KPI Data Found", 404));
-    }
+    // Fetch data for all quarters for the specified theme and filters
+    const gpDataList = await GpWiseKpiModel.find(query);
 
-    let gpPercentage = (gpData.input_data / gpData.max_range) * 100;
-    console.log(gpPercentage);
-    const stateData = await GpWiseKpiModel.find({
-      kpi_id: kpi,
-      state_id: state,
+    // Group the data by submitted_id to process each quarter separately
+    const groupedBySubmittedId = gpDataList.reduce((acc, data) => {
+      if (!acc[data.submitted_id]) {
+        acc[data.submitted_id] = [];
+      }
+      acc[data.submitted_id].push(data);
+      return acc;
+    }, {});
+
+    // Calculate quarterly percentages and yearly data
+    const quarterlyPercentage = {};
+    let gpYearlyInputData = 0,
+      gpYearlyMaxRange = 0;
+    let stateYearlyInputData = 0,
+      stateYearlyMaxRange = 0;
+    let countryYearlyInputData = 0,
+      countryYearlyMaxRange = 0;
+
+    Object.keys(groupedBySubmittedId).forEach((submittedId, index) => {
+      const quarterData = groupedBySubmittedId[submittedId];
+      let quarterGpInputData = 0,
+        quarterGpMaxRange = 0;
+      let quarterStateInputData = 0,
+        quarterStateMaxRange = 0;
+      let quarterCountryInputData = 0,
+        quarterCountryMaxRange = 0;
+
+      quarterData.forEach((data) => {
+        // Aggregate GP level data for the quarter
+        if (data.gp_id === gp) {
+          quarterGpInputData += data.input_data;
+          quarterGpMaxRange += data.max_range;
+        }
+
+        // Aggregate State level data for the quarter
+        if (data.state_id === state) {
+          quarterStateInputData += data.input_data;
+          quarterStateMaxRange += data.max_range;
+        }
+
+        // Aggregate Country level data for the quarter
+        quarterCountryInputData += data.input_data;
+        quarterCountryMaxRange += data.max_range;
+      });
+
+      // Calculate quarterly percentage
+      const quarterPercentage = (quarterGpInputData / quarterGpMaxRange) * 100;
+      quarterlyPercentage[`quarter${index + 1}`] = quarterPercentage.toFixed(2);
+
+      // Accumulate yearly data
+      gpYearlyInputData += quarterGpInputData;
+      gpYearlyMaxRange += quarterGpMaxRange;
+      stateYearlyInputData += quarterStateInputData;
+      stateYearlyMaxRange += quarterStateMaxRange;
+      countryYearlyInputData += quarterCountryInputData;
+      countryYearlyMaxRange += quarterCountryMaxRange;
     });
 
-    const stateTotalInputData = stateData.reduce(
-      (total, gp) => total + gp.input_data,
-      0
-    );
-    const stateTotalMaxRange = stateData.reduce(
-      (total, gp) => total + gp.max_range,
-      0
-    );
+    // Calculate yearly percentages
+    const gpYearlyPercentage = (gpYearlyInputData / gpYearlyMaxRange) * 100;
+    const stateYearlyPercentage =
+      (stateYearlyInputData / stateYearlyMaxRange) * 100;
+    const countryYearlyPercentage =
+      (countryYearlyInputData / countryYearlyMaxRange) * 100;
 
-    let statePercentage = (stateTotalInputData / stateTotalMaxRange) * 100;
-
-    const countryData = await GpWiseKpiModel.find({ kpi_id: kpi });
-    const countryTotalInputData = countryData.reduce(
-      (total, gp) => total + gp.input_data,
-      0
-    );
-    const countryTotalMaxRange = countryData.reduce(
-      (total, gp) => total + gp.max_range,
-      0
-    );
-
-    let countryPercentage =
-      (countryTotalInputData / countryTotalMaxRange) * 100;
-
+    // Respond with the calculated percentages and yearly data
     res.json({
-      gp: {
-        gp_id: gpData.gp_id,
-        percentage: gpPercentage.toFixed(2),
-      },
-      state: {
-        state_id: state,
-        percentage: statePercentage.toFixed(2),
-      },
-      country: {
-        percentage: countryPercentage.toFixed(2),
+      quarterlyPercentage,
+      yearlyData: {
+        gp: {
+          totalInputData: gpYearlyInputData,
+          percentage: gpYearlyPercentage.toFixed(2),
+        },
+        state: {
+          totalInputData: stateYearlyInputData,
+          percentage: stateYearlyPercentage.toFixed(2),
+        },
+        country: {
+          totalInputData: countryYearlyInputData,
+          percentage: countryYearlyPercentage.toFixed(2),
+        },
       },
     });
   } catch (error) {
     console.log(error);
-    return next(new Errorhandler("Failed to get kpi data", 500));
+    return next(new Errorhandler("Failed to get KPI data", 500));
   }
 });
 
