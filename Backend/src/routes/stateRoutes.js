@@ -16,5 +16,6 @@ router.route("/create", isAuth).post(createState);
 router.route("/:id").get(getStateById);
 router.route("/delete/:id").put(deleteState);
 router.route("/:id").put(updateState);
+router.route("/get-state/:id").get(getStateById);
 
 export default router;

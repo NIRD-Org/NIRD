@@ -4,6 +4,7 @@ import {
   createDistrict,
   deleteDistrict,
   updateDistrict,
+  getDistrictById,
 } from "../controllers/districtController.js";
 import { isAuth } from "../middlewares/auth.js";
 
@@ -13,5 +14,6 @@ router.route("/state/:state").get(getDistrictByState);
 router.route("/create").post(createDistrict);
 router.route("/delete/:id").put(deleteDistrict);
 router.route("/:id").put(updateDistrict);
+router.route("/get-dist/:id").get(getDistrictById);
 
 export default router;

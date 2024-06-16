@@ -5,13 +5,10 @@ import Layout from "./Layout";
 import AdminPage from "./Pages/admin/AdminPage";
 import BlockPage from "./components/admin/block/BlockPage";
 import GpPage from "./components/admin/gp/GpPage";
-import KpiPage from "./components/admin/kpi/KpiPage";
 import ThemePage from "./components/admin/theme/ThemePage";
-import GpWiseKpiPage from "./components/admin/gp-wise-kpi/GpWiseKpiPage";
 import DistrictPage from "./components/admin/district/DistrictPage";
 import KPIApprovalPage from "./components/admin/kpi-approval/KPIApprovalPage";
 import KPIDetails from "./Pages/KPIDetails";
-import KPIQuestionPage from "./components/admin/kpi-question/KPIQuestionPage";
 import StatePage from "./components/admin/state/StatePage";
 import { Toaster } from "react-hot-toast";
 import LoginPage from "./Pages/LoginPage";
@@ -22,19 +19,17 @@ import KPIPage from "./Pages/KPIPage";
 import CreateUserForm from "./components/admin/create-user/CreateUserForm";
 import YoungFellowForm from "./components/admin/young-fellow/YoungFellowForm";
 import { useAuthContext } from "./context/AuthContext";
-import GpWiseKpiList from "./components/admin/young-fellow/YoungFellow.jsx/GpWiseKpiList";
-import AddGpWiseKpi from "./components/admin/young-fellow/YoungFellow.jsx/AddGpWiseKpi";
+import GpWiseKpiList from "./components/admin/young-fellow/GpWiseKpiList";
+import AddGpWiseKpi from "./components/admin/young-fellow/AddGpWiseKpi";
 import StateForm from "./components/admin/state/StateForm";
 import DistrictForm from "./components/admin/district/DistrictForm";
 import BlockForm from "./components/admin/block/BlockForm";
 import GpForm from "./components/admin/gp/GpForm";
 import ThemeForm from "./components/admin/theme/ThemeForm";
-import KpiForm from "./components/admin/kpi/KpiForm";
-import KpiQuestionForm from "./components/admin/kpi-question/KpiQuestionForm";
 import IndicatorForm from "./components/admin/young-fellow/IndicatorForm";
 import AdminMainPage from "./components/admin/AdminMainPage";
-import DataPointForm from "./components/admin/data-point/DataPointForm";
-import DataPointPage from "./components/admin/data-point/DataPointPage";
+import DataPointForm from "./components/admin/kpi/DataPointForm";
+import DataPointPage from "./components/admin/kpi/DataPointPage";
 
 function App() {
   const { login } = useAuthContext();
@@ -58,12 +53,9 @@ function App() {
             <Route index element={<AdminMainPage />} />
             <Route path="blocks" element={<BlockPage />} />
             <Route path="gram-panchayats" element={<GpPage />} />
-            <Route path="kpi" element={<KpiPage />} />
             <Route path="themes" element={<ThemePage />} />
-            {/* <Route path="gp-wise-kpi" element={<GpWiseKpiPage />} /> */}
             <Route path="districts" element={<DistrictPage />} />
             <Route path="kpi-approvals" element={<KPIApprovalPage />} />
-            <Route path="kpi-questions" element={<KPIQuestionPage />} />
             <Route path="states" element={<StatePage />} />
             <Route path="users/create" element={<CreateUserForm />} />
             <Route path="young-professionals" element={<YoungFellowForm />} />
@@ -74,8 +66,6 @@ function App() {
             <Route path="block/create" element={<BlockForm />} />
             <Route path="gram/create" element={<GpForm />} />
             <Route path="theme/create" element={<ThemeForm />} />
-            <Route path="kpi/create" element={<KpiForm />} />
-            <Route path="kpi-question/create" element={<KpiQuestionForm />} />
             <Route path="indicator/create" element={<IndicatorForm />} />
             <Route path="data-point/create" element={<DataPointForm />} />
             <Route path="data-point" element={<DataPointPage />} />

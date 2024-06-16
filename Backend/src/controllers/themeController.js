@@ -103,3 +103,22 @@ export const updateTheme = CatchAsyncError(async (req, res, next) => {
     return next(new Errorhandler("Failed to update theme", 500));
   }
 });
+
+
+// get theme by id
+
+export const getThemeById = CatchAsyncError(async (req, res, next) => {
+  try {
+    const theme = await ThemeModel.findOne({ id: req.params.id });
+    if (!theme) {
+      return next(new Errorhandler("Theme not found", 404));
+    }
+    res.status(200).json({
+      status: "success",
+      message: "Theme Fetched Successfully",
+      theme,
+    });
+  } catch (error) {
+    return next(new Errorhandler("Failed to get Theme", 500));
+  }
+});

@@ -4,6 +4,7 @@ import {
   deleteGP,
   getGpByLocation,
   updateGP,
+  getGpById
 } from "../controllers/gpController.js";
 import { isAuth } from "../middlewares/auth.js";
 
@@ -13,4 +14,5 @@ router.route("/get").get(getGpByLocation);
 router.route("/create").post(createGP);
 router.route("/delete/:id").put(deleteGP);
 router.route("/:id").put(updateGP);
+router.route('/get-gram/:id').get(getGpById);
 export default router;

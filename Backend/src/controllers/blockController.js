@@ -135,3 +135,22 @@ export const updateblock = CatchAsyncError(async (req, res, next) => {
     return next(new Errorhandler("Failed to update block", 500));
   }
 });
+
+
+// get block by id
+
+export const getBlockById = CatchAsyncError(async (req, res, next) => {
+  try {
+    const block = await BlockModel.findOne({ id: req.params.id });
+    if (!block) {
+      return next(new Errorhandler("Block not found", 404));
+    }
+    res.status(200).json({
+      success: true,
+      message: "Block fetched successfully",
+      block,
+    });
+  } catch (err) {
+    return next(new Errorhandler("Failed to get block", 500));
+  }
+});
