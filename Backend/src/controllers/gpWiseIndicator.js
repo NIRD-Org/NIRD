@@ -283,8 +283,8 @@ const getGpWiseIndicatorDataWithPercentage = async (query) => {
         },
         original_id: { $first: "$_id" },
         doc: { $first: "$$ROOT" },
-        totalInputData: { $sum: { $toDouble: "$input_data" } },
-        totalMaxRange: { $sum: { $toDouble: "$max_range" } },
+        totalInputData: { $first: { $toDouble: "$input_data" } },
+        totalMaxRange: { $first: { $toDouble: "$max_range" } },
       },
     },
     {
