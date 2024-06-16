@@ -5,7 +5,14 @@ import { Button } from "@/components/ui/button";
 import API from "@/utils/API";
 import { tst } from "@/lib/utils";
 import AdminHeader from "../AdminHeader";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 
 function IndicatorForm({ type = "add" }) {
@@ -52,9 +59,11 @@ function IndicatorForm({ type = "add" }) {
     async function fetchDistricts() {
       if (formData.state_id) {
         try {
-          const response = await API.get(`/api/v1/dist/state/${formData.state_id}`);
+          const response = await API.get(
+            `/api/v1/dist/state/${formData.state_id}`
+          );
           setDistricts(response.data?.districts || []);
-          setFormData(prevData => ({
+          setFormData((prevData) => ({
             ...prevData,
             // state_id: "",
             dist_id: "",
@@ -74,9 +83,11 @@ function IndicatorForm({ type = "add" }) {
     async function fetchBlocks() {
       if (formData.dist_id) {
         try {
-          const response = await API.get(`/api/v1/block/get?dist=${formData.dist_id}`);
+          const response = await API.get(
+            `/api/v1/block/get?dist=${formData.dist_id}`
+          );
           setBlocks(response.data?.blocks || []);
-          setFormData(prevData => ({
+          setFormData((prevData) => ({
             ...prevData,
             // state_id: "",
             // dist_id: "",
@@ -95,15 +106,17 @@ function IndicatorForm({ type = "add" }) {
   useEffect(() => {
     async function fetchGrams() {
       try {
-        const { data } = await API.get(`/api/v1/gram/get?block=${formData.block_id}`);
+        const { data } = await API.get(
+          `/api/v1/gram/get?block=${formData.block_id}`
+        );
         setGp(data?.gram || []);
-        setFormData(prevData => ({
-            ...prevData,
-            // state_id: "",
-            // dist_id: "",
-            // block_id: "",
-            gp_id: "",
-          }));
+        setFormData((prevData) => ({
+          ...prevData,
+          // state_id: "",
+          // dist_id: "",
+          // block_id: "",
+          gp_id: "",
+        }));
       } catch (error) {
         console.log(error);
       }
@@ -111,9 +124,9 @@ function IndicatorForm({ type = "add" }) {
     fetchGrams();
   }, [formData.block_id]);
 
-  const handleFormChange = e => {
+  const handleFormChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
@@ -121,7 +134,7 @@ function IndicatorForm({ type = "add" }) {
 
   const handleChange = (e, index) => {
     const { name, value } = e.target;
-    setIndicatorFormData(prevData => {
+    setIndicatorFormData((prevData) => {
       const updatedData = [...prevData];
       updatedData[index] = {
         ...updatedData[index],
@@ -131,7 +144,7 @@ function IndicatorForm({ type = "add" }) {
     });
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     let updatedFormData = indicators.map((item, index) => {
@@ -148,7 +161,10 @@ function IndicatorForm({ type = "add" }) {
     };
 
     try {
-      const response = await API.post("/api/v1/gp-wise-indicator/submit", dataToSend);
+      const response = await API.post(
+        "/api/v1/gp-wise-indicator/submit",
+        dataToSend
+      );
       console.log("Success:", response.data);
       tst.success("Form submitted successfully");
     } catch (error) {
@@ -162,36 +178,38 @@ function IndicatorForm({ type = "add" }) {
       name: "state_id",
       label: "State",
       type: "select",
-      options: states.map(state => ({ value: state.id, label: state.name })),
+      options: states.map((state) => ({ value: state.id, label: state.name })),
       required: true,
     },
     {
       name: "dist_id",
       label: "District",
       type: "select",
-      options: districts.map(district => ({ value: district.id, label: district.name })),
+      options: districts.map((district) => ({
+        value: district.id,
+        label: district.name,
+      })),
       required: true,
     },
     {
       name: "block_id",
       label: "Block",
       type: "select",
-      options: blocks.map(block => ({ value: block.id, label: block.name })),
+      options: blocks.map((block) => ({ value: block.id, label: block.name })),
       required: true,
     },
     {
       name: "gp_id",
       label: "GP",
       type: "select",
-      options: gp.map(gp => ({ value: gp.id, label: gp.name })),
+      options: gp.map((gp) => ({ value: gp.id, label: gp.name })),
       required: true,
     },
   ];
 
-
   const resetForm = () => {
-    console.log('first')
-    setFormData(prevData => ({
+    console.log("first");
+    setFormData((prevData) => ({
       ...prevData,
       state_id: "",
       dist_id: "",
@@ -200,36 +218,60 @@ function IndicatorForm({ type = "add" }) {
     }));
   };
 
-
   return (
     <div className="container mx-auto p-6">
       <div>
         <div className="py-4">
-          <AdminHeader>{type === "add" ? "Young Fellow - Indicators Entry" : "Update Gram Panchayat"}</AdminHeader>
+          <AdminHeader>
+            {type === "add"
+              ? "Young Fellow - Indicators Entry"
+              : "Update Gram Panchayat"}
+          </AdminHeader>
           <div className="grid  gap-10 grid-cols-2 sm:grid-cols-4 md:grid-cols-5">
-            {fields.map(({ name, label, type, options, required, disabled = false }) => (
-              <div key={name}>
-                <Label htmlFor={name} className="inline-block mb-2">
-                  {label}
-                </Label>
-                {required && <span className="text-red-500 ml-1">*</span>}
-                {type === "select" ? (
-                  <select required={required} disabled={pending} className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border" value={formData[name]} name={name} onChange={handleFormChange}>
-                    <option value="" disabled>
-                      Select {label}
-                    </option>
-                    {options.map(option => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
+            {fields.map(
+              ({ name, label, type, options, required, disabled = false }) => (
+                <div key={name}>
+                  <Label htmlFor={name} className="inline-block mb-2">
+                    {label}
+                  </Label>
+                  {required && <span className="text-red-500 ml-1">*</span>}
+                  {type === "select" ? (
+                    <select
+                      required={required}
+                      disabled={pending}
+                      className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
+                      value={formData[name]}
+                      name={name}
+                      onChange={handleFormChange}
+                    >
+                      <option value="" disabled>
+                        Select {label}
                       </option>
-                    ))}
-                  </select>
-                ) : (
-                  <Input required={required} disabled={pending || disabled} type={type} name={name} value={formData[name]} onChange={handleFormChange} id={name} placeholder={`Enter ${label}`} className="col-span-3" />
-                )}
-              </div>
-            ))}
-            <Button className="self-end" onClick={() => resetForm()}>Reset</Button>
+                      {options.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <Input
+                      required={required}
+                      disabled={pending || disabled}
+                      type={type}
+                      name={name}
+                      value={formData[name]}
+                      onChange={handleFormChange}
+                      id={name}
+                      placeholder={`Enter ${label}`}
+                      className="col-span-3"
+                    />
+                  )}
+                </div>
+              )
+            )}
+            <Button className="self-end" onClick={() => resetForm()}>
+              Reset
+            </Button>
           </div>
           <div className="mt-10">
             <form onSubmit={handleSubmit} className="overflow-auto ">
@@ -249,13 +291,34 @@ function IndicatorForm({ type = "add" }) {
                       <TableCell>{data.id}</TableCell>
                       <TableCell>{data.name}</TableCell>
                       <TableCell>
-                        <Input type="number" disabled name="max_range" value={indicatorFormData[index]?.max_range || data.max_range} onChange={e => handleChange(e, index)} />
+                        <Input
+                          type="number"
+                          disabled
+                          name="max_range"
+                          value={
+                            indicatorFormData[index]?.max_range ||
+                            data.max_range
+                          }
+                          onChange={(e) => handleChange(e, index)}
+                        />
                       </TableCell>
                       <TableCell>
-                        <Input required type="number" max={data.max_range} name="input_data" value={indicatorFormData[index]?.input_data || ""} onChange={e => handleChange(e, index)} />
+                        <Input
+                          required
+                          type="number"
+                          max={data.max_range}
+                          name="input_data"
+                          value={indicatorFormData[index]?.input_data || ""}
+                          onChange={(e) => handleChange(e, index)}
+                        />
                       </TableCell>
                       <TableCell>
-                        <Textarea type="text" name="remarks" value={indicatorFormData[index]?.remarks || ""} onChange={e => handleChange(e, index)} />
+                        <Textarea
+                          type="text"
+                          name="remarks"
+                          value={indicatorFormData[index]?.remarks || ""}
+                          onChange={(e) => handleChange(e, index)}
+                        />
                       </TableCell>
                     </TableRow>
                   ))}
@@ -265,7 +328,15 @@ function IndicatorForm({ type = "add" }) {
                 <Label htmlFor="date" className="text-right mt-2">
                   Date
                 </Label>
-                <Input type="date" name="date" value={formData.date || ""} onChange={handleFormChange} id="date" placeholder="Enter datte" className="px-10" />
+                <Input
+                  type="date"
+                  name="date"
+                  value={formData.date || ""}
+                  onChange={handleFormChange}
+                  id="date"
+                  placeholder="Enter datte"
+                  className="px-10"
+                />
               </div>
               <Button className="mt-10 px-20" type="submit">
                 Submit

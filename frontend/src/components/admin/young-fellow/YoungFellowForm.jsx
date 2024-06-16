@@ -1,11 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import {
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import API from "@/utils/API";
 import ThemeRow from "../theme/ThemeRow";
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import StateFilter from "../filter/StateFilter";
 import DistrictFilter from "../filter/DistrictFilter";
 import BlockFilter from "../filter/BlockFilter";
@@ -40,22 +54,22 @@ function YoungFellowForm({ type, onSubmit, kpiApproval }) {
     setThemes(data?.themes);
   };
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setPending(true);
     setPending(false);
   };
 
   useEffect(() => {
-    console.log('first')
+    console.log("first");
     if (gram_id) {
       getAllThemes();
     } else {
@@ -63,8 +77,10 @@ function YoungFellowForm({ type, onSubmit, kpiApproval }) {
     }
   }, [gram_id]);
 
-  const handleGpWiseKpiEdit = id => {
-    navigate(`/admin/gp-wise-kpi?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${id}`);
+  const handleGpWiseKpiEdit = (id) => {
+    navigate(
+      `/admin/gp-wise-kpi?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${id}`
+    );
   };
 
   const resetForm = () => {
@@ -75,8 +91,10 @@ function YoungFellowForm({ type, onSubmit, kpiApproval }) {
   return (
     <div className="container p-6">
       <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">Young Fellow - KPI Entry Form</h2>
-        <div className="w-full grid grid-cols-5 gap-10">
+        <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">
+          Young Fellow - KPI Entry Form
+        </h2>
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10">
           <StateFilter />
           <DistrictFilter />
           <BlockFilter />
@@ -100,12 +118,14 @@ function YoungFellowForm({ type, onSubmit, kpiApproval }) {
             <TableSkeleton columnCount={7} />
           ) : (
             <TableBody>
-              {themes.map(theme => (
+              {themes.map((theme) => (
                 <TableRow>
                   <TableCell>{theme.id}</TableCell>
                   <TableCell>{theme.theme_name}</TableCell>
                   <TableCell>
-                    <Button onClick={() => handleGpWiseKpiEdit(theme.id)}>Edit</Button>
+                    <Button onClick={() => handleGpWiseKpiEdit(theme.id)}>
+                      Edit
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
