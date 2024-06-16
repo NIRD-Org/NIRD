@@ -102,3 +102,4 @@ export const updateState = CatchAsyncError(async (req, res, next) => {
     return next(new Errorhandler("Failed to update state", 500));
   }
 });
+

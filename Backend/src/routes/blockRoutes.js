@@ -6,6 +6,7 @@ import {
   getblockById,
   getblocksByLocation,
   updateblock,
+  getBlockById
 } from "../controllers/blockController.js";
 import { isAuth } from "../middlewares/auth.js";
 
@@ -18,5 +19,7 @@ router.route("/get").get(getblocksByLocation);
 router.route("/create").post(createblock);
 router.route("/delete/:id").put(deleteblock);
 router.route("/:id").put(updateblock);
+router.route("/get-blocks/:id").get(getBlockById);
+
 
 export default router;

@@ -109,3 +109,22 @@ export const updateDistrict = CatchAsyncError(async (req, res, next) => {
     return next(new Errorhandler("Failed to update District", 500));
   }
 });
+
+
+// Get district by id
+
+export const getDistrictById = CatchAsyncError(async (req, res, next) => {
+  try {
+    const districtData = await DistrictModel.findOne({ id: req.params.id });
+    if (!districtData) {
+      return next(new Errorhandler("No District Data Found", 404));
+    }
+    res.status(200).json({
+      success: true,
+      message: "District Data Fetched Successfully",
+      district: districtData,
+    });
+  } catch (error) {
+    return next(new Errorhandler("Failed to fetch District", 500));
+  }
+});
