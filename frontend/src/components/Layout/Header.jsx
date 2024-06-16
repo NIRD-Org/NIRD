@@ -123,7 +123,7 @@ const Header = () => {
       </div>
 
       {/* Mobile navigation */}
-      <div className="lg:hidden bg-primary flex justify-between items-center">
+      <div className="lg:hidden h-[10vh] bg-primary flex justify-between items-center">
         <div className="w-[10%]">
           <img
             src="/logo/niti-logo-white.svg"
@@ -132,7 +132,7 @@ const Header = () => {
           />
         </div>
 
-        <div className="sm:w-[15%] w-[28%] z-50  bg-white">
+        <div className="w-[28%] sm:w-[15%] z-50  bg-white">
           <NavLink to={"/"}>
             <img
               src="/logo/nirdpr.png"
