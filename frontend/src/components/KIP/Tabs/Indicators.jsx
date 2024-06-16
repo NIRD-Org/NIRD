@@ -220,7 +220,7 @@ const Indicators = () => {
           </button>
         </div>
       </div>
-      <div className="flex relative pt-5 pb-20">
+      {/* <div className="flex relative pt-5 pb-20">
         <div class="ml-1/4 flex-1 overflow-hidden">
           <div class="flex flex-col">
             <div class="-m-1.5 overflow-x-auto">
@@ -232,10 +232,27 @@ const Indicators = () => {
                         <th>
                           <h1 className="text-3xl">Gram Panchayat</h1>
                         </th>
+                    
+                    
+        </div>
+      </div> */}
+
+      <div className="flex relative pt-5 pb-20">
+        <div className="ml-1/4 flex-1 overflow-hidden">
+          <div className="flex flex-col h-full">
+            <div className="overflow-x-auto">
+              <div className="min-w-full inline-block align-middle">
+                <div className="overflow-x-hidden max-h-screen">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-white sticky top-0 z-10">
+                      <tr>
+                        <th className="pl-5">
+                          <h1 className="text-3xl">Gram Panchayat</h1>
+                        </th>
                         {indicator?.map((i) => (
                           <th
                             scope="col"
-                            class="px-4 w-[10rem] py-3 text-start text-xs font-medium text-gray-500 uppercase"
+                            className="px-4 w-[10rem] py-3 text-start text-xs font-medium text-gray-500 uppercase"
                             key={i.id}
                           >
                             {i.name}
@@ -243,16 +260,16 @@ const Indicators = () => {
                         ))}
                       </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-200">
+                    <tbody className="divide-y border-2 border-red-600 divide-gray-200">
                       {gpWiseKpiData.map((gpData, index) => (
                         <tr key={index}>
-                          <td>
-                            <div class="mb-4">
-                              <h3 class="text-xl font-semibold">
+                          <td className="pl-5">
+                            <div className="mb-4">
+                              <h3 className="text-xl font-semibold">
                                 {gpData.gp_name}
                               </h3>
                               <p>{gpData.block_name}</p>
-                              <p className="text-lg">{gpData.district_name} </p>
+                              <p className="text-lg">{gpData.district_name}</p>
                               <p className="text-sm">{gpData.state_name}</p>
                             </div>
                           </td>

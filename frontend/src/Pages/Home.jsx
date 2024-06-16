@@ -47,7 +47,7 @@ function Home() {
 
 const ThemeCard = ({ imgUrl, theme }) => {
   return (
-    <div className="hover:cursor-pointer relative min-w-64 h-[10rem]  rounded-lg overflow-hidden">
+    <div className="hover:cursor-pointer relative min-w-64 h-[10rem]  rounded-lg">
       <img src={imgUrl} alt="" className="h-full w-full object-cover " />
       <div className="absolute text-sm z-10 inset-0 w-full h-full flex items-center justify-center text-center bg-black/50 text-white font-semibold">
         {theme}
@@ -81,7 +81,7 @@ const Themes = () => {
   ];
 
   return (
-    <div className="flex gap-5 items-center overflow-auto lg:flex-wrap  lg:overflow-hidden">
+    <div className="flex gap-5 items-center overflow-auto lg:flex-wrap ">
       {images.map((d) => (
         <ThemeCard imgUrl={d.imgUrl} theme={d.theme} />
       ))}
