@@ -11,6 +11,10 @@ const themeSchema = new Schema(
       type: String,
       required: true,
     },
+    theme_image: {
+      type: String,
+      default: "",
+    },
     status: {
       type: String,
       default: "1",

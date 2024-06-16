@@ -417,31 +417,13 @@ export const deleteGpWiseKpiData = CatchAsyncError(async (req, res, next) => {
 export const getGpWiseKpiForApprover = CatchAsyncError(
   async (req, res, next) => {
     try {
-      const { state, dist, block, gp, theme, date } = req.query;
-      console.log(req.query);
-
-      let dateString = null;
-
-      if (date) {
-        const parsedDate = new Date(date);
-        if (!isNaN(parsedDate)) {
-          dateString = parsedDate.toISOString().split("T")[0];
-        }
-      }
+      const { state, dist, block, gp, theme, submitted_id } = req.query;
 
       const matchStage = {
         gp_id: gp,
         theme_id: theme,
+        submitted_id,
       };
-
-      if (dateString) {
-        matchStage.$expr = {
-          $eq: [
-            { $dateToString: { format: "%Y-%m-%d", date: "$date" } },
-            dateString,
-          ],
-        };
-      }
 
       if (state) matchStage.state_id = state;
       if (dist) matchStage.dist_id = dist;

@@ -1,9 +1,11 @@
-import React from "react";
+import API from "@/utils/API";
+import React, { useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 
 const ThemeCard = ({ imgUrl, theme }) => {
   return (
     <a href={`#${theme}`}>
-      <div className="hover:cursor-pointer relative w-[80vw] sm:w-[17rem] h-[8rem]   rounded-lg overflow-hidden">
+      <div className="hover:cursor-pointer relative w-[80vw] sm:w-[17rem] h-[8rem] lg:w-[12rem] xl:w-[13rem]   rounded-lg overflow-hidden">
         <img src={imgUrl} alt="" className="h-full w-full object-cover " />
         <div className="absolute text-sm z-10 inset-0 w-full h-full flex items-center justify-center text-center bg-black/50 text-white font-semibold">
           {theme}
@@ -14,59 +16,34 @@ const ThemeCard = ({ imgUrl, theme }) => {
 };
 
 const Themes = () => {
-  const images = [
-    {
-      imgUrl:
-        "https://res.cloudinary.com/dtbbuevez/image/upload/v1718221368/WhatsApp_Image_2024-06-12_at_14.47.14_1_hdc1fi.jpg",
-      theme: "Poverty Free and Enhanced Livelihoods Village",
-    },
-    {
-      imgUrl:
-        "https://res.cloudinary.com/dtbbuevez/image/upload/v1717957878/themes/sqoylgq7pcbst3otk2h8.jpg",
-      theme: "Healthy Village",
-    },
-    {
-      imgUrl:
-        "https://res.cloudinary.com/dtbbuevez/image/upload/v1717957913/themes/m3vmfa6zy7fxazunf6rt.png",
-      theme: "Child Friendly Village",
-    },
-    {
-      imgUrl:
-        "https://res.cloudinary.com/dtbbuevez/image/upload/v1717957901/themes/hfaiqrqfcbu0lo8pmkvz.jpg",
-      theme: "Water Sufficient Village",
-    },
-    {
-      imgUrl:
-        "https://res.cloudinary.com/dtbbuevez/image/upload/v1717959547/4_1_tnvg14.jpg",
-      theme: "Clean and Green Village",
-    },
-    {
-      imgUrl:
-        "https://res.cloudinary.com/dtbbuevez/image/upload/v1717957905/themes/vfslczxbapybu08ttpok.jpg",
-      theme: "Self-Sufficient Infrastructure in Village",
-    },
-    {
-      imgUrl:
-        "https://res.cloudinary.com/dtbbuevez/image/upload/v1717957911/themes/odken8cp40mxcvtxvoau.png",
-      theme: "Socially Just & Socially Secured Village",
-    },
-    {
-      imgUrl:
-        "https://res.cloudinary.com/dtbbuevez/image/upload/v1717957912/themes/kxz127iusueqfl1y2is2.png",
-      theme: "Village with Good Governance",
-    },
-    {
-      imgUrl:
-        "https://res.cloudinary.com/dtbbuevez/image/upload/v1717957904/themes/emyvzvsfause0lr5astz.jpg",
-      theme: "Women Friendly Village",
-    },
-  ];
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [themeData, setThemeData] = useState([]);
+
+  const state = searchParams.get("state") || "";
+  const dist = searchParams.get("dist") || "";
+  const block = searchParams.get("block") || "";
+  const gp = searchParams.get("gp") || "";
+
+  const getThemeData = async () => {
+    const { data } = await API.get("/api/v1/theme/all");
+    setThemeData(data?.themes);
+  };
+
+  useEffect(() => {
+    getThemeData();
+  }, []);
 
   return (
-    <div className="w-[90vw] grid place-items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
-      {images.map((d) => (
-        <ThemeCard imgUrl={d.imgUrl} theme={d.theme} />
-      ))}
+    <div className="w-[90vw] grid place-items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10">
+      {themeData &&
+        themeData.length > 0 &&
+        themeData.map((d) => (
+          <Link
+            to={`/gp-wise-data/theme/${d.id}?state=${state}&dist=${dist}&block=${block}&gp=${gp}`}
+          >
+            <ThemeCard imgUrl={d.theme_image} theme={d.theme_name} />
+          </Link>
+        ))}
     </div>
   );
 };
