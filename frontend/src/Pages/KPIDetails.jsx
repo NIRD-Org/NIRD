@@ -33,7 +33,7 @@ const KPIDetails = () => {
       );
       setGpData(data?.data);
     } catch (error) {
-      setGpData(null);
+      setGpData([]);
       console.log(error);
     }
   };

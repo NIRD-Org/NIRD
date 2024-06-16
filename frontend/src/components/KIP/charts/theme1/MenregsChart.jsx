@@ -99,9 +99,9 @@ const ManregsChart = ({ kpi, kpiId, theme }) => {
     datasets: [
       {
         data: [
-          gpwiseKpiChart.yearlyData.gp.percentage,
-          gpwiseKpiChart.yearlyData.state.percentage,
-          gpwiseKpiChart.yearlyData.country.percentage,
+          gpwiseKpiChart?.yearlyData?.gp.percentage,
+          gpwiseKpiChart?.yearlyData?.state.percentage,
+          gpwiseKpiChart?.yearlyData?.country.percentage,
         ],
         fill: true,
         backgroundColor: ["#004B86", "darkOrange", "gray"],

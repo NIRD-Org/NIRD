@@ -2,36 +2,44 @@ import React, { useEffect, useState } from "react";
 import GpProfile from "./Tabs/GpProfile";
 import Indicators from "./Tabs/Indicators";
 import Ranking from "./Tabs/Ranking";
+import { useSearchParams } from "react-router-dom";
 
 const KipTabs = ({ setTagline }) => {
-  const [activeTab, setActiveTab] = useState("Localised Sustainable Goals");
+  const [searchparams, setSearchParams] = useSearchParams();
+  const tab = searchparams.get("tab") || "";
 
   useEffect(() => {
-    if (activeTab === "Localised Sustainable Goals") {
+    if (!tab) {
+      setSearchParams({ tab: "Localised Sustainable Goals" });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (tab === "Localised Sustainable Goals") {
       setTagline(
         "Find data from 1016 Gram Panchayats across India and view indicators for 9 themes"
       );
-    } else if (activeTab === "Institutional Strengthening") {
+    } else if (tab === "Institutional Strengthening") {
       setTagline(
         "Find data from 1016 Gram Panchayats across India and view indicators for Institutional Strengthening"
       );
     }
-  }, [activeTab]);
+  }, [tab]);
 
   const tabs = ["Localised Sustainable Goals", "Institutional Strengthening"];
 
   return (
     <div className="w-full ">
       <div className="flex px-10 lg:px-20 justify-center border-gray-200">
-        {tabs.map((tab) => (
+        {tabs.map((t) => (
           <button
-            key={tab}
+            key={t}
             className={`px-4 py-4 text-xl focus:outline-none ${
-              activeTab === tab
-                ? "bg-white text-black  font-semibold"
-                : "text-gray-600"
+              tab === t ? "bg-white text-black  font-semibold" : "text-gray-600"
             }`}
-            onClick={() => setActiveTab(tab)}
+            onClick={() => {
+              setSearchParams({ tab: t });
+            }}
           >
             {tab}
           </button>
@@ -46,8 +54,8 @@ const KipTabs = ({ setTagline }) => {
       ></div>
 
       <div className="mt-4">
-        {activeTab === "Localised Sustainable Goals" && <GpProfile />}
-        {activeTab === "Institutional Strengthening" && <Indicators />}
+        {tab === "Localised Sustainable Goals" && <GpProfile />}
+        {tab === "Institutional Strengthening" && <Indicators />}
       </div>
     </div>
   );

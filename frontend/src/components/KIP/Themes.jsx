@@ -44,6 +44,14 @@ const Themes = () => {
             <ThemeCard imgUrl={d.theme_image} theme={d.theme_name} />
           </Link>
         ))}
+      <Link to={`/kpi?tab=Institutional Strengthening`}>
+        <ThemeCard
+          imgUrl={
+            "https://www.ultimusfundsolutions.com/wp-content/uploads/2021/12/MicrosoftTeams-image-1024x459.jpg"
+          }
+          theme={"Institutional Strengthening"}
+        />
+      </Link>
     </div>
   );
 };
