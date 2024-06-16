@@ -526,7 +526,7 @@ export const getGpWiseKpiForApprover = CatchAsyncError(
 
       const gpWiseKpiData = await GpWiseKpiModel.aggregate(pipeline);
 
-      if (!gpWiseKpiData || gpWiseKpiData.length === 0) {
+      if (!gpWiseKpiData) {
         return next(
           new Errorhandler("No KPI data found for the specified filters", 404)
         );

@@ -19,6 +19,7 @@ function KpiApprovalsList() {
   const getAllKpiApprovals = async () => {
     try {
       const { data } = await API.get(`/api/v1/kpi-approvals/get-kpiapprovals?state=${state_id}&dist=${dist_id}&block=${block_id}&gram=${gram_id}&theme=${theme_id}`);
+    //   console.log(data)
       data?.data?.sort((a, b) => a.id - b.id);
       setKpiApprovals(data?.data || []);
     } catch (error) {
@@ -32,11 +33,11 @@ function KpiApprovalsList() {
     }
   }, [state_id, dist_id, block_id, gram_id, theme_id]);
 
-  const handleNavigate = id => {
+  const handleNavigate = (id,date) => {
     if (id === 1) {
-      navigate(`/admin/submit-kpi-approval?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${theme_id}`);
+      navigate(`/admin/submit-kpi-approval?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${theme_id}&date=${date}`);
     } else if (id === 2) {
-      navigate(`/admin/view-kpi-approval?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${theme_id}`);
+      navigate(`/admin/view-kpi-approval?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${theme_id}&date=${date}`);
     }
   };
 

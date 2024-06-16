@@ -26,8 +26,10 @@ import BlockFilter from "../filter/BlockFilter";
 import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
 import GramFilter from "../filter/GramFilter";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useAuthContext } from "@/context/AuthContext";
 
 function YoungFellowForm({ type, onSubmit, kpiApproval }) {
+  const { user } = useAuthContext();
   const [formData, setFormData] = useState({
     id: kpiApproval ? kpiApproval.id : "",
     state_id: kpiApproval ? kpiApproval.state_id : "",
@@ -70,17 +72,18 @@ function YoungFellowForm({ type, onSubmit, kpiApproval }) {
 
   useEffect(() => {
     console.log("first");
+    console.log("first");
     if (gram_id) {
       getAllThemes();
     } else {
       setThemes([]);
     }
   }, [gram_id]);
-
-  const handleGpWiseKpiEdit = (id) => {
-    navigate(
-      `/admin/gp-wise-kpi?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${id}`
-    );
+// console.log(user.role);
+  const handleGpWiseKpiEdit = id => {
+    console.log(user.role);
+    if (user.role == 2) navigate(`/admin/kpi-approvals-list?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${id}`);
+    else navigate(`/admin/gp-wise-kpi?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${id}`);
   };
 
   const resetForm = () => {
