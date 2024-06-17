@@ -8,9 +8,9 @@ function Home() {
         {/* <div class="absolute inset-0 z-10 h-[100vh]  bg-gray-900 opacity-50"></div> */}
         <div class="relative w-full mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center h-full">
           <div className="flex flex-1 ">
-            <div className="w-full md:w-[50%] z-20 ">
-              <h1 class="text-primary text-4xl  md:text-6xl font-bold">
-                Project for Creating 250 Model <br /> GP Clusters.
+            <div className="w-full md:w-[60%] z-20 ">
+              <h1 class="text-primary text-4xl  md:text-5xl font-bold">
+                Project for Creating <br /> 250 Model GP Clusters.
               </h1>
               <p class="mt-4 text-primary text-lg md:text-xl">
                 Join us in enhancing lives through sustainable development and
