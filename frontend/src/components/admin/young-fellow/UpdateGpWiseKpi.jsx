@@ -16,8 +16,8 @@ function KpiApprovalSubmit() {
   const dist_id = searchParams.get("dist_id") || "";
   const block_id = searchParams.get("block_id") || "";
   const gp_id = searchParams.get("gram_id") || "";
+  // const submitted_id = searchParams.get("submitted_id") || "";
   const submitted_id = searchParams.get("submitted_id") || "";
-  const kpi_approval_id = searchParams.get("kpi_approval_id") || "";
   const [formData, setFormData] = useState([]);
   const navigate = useNavigate();
 
@@ -254,7 +254,7 @@ function KpiApprovalSubmit() {
     console.log(formData);
     // return;
     try {
-      const response = await API.put("/api/v1/gp-wise-kpi/resubmit", { formData, submitted_id: kpi_approval_id });
+      const response = await API.put("/api/v1/gp-wise-kpi/resubmit", { formData, submitted_id: submitted_id });
       console.log("Success:", response.data);
       tst.success("Form submitted successfully");
       // navigate("/admin/young-professionals");
@@ -283,9 +283,9 @@ function KpiApprovalSubmit() {
                     <TableHead className="w-[200px]">KPI Name</TableHead>
                     <TableHead className="w-[200px]">Data point</TableHead>
                     <TableHead className="w-20">Input type</TableHead>
-                    <TableHead className="w-40">Max Number (Total Number)</TableHead>
-                    <TableHead className="w-40">Cumulative Achived Number</TableHead>
-                    <TableHead className="w-28">Score</TableHead>
+                    <TableHead className="w-32">Max Number (Total Number)</TableHead>
+                    <TableHead className="w-20">Cumulative Achived Number</TableHead>
+                    <TableHead className="w-40">Score</TableHead>
                     <TableHead className="w-40">Remarks</TableHead>
                   </TableRow>
                 </TableHeader>

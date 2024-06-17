@@ -26,7 +26,7 @@ function AdminActionForm() {
     try {
       const { data } = await API.get(`/api/v1/kpi-approvals/get-kpiapprovals?state=${state_id}&dist=${dist_id}&block=${block_id}&gp=${gram_id}&theme=${theme_id}`);
       console.log(data);
-      data?.data?.sort((a, b) => a.id - b.id);
+      data?.data?.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
       setKpiApprovals(data?.data || []);
     } catch (error) {
       console.log(error);
@@ -66,7 +66,7 @@ function AdminActionForm() {
                         kpiApproval.date || kpiApproval.created_at
                       ).toLocaleDateString()}
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="text-center">
                       {kpiApproval.decision == 2
                         ? new Date(kpiApproval.modified_at).toLocaleDateString()
                         : "-"}
@@ -77,7 +77,7 @@ function AdminActionForm() {
                           ? "Submitted"
                           : kpiApproval.decision == 1
                           ? "Approved"
-                          : "Send for modification"}
+                          : "Sent for modification"}
                       </TableCell>
                     }
                     <TableCell>

@@ -24,9 +24,10 @@ function ActionForm() {
 
   const getAllKpiApprovals = async () => {
     try {
-      const { data } = await API.get(`/api/v1/kpi-approvals/get-kpiapprovals?`);
+      const { data } = await API.get(`/api/v1/kpi-approvals/get-kpiapprovals?decision=2`);
       console.log(data);
-      data?.data?.sort((a, b) => a.id - b.id);
+      // data?.data?.sort((a, b) => a.id - b.id);
+      data?.data?.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
       setKpiApprovals(data?.data || []);
     } catch (error) {
       console.log(error);
@@ -62,7 +63,6 @@ function ActionForm() {
                 <TableHead>GP</TableHead>
                 <TableHead>Submisson Date</TableHead>
                 <TableHead>Date of Sent Back</TableHead>
-                <TableHead>Status</TableHead>
                 <TableHead>Action</TableHead>
               </TableRow>
             </TableHeader>
@@ -83,15 +83,7 @@ function ActionForm() {
                         ? new Date(kpiApproval.modified_at).toLocaleDateString()
                         : "-"}
                     </TableCell>
-                    {
-                      <TableCell>
-                        {kpiApproval.decision == 0
-                          ? "Submitted"
-                          : kpiApproval.decision == 1
-                          ? "Approved"
-                          : "Sent for modification"}
-                      </TableCell>
-                    }
+                   
                     <TableCell>
                       <div className="flex items-center gap-3">
                         {kpiApproval.decision == 2 && (
