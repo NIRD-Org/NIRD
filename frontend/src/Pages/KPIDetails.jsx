@@ -1,17 +1,9 @@
-import ThemeData from "@/components/KIP/Theme1Data";
 import Themes from "@/components/KIP/Themes";
-import Theme2Data from "../components/KIP/themeData/Theme2Data";
 import API from "@/utils/API";
 import React, { useEffect, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-import Theme3Data from "@/components/KIP/themeData/Theme3Data";
-import Theme4Data from "@/components/KIP/themeData/Theme4Data";
-import Theme5Data from "@/components/KIP/themeData/Theme5Data";
-import Theme6Data from "@/components/KIP/themeData/Theme6Data";
-import Theme7Data from "@/components/KIP/themeData/Theme7Data";
-import Theme8Data from "@/components/KIP/themeData/Theme8Data";
-import Theme9Data from "@/components/KIP/themeData/Theme9Data";
 import { usePDF } from "react-to-pdf";
+import GpDetailComponent from "@/components/KIP/GpDetailComponent";
 const KPIDetails = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [gpData, setGpData] = useState([]);
@@ -20,7 +12,7 @@ const KPIDetails = () => {
   const [blockOptions, setBlockOptions] = useState([]);
   const [GpOptions, setGpOptions] = useState([]);
   const [stateData, setStateData] = useState();
-
+  const [gpDetails, setGpDetails] = useState();
   const state = searchParams.get("state") || "";
   const dist = searchParams.get("dist") || "";
   const block = searchParams.get("block") || "";
@@ -58,6 +50,17 @@ const KPIDetails = () => {
     setGpOptions(data.gram);
   };
 
+  const getgpDetails = async () => {
+    try {
+      const { data } = await API.get(
+        `/api/v1/g-details/get?state=${state}&dist=${dist}&block=${block}&gp=${gp}`
+      );
+      setGpDetails(data?.data);
+    } catch (error) {
+      console.log("Errror: " + error.message);
+    }
+  };
+
   useEffect(() => {
     getAllKpiData();
     getAllStates();
@@ -92,6 +95,55 @@ const KPIDetails = () => {
     const stateId = searchParams.get("state");
     getStateById(stateId);
   }, []);
+
+  const sampleData = {
+    panchayatDetails: {
+      state: "StateName",
+      district: "DistrictName",
+      block: "BlockName",
+      village: "VillageName",
+      panchayat: "PanchayatName",
+      lgd: "LGD1234",
+      address: "1234 Panchayat Address",
+      mobileNumber: "1234567890",
+      emailAddress: "email@example.com",
+      distanceFromBusStop: 5,
+      gpAttractions: "Attractions info",
+    },
+    demography: {
+      totalPopulation: 10000,
+      malePopulation: 5000,
+      femalePopulation: 5000,
+      stPopulation: 1000,
+      scPopulation: 2000,
+      obcPopulation: 3000,
+      generalPopulation: 4000,
+      childrenPopulation0to6: 1000,
+      childrenPopulation6to18: 2000,
+    },
+    panchayatArea: {
+      totalArea: 50,
+      noOfRevenueVillages: 10,
+      noOfWardsSansads: 5,
+      noOfVillagesMappedWithLGD: 7,
+    },
+    sarpanchDetails: {
+      nameOfSarpanch: "Sarpanch Name",
+      education: "Graduate",
+      gender: "Male",
+      areaOfExpertise: "Agriculture",
+      email: "sarpanch@example.com",
+      mobile: "0987654321",
+    },
+    secretaryDetails: {
+      nameOfSecretary: "Secretary Name",
+      education: "Postgraduate",
+      gender: "Female",
+      numberOfGPCovered: 5,
+      email: "secretary@example.com",
+      mobile: "1234567890",
+    },
+  };
 
   const { toPDF, targetRef } = usePDF({ filename: "kpi.pdf" });
 
@@ -222,16 +274,13 @@ const KPIDetails = () => {
       <div className="py-14">
         <Themes />
       </div>
-      <div ref={targetRef}>
-        {/* <ThemeData />
-        <Theme2Data />
-        <Theme3Data />
-        <Theme4Data />
-        <Theme5Data />
-        <Theme6Data />
-        <Theme7Data />
-        <Theme8Data />
-        <Theme9Data /> */}
+      <div>
+        {/* {gpDetails && ( */}
+        <GpDetailComponent
+          //  data={gpDetails}
+          data={sampleData}
+        />
+        {/* )} */}
       </div>
     </div>
   );

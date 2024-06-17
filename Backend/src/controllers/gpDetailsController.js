@@ -1,4 +1,4 @@
-import { CatchAsyncError } from "../middlewares/catchAsyncError";
+import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
 import { GpDetailsModel } from "../models/gpDetailsModel.js";
 import { Errorhandler } from "../utils/errorHandler.js";
 
@@ -51,7 +51,7 @@ export const createPanchayatDetails = CatchAsyncError(
       });
 
       if (existingData) {
-        return next(new Errorhandler("Data already exist", 400));
+        return next(new Errorhandler("GP Data already exists!", 400));
       }
 
       const panchayat = new GpDetailsModel({
@@ -67,8 +67,11 @@ export const createPanchayatDetails = CatchAsyncError(
         secretaryDetails,
       });
       await panchayat.save();
-      res.status(201).json({ message: "Panchayat Data saved successfully" });
+      res
+        .status(201)
+        .json({ success: true, message: "Panchayat Data saved successfully" });
     } catch (error) {
+      console.log("Error", error);
       return next(new Errorhandler("Failed to create panchayat data", 500));
     }
   }
@@ -91,6 +94,8 @@ export const updatePanchayatDetails = CatchAsyncError(
         secretaryDetails,
       } = req.body;
 
+      console.log(req.body);
+
       const panchayat = await GpDetailsModel.findOneAndUpdate(
         { state_id, dist_id, block_id, gp_id },
         {
@@ -102,7 +107,10 @@ export const updatePanchayatDetails = CatchAsyncError(
         },
         { new: true }
       );
-      res.status(201).json({ message: "Panchayat Data updated successfully" });
+      res.status(201).json({
+        success: true,
+        message: "Panchayat Data updated successfully",
+      });
     } catch (error) {
       return next(new Errorhandler("Failed to Update panchayat data", 500));
     }
