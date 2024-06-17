@@ -275,12 +275,12 @@ const KPIDetails = () => {
         <Themes />
       </div>
       <div>
-        {/* {gpDetails && ( */}
-        <GpDetailComponent
-          //  data={gpDetails}
-          data={sampleData}
-        />
-        {/* )} */}
+        {gpDetails && (
+          <GpDetailComponent
+            data={gpDetails}
+            // data={sampleData}
+          />
+        )}
       </div>
     </div>
   );
