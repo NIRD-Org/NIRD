@@ -50,7 +50,12 @@ const ManregsChart = ({ kpi, kpiId, theme, kpi_img }) => {
 
   // Data for the doughnut chart
   const barData = {
-    labels: ["Quarterly 1", "Quarterly 2", "Quarterly 3", "Quarterly 4"],
+    labels: [
+      " Quarter 1 (Apr - Jun)",
+      "Quarter 2 (Jul - Sep)",
+      "Quarter 3 (Oct - Dec)",
+      "Quarter 4 (Jan - Mar)",
+    ],
     datasets: [
       {
         label: kpi.substr(0, 50) + "...",
