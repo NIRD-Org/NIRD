@@ -10,7 +10,7 @@ function Home() {
           <div className="flex flex-1 ">
             <div className="w-full md:w-[80%] lg:w-[60%] z-20 ">
               <h1 class="text-primary text-4xl  md:text-6xl lg:text-5xl font-bold">
-                Project for Creating <br /> 250 Model GP Clusters.
+                Project for Creating <br /> 250 Model GP Clusters
               </h1>
               <p class="mt-4 lg:pr-40 text-primary text-md md:text-xl">
                 Join us in enhancing lives through sustainable development and
