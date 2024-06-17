@@ -3,22 +3,34 @@ import mongoose from "mongoose";
 const usersLocationSchema = new mongoose.Schema(
   {
     id: {
-      type: "string",
+      type: String,
       required: true,
       unique: true,
     },
     user_id: {
-      type: Number,
+      type: String,
       required: true,
     },
-    state_id: {
-      type: Number,
-      required: true,
-    },
-    dist_id: {
-      type: Number,
-      required: true,
-    },
+    userLocations: [
+      {
+        state_id: {
+          type: String,
+          required: true,
+        },
+        dist_id: {
+          type: String,
+          required: true,
+        },
+        block_id: {
+          type: String,
+          required: true,
+        },
+        gp_id: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
     status: {
       type: String,
       required: true,

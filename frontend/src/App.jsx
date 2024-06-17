@@ -41,6 +41,7 @@ import KpiApprovalView from "./components/admin/young-fellow/KpiApprovalView";
 import UpdateGpWiseKpi from "./components/admin/young-fellow/UpdateGpWiseKpi";
 import ThemeDataPage from "./Pages/ThemeDataPage";
 import Attendance from "./components/admin/attendance/Attendance";
+import GpDetailsForm from "./components/admin/Gpdetails/GpDetailsForm";
 
 function App() {
   const { login } = useAuthContext();
@@ -62,6 +63,7 @@ function App() {
           <Route path="/gp-wise-data/theme/:id" element={<ThemeDataPage />} />
           <Route path="/admin" element={<AdminPage />}>
             <Route index element={<AdminMainPage />} />
+            <Route path="gp-details-form" element={<GpDetailsForm />} />
             <Route path="blocks" element={<BlockPage />} />
             <Route path="gram-panchayats" element={<GpPage />} />
             <Route path="themes" element={<ThemePage />} />

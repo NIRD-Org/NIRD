@@ -24,15 +24,26 @@ const getNewId = async () => {
     return next(new Errorhandler("failed to get new id", 500));
   }
 };
+
 export const assignUserLocation = CatchAsyncError(async (req, res, next) => {
   try {
-    const { user_id, state_id, dist_id } = req.body;
+    const { user_id, userLocations } = req.body;
     const id = await getNewId();
+
+    // Find For Existing user_id
+
+    const existingUserLocation = await UserLocationModel.findOne({
+      user_id,
+    });
+    if (existingUserLocation) {
+      return next(new Errorhandler("Cannot Reassign User Location", 400));
+    }
+
     const userLocation = await UserLocationModel.create({
       id,
       user_id,
-      state_id,
-      dist_id,
+      userLocations,
+      created_by: req?.user?.id || "3",
     });
 
     if (!userLocation) {
@@ -48,7 +59,7 @@ export const assignUserLocation = CatchAsyncError(async (req, res, next) => {
   }
 });
 
-// Get all users Location info
+// Get all users Location info -- Super Admin
 
 export const getUserLocation = CatchAsyncError(async (req, res, next) => {
   try {
@@ -63,6 +74,8 @@ export const getUserLocation = CatchAsyncError(async (req, res, next) => {
     return next(new Errorhandler("Failed to get user location", 500));
   }
 });
+
+// Get the users location
 
 export const getUserLocationById = CatchAsyncError(async (req, res, next) => {
   try {
@@ -85,11 +98,19 @@ export const getUserLocationById = CatchAsyncError(async (req, res, next) => {
 
 export const updateUserLocation = CatchAsyncError(async (req, res, next) => {
   try {
-    const { state_id, dist_id } = req.body;
+    const { userLocations } = req.body;
     const { user_id } = req.params;
+    const existingUserLocation = await UserLocationModel.findOne({
+      user_id,
+    });
+
+    if (!existingUserLocation) {
+      return next(new Errorhandler("User location not found", 404));
+    }
+
     const userLocation = await UserLocationModel.findOneAndUpdate(
       { user_id },
-      { state_id, dist_id },
+      { userLocations },
       { new: true }
     );
 
