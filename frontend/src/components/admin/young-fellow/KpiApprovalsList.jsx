@@ -49,7 +49,7 @@ function KpiApprovalsList() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>ID</TableHead>
+                <TableHead>Submission ID</TableHead>
                 <TableHead>Theme</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Status</TableHead>

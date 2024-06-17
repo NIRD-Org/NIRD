@@ -35,9 +35,10 @@ function KpiApprovalSubmit() {
           input_data: item.input_data,
           score: item.score,
           submitted_id: item.submitted_id,
-          remarks: item.remarks || ""  // Ensure remarks are initialized
+          remarks: item.remarks || "", // Ensure remarks are initialized
         }));
         setFormData(updatedFormData);
+        console.log(updatedFormData);
       } catch (error) {
         console.log(error);
       }
@@ -230,8 +231,7 @@ function KpiApprovalSubmit() {
         const maxRange = updatedData[index].max_range || 0;
         const inputData = updatedData[index].input_data || 0;
         const percentage = (inputData / maxRange) * 100;
-
-        const kpiId = kpiApprovalData[index].id;
+        const kpiId = kpiApprovalData[index].kpi_id;
         const { thresholds, scores } = kpiScoringRules[kpiId];
         updatedData[index].score = calculateScore(percentage, thresholds, scores);
       }
@@ -295,7 +295,7 @@ function KpiApprovalSubmit() {
                     return (
                       <>
                         <TableRow key={data.id}>
-                          <TableCell>{index + 1}</TableCell>
+                          <TableCell>{data?.kpiDetails?.id}</TableCell>
                           <TableCell>{data?.kpiDetails?.name}</TableCell>
                           <TableCell>{data?.kpiDetails?.kpi_datapoint || "No question"}</TableCell>
                           <TableCell>{data?.kpiDetails?.input_type}</TableCell>
@@ -326,7 +326,8 @@ function KpiApprovalSubmit() {
               <Label htmlFor="date" className="text-right mt-2">
                 Date
               </Label>
-              <Input disabled value={kpiApprovalData[0]?.date} type="date" name="date" onChange={e => setFormData(prevData => ({ ...prevData, date: e.target.value }))} id="date" placeholder="Enter date" className="px-10" />
+              <Input disabled value={kpiApprovalData[0]?.date ? kpiApprovalData[0]?.date.substring(0, 10) : ""} type="date" name="date" onChange={e => setDate(e.target.value)} id="date" placeholder="Enter date" className="px-10" />
+              {/* <Input disabled value={kpiApprovalData[0]?.date} type="date" name="date" onChange={e => setFormData(prevData => ({ ...prevData, date: e.target.value }))} id="date" placeholder="Enter date" className="px-10" /> */}
             </div>
             <Button type="submit">Submit</Button>
           </div>

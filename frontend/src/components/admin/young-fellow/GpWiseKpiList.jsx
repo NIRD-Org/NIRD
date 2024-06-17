@@ -42,7 +42,7 @@ function GpWiseKpiList() {
     if (id === 1) {
       navigate(`/admin/update-gp-wise-kpi?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${theme_id}&submitted_id=${submitted_id}&kpi_approval_id=${kpiApprovalId}`);
     } else if (id === 2) {
-      navigate(`/admin/view-gp-wise-kpi?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${theme_id}&submitted_id=${submitted_id}&kpi_approval_id=${kpiApprovalId}`);
+      navigate(`/admin/view-kpi-approval?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${theme_id}&submitted_id=${submitted_id}&kpi_approval_id=${kpiApprovalId}`);
     }
   };
 
@@ -83,7 +83,7 @@ function GpWiseKpiList() {
                       </div>
                     ) : (
                       <span
-                      // onClick={() => handleNavigate(2, kpiApproval.created_at, kpiApproval.id)}
+                      onClick={() => handleNavigate(2, kpiApproval.submitted_id, kpiApproval.id)}
                       >
                         <NirdViewIcon />
                       </span>

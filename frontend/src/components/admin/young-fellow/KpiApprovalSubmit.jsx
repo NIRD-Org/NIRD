@@ -33,23 +33,23 @@ function KpiApprovalSubmit() {
     fetchKpiApprovalData();
   }, []);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
-      try {
-        const body = {
-          decision :formData.decision,
-          remarks:formData.remarks
-        };
+    try {
+      const body = {
+        decision: formData.decision,
+        remarks: formData.remarks,
+      };
 
-        const url = `/api/v1/kpi-approvals/update/${kpi_approval_id}`;
-        const response = await API.put(url, body);
-        console.log(response.data);
-        tst.success("Form submitted successfully");
-      } catch (error) {
-        tst.error("Failed to submit form");
-        console.log(error);
-      }
-  }
+      const url = `/api/v1/kpi-approvals/update/${kpi_approval_id}`;
+      const response = await API.put(url, body);
+      console.log(response.data);
+      tst.success("Form submitted successfully");
+    } catch (error) {
+      tst.error("Failed to submit form");
+      console.log(error);
+    }
+  };
 
   return (
     <div className="w-full">
@@ -76,7 +76,7 @@ function KpiApprovalSubmit() {
               <TableBody>
                 {kpiApprovalData.map((data, index) => (
                   <TableRow key={data.id}>
-                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{data?.kpi_id}</TableCell>
                     <TableCell>{data?.kpiDetails.name}</TableCell>
                     <TableCell>{data.kpiDetails.kpi_datapoint || "No question"}</TableCell>
                     {/* <TableCell>{data?.kpiDetails.input_type}</TableCell> */}
@@ -102,7 +102,9 @@ function KpiApprovalSubmit() {
             <Label htmlFor="date" className="text-right mt-2">
               Date
             </Label>
-            <Input disabled value={kpiApprovalData[0]?.date} type="date" name="date" onChange={e => setFormData(prevData => ({ ...prevData, date: e.target.value }))} id="date" placeholder="Enter date" className="px-10" />
+            <Input disabled value={kpiApprovalData[0]?.date ? kpiApprovalData[0]?.date.substring(0, 10) : ""} type="date" name="date" onChange={e => setDate(e.target.value)} id="date" placeholder="Enter date" className="px-10" />
+
+            {/* <Input disabled value={kpiApprovalData[0]?.date} type="date" name="date" onChange={e => setFormData(prevData => ({ ...prevData, date: e.target.value }))} id="date" placeholder="Enter date" className="px-10" /> */}
           </div>
           {/* <Button type="submit">Submit</Button> */}
         </div>

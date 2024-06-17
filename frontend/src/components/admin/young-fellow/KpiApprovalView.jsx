@@ -57,7 +57,7 @@ function KpiApprovalView() {
               <TableBody>
                 {kpiApprovalData.map((data, index) => (
                   <TableRow key={data.id}>
-                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{data?.kpiDetails?.id}</TableCell>
                     <TableCell>{data?.kpiDetails.name}</TableCell>
                     <TableCell>{data.kpiDetails.kpi_datapoint || "No question"}</TableCell>
                     {/* <TableCell>{data?.kpiDetails.input_type}</TableCell> */}
@@ -82,9 +82,11 @@ function KpiApprovalView() {
             <Label htmlFor="date" className="text-right mt-2">
               Date
             </Label>
-            <Input disabled value={kpiApprovalData[0]?.date} type="date" name="date" onChange={e => setDate(e.target.value)} id="date" placeholder="Enter datte" className="px-10" />
+            <Input disabled value={kpiApprovalData[0]?.date ? kpiApprovalData[0]?.date.substring(0, 10) : ""} type="date" name="date" onChange={e => setDate(e.target.value)} id="date" placeholder="Enter date" className="px-10" />
+
+            {/* <Input disabled value={kpiApprovalData[0]?.date} type="date" name="date" onChange={e => setDate(e.target.value)} id="date" placeholder="Enter datte" className="px-10" /> */}
           </div>
-          <Button type="submit">Submit</Button>
+          {/* <Button type="submit">Submit</Button> */}
         </form>
       </div>
     </div>
