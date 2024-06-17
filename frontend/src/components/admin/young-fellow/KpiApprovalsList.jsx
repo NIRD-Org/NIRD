@@ -57,32 +57,40 @@ function KpiApprovalsList() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {kpiApprovals.map(kpiApproval => (
-                <TableRow key={kpiApproval.id}>
-                  <TableCell>{kpiApproval.id}</TableCell>
-                  <TableCell>{kpiApproval.theme_name}</TableCell>
-                  <TableCell>{new Date(kpiApproval.date || kpiApproval.created_at).toLocaleDateString()}</TableCell>
-                  <TableCell>{kpiApproval.decision == 0 ? "Submitted" : kpiApproval.decision == 1 ? "Approved" : "Send for modification"}</TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-3">
-                      {kpiApproval.decision == 0 ? (
-                        <>
+              {kpiApprovals.length > 0 ? (
+                kpiApprovals.map(kpiApproval => (
+                  <TableRow key={kpiApproval.id}>
+                    <TableCell>{kpiApproval.id}</TableCell>
+                    <TableCell>{kpiApproval.theme_name}</TableCell>
+                    <TableCell>{new Date(kpiApproval.date || kpiApproval.created_at).toLocaleDateString()}</TableCell>
+                    <TableCell>{kpiApproval.decision == 0 ? "Submitted" : kpiApproval.decision == 1 ? "Approved" : "Send for modification"}</TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-3">
+                        {kpiApproval.decision == 0 ? (
+                          <>
+                            <span onClick={() => handleNavigate(2, kpiApproval.submitted_id, kpiApproval.id)}>
+                              <NirdViewIcon />
+                            </span>
+                            <span onClick={() => handleNavigate(1, kpiApproval.submitted_id, kpiApproval.id)}>
+                              <NirdEditIcon />
+                            </span>
+                          </>
+                        ) : (
                           <span onClick={() => handleNavigate(2, kpiApproval.submitted_id, kpiApproval.id)}>
                             <NirdViewIcon />
                           </span>
-                          <span onClick={() => handleNavigate(1, kpiApproval.submitted_id, kpiApproval.id)}>
-                            <NirdEditIcon />
-                          </span>
-                        </>
-                      ) : (
-                        <span onClick={() => handleNavigate(2, kpiApproval.submitted_id, kpiApproval.id)}>
-                          <NirdViewIcon />
-                        </span>
-                      )}
-                    </div>
+                        )}
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan="5" className="text-center">
+                    No data found
                   </TableCell>
                 </TableRow>
-              ))}
+              )}
             </TableBody>
           </Table>
         </div>

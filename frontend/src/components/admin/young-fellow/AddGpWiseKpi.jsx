@@ -264,7 +264,6 @@ function AddGpWiseKpi({ update }) {
       dist_id,
       block_id,
       gp_id,
-      theme_id,
       user_id: user.id,
       date: date,
       theme_id,

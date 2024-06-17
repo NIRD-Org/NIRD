@@ -40,7 +40,7 @@ const BlockFilter = ({ className }) => {
     <select
       className={cn(
         className,
-        "text-sm px-4 py-2 rounded-md bg-transparent border w-48"
+        "text-sm px-4 py-2 rounded-md bg-transparent border w-full"
       )}
       value={block_id}
       onChange={handleblockChange}

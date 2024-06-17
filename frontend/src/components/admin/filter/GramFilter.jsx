@@ -46,7 +46,7 @@ const GramFilter = ({ className }) => {
     <select
       className={cn(
         className,
-        "text-sm px-4 py-2 rounded-md bg-transparent border w-fit"
+        "text-sm px-4 py-2 rounded-md bg-transparent border w w-full"
       )}
       value={gram_id}
       onChange={handleGramChange}

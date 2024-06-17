@@ -40,6 +40,7 @@ import KpiApprovalSubmit from "./components/admin/young-fellow/KpiApprovalSubmit
 import KpiApprovalView from "./components/admin/young-fellow/KpiApprovalView";
 import UpdateGpWiseKpi from "./components/admin/young-fellow/UpdateGpWiseKpi";
 import ThemeDataPage from "./Pages/ThemeDataPage";
+import Attendance from "./components/admin/attendance/Attendance";
 
 function App() {
   const { login } = useAuthContext();
@@ -83,6 +84,7 @@ function App() {
             <Route path="kpi-approvals-list" element={<KpiApprovalsList />} />
             <Route path="submit-kpi-approval" element={<KpiApprovalSubmit />} />
             <Route path="view-kpi-approval" element={<KpiApprovalView />} />
+            <Route path="attendance" element={<Attendance />} />
           </Route>
         </Route>
 

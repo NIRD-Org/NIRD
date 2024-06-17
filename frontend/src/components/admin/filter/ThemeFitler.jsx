@@ -28,7 +28,7 @@ const ThemeFilter = ({ className }) => {
 
   return (
     <select
-      className={cn(className, "text-sm px-4 py-2 rounded-md bg-transparent border")}
+      className={cn(className, "text-sm px-4 py-2 rounded-md bg-transparent border  w-full")}
       value={theme_id}
       onChange={handleThemeChange}
     >

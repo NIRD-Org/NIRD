@@ -94,6 +94,17 @@ function Navbar() {
           title: "KPI",
           link: "/admin/data-point",
         },
+        {
+          type: "module",
+          icon: ArrowBigRight,
+          title: "Young Fellow",
+        },
+        {
+          type: "sub-module",
+          icon: ArrowBigRight,
+          title: "Kpi Approvals",
+        link: "/admin/young-professionals",
+        },
         /*  {
           type: "sub-module",
           icon: ArrowBigRight,
