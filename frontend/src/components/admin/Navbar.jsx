@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ArrowBigRight } from "lucide-react";
+
 function Navbar() {
   const { logout, user } = useAuthContext();
   const navigate = useNavigate();
@@ -152,15 +153,16 @@ function Navbar() {
       <header className="z-[3] w-full gap-4 h-16 rounded-md shadow-md bg-white flex items-center px-6 justify-between">
         <div></div>
         <div className="flex items-center gap-3">
-          <div>
+          <div className="flex gap-2">
+            <h2>{user?.name}</h2>
             <h2>
-              {user?.role == 1
+              ({user?.role == 1
                 ? "Superadmin"
                 : user?.role == 2
                 ? "Admin"
                 : user?.role == 3
                 ? "Young Fellow"
-                : ""}
+                : ""})
             </h2>
           </div>
           <DropdownMenu>
