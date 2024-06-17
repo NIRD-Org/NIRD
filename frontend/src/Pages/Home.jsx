@@ -12,7 +12,7 @@ function Home() {
               <h1 class="text-primary text-4xl  md:text-6xl lg:text-5xl font-bold">
                 Project for Creating <br /> 250 Model GP Clusters
               </h1>
-              <p class="mt-4 lg:pr-40 text-primary text-md md:text-xl">
+              <p class="mt-4 lg:pr-40 text-primary text-sm md:text-xl">
                 Join us in enhancing lives through sustainable development and
                 empowering communities across India. Together, we can make a
                 lasting impact.
