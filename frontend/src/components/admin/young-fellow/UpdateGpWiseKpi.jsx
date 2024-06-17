@@ -283,9 +283,9 @@ function KpiApprovalSubmit() {
                     <TableHead className="w-[200px]">KPI Name</TableHead>
                     <TableHead className="w-[200px]">Data point</TableHead>
                     <TableHead className="w-20">Input type</TableHead>
-                    <TableHead className="w-32">Max Number (Total Number)</TableHead>
-                    <TableHead className="w-20">Cumulative Achived Number</TableHead>
-                    <TableHead className="w-40">Score</TableHead>
+                    <TableHead className="w-40">Max Number (Total Number)</TableHead>
+                    <TableHead className="w-40">Cumulative Achived Number</TableHead>
+                    <TableHead className="w-28">Score</TableHead>
                     <TableHead className="w-40">Remarks</TableHead>
                   </TableRow>
                 </TableHeader>

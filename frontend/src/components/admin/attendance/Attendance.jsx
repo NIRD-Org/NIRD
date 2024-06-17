@@ -10,7 +10,7 @@ const Attendance = () => {
     <div className="container mx-auto p-4">
       <AdminHeader>All attendance</AdminHeader>
 
-      <div className="gap-4 flex flex-wrap mb-10">
+      <div className="gap-4 grid grid-cols-4 mb-10">
           <StateFilter />
           <DistrictFilter />
           <BlockFilter />
