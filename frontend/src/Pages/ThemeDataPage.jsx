@@ -111,11 +111,16 @@ const ThemeDataPage = () => {
 
       {/* Charts area */}
 
-      <div className="w-full h-full">
+      <div className="h-full grid grid-cols-1 lg:grid-cols-2">
         {kpiData &&
           kpiData.length > 0 &&
           kpiData.map((k) => (
-            <ManregsChart kpi={k.name} kpiId={k.id} theme={id} />
+            <ManregsChart
+              kpi={k.name}
+              kpiId={k.id}
+              kpi_img={k.kpi_image}
+              theme={id}
+            />
           ))}
       </div>
     </div>

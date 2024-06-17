@@ -47,6 +47,11 @@ const kpiSchema = new Schema(
     created_by: {
       type: String,
     },
+    kpi_image: {
+      type: String,
+      required: false,
+      default: "",
+    },
     modified_by: {
       type: String,
     },

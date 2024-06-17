@@ -97,11 +97,20 @@ const KPIDetails = () => {
 
   return (
     <div className="py-10 px-5 lg:px-20">
-      <div className="flex flex-col justify-between items-center lg:flex-row text-center text-3xl h-full">
+      <h1 className="text-3xl text-primary text-center font-bold">
+        Gram Panchayat Profile
+      </h1>
+      <div className="flex flex-col justify-between items-center lg:items-end lg:flex-row text-center text-3xl h-full">
         {/* Info */}
         <div className="w-full lg:w-full h-fit">
-          <div className="flex flex-wrap items-start py-10 gap-2 sm:gap-5">
+          <div className="flex flex-wrap items-end py-10 gap-2 sm:gap-5">
             <div className="flex flex-col">
+              <label
+                className="text-sm text-primary text-start px-4 py-2 font-semibold"
+                htmlFor=""
+              >
+                State
+              </label>
               <select
                 className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
                 value={state}
@@ -120,6 +129,13 @@ const KPIDetails = () => {
             </div>
             <div className="flex flex-col">
               {/* <SelectComponent data={districtOptions} name="District" /> */}
+              <label
+                className="text-sm text-primary text-start px-4 py-2 font-semibold"
+                htmlFor=""
+              >
+                District
+              </label>
+
               <select
                 className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
                 value={dist}
@@ -137,6 +153,13 @@ const KPIDetails = () => {
               </select>
             </div>
             <div className="flex flex-col">
+              <label
+                className="text-sm text-primary text-start px-4 py-2 font-semibold"
+                htmlFor=""
+              >
+                Block
+              </label>
+
               <select
                 className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
                 value={block}
@@ -154,6 +177,13 @@ const KPIDetails = () => {
               </select>
             </div>
             <div className="flex flex-col">
+              <label
+                className="text-sm text-primary text-start px-4 py-2 font-semibold"
+                htmlFor=""
+              >
+                Gram Panchayat
+              </label>
+
               <select
                 className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
                 value={gp}
@@ -178,7 +208,7 @@ const KPIDetails = () => {
             </button>
           </div>
         </div>
-        <div className="w-1/2 mt-10 lg:mt-0 flex justify-center items-center lg:w-3/12 h-full lg:max-h-[40vh]">
+        <div className="w-1/2 mt-10 lg:mt-0 flex justify-center items-center lg:w-[20%] h-full lg:max-h-[25vh]">
           <img
             src={stateData?.state_icon}
             alt=""

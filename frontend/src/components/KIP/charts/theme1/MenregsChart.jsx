@@ -17,7 +17,7 @@ import { useSearchParams } from "react-router-dom";
 
 Chart.register(ArcElement, Tooltip, Legend);
 
-const ManregsChart = ({ kpi, kpiId, theme }) => {
+const ManregsChart = ({ kpi, kpiId, theme, kpi_img }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [gpwiseKpiChart, setGpwiseKpiChart] = useState();
   const chartRef = useRef();
@@ -53,7 +53,7 @@ const ManregsChart = ({ kpi, kpiId, theme }) => {
     labels: ["Quarterly 1", "Quarterly 2", "Quarterly 3", "Quarterly 4"],
     datasets: [
       {
-        label: kpi.substr(0, 70) + "...",
+        label: kpi.substr(0, 50) + "...",
         data: [
           gpwiseKpiChart?.quarterlyPercentage?.quarter1,
           gpwiseKpiChart?.quarterlyPercentage?.quarter2 || 78,
@@ -87,7 +87,7 @@ const ManregsChart = ({ kpi, kpiId, theme }) => {
         display: true,
       },
       tooltip: {
-        enabled: false,
+        enabled: true,
       },
     },
     barThickness: 30, // This controls the thickness of the bars
@@ -135,20 +135,37 @@ const ManregsChart = ({ kpi, kpiId, theme }) => {
   };
 
   return (
-    <div className="px-2 md:px-10 md:py-8 lg:px-20 lg:py-10">
+    <div className="px-2 py-10">
       <div className="max-w-full overflow-auto">
         <table className="w-full divide-y border border-gray-200 divide-gray-200">
           <thead>
-            <tr className="text-white w-full bg-primary">
-              <th colspan="4" className="w-full text-center p-2">
+            <tr className="text-white w-full  h-[12vh] max-h-[12vh] bg-primary">
+              <th>
+                <div className="w-[4rem] h-fit bg-white rounded-xl p-1  ">
+                  <img
+                    src={kpi_img}
+                    alt=""
+                    className="w-full border border-gray-300 p-1 rounded-xl h-full"
+                  />
+                </div>
+              </th>
+              <th colspan="4" className="w-full text-center  p-2">
                 {kpi}
               </th>
             </tr>
             <tr>
-              <th className="p-2 border-2 text-center">Quarterly 1</th>
-              <th className="p-2 border-2 text-center">Quarterly 2</th>
-              <th className="p-2 border-2 text-center">Quarterly 3</th>
-              <th className="p-2 border-2 text-center">Quarterly 4</th>
+              <th className="p-2 min-w-[8rem] border-2 text-center">
+                Quarter 1 <br /> (Apr - Jun)
+              </th>
+              <th className="p-2 border-2 text-center">
+                Quarter 2 <br /> (Jul - Sep)
+              </th>
+              <th className="p-2 border-2 text-center">
+                Quarter 3 <br /> (Oct - Dec)
+              </th>
+              <th className="p-2 border-2 text-center">
+                Quarter 4 <br /> (Jan - Mar){" "}
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -170,13 +187,13 @@ const ManregsChart = ({ kpi, kpiId, theme }) => {
         </table>
       </div>
 
-      <div className="flex py-10 flex-col md:flex-row justify-between items-center ">
-        <div className="lg:w-1/2  w-full h-screen lg:h-[80vh] border-2 p-1 md:p-10">
+      <div className="flex border-2 py-10 flex-col md:flex-row justify-between items-center ">
+        <div className="  w-full h-[70vh]  lg:w-2/3 lg:h-[60vh]  p-1 ">
           <Bar data={barData} options={barOptions} />
         </div>
-        <div className=" flex flex-col justify-center items-center lg:w-1/2 text-center  max-h-screen lg:max-h-[80vh]  border-2 md:p-10 ">
-          <h1 className="text-center py-4  text-gray-700 text-3xl font-semibold">
-            Financial Year - 2023
+        <div className="w-full h-[70vh] lg:w-1/2 flex flex-col justify-center items-center  text-center  max-h-screen  lg:max-h-[45vh]">
+          <h1 className="text-center py-4  text-gray-700 textxgl font-semibold">
+            FY 2023-24
           </h1>
           <Pie data={pieData} options={options} />
         </div>

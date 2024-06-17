@@ -385,7 +385,9 @@ export const getGpWiseKpiChart = CatchAsyncError(async (req, res, next) => {
       const quarterGpMaxRange = result.quarterlyGpMaxRange;
 
       // Calculate quarterly percentage
-      const quarterPercentage = (quarterGpInputData / quarterGpMaxRange) * 100;
+      const quarterPercentage = quarterGpMaxRange
+        ? (quarterGpInputData / quarterGpMaxRange) * 100
+        : 0;
       quarterlyPercentage[`quarter${index + 1}`] = quarterPercentage.toFixed(2);
 
       // Accumulate yearly data
@@ -403,11 +405,15 @@ export const getGpWiseKpiChart = CatchAsyncError(async (req, res, next) => {
     });
 
     // Calculate yearly percentages
-    const gpYearlyPercentage = (gpYearlyInputData / gpYearlyMaxRange) * 100;
-    const stateYearlyPercentage =
-      (stateYearlyInputData / stateYearlyMaxRange) * 100;
-    const countryYearlyPercentage =
-      (countryYearlyInputData / countryYearlyMaxRange) * 100;
+    const gpYearlyPercentage = gpYearlyMaxRange
+      ? (gpYearlyInputData / gpYearlyMaxRange) * 100
+      : 0;
+    const stateYearlyPercentage = stateYearlyMaxRange
+      ? (stateYearlyInputData / stateYearlyMaxRange) * 100
+      : 0;
+    const countryYearlyPercentage = countryYearlyMaxRange
+      ? (countryYearlyInputData / countryYearlyMaxRange) * 100
+      : 0;
 
     // Prepare the response object with the fetched names and calculated percentages
     const response = {
