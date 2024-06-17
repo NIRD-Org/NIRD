@@ -16,8 +16,8 @@ function KpiApprovalSubmit() {
   const dist_id = searchParams.get("dist_id") || "";
   const block_id = searchParams.get("block_id") || "";
   const gp_id = searchParams.get("gram_id") || "";
+  // const submitted_id = searchParams.get("submitted_id") || "";/
   const submitted_id = searchParams.get("submitted_id") || "";
-  const kpi_approval_id = searchParams.get("kpi_approval_id") || "";
   const [formData, setFormData] = useState({ decision: "", remarks: "" });
 
   useEffect(() => {
@@ -41,7 +41,7 @@ function KpiApprovalSubmit() {
         remarks: formData.remarks,
       };
 
-      const url = `/api/v1/kpi-approvals/update/${kpi_approval_id}`;
+      const url = `/api/v1/kpi-approvals/update/${submitted_id}`;
       const response = await API.put(url, body);
       console.log(response.data);
       tst.success("Form submitted successfully");

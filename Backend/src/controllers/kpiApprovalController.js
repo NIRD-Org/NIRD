@@ -45,7 +45,7 @@ export const getAllKPIApprovals = CatchAsyncError(async (req, res, next) => {
 
 export const getKPIApprovals = CatchAsyncError(async (req, res, next) => {
   try {
-    const { state, dist, block, gp, theme } = req.query;
+    const { state, dist, block, gp, theme,decision } = req.query;
     const match = {};
 
     if (state) match.state_id = state;
@@ -53,7 +53,11 @@ export const getKPIApprovals = CatchAsyncError(async (req, res, next) => {
     if (block) match.block_id = block;
     if (gp) match.gp_id = gp;
     if (theme) match.theme_id = theme;
+    if(decision) match.decision = decision;
+    if(req.user.role==3)
+    match.created_by = req.user.id;
 
+    console.log(req.user.id);
     const categorizedKPIApprovals = await KPIApprovalModel.aggregate([
       { $match: match },
       {
@@ -65,7 +69,29 @@ export const getKPIApprovals = CatchAsyncError(async (req, res, next) => {
         },
       },
       {
+        $lookup: {
+          from: "grampanchayats",
+          localField: "gp_id",
+          foreignField: "id",
+          as: "gramDetails",
+        },
+      },
+      {
+        $lookup: {
+          from: "states",
+          localField: "state_id",
+          foreignField: "id",
+          as: "stateDetails",
+        },
+      },
+      {
         $unwind: "$themeDetails",
+      },
+      {
+        $unwind: "$gramDetails",
+      },
+      {
+        $unwind: "$stateDetails",
       },
       {
         $project: {
@@ -77,6 +103,8 @@ export const getKPIApprovals = CatchAsyncError(async (req, res, next) => {
           gp_id: 1,
           theme_id: 1,
           theme_name: "$themeDetails.theme_name",
+          gp_name: "$gramDetails.name",
+          state_name: "$stateDetails.name",
           decision: 1,
           submitted_id: 1,
           remarks: 1,
@@ -90,7 +118,7 @@ export const getKPIApprovals = CatchAsyncError(async (req, res, next) => {
       { $sort: { created_at: -1 } },
     ]);
 
-    if (!categorizedKPIApprovals || categorizedKPIApprovals.length === 0) {
+    if (!categorizedKPIApprovals) {
       return next(new Errorhandler("No KPI Approvals Found", 404));
     }
 
@@ -110,11 +138,7 @@ export const updateKPIApproval = CatchAsyncError(async (req, res, next) => {
   try {
     const { id } = req.params;
     const { decision, remarks } = req.body;
-    const kpiApproval = await KPIApprovalModel.findOneAndUpdate(
-      { id },
-      { decision, remarks },
-      { new: true }
-    );
+    const kpiApproval = await KPIApprovalModel.findOneAndUpdate({ id }, { decision, remarks }, { new: true });
     if (!kpiApproval) {
       return next(new Errorhandler("KPI Approval not found", 404));
     }

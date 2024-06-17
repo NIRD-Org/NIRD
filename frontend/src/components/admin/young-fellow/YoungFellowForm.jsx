@@ -71,8 +71,6 @@ function YoungFellowForm({ type, onSubmit, kpiApproval }) {
   };
 
   useEffect(() => {
-    console.log("first");
-    console.log("first");
     if (gram_id) {
       getAllThemes();
     } else {
@@ -83,7 +81,7 @@ function YoungFellowForm({ type, onSubmit, kpiApproval }) {
   const handleGpWiseKpiEdit = id => {
     console.log(user.role);
     if (user.role == 2) navigate(`/admin/kpi-approvals-list?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${id}`);
-    else navigate(`/admin/gp-wise-kpi?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${id}`);
+    else navigate(`/admin/add-gp-wise-kpi?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${id}`);
   };
 
   const resetForm = () => {
