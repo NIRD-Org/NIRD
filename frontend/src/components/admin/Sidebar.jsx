@@ -90,8 +90,8 @@ function Sidebar({ className }) {
         {
           type: "sub-module",
           icon: ArrowBigRight,
-          title: "Kpi Approvals",
-        link: "/admin/young-professionals",
+          title: "Action Form",
+        link: "/admin/admin-action-form",
         },
        /*  {
           type: "sub-module",
@@ -130,6 +130,12 @@ function Sidebar({ className }) {
           icon: ArrowBigRight,
           title: "Indicator",
           link: "/admin/indicator/create",
+        },
+        {
+          type: "sub-module",
+          icon: ArrowBigRight,
+          title: "Action Form",
+          link: "/admin/action-form",
         },
       ];
       break;
