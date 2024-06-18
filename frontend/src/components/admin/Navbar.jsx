@@ -141,6 +141,12 @@ function Navbar() {
         {
           type: "sub-module",
           icon: ArrowBigRight,
+          title: "Action Form",
+          link: "/admin/action-form",
+        },
+        {
+          type: "sub-module",
+          icon: ArrowBigRight,
           title: "GP Details",
           link: "/admin/gp-details-form",
         },
