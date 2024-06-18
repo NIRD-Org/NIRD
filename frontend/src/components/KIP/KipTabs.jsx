@@ -40,7 +40,7 @@ const KipTabs = ({ setTagline }) => {
           to="/gp-profile/details"
           className="px-4 py-3 text-sm text-gray-600 md:text-xl focus:outline-none"
         >
-          View Gram Panchayat Profile
+          Gram Panchayat Profile
         </Link>
         {tabs.map((t) => (
           <button
