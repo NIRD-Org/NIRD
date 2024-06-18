@@ -19,16 +19,16 @@ const Attendance = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <AdminHeader>All attendance</AdminHeader>
+      <AdminHeader>All Attendance</AdminHeader>
 
-      {user.role == 2 && (
+      {/* {user.role == 2 && ( */}
         <>
           {" "}
-          <div className="gap-4 grid grid-cols-4 mb-10">
+      {/*     <div className="gap-4 grid grid-cols-4 mb-10">
             <StateFilter />
             <DistrictFilter />
             <BlockFilter />
-          </div>
+          </div> */}
           <Table className="overscroll-x-scroll">
             <TableCaption>List of all Gram Panchayats.</TableCaption>
             <TableHeader>
@@ -50,7 +50,7 @@ const Attendance = () => {
             </TableBody>
           </Table>
         </>
-      )}
+      {/* )} */}
     </div>
   );
 };

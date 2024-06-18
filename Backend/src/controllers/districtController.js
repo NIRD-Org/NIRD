@@ -48,9 +48,9 @@ export const getDistrictByState = CatchAsyncError(async (req, res, next) => {
     const districtData = await DistrictModel.find({
       state_id: req.params.state,
     }).sort({ name: 1 });
-    if (!districtData || districtData.length === 0) {
+   /*  if (!districtData || districtData.length === 0) {
       return next(new Errorhandler("No District Data Found", 404));
-    }
+    } */
     res.status(200).json({
       success: true,
       message: "District Data Fetched Successfully",

@@ -22,6 +22,12 @@ function Sidebar({ className }) {
           link: "/admin/users/create",
         },
         {
+          type: "sub-module",
+          icon: ArrowBigRight,
+          title: "User location",
+          link: "/admin/users/all",
+        },
+        {
           type: "module",
           icon: ArrowBigRight,
           title: "Master",
@@ -57,6 +63,29 @@ function Sidebar({ className }) {
         {
           type: "module",
           icon: ArrowBigRight,
+          title: "Attendance",
+        },
+        {
+          type: "sub-module",
+          icon: ArrowBigRight,
+          title: "All Attendance",
+          link: "/admin/attendance/attendance",
+        },
+        {
+          type: "sub-module",
+          icon: ArrowBigRight,
+          title: "AM Entry Form",
+          link: "/admin/attendance/amu-upload",
+        },
+        {
+          type: "sub-module",
+          icon: ArrowBigRight,
+          title: "PM Entry Form",
+          link: "/admin/attendance/pmu-upload",
+        },
+        {
+          type: "module",
+          icon: ArrowBigRight,
           title: "Access Management",
         },
         {
@@ -65,12 +94,12 @@ function Sidebar({ className }) {
           title: "Create User",
           link: "/admin/users/create",
         },
-       /*  {
+        {
           type: "sub-module",
           icon: ArrowBigRight,
           title: "User location",
           link: "/admin/users/all",
-        }, */
+        },
         {
           type: "module",
           icon: ArrowBigRight,
@@ -99,16 +128,33 @@ function Sidebar({ className }) {
           title: "Action Form",
           link: "/admin/admin-action-form",
         },
-        {
-          type: "sub-module",
-          icon: ArrowBigRight,
-          title: "Attendance",
-          link: "/admin/attendance",
-        },
       ];
       break;
     case 3:
       sidebarItems = [
+        {
+          type: "module",
+          icon: ArrowBigRight,
+          title: "Attendance",
+        },
+        {
+          type: "sub-module",
+          icon: ArrowBigRight,
+          title: "All Attendance",
+          link: "/admin/attendance/attendance",
+        },
+        {
+          type: "sub-module",
+          icon: ArrowBigRight,
+          title: "AM Entry Form",
+          link: "/admin/attendance/amu-upload",
+        },
+        {
+          type: "sub-module",
+          icon: ArrowBigRight,
+          title: "PM Entry Form",
+          link: "/admin/attendance/pmu-upload",
+        },
         {
           type: "module",
           icon: ArrowBigRight,
@@ -137,12 +183,6 @@ function Sidebar({ className }) {
           icon: ArrowBigRight,
           title: "GP Details",
           link: "/admin/gp-details-form",
-        },
-        {
-          type: "sub-module",
-          icon: ArrowBigRight,
-          title: "Attendance",
-          link: "/admin/attendance",
         },
       ];
       break;

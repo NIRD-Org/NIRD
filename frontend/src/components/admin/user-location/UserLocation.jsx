@@ -12,6 +12,7 @@ import { cn, tst } from "@/lib/utils";
 import API from "@/utils/API";
 import { Button } from "@/components/ui/button";
 import { useParams, useSearchParams } from "react-router-dom";
+import { useAuthContext } from "@/context/AuthContext";
 
 const UserLocation = () => {
   const [state, setState] = useState(null);
@@ -21,9 +22,20 @@ const UserLocation = () => {
   const [selectedState, setSelectedState] = useState([]);
   const [selectedBlock, setSelectedBlock] = useState([]);
   const [selectedGp, setSelectedGp] = useState([]);
-  const [selectedDist, setSelectedDist] = useState([]);
   const [gps, setGps] = useState([]);
+  const { user } = useAuthContext();
   const { userId } = useParams();
+
+  const handleStateChange = value => {
+    const stateId = states
+      .filter(state => state.name == value)
+      .map(state => state.id);
+
+    setSelectedState(prev => {
+      const newSelectedState = new Set([...prev, ...stateId]);
+      return Array.from(newSelectedState);
+    });
+  };
 
   const handleBlockChange = (value, dist_id) => {
     const blockIds = blocks
@@ -34,11 +46,7 @@ const UserLocation = () => {
       const newSelectedBlocks = new Set([...prev, ...blockIds]);
       return Array.from(newSelectedBlocks);
     });
-
-    setSelectedDist(prev => {
-      const newSelectedDist = new Set([...prev, dist_id]);
-      return Array.from(newSelectedDist);
-    });
+   
   };
 
   const handleBlockRemove = (value, dist_id) => {
@@ -47,7 +55,6 @@ const UserLocation = () => {
       .map(block => block.id);
 
     setSelectedBlock(prev => prev.filter(id => !blockIds.includes(id)));
-    setSelectedDist(prev => prev.filter(id => id !== dist_id));
   };
 
   const handleGPChange = value => {
@@ -66,14 +73,21 @@ const UserLocation = () => {
   };
 
   const postLocation = async () => {
+    const distIds = Array.from(
+      new Set(
+        blocks
+          .filter(block => selectedBlock.includes(block.id))
+          .map(block => block.dist_id)
+      )
+    );
     const userLocations = {
       state_ids: [state],
-      district_ids: selectedDist,
+      district_ids: distIds,
       block_ids: selectedBlock,
       gp_ids: selectedGp,
     };
 
-    // console.log(userLocations)
+    // console.log(userLocations);
     // return;
     if (selectedGp.length == 0) return;
 
@@ -82,6 +96,28 @@ const UserLocation = () => {
         user_id: userId,
         userLocations,
       });
+      tst.success("User has been assigned location successfully")
+      console.log(response);
+    } catch (error) {
+      tst.error(error);
+      console.log(error);
+    }
+  };
+
+  const postAdminLocation = async () => {
+    const userLocations = {
+      state_ids: selectedState,
+    };
+
+    if (selectedState.length == 0) return;
+
+    try {
+      const response = await API.post("/api/v1/user-location/create", {
+        user_id: userId,
+        userLocations,
+      });
+      tst.success("User has been assigned location successfully")
+
       console.log(response);
     } catch (error) {
       tst.error(error);
@@ -91,7 +127,6 @@ const UserLocation = () => {
 
   useEffect(() => {
     setSelectedBlock([]);
-    setSelectedDist([]);
     setSelectedGp([]);
 
     async function fetchStates() {
@@ -135,12 +170,33 @@ const UserLocation = () => {
     Promise.all([fetchDistricts(), fetchBlocks(), fetchGPs(), fetchStates()]);
   }, [state]);
 
+  if (user.role == 1) {
+    return (
+      <div className="justify-between items-center flex flex-col mt-32 max-w-xl mx-auto ">
+        <Multiselect
+          isObject={false}
+          onKeyPressFn={function noRefCheck() {}}
+          onRemove={(_, value) => handleStateRemove(value)}
+          onSearch={function noRefCheck() {}}
+          onSelect={(_, value) => handleStateChange(value)}
+          options={states.map(state => state.name)}
+        />
+        <Button
+          onClick={postAdminLocation}
+          className="mx-auto block px-20 mt-20"
+        >
+          Submit
+        </Button>
+      </div>
+    );
+  }
+
   return (
     <div>
-      <div className="mx-auto">
+      <div>
         <select
           className={cn(
-            "text-sm px-4 py-2 rounded-md bg-transparent border min-80 mx-auto block"
+            "text-sm px-4 py-2 rounded-md bg-transparent border max-w-[500px] mx-auto block"
           )}
           value={state || ""}
           onChange={e => setState(e.target.value)}
@@ -154,7 +210,7 @@ const UserLocation = () => {
         </select>
       </div>
       <div className="mt-6">
-        <Table className="min">
+        <Table className="min-h-[10vh]">
           <TableHeader>
             <TableRow>
               <TableHead className="w-10">S.No.</TableHead>

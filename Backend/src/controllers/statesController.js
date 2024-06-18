@@ -49,9 +49,9 @@ export const getAllStates = CatchAsyncError(async (req, res, next) => {
     const states = await StateModel.find().sort({
       name: 1,
     });
-    if (!states || states.length === 0) {
+   /*  if (!states || states.length === 0) {
       return next(new Errorhandler("No States Found", 404));
-    }
+    } */
     res.status(200).json({ success: true, message: "States fetched", states });
   } catch (err) {
     return next(new Errorhandler("Failed to fetch states", 500));

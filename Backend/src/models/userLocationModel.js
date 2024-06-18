@@ -21,19 +21,19 @@ const usersLocationSchema = new mongoose.Schema(
       dist_ids: [
         {
           type: String,
-          required: true,
+          // required: true,
         },
       ],
       block_ids: [
         {
           type: String,
-          required: true,
+          // required: true,
         },
       ],
       gp_ids: [
         {
           type: String,
-          required: true,
+          // required: true,
         },
       ],
     },
