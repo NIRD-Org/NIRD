@@ -1,7 +1,8 @@
-import ManregsChart from "@/components/KIP/charts/theme1/MenregsChart";
+import ManregsChart from "@/components/KIP/charts/MenregsChart";
 import API from "@/utils/API";
+import { ArrowLeftIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 const KPIDataComponent = {};
 
@@ -19,6 +20,7 @@ const ThemeDataPage = () => {
   const dist_id = searchParams.get("dist") || "";
   const block_id = searchParams.get("block") || "";
   const gp_id = searchParams.get("gp") || "";
+  const navigate = useNavigate();
 
   const getThemeById = async () => {
     try {
@@ -85,7 +87,14 @@ const ThemeDataPage = () => {
     getKpiByTheme();
   }, []);
   return (
-    <div className=" overflow-hidden">
+    <div className="relative overflow-hidden">
+      <button
+        onClick={() => navigate(-1)}
+        className="absolute flex items-center justify-center bg-primary text-white p-2 rounded top-8 left-16"
+      >
+        <ArrowLeftIcon className="w-7 h-5" />
+        Back
+      </button>
       <div className="flex flex-col md:flex-row flex-wrap gap-3 pt-10 justify-center items-center">
         <h1 className="text-xl font-bold text-primary">Theme : </h1>
         <p className="text-lg text-center">{theme}</p>

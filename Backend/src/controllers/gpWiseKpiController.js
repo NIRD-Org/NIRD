@@ -268,8 +268,8 @@ export const getGpWiseKpi = CatchAsyncError(async (req, res, next) => {
       });
     }
 
-    pipeline.push({ $skip: startIndex });
-    pipeline.push({ $limit: limit });
+    // pipeline.push({ $skip: startIndex });
+    // pipeline.push({ $limit: limit });
     pipeline.push({ $sort: { created_at: -1 } });
 
     const gpWiseKpiData = await GpWiseKpiModel.aggregate(pipeline);

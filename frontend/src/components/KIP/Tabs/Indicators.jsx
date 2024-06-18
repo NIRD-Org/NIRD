@@ -48,6 +48,10 @@ const Indicators = () => {
   };
 
   useEffect(() => {
+    getAllStates();
+  }, []);
+
+  useEffect(() => {
     if (state) {
       setDistrict("");
       setDistrictOptions([]);
@@ -55,7 +59,6 @@ const Indicators = () => {
       setGpOptions([]);
       setblock("");
       setGp("");
-      getAllStates();
       getAllDistricts();
     }
   }, [state]);

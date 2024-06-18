@@ -76,12 +76,15 @@ const GpProfile = () => {
   };
 
   useEffect(() => {
+    getAllStates();
+  }, []);
+
+  useEffect(() => {
     if (state) {
       setDistrict("");
       setblock("");
       setGp("");
       getAllKpiData();
-      getAllStates();
       getAllDistricts();
     }
   }, [state]);
@@ -100,43 +103,12 @@ const GpProfile = () => {
     if (block) getAllGp();
   }, [block]);
 
-  const stateOptions1 = stateOptions.map((item) => ({
-    value: item.id,
-    label: item.name,
-  }));
-  const districtOptions1 = districtOptions.map((item) => ({
-    value: item.id,
-    label: item.name,
-  }));
-
-  const blockOptions1 = blockOptions.map((item) => ({
-    value: item.id,
-    label: item.name,
-  }));
-
-  const GpOptions1 = GpOptions.map((item) => ({
-    value: item.id,
-    label: item.name,
-  }));
-
-  const customStyles = {
-    control: (provided) => ({
-      ...provided,
-      fontSize: "15px", // Adjust the font size as needed
-      width: "100%", // Adjust the width as needed
-    }),
-    singleValue: (provided) => ({
-      ...provided,
-      fontSize: "15px", // Adjust the font size as needed
-    }),
-    option: (provided) => ({
-      ...provided,
-      fontSize: "14px", // Adjust the font size of the options as needed
-    }),
-    menu: (provided) => ({
-      ...provided,
-      width: "max-content", // Adjust the width of the dropdown menu as needed
-    }),
+  const handleReset = () => {
+    setState("");
+    setDistrict("");
+    setblock("");
+    setGp("");
+    getAllKpiData();
   };
 
   const handlePageClick = () => {};
@@ -148,72 +120,80 @@ const GpProfile = () => {
   return (
     <div className="px-5 pb-8 lg:px-20 lg:pb-12">
       <div className="flex flex-col md:flex-row items-center gap-10 justify-between mb-4">
-        <div className="flex flex-wrap items-center gap-2 sm:gap-5">
+        <div className="flex flex-wrap items-end gap-2 sm:gap-5">
           <div className="flex flex-col">
             <label className="text-gray-600 text-sm mb-1">Select State</label>
 
-            <Select
-              className="basic-single"
-              classNamePrefix="select"
-              defaultValue={stateOptions1[0]}
-              isClearable="true"
-              isSearchable="true"
-              name="States"
-              options={stateOptions1}
-              onChange={(e) => setState(e.value)}
-              classNames="text-black w-full text-sm"
-              styles={customStyles}
-            />
+            <select
+              className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
+              value={state}
+              onChange={(e) => {
+                setState(e.target.value);
+              }}
+            >
+              <option>All States</option>
+              {stateOptions.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="flex flex-col">
-            <label className="text-gray-600 text-sm mb-1">
-              Select District
-            </label>
             {/* <SelectComponent data={districtOptions} name="District" /> */}
-            <Select
-              className="basic-single"
-              classNamePrefix="select"
-              defaultValue={districtOptions1[0]}
-              isClearable={true}
-              isSearchable={true}
-              name="States"
-              options={districtOptions1}
-              onChange={(e) => setDistrict(e.value)}
-              classNames="text-black w-full"
-            />
+            <select
+              className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
+              value={district}
+              onChange={(e) => {
+                setDistrict(e.target.value);
+              }}
+            >
+              <option>All Districts</option>
+              {districtOptions.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="flex flex-col">
-            <label className="text-gray-600 text-sm mb-1">
-              Select Block/block
-            </label>
-            <Select
-              className="basic-single"
-              classNamePrefix="select"
-              defaultValue={blockOptions1[0]}
-              isClearable={true}
-              isSearchable={true}
-              name="States"
-              options={blockOptions1}
-              onChange={(e) => setblock(e.value)}
-              classNames="text-black w-full text-sm"
-              styles={customStyles}
-            />
+            <select
+              className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
+              value={block}
+              onChange={(e) => {
+                setblock(e.target.value);
+              }}
+            >
+              <option>All Blocks</option>
+              {blockOptions.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="flex flex-col">
-            <label className="text-gray-600 text-sm mb-1">Select GP</label>
-            <Select
-              className="basic-single"
-              classNamePrefix="select"
-              defaultValue={GpOptions1[0]}
-              isClearable={true}
-              isSearchable={true}
-              name="States"
-              options={GpOptions1}
-              onChange={(e) => setGp(e.value)}
-              classNames="text-black w-full text-sm"
-              styles={customStyles}
-            />
+            <select
+              className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
+              value={gp}
+              onChange={(e) => {
+                setGp(e.target.value);
+              }}
+            >
+              <option>All GPs</option>
+              {GpOptions.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
           </div>
+          <button
+            onClick={handleReset}
+            className="bg-primary rounded text-white text-sm p-2 px-4"
+          >
+            Reset
+          </button>
         </div>
         <form onSubmit={handleSearch} className="flex items-center space-x-2">
           <input

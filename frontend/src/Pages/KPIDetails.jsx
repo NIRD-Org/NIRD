@@ -1,9 +1,15 @@
 import Themes from "@/components/KIP/Themes";
 import API from "@/utils/API";
 import React, { useEffect, useState } from "react";
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { usePDF } from "react-to-pdf";
 import GpDetailComponent from "@/components/KIP/GpDetailComponent";
+import { ArrowLeftIcon } from "lucide-react";
 const KPIDetails = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [gpData, setGpData] = useState([]);
@@ -17,7 +23,7 @@ const KPIDetails = () => {
   const dist = searchParams.get("dist") || "";
   const block = searchParams.get("block") || "";
   const gp = searchParams.get("gp") || "";
-
+  const navigate = useNavigate();
   const getAllKpiData = async () => {
     try {
       const { data } = await API.get(
@@ -53,13 +59,17 @@ const KPIDetails = () => {
   const getgpDetails = async () => {
     try {
       const { data } = await API.get(
-        `/api/v1/g-details/get?state=${state}&dist=${dist}&block=${block}&gp=${gp}`
+        `/api/v1/gp-details/get?state=${state}&dist=${dist}&block=${block}&gp=${gp}`
       );
       setGpDetails(data?.data);
     } catch (error) {
       console.log("Errror: " + error.message);
     }
   };
+
+  useEffect(() => {
+    getgpDetails();
+  }, [gp]);
 
   useEffect(() => {
     getAllKpiData();
@@ -148,7 +158,14 @@ const KPIDetails = () => {
   const { toPDF, targetRef } = usePDF({ filename: "kpi.pdf" });
 
   return (
-    <div className="py-10 px-5 lg:px-20">
+    <div className="relative py-10 px-5 lg:px-20">
+      <button
+        onClick={() => navigate("/kpi")}
+        className="absolute flex items-center justify-center bg-primary text-white p-2 rounded top-10 left-20"
+      >
+        <ArrowLeftIcon className="w-7 h-5" />
+        Back
+      </button>
       <h1 className="text-3xl text-primary text-center font-bold">
         Gram Panchayat Profile
       </h1>
