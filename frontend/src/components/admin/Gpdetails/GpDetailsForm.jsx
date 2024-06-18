@@ -334,7 +334,6 @@ const GpDetailsForm = () => {
               type="email"
               name="emailAddress"
               value={formValues.panchayatDetails.emailAddress}
-              required
               onChange={handlePanchayatDetailsChange}
               placeholder="Email Address"
               className="input-field  py-2 px-3 outline-1 border border-gray-200 rounded-sm"
@@ -545,7 +544,6 @@ const GpDetailsForm = () => {
               type="email"
               name="email"
               value={formValues.sarpanchDetails.email}
-              required
               onChange={handleSarpanchDetailsChange}
               placeholder="Email of Sarpanch"
               className="input-field  py-2 px-3 outline-1 border border-gray-200 rounded-sm"
@@ -612,7 +610,6 @@ const GpDetailsForm = () => {
               type="email"
               name="email"
               value={formValues.secretaryDetails.email}
-              required
               onChange={handleSecretaryDetailsChange}
               placeholder="Email of Secretary"
               className="input-field  py-2 px-3 outline-1 border border-gray-200 rounded-sm"
