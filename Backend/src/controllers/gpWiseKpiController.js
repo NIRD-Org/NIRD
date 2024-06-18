@@ -797,3 +797,97 @@ export const getRankingController = CatchAsyncError(async (req, res, next) => {
     return next(new Errorhandler("Failed to get ranking", 500));
   }
 });
+
+// Get Block ranking
+
+export const getBlockRankingController = CatchAsyncError(
+  async (req, res, next) => {
+    try {
+      const { keyword } = req.query;
+
+      const pipeline = [
+        {
+          $group: {
+            _id: "$block_id",
+            totalScore: { $sum: "$score" },
+            state_id: { $first: "$state_id" },
+            dist_id: { $first: "$dist_id" },
+          },
+        },
+        {
+          $sort: { totalScore: -1 },
+        },
+        {
+          $lookup: {
+            from: "blocks",
+            localField: "_id",
+            foreignField: "id",
+            as: "block",
+          },
+        },
+        {
+          $unwind: "$block",
+        },
+        {
+          $lookup: {
+            from: "states",
+            localField: "state_id",
+            foreignField: "id",
+            as: "state",
+          },
+        },
+        {
+          $unwind: "$state",
+        },
+        {
+          $lookup: {
+            from: "districts",
+            localField: "dist_id",
+            foreignField: "id",
+            as: "district",
+          },
+        },
+        {
+          $unwind: "$district",
+        },
+        {
+          $addFields: {
+            block_name: "$block.name",
+            state_name: "$state.name",
+            dist_name: "$district.name",
+          },
+        },
+        {
+          $unset: ["block", "state", "district"],
+        },
+      ];
+
+      let ranking = await GpWiseKpiModel.aggregate(pipeline);
+
+      // Add ranks to the sorted results manually
+      ranking.forEach((item, index) => {
+        item.rank = index + 1;
+      });
+
+      // Apply advanced regex filtering on the ranked results
+      if (keyword) {
+        const regex = new RegExp(keyword, "i"); // 'i' for case-insensitive
+        ranking = ranking.filter(
+          (item) =>
+            regex.test(item.block_name) ||
+            regex.test(item.state_name) ||
+            regex.test(item.dist_name)
+        );
+      }
+
+      res.status(200).json({
+        success: true,
+        message: "Block ranking fetched successfully",
+        total: ranking.length,
+        data: ranking,
+      });
+    } catch (error) {
+      return next(new Errorhandler("Failed to get block ranking", 500));
+    }
+  }
+);

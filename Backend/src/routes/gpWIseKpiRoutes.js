@@ -1,6 +1,7 @@
 import express from "express";
 import {
   deleteGpWiseKpiData,
+  getBlockRankingController,
   getGpWiseKpi,
   getGpWiseKpiChart,
   getGpWiseKpiData,
@@ -34,5 +35,6 @@ router.route("/delete/:id").put(deleteGpWiseKpiData);
 router.route("/approval-data").get(getGpWiseKpiForApprover);
 
 router.route("/get-ranking").get(getRankingController);
+router.route("/get-block-ranking").get(getBlockRankingController);
 
 export default router;
