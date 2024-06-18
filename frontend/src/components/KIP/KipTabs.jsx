@@ -38,7 +38,7 @@ const KipTabs = ({ setTagline }) => {
         {" "}
         <Link
           to="/gp-profile/details"
-          className="bg-white text-center mx-5 rounded flex justify-center items-center text-primary  p-1 px-4 border-2 border-primary"
+          className="px-4 py-3 text-sm text-gray-600 md:text-xl focus:outline-none"
         >
           View Gram Panchayat Profile
         </Link>
