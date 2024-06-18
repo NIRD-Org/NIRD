@@ -131,3 +131,22 @@ export const getGpById = CatchAsyncError(async (req, res, next) => {
     return next(new Errorhandler("Failed to get Gram Panchayat", 500));
   }
 });
+
+
+// get all gps
+
+export const getAllGps = CatchAsyncError(async (req, res, next) => {
+  try {
+    const gps = await GpModel.find({});
+    if (!gps || gps.length === 0) {
+      return next(new Errorhandler("No Gram Panchayats Found", 404));
+    }
+    res.status(200).json({
+      success: true,
+      message: "Gram Panchayats Fetched Successfully",
+      gps,
+    });
+  } catch (error) {
+    return next(new Errorhandler("Failed to get Gram Panchayats", 500));
+  }
+});

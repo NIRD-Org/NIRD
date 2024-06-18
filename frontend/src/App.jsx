@@ -43,6 +43,7 @@ import ThemeDataPage from "./Pages/ThemeDataPage";
 import Attendance from "./components/admin/attendance/Attendance";
 import ActionForm from "./components/admin/young-fellow/YfActionForm";
 import AdminActionForm from "./components/admin/young-fellow/AdminActionForm";
+import UserLocation from "./components/admin/user-location/UserLocation";
 
 function App() {
   const { login } = useAuthContext();
@@ -89,6 +90,7 @@ function App() {
             <Route path="attendance" element={<Attendance />} />
             <Route path="action-form" element={<ActionForm />} />
             <Route path="admin-action-form" element={<AdminActionForm />} />
+            <Route path="admin/user-location" element={<UserLocation />} />
           </Route>
         </Route>
 
