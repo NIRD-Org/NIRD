@@ -24,9 +24,13 @@ function AdminActionForm() {
 
   const getAllKpiApprovals = async () => {
     try {
-      const { data } = await API.get(`/api/v1/kpi-approvals/get-kpiapprovals?state=${state_id}&dist=${dist_id}&block=${block_id}&gp=${gram_id}&theme=${theme_id}`);
+      const { data } = await API.get(
+        `/api/v1/kpi-approvals/get-kpiapprovals?state=${state_id}&dist=${dist_id}&block=${block_id}&gp=${gram_id}&theme=${theme_id}`
+      );
       console.log(data);
-      data?.data?.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      data?.data?.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+      );
       setKpiApprovals(data?.data || []);
     } catch (error) {
       console.log(error);
@@ -56,9 +60,9 @@ function AdminActionForm() {
             </TableHeader>
             <TableBody>
               {kpiApprovals.length > 0 ? (
-                kpiApprovals.map(kpiApproval => (
+                kpiApprovals.map((kpiApproval) => (
                   <TableRow key={kpiApproval.id}>
-                    <TableCell>{kpiApproval.id}</TableCell>
+                    <TableCell>{kpiApproval.submitted_id}</TableCell>
                     <TableCell>{kpiApproval.theme_name}</TableCell>
                     <TableCell>{kpiApproval.gp_name}</TableCell>
                     <TableCell>

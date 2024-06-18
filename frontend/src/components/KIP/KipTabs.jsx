@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import GpProfile from "./Tabs/GpProfile";
 import Indicators from "./Tabs/Indicators";
 import Ranking from "./Tabs/Ranking";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 const KipTabs = ({ setTagline }) => {
   const [searchparams, setSearchParams] = useSearchParams();
@@ -34,11 +34,18 @@ const KipTabs = ({ setTagline }) => {
 
   return (
     <div className="w-full ">
-      <div className="flex px-10 lg:px-20 justify-center border-gray-200">
+      <div className="flex px-10  lg:px-20 justify-center border-gray-200">
+        {" "}
+        <Link
+          to="/gp-profile/details"
+          className="px-4 py-3 text-sm text-gray-600 md:text-xl focus:outline-none"
+        >
+          Gram Panchayat Profile
+        </Link>
         {tabs.map((t) => (
           <button
             key={t}
-            className={`px-4 py-4 text-sm md:text-xl focus:outline-none ${
+            className={`px-4 py-3 text-sm md:text-xl focus:outline-none ${
               tab === t
                 ? "bg-primary text-white  font-semibold"
                 : "text-gray-600"

@@ -10,14 +10,16 @@ import {
 import { usePDF } from "react-to-pdf";
 import GpDetailComponent from "@/components/KIP/GpDetailComponent";
 import { ArrowLeftIcon } from "lucide-react";
-import StateMap from "@/components/KIP/StateMap";
-const KPIDetails = () => {
+
+const GramPanchayatProfile = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [gpData, setGpData] = useState([]);
   const [stateOptions, setStateOptions] = useState([]);
   const [districtOptions, setDistrictOptions] = useState([]);
   const [blockOptions, setBlockOptions] = useState([]);
   const [GpOptions, setGpOptions] = useState([]);
   const [stateData, setStateData] = useState();
+  const [gpDetails, setGpDetails] = useState();
   const state = searchParams.get("state") || "";
   const dist = searchParams.get("dist") || "";
   const block = searchParams.get("block") || "";
@@ -44,10 +46,25 @@ const KPIDetails = () => {
     setGpOptions(data.gram);
   };
 
+  const getgpDetails = async () => {
+    try {
+      const { data } = await API.get(
+        `/api/v1/gp-details/get?state=${state}&dist=${dist}&block=${block}&gp=${gp}`
+      );
+      setGpDetails(data?.data);
+    } catch (error) {
+      console.log("Errror: " + error.message);
+      setGpDetails();
+    }
+  };
+
+  useEffect(() => {
+    getgpDetails();
+  }, [gp]);
+
   useEffect(() => {
     setGpOptions([]);
     setBlockOptions([]);
-
     getAllStates();
     getAllDistricts();
   }, [state]);
@@ -55,6 +72,7 @@ const KPIDetails = () => {
   useEffect(() => {
     if (dist) {
       getAllBlocks();
+      setGpData("");
     }
   }, [dist]);
 
@@ -85,12 +103,12 @@ const KPIDetails = () => {
         Back
       </button>
       <h1 className="text-3xl text-primary text-center font-bold">
-        GP Wise Localised Sustainable Development Goals
+        Gram Panchayat Profile
       </h1>
       <div className="flex flex-col justify-between items-center  lg:flex-row text-center text-3xl h-full">
         {/* Info */}
         <div className="w-full  h-fit">
-          <div className="flex flex-wrap items-end py-10 gap-2 sm:gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 items-end py-10 gap-2 sm:gap-5">
             <div className="flex flex-col">
               <label
                 className="text-sm text-primary text-start px-4 py-2 font-semibold"
@@ -196,13 +214,20 @@ const KPIDetails = () => {
         </div>
       </div>
 
-      {/* Themes */}
-
-      <div className="py-0">
-        <Themes />
+      <div>
+        {gpDetails ? (
+          <GpDetailComponent
+            data={gpDetails}
+            // data={sampleData}
+          />
+        ) : (
+          <h1 className="text-center text-4xl text-gray-500 font-semibold">
+            Gram Panchayat Data Not Found
+          </h1>
+        )}
       </div>
     </div>
   );
 };
 
-export default KPIDetails;
+export default GramPanchayatProfile;

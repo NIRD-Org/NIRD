@@ -50,6 +50,7 @@ import PmUploadForm from "./components/admin/attendance/PmuUpload";
 import AmUploadForm from "./components/admin/attendance/AmuUpload";
 import Attendance from "./components/admin/attendance/Attendance";
 import UpdateUserLocation from "./components/admin/user-location/UpdateUserLocation";
+import GramPanchayatProfile from "./Pages/GramPanchayatProfile";
 
 function App() {
   const { login } = useAuthContext();
@@ -69,6 +70,7 @@ function App() {
           <Route path="/gp-profile" element={<KPIDetails />} />
           <Route path="project" element={<ProjectPage />} />
           <Route path="/gp-wise-data/theme/:id" element={<ThemeDataPage />} />
+          <Route path="gp-profile/details" element={<GramPanchayatProfile />} />
           <Route path="/admin" element={<AdminPage />}>
             <Route index element={<AdminMainPage />} />
             <Route path="gp-details-form" element={<GpDetailsForm />} />
@@ -105,8 +107,14 @@ function App() {
             <Route path="attendance/attendance" element={<Attendance />} />
             <Route path="attendance/amu-upload" element={<AmUploadForm />} />
             <Route path="attendance/pmu-upload" element={<PmUploadForm />} />
-            <Route path="user-location/update/:userId" element={<UpdateUserLocation />} />
-            <Route path="user-location/view/:userId" element={<UpdateUserLocation view/>} />
+            <Route
+              path="user-location/update/:userId"
+              element={<UpdateUserLocation />}
+            />
+            <Route
+              path="user-location/view/:userId"
+              element={<UpdateUserLocation view />}
+            />
           </Route>
         </Route>
 
