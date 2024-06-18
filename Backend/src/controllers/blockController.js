@@ -47,9 +47,9 @@ export const createblock = CatchAsyncError(async (req, res, next) => {
 export const getAllblocks = CatchAsyncError(async (req, res, next) => {
   try {
     const blocks = await BlockModel.find();
-    if (blocks.length === 0) {
+    /* if (blocks.length === 0) {
       return next(new Errorhandler("blocks data not found", 400));
-    }
+    } */
     res.status(200).json(blocks);
   } catch (err) {
     return next(new Errorhandler("failed to get blocks data", 500));

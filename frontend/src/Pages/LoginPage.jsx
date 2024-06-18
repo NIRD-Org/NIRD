@@ -44,7 +44,7 @@ const LoginPage = () => {
   // if(isAuthenticated)  navigate("/admin");
 
   return (
-    <div className="max-w-xl mx-auto py-20 px-16 ">
+    <div className="max-w-xl mx-auto py-20 px-4 md:px-16 ">
       <h1 className="text-2xl font-bold mb-8 text-center">Login to your account</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="flex flex-col space-y-2">
