@@ -1,9 +1,16 @@
 import Themes from "@/components/KIP/Themes";
 import API from "@/utils/API";
 import React, { useEffect, useState } from "react";
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { usePDF } from "react-to-pdf";
 import GpDetailComponent from "@/components/KIP/GpDetailComponent";
+import { ArrowLeftIcon } from "lucide-react";
+import StateMap from "@/components/KIP/StateMap";
 const KPIDetails = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [gpData, setGpData] = useState([]);
@@ -17,7 +24,7 @@ const KPIDetails = () => {
   const dist = searchParams.get("dist") || "";
   const block = searchParams.get("block") || "";
   const gp = searchParams.get("gp") || "";
-
+  const navigate = useNavigate();
   const getAllKpiData = async () => {
     try {
       const { data } = await API.get(
@@ -53,7 +60,7 @@ const KPIDetails = () => {
   const getgpDetails = async () => {
     try {
       const { data } = await API.get(
-        `/api/v1/g-details/get?state=${state}&dist=${dist}&block=${block}&gp=${gp}`
+        `/api/v1/gp-details/get?state=${state}&dist=${dist}&block=${block}&gp=${gp}`
       );
       setGpDetails(data?.data);
     } catch (error) {
@@ -62,6 +69,12 @@ const KPIDetails = () => {
   };
 
   useEffect(() => {
+    getgpDetails();
+  }, [gp]);
+
+  useEffect(() => {
+    setGpOptions([]);
+    setBlockOptions([]);
     getAllKpiData();
     getAllStates();
     getAllDistricts();
@@ -70,17 +83,13 @@ const KPIDetails = () => {
   useEffect(() => {
     if (dist) {
       getAllBlocks();
+      setGpData("");
     }
   }, [dist]);
 
   useEffect(() => {
     getAllGp();
   }, [block]);
-
-  const handleApply = () => {
-    setSearchParams({ state, dist, block, gp });
-    getAllKpiData();
-  };
 
   const getStateById = async (stateId) => {
     try {
@@ -92,9 +101,8 @@ const KPIDetails = () => {
   };
 
   useEffect(() => {
-    const stateId = searchParams.get("state");
-    getStateById(stateId);
-  }, []);
+    getStateById(state);
+  }, [state]);
 
   const sampleData = {
     panchayatDetails: {
@@ -148,13 +156,20 @@ const KPIDetails = () => {
   const { toPDF, targetRef } = usePDF({ filename: "kpi.pdf" });
 
   return (
-    <div className="py-10 px-5 lg:px-20">
+    <div className="relative py-10 px-5 lg:px-20">
+      <button
+        onClick={() => navigate("/kpi")}
+        className="absolute flex items-center justify-center bg-primary text-white p-2 rounded top-10 left-20"
+      >
+        <ArrowLeftIcon className="w-7 h-5" />
+        Back
+      </button>
       <h1 className="text-3xl text-primary text-center font-bold">
         Gram Panchayat Profile
       </h1>
-      <div className="flex flex-col justify-between items-center lg:items-end lg:flex-row text-center text-3xl h-full">
+      <div className="flex flex-col justify-between items-center  lg:flex-row text-center text-3xl h-full">
         {/* Info */}
-        <div className="w-full lg:w-full h-fit">
+        <div className="w-full  h-fit">
           <div className="flex flex-wrap items-end py-10 gap-2 sm:gap-5">
             <div className="flex flex-col">
               <label
@@ -167,8 +182,7 @@ const KPIDetails = () => {
                 className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
                 value={state}
                 onChange={(e) => {
-                  searchParams.set("state", e.target.value);
-                  setSearchParams(searchParams);
+                  setSearchParams({ state: e.target.value });
                 }}
               >
                 <option>All States</option>
@@ -192,8 +206,7 @@ const KPIDetails = () => {
                 className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
                 value={dist}
                 onChange={(e) => {
-                  searchParams.set("dist", e.target.value);
-                  setSearchParams(searchParams);
+                  setSearchParams({ state, dist: e.target.value });
                 }}
               >
                 <option>All Districts</option>
@@ -216,8 +229,7 @@ const KPIDetails = () => {
                 className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
                 value={block}
                 onChange={(e) => {
-                  searchParams.set("block", e.target.value);
-                  setSearchParams(searchParams);
+                  setSearchParams({ state, dist, block: e.target.value });
                 }}
               >
                 <option>All Blocks</option>
@@ -240,8 +252,7 @@ const KPIDetails = () => {
                 className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
                 value={gp}
                 onChange={(e) => {
-                  searchParams.set("gp", e.target.value);
-                  setSearchParams(searchParams);
+                  setSearchParams({ state, dist, block, gp: e.target.value });
                 }}
               >
                 <option>All GPs</option>
@@ -252,28 +263,19 @@ const KPIDetails = () => {
                 ))}
               </select>
             </div>
-            <button
-              onClick={handleApply}
-              className="bg-sky-900 rounded text-white text-sm p-2 px-4"
-            >
-              Apply
-            </button>
           </div>
         </div>
-        <div className="w-1/2 mt-10 lg:mt-0 flex justify-center items-center lg:w-[20%] h-full lg:max-h-[25vh]">
+        {/* img */}
+        <div className="w-1/3 mt-10 lg:mt-0 flex justify-center items-center lg:w-1/2 h-full ">
           <img
             src={stateData?.state_icon}
             alt=""
-            className="w-full max-h-[40vh]"
+            className="w-full  max-h-[40vh] xl:max-h-[30vh]"
           />
+          {/* {stateData && <StateMap stateName={stateData?.name} />} */}
         </div>
       </div>
 
-      {/* Themes */}
-
-      <div className="py-14">
-        <Themes />
-      </div>
       <div>
         {gpDetails && (
           <GpDetailComponent
@@ -281,6 +283,12 @@ const KPIDetails = () => {
             // data={sampleData}
           />
         )}
+      </div>
+
+      {/* Themes */}
+
+      <div className="py-14">
+        <Themes />
       </div>
     </div>
   );

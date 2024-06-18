@@ -98,6 +98,7 @@ const ManregsChart = ({ kpi, kpiId, theme, kpi_img }) => {
     labels: ["GP", "State", "250 Model GP Cluster"],
     datasets: [
       {
+        label: kpi?.substr(0, 40),
         data: [
           gpwiseKpiChart?.yearlyData?.gp[0].percentage.toFixed(2),
           gpwiseKpiChart?.yearlyData?.state.percentage.toFixed(2),
@@ -200,8 +201,9 @@ const ManregsChart = ({ kpi, kpiId, theme, kpi_img }) => {
               onChange={(e) => setChartType(e.target.value)}
               className="p-2 border rounded"
             >
-              <option value="doughnut">Doughbut</option>
+              <option value="doughnut">Doughnut</option>
               <option value="pie">Pie</option>
+              <option value="bar">Bar</option>
 
               <option value="polar">Polar</option>
             </select>
@@ -216,6 +218,13 @@ const ManregsChart = ({ kpi, kpiId, theme, kpi_img }) => {
           )}
           {chartType === "doughnut" && (
             <Doughnut data={pieData} options={options} />
+          )}
+          {chartType === "bar" && (
+            <Bar
+              className="w-full h-full"
+              data={pieData}
+              options={barOptions}
+            />
           )}
         </div>
       </div>

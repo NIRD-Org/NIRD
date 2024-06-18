@@ -36,7 +36,7 @@ const PanchayatSchema = new mongoose.Schema({
     lgd: { type: String, required: true },
     address: { type: String, required: true },
     mobileNumber: { type: String, required: true },
-    emailAddress: { type: String, required: true },
+    emailAddress: { type: String, required: false },
     distanceFromBusStop: { type: Number, required: true }, // Distance in KM
     gpAttractions: { type: String, required: true },
   },
@@ -62,7 +62,7 @@ const PanchayatSchema = new mongoose.Schema({
     education: { type: String, required: true },
     gender: { type: String, required: true },
     areaOfExpertise: { type: String, required: true },
-    email: { type: String, required: true },
+    email: { type: String, required: false },
     mobile: { type: String, required: true },
   },
   secretaryDetails: {
@@ -70,7 +70,7 @@ const PanchayatSchema = new mongoose.Schema({
     education: { type: String, required: true },
     gender: { type: String, required: true },
     numberOfGPCovered: { type: Number, required: true },
-    email: { type: String, required: true },
+    email: { type: String, required: false },
     mobile: { type: String, required: true },
   },
 });

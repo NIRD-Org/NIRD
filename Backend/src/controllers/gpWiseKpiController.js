@@ -268,8 +268,8 @@ export const getGpWiseKpi = CatchAsyncError(async (req, res, next) => {
       });
     }
 
-    pipeline.push({ $skip: startIndex });
-    pipeline.push({ $limit: limit });
+    // pipeline.push({ $skip: startIndex });
+    // pipeline.push({ $limit: limit });
     pipeline.push({ $sort: { created_at: -1 } });
 
     const gpWiseKpiData = await GpWiseKpiModel.aggregate(pipeline);
@@ -690,5 +690,110 @@ export const reSubmitKpiData = CatchAsyncError(async (req, res, next) => {
   } catch (error) {
     console.error("Failed to update KPI data:", error);
     return next(new Errorhandler("Failed to update KPI data", 500));
+  }
+});
+
+// Get the ranking of the gps
+export const getRankingController = CatchAsyncError(async (req, res, next) => {
+  try {
+    const { keyword } = req.query;
+
+    const pipeline = [
+      {
+        $group: {
+          _id: "$gp_id",
+          totalScore: { $sum: "$score" },
+          state_id: { $first: "$state_id" },
+          dist_id: { $first: "$dist_id" },
+          block_id: { $first: "$block_id" },
+        },
+      },
+      {
+        $sort: { totalScore: -1 },
+      },
+      {
+        $lookup: {
+          from: "grampanchayats",
+          localField: "_id",
+          foreignField: "id",
+          as: "gp",
+        },
+      },
+      {
+        $unwind: "$gp",
+      },
+      {
+        $lookup: {
+          from: "states",
+          localField: "state_id",
+          foreignField: "id",
+          as: "state",
+        },
+      },
+      {
+        $unwind: "$state",
+      },
+      {
+        $lookup: {
+          from: "districts",
+          localField: "dist_id",
+          foreignField: "id",
+          as: "district",
+        },
+      },
+      {
+        $unwind: "$district",
+      },
+      {
+        $lookup: {
+          from: "blocks",
+          localField: "block_id",
+          foreignField: "id",
+          as: "block",
+        },
+      },
+      {
+        $unwind: "$block",
+      },
+      {
+        $addFields: {
+          gp_name: "$gp.name",
+          state_name: "$state.name",
+          dist_name: "$district.name",
+          block_name: "$block.name",
+        },
+      },
+      {
+        $unset: ["gp", "state", "district", "block"],
+      },
+    ];
+
+    let ranking = await GpWiseKpiModel.aggregate(pipeline);
+
+    // Add ranks to the sorted results manually
+    ranking.forEach((item, index) => {
+      item.rank = index + 1;
+    });
+
+    // search Functionality
+    if (keyword) {
+      const regex = new RegExp(keyword, "i");
+      ranking = ranking.filter(
+        (item) =>
+          regex.test(item.gp_name) ||
+          regex.test(item.state_name) ||
+          regex.test(item.dist_name) ||
+          regex.test(item.block_name)
+      );
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Ranking fetched successfully",
+      total: ranking.length,
+      data: ranking,
+    });
+  } catch (error) {
+    return next(new Errorhandler("Failed to get ranking", 500));
   }
 });

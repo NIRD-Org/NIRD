@@ -13,6 +13,7 @@ const Indicators = () => {
   const [district, setDistrict] = useState("");
   const [block, setblock] = useState("");
   const [gp, setGp] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const getAllStates = async () => {
     const { data } = await API.get(`/api/v1/state/all`);
@@ -48,6 +49,10 @@ const Indicators = () => {
   };
 
   useEffect(() => {
+    getAllStates();
+  }, []);
+
+  useEffect(() => {
     if (state) {
       setDistrict("");
       setDistrictOptions([]);
@@ -55,7 +60,6 @@ const Indicators = () => {
       setGpOptions([]);
       setblock("");
       setGp("");
-      getAllStates();
       getAllDistricts();
     }
   }, [state]);
@@ -86,13 +90,9 @@ const Indicators = () => {
     }
   };
 
-  // const getAllKpiData = async () => {
-  //   const { data } = await API.get(`/api/v1/gp-wise-kpi?page=${1}`);
-  //   setGpData(data?.data);
-  // };
-
   const getGpWiseKpiData = async () => {
     try {
+      setLoading(true);
       const { data } = await API.get(`/api/v1/gp-wise-indicator/indicators`);
       if (data.success) {
         setGpWiseKpiData(data.data);
@@ -102,11 +102,14 @@ const Indicators = () => {
     } catch (error) {
       setGpWiseKpiData([]);
       console.log("Error: " + error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const getGpWiseKpiDataFilters = async () => {
     try {
+      setLoading(true);
       const { data } = await API.get(
         `/api/v1/gp-wise-indicator/indicators?state=${state}&dist=${district}&block=${block}&gp=${gp}`
       );
@@ -118,6 +121,8 @@ const Indicators = () => {
     } catch (error) {
       setGpWiseKpiData([]);
       console.log("Error: " + error);
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -146,6 +151,7 @@ const Indicators = () => {
 
   const getGpWiseKpiSearchData = async () => {
     try {
+      setLoading(true);
       const { data } = await API.get(
         `/api/v1/gp-wise-indicator/indicators?search=${search}`
       );
@@ -157,6 +163,8 @@ const Indicators = () => {
     } catch (error) {
       setGpWiseKpiData([]);
       console.log("Error: " + error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -274,72 +282,85 @@ const Indicators = () => {
             <div className="overflow-x-auto">
               <div className="min-w-full inline-block align-middle">
                 <div className="overflow-x-hidden max-h-screen">
-                  {gpWiseKpiData && gpWiseKpiData.length > 0 ? (
-                    <table className="min-w-full divide-y divide-gray-200">
-                      <thead className="bg-primary text-white sticky top-0 z-0">
-                        <tr>
-                          <th className="pl-5">
-                            <h1 className="text-3xl">Gram Panchayat</h1>
-                          </th>
-                          {indicator?.map((i) => (
-                            <th
-                              scope="col"
-                              className="px-4 w-[10rem] py-3 text-start text-xs font-medium text-white uppercase"
-                              key={i.id}
-                            >
-                              {i.name}
-                            </th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y border-2 border-red-600 divide-gray-200">
-                        {gpWiseKpiData.map((gpData, index) => (
-                          <tr key={index}>
-                            <td className="pl-5">
-                              <div className="mb-4">
-                                <h3 className="text-xl font-semibold">
-                                  {gpData.gp_name}
-                                </h3>
-                                <p>{gpData.block_name}</p>
-                                <p className="text-md">{gpData.dist_name}</p>
-                                <p className="text-sm">{gpData.state_name}</p>
-                              </div>
-                            </td>
-                            {indicator.map((i) => {
-                              const indicatorData = gpData.gp_percentage.find(
-                                (item) => item.indicator_id === i.id
-                              );
-                              return (
-                                <td className="px-4" key={i.id}>
-                                  {indicatorData ? (
-                                    <>
-                                      <p className="text-[0.8em] font-semibold">
-                                        Max Range: {indicatorData.max_range}
-                                      </p>
-                                      <p className="text-[0.8rem] font-semibold">
-                                        Input: {indicatorData.input_data}
-                                      </p>
-
-                                      <Progress
-                                        value={indicatorData.percentage.toFixed(
-                                          2
-                                        )}
-                                      />
-                                    </>
-                                  ) : (
-                                    "N/A"
-                                  )}
-                                </td>
-                              );
-                            })}
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  ) : (
-                    <h1 className="text-center font-semibold text-gray-700 text-5xl">
-                      No Data Found
+                  {loading ? (
+                    <h1 className="text-center py-10 text-2xl text-gray-500">
+                      Loading...
                     </h1>
+                  ) : (
+                    <>
+                      {gpWiseKpiData && gpWiseKpiData.length > 0 ? (
+                        <table className="min-w-full divide-y divide-gray-200">
+                          <thead className="bg-primary text-white sticky top-0 z-0">
+                            <tr>
+                              <th className="pl-5">
+                                <h1 className="text-3xl">Gram Panchayat</h1>
+                              </th>
+                              {indicator?.map((i) => (
+                                <th
+                                  scope="col"
+                                  className="px-4 w-[10rem] py-3 text-start text-xs font-medium text-white uppercase"
+                                  key={i.id}
+                                >
+                                  {i.name}
+                                </th>
+                              ))}
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y border-2 border-red-600 divide-gray-200">
+                            {gpWiseKpiData.map((gpData, index) => (
+                              <tr key={index}>
+                                <td className="pl-5">
+                                  <div className="mb-4">
+                                    <h3 className="text-xl font-semibold">
+                                      {gpData.gp_name}
+                                    </h3>
+                                    <p>{gpData.block_name}</p>
+                                    <p className="text-md">
+                                      {gpData.dist_name}
+                                    </p>
+                                    <p className="text-sm">
+                                      {gpData.state_name}
+                                    </p>
+                                  </div>
+                                </td>
+                                {indicator.map((i) => {
+                                  const indicatorData =
+                                    gpData.gp_percentage.find(
+                                      (item) => item.indicator_id === i.id
+                                    );
+                                  return (
+                                    <td className="px-4" key={i.id}>
+                                      {indicatorData ? (
+                                        <>
+                                          <p className="text-[0.8em] font-semibold">
+                                            Max Range: {indicatorData.max_range}
+                                          </p>
+                                          <p className="text-[0.8rem] font-semibold">
+                                            Input: {indicatorData.input_data}
+                                          </p>
+
+                                          <Progress
+                                            value={indicatorData.percentage.toFixed(
+                                              2
+                                            )}
+                                          />
+                                        </>
+                                      ) : (
+                                        "N/A"
+                                      )}
+                                    </td>
+                                  );
+                                })}
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      ) : (
+                        <h1 className="text-center font-semibold text-gray-700 text-5xl">
+                          No Data Found
+                        </h1>
+                      )}
+                    </>
                   )}
                 </div>
               </div>

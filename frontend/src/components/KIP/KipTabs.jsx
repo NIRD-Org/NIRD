@@ -26,7 +26,11 @@ const KipTabs = ({ setTagline }) => {
     }
   }, [tab]);
 
-  const tabs = ["Localised Sustainable Goals", "Institutional Strengthening"];
+  const tabs = [
+    "Localised Sustainable Goals",
+    "Institutional Strengthening",
+    "Ranking",
+  ];
 
   return (
     <div className="w-full ">
@@ -34,14 +38,14 @@ const KipTabs = ({ setTagline }) => {
         {tabs.map((t) => (
           <button
             key={t}
-            className={`px-4 py-4 text-xl focus:outline-none ${
+            className={`px-4 py-4 text-sm md:text-xl focus:outline-none ${
               tab === t ? "bg-white text-black  font-semibold" : "text-gray-600"
             }`}
             onClick={() => {
               setSearchParams({ tab: t });
             }}
           >
-            {tab}
+            {t}
           </button>
         ))}
       </div>
@@ -56,6 +60,7 @@ const KipTabs = ({ setTagline }) => {
       <div className="mt-4">
         {tab === "Localised Sustainable Goals" && <GpProfile />}
         {tab === "Institutional Strengthening" && <Indicators />}
+        {tab === "Ranking" && <Ranking />}
       </div>
     </div>
   );

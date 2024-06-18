@@ -104,7 +104,7 @@ function Navbar() {
           type: "sub-module",
           icon: ArrowBigRight,
           title: "Kpi Approvals",
-        link: "/admin/young-professionals",
+          link: "/admin/young-professionals",
         },
         /*  {
           type: "sub-module",
@@ -141,13 +141,25 @@ function Navbar() {
         {
           type: "sub-module",
           icon: ArrowBigRight,
+          title: "Action Form",
+          link: "/admin/action-form",
+        },
+        {
+          type: "sub-module",
+          icon: ArrowBigRight,
+          title: "GP Details",
+          link: "/admin/gp-details-form",
+        },
+        {
+          type: "sub-module",
+          icon: ArrowBigRight,
           title: "Indicator",
           link: "/admin/indicator/create",
         },
       ];
       break;
   }
-  
+
   return (
     <>
       <header className="z-[3] w-full gap-4 h-16 rounded-md shadow-md bg-white flex items-center px-6 justify-between">
@@ -156,13 +168,15 @@ function Navbar() {
           <div className="flex gap-2">
             <h2>{user?.name}</h2>
             <h2>
-              ({user?.role == 1
+              (
+              {user?.role == 1
                 ? "Superadmin"
                 : user?.role == 2
                 ? "Admin"
                 : user?.role == 3
                 ? "Young Fellow"
-                : ""})
+                : ""}
+              )
             </h2>
           </div>
           <DropdownMenu>
