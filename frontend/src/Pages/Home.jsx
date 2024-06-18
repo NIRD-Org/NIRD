@@ -4,15 +4,15 @@ import { Link } from "react-router-dom";
 function Home() {
   return (
     <div>
-      <section class="relative bg-cover bg-center h-screen">
-        <div class="absolute inset-0 z-10 h-[100vh]  bg-gray-900 opacity-50"></div>
-        <div class="relative w-full mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center h-full">
-          <div className="flex flex-1  ">
-            <div className="flex-1 z-20">
-              <h1 class="text-white text-4xl md:text-6xl font-bold">
-                Empowering Communities. Transforming Lives.
+      <section class="relative bg-cover bg-center h-[75vh] md:h-screen">
+        {/* <div class="absolute inset-0 z-10 h-[100vh]  bg-gray-900 opacity-50"></div> */}
+        <div class="relative w-full pt-20 mx-auto px-4 sm:px-6 lg:px-8 flex md:items-center justify-center h-full">
+          <div className="flex flex-1 ">
+            <div className="w-full md:w-[80%] lg:w-[60%] z-20 ">
+              <h1 class="text-primary text-4xl  md:text-6xl lg:text-5xl font-bold">
+                Project for Creating <br /> 250 Model GP Clusters
               </h1>
-              <p class="mt-4 text-white text-lg md:text-xl">
+              <p class="mt-4 lg:pr-40 text-primary text-sm md:text-xl">
                 Join us in enhancing lives through sustainable development and
                 empowering communities across India. Together, we can make a
                 lasting impact.
@@ -26,8 +26,8 @@ function Home() {
             </div>
             <div className="flex-1"></div>
             <img
-              className="absolute w-full top-0 right-0 left-0 z-0 bg-opacity-30 h-[100%] object-cover"
-              src="https://res.cloudinary.com/dtbbuevez/image/upload/v1717957901/themes/hfaiqrqfcbu0lo8pmkvz.jpg"
+              className="absolute w-full top-0 right-0 left-0 z-0  object-cover lg:object-fill opacity-30 md:opacity-50 lg:opacity-100 md:h-screen h-[75vh]"
+              src="/nird-home.jpg"
               alt=""
             />
           </div>

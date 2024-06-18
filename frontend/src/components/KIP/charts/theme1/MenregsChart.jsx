@@ -21,7 +21,7 @@ const ManregsChart = ({ kpi, kpiId, theme, kpi_img }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [gpwiseKpiChart, setGpwiseKpiChart] = useState();
   const chartRef = useRef();
-
+  const [chartType, setChartType] = useState("doughnut");
   const state = searchParams.get("state") || "";
   const dist = searchParams.get("dist") || "";
   const gp = searchParams.get("gp") || "";
@@ -56,9 +56,9 @@ const ManregsChart = ({ kpi, kpiId, theme, kpi_img }) => {
         label: kpi.substr(0, 50) + "...",
         data: [
           gpwiseKpiChart?.quarterlyPercentage?.quarter1,
-          gpwiseKpiChart?.quarterlyPercentage?.quarter2 || 78,
-          gpwiseKpiChart?.quarterlyPercentage?.quarter3 || 94,
-          gpwiseKpiChart?.quarterlyPercentage?.quarter4 || 87,
+          gpwiseKpiChart?.quarterlyPercentage?.quarter2,
+          gpwiseKpiChart?.quarterlyPercentage?.quarter3,
+          gpwiseKpiChart?.quarterlyPercentage?.quarter4,
         ],
         backgroundColor: "#00203F",
 
@@ -95,13 +95,13 @@ const ManregsChart = ({ kpi, kpiId, theme, kpi_img }) => {
   };
 
   const pieData = {
-    labels: ["GP", "State", "Country"],
+    labels: ["GP", "State", "250 Model GP Cluster"],
     datasets: [
       {
         data: [
-          gpwiseKpiChart?.yearlyData?.gp.percentage,
-          gpwiseKpiChart?.yearlyData?.state.percentage,
-          gpwiseKpiChart?.yearlyData?.country.percentage,
+          gpwiseKpiChart?.yearlyData?.gp[0].percentage.toFixed(2),
+          gpwiseKpiChart?.yearlyData?.state.percentage.toFixed(2),
+          gpwiseKpiChart?.yearlyData?.country.percentage.toFixed(2),
         ],
         fill: true,
         backgroundColor: ["#004B86", "darkOrange", "gray"],
@@ -114,7 +114,7 @@ const ManregsChart = ({ kpi, kpiId, theme, kpi_img }) => {
       },
     ],
   };
-
+  console.log(gpwiseKpiChart?.yearlyData?.gp[0].percentage);
   // Options for the doughnut chart
   const options = {
     responsive: true,
@@ -192,10 +192,31 @@ const ManregsChart = ({ kpi, kpiId, theme, kpi_img }) => {
           <Bar data={barData} options={barOptions} />
         </div>
         <div className="w-full h-[70vh] lg:w-1/2 flex flex-col justify-center items-center  text-center  max-h-screen  lg:max-h-[45vh]">
+          <div>
+            <label htmlFor="">Chart Type: </label>
+            <select
+              name=""
+              id=""
+              onChange={(e) => setChartType(e.target.value)}
+              className="p-2 border rounded"
+            >
+              <option value="doughnut">Doughbut</option>
+              <option value="pie">Pie</option>
+
+              <option value="polar">Polar</option>
+            </select>
+          </div>
           <h1 className="text-center py-4  text-gray-700 textxgl font-semibold">
             FY 2023-24
           </h1>
-          <Pie data={pieData} options={options} />
+
+          {chartType === "pie" && <Pie data={pieData} options={options} />}
+          {chartType === "polar" && (
+            <PolarArea data={pieData} options={options} />
+          )}
+          {chartType === "doughnut" && (
+            <Doughnut data={pieData} options={options} />
+          )}
         </div>
       </div>
     </div>

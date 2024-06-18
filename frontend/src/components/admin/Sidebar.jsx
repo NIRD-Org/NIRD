@@ -91,9 +91,9 @@ function Sidebar({ className }) {
           type: "sub-module",
           icon: ArrowBigRight,
           title: "Action Form",
-        link: "/admin/admin-action-form",
+          link: "/admin/admin-action-form",
         },
-       /*  {
+        /*  {
           type: "sub-module",
           icon: ArrowBigRight,
           title: "Kpi approvals",
@@ -137,14 +137,27 @@ function Sidebar({ className }) {
           title: "Action Form",
           link: "/admin/action-form",
         },
+        {
+          type: "sub-module",
+          icon: ArrowBigRight,
+          title: "GP Details",
+          link: "/admin/gp-details-form",
+        },
       ];
       break;
   }
 
   return (
-    <aside aria-label="sidebar " aria-controls="default-sidebar" className={`${className} bg-slate-100 scrollbar  font-urbanist  shadow-md rounded-md  z-[20]`}>
+    <aside
+      aria-label="sidebar "
+      aria-controls="default-sidebar"
+      className={`${className} bg-slate-100 scrollbar  font-urbanist  shadow-md rounded-md  z-[20]`}
+    >
       <div className="pt-10 hover:text-slate-100 text-slate-600">
-        <Link to="/" className="flex  items-center px-4 py-3 rounded-xl text-slate-700 hover:bg-main  transition duration-150 cursor-pointer"></Link>
+        <Link
+          to="/"
+          className="flex  items-center px-4 py-3 rounded-xl text-slate-700 hover:bg-main  transition duration-150 cursor-pointer"
+        ></Link>
       </div>
 
       <div className="pt-6 w-max">
@@ -154,14 +167,21 @@ function Sidebar({ className }) {
               <li key={item.title}>
                 <div className="flex bg-primary text-slate-100 mb-1  items-center px-4 py-3 w-full cursor-not-allowed font-semibold">
                   {/* <item.icon size={20} /> */}
-                  <span className="ml-4 text-[0.8rem] tracking-wider">{item.title}</span>
+                  <span className="ml-4 text-[0.8rem] tracking-wider">
+                    {item.title}
+                  </span>
                 </div>
               </li>
             ) : (
               <li key={item.title}>
-                <Link to={item.link} className="flex mb-2 px-2 mx-6 items-center  py-2 rounded-xl text-slate-700 hover:bg-[#004B86]/70 hover:text-white transition duration-150 cursor-pointer">
+                <Link
+                  to={item.link}
+                  className="flex mb-2 px-2 mx-6 items-center  py-2 rounded-xl text-slate-700 hover:bg-[#004B86]/70 hover:text-white transition duration-150 cursor-pointer"
+                >
                   <item.icon size={20} />
-                  <span className="ml-4 text-[0.7rem] font-semibold tracking-wider">{item.title}</span>
+                  <span className="ml-4 text-[0.7rem] font-semibold tracking-wider">
+                    {item.title}
+                  </span>
                 </Link>
               </li>
             )

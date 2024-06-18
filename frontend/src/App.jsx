@@ -44,6 +44,7 @@ import Attendance from "./components/admin/attendance/Attendance";
 import ActionForm from "./components/admin/young-fellow/YfActionForm";
 import AdminActionForm from "./components/admin/young-fellow/AdminActionForm";
 import UserLocation from "./components/admin/user-location/UserLocation";
+import GpDetailsForm from "./components/admin/Gpdetails/GpDetailsForm";
 
 function App() {
   const { login } = useAuthContext();
@@ -65,6 +66,7 @@ function App() {
           <Route path="/gp-wise-data/theme/:id" element={<ThemeDataPage />} />
           <Route path="/admin" element={<AdminPage />}>
             <Route index element={<AdminMainPage />} />
+            <Route path="gp-details-form" element={<GpDetailsForm />} />
             <Route path="blocks" element={<BlockPage />} />
             <Route path="gram-panchayats" element={<GpPage />} />
             <Route path="themes" element={<ThemePage />} />

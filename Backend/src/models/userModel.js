@@ -26,6 +26,7 @@ const userSchema = new mongoose.Schema({
   count: { type: Number },
   outer_checkbox: { type: Number },
   status: { type: String },
+
   created_at: { type: Date, default: Date.now },
   modified_at: { type: Date, default: Date.now },
 });

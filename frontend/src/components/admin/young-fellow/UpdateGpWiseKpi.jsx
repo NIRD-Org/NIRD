@@ -1,7 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import API from "@/utils/API";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -28,7 +35,7 @@ function KpiApprovalSubmit() {
         const response = await API.get(url);
         setKpiApprovalData(response.data.data || []);
         const data = response.data.data;
-        const updatedFormData = data.map(item => ({
+        const updatedFormData = data.map((item) => ({
           id: item.id,
           kpi_id: item.kpi_id,
           max_range: item.max_range,
@@ -220,7 +227,7 @@ function KpiApprovalSubmit() {
 
   const handleChange = (e, index) => {
     const { name, value } = e.target;
-    setFormData(prevData => {
+    setFormData((prevData) => {
       const updatedData = [...prevData];
       updatedData[index] = {
         ...updatedData[index],
@@ -233,7 +240,11 @@ function KpiApprovalSubmit() {
         const percentage = (inputData / maxRange) * 100;
         const kpiId = kpiApprovalData[index].kpi_id;
         const { thresholds, scores } = kpiScoringRules[kpiId];
-        updatedData[index].score = calculateScore(percentage, thresholds, scores);
+        updatedData[index].score = calculateScore(
+          percentage,
+          thresholds,
+          scores
+        );
       }
 
       return updatedData;
@@ -249,12 +260,15 @@ function KpiApprovalSubmit() {
     return scores[thresholds.length];
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
     // return;
     try {
-      const response = await API.put("/api/v1/gp-wise-kpi/resubmit", { formData, submitted_id: submitted_id });
+      const response = await API.put("/api/v1/gp-wise-kpi/resubmit", {
+        formData,
+        submitted_id: submitted_id,
+      });
       console.log("Success:", response.data);
       tst.success("Form submitted successfully");
       // navigate("/admin/young-professionals");
@@ -264,13 +278,17 @@ function KpiApprovalSubmit() {
     }
   };
 
-  const disabledKpis = [16, 17, 18, 19, 20, 21, 22, 23, 29, 39, 40, 41, 45, 48, 49];
+  const disabledKpis = [
+    16, 17, 18, 19, 20, 21, 22, 23, 29, 39, 40, 41, 45, 48, 49,
+  ];
 
   return (
     <div className="w-full">
       <div>
         <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">Young Fellow - KPI Entry Form</h2>
+          <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">
+            Young Fellow - KPI Entry Form
+          </h2>
         </div>
         <YfLayout />
         <form action="" onSubmit={handleSubmit}>
@@ -283,37 +301,81 @@ function KpiApprovalSubmit() {
                     <TableHead className="w-[200px]">KPI Name</TableHead>
                     <TableHead className="w-[200px]">Data point</TableHead>
                     <TableHead className="w-20">Input type</TableHead>
-                    <TableHead className="w-32">Max Number (Total Number)</TableHead>
-                    <TableHead className="w-20">Cumulative Achived Number</TableHead>
+                    <TableHead className="w-32">
+                      Max Number (Total Number)
+                    </TableHead>
+                    <TableHead className="w-20">
+                      Cumulative Achieved Number
+                    </TableHead>
                     <TableHead className="w-40">Score</TableHead>
                     <TableHead className="w-40">Remarks</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {kpiApprovalData.map((data, index) => {
-                    const isDisabled = disabledKpis.includes(parseInt(data?.kpiDetails?.id));
+                    const isDisabled = disabledKpis.includes(
+                      parseInt(data?.kpiDetails?.id)
+                    );
                     return (
                       <>
                         <TableRow key={data.id}>
                           <TableCell>{data?.kpiDetails?.id}</TableCell>
                           <TableCell>{data?.kpiDetails?.name}</TableCell>
-                          <TableCell>{data?.kpiDetails?.kpi_datapoint || "No question"}</TableCell>
+                          <TableCell>
+                            {data?.kpiDetails?.kpi_datapoint || "No question"}
+                          </TableCell>
                           <TableCell>{data?.kpiDetails?.input_type}</TableCell>
                           <TableCell>
-                            <Input disabled={isDisabled} type="number" name="max_range" value={isDisabled ? "0" : formData[index]?.max_range || ""} onChange={e => handleChange(e, index)} />
+                            <Input
+                              disabled={isDisabled}
+                              type="number"
+                              name="max_range"
+                              value={
+                                isDisabled
+                                  ? "0"
+                                  : formData[index]?.max_range || ""
+                              }
+                              onChange={(e) => handleChange(e, index)}
+                            />
                           </TableCell>
                           <TableCell>
                             {!isDisabled ? (
-                              <Input required max={formData[index]?.max_range} type="number" name="input_data" value={formData[index]?.input_data || ""} onChange={e => handleChange(e, index)} />
+                              <Input
+                                required
+                                max={formData[index]?.max_range}
+                                type="number"
+                                name="input_data"
+                                value={formData[index]?.input_data || ""}
+                                onChange={(e) => handleChange(e, index)}
+                              />
                             ) : (
-                              <Input required type="number" name="input_data" value={formData[index]?.input_data || ""} onChange={e => handleChange(e, index)} />
+                              <Input
+                                required
+                                type="number"
+                                name="input_data"
+                                value={formData[index]?.input_data || ""}
+                                onChange={(e) => handleChange(e, index)}
+                              />
                             )}{" "}
                           </TableCell>
                           <TableCell>
-                            <Input disabled type="number" name="score" value={formData[index]?.score || ""} default={data.score} onChange={e => handleChange(e, index)} />
+                            <Input
+                              disabled
+                              type="number"
+                              name="score"
+                              value={formData[index]?.score || ""}
+                              default={data.score}
+                              onChange={(e) => handleChange(e, index)}
+                            />
                           </TableCell>
                           <TableCell>
-                            <Textarea type="text" name="remarks" value={formData[index]?.remarks || ""} default={data.remarks} onChange={e => handleChange(e, index)} />
+                            <Textarea
+                              type="text"
+                              name="remarks"
+                              value={formData[index]?.remarks || ""}
+                              default={data.remarks}
+                              onChange={(e) => handleChange(e, index)}
+                            />
                           </TableCell>
                         </TableRow>
                       </>
@@ -326,7 +388,20 @@ function KpiApprovalSubmit() {
               <Label htmlFor="date" className="text-right mt-2">
                 Date
               </Label>
-              <Input disabled value={kpiApprovalData[0]?.date ? kpiApprovalData[0]?.date.substring(0, 10) : ""} type="date" name="date" onChange={e => setDate(e.target.value)} id="date" placeholder="Enter date" className="px-10" />
+              <Input
+                disabled
+                value={
+                  kpiApprovalData[0]?.date
+                    ? kpiApprovalData[0]?.date.substring(0, 10)
+                    : ""
+                }
+                type="date"
+                name="date"
+                onChange={(e) => setDate(e.target.value)}
+                id="date"
+                placeholder="Enter date"
+                className="px-10"
+              />
               {/* <Input disabled value={kpiApprovalData[0]?.date} type="date" name="date" onChange={e => setFormData(prevData => ({ ...prevData, date: e.target.value }))} id="date" placeholder="Enter date" className="px-10" /> */}
             </div>
             <Button type="submit">Submit</Button>

@@ -314,130 +314,179 @@ export const getGpWiseKpiChart = CatchAsyncError(async (req, res, next) => {
   try {
     const { state, dist, block, theme, gp, kpi } = req.query;
 
-    // Define the match stage of the aggregation pipeline
-    const matchStage = {
+    // 1. Calculate Quarterly Data
+    const matchStageQuarterly = {
       theme_id: theme,
     };
-    if (state) matchStage.state_id = state;
-    if (dist) matchStage.dist_id = dist;
-    if (block) matchStage.block_id = block;
-    if (gp) matchStage.gp_id = gp;
-    if (kpi) matchStage.kpi_id = kpi;
+    if (state) matchStageQuarterly.state_id = state;
+    if (dist) matchStageQuarterly.dist_id = dist;
+    if (block) matchStageQuarterly.block_id = block;
+    if (gp) matchStageQuarterly.gp_id = gp;
+    if (kpi) matchStageQuarterly.kpi_id = kpi;
 
-    // Define the aggregation pipeline
-    const pipeline = [
-      { $match: matchStage },
+    const pipelineQuarterly = [
+      { $match: matchStageQuarterly },
+      {
+        $group: {
+          _id: "$submitted_id",
+          totalInputData: { $sum: "$input_data" },
+          totalMaxRange: { $sum: "$max_range" },
+        },
+      },
+      {
+        $sort: { _id: 1 },
+      },
+    ];
+
+    const quarterlyResults = await GpWiseKpiModel.aggregate(pipelineQuarterly);
+
+    const quarterlyPercentage = {};
+    quarterlyResults.forEach((result, index) => {
+      const quarterInputData = result.totalInputData || 0;
+      const quarterMaxRange = result.totalMaxRange || 1;
+
+      const quarterPercentage =
+        quarterMaxRange !== 0 ? (quarterInputData / quarterMaxRange) * 100 : 0;
+      quarterlyPercentage[`quarter${index + 1}`] = quarterPercentage.toFixed(2);
+    });
+
+    // 2. Calculate Yearly Data
+    const matchStageYearly = {
+      theme_id: theme,
+    };
+    if (state) matchStageYearly.state_id = state;
+    if (gp) matchStageYearly.gp_id = gp;
+    if (kpi) matchStageYearly.kpi_id = kpi;
+
+    // For GP Yearly Data
+    const pipelineGP = [
+      { $match: matchStageYearly },
       {
         $group: {
           _id: {
-            submitted_id: "$submitted_id",
-            gp_id: "$gp_id",
             state_id: "$state_id",
-            dist_id: "$dist_id",
-            block_id: "$block_id",
-            kpi_id: "$kpi_id",
+            gp_id: "$gp_id",
+            theme_id: theme,
+            kpi_id: kpi,
           },
           totalInputData: { $sum: "$input_data" },
           totalMaxRange: { $sum: "$max_range" },
         },
       },
       {
-        $group: {
-          _id: "$_id.submitted_id",
-          gpData: {
-            $push: {
-              gp_id: "$_id.gp_id",
-              state_id: "$_id.state_id",
-              dist_id: "$_id.dist_id",
-              block_id: "$_id.block_id",
-              kpi_id: "$_id.kpi_id",
-              totalInputData: "$totalInputData",
-              totalMaxRange: "$totalMaxRange",
-            },
+        $project: {
+          _id: 0,
+          gp_id: "$_id.gp_id",
+          state_id: "$_id.state_id",
+          theme_id: "$_id.theme_id",
+          kpi_id: "$_id.kpi_id",
+          totalInputData: 1,
+          totalMaxRange: 1,
+          percentage: {
+            $cond: [
+              { $eq: ["$totalMaxRange", 0] },
+              0,
+              {
+                $multiply: [
+                  { $divide: ["$totalInputData", "$totalMaxRange"] },
+                  100,
+                ],
+              },
+            ],
           },
-          quarterlyGpInputData: { $sum: "$totalInputData" },
-          quarterlyGpMaxRange: { $sum: "$totalMaxRange" },
+        },
+      },
+    ];
+
+    const gpYearlyData = await GpWiseKpiModel.aggregate(pipelineGP);
+
+    // For State Yearly Data
+    const pipelineState = [
+      { $match: { state_id: state, theme_id: theme, kpi_id: kpi } },
+      {
+        $group: {
+          _id: {
+            state_id: state,
+            theme_id: theme,
+            kpi_id: kpi,
+          },
+          totalInputData: { $sum: "$input_data" },
+          totalMaxRange: { $sum: "$max_range" },
         },
       },
       {
-        $sort: { _id: 1 },
+        $project: {
+          _id: 0,
+          state_id: "$_id.state_id",
+          theme_id: "$_id.theme_id",
+          kpi_id: "$_id.kpi_id",
+          totalInputData: 1,
+          totalMaxRange: 1,
+          percentage: {
+            $cond: [
+              { $eq: ["$totalMaxRange", 0] },
+              0,
+              {
+                $multiply: [
+                  { $divide: ["$totalInputData", "$totalMaxRange"] },
+                  100,
+                ],
+              },
+            ],
+          },
+        },
       },
-      // Lookup stages to get the names from respective collections
     ];
 
-    // Execute the aggregation pipeline
-    const results = await GpWiseKpiModel.aggregate(pipeline);
+    const stateYearlyData = await GpWiseKpiModel.aggregate(pipelineState);
 
-    // Initialize variables for yearly data calculation
-    let gpYearlyInputData = 0,
-      gpYearlyMaxRange = 0;
-    let stateYearlyInputData = 0,
-      stateYearlyMaxRange = 0;
-    let countryYearlyInputData = 0,
-      countryYearlyMaxRange = 0;
+    // For Country Yearly Data
+    const pipelineCountry = [
+      { $match: { theme_id: theme, kpi_id: kpi } },
+      {
+        $group: {
+          _id: null,
+          totalInputData: { $sum: "$input_data" },
+          totalMaxRange: { $sum: "$max_range" },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          theme_id: theme,
+          kpi_id: kpi,
+          totalInputData: 1,
+          totalMaxRange: 1,
+          percentage: {
+            $cond: [
+              { $eq: ["$totalMaxRange", 0] },
+              0,
+              {
+                $multiply: [
+                  { $divide: ["$totalInputData", "$totalMaxRange"] },
+                  100,
+                ],
+              },
+            ],
+          },
+        },
+      },
+    ];
 
-    // Initialize quarterly percentage object
-    const quarterlyPercentage = {};
+    const countryYearlyData = await GpWiseKpiModel.aggregate(pipelineCountry);
 
-    // Process the results to calculate percentages and yearly data
-    results.forEach((result, index) => {
-      const quarterGpInputData = result.quarterlyGpInputData;
-      const quarterGpMaxRange = result.quarterlyGpMaxRange;
-
-      // Calculate quarterly percentage
-      const quarterPercentage = quarterGpMaxRange
-        ? (quarterGpInputData / quarterGpMaxRange) * 100
-        : 0;
-      quarterlyPercentage[`quarter${index + 1}`] = quarterPercentage.toFixed(2);
-
-      // Accumulate yearly data
-      gpYearlyInputData += quarterGpInputData;
-      gpYearlyMaxRange += quarterGpMaxRange;
-
-      result.gpData.forEach((data) => {
-        if (data.state_id === state) {
-          stateYearlyInputData += data.totalInputData;
-          stateYearlyMaxRange += data.totalMaxRange;
-        }
-        countryYearlyInputData += data.totalInputData;
-        countryYearlyMaxRange += data.totalMaxRange;
-      });
-    });
-
-    // Calculate yearly percentages
-    const gpYearlyPercentage = gpYearlyMaxRange
-      ? (gpYearlyInputData / gpYearlyMaxRange) * 100
-      : 0;
-    const stateYearlyPercentage = stateYearlyMaxRange
-      ? (stateYearlyInputData / stateYearlyMaxRange) * 100
-      : 0;
-    const countryYearlyPercentage = countryYearlyMaxRange
-      ? (countryYearlyInputData / countryYearlyMaxRange) * 100
-      : 0;
-
-    // Prepare the response object with the fetched names and calculated percentages
     const response = {
       quarterlyPercentage,
       yearlyData: {
-        gp: {
-          totalInputData: gpYearlyInputData,
-          percentage: gpYearlyPercentage.toFixed(2),
-        },
-        state: {
-          totalInputData: stateYearlyInputData,
-          percentage: stateYearlyPercentage.toFixed(2),
-        },
-        country: {
-          totalInputData: countryYearlyInputData,
-          percentage: countryYearlyPercentage.toFixed(2),
-        },
+        gp: gpYearlyData,
+        state: stateYearlyData.length > 0 ? stateYearlyData[0] : {},
+        country: countryYearlyData.length > 0 ? countryYearlyData[0] : {},
       },
     };
 
-    // Respond with the final result
     res.json(response);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return next(new Errorhandler("Failed to get KPI data", 500));
   }
 });
