@@ -5,6 +5,7 @@ import {
   getGpWiseKpiChart,
   getGpWiseKpiData,
   getGpWiseKpiForApprover,
+  getRankingController,
   reSubmitKpiData,
   submitKpiData,
 } from "../controllers/gpWiseKpiController.js";
@@ -31,5 +32,7 @@ router.route("/delete/:id").put(deleteGpWiseKpiData);
 // get Kpi details for approver
 
 router.route("/approval-data").get(getGpWiseKpiForApprover);
+
+router.route("/get-ranking").get(getRankingController);
 
 export default router;

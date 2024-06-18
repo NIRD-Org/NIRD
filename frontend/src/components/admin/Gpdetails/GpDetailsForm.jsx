@@ -237,12 +237,12 @@ const GpDetailsForm = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto p-4">
+    <div className="w-full md:max-w-5xl mx-auto p-4">
       <form
         onSubmit={handleSubmit}
         className="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4"
       >
-        <div className="grid py-10  grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 justify-between">
+        <div className="grid py-10  grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-10 justify-between">
           <StateFilter />
           <DistrictFilter />
           <BlockFilter />

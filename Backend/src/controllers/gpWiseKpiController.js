@@ -692,3 +692,81 @@ export const reSubmitKpiData = CatchAsyncError(async (req, res, next) => {
     return next(new Errorhandler("Failed to update KPI data", 500));
   }
 });
+
+// Get the ranking of the gps
+export const getRankingController = CatchAsyncError(async (req, res, next) => {
+  try {
+    const pipeline = [
+      {
+        $group: {
+          _id: "$gp_id",
+          totalScore: { $sum: "$score" },
+          state_id: { $first: "$state_id" },
+          dist_id: { $first: "$dist_id" },
+        },
+      },
+      {
+        $sort: { totalScore: -1 },
+      },
+      {
+        $lookup: {
+          from: "grampanchayats",
+          localField: "_id",
+          foreignField: "id",
+          as: "gp",
+        },
+      },
+      {
+        $unwind: "$gp",
+      },
+      {
+        $lookup: {
+          from: "states",
+          localField: "state_id",
+          foreignField: "id",
+          as: "state",
+        },
+      },
+      {
+        $unwind: "$state",
+      },
+      {
+        $lookup: {
+          from: "districts",
+          localField: "dist_id",
+          foreignField: "id",
+          as: "district",
+        },
+      },
+      {
+        $unwind: "$district",
+      },
+      {
+        $addFields: {
+          gp_name: "$gp.name",
+          state_name: "$state.name",
+          dist_name: "$district.name",
+        },
+      },
+      {
+        $unset: ["gp", "state", "district"],
+      },
+    ];
+
+    const ranking = await GpWiseKpiModel.aggregate(pipeline);
+
+    // Add ranks to the sorted results manually
+    ranking.forEach((item, index) => {
+      item.rank = index + 1;
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Ranking fetched successfully",
+      total: ranking.length,
+      data: ranking,
+    });
+  } catch (error) {
+    return next(new Errorhandler("Failed to get ranking", 500));
+  }
+});

@@ -10,6 +10,7 @@ import {
 import { usePDF } from "react-to-pdf";
 import GpDetailComponent from "@/components/KIP/GpDetailComponent";
 import { ArrowLeftIcon } from "lucide-react";
+import StateMap from "@/components/KIP/StateMap";
 const KPIDetails = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [gpData, setGpData] = useState([]);
@@ -171,7 +172,7 @@ const KPIDetails = () => {
       </h1>
       <div className="flex flex-col justify-between items-center lg:items-end lg:flex-row text-center text-3xl h-full">
         {/* Info */}
-        <div className="w-full lg:w-full h-fit">
+        <div className="w-full  h-fit">
           <div className="flex flex-wrap items-end py-10 gap-2 sm:gap-5">
             <div className="flex flex-col">
               <label
@@ -277,12 +278,13 @@ const KPIDetails = () => {
             </button>
           </div>
         </div>
-        <div className="w-1/2 mt-10 lg:mt-0 flex justify-center items-center lg:w-[20%] h-full lg:max-h-[25vh]">
+        <div className="w-full mt-10 lg:mt-0 flex justify-center items-center lg:w-1/2 h-full ">
           <img
             src={stateData?.state_icon}
             alt=""
             className="w-full max-h-[40vh]"
           />
+          {/* {stateData && <StateMap stateName={stateData?.name} />} */}
         </div>
       </div>
 
