@@ -43,7 +43,7 @@ export const assignUserLocation = CatchAsyncError(async (req, res, next) => {
       id,
       user_id,
       userLocations,
-      created_by: req?.user?.id ,
+      created_by: req?.user?.id,
     });
 
     if (!userLocation) {
@@ -79,7 +79,7 @@ export const getUserLocation = CatchAsyncError(async (req, res, next) => {
 
 export const getUserLocationById = CatchAsyncError(async (req, res, next) => {
   try {
-    const { user_id } = req.params;
+    const user_id = req.params.user_id;
     const userLocation = await UserLocationModel.findOne({ user_id });
     if (!userLocation) {
       return next(new Errorhandler("User locations data not found", 404));

@@ -49,12 +49,24 @@ const UserList = () => {
               <TableCell>{user.id}</TableCell>
               <TableCell>{user.name}</TableCell>
               <TableCell>{user.username}</TableCell>
-              <TableCell>
+              <TableCell className="space-x-4">
                 <Link
                   to={`/admin/user-location/assign/${user.id}`}
                   className="text-blue-600 hover:underline"
                 >
-                  Assign Location
+                  Assign 
+                </Link>
+                <Link
+                  to={`/admin/user-location/update/${user.id}`}
+                  className="text-blue-600 hover:underline"
+                >
+                  Update 
+                </Link>
+                <Link
+                  to={`/admin/user-location/view/${user.id}`}
+                  className="text-blue-600 hover:underline"
+                >
+                  View 
                 </Link>
               </TableCell>
             </TableRow>

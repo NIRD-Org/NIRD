@@ -49,6 +49,7 @@ import PmUploadForm from "./components/admin/attendance/PmuUpload";
 // import AttendanceLayout from "./components/admin/attendance/AttendanceLayout";
 import AmUploadForm from "./components/admin/attendance/AmuUpload";
 import Attendance from "./components/admin/attendance/Attendance";
+import UpdateUserLocation from "./components/admin/user-location/UpdateUserLocation";
 
 function App() {
   const { login } = useAuthContext();
@@ -101,6 +102,8 @@ function App() {
             <Route path="attendance/attendance" element={<Attendance />} />
             <Route path="attendance/amu-upload" element={<AmUploadForm />} />
             <Route path="attendance/pmu-upload" element={<PmUploadForm />} />
+            <Route path="user-location/update/:userId" element={<UpdateUserLocation />} />
+            <Route path="user-location/view/:userId" element={<UpdateUserLocation view/>} />
           </Route>
         </Route>
 

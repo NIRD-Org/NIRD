@@ -15,7 +15,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { useAuthContext } from "@/context/AuthContext";
 import { Label } from "@/components/ui/label";
 
-const UserLocation = () => {
+const UpdateUserLocation = ({ view }) => {
   const [state, setState] = useState(null);
   const [states, setStates] = useState([]);
   const [districts, setDistricts] = useState([]);
@@ -73,12 +73,9 @@ const UserLocation = () => {
   };
 
   const postLocation = async () => {
-
     const blockIds = Array.from(
       new Set(
-        gps
-          .filter(gp => selectedGp.includes(gp.id))
-          .map(gp => gp.block_id)
+        gps.filter(gp => selectedGp.includes(gp.id)).map(gp => gp.block_id)
       )
     );
 
@@ -89,10 +86,9 @@ const UserLocation = () => {
           .map(block => block.dist_id)
       )
     );
-    
 
     const userLocations = {
-      state_ids: [state],
+      state_ids: state,
       district_ids: distIds,
       block_ids: blockIds,
       gp_ids: selectedGp,
@@ -103,11 +99,10 @@ const UserLocation = () => {
     if (selectedGp.length == 0) return;
 
     try {
-      const response = await API.post("/api/v1/user-location/create", {
-        user_id: userId,
+      const response = await API.put(`/api/v1/user-location/${userId}`, {
         userLocations,
       });
-      tst.success("User has been assigned location successfully");
+      tst.success("User Location updated successfully");
       console.log(response);
     } catch (error) {
       tst.error(error);
@@ -116,16 +111,15 @@ const UserLocation = () => {
   };
 
   const postAdminLocation = async () => {
-    const userLocations = {
+    const updateuserLocations = {
       state_ids: selectedState,
     };
 
     if (selectedState.length == 0) return;
 
     try {
-      const response = await API.post("/api/v1/user-location/create", {
-        user_id: userId,
-        userLocations,
+      const response = await API.post(`/api/v1/user-location/${userId}`, {
+        updateuserLocations,
       });
       tst.success("User has been assigned location successfully");
 
@@ -149,16 +143,7 @@ const UserLocation = () => {
       }
     }
 
-    async function fetchDistricts() {
-      if (state) {
-        try {
-          const response = await API.get(`/api/v1/dist/state/${state}`);
-          setDistricts(response.data?.districts || []);
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    }
+   
 
     async function fetchBlocks() {
       try {
@@ -178,8 +163,40 @@ const UserLocation = () => {
       }
     }
 
-    Promise.all([fetchDistricts(), fetchBlocks(), fetchGPs(), fetchStates()]);
-  }, [state]);
+    async function fetchUserLocation() {
+      try {
+        const response = await API.get(`/api/v1/user-location/${userId}`);
+        const data = response.data.userLocation.userLocations;
+        console.log(data);
+        setState(prev => (prev = data.state_ids));
+        setSelectedBlock(prev => (prev = data.block_ids));
+        setSelectedGp(prev => (prev = data.gp_ids));
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    Promise.all([
+      fetchBlocks(),
+      fetchGPs(),
+      fetchStates(),
+      fetchUserLocation(),
+    ]);
+  }, []);
+
+  useEffect(()=>{
+    async function fetchDistricts() {
+      if (state) {
+        try {
+          const response = await API.get(`/api/v1/dist/state/${state}`);
+          setDistricts(response.data?.districts || []);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
+    fetchDistricts();
+  },[state])
 
   if (user.role == 1) {
     return (
@@ -204,7 +221,7 @@ const UserLocation = () => {
       </div>
     );
   }
-
+  // console.log('first')
   return (
     <div>
       <div>
@@ -241,6 +258,14 @@ const UserLocation = () => {
                 <TableCell>
                   <Multiselect
                     isObject={false}
+                    disable={view}
+                    selectedValues={blocks
+                      .filter(
+                        block =>
+                          selectedBlock.includes(block.id) &&
+                          block.dist_id == district.id
+                      )
+                      .map(block => block.name)}
                     onKeyPressFn={function noRefCheck() {}}
                     onRemove={(_, value) =>
                       handleBlockRemove(value, district.id)
@@ -256,11 +281,19 @@ const UserLocation = () => {
                 </TableCell>
                 <TableCell>
                   <Multiselect
+                    disable={view}
                     isObject={false}
                     onKeyPressFn={function noRefCheck() {}}
                     onRemove={(_, value) => handleGPRemove(value)}
                     onSearch={function noRefCheck() {}}
                     onSelect={(_, value) => handleGPChange(value)}
+                    selectedValues={gps
+                      .filter(
+                        gp =>
+                          selectedGp.includes(gp.id) &&
+                          gp.dist_id == district.id
+                      )
+                      .map(gp => gp.name)}
                     options={gps
                       .filter(
                         gp =>
@@ -275,11 +308,13 @@ const UserLocation = () => {
           </TableBody>
         </Table>
       </div>
-      <Button onClick={postLocation} className="mx-auto block px-20 mt-20">
-        Submit
-      </Button>
+      {!view && (
+        <Button onClick={postLocation} className="mx-auto block px-20 mt-20">
+          Submit
+        </Button>
+      )}
     </div>
   );
 };
 
-export default UserLocation;
+export default UpdateUserLocation;
