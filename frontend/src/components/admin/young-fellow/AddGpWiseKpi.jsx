@@ -359,7 +359,7 @@ function AddGpWiseKpi({ update }) {
                         ) : (
                           <Input
                             required
-                            type="text"
+                            type="number"
                             name="input_data"
                             value={formData[index]?.input_data || ""}
                             onChange={(e) => handleChange(e, index)}

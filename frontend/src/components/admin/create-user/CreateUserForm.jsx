@@ -72,7 +72,7 @@ const fields = [
     ],
     required: true,
   },
-  {
+ /*  {
     name: "designation",
     label: "Designation",
     options: [
@@ -81,7 +81,7 @@ const fields = [
     ],
     type: "select",
     required: true,
-  },
+  }, */
   { name: "mobile", label: "Mobile Number", required: true },
   { name: "email", label: "Email ID", required: true },
   { name: "dateOfBirth", label: "Date of Birth", type: "date", required: true },
@@ -90,7 +90,7 @@ const fields = [
   { name: "officeContactNo", label: "Work Phone Number", required: true },
   {
     name: "role",
-    label: "Role",
+    label: "Designation",
     options: getRoleOptions(user.role),
     type: "select",
     required: true,

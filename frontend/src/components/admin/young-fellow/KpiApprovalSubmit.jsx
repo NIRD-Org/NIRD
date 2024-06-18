@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import API from "@/utils/API";
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import YfLayout from "./YfLayout";
 import { Textarea } from "@/components/ui/textarea";
 import { tst } from "@/lib/utils";
@@ -19,6 +19,7 @@ function KpiApprovalSubmit() {
   // const submitted_id = searchParams.get("submitted_id") || "";/
   const submitted_id = searchParams.get("submitted_id") || "";
   const [formData, setFormData] = useState({ decision: "", remarks: "" });
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchKpiApprovalData = async () => {
@@ -38,13 +39,14 @@ function KpiApprovalSubmit() {
     try {
       const body = {
         decision: formData.decision,
-        remarks: formData.remarks,
+        remark: formData.remarks,
       };
 
       const url = `/api/v1/kpi-approvals/update/${submitted_id}`;
       const response = await API.put(url, body);
       console.log(response.data);
       tst.success("Form submitted successfully");
+      navigate('/admin/admin-action-form')
     } catch (error) {
       tst.error("Failed to submit form");
       console.log(error);
@@ -127,7 +129,7 @@ function KpiApprovalSubmit() {
               <Label htmlFor="decision" className="mb-2 block">
                 Remark
               </Label>
-              <Textarea value={formData.remarks || ""} onChange={e => setFormData(prevData => ({ ...prevData, remarks: e.target.value }))} className="w-80" type="text" name="remarks" />
+              <Textarea required={formData.decision === "2"} value={formData.remarks || ""} onChange={e => setFormData(prevData => ({ ...prevData, remarks: e.target.value }))} className="w-80" type="text" name="remarks" />
             </div>
           </div>
           <Button type="submit">Submit</Button>

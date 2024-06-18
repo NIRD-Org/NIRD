@@ -54,19 +54,19 @@ const UserList = () => {
                   to={`/admin/user-location/assign/${user.id}`}
                   className="text-blue-600 hover:underline"
                 >
-                  Assign 
+                  Assign
                 </Link>
                 <Link
                   to={`/admin/user-location/update/${user.id}`}
                   className="text-blue-600 hover:underline"
                 >
-                  Update 
+                  Update
                 </Link>
                 <Link
                   to={`/admin/user-location/view/${user.id}`}
                   className="text-blue-600 hover:underline"
                 >
-                  View 
+                  View
                 </Link>
               </TableCell>
             </TableRow>

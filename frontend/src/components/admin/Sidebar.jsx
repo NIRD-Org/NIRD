@@ -56,6 +56,18 @@ function Sidebar({ className }) {
           title: "Gram Panchayats",
           link: "/admin/gram-panchayats",
         },
+        {
+          type: "sub-module",
+          icon: ArrowBigRight,
+          title: "Themes",
+          link: "/admin/themes",
+        },
+        {
+          type: "sub-module",
+          icon: ArrowBigRight,
+          title: "KPI",
+          link: "/admin/data-point",
+        },
       ];
       break;
     case 2:
@@ -100,23 +112,12 @@ function Sidebar({ className }) {
           title: "User location",
           link: "/admin/users/all",
         },
-        {
+       /*  {
           type: "module",
           icon: ArrowBigRight,
           title: "Master",
-        },
-        {
-          type: "sub-module",
-          icon: ArrowBigRight,
-          title: "Themes",
-          link: "/admin/themes",
-        },
-        {
-          type: "sub-module",
-          icon: ArrowBigRight,
-          title: "KPI",
-          link: "/admin/data-point",
-        },
+        }, */
+      
         {
           type: "module",
           icon: ArrowBigRight,

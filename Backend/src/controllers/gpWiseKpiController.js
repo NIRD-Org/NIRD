@@ -86,6 +86,7 @@ export const submitKpiData = CatchAsyncError(async (req, res, next) => {
       date,
       theme_id,
       user_id,
+      remark,
       formData,
     } = req.body;
 
@@ -151,6 +152,7 @@ export const submitKpiData = CatchAsyncError(async (req, res, next) => {
       block_id,
       gp_id,
       theme_id,
+      remarks:remark,
       submitted_id,
       created_by: user_id,
       date: parsedDate,

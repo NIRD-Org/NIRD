@@ -46,7 +46,7 @@ export const assignUserLocation = CatchAsyncError(async (req, res, next) => {
       userLocations,
       created_by: req?.user?.id,
     });
-    await User.findByIdAndUpdate({ id: user_id }, { location_assigned: true });
+    await User.findOneAndUpdate({id:user_id} , { location_assigned: true });
 
 
     if (!userLocation) {
