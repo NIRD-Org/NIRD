@@ -184,12 +184,6 @@ function Sidebar({ className }) {
           title: "GP Details",
           link: "/admin/gp-details-form",
         },
-        {
-          type: "sub-module",
-          icon: ArrowBigRight,
-          title: "Attendance",
-          link: "/admin/attendance",
-        },
       ];
       break;
   }
