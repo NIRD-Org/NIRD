@@ -39,7 +39,9 @@ const KipTabs = ({ setTagline }) => {
           <button
             key={t}
             className={`px-4 py-4 text-sm md:text-xl focus:outline-none ${
-              tab === t ? "bg-white text-black  font-semibold" : "text-gray-600"
+              tab === t
+                ? "bg-primary text-white  font-semibold"
+                : "text-gray-600"
             }`}
             onClick={() => {
               setSearchParams({ tab: t });

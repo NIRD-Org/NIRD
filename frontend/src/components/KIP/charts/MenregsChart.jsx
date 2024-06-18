@@ -100,9 +100,9 @@ const ManregsChart = ({ kpi, kpiId, theme, kpi_img }) => {
       {
         label: kpi?.substr(0, 40),
         data: [
-          gpwiseKpiChart?.yearlyData?.gp[0].percentage.toFixed(2),
-          gpwiseKpiChart?.yearlyData?.state.percentage.toFixed(2),
-          gpwiseKpiChart?.yearlyData?.country.percentage.toFixed(2),
+          gpwiseKpiChart?.yearlyData?.gp[0]?.percentage?.toFixed(2),
+          gpwiseKpiChart?.yearlyData?.state?.percentage?.toFixed(2),
+          gpwiseKpiChart?.yearlyData?.country?.percentage?.toFixed(2),
         ],
         fill: true,
         backgroundColor: ["#004B86", "darkOrange", "gray"],
@@ -115,7 +115,7 @@ const ManregsChart = ({ kpi, kpiId, theme, kpi_img }) => {
       },
     ],
   };
-  console.log(gpwiseKpiChart?.yearlyData?.gp[0].percentage);
+
   // Options for the doughnut chart
   const options = {
     responsive: true,

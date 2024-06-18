@@ -35,7 +35,7 @@ const Header = () => {
             <br /> 250 Model GP Clusters
           </NavLink>
           <NavLink
-            to="/kpi"
+            to="/kpi?tab=Localised+Sustainable+Goals"
             className={({ isActive }) =>
               `block px-3 text-md py-2 font-normal duration-200 ${
                 isActive ? "text-white font-bold" : "text-gray-300"
@@ -165,7 +165,7 @@ const Header = () => {
                 <br /> 250 Model GP Clusters
               </NavLink>
               <NavLink
-                to="/kpi"
+                to="/kpi?tab=Localised+Sustainable+Goals"
                 onClick={toggleSidebar}
                 className={({ isActive }) =>
                   `block px-3 text-start py-2 font-normal duration-200 ${

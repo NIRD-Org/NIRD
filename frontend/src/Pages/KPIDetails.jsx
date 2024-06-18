@@ -65,6 +65,7 @@ const KPIDetails = () => {
       setGpDetails(data?.data);
     } catch (error) {
       console.log("Errror: " + error.message);
+      setGpDetails();
     }
   };
 
@@ -103,55 +104,6 @@ const KPIDetails = () => {
   useEffect(() => {
     getStateById(state);
   }, [state]);
-
-  const sampleData = {
-    panchayatDetails: {
-      state: "StateName",
-      district: "DistrictName",
-      block: "BlockName",
-      village: "VillageName",
-      panchayat: "PanchayatName",
-      lgd: "LGD1234",
-      address: "1234 Panchayat Address",
-      mobileNumber: "1234567890",
-      emailAddress: "email@example.com",
-      distanceFromBusStop: 5,
-      gpAttractions: "Attractions info",
-    },
-    demography: {
-      totalPopulation: 10000,
-      malePopulation: 5000,
-      femalePopulation: 5000,
-      stPopulation: 1000,
-      scPopulation: 2000,
-      obcPopulation: 3000,
-      generalPopulation: 4000,
-      childrenPopulation0to6: 1000,
-      childrenPopulation6to18: 2000,
-    },
-    panchayatArea: {
-      totalArea: 50,
-      noOfRevenueVillages: 10,
-      noOfWardsSansads: 5,
-      noOfVillagesMappedWithLGD: 7,
-    },
-    sarpanchDetails: {
-      nameOfSarpanch: "Sarpanch Name",
-      education: "Graduate",
-      gender: "Male",
-      areaOfExpertise: "Agriculture",
-      email: "sarpanch@example.com",
-      mobile: "0987654321",
-    },
-    secretaryDetails: {
-      nameOfSecretary: "Secretary Name",
-      education: "Postgraduate",
-      gender: "Female",
-      numberOfGPCovered: 5,
-      email: "secretary@example.com",
-      mobile: "1234567890",
-    },
-  };
 
   const { toPDF, targetRef } = usePDF({ filename: "kpi.pdf" });
 

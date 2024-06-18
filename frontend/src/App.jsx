@@ -97,7 +97,10 @@ function App() {
             {/* <Route path="attendance" element={<AttendanceLayout />} /> */}
             <Route path="action-form" element={<ActionForm />} />
             <Route path="admin-action-form" element={<AdminActionForm />} />
-            <Route path="user-location/assign/:userId" element={<UserLocation />} />
+            <Route
+              path="user-location/assign/:userId"
+              element={<UserLocation />}
+            />
             <Route path="users/all" element={<UserList />} />
             <Route path="attendance/attendance" element={<Attendance />} />
             <Route path="attendance/amu-upload" element={<AmUploadForm />} />

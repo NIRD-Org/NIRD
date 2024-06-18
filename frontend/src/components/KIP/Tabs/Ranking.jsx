@@ -3,10 +3,14 @@ import React, { useEffect, useState } from "react";
 
 const Ranking = () => {
   const [gpRankData, setGpRankData] = useState([]);
+  const [blockRankData, setBlockRankData] = useState([]);
   const [keyword, setKeyword] = useState("");
+  const [rankType, setRankType] = useState("gp");
+
   const [loading, setLoading] = useState(false);
   const getGpRankData = async () => {
     try {
+      setBlockRankData([]);
       setLoading(true);
       const { data } = await API.get(
         `/api/v1/gp-wise-kpi/get-ranking?keyword=${keyword}`
@@ -20,9 +24,26 @@ const Ranking = () => {
     }
   };
 
+  const getBlockRankData = async () => {
+    try {
+      setGpRankData([]);
+      setLoading(true);
+      const { data } = await API.get(
+        `/api/v1/gp-wise-kpi/get-block-ranking?keyword=${keyword}`
+      );
+      setBlockRankData(data?.data);
+    } catch (error) {
+      setGpRankData([]);
+      console.log("Failed to get rank data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    getGpRankData();
-  }, []);
+    if (rankType === "gp") getGpRankData();
+    else getBlockRankData();
+  }, [rankType]);
 
   return (
     <div className="flex relative pt-5 pb-20 px-4 md:px-20 lg:px-24">
@@ -30,13 +51,26 @@ const Ranking = () => {
         <h1 className="text-center text-4xl md:text-5xl text-primary font-bold py-10">
           Gram Panchayat Ranks
         </h1>
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col sm:flex-row py-5 items-center justify-between space-x-2">
+          <div className="">
+            <select
+              name=""
+              id=""
+              className="p-2 border rounded border-gray-300"
+              onChange={(e) => setRankType(e.target.value)}
+            >
+              <option value="">Select Ranking Type</option>
+              <option value="gp">Gram Panchayat Wise</option>
+              <option value="block">Cluster Wise</option>
+            </select>
+          </div>
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              getGpRankData();
+              if (rankType === "gp") getGpRankData();
+              else getBlockRankData();
             }}
-            className="flex py-5 items-center self-end space-x-2"
+            className="flex py-5 items-center space-x-1"
           >
             <input
               type="text"
@@ -61,6 +95,8 @@ const Ranking = () => {
               </svg>
             </button>
           </form>
+        </div>
+        <div className="flex flex-col h-full">
           <div className="overflow-x-auto">
             <div className="min-w-full inline-block align-middle">
               <div className="overflow-x-hidden max-h-screen">
@@ -69,7 +105,9 @@ const Ranking = () => {
                     <tr className="text-left divide-x divide-gray-300 border border-gray-300 text-white">
                       <th className="px-5 py-3 ">Rank</th>
                       <th className="px-5 py-3">Total Score</th>
-                      <th className="px-5 py-3">GP Name</th>
+                      {rankType === "gp" && (
+                        <th className="px-5 py-3">Gram Panchayat</th>
+                      )}
                       <th className="px-5 py-3">Block</th>
 
                       <th className="px-5 py-3">Distrct</th>
@@ -85,18 +123,73 @@ const Ranking = () => {
                       </tr>
                     ) : (
                       <>
-                        {gpRankData.map((rankData) => (
-                          <tr className="text-left divide-x divide-gray-300 border border-gray-300">
-                            <td className="px-5 py-2"># {rankData.rank}</td>
-                            <td className="px-5 py-2">{rankData.totalScore}</td>
+                        {rankType === "gp" ? (
+                          <>
+                            {gpRankData ? (
+                              gpRankData.map((rankData) => (
+                                <tr className="text-left divide-x divide-gray-300 border border-gray-300">
+                                  <td className="px-5 py-2">
+                                    # {rankData.rank}
+                                  </td>
+                                  <td className="px-5 py-2">
+                                    {rankData.totalScore}
+                                  </td>
 
-                            <td className="px-5 py-2">{rankData.gp_name}</td>
-                            <td className="px-5 py-2">{rankData.block_name}</td>
+                                  <td className="px-5 py-2">
+                                    {rankData.gp_name}
+                                  </td>
+                                  <td className="px-5 py-2">
+                                    {rankData.block_name}
+                                  </td>
 
-                            <td className="px-5 py-2">{rankData.dist_name}</td>
-                            <td className="px-5 py-2">{rankData.state_name}</td>
-                          </tr>
-                        ))}
+                                  <td className="px-5 py-2">
+                                    {rankData.dist_name}
+                                  </td>
+                                  <td className="px-5 py-2">
+                                    {rankData.state_name}
+                                  </td>
+                                </tr>
+                              ))
+                            ) : (
+                              <tr className="text-center text-2xl text-gray-500">
+                                <td colSpan={6} className="py-10 ">
+                                  Sorry, No Data Found!
+                                </td>
+                              </tr>
+                            )}
+                          </>
+                        ) : (
+                          <>
+                            {blockRankData ? (
+                              blockRankData.map((rankData) => (
+                                <tr className="text-left divide-x divide-gray-300 border border-gray-300">
+                                  <td className="px-5 py-2">
+                                    # {rankData.rank}
+                                  </td>
+                                  <td className="px-5 py-2">
+                                    {rankData.totalScore}
+                                  </td>
+                                  <td className="px-5 py-2">
+                                    {rankData.block_name}
+                                  </td>
+
+                                  <td className="px-5 py-2">
+                                    {rankData.dist_name}
+                                  </td>
+                                  <td className="px-5 py-2">
+                                    {rankData.state_name}
+                                  </td>
+                                </tr>
+                              ))
+                            ) : (
+                              <tr className="text-center text-2xl text-gray-500">
+                                <td colSpan={6} className="py-10 ">
+                                  Sorry, No Data Found!
+                                </td>
+                              </tr>
+                            )}
+                          </>
+                        )}
                       </>
                     )}
                   </tbody>
