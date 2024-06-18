@@ -16,6 +16,7 @@ const userSchema = new mongoose.Schema({
   officeContactNo: { type: String },
   createdBy: { type: String },
   modifiedBy: { type: String },
+  location_assigned:{type:Boolean},
 
   hr_profile_id: { type: Number },
   esop_certified: { type: Boolean },

@@ -20,7 +20,7 @@ function KpiApprovalsList() {
     try {
       const { data } = await API.get(`/api/v1/kpi-approvals/get-kpiapprovals?state=${state_id}&dist=${dist_id}&block=${block_id}&gp=${gram_id}&theme=${theme_id}`);
       console.log(data);
-      data?.data?.sort((a, b) => a.id - b.id);
+      data?.data?.sort((a, b) => a.created_at - b.created_at);
       setKpiApprovals(data?.data || []);
     } catch (error) {
       console.log(error);

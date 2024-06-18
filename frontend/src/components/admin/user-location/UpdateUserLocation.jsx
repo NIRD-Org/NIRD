@@ -111,19 +111,20 @@ const UpdateUserLocation = ({ view }) => {
   };
 
   const postAdminLocation = async () => {
-    const updateuserLocations = {
+    const updateUserLocations = {
       state_ids: selectedState,
     };
 
+    // console.log(updateUserLocations)
+    // return;
     if (selectedState.length == 0) return;
 
     try {
-      const response = await API.post(`/api/v1/user-location/${userId}`, {
-        updateuserLocations,
+      const response = await API.put(`/api/v1/user-location/${userId}`, {
+        userLocations:updateUserLocations,
       });
-      tst.success("User has been assigned location successfully");
+      tst.success("User location updated");
 
-      console.log(response);
     } catch (error) {
       tst.error(error);
       console.log(error);
@@ -169,6 +170,7 @@ const UpdateUserLocation = ({ view }) => {
         const data = response.data.userLocation.userLocations;
         console.log(data);
         setState(prev => (prev = data.state_ids));
+        setSelectedState(prev => (prev = data.state_ids));
         setSelectedBlock(prev => (prev = data.block_ids));
         setSelectedGp(prev => (prev = data.gp_ids));
       } catch (error) {
@@ -204,6 +206,7 @@ const UpdateUserLocation = ({ view }) => {
         <div>
           <Label className="text-right mb-2 inline-block ">Select State</Label>
           <Multiselect
+            selectedValues={states.filter(s=>selectedState.includes(s.id)).map(state=>state.name)}
             isObject={false}
             onKeyPressFn={function noRefCheck() {}}
             onRemove={(_, value) => handleStateRemove(value)}

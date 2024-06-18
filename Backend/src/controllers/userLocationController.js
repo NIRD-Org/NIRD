@@ -1,5 +1,6 @@
 import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
 import { UserLocationModel } from "../models/userLocationModel.js";
+import { User } from "../models/userModel.js";
 import { Errorhandler } from "../utils/errorHandler.js";
 
 const getNewId = async () => {
@@ -45,6 +46,8 @@ export const assignUserLocation = CatchAsyncError(async (req, res, next) => {
       userLocations,
       created_by: req?.user?.id,
     });
+    await User.findByIdAndUpdate({ id: user_id }, { location_assigned: true });
+
 
     if (!userLocation) {
       return next(new Errorhandler("Failed to assign user location", 500));
