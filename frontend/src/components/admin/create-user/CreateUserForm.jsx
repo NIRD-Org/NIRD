@@ -5,6 +5,7 @@ import { useAuthContext } from "@/context/AuthContext";
 import { tst } from "@/lib/utils";
 import API from "@/utils/API";
 import { useState } from "react";
+import AdminHeader from "../AdminHeader";
 
 function CreateUserForm({ onSubmit }) {
   const {user} = useAuthContext()
@@ -98,7 +99,7 @@ const fields = [
 
   return (
     <div className="container mx-auto p-6">
-      <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">Create User</h2>
+      <AdminHeader>Create User</AdminHeader>
       <form onSubmit={handleSubmit}>
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-10">
           {fields.map((field, index) => (

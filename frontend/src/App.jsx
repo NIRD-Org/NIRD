@@ -40,12 +40,15 @@ import KpiApprovalSubmit from "./components/admin/young-fellow/KpiApprovalSubmit
 import KpiApprovalView from "./components/admin/young-fellow/KpiApprovalView";
 import UpdateGpWiseKpi from "./components/admin/young-fellow/UpdateGpWiseKpi";
 import ThemeDataPage from "./Pages/ThemeDataPage";
-import Attendance from "./components/admin/attendance/Attendance";
 import ActionForm from "./components/admin/young-fellow/YfActionForm";
 import AdminActionForm from "./components/admin/young-fellow/AdminActionForm";
 import UserLocation from "./components/admin/user-location/UserLocation";
 import GpDetailsForm from "./components/admin/Gpdetails/GpDetailsForm";
 import UserList from "./components/admin/user-location/UserList";
+import PmUploadForm from "./components/admin/attendance/PmuUpload";
+// import AttendanceLayout from "./components/admin/attendance/AttendanceLayout";
+import AmUploadForm from "./components/admin/attendance/AmuUpload";
+import Attendance from "./components/admin/attendance/Attendance";
 
 function App() {
   const { login } = useAuthContext();
@@ -90,11 +93,14 @@ function App() {
             <Route path="kpi-approvals-list" element={<KpiApprovalsList />} />
             <Route path="submit-kpi-approval" element={<KpiApprovalSubmit />} />
             <Route path="view-kpi-approval" element={<KpiApprovalView />} />
-            <Route path="attendance" element={<Attendance />} />
+            {/* <Route path="attendance" element={<AttendanceLayout />} /> */}
             <Route path="action-form" element={<ActionForm />} />
             <Route path="admin-action-form" element={<AdminActionForm />} />
             <Route path="user-location/assign/:userId" element={<UserLocation />} />
             <Route path="users/all" element={<UserList />} />
+            <Route path="attendance/attendance" element={<Attendance />} />
+            <Route path="attendance/amu-upload" element={<AmUploadForm />} />
+            <Route path="attendance/pmu-upload" element={<PmUploadForm />} />
           </Route>
         </Route>
 
