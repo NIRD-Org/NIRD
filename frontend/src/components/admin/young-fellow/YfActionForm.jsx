@@ -24,10 +24,14 @@ function ActionForm() {
 
   const getAllKpiApprovals = async () => {
     try {
-      const { data } = await API.get(`/api/v1/kpi-approvals/get-kpiapprovals?decision=2`);
+      const { data } = await API.get(
+        `/api/v1/kpi-approvals/get-kpiapprovals?decision=2`
+      );
       console.log(data);
       // data?.data?.sort((a, b) => a.id - b.id);
-      data?.data?.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      data?.data?.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+      );
       setKpiApprovals(data?.data || []);
     } catch (error) {
       console.log(error);
@@ -68,7 +72,7 @@ function ActionForm() {
             </TableHeader>
             <TableBody>
               {kpiApprovals.length > 0 ? (
-                kpiApprovals.map(kpiApproval => (
+                kpiApprovals.map((kpiApproval) => (
                   <TableRow key={kpiApproval.id}>
                     <TableCell>{kpiApproval.id}</TableCell>
                     <TableCell>{kpiApproval.theme_name}</TableCell>
@@ -83,7 +87,7 @@ function ActionForm() {
                         ? new Date(kpiApproval.modified_at).toLocaleDateString()
                         : "-"}
                     </TableCell>
-                   
+
                     <TableCell>
                       <div className="flex items-center gap-3">
                         {kpiApproval.decision == 2 && (

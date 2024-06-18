@@ -45,7 +45,7 @@ export const getAllKPIApprovals = CatchAsyncError(async (req, res, next) => {
 
 export const getKPIApprovals = CatchAsyncError(async (req, res, next) => {
   try {
-    const { state, dist, block, gp, theme,decision } = req.query;
+    const { state, dist, block, gp, theme, decision } = req.query;
     const match = {};
 
     if (state) match.state_id = state;
@@ -53,9 +53,8 @@ export const getKPIApprovals = CatchAsyncError(async (req, res, next) => {
     if (block) match.block_id = block;
     if (gp) match.gp_id = gp;
     if (theme) match.theme_id = theme;
-    if(decision) match.decision = decision;
-    if(req.user.role==3)
-    match.created_by = req.user.id;
+    if (decision) match.decision = decision;
+    if (req.user.role == 3) match.created_by = req.user.id;
 
     console.log(req.user.id);
     const categorizedKPIApprovals = await KPIApprovalModel.aggregate([
@@ -138,7 +137,11 @@ export const updateKPIApproval = CatchAsyncError(async (req, res, next) => {
   try {
     const { id } = req.params;
     const { decision, remarks } = req.body;
-    const kpiApproval = await KPIApprovalModel.findOneAndUpdate({ id }, { decision, remarks }, { new: true });
+    const kpiApproval = await KPIApprovalModel.findOneAndUpdate(
+      { submitted_id: id },
+      { decision, remarks },
+      { new: true }
+    );
     if (!kpiApproval) {
       return next(new Errorhandler("KPI Approval not found", 404));
     }
