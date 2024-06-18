@@ -709,6 +709,11 @@ export const getRankingController = CatchAsyncError(async (req, res, next) => {
         },
       },
       {
+        $addFields: {
+          totalScore: { $trunc: { $divide: ["$totalScore", 4] } },
+        },
+      },
+      {
         $sort: { totalScore: -1 },
       },
       {
@@ -815,6 +820,34 @@ export const getBlockRankingController = CatchAsyncError(
           },
         },
         {
+          $lookup: {
+            from: "grampanchayats",
+            localField: "_id",
+            foreignField: "block_id",
+            as: "gps",
+          },
+        },
+        {
+          $addFields: {
+            gpCount: { $size: "$gps" },
+          },
+        },
+        {
+          $addFields: {
+            totalScore: {
+              $cond: {
+                if: { $eq: ["$gpCount", 0] },
+                then: 0,
+                else: {
+                  $trunc: {
+                    $divide: [{ $divide: ["$totalScore", 4] }, "$gpCount"],
+                  },
+                },
+              },
+            },
+          },
+        },
+        {
           $sort: { totalScore: -1 },
         },
         {
@@ -858,7 +891,7 @@ export const getBlockRankingController = CatchAsyncError(
           },
         },
         {
-          $unset: ["block", "state", "district"],
+          $unset: ["block", "state", "district", "gps"],
         },
       ];
 

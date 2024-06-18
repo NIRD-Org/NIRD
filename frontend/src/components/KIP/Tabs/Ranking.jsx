@@ -54,8 +54,7 @@ const Ranking = () => {
         <div className="flex flex-col sm:flex-row py-5 items-center justify-between space-x-2">
           <div className="">
             <select
-              name=""
-              id=""
+              value={rankType}
               className="p-2 border rounded border-gray-300"
               onChange={(e) => setRankType(e.target.value)}
             >

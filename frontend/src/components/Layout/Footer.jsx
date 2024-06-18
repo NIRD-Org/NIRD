@@ -43,7 +43,7 @@ const Footer = () => {
           Legal Disclaimer:
           <br />
           This Website Belongs to NIRDPR © 2024. All rights reserved with
-          National institute of Rural Development & Panchayati Raj, Hyderabad.
+          National Institute of Rural Development & Panchayati Raj, Hyderabad.
         </p>
         <p>
           Contact us:
