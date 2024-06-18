@@ -35,7 +35,7 @@ const GpDetailComponent = ({ data }) => {
                           .replace(/([a-zA-Z])([0-9])/g, "$1 $2")
                           .slice(1)}
                     </td>
-                    <td className="">{value}</td>
+                    <td className="">{value ? value : "N/A"}</td>
                   </tr>
                 ))}
             </tbody>
@@ -58,7 +58,7 @@ const GpDetailComponent = ({ data }) => {
                       .replace(/([a-z])([A-Z])/g, "$1 $2")
                       .replace(/([A-Z])([A-Z][a-z])/g, "$1 $2")}
                   </td>
-                  <td className="">{value}</td>
+                  <td className="">{value ? value : "N/A"}</td>
                 </tr>
               ))}
             </tbody>
@@ -81,7 +81,7 @@ const GpDetailComponent = ({ data }) => {
                       .replace(/([a-z])([A-Z])/g, "$1 $2")
                       .replace(/([A-Z])([A-Z][a-z])/g, "$1 $2")}
                   </td>
-                  <td className="">{value}</td>
+                  <td className="">{value ? value : "N/A"}</td>
                 </tr>
               ))}
             </tbody>
@@ -106,7 +106,7 @@ const GpDetailComponent = ({ data }) => {
                       .replace(/([0-9])([a-zA-Z])/g, "$1 $2")
                       .replace(/([a-zA-Z])([0-9])/g, "$1 $2")}
                   </td>
-                  <td className="">{value}</td>
+                  <td className="">{value ? value : "N/A"}</td>
                 </tr>
               ))}
             </tbody>
@@ -129,7 +129,7 @@ const GpDetailComponent = ({ data }) => {
                       .replace(/([a-z])([A-Z])/g, "$1 $2")
                       .replace(/([A-Z])([A-Z][a-z])/g, "$1 $2")}
                   </td>
-                  <td className="text-center ">{value}</td>
+                  <td className="text-center ">{value ? value : "N/A"}</td>
                 </tr>
               ))}
             </tbody>

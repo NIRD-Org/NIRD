@@ -696,6 +696,8 @@ export const reSubmitKpiData = CatchAsyncError(async (req, res, next) => {
 // Get the ranking of the gps
 export const getRankingController = CatchAsyncError(async (req, res, next) => {
   try {
+    const { keyword } = req.query;
+
     const pipeline = [
       {
         $group: {
@@ -703,6 +705,7 @@ export const getRankingController = CatchAsyncError(async (req, res, next) => {
           totalScore: { $sum: "$score" },
           state_id: { $first: "$state_id" },
           dist_id: { $first: "$dist_id" },
+          block_id: { $first: "$block_id" },
         },
       },
       {
@@ -742,23 +745,47 @@ export const getRankingController = CatchAsyncError(async (req, res, next) => {
         $unwind: "$district",
       },
       {
+        $lookup: {
+          from: "blocks",
+          localField: "block_id",
+          foreignField: "id",
+          as: "block",
+        },
+      },
+      {
+        $unwind: "$block",
+      },
+      {
         $addFields: {
           gp_name: "$gp.name",
           state_name: "$state.name",
           dist_name: "$district.name",
+          block_name: "$block.name",
         },
       },
       {
-        $unset: ["gp", "state", "district"],
+        $unset: ["gp", "state", "district", "block"],
       },
     ];
 
-    const ranking = await GpWiseKpiModel.aggregate(pipeline);
+    let ranking = await GpWiseKpiModel.aggregate(pipeline);
 
     // Add ranks to the sorted results manually
     ranking.forEach((item, index) => {
       item.rank = index + 1;
     });
+
+    // search Functionality
+    if (keyword) {
+      const regex = new RegExp(keyword, "i");
+      ranking = ranking.filter(
+        (item) =>
+          regex.test(item.gp_name) ||
+          regex.test(item.state_name) ||
+          regex.test(item.dist_name) ||
+          regex.test(item.block_name)
+      );
+    }
 
     res.status(200).json({
       success: true,

@@ -17,8 +17,11 @@ const GpProfile = () => {
   const [gp, setGp] = useState("");
   const [search, setSearch] = useState("");
 
+  const [loading, setLoading] = useState(false);
+
   const getAllKpiData = async () => {
     try {
+      setLoading(true);
       const { data } = await API.get(
         `/api/v1/gp-wise-kpi?page=${1}&state=${state}&block=${block}&dist=${district}&gp=${gp}`
       );
@@ -26,11 +29,14 @@ const GpProfile = () => {
     } catch (error) {
       console.log(error.message);
       setGpData([]);
+    } finally {
+      setLoading(false);
     }
   };
 
   const getAllKpiSearchData = async () => {
     try {
+      setLoading(true);
       const { data } = await API.get(
         `/api/v1/gp-wise-kpi?page=${1}&search=${search}`
       );
@@ -38,6 +44,8 @@ const GpProfile = () => {
     } catch (error) {
       console.log(error.message);
       setGpData([]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -221,22 +229,30 @@ const GpProfile = () => {
         </form>
       </div>
       <hr />
-      <p>Showing 1 to 35 of 500 Results</p>
-      {Array.isArray(gpData) && gpData.length > 0 ? (
-        <div className="w-fit mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 md:grid-cols-3 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-5">
-          {gpData?.map((gp) => (
-            <GpProfileCard
-              key={gp._id}
-              gpDistrict={gp?.district}
-              gpName={gp?.gp}
-              gpState={gp?.state}
-              gpblock={gp?.block}
-              gp={gp?.gp}
-            />
-          ))}
-        </div>
+      {loading ? (
+        <h1 className="text-center py-10 text-2xl text-gray-500">Loading...</h1>
       ) : (
-        <h1 className="text-center text-gray-600 text-4xl">No Data Found</h1>
+        <>
+          <p>Showing {gpData.length} Results</p>
+          {Array.isArray(gpData) && gpData.length > 0 ? (
+            <div className="w-fit mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 md:grid-cols-3 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-5">
+              {gpData?.map((gp) => (
+                <GpProfileCard
+                  key={gp._id}
+                  gpDistrict={gp?.district}
+                  gpName={gp?.gp}
+                  gpState={gp?.state}
+                  gpblock={gp?.block}
+                  gp={gp?.gp}
+                />
+              ))}
+            </div>
+          ) : (
+            <h1 className="text-center text-gray-600 text-4xl">
+              No Data Found
+            </h1>
+          )}
+        </>
       )}
 
       {/* Pagination */}

@@ -276,11 +276,6 @@ const KPIDetails = () => {
         </div>
       </div>
 
-      {/* Themes */}
-
-      <div className="py-14">
-        <Themes />
-      </div>
       <div>
         {gpDetails && (
           <GpDetailComponent
@@ -288,6 +283,12 @@ const KPIDetails = () => {
             // data={sampleData}
           />
         )}
+      </div>
+
+      {/* Themes */}
+
+      <div className="py-14">
+        <Themes />
       </div>
     </div>
   );
