@@ -73,6 +73,8 @@ const KPIDetails = () => {
   }, [gp]);
 
   useEffect(() => {
+    setGpOptions([]);
+    setBlockOptions([]);
     getAllKpiData();
     getAllStates();
     getAllDistricts();
@@ -81,17 +83,13 @@ const KPIDetails = () => {
   useEffect(() => {
     if (dist) {
       getAllBlocks();
+      setGpData("");
     }
   }, [dist]);
 
   useEffect(() => {
     getAllGp();
   }, [block]);
-
-  const handleApply = () => {
-    setSearchParams({ state, dist, block, gp });
-    getAllKpiData();
-  };
 
   const getStateById = async (stateId) => {
     try {
@@ -103,9 +101,8 @@ const KPIDetails = () => {
   };
 
   useEffect(() => {
-    const stateId = searchParams.get("state");
-    getStateById(stateId);
-  }, []);
+    getStateById(state);
+  }, [state]);
 
   const sampleData = {
     panchayatDetails: {
@@ -170,7 +167,7 @@ const KPIDetails = () => {
       <h1 className="text-3xl text-primary text-center font-bold">
         Gram Panchayat Profile
       </h1>
-      <div className="flex flex-col justify-between items-center lg:items-end lg:flex-row text-center text-3xl h-full">
+      <div className="flex flex-col justify-between items-center  lg:flex-row text-center text-3xl h-full">
         {/* Info */}
         <div className="w-full  h-fit">
           <div className="flex flex-wrap items-end py-10 gap-2 sm:gap-5">
@@ -185,8 +182,7 @@ const KPIDetails = () => {
                 className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
                 value={state}
                 onChange={(e) => {
-                  searchParams.set("state", e.target.value);
-                  setSearchParams(searchParams);
+                  setSearchParams({ state: e.target.value });
                 }}
               >
                 <option>All States</option>
@@ -210,8 +206,7 @@ const KPIDetails = () => {
                 className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
                 value={dist}
                 onChange={(e) => {
-                  searchParams.set("dist", e.target.value);
-                  setSearchParams(searchParams);
+                  setSearchParams({ state, dist: e.target.value });
                 }}
               >
                 <option>All Districts</option>
@@ -234,8 +229,7 @@ const KPIDetails = () => {
                 className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
                 value={block}
                 onChange={(e) => {
-                  searchParams.set("block", e.target.value);
-                  setSearchParams(searchParams);
+                  setSearchParams({ state, dist, block: e.target.value });
                 }}
               >
                 <option>All Blocks</option>
@@ -258,8 +252,7 @@ const KPIDetails = () => {
                 className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
                 value={gp}
                 onChange={(e) => {
-                  searchParams.set("gp", e.target.value);
-                  setSearchParams(searchParams);
+                  setSearchParams({ state, dist, block, gp: e.target.value });
                 }}
               >
                 <option>All GPs</option>
@@ -270,19 +263,14 @@ const KPIDetails = () => {
                 ))}
               </select>
             </div>
-            <button
-              onClick={handleApply}
-              className="bg-sky-900 rounded text-white text-sm p-2 px-4"
-            >
-              Apply
-            </button>
           </div>
         </div>
-        <div className="w-full mt-10 lg:mt-0 flex justify-center items-center lg:w-1/2 h-full ">
+        {/* img */}
+        <div className="w-1/3 mt-10 lg:mt-0 flex justify-center items-center lg:w-1/2 h-full ">
           <img
             src={stateData?.state_icon}
             alt=""
-            className="w-full max-h-[40vh]"
+            className="w-full  max-h-[40vh] xl:max-h-[30vh]"
           />
           {/* {stateData && <StateMap stateName={stateData?.name} />} */}
         </div>
