@@ -74,7 +74,7 @@ function ActionForm() {
               {kpiApprovals.length > 0 ? (
                 kpiApprovals.map((kpiApproval) => (
                   <TableRow key={kpiApproval.id}>
-                    <TableCell>{kpiApproval.id}</TableCell>
+                    <TableCell>{kpiApproval?.submitted_id}</TableCell>
                     <TableCell>{kpiApproval.theme_name}</TableCell>
                     <TableCell>{kpiApproval.gp_name}</TableCell>
                     <TableCell>
