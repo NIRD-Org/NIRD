@@ -51,7 +51,7 @@ const Ranking = () => {
         <h1 className="text-center text-4xl md:text-5xl text-primary font-bold py-10">
           Gram Panchayat Ranks
         </h1>
-        <div className="flex py-5 items-center justify-between space-x-2">
+        <div className="flex flex-col sm:flex-row py-5 items-center justify-between space-x-2">
           <div className="">
             <select
               name=""
@@ -60,7 +60,7 @@ const Ranking = () => {
               onChange={(e) => setRankType(e.target.value)}
             >
               <option value="">Select Ranking Type</option>
-              <option value="gp">GP Wise</option>
+              <option value="gp">Gram Panchayat Wise</option>
               <option value="block">Cluster Wise</option>
             </select>
           </div>
@@ -106,7 +106,7 @@ const Ranking = () => {
                       <th className="px-5 py-3 ">Rank</th>
                       <th className="px-5 py-3">Total Score</th>
                       {rankType === "gp" && (
-                        <th className="px-5 py-3">GP Name</th>
+                        <th className="px-5 py-3">Gram Panchayat</th>
                       )}
                       <th className="px-5 py-3">Block</th>
 

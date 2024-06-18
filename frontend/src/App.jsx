@@ -49,7 +49,6 @@ import PmUploadForm from "./components/admin/attendance/PmuUpload";
 // import AttendanceLayout from "./components/admin/attendance/AttendanceLayout";
 import AmUploadForm from "./components/admin/attendance/AmuUpload";
 import Attendance from "./components/admin/attendance/Attendance";
-
 function App() {
   const { login } = useAuthContext();
 
@@ -96,7 +95,10 @@ function App() {
             {/* <Route path="attendance" element={<AttendanceLayout />} /> */}
             <Route path="action-form" element={<ActionForm />} />
             <Route path="admin-action-form" element={<AdminActionForm />} />
-            <Route path="user-location/assign/:userId" element={<UserLocation />} />
+            <Route
+              path="user-location/assign/:userId"
+              element={<UserLocation />}
+            />
             <Route path="users/all" element={<UserList />} />
             <Route path="attendance/attendance" element={<Attendance />} />
             <Route path="attendance/amu-upload" element={<AmUploadForm />} />
