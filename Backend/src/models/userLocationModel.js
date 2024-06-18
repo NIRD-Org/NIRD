@@ -11,26 +11,32 @@ const usersLocationSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    userLocations: [
-      {
-        state_id: {
+    userLocations: {
+      state_ids: [
+        {
           type: String,
           required: true,
         },
-        dist_id: {
+      ],
+      dist_ids: [
+        {
           type: String,
           required: true,
         },
-        block_id: {
+      ],
+      block_ids: [
+        {
           type: String,
           required: true,
         },
-        gp_id: {
+      ],
+      gp_ids: [
+        {
           type: String,
           required: true,
         },
-      },
-    ],
+      ],
+    },
     status: {
       type: String,
       required: true,
@@ -40,7 +46,6 @@ const usersLocationSchema = new mongoose.Schema(
     created_by: {
       type: Number,
     },
-
     modified_by: {
       type: Number,
     },

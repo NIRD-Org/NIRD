@@ -43,7 +43,7 @@ export const assignUserLocation = CatchAsyncError(async (req, res, next) => {
       id,
       user_id,
       userLocations,
-      created_by: req?.user?.id || "3",
+      created_by: req?.user?.id ,
     });
 
     if (!userLocation) {

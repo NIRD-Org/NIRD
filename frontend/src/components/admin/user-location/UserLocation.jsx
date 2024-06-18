@@ -10,18 +10,20 @@ import {
 } from "@/components/ui/table";
 import { cn, tst } from "@/lib/utils";
 import API from "@/utils/API";
-import { districts } from "@/lib/data";
 import { Button } from "@/components/ui/button";
+import { useParams, useSearchParams } from "react-router-dom";
 
 const UserLocation = () => {
   const [state, setState] = useState(null);
   const [states, setStates] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [blocks, setBlocks] = useState([]);
+  const [selectedState, setSelectedState] = useState([]);
   const [selectedBlock, setSelectedBlock] = useState([]);
   const [selectedGp, setSelectedGp] = useState([]);
   const [selectedDist, setSelectedDist] = useState([]);
   const [gps, setGps] = useState([]);
+  const { userId } = useParams();
 
   const handleBlockChange = (value, dist_id) => {
     const blockIds = blocks
@@ -63,16 +65,28 @@ const UserLocation = () => {
     setSelectedGp(prev => prev.filter(id => !gpIds.includes(id)));
   };
 
-  const postLocation = () => {
-    const data = {
-      state,
-      districts: selectedDist,
-      blocks: selectedBlock,
-      gps: selectedGp,
+  const postLocation = async () => {
+    const userLocations = {
+      state_ids: [state],
+      district_ids: selectedDist,
+      block_ids: selectedBlock,
+      gp_ids: selectedGp,
     };
 
-    // Make API call with data
-    console.log(data);
+    // console.log(userLocations)
+    // return;
+    if (selectedGp.length == 0) return;
+
+    try {
+      const response = await API.post("/api/v1/user-location/create", {
+        user_id: userId,
+        userLocations,
+      });
+      console.log(response);
+    } catch (error) {
+      tst.error(error);
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -128,7 +142,7 @@ const UserLocation = () => {
           className={cn(
             "text-sm px-4 py-2 rounded-md bg-transparent border min-80 mx-auto block"
           )}
-          value={state}
+          value={state || ""}
           onChange={e => setState(e.target.value)}
         >
           <option value="">Select a state</option>

@@ -16,6 +16,8 @@ import userLocationRoutes from "./routes/userLocationRoutes.js";
 import indicatorRoutes from "./routes/indicatorRoutes.js";
 import gpWiseIndicatorRoutes from "./routes/gpWiseIndicatorRoutes.js";
 import gpDetailRoutes from "./routes/gpDetailRoutes.js";
+import userRoutes from "./routes/userRoutes.js"
+
 const app = express();
 
 dotenv.config();
@@ -38,6 +40,7 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/user-location", userLocationRoutes);
 app.use("/api/v1/indicator", indicatorRoutes);
 app.use("/api/v1/gp-details", gpDetailRoutes);
+app.use("/api/v1/users", userRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).json({ message: "Server is running" });
