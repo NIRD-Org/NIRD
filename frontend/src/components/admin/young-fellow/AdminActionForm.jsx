@@ -62,7 +62,7 @@ function AdminActionForm() {
   };
 
   const filteredKpiApprovals = kpiApprovals.filter((kpiApproval) => {
-    if (statusFilter !== "All" && kpiApproval.decision !== statusFilter) {
+    if (statusFilter !== "all" && kpiApproval.decision !== statusFilter) {
       return false;
     }
     if (
