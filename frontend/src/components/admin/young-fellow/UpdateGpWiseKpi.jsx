@@ -413,7 +413,7 @@ function UpdateGpWiseKpi() {
                 </Label>
                 <Textarea
                   disabled
-                  default={remark || ""}
+                  default={kpiApprovalData[0]?.admin_remark || ""}
                   className="w-80"
                   type="text"
                   name="remarks"

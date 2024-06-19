@@ -15,7 +15,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { useAuthContext } from "@/context/AuthContext";
 import { Label } from "@/components/ui/label";
 
-const UpdateUserLocation = ({ view }) => {
+const UpdateUserLocation = ({ view,role }) => {
   const [state, setState] = useState(null);
   const [states, setStates] = useState([]);
   const [districts, setDistricts] = useState([]);
@@ -200,7 +200,7 @@ const UpdateUserLocation = ({ view }) => {
     fetchDistricts();
   },[state])
 
-  if (user.role == 1) {
+  if (role == 2) {
     return (
       <div className="flex flex-col mt-20 w-80 mx-auto ">
         <div>
