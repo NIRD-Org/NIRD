@@ -114,6 +114,7 @@ function AdminActionForm() {
                 <TableHead>GP</TableHead>
                 <TableHead>Submisson Date</TableHead>
                 <TableHead>Date of Sent Back</TableHead>
+                <TableHead>Approved Date</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Action</TableHead>
               </TableRow>
@@ -132,6 +133,11 @@ function AdminActionForm() {
                     </TableCell>
                     <TableCell className="text-center">
                       {kpiApproval.decision == 2
+                        ? new Date(kpiApproval.modified_at).toLocaleDateString()
+                        : "-"}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {kpiApproval.decision == 1
                         ? new Date(kpiApproval.modified_at).toLocaleDateString()
                         : "-"}
                     </TableCell>
