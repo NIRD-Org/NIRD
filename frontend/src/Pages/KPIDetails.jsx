@@ -76,7 +76,7 @@ const KPIDetails = () => {
   }, [state]);
 
   return (
-    <div className="relative py-10 px-5 lg:px-20">
+    <div className="relative py-10 pt-16 px-5 lg:px-20">
       <button
         onClick={() => navigate("/kpi")}
         className="absolute flex items-center justify-center bg-primary text-white p-2 rounded top-2 left-4 md:top-10 md:left-20 "
