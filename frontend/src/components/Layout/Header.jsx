@@ -239,7 +239,7 @@ const Header = () => {
 
             <div className="flex-shrink-0">
               <img
-                src="/logo/MOPR-NEW-LOGO.png"
+                src="/logo/mopr.png"
                 alt="MoPR Logo"
                 className="h-12 w-auto"
               />
