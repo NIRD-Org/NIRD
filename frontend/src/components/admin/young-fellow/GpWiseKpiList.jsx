@@ -18,7 +18,7 @@ function GpWiseKpiList() {
 
   const getAllKpiApprovals = async () => {
     try {
-      const response = await API.get(`/api/v1/kpi-approvals/get-kpiapprovals?decision=0&theme=${theme_id}`);
+      const response = await API.get(`/api/v1/kpi-approvals/get-kpiapprovals?decision=0&theme=${theme_id}&gp=${gram_id}`);
       let data = response.data.data;
       data?.sort((a, b) => a.created_at - b.created_at);
       data = data?.filter(item => item.decision != 1);
