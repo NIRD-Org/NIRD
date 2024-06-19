@@ -152,7 +152,7 @@ export const submitKpiData = CatchAsyncError(async (req, res, next) => {
       block_id,
       gp_id,
       theme_id,
-      remarks:remark,
+      remarks: remark,
       submitted_id,
       created_by: user_id,
       date: parsedDate,
@@ -541,8 +541,20 @@ export const getGpWiseKpiForApprover = CatchAsyncError(
             as: "kpiDetails",
           },
         },
+
         {
           $unwind: "$kpiDetails",
+        },
+        {
+          $lookup: {
+            from: "kpiapprovals",
+            localField: "submitted_id",
+            foreignField: "submitted_id",
+            as: "approvalDetails",
+          },
+        },
+        {
+          $unwind: "$approvalDetails",
         },
         {
           $lookup: {
@@ -599,13 +611,14 @@ export const getGpWiseKpiForApprover = CatchAsyncError(
             input_data: 1,
             score: 1,
             remarks: 1,
+            approver_remarks: "$approvalDetails.remarks",
             status: 1,
             submitted_id: 1,
             created_by: 1,
             modified_by: 1,
             created_at: 1,
             modified_at: 1,
-            kpiDetails: 1, // Include KPI details
+            kpiDetails: 1,
           },
         },
       ];
@@ -698,9 +711,13 @@ export const reSubmitKpiData = CatchAsyncError(async (req, res, next) => {
 // Get the ranking of the gps
 export const getRankingController = CatchAsyncError(async (req, res, next) => {
   try {
-    const { keyword } = req.query;
-
+    const { keyword, theme } = req.query;
+    const matchStage = {};
+    if (theme) matchStage.theme_id = theme;
     const pipeline = [
+      {
+        $match: matchStage,
+      },
       {
         $group: {
           _id: "$gp_id",

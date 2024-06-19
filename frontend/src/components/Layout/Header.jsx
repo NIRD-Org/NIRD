@@ -49,7 +49,7 @@ const Header = () => {
           <NavLink
             to="/practices"
             className={({ isActive }) =>
-              `block px-3 text-md py-2 font-normal duration-200 ${
+              `block px-3 pointer-events-none text-md py-2 font-normal duration-200 ${
                 isActive ? "text-white font-bold" : "text-gray-300"
               } hover:text-white`
             }
@@ -72,7 +72,7 @@ const Header = () => {
           <NavLink
             to="/training"
             className={({ isActive }) =>
-              `block px-3 text-md py-2 font-normal duration-200 ${
+              `block px-3 pointer-events-none text-md py-2 font-normal duration-200 ${
                 isActive ? "text-white font-bold" : "text-gray-300"
               } hover:text-white`
             }
@@ -84,7 +84,7 @@ const Header = () => {
         <NavLink
           to="/voluntary"
           className={({ isActive }) =>
-            `block px-3 text-md py-2 font-normal duration-200 ${
+            `block px-3 pointer-events-none text-md py-2 font-normal duration-200 ${
               isActive ? "text-white font-bold" : "text-gray-300"
             } hover:text-white`
           }
@@ -128,7 +128,7 @@ const Header = () => {
           <img
             src="/logo/niti-logo-white.svg"
             alt="Ashoka Logo"
-            className="h-full mt-4 w-[3rem]"
+            className="h-full mt-4 w-[5rem]"
           />
         </div>
 
@@ -180,7 +180,7 @@ const Header = () => {
                 to="/voluntary"
                 onClick={toggleSidebar}
                 className={({ isActive }) =>
-                  `block px-3 text-start py-2 font-normal duration-200 ${
+                  `block px-3 pointer-events-none text-start py-2 font-normal duration-200 ${
                     isActive ? "text-gray-300" : "text-white"
                   } hover:text-gray-300`
                 }
@@ -192,7 +192,7 @@ const Header = () => {
                 to="/training"
                 onClick={toggleSidebar}
                 className={({ isActive }) =>
-                  `block px-3 text-start py-2 font-normal duration-200 ${
+                  `block px-3 pointer-events-none text-start py-2 font-normal duration-200 ${
                     isActive ? "text-gray-300" : "text-white"
                   } hover:text-gray-300`
                 }
@@ -204,7 +204,7 @@ const Header = () => {
                 to="/practices"
                 onClick={toggleSidebar}
                 className={({ isActive }) =>
-                  `block px-3 text-start py-2 font-normal duration-200 ${
+                  `block px-3 pointer-events-none text-start py-2 font-normal duration-200 ${
                     isActive ? "text-gray-300" : "text-white"
                   } hover:text-gray-300`
                 }

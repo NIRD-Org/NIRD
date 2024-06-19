@@ -13,7 +13,9 @@ const Ranking = () => {
       setBlockRankData([]);
       setLoading(true);
       const { data } = await API.get(
-        `/api/v1/gp-wise-kpi/get-ranking?keyword=${keyword}`
+        `/api/v1/gp-wise-kpi/get-ranking?keyword=${keyword}&theme=${
+          rankType !== "gp" && rankType !== "block" && rankType
+        }`
       );
       setGpRankData(data?.data);
     } catch (error) {
@@ -41,8 +43,8 @@ const Ranking = () => {
   };
 
   useEffect(() => {
-    if (rankType === "gp") getGpRankData();
-    else getBlockRankData();
+    if (rankType === "block") getBlockRankData();
+    else getGpRankData();
   }, [rankType]);
 
   return (
@@ -52,7 +54,10 @@ const Ranking = () => {
           Gram Panchayat Ranks
         </h1>
         <div className="flex flex-col sm:flex-row py-5 items-center justify-between space-x-2">
-          <div className="">
+          <div className="flex flex-col">
+            <label className="px-2 text-primary font-medium">
+              Ranking type
+            </label>
             <select
               value={rankType}
               className="p-2 border rounded border-gray-300"
@@ -61,13 +66,22 @@ const Ranking = () => {
               <option value="">Select Ranking Type</option>
               <option value="gp">Gram Panchayat Wise</option>
               <option value="block">Cluster Wise</option>
+              <option value="1">Theme 1</option>
+              <option value="2">Theme 2</option>
+              <option value="3">Theme 3</option>
+              <option value="4">Theme 4</option>
+              <option value="5">Theme 5</option>
+              <option value="6">Theme 6</option>
+              <option value="7">Theme 7</option>
+              <option value="8">Theme 8</option>
+              <option value="9">Theme 9</option>
             </select>
           </div>
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              if (rankType === "gp") getGpRankData();
-              else getBlockRankData();
+              if (rankType === "block") getBlockRankData();
+              else getGpRankData();
             }}
             className="flex py-5 items-center space-x-1"
           >
@@ -104,7 +118,7 @@ const Ranking = () => {
                     <tr className="text-left divide-x divide-gray-300 border border-gray-300 text-white">
                       <th className="px-5 py-3 ">Rank</th>
                       <th className="px-5 py-3">Total Score</th>
-                      {rankType === "gp" && (
+                      {rankType !== "block" && (
                         <th className="px-5 py-3">Gram Panchayat</th>
                       )}
                       <th className="px-5 py-3">Block</th>
@@ -122,9 +136,9 @@ const Ranking = () => {
                       </tr>
                     ) : (
                       <>
-                        {rankType === "gp" ? (
+                        {rankType !== "block" ? (
                           <>
-                            {gpRankData ? (
+                            {gpRankData && gpRankData.length > 0 ? (
                               gpRankData.map((rankData) => (
                                 <tr className="text-left divide-x divide-gray-300 border border-gray-300">
                                   <td className="px-5 py-2">
@@ -159,7 +173,7 @@ const Ranking = () => {
                           </>
                         ) : (
                           <>
-                            {blockRankData ? (
+                            {blockRankData && blockRankData.length > 0 ? (
                               blockRankData.map((rankData) => (
                                 <tr className="text-left divide-x divide-gray-300 border border-gray-300">
                                   <td className="px-5 py-2">
