@@ -84,7 +84,7 @@ const Header = () => {
         <NavLink
           to="/voluntary"
           className={({ isActive }) =>
-            `block px-3 pointer-events-none text-md py-2 font-normal duration-200 ${
+            `block px-4 pointer-events-none text-md py-2 font-normal duration-200 ${
               isActive ? "text-white font-bold" : "text-gray-300"
             } hover:text-white`
           }
@@ -94,7 +94,11 @@ const Header = () => {
         </NavLink>
 
         <div>
-          <img src="/logo/mopr.png" alt="MoPR Logo" className="h-12 w-fit" />
+          <img
+            src="/logo/mopr.png"
+            alt="MoPR Logo"
+            className="h-12 scale-[1.8] w-full px-4"
+          />
         </div>
 
         {!isAuthenticated ? (
