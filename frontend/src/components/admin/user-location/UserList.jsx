@@ -12,16 +12,14 @@ import { Link, useSearchParams } from "react-router-dom";
 import { useAuthContext } from "@/context/AuthContext";
 import AdminHeader from "../AdminHeader";
 
-const UserList = () => {
+const UserList = ({ role }) => {
   const { user } = useAuthContext();
 
   const [users, setUsers] = useState([]);
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const { data } = await API.get(
-          `/api/v1/users/all?role=${user.role == 1 ? 2 : 3}`
-        );
+        const { data } = await API.get(`/api/v1/users/all?role=${role}`);
         setUsers(data.data);
       } catch (error) {
         console.log(error);
@@ -29,7 +27,7 @@ const UserList = () => {
     };
 
     fetchUser();
-  }, []);
+  }, [role]);
 
   return (
     <div className="container p-4">
@@ -50,24 +48,49 @@ const UserList = () => {
               <TableCell>{user.name}</TableCell>
               <TableCell>{user.username}</TableCell>
               <TableCell className="space-x-4">
-                <Link
-                  to={`/admin/user-location/assign/${user.id}`}
-                  className="text-blue-600 hover:underline"
-                >
-                  Assign
-                </Link>
-                <Link
-                  to={`/admin/user-location/update/${user.id}`}
-                  className="text-blue-600 hover:underline"
-                >
-                  Update
-                </Link>
-                <Link
-                  to={`/admin/user-location/view/${user.id}`}
-                  className="text-blue-600 hover:underline"
-                >
-                  View
-                </Link>
+                {role == 2 ? (
+                  <>
+                    <Link
+                      to={`/admin/user-location/assign/admin/${user.id}`}
+                      className="text-blue-600 hover:underline"
+                    >
+                      Assign
+                    </Link>
+                    <Link
+                      to={`/admin/user-location/update/admin/${user.id}`}
+                      className="text-blue-600 hover:underline"
+                    >
+                      Update
+                    </Link>
+                    <Link
+                      to={`/admin/user-location/view/admin/${user.id}`}
+                      className="text-blue-600 hover:underline"
+                    >
+                      View
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      to={`/admin/user-location/assign/young-fellow/${user.id}`}
+                      className="text-blue-600 hover:underline"
+                    >
+                      Assign
+                    </Link>
+                    <Link
+                      to={`/admin/user-location/update/young-fellow/${user.id}`}
+                      className="text-blue-600 hover:underline"
+                    >
+                      Update
+                    </Link>
+                    <Link
+                      to={`/admin/user-location/view/young-fellow/${user.id}`}
+                      className="text-blue-600 hover:underline"
+                    >
+                      View
+                    </Link>
+                  </>
+                )}
               </TableCell>
             </TableRow>
           ))}

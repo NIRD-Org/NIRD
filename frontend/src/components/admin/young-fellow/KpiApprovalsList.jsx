@@ -60,7 +60,7 @@ function KpiApprovalsList() {
               {kpiApprovals.length > 0 ? (
                 kpiApprovals.map(kpiApproval => (
                   <TableRow key={kpiApproval.id}>
-                    <TableCell>{kpiApproval.id}</TableCell>
+                    <TableCell>{kpiApproval.submitted_id}</TableCell>
                     <TableCell>{kpiApproval.theme_name}</TableCell>
                     <TableCell>{new Date(kpiApproval.date || kpiApproval.created_at).toLocaleDateString()}</TableCell>
                     <TableCell>{kpiApproval.decision == 0 ? "Submitted" : kpiApproval.decision == 1 ? "Approved" : "Send for modification"}</TableCell>

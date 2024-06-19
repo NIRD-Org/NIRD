@@ -99,22 +99,17 @@ function App() {
             {/* <Route path="attendance" element={<AttendanceLayout />} /> */}
             <Route path="action-form" element={<ActionForm />} />
             <Route path="admin-action-form" element={<AdminActionForm />} />
-            <Route
-              path="user-location/assign/:userId"
-              element={<UserLocation />}
-            />
-            <Route path="users/all" element={<UserList />} />
+            <Route path="user-location/assign/admin/:userId" element={<UserLocation role={2}/>}/>
+            <Route path="user-location/assign/young-fellow/:userId" element={<UserLocation role={3}/>}/>
+            <Route path="users/all/admin" element={<UserList role={2}/>} />
+            <Route path="users/all/young-fellow" element={<UserList role={3}/>} />
             <Route path="attendance/attendance" element={<Attendance />} />
             <Route path="attendance/amu-upload" element={<AmUploadForm />} />
             <Route path="attendance/pmu-upload" element={<PmUploadForm />} />
-            <Route
-              path="user-location/update/:userId"
-              element={<UpdateUserLocation />}
-            />
-            <Route
-              path="user-location/view/:userId"
-              element={<UpdateUserLocation view />}
-            />
+            <Route path="user-location/update/admin/:userId" element={<UpdateUserLocation role={2}/>}/>
+            <Route path="user-location/update/young-fellow/:userId" element={<UpdateUserLocation role={3}/>}/>
+            <Route path="user-location/view/admin/:userId" element={<UpdateUserLocation view role={2}/>}/>
+            <Route path="user-location/view/young-fellow/:userId" element={<UpdateUserLocation view role={3}/>}/>
           </Route>
         </Route>
 

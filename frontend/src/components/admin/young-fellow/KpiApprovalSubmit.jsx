@@ -39,7 +39,7 @@ function KpiApprovalSubmit() {
     try {
       const body = {
         decision: formData.decision,
-        remark: formData.remarks,
+        remarks: formData.remarks,
       };
 
       const url = `/api/v1/kpi-approvals/update/${submitted_id}`;

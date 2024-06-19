@@ -262,7 +262,7 @@ function UpdateGpWiseKpi() {
     }
     return scores[thresholds.length];
   };
-
+console.log()
   const handleSubmit = async e => {
     e.preventDefault();
     console.log(formData);
@@ -393,7 +393,7 @@ function UpdateGpWiseKpi() {
               </Label>
               <Input
                 disabled
-                default={kpiApprovalData.remarks || ""}
+                // default={kpiApprovalData.remarks || ""}
                 value={
                   kpiApprovalData[0]?.date
                     ? kpiApprovalData[0]?.date.substring(0, 10)
@@ -413,7 +413,7 @@ function UpdateGpWiseKpi() {
                 </Label>
                 <Textarea
                   disabled
-                  default={remark || ""}
+                  value={kpiApprovalData[0]?.approver_remarks || ""}
                   className="w-80"
                   type="text"
                   name="remarks"

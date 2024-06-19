@@ -24,8 +24,14 @@ function Sidebar({ className }) {
         {
           type: "sub-module",
           icon: ArrowBigRight,
-          title: "User location",
-          link: "/admin/users/all",
+          title: "Admin location",
+          link: "/admin/users/all/admin",
+        },
+        {
+          type: "sub-module",
+          icon: ArrowBigRight,
+          title: "Young Fellow location",
+          link: "/admin/users/all/young-fellow",
         },
         {
           type: "module",
@@ -75,29 +81,6 @@ function Sidebar({ className }) {
         {
           type: "module",
           icon: ArrowBigRight,
-          title: "Attendance",
-        },
-        {
-          type: "sub-module",
-          icon: ArrowBigRight,
-          title: "All Attendance",
-          link: "/admin/attendance/attendance",
-        },
-        {
-          type: "sub-module",
-          icon: ArrowBigRight,
-          title: "AM Entry Form",
-          link: "/admin/attendance/amu-upload",
-        },
-        {
-          type: "sub-module",
-          icon: ArrowBigRight,
-          title: "PM Entry Form",
-          link: "/admin/attendance/pmu-upload",
-        },
-        {
-          type: "module",
-          icon: ArrowBigRight,
           title: "Access Management",
         },
         {
@@ -110,7 +93,7 @@ function Sidebar({ className }) {
           type: "sub-module",
           icon: ArrowBigRight,
           title: "User location",
-          link: "/admin/users/all",
+          link: "/admin/users/all/young-fellow",
         },
        /*  {
           type: "module",
