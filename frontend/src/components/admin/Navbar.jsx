@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ArrowBigRight } from "lucide-react";
-
+import { getSidebarItems } from "@/lib/data";
 function Navbar() {
   const { logout, user } = useAuthContext();
   const navigate = useNavigate();
@@ -19,146 +19,147 @@ function Navbar() {
     navigate("/");
   };
 
-  let sidebarItems;
-  switch (user.role) {
-    case 1:
-      sidebarItems = [
-        {
-          type: "module",
-          icon: ArrowBigRight,
-          title: "Access Management",
-        },
-        {
-          type: "sub-module",
-          icon: ArrowBigRight,
-          title: "Create User",
-          link: "/admin/users/create",
-        },
-        {
-          type: "module",
-          icon: ArrowBigRight,
-          title: "Master",
-        },
-        {
-          type: "sub-module",
-          icon: ArrowBigRight,
-          title: "States",
-          link: "/admin/states",
-        },
-        {
-          type: "sub-module",
-          icon: ArrowBigRight,
-          title: "Districts",
-          link: "/admin/districts",
-        },
-        {
-          type: "sub-module",
-          icon: ArrowBigRight,
-          title: "Blocks",
-          link: "/admin/blocks",
-        },
-        {
-          type: "sub-module",
-          icon: ArrowBigRight,
-          title: "Gram Panchayats",
-          link: "/admin/gram-panchayats",
-        },
-      ];
-      break;
-    case 2:
-      sidebarItems = [
-        {
-          type: "module",
-          icon: ArrowBigRight,
-          title: "Access Management",
-        },
-        {
-          type: "sub-module",
-          icon: ArrowBigRight,
-          title: "Create User",
-          link: "/admin/users/create",
-        },
-        {
-          type: "module",
-          icon: ArrowBigRight,
-          title: "Master",
-        },
-        {
-          type: "sub-module",
-          icon: ArrowBigRight,
-          title: "Themes",
-          link: "/admin/themes",
-        },
-        {
-          type: "sub-module",
-          icon: ArrowBigRight,
-          title: "KPI",
-          link: "/admin/data-point",
-        },
-        {
-          type: "module",
-          icon: ArrowBigRight,
-          title: "Young Fellow",
-        },
-        {
-          type: "sub-module",
-          icon: ArrowBigRight,
-          title: "Kpi Approvals",
-          link: "/admin/young-professionals",
-        },
-        /*  {
-          type: "sub-module",
-          icon: ArrowBigRight,
-          title: "Kpi approvals",
-          link: "/admin/kpi-approvals",
-        }, */
-      ];
-      break;
-    case 3:
-      sidebarItems = [
-        {
-          type: "module",
-          icon: ArrowBigRight,
-          title: "Attendance",
-        },
-        {
-          type: "sub-module",
-          icon: ArrowBigRight,
-          title: "Attendance",
-          link: "/admin/attendance",
-        },
-        {
-          type: "module",
-          icon: ArrowBigRight,
-          title: "Young Fellow",
-        },
-        {
-          type: "sub-module",
-          icon: ArrowBigRight,
-          title: "Themewise KPI",
-          link: "/admin/young-professionals",
-        },
-        {
-          type: "sub-module",
-          icon: ArrowBigRight,
-          title: "Action Form",
-          link: "/admin/action-form",
-        },
-        {
-          type: "sub-module",
-          icon: ArrowBigRight,
-          title: "GP Details",
-          link: "/admin/gp-details-form",
-        },
-        {
-          type: "sub-module",
-          icon: ArrowBigRight,
-          title: "Indicator",
-          link: "/admin/indicator/create",
-        },
-      ];
-      break;
-  }
+  const sidebarItems = getSidebarItems(user);
+  // let sidebarItems;
+  // switch (user.role) {
+  //   case 1:
+  //     sidebarItems = [
+  //       {
+  //         type: "module",
+  //         icon: ArrowBigRight,
+  //         title: "Access Management",
+  //       },
+  //       {
+  //         type: "sub-module",
+  //         icon: ArrowBigRight,
+  //         title: "Create User",
+  //         link: "/admin/users/create",
+  //       },
+  //       {
+  //         type: "module",
+  //         icon: ArrowBigRight,
+  //         title: "Master",
+  //       },
+  //       {
+  //         type: "sub-module",
+  //         icon: ArrowBigRight,
+  //         title: "States",
+  //         link: "/admin/states",
+  //       },
+  //       {
+  //         type: "sub-module",
+  //         icon: ArrowBigRight,
+  //         title: "Districts",
+  //         link: "/admin/districts",
+  //       },
+  //       {
+  //         type: "sub-module",
+  //         icon: ArrowBigRight,
+  //         title: "Blocks",
+  //         link: "/admin/blocks",
+  //       },
+  //       {
+  //         type: "sub-module",
+  //         icon: ArrowBigRight,
+  //         title: "Gram Panchayats",
+  //         link: "/admin/gram-panchayats",
+  //       },
+  //     ];
+  //     break;
+  //   case 2:
+  //     sidebarItems = [
+  //       {
+  //         type: "module",
+  //         icon: ArrowBigRight,
+  //         title: "Access Management",
+  //       },
+  //       {
+  //         type: "sub-module",
+  //         icon: ArrowBigRight,
+  //         title: "Create User",
+  //         link: "/admin/users/create",
+  //       },
+  //       {
+  //         type: "module",
+  //         icon: ArrowBigRight,
+  //         title: "Master",
+  //       },
+  //       {
+  //         type: "sub-module",
+  //         icon: ArrowBigRight,
+  //         title: "Themes",
+  //         link: "/admin/themes",
+  //       },
+  //       {
+  //         type: "sub-module",
+  //         icon: ArrowBigRight,
+  //         title: "KPI",
+  //         link: "/admin/data-point",
+  //       },
+  //       {
+  //         type: "module",
+  //         icon: ArrowBigRight,
+  //         title: "Young Fellow",
+  //       },
+  //       {
+  //         type: "sub-module",
+  //         icon: ArrowBigRight,
+  //         title: "Kpi Approvals",
+  //         link: "/admin/young-professionals",
+  //       },
+  //       /*  {
+  //         type: "sub-module",
+  //         icon: ArrowBigRight,
+  //         title: "Kpi approvals",
+  //         link: "/admin/kpi-approvals",
+  //       }, */
+  //     ];
+  //     break;
+  //   case 3:
+  //     sidebarItems = [
+  //       {
+  //         type: "module",
+  //         icon: ArrowBigRight,
+  //         title: "Attendance",
+  //       },
+  //       {
+  //         type: "sub-module",
+  //         icon: ArrowBigRight,
+  //         title: "Attendance",
+  //         link: "/admin/attendance",
+  //       },
+  //       {
+  //         type: "module",
+  //         icon: ArrowBigRight,
+  //         title: "Young Fellow",
+  //       },
+  //       {
+  //         type: "sub-module",
+  //         icon: ArrowBigRight,
+  //         title: "Themewise KPI",
+  //         link: "/admin/young-professionals",
+  //       },
+  //       {
+  //         type: "sub-module",
+  //         icon: ArrowBigRight,
+  //         title: "Action Form",
+  //         link: "/admin/action-form",
+  //       },
+  //       {
+  //         type: "sub-module",
+  //         icon: ArrowBigRight,
+  //         title: "GP Details",
+  //         link: "/admin/gp-details-form",
+  //       },
+  //       {
+  //         type: "sub-module",
+  //         icon: ArrowBigRight,
+  //         title: "Indicator",
+  //         link: "/admin/indicator/create",
+  //       },
+  //     ];
+  //     break;
+  // }
 
   return (
     <>
