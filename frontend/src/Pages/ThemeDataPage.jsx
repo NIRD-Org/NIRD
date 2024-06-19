@@ -95,11 +95,11 @@ const ThemeDataPage = () => {
         <ArrowLeftIcon className="w-7 h-5" />
         <p className="hidden md:block"> Back</p>
       </button>
-      <div className="flex flex-col md:flex-row flex-wrap gap-3 pt-10 justify-center items-center">
+      <div className="flex flex-col px-3 md:flex-row flex-wrap gap-3 pt-10 justify-center items-center">
         <h1 className="text-xl font-bold text-primary">Theme : </h1>
         <p className="text-lg text-center">{theme}</p>
       </div>
-      <div className="mx-auto pb-10 pt-5 w-1/2 flex flex-wrap justify-between gap-5">
+      <div className="mx-auto px-4 pb-10 pt-5 w-full md:w-1/2 flex flex-wrap justify-between gap-5">
         <div className="flex gap-2 items-center">
           <h1 className="font-semibold text-lg">State : </h1>
           <p className="text-lg text-gray-700">{state}</p>
