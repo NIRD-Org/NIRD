@@ -94,7 +94,7 @@ const Header = () => {
         </NavLink>
 
         <div>
-          <img src="/logo/mopr.png" alt="MoPR Logo" className="h-12 w-auto" />
+          <img src="/logo/mopr.png" alt="MoPR Logo" className="h-12 w-fit" />
         </div>
 
         {!isAuthenticated ? (
