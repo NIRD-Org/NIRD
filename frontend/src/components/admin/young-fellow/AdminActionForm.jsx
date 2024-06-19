@@ -21,7 +21,7 @@ function AdminActionForm() {
   const theme_id = searchParams.get("theme_id") || "";
   const navigate = useNavigate();
   const [kpiApprovals, setKpiApprovals] = useState([]);
-  const [statusFilter, setStatusFilter] = useState("All");
+  const [statusFilter, setStatusFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalApprovals,setTotalApprovals] = useState([])
@@ -92,6 +92,7 @@ function AdminActionForm() {
             onChange={handleStatusFilterChange}
             className="p-2 border rounded"
           >
+            {/* <option value="all"></option> */}
             <option value="all">All</option>
             <option value="1">Approved</option>
             <option value="2">Sent for Modification</option>
