@@ -34,7 +34,7 @@ const KipTabs = ({ setTagline }) => {
 
   return (
     <div className="w-full ">
-      <div className="flex px-10  lg:px-20 justify-center border-gray-200">
+      <div className="flex px-10 flex-col items-center sm:flex-row lg:px-20 justify-center border-gray-200">
         {" "}
         <Link
           to="/gp-profile/details"

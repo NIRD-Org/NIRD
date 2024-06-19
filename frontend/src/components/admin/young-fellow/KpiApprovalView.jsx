@@ -1,7 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import API from "@/utils/API";
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -36,7 +43,9 @@ function KpiApprovalView() {
     <div className="w-full">
       <div>
         <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">Young Fellow - KPI Entry Form</h2>
+          <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">
+            Young Fellow - KPI Entry Form
+          </h2>
         </div>
         <YfLayout />
         <form className="overflow-x-auto  mt-6">
@@ -59,7 +68,9 @@ function KpiApprovalView() {
                   <TableRow key={data.id}>
                     <TableCell>{data?.kpiDetails?.id}</TableCell>
                     <TableCell>{data?.kpiDetails.name}</TableCell>
-                    <TableCell>{data.kpiDetails.kpi_datapoint || "No question"}</TableCell>
+                    <TableCell>
+                      {data.kpiDetails.kpi_datapoint || "No question"}
+                    </TableCell>
                     {/* <TableCell>{data?.kpiDetails.input_type}</TableCell> */}
                     <TableCell>
                       <Input value={data?.max_range} disabled />
@@ -68,7 +79,12 @@ function KpiApprovalView() {
                       <Input value={data?.input_data} type="number" disabled />
                     </TableCell>
                     <TableCell>
-                      <Textarea disabled type="text" name="remarks" value={data?.remarks} />
+                      <Textarea
+                        disabled
+                        type="text"
+                        name="remarks"
+                        value={data?.remarks}
+                      />
                     </TableCell>
                     {/* <TableCell>
                       <Input disabled type="text" />
@@ -82,7 +98,20 @@ function KpiApprovalView() {
             <Label htmlFor="date" className="text-right mt-2">
               Date
             </Label>
-            <Input disabled value={kpiApprovalData[0]?.date ? kpiApprovalData[0]?.date.substring(0, 10) : ""} type="date" name="date" onChange={e => setDate(e.target.value)} id="date" placeholder="Enter date" className="px-10" />
+            <Input
+              disabled
+              value={
+                kpiApprovalData[0]?.date
+                  ? kpiApprovalData[0]?.date.substring(0, 10)
+                  : ""
+              }
+              type="date"
+              name="date"
+              onChange={(e) => setDate(e.target.value)}
+              id="date"
+              placeholder="Enter date"
+              className="px-10"
+            />
 
             {/* <Input disabled value={kpiApprovalData[0]?.date} type="date" name="date" onChange={e => setDate(e.target.value)} id="date" placeholder="Enter datte" className="px-10" /> */}
           </div>

@@ -94,13 +94,13 @@ const GramPanchayatProfile = () => {
   }, [state]);
 
   return (
-    <div className="relative py-10 px-5 lg:px-20">
+    <div className="relative py-10 px-1 lg:px-20">
       <button
         onClick={() => navigate("/kpi")}
-        className="absolute flex items-center justify-center bg-primary text-white p-2 rounded top-10 left-20"
+        className="absolute flex items-center justify-center bg-primary text-white p-2 rounded top-2 left-4 md:top-10 md:left-20 "
       >
         <ArrowLeftIcon className="w-7 h-5" />
-        Back
+        <p className="hidden md:block"> Back</p>
       </button>
       <h1 className="text-3xl text-primary text-center font-bold">
         Gram Panchayat Profile
@@ -204,7 +204,7 @@ const GramPanchayatProfile = () => {
           </div>
         </div>
         {/* img */}
-        <div className="w-1/3 mt-10 lg:mt-0 flex justify-center items-center lg:w-1/2 h-full ">
+        <div className="w-full md:w-1/3 flex justify-center items-center lg:w-1/2 h-full ">
           <img
             src={stateData?.state_icon}
             alt=""
@@ -214,7 +214,7 @@ const GramPanchayatProfile = () => {
         </div>
       </div>
 
-      <div>
+      <div className="pt-10">
         {gpDetails ? (
           <GpDetailComponent
             data={gpDetails}
