@@ -186,7 +186,7 @@ const KPIDetails = () => {
           </div>
         </div>
         {/* img */}
-        <div className="w-1/3 mt-10 lg:mt-0 flex justify-center items-center lg:w-1/2 h-full ">
+        <div className="w-full md:w-1/3 flex justify-center items-center lg:w-1/2 h-full ">
           <img
             src={stateData?.state_icon}
             alt=""
@@ -198,7 +198,7 @@ const KPIDetails = () => {
 
       {/* Themes */}
 
-      <div className="py-0">
+      <div className="py-10 md:py-1">
         <Themes />
       </div>
     </div>

@@ -2,7 +2,7 @@ import React from "react";
 
 const GpDetailComponent = ({ data }) => {
   return (
-    <div className="w-fit grid py-6 lg:pt-14 grid-cols-1 md:grid-cols-2 xl:grid-cols-3 p-4 gap-10">
+    <div className="w-full grid py-6 lg:pt-14 grid-cols-1 md:grid-cols-2 xl:grid-cols-3 p-4 gap-10">
       {/* Panchayat Details */}
       <div className="bg-gray-100 overflow-hidden border border-gray-400">
         <div className="text-white bg-primary text-center p-2">
