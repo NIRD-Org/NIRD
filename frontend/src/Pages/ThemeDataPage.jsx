@@ -90,10 +90,10 @@ const ThemeDataPage = () => {
     <div className="relative overflow-hidden">
       <button
         onClick={() => navigate(-1)}
-        className="absolute flex items-center justify-center bg-primary text-white p-2 rounded top-8 left-16"
+        className="absolute flex items-center justify-center bg-primary text-white p-2 rounded top-2 left-4 md:top-10 md:left-20 "
       >
         <ArrowLeftIcon className="w-7 h-5" />
-        Back
+        <p className="hidden md:block"> Back</p>
       </button>
       <div className="flex flex-col md:flex-row flex-wrap gap-3 pt-10 justify-center items-center">
         <h1 className="text-xl font-bold text-primary">Theme : </h1>
