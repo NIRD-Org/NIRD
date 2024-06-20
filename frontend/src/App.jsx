@@ -51,6 +51,7 @@ import AmUploadForm from "./components/admin/attendance/AmuUpload";
 import Attendance from "./components/admin/attendance/Attendance";
 import UpdateUserLocation from "./components/admin/user-location/UpdateUserLocation";
 import GramPanchayatProfile from "./Pages/GramPanchayatProfile";
+import YfInsightsPage from "./Pages/YfInsightsPage";
 
 function App() {
   const { login } = useAuthContext();
@@ -71,6 +72,7 @@ function App() {
           <Route path="project" element={<ProjectPage />} />
           <Route path="/gp-wise-data/theme/:id" element={<ThemeDataPage />} />
           <Route path="gp-profile/details" element={<GramPanchayatProfile />} />
+          <Route path="/yf-insights" element={<YfInsightsPage />} />
           <Route path="/admin" element={<AdminPage />}>
             <Route index element={<AdminMainPage />} />
             <Route path="gp-details-form" element={<GpDetailsForm />} />
@@ -99,17 +101,38 @@ function App() {
             {/* <Route path="attendance" element={<AttendanceLayout />} /> */}
             <Route path="action-form" element={<ActionForm />} />
             <Route path="admin-action-form" element={<AdminActionForm />} />
-            <Route path="user-location/assign/admin/:userId" element={<UserLocation role={2}/>}/>
-            <Route path="user-location/assign/young-fellow/:userId" element={<UserLocation role={3}/>}/>
-            <Route path="users/all/admin" element={<UserList role={2}/>} />
-            <Route path="users/all/young-fellow" element={<UserList role={3}/>} />
+            <Route
+              path="user-location/assign/admin/:userId"
+              element={<UserLocation role={2} />}
+            />
+            <Route
+              path="user-location/assign/young-fellow/:userId"
+              element={<UserLocation role={3} />}
+            />
+            <Route path="users/all/admin" element={<UserList role={2} />} />
+            <Route
+              path="users/all/young-fellow"
+              element={<UserList role={3} />}
+            />
             <Route path="attendance/attendance" element={<Attendance />} />
             <Route path="attendance/amu-upload" element={<AmUploadForm />} />
             <Route path="attendance/pmu-upload" element={<PmUploadForm />} />
-            <Route path="user-location/update/admin/:userId" element={<UpdateUserLocation role={2}/>}/>
-            <Route path="user-location/update/young-fellow/:userId" element={<UpdateUserLocation role={3}/>}/>
-            <Route path="user-location/view/admin/:userId" element={<UpdateUserLocation view role={2}/>}/>
-            <Route path="user-location/view/young-fellow/:userId" element={<UpdateUserLocation view role={3}/>}/>
+            <Route
+              path="user-location/update/admin/:userId"
+              element={<UpdateUserLocation role={2} />}
+            />
+            <Route
+              path="user-location/update/young-fellow/:userId"
+              element={<UpdateUserLocation role={3} />}
+            />
+            <Route
+              path="user-location/view/admin/:userId"
+              element={<UpdateUserLocation view role={2} />}
+            />
+            <Route
+              path="user-location/view/young-fellow/:userId"
+              element={<UpdateUserLocation view role={3} />}
+            />
           </Route>
         </Route>
 
