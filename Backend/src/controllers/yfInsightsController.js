@@ -134,6 +134,7 @@ export const getAllYfInsights = CatchAsyncError(async (req, res, next) => {
           updated_at: 1,
           dateOfSubmission: 1,
           achievementPhoto: 1,
+          approved: 1,
         },
       },
     ]);
