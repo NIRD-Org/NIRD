@@ -51,6 +51,7 @@ import AmUploadForm from "./components/admin/attendance/AmuUpload";
 import Attendance from "./components/admin/attendance/Attendance";
 import UpdateUserLocation from "./components/admin/user-location/UpdateUserLocation";
 import GramPanchayatProfile from "./Pages/GramPanchayatProfile";
+import YoungFellowInsights from "./components/admin/young-fellow-insight/YoungFellowInsight";
 
 function App() {
   const { login } = useAuthContext();
@@ -110,6 +111,7 @@ function App() {
             <Route path="user-location/update/young-fellow/:userId" element={<UpdateUserLocation role={3}/>}/>
             <Route path="user-location/view/admin/:userId" element={<UpdateUserLocation view role={2}/>}/>
             <Route path="user-location/view/young-fellow/:userId" element={<UpdateUserLocation view role={3}/>}/>
+            <Route path="young-fellow-insight" element={<YoungFellowInsights />}/>
           </Route>
         </Route>
 

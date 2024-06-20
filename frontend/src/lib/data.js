@@ -541,6 +541,12 @@ export const getSidebarItems = (user)=>{
           title: "GP Details",
           link: "/admin/gp-details-form",
         },
+        {
+          type: "sub-module",
+          icon: ArrowBigRight,
+          title: "Yonng Fellow Insight",
+          link: "/admin/young-fellow-insight",
+        },
       ];
       break;
   }
