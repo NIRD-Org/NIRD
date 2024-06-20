@@ -2,6 +2,30 @@ import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
 import { YfInsightsModel } from "../models/yfInsightsModel.js";
 import { Errorhandler } from "../utils/errorHandler.js";
 import { v2 as cloudinary } from "cloudinary";
+
+const getNewId = async () => {
+  try {
+    const maxDoc = await YfInsightsModel.aggregate([
+      {
+        $addFields: {
+          numericId: { $toInt: "$id" },
+        },
+      },
+      {
+        $sort: { numericId: -1 },
+      },
+      {
+        $limit: 1,
+      },
+    ]).exec();
+
+    const maxId = maxDoc.length > 0 ? maxDoc[0].numericId : 0;
+    return maxId + 1;
+  } catch (error) {
+    return next(new Errorhandler("failed to get new id", 500));
+  }
+};
+
 export const createYfInsights = CatchAsyncError(async (req, res, next) => {
   try {
     const { gp_id, financialYear } = req.body;
@@ -9,6 +33,8 @@ export const createYfInsights = CatchAsyncError(async (req, res, next) => {
       gp_id,
       financialYear,
     });
+    const id = await getNewId();
+    req.body.id = id;
 
     if (existingInsight) {
       return next(
@@ -131,7 +157,6 @@ export const getAllYfInsights = CatchAsyncError(async (req, res, next) => {
 
 export const updateYfInsights = CatchAsyncError(async (req, res, next) => {
   try {
-    const { state, dist, block, gp } = req.query;
     if (req.body.achievement) {
       const result = await cloudinary.uploader.upload(req.body.achievement, {
         folder: "achievements",
@@ -140,7 +165,7 @@ export const updateYfInsights = CatchAsyncError(async (req, res, next) => {
       req.body.achievement = result.secure_url;
     }
     const yfInsights = await YfInsightsModel.findOneAndUpdate(
-      { gp_id: gp },
+      { id: req.params.id },
       req.body,
       { new: true }
     );
