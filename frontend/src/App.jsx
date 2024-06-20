@@ -113,7 +113,7 @@ function App() {
             <Route path="user-location/view/admin/:userId" element={<UpdateUserLocation view role={2}/>}/>
             <Route path="user-location/view/young-fellow/:userId" element={<UpdateUserLocation view role={3}/>}/>
             <Route path="young-fellow-insight" element={<YoungFellowInsights />}/>
-            <Route path="young-fellow-insight/edit/:userId" element={<YoungFellowInsights update={true}/>}/>
+            <Route path="young-fellow-insight/edit/:id" element={<YoungFellowInsights update={true}/>}/>
             <Route path="young-fellow-insight/submissions" element={<FellowInsightPage />}/>
           </Route>
         </Route>

@@ -16,15 +16,15 @@ import { NirdDownloadIcon, NirdEditIcon } from "../Icons";
 import DataToPDF from "./InsightPdf";
 
 const FellowInsightPage = () => {
-  const [insights, setInsights] = useState(dummyData);
+  const [insights, setInsights] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     const fetchInsights = async () => {
       try {
         setIsLoading(true);
-        const response = await API.get("/api/v1/young-fellow-insights");
-        setInsights(response.data.insights);
+        const response = await API.get("/api/v1/yf-insights/get");
+        setInsights(response.data.data);
       } catch (error) {
         console.error("Error fetching insights:", error);
       } finally {
@@ -46,6 +46,7 @@ const FellowInsightPage = () => {
             <TableHead>GP</TableHead>
             <TableHead>Date of Joining</TableHead>
             <TableHead>Date of Submission</TableHead>
+            <TableHead>Status</TableHead>
             <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
@@ -62,17 +63,18 @@ const FellowInsightPage = () => {
             insights.map((insight, index) => (
               <TableRow key={insight.id}>
                 <TableCell>{index + 1}</TableCell>
-                <TableCell>{insight.youngFellowName}</TableCell>
+                <TableCell>{insight.name}</TableCell>
                 <TableCell>{insight.gp_name}</TableCell>
                 <TableCell>{insight.dateOfJoining}</TableCell>
                 <TableCell>{insight.dateOfSubmission}</TableCell>
+                <TableCell>{insight.approved?"Approved":"Pending"}</TableCell>
                 <TableCell className="flex items-center gap-4">
                   <Link to={`/admin/young-fellow-insight/edit/${insight.id}`}>
                     <NirdEditIcon />
                   </Link>
-                  <DataToPDF data={insight}>
+                 {/*  <DataToPDF data={insight}>
                     <NirdDownloadIcon />
-                  </DataToPDF>
+                  </DataToPDF> */}
                 </TableCell>
               </TableRow>
             ))

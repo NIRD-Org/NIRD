@@ -4,9 +4,10 @@ import API from "@/utils/API";
 import { Button } from "@/components/ui/button";
 import AdminHeader from "../AdminHeader";
 import { dummyData } from "./data";
+import { tst } from "@/lib/utils";
 
-const YoungFellowInsights = ({ update }) => {
-  const { userId } = useParams();
+const YoungFellowInsights = ({ update = false }) => {
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const [locationData, setLocationData] = useState({
@@ -21,13 +22,14 @@ const YoungFellowInsights = ({ update }) => {
     dist_id: "",
     block_id: "",
     gp_id: "",
-    youngFellowName: "",
+    name: "",
     dateOfJoining: "",
     dateOfSubmission: "",
     achievement: "",
     achievementPhoto: null,
     failure: "",
     planOfAction: "",
+    financialYear: "2024- 2025",
   });
 
   useEffect(() => {
@@ -43,21 +45,20 @@ const YoungFellowInsights = ({ update }) => {
       }
     }
 
+    fetchStates();
+  }, []);
+
+  useEffect(() => {
     async function fetchUserInsight() {
-      /* try {
-        const response = await API.get("/api/v1/young-fellow-insights/" + id);
-        setFormData(response.data.youngFellowInsight);
+      try {
+        const response = await API.get(`/api/v1/yf-insights/get/${id}`);
+        setFormData(response.data.data);
       } catch (error) {
         console.log(error);
-      } */
-      console.log('first')
-      const user = dummyData.find(user => user.id == userId);
-      console.log(user);
-      setFormData({ ...formData, ...user });
+      }
     }
-    fetchStates();
     if (update) fetchUserInsight();
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     async function fetchDistricts() {
@@ -124,23 +125,6 @@ const YoungFellowInsights = ({ update }) => {
     fetchGrams();
   }, [formData.block_id]);
 
-  useEffect(() => {
-    if (update) {
-      setFormData({
-        state_id: update.state_id,
-        dist_id: update.dist_id,
-        block_id: update.block_id,
-        gp_id: update.gp_id,
-        youngFellowName: update.youngFellowName,
-        dateOfJoining: update.dateOfJoining,
-        dateOfSubmission: update.dateOfSubmission,
-        achievement: update.achievement,
-        failure: update.failure,
-        planOfAction: update.planOfAction,
-      });
-    }
-  }, [update]);
-
   const handleInputChange = e => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -148,25 +132,23 @@ const YoungFellowInsights = ({ update }) => {
 
   const handleFileChange = e => {
     const file = e.target.files[0];
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      const base64String = reader.result.split(",")[1];
-      setFormData(prev => ({ ...prev, achievementPhoto: base64String }));
-    };
-
-    reader.readAsDataURL(file);
+    setFormData(prev => ({ ...prev, achievementPhoto: file }));
   };
 
   const handleSubmit = async e => {
     e.preventDefault();
     try {
       if (update) {
-        await API.put(`/api/v1/young-fellow-insights/${id}`, formData);
+        await API.put(`/api/v1/yf-insights/update/${id}`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        tst.success("Data approved successfully");
       } else {
-        await API.post("/api/v1/young-fellow-insights", formData);
+        await API.post("/api/v1/yf-insights/create", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        tst.success("Data submitted and sent for approval successfully");
       }
-      navigate("/admin/fellow-insight");
     } catch (error) {
       console.log(error);
     }
@@ -175,73 +157,73 @@ const YoungFellowInsights = ({ update }) => {
   const formFields = [
     {
       label: "Young Fellow Name",
-      name: "youngFellowName",
+      name: "name",
       type: "text",
       maxLength: null,
-      required: true,
+      required: !update,
     },
     {
       label: "Date of Joining",
       name: "dateOfJoining",
       type: "date",
       maxLength: null,
-      required: true,
+      required: !update,
     },
     {
       label: "Date of Submission",
       name: "dateOfSubmission",
       type: "date",
       maxLength: null,
-      required: true,
+      required: !update,
     },
     {
       label: "State",
       name: "state_id",
       type: "select",
       options: locationData.states,
-      required: true,
+      required: !update,
     },
     {
       label: "District",
       name: "dist_id",
       type: "select",
       options: locationData.districts,
-      required: true,
+      required: !update,
     },
     {
       label: "Block",
       name: "block_id",
       type: "select",
       options: locationData.blocks,
-      required: true,
+      required: !update,
     },
     {
       label: "GP",
       name: "gp_id",
       type: "select",
       options: locationData.gps,
-      required: true,
+      required: !update,
     },
     {
       label: "Achievements",
       name: "achievement",
       type: "textarea",
       maxLength: 300,
-      required: true,
+      required: !update,
     },
     {
       label: "Failures",
       name: "failure",
       type: "textarea",
       maxLength: 200,
-      required: true,
+      required: !update,
     },
     {
       label: "Plan of Action for FY 2024-25",
       name: "planOfAction",
       type: "textarea",
       maxLength: 200,
-      required: true,
+      required: !update,
     },
   ];
 
@@ -295,7 +277,7 @@ const YoungFellowInsights = ({ update }) => {
         ))}
         <div className="mb-4">
           <label className="block font-bold mb-2">Financial Year</label>
-          <select className="p-2 border rounded w-full bg-white" required>
+          <select className="p-2 border rounded w-full bg-white" required={!update}>
             <option value="FY 2023-24">FY 2023-24</option>
           </select>
         </div>
@@ -305,7 +287,7 @@ const YoungFellowInsights = ({ update }) => {
             type="file"
             accept="image/*"
             onChange={handleFileChange}
-            required
+            required={!update}
           />
           <small>
             Upload a photo that demonstrates your achievements in the last
@@ -314,7 +296,7 @@ const YoungFellowInsights = ({ update }) => {
         </div>
         <div className="col-span-3 text-right">
           <Button type="submit" className="px-20">
-            {update ? "Update" : "Submit"}
+            {update ? "Approve" : "Submit"}
           </Button>
         </div>
       </form>

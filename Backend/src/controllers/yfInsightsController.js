@@ -2,6 +2,30 @@ import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
 import { YfInsightsModel } from "../models/yfInsightsModel.js";
 import { Errorhandler } from "../utils/errorHandler.js";
 import { v2 as cloudinary } from "cloudinary";
+import { uploadImage } from "../utils/uploadImage.js";
+
+const getNewId = async () => {
+  try {
+    const maxDoc = await YfInsightsModel.aggregate([
+      {
+        $addFields: {
+          numericId: { $toInt: "$id" },
+        },
+      },
+      {
+        $sort: { numericId: -1 },
+      },
+      {
+        $limit: 1,
+      },
+    ]).exec();
+
+    const maxId = maxDoc.length > 0 ? maxDoc[0].numericId : 0;
+    return maxId + 1;
+  } catch (error) {
+    return next(new Errorhandler("failed to get new id", 500));
+  }
+};
 export const createYfInsights = CatchAsyncError(async (req, res, next) => {
   try {
     const { gp_id, financialYear } = req.body;
@@ -18,14 +42,11 @@ export const createYfInsights = CatchAsyncError(async (req, res, next) => {
         )
       );
     }
-    if (req.body.achievement) {
-      const result = await cloudinary.uploader.upload(req.body.achievement, {
-        folder: "achievements",
-        resource_type: "auto",
-      });
-
-      req.body.achievement = result.secure_url;
-    }
+    const achievementPhoto = req.files.achievementPhoto;
+    const { url } = await uploadImage(achievementPhoto.data);
+    req.body.achievementPhoto = url;
+    const id = await getNewId();
+    req.body.id = id.toString();
 
     const yfInsights = new YfInsightsModel(req.body);
     await yfInsights.save();
@@ -91,7 +112,7 @@ export const getAllYfInsights = CatchAsyncError(async (req, res, next) => {
       { $sort: { created_at: -1 } },
       {
         $project: {
-          _id: 0,
+          _id: 1,
           id: 1,
           state_id: 1,
           dist_id: 1,
@@ -108,11 +129,13 @@ export const getAllYfInsights = CatchAsyncError(async (req, res, next) => {
           gp_name: "$gp.name",
           created_at: 1,
           updated_at: 1,
+          dateOfSubmission: 1,
+          achievementPhoto: 1,
         },
       },
     ]);
 
-    if (!yfInsights || yfInsights.length === 0) {
+    if (!yfInsights) {
       return next(new Errorhandler("No yf insights found", 404));
     }
 
@@ -131,16 +154,11 @@ export const getAllYfInsights = CatchAsyncError(async (req, res, next) => {
 
 export const updateYfInsights = CatchAsyncError(async (req, res, next) => {
   try {
-    const { state, dist, block, gp } = req.query;
-    if (req.body.achievement) {
-      const result = await cloudinary.uploader.upload(req.body.achievement, {
-        folder: "achievements",
-        resource_type: "auto",
-      });
-      req.body.achievement = result.secure_url;
-    }
+    const id = req.params.id;
+    req.body.approved = true;
+
     const yfInsights = await YfInsightsModel.findOneAndUpdate(
-      { gp_id: gp },
+      { id },
       req.body,
       { new: true }
     );
@@ -157,5 +175,24 @@ export const updateYfInsights = CatchAsyncError(async (req, res, next) => {
   } catch {
     console.log(error);
     return next(new Errorhandler("Failed to update yf insights", 500));
+  }
+});
+
+export const getYfInsightsById = CatchAsyncError(async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const yfInsights = await YfInsightsModel.findOne({ id });
+    if (!yfInsights) {
+      return next(new Errorhandler("No yf insights found", 404));
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "YF Insights retrieved successfully",
+      data: yfInsights,
+    });
+  } catch (error) {
+    console.log(error);
+    return next(new Errorhandler("Failed to get yf insights by id", 500));
   }
 });

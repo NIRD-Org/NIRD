@@ -1,11 +1,12 @@
 import React from "react";
 import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
-import { NirdDownloadIcon } from "../Icons";
+import "jspdf-autotable"; 
 
 const DataToPDF = ({ data, children }) => {
-  const downloadPDF = () => {
-    console.log("downlaosdPd");  const pdf = new jsPDF();
+  const downloadPDF = async () => {
+    console.log("downloadPDF"); 
+    const pdf = new jsPDF();
+
     const headers = [['Field', 'Value']];
     const body = [
       ['Young Fellow Name', data.youngFellowName],
@@ -16,21 +17,30 @@ const DataToPDF = ({ data, children }) => {
       ['Plan of Action', data.planOfAction]
     ];
 
-    const tableStyles = { margin: { top: 20 }, alternateRowStyles: { fillColor: [245, 245, 245] } };
+    const tableStyles = { fillColor: [245, 245, 245] }; 
 
-    pdf.autoTable({
-      head: headers,
-      body: body,
-      startY: 20,
-      styles: tableStyles
-    });
+    const imageUrl = ''; 
+    const response = await fetch(imageUrl);
+    const blob = await response.blob();
+    const reader = new FileReader();
+    reader.readAsDataURL(blob);
+    reader.onloadend = () => {
+      const imageDataUrl = reader.result;
+      pdf.addImage(imageDataUrl, 'JPEG', 15, 15, 180, 160);
+      pdf.autoTable({
+        head: headers,
+        body: body,
+        startY: 180, 
+        styles: tableStyles
+      });
 
-    pdf.save(`${data.gp_name}_${data.youngFellowName}_Report.pdf`);
+      pdf.save(`${data.gp_name}_${data.youngFellowName}_Report.pdf`);
+    };
   };
 
   return (
     <span onClick={downloadPDF}>
-        {children}
+      {children}
     </span>
   );
 };

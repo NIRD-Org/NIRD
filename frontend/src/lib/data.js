@@ -1,7 +1,5 @@
 import { ArrowBigRight } from "lucide-react";
 
-
-
 export const districts = [
   {
     id: "d1",
@@ -377,10 +375,28 @@ export const sidebarItems = [
   },
 ];
 
-
-export const getSidebarItems = (user)=>{
+export const getSidebarItems = user => {
   let sidebarItems;
-  switch (4) {
+
+  if (user.username == "cprbolke") {
+    sidebarItems = sidebarItems = [
+      {
+        type: "module",
+        icon: ArrowBigRight,
+        title: "Submissions",
+      },
+      {
+        type: "sub-module",
+        icon: ArrowBigRight,
+        title: "Young Fellow Insights",
+        link: "/admin/young-fellow-insight/submissions",
+      },
+    ];
+
+    return sidebarItems;
+  }
+  
+  switch (user.role) {
     case 1:
       sidebarItems = [
         {
@@ -468,12 +484,12 @@ export const getSidebarItems = (user)=>{
           title: "User location",
           link: "/admin/users/all/young-fellow",
         },
-       /*  {
+        /*  {
           type: "module",
           icon: ArrowBigRight,
           title: "Master",
         }, */
-      
+
         {
           type: "module",
           icon: ArrowBigRight,
@@ -548,23 +564,9 @@ export const getSidebarItems = (user)=>{
           link: "/admin/young-fellow-insight",
         },
       ];
-      case 4:
-      sidebarItems = [
-        {
-          type: "module",
-          icon: ArrowBigRight,
-          title: "Submissions",
-        },
-        {
-          type: "sub-module",
-          icon: ArrowBigRight,
-          title: "Young Fellow Insights",
-          link: "/admin/young-fellow-insight/submissions",
-        },
-      ]
+    case 4:
       break;
   }
 
   return sidebarItems;
-
-}
+};

@@ -2,11 +2,19 @@ import mongoose from "mongoose";
 
 const yfInsightsSchema = new mongoose.Schema(
   {
+    id: {
+      type: String,
+      required: true,
+    },
     name: {
       type: String,
       required: true,
     },
     dateOfJoining: {
+      type: String,
+      required: true,
+    },
+    dateOfSubmission: {
       type: String,
       required: true,
     },
@@ -36,11 +44,23 @@ const yfInsightsSchema = new mongoose.Schema(
     },
     achievement: {
       type: String,
-      required: false,
+      required: true,
     },
-    failures: {
+    achievementPhoto: {
       type: String,
       required: true,
+    },
+    failure: {
+      type: String,
+      required: true,
+    },
+    planOfAction: {
+      type: String,
+      required: true,
+    },
+    approved: {
+      type: Boolean,
+      default: false,
     },
   },
   {

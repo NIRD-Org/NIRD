@@ -2,7 +2,6 @@ import express from "express";
 import dotenv from "dotenv";
 import { connectDb } from "./db/db.js";
 import cors from "cors";
-import cloudinary from "cloudinary";
 import { ErrorMiddleware } from "./middlewares/error.js";
 import gpWiseKpiRoutes from "./routes/gpWIseKpiRoutes.js";
 import stateRoutes from "./routes/stateRoutes.js";
@@ -19,16 +18,13 @@ import gpWiseIndicatorRoutes from "./routes/gpWiseIndicatorRoutes.js";
 import gpDetailRoutes from "./routes/gpDetailRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import yfInsightsRoutes from "./routes/yfInsightsRoutes.js";
+import fileUpload from "express-fileupload";
 const app = express();
 
 dotenv.config();
-app.use(express.json());
 app.use(cors());
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+app.use(express.json());
+app.use(fileUpload({ limits: { fileSize: "10*1024*1024" } }));
 
 // Routes
 
