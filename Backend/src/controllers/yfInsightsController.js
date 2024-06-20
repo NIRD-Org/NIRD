@@ -33,8 +33,6 @@ export const createYfInsights = CatchAsyncError(async (req, res, next) => {
       gp_id,
       financialYear,
     });
-    const id = await getNewId();
-    req.body.id = id;
 
     if (existingInsight) {
       return next(
