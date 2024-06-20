@@ -1,277 +1,325 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import API from "@/utils/API";
 import { Button } from "@/components/ui/button";
+import AdminHeader from "../AdminHeader";
+import { dummyData } from "./data";
 
-function YoungFellowInsights() {
-  const [searchParams] = useSearchParams();
-  const state_id = searchParams.get("state_id") || "";
-  const dist_id = searchParams.get("dist_id") || "";
-  const block_id = searchParams.get("block_id") || "";
-  const gram_id = searchParams.get("gram_id") || "";
-
-  const [states, setStates] = useState([]);
-  const [districts, setDistricts] = useState([]);
-  const [blocks, setBlocks] = useState([]);
-  const [gps, setGps] = useState([]);
-
-  const [selectedState, setSelectedState] = useState(state_id);
-  const [selectedDistrict, setSelectedDistrict] = useState(dist_id);
-  const [selectedBlock, setSelectedBlock] = useState(block_id);
-  const [selectedGP, setSelectedGP] = useState(gram_id);
-
-  const [youngFellowName, setYoungFellowName] = useState("");
-  const [dateOfJoining, setDateOfJoining] = useState("");
-  const [achievement, setAchievement] = useState("");
-  const [achievementPhoto, setAchievementPhoto] = useState(null);
-  const [failure, setFailure] = useState("");
-  const [planOfAction, setPlanOfAction] = useState("");
-
+const YoungFellowInsights = ({ update }) => {
+  const { userId } = useParams();
   const navigate = useNavigate();
 
+  const [locationData, setLocationData] = useState({
+    states: [],
+    districts: [],
+    blocks: [],
+    gps: [],
+  });
+
+  const [formData, setFormData] = useState({
+    state_id: "",
+    dist_id: "",
+    block_id: "",
+    gp_id: "",
+    youngFellowName: "",
+    dateOfJoining: "",
+    dateOfSubmission: "",
+    achievement: "",
+    achievementPhoto: null,
+    failure: "",
+    planOfAction: "",
+  });
+
   useEffect(() => {
+    async function fetchStates() {
+      try {
+        const response = await API.get("/api/v1/state/all");
+        setLocationData(prevData => ({
+          ...prevData,
+          states: response.data.states || [],
+        }));
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    async function fetchUserInsight() {
+      /* try {
+        const response = await API.get("/api/v1/young-fellow-insights/" + id);
+        setFormData(response.data.youngFellowInsight);
+      } catch (error) {
+        console.log(error);
+      } */
+      console.log('first')
+      const user = dummyData.find(user => user.id == userId);
+      console.log(user);
+      setFormData({ ...formData, ...user });
+    }
     fetchStates();
+    if (update) fetchUserInsight();
   }, []);
 
   useEffect(() => {
-    if (selectedState) {
-      fetchDistricts(selectedState);
+    async function fetchDistricts() {
+      if (formData.state_id) {
+        try {
+          const response = await API.get(
+            `/api/v1/dist/state/${formData.state_id}`
+          );
+          setLocationData(prevData => ({
+            ...prevData,
+            districts: response.data.districts || [],
+          }));
+          setFormData(prevData => ({
+            ...prevData,
+            dist_id: "",
+            block_id: "",
+            gp_id: "",
+          }));
+        } catch (error) {
+          console.error("Failed to fetch districts.");
+        }
+      }
     }
-  }, [selectedState]);
+    fetchDistricts();
+  }, [formData.state_id]);
 
   useEffect(() => {
-    if (selectedDistrict) {
-      fetchBlocks(selectedDistrict);
+    async function fetchBlocks() {
+      if (formData.dist_id) {
+        try {
+          const response = await API.get(
+            `/api/v1/block/get?dist=${formData.dist_id}`
+          );
+          setLocationData(prevData => ({
+            ...prevData,
+            blocks: response.data.blocks || [],
+          }));
+          setFormData(prevData => ({ ...prevData, block_id: "", gp_id: "" }));
+        } catch (error) {
+          console.error("Failed to fetch blocks.");
+        }
+      }
     }
-  }, [selectedDistrict]);
+    fetchBlocks();
+  }, [formData.dist_id]);
 
   useEffect(() => {
-    if (selectedBlock) {
-      fetchGps(selectedBlock);
+    async function fetchGrams() {
+      if (formData.block_id) {
+        try {
+          const response = await API.get(
+            `/api/v1/gram/get?block=${formData.block_id}`
+          );
+          setLocationData(prevData => ({
+            ...prevData,
+            gps: response.data.gram || [],
+          }));
+          setFormData(prevData => ({ ...prevData, gp_id: "" }));
+        } catch (error) {
+          console.log(error);
+        }
+      }
     }
-  }, [selectedBlock]);
+    fetchGrams();
+  }, [formData.block_id]);
 
-  const fetchStates = async () => {
-    try {
-      const { data } = await API.get("/api/v1/locations/states");
-      setStates(data.states);
-    } catch (error) {
-      console.log(error);
+  useEffect(() => {
+    if (update) {
+      setFormData({
+        state_id: update.state_id,
+        dist_id: update.dist_id,
+        block_id: update.block_id,
+        gp_id: update.gp_id,
+        youngFellowName: update.youngFellowName,
+        dateOfJoining: update.dateOfJoining,
+        dateOfSubmission: update.dateOfSubmission,
+        achievement: update.achievement,
+        failure: update.failure,
+        planOfAction: update.planOfAction,
+      });
     }
-  };
+  }, [update]);
 
-  const fetchDistricts = async stateId => {
-    try {
-      const { data } = await API.get(
-        "/api/v1/locations/districts?state_id=${stateId}"
-      );
-      setDistricts(data.districts);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const fetchBlocks = async districtId => {
-    try {
-      const { data } = await API.get(
-        "/api/v1/locations/blocks?district_id=${districtId}"
-      );
-      setBlocks(data.blocks);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const fetchGps = async blockId => {
-    try {
-      const { data } = await API.get(
-        "/api/v1/locations/gps?block_id=${blockId}"
-      );
-      setGps(data.gps);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleInputChange = e => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleFileChange = e => {
-    setAchievementPhoto(e.target.files[0]);
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      const base64String = reader.result.split(",")[1];
+      setFormData(prev => ({ ...prev, achievementPhoto: base64String }));
+    };
+
+    reader.readAsDataURL(file);
   };
 
   const handleSubmit = async e => {
     e.preventDefault();
-
-    const formData = new FormData();
-    formData.append("youngFellowName", youngFellowName);
-    formData.append("dateOfJoining", dateOfJoining);
-    formData.append("state_id", selectedState);
-    formData.append("dist_id", selectedDistrict);
-    formData.append("block_id", selectedBlock);
-    formData.append("gram_id", selectedGP);
-    formData.append("financialYear", "FY 2023-24");
-    formData.append("achievement", achievement);
-    formData.append("achievementPhoto", achievementPhoto);
-    formData.append("failure", failure);
-    formData.append("planOfAction", planOfAction);
-
     try {
-      await API.post("/api/v1/young-fellow-insights", formData);
-      navigate("/success");
+      if (update) {
+        await API.put(`/api/v1/young-fellow-insights/${id}`, formData);
+      } else {
+        await API.post("/api/v1/young-fellow-insights", formData);
+      }
+      navigate("/admin/fellow-insight");
     } catch (error) {
       console.log(error);
     }
   };
 
+  const formFields = [
+    {
+      label: "Young Fellow Name",
+      name: "youngFellowName",
+      type: "text",
+      maxLength: null,
+      required: true,
+    },
+    {
+      label: "Date of Joining",
+      name: "dateOfJoining",
+      type: "date",
+      maxLength: null,
+      required: true,
+    },
+    {
+      label: "Date of Submission",
+      name: "dateOfSubmission",
+      type: "date",
+      maxLength: null,
+      required: true,
+    },
+    {
+      label: "State",
+      name: "state_id",
+      type: "select",
+      options: locationData.states,
+      required: true,
+    },
+    {
+      label: "District",
+      name: "dist_id",
+      type: "select",
+      options: locationData.districts,
+      required: true,
+    },
+    {
+      label: "Block",
+      name: "block_id",
+      type: "select",
+      options: locationData.blocks,
+      required: true,
+    },
+    {
+      label: "GP",
+      name: "gp_id",
+      type: "select",
+      options: locationData.gps,
+      required: true,
+    },
+    {
+      label: "Achievements",
+      name: "achievement",
+      type: "textarea",
+      maxLength: 300,
+      required: true,
+    },
+    {
+      label: "Failures",
+      name: "failure",
+      type: "textarea",
+      maxLength: 200,
+      required: true,
+    },
+    {
+      label: "Plan of Action for FY 2024-25",
+      name: "planOfAction",
+      type: "textarea",
+      maxLength: 200,
+      required: true,
+    },
+  ];
+
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">
-        Young Fellow Insights FY 2023-24
-      </h1>
+      <AdminHeader>
+        {update ? "Edit Young Fellow Insight" : "Add Young Fellow Insight"}
+      </AdminHeader>
       <form onSubmit={handleSubmit} className="w-full grid grid-cols-3 gap-10">
-        <div className="mb-4">
-          <label className="block font-bold mb-2">Young Fellow Name</label>
-          <input
-            type="text"
-            value={youngFellowName}
-            onChange={e => setYoungFellowName(e.target.value)}
-            className="p-2 border rounded w-full"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block font-bold mb-2">Date of Joining</label>
-          <input
-            type="date"
-            value={dateOfJoining}
-            onChange={e => setDateOfJoining(e.target.value)}
-            className="p-2 border rounded w-full"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block font-bold mb-2">State</label>
-          <select
-            value={selectedState}
-            onChange={e => setSelectedState(e.target.value)}
-            className="p-2 border rounded w-full"
-            required
-          >
-            <option value="">Select State</option>
-            {states.map(state => (
-              <option key={state.id} value={state.id}>
-                {state.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="mb-4">
-          <label className="block font-bold mb-2">District</label>
-          <select
-            value={selectedDistrict}
-            onChange={e => setSelectedDistrict(e.target.value)}
-            className="p-2 border rounded w-full"
-            required
-          >
-            <option value="">Select District</option>
-            {districts.map(district => (
-              <option key={district.id} value={district.id}>
-                {district.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="mb-4">
-          <label className="block font-bold mb-2">Block</label>
-          <select
-            value={selectedBlock}
-            onChange={e => setSelectedBlock(e.target.value)}
-            className="p-2 border rounded w-full"
-            required
-          >
-            <option value="">Select Block</option>
-            {blocks.map(block => (
-              <option key={block.id} value={block.id}>
-                {block.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="mb-4">
-          <label className="block font-bold mb-2">GP</label>
-          <select
-            value={selectedGP}
-            onChange={e => setSelectedGP(e.target.value)}
-            className="p-2 border rounded w-full"
-            required
-          >
-            <option value="">Select GP</option>
-            {gps.map(gp => (
-              <option key={gp.id} value={gp.id}>
-                {gp.name}
-              </option>
-            ))}
-          </select>
-        </div>
+        {formFields.map((field, index) => (
+          <div className="mb-4" key={index}>
+            <label className="block font-bold mb-2">{field.label}</label>
+            {field.type === "text" || field.type === "date" ? (
+              <input
+                type={field.type}
+                name={field.name}
+                value={formData[field.name]}
+                onChange={handleInputChange}
+                className="p-2 border rounded w-full bg-white"
+                required={field.required}
+              />
+            ) : field.type === "textarea" ? (
+              <>
+                <textarea
+                  name={field.name}
+                  value={formData[field.name]}
+                  onChange={handleInputChange}
+                  className="p-2 border rounded w-full bg-white"
+                  maxLength={field.maxLength}
+                  required={field.required}
+                ></textarea>
+                <small>Maximum {field.maxLength} words</small>
+              </>
+            ) : field.type === "select" ? (
+              <select
+                name={field.name}
+                value={formData[field.name]}
+                onChange={handleInputChange}
+                className="p-2 border rounded w-full bg-white"
+                required={field.required}
+              >
+                <option value="">Select {field.label}</option>
+                {field.options.map(option => (
+                  <option key={option.id} value={option.id}>
+                    {option.name}
+                  </option>
+                ))}
+              </select>
+            ) : null}
+          </div>
+        ))}
         <div className="mb-4">
           <label className="block font-bold mb-2">Financial Year</label>
-          <select className="p-2 border rounded w-full" required>
+          <select className="p-2 border rounded w-full bg-white" required>
             <option value="FY 2023-24">FY 2023-24</option>
           </select>
         </div>
         <div className="mb-4">
-          <label className="block font-bold mb-2">Achievements</label>
-          <textarea
-            value={achievement}
-            onChange={e => setAchievement(e.target.value)}
-            className="p-2 border rounded w-full"
-            maxLength="300"
+          <label className="block font-bold mb-2">Achievement Photo</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
             required
-          ></textarea>
-          <small>Maximum 300 words</small>
-          <div className="mt-2">
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-              required
-            />
-            <small>
-              Upload a photo that demonstrates your achievements in the last
-              financial year with you present in it
-            </small>
-          </div>
+          />
+          <small>
+            Upload a photo that demonstrates your achievements in the last
+            financial year with you present in it
+          </small>
         </div>
-        <div className="mb-4">
-          <label className="block font-bold mb-2">Failures</label>
-          <textarea
-            value={failure}
-            onChange={e => setFailure(e.target.value)}
-            className="p-2 border rounded w-full"
-            maxLength="200"
-            required
-          ></textarea>
-          <small>Maximum 200 words</small>
-        </div>
-        <div className="mb-4">
-          <label className="block font-bold mb-2">
-            Plan of Action for FY 2024-25
-          </label>
-          <textarea
-            value={planOfAction}
-            onChange={e => setPlanOfAction(e.target.value)}
-            className="p-2 border rounded w-full"
-            maxLength="200"
-            required
-          ></textarea>
-          <small>Maximum 200 words</small>
+        <div className="col-span-3 text-right">
+          <Button type="submit" className="px-20">
+            {update ? "Update" : "Submit"}
+          </Button>
         </div>
       </form>
-      <div className="">
-        <Button type="submit" className="px-20">
-          Submit
-        </Button>
-      </div>
     </div>
   );
-}
+};
 
 export default YoungFellowInsights;

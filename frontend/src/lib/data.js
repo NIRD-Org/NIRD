@@ -380,7 +380,7 @@ export const sidebarItems = [
 
 export const getSidebarItems = (user)=>{
   let sidebarItems;
-  switch (user.role) {
+  switch (4) {
     case 1:
       sidebarItems = [
         {
@@ -548,6 +548,20 @@ export const getSidebarItems = (user)=>{
           link: "/admin/young-fellow-insight",
         },
       ];
+      case 4:
+      sidebarItems = [
+        {
+          type: "module",
+          icon: ArrowBigRight,
+          title: "Submissions",
+        },
+        {
+          type: "sub-module",
+          icon: ArrowBigRight,
+          title: "Young Fellow Insights",
+          link: "/admin/young-fellow-insight/submissions",
+        },
+      ]
       break;
   }
 
