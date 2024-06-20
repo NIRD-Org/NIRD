@@ -67,12 +67,18 @@ const FellowInsightPage = () => {
                 <TableCell>{insight.gp_name}</TableCell>
                 <TableCell>{insight.dateOfJoining}</TableCell>
                 <TableCell>{insight.dateOfSubmission}</TableCell>
-                <TableCell>{insight.approved?"Approved":"Pending"}</TableCell>
-                <TableCell className="flex items-center gap-4">
-                  <Link to={`/admin/young-fellow-insight/edit/${insight.id}`}>
-                    <NirdEditIcon />
-                  </Link>
-                 {/*  <DataToPDF data={insight}>
+                <TableCell>
+                  {insight.approved ? "Approved" : "Pending"}
+                </TableCell>
+                <TableCell >
+                  {!insight.approved ? (
+                    <Link to={`/admin/young-fellow-insight/edit/${insight.id}`}>
+                      <NirdEditIcon />
+                    </Link>
+                  ) : (
+                    "-"
+                  )}
+                  {/*  <DataToPDF data={insight}>
                     <NirdDownloadIcon />
                   </DataToPDF> */}
                 </TableCell>

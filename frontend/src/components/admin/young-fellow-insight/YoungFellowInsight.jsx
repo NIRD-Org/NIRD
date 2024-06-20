@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import AdminHeader from "../AdminHeader";
 import { dummyData } from "./data";
 import { tst } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 const YoungFellowInsights = ({ update = false }) => {
   const { id } = useParams();
@@ -29,7 +31,7 @@ const YoungFellowInsights = ({ update = false }) => {
     achievementPhoto: null,
     failure: "",
     planOfAction: "",
-    financialYear: "2024- 2025",
+    financialYear: "FY 2023-24",
   });
 
   useEffect(() => {
@@ -71,12 +73,13 @@ const YoungFellowInsights = ({ update = false }) => {
             ...prevData,
             districts: response.data.districts || [],
           }));
-          setFormData(prevData => ({
-            ...prevData,
-            dist_id: "",
-            block_id: "",
-            gp_id: "",
-          }));
+          if (!update)
+            setFormData(prevData => ({
+              ...prevData,
+              dist_id: "",
+              block_id: "",
+              gp_id: "",
+            }));
         } catch (error) {
           console.error("Failed to fetch districts.");
         }
@@ -96,7 +99,8 @@ const YoungFellowInsights = ({ update = false }) => {
             ...prevData,
             blocks: response.data.blocks || [],
           }));
-          setFormData(prevData => ({ ...prevData, block_id: "", gp_id: "" }));
+          if (!update)
+            setFormData(prevData => ({ ...prevData, block_id: "", gp_id: "" }));
         } catch (error) {
           console.error("Failed to fetch blocks.");
         }
@@ -116,7 +120,7 @@ const YoungFellowInsights = ({ update = false }) => {
             ...prevData,
             gps: response.data.gram || [],
           }));
-          setFormData(prevData => ({ ...prevData, gp_id: "" }));
+          if (!update) setFormData(prevData => ({ ...prevData, gp_id: "" }));
         } catch (error) {
           console.log(error);
         }
@@ -160,70 +164,70 @@ const YoungFellowInsights = ({ update = false }) => {
       name: "name",
       type: "text",
       maxLength: null,
-      required: !update,
+      required: true,
     },
     {
       label: "Date of Joining",
       name: "dateOfJoining",
       type: "date",
       maxLength: null,
-      required: !update,
+      required: true,
     },
     {
       label: "Date of Submission",
       name: "dateOfSubmission",
       type: "date",
       maxLength: null,
-      required: !update,
+      required: true,
     },
     {
       label: "State",
       name: "state_id",
       type: "select",
       options: locationData.states,
-      required: !update,
+      required: true,
     },
     {
       label: "District",
       name: "dist_id",
       type: "select",
       options: locationData.districts,
-      required: !update,
+      required: true,
     },
     {
       label: "Block",
       name: "block_id",
       type: "select",
       options: locationData.blocks,
-      required: !update,
+      required: true,
     },
     {
       label: "GP",
       name: "gp_id",
       type: "select",
       options: locationData.gps,
-      required: !update,
+      required: true,
     },
     {
       label: "Achievements",
       name: "achievement",
       type: "textarea",
       maxLength: 300,
-      required: !update,
+      required: true,
     },
     {
       label: "Failures",
       name: "failure",
       type: "textarea",
       maxLength: 200,
-      required: !update,
+      required: true,
     },
     {
       label: "Plan of Action for FY 2024-25",
       name: "planOfAction",
       type: "textarea",
       maxLength: 200,
-      required: !update,
+      required: true,
     },
   ];
 
@@ -237,24 +241,22 @@ const YoungFellowInsights = ({ update = false }) => {
           <div className="mb-4" key={index}>
             <label className="block font-bold mb-2">{field.label}</label>
             {field.type === "text" || field.type === "date" ? (
-              <input
+              <Input
                 type={field.type}
                 name={field.name}
                 value={formData[field.name]}
                 onChange={handleInputChange}
-                className="p-2 border rounded w-full bg-white"
                 required={field.required}
               />
             ) : field.type === "textarea" ? (
               <>
-                <textarea
+                <Textarea
                   name={field.name}
                   value={formData[field.name]}
                   onChange={handleInputChange}
-                  className="p-2 border rounded w-full bg-white"
                   maxLength={field.maxLength}
                   required={field.required}
-                ></textarea>
+                ></Textarea>
                 <small>Maximum {field.maxLength} words</small>
               </>
             ) : field.type === "select" ? (
@@ -277,23 +279,37 @@ const YoungFellowInsights = ({ update = false }) => {
         ))}
         <div className="mb-4">
           <label className="block font-bold mb-2">Financial Year</label>
-          <select className="p-2 border rounded w-full bg-white" required={!update}>
+          <select
+            className="p-2 border rounded w-full bg-white"
+            required={!update}
+          >
             <option value="FY 2023-24">FY 2023-24</option>
           </select>
         </div>
-        <div className="mb-4">
-          <label className="block font-bold mb-2">Achievement Photo</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            required={!update}
-          />
-          <small>
-            Upload a photo that demonstrates your achievements in the last
-            financial year with you present in it
-          </small>
-        </div>
+        {!update ? (
+          <div className="mb-4">
+            <label className="block font-bold mb-2">Achievement Photo</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              required={!update}
+            />
+            <small>
+              Upload a photo that demonstrates your achievements in the last
+              financial year with you present in it
+            </small>
+          </div>
+        ) : (
+          <div>
+            <label className="block font-bold mb-2">Achievement Photo</label>
+            <img
+              className=" rounded-md "
+              src={formData.achievementPhoto}
+              alt=""
+            />
+          </div>
+        )}
         <div className="col-span-3 text-right">
           <Button type="submit" className="px-20">
             {update ? "Approve" : "Submit"}
