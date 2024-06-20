@@ -51,6 +51,8 @@ import AmUploadForm from "./components/admin/attendance/AmuUpload";
 import Attendance from "./components/admin/attendance/Attendance";
 import UpdateUserLocation from "./components/admin/user-location/UpdateUserLocation";
 import GramPanchayatProfile from "./Pages/GramPanchayatProfile";
+import YoungFellowInsights from "./components/admin/young-fellow-insight/YoungFellowInsight";
+import FellowInsightPage from "./components/admin/young-fellow-insight/FellowInsightPage";
 import YfInsightsPage from "./Pages/YfInsightsPage";
 
 function App() {
@@ -132,6 +134,18 @@ function App() {
             <Route
               path="user-location/view/young-fellow/:userId"
               element={<UpdateUserLocation view role={3} />}
+            />
+            <Route
+              path="young-fellow-insight"
+              element={<YoungFellowInsights />}
+            />
+            <Route
+              path="young-fellow-insight/edit/:id"
+              element={<YoungFellowInsights update={true} />}
+            />
+            <Route
+              path="young-fellow-insight/submissions"
+              element={<FellowInsightPage />}
             />
           </Route>
         </Route>
