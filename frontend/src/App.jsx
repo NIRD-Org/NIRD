@@ -53,6 +53,7 @@ import UpdateUserLocation from "./components/admin/user-location/UpdateUserLocat
 import GramPanchayatProfile from "./Pages/GramPanchayatProfile";
 import YoungFellowInsights from "./components/admin/young-fellow-insight/YoungFellowInsight";
 import FellowInsightPage from "./components/admin/young-fellow-insight/FellowInsightPage";
+import YfInsightsPage from "./Pages/YfInsightsPage";
 
 function App() {
   const { login } = useAuthContext();
@@ -73,6 +74,7 @@ function App() {
           <Route path="project" element={<ProjectPage />} />
           <Route path="/gp-wise-data/theme/:id" element={<ThemeDataPage />} />
           <Route path="gp-profile/details" element={<GramPanchayatProfile />} />
+          <Route path="/yf-insights" element={<YfInsightsPage />} />
           <Route path="/admin" element={<AdminPage />}>
             <Route index element={<AdminMainPage />} />
             <Route path="gp-details-form" element={<GpDetailsForm />} />
@@ -101,20 +103,50 @@ function App() {
             {/* <Route path="attendance" element={<AttendanceLayout />} /> */}
             <Route path="action-form" element={<ActionForm />} />
             <Route path="admin-action-form" element={<AdminActionForm />} />
-            <Route path="user-location/assign/admin/:userId" element={<UserLocation role={2}/>}/>
-            <Route path="user-location/assign/young-fellow/:userId" element={<UserLocation role={3}/>}/>
-            <Route path="users/all/admin" element={<UserList role={2}/>} />
-            <Route path="users/all/young-fellow" element={<UserList role={3}/>} />
+            <Route
+              path="user-location/assign/admin/:userId"
+              element={<UserLocation role={2} />}
+            />
+            <Route
+              path="user-location/assign/young-fellow/:userId"
+              element={<UserLocation role={3} />}
+            />
+            <Route path="users/all/admin" element={<UserList role={2} />} />
+            <Route
+              path="users/all/young-fellow"
+              element={<UserList role={3} />}
+            />
             <Route path="attendance/attendance" element={<Attendance />} />
             <Route path="attendance/amu-upload" element={<AmUploadForm />} />
             <Route path="attendance/pmu-upload" element={<PmUploadForm />} />
-            <Route path="user-location/update/admin/:userId" element={<UpdateUserLocation role={2}/>}/>
-            <Route path="user-location/update/young-fellow/:userId" element={<UpdateUserLocation role={3}/>}/>
-            <Route path="user-location/view/admin/:userId" element={<UpdateUserLocation view role={2}/>}/>
-            <Route path="user-location/view/young-fellow/:userId" element={<UpdateUserLocation view role={3}/>}/>
-            <Route path="young-fellow-insight" element={<YoungFellowInsights />}/>
-            <Route path="young-fellow-insight/edit/:id" element={<YoungFellowInsights update={true}/>}/>
-            <Route path="young-fellow-insight/submissions" element={<FellowInsightPage />}/>
+            <Route
+              path="user-location/update/admin/:userId"
+              element={<UpdateUserLocation role={2} />}
+            />
+            <Route
+              path="user-location/update/young-fellow/:userId"
+              element={<UpdateUserLocation role={3} />}
+            />
+            <Route
+              path="user-location/view/admin/:userId"
+              element={<UpdateUserLocation view role={2} />}
+            />
+            <Route
+              path="user-location/view/young-fellow/:userId"
+              element={<UpdateUserLocation view role={3} />}
+            />
+            <Route
+              path="young-fellow-insight"
+              element={<YoungFellowInsights />}
+            />
+            <Route
+              path="young-fellow-insight/edit/:id"
+              element={<YoungFellowInsights update={true} />}
+            />
+            <Route
+              path="young-fellow-insight/submissions"
+              element={<FellowInsightPage />}
+            />
           </Route>
         </Route>
 

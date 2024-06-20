@@ -14,7 +14,7 @@ const Ranking = () => {
       setLoading(true);
       const { data } = await API.get(
         `/api/v1/gp-wise-kpi/get-ranking?keyword=${keyword}&theme=${
-          rankType !== "gp" && rankType !== "block" && rankType
+          rankType !== "gp" && rankType !== "block" ? rankType : ""
         }`
       );
       setGpRankData(data?.data);
