@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import { connectDb } from "./db/db.js";
 import cors from "cors";
+import cloudinary from "cloudinary";
 import { ErrorMiddleware } from "./middlewares/error.js";
 import gpWiseKpiRoutes from "./routes/gpWIseKpiRoutes.js";
 import stateRoutes from "./routes/stateRoutes.js";
@@ -16,13 +17,18 @@ import userLocationRoutes from "./routes/userLocationRoutes.js";
 import indicatorRoutes from "./routes/indicatorRoutes.js";
 import gpWiseIndicatorRoutes from "./routes/gpWiseIndicatorRoutes.js";
 import gpDetailRoutes from "./routes/gpDetailRoutes.js";
-import userRoutes from "./routes/userRoutes.js"
-
+import userRoutes from "./routes/userRoutes.js";
+import yfInsightsRoutes from "./routes/yfInsightsRoutes.js";
 const app = express();
 
 dotenv.config();
 app.use(express.json());
 app.use(cors());
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 // Routes
 
@@ -41,7 +47,7 @@ app.use("/api/v1/user-location", userLocationRoutes);
 app.use("/api/v1/indicator", indicatorRoutes);
 app.use("/api/v1/gp-details", gpDetailRoutes);
 app.use("/api/v1/users", userRoutes);
-
+app.use("/api/v1/yf-insights", yfInsightsRoutes);
 app.get("/", (req, res) => {
   res.status(200).json({ message: "Server is running" });
 });
