@@ -7,12 +7,11 @@ import {
 } from "react-router-dom";
 import { usePDF } from "react-to-pdf";
 import { ArrowLeftIcon } from "lucide-react";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
-import Themes from "@/components/KIP/Themes";
 import API from "@/utils/API";
 import GpDetailComponent from "@/components/KIP/GpDetailComponent";
 import YfInsightComponent from "@/components/YfInsightComponent";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import YfInsightsPdf from "@/components/YfInsightsPdf";
 
 const YfInsightsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -31,7 +30,7 @@ const YfInsightsPage = () => {
   const getAllStates = async () => {
     const { data } = await API.get(`/api/v1/state/all`);
     setStateOptions(data?.states);
-    console.log(data?.states);
+    // console.log(data?.states);
   };
 
   const getAllDistricts = async () => {
@@ -95,39 +94,40 @@ const YfInsightsPage = () => {
     getStateById(state);
   }, [state]);
 
-  const handleDownloadPDF = () => {
-    const input = document.getElementById("yf-insights-content");
-    html2canvas(input, {
-      useCORS: true,
-      allowTaint: true,
-      logging: true,
-      letterRendering: true,
-    }).then((canvas) => {
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF("p", "mm", "a4");
-      const imgWidth = 210;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      const margin = 10;
-      const headingHeight = 20; // height of the heading
-      const textSize = 20;
-      const text = "GP wise Youngfellow Insights";
-      pdf.setFontSize(textSize);
-      const textWidth = pdf.getTextWidth(text);
-      const textX = (pdf.internal.pageSize.width - textWidth) / 2;
-      const textY = margin + textSize;
+  //   const handleDownloadPDF = () => {
+  //     const input = document.getElementById("yf-insights-content");
+  //     html2canvas(input, {
+  //       useCORS: true,
+  //       allowTaint: true,
+  //       logging: true,
+  //       letterRendering: true,
+  //       scale: 1,
+  //     }).then((canvas) => {
+  //       const imgData = canvas.toDataURL("image/png", 0.2);
+  //       const pdf = new jsPDF("p", "mm", "a4");
+  //       const imgWidth = 210;
+  //       const imgHeight = (canvas.height * imgWidth) / canvas.width;
+  //       const margin = 10;
+  //       const headingHeight = 20; // height of the heading
+  //       const textSize = 20;
+  //       const text = "GP wise Youngfellow Insights";
+  //       pdf.setFontSize(textSize);
+  //       const textWidth = pdf.getTextWidth(text);
+  //       const textX = (pdf.internal.pageSize.width - textWidth) / 2;
+  //       const textY = margin + textSize;
 
-      pdf.text(text, textX, textY);
-      pdf.addImage(
-        imgData,
-        "PNG",
-        margin,
-        textY + margin,
-        imgWidth - 2 * margin,
-        imgHeight
-      );
-      pdf.save("yf_insights.pdf");
-    });
-  };
+  //       pdf.text(text, textX, textY);
+  //       pdf.addImage(
+  //         imgData,
+  //         "PNG",
+  //         margin,
+  //         textY + margin,
+  //         imgWidth - 2 * margin,
+  //         imgHeight
+  //       );
+  //       pdf.save("yf_insights.pdf");
+  //     });
+  //   };
 
   return (
     <div className="relative py-10 px-1 lg:px-20">
@@ -230,20 +230,38 @@ const YfInsightsPage = () => {
           />
         </div>
       </div>
-      <button
-        onClick={handleDownloadPDF}
+      {/* <button
+        onClick={() => generatePDF()}
         className="mt-4 bg-primary hover:bg-blue-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
       >
         Download as PDF
-      </button>
+      </button> */}
+
+      <PDFDownloadLink
+        document={<YfInsightsPdf insights={yfInsights} />}
+        fileName="yf_insights.pdf"
+      >
+        {({ loading }) =>
+          loading ? (
+            <button className="mt-4 bg-primary  text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+              Loading Document...
+            </button>
+          ) : (
+            <button className="mt-4 bg-primary  text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+              Download as PDF
+            </button>
+          )
+        }
+      </PDFDownloadLink>
       <div
         className="pt-10 grid grid-cols-1 place-items-center"
         id="yf-insights-content"
       >
         {yfInsights.length > 0 ? (
-          yfInsights.map((insights, index) => (
-            <YfInsightComponent key={index} insight={insights} />
-          ))
+          yfInsights.map((insights, index) => {
+            if (insights.approved)
+              return <YfInsightComponent key={index} insight={insights} />;
+          })
         ) : (
           <h1 className="text-center text-4xl text-gray-500 font-semibold">
             No Data Available

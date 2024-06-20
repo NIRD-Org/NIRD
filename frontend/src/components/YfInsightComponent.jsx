@@ -22,17 +22,23 @@ const YfInsightComponent = ({ insight }) => {
           <div className="font-bold">Financial Year:</div>
           <div>{insight.financialYear}</div>
 
-          <div className="font-bold self-center">Achievement:</div>
+          <div className="font-bold">Plan Of Action:</div>
+          <div>{insight.planOfAction}</div>
+
+          <div className="font-bold">Achievement:</div>
+          <div>{insight.achievement}</div>
+
+          <div className="font-bold self-center">Achievement Picture:</div>
           <div className="max-w-xs">
             <img
-              src={insight.achievement}
+              src={insight.achievementPhoto}
               alt="Achievement"
               className="w-min h-auto "
             />
           </div>
 
           <div className="font-bold">Failures:</div>
-          <div>{insight.failures}</div>
+          <div>{insight.failure}</div>
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
-import {v2 as cloudinary} from 'cloudinary';
-import streamifier from 'streamifier';
+import { v2 as cloudinary } from "cloudinary";
+import streamifier from "streamifier";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -12,20 +12,23 @@ cloudinary.config({
 export const uploadImage = async (buffer, width) => {
   try {
     return new Promise((resolve, reject) => {
-      const cld_upload_stream = cloudinary.uploader.upload_stream({ 
-        resource_type: "image",
-        folder: "user/uploads",
-        format: 'webp' 
-      }, (error, result) => {
-        if (error) {
-          console.error(error);
-          reject(error);
-        } else {
-          console.log(result);
-          resolve(result);
+      const cld_upload_stream = cloudinary.uploader.upload_stream(
+        {
+          resource_type: "image",
+          folder: "user/uploads",
+          format: "jpg",
+        },
+        (error, result) => {
+          if (error) {
+            console.error(error);
+            reject(error);
+          } else {
+            console.log(result);
+            resolve(result);
+          }
         }
-      });
-      
+      );
+
       streamifier.createReadStream(buffer).pipe(cld_upload_stream);
     });
   } catch (error) {
@@ -33,8 +36,6 @@ export const uploadImage = async (buffer, width) => {
     throw error;
   }
 };
-
-
 
 // response type
 // {
