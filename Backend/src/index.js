@@ -22,7 +22,7 @@ import fileUpload from "express-fileupload";
 const app = express();
 
 dotenv.config();
-app.use(cors());
+app.use(cors({ origin: "*" }));
 app.use(express.json());
 app.use(fileUpload({ limits: { fileSize: "10*1024*1024" } }));
 
