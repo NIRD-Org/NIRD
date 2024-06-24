@@ -37,7 +37,7 @@ const FellowInsightPage = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <AdminHeader>Fellow Insights</AdminHeader>
+      <AdminHeader>Young Fellow Insights</AdminHeader>
       <Table className="overscroll-x-scroll">
         <TableHeader>
           <TableRow>
