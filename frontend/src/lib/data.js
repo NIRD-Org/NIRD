@@ -378,7 +378,7 @@ export const sidebarItems = [
 export const getSidebarItems = user => {
   let sidebarItems;
 
-  if (user.username == "cprbolke") {
+  if (user.username == "cpr") {
     sidebarItems = sidebarItems = [
       {
         type: "module",
