@@ -560,7 +560,7 @@ export const getSidebarItems = user => {
         {
           type: "sub-module",
           icon: ArrowBigRight,
-          title: "Yonng Fellow Insight",
+          title: "Young Fellow Insight",
           link: "/admin/young-fellow-insight",
         },
       ];

@@ -174,12 +174,19 @@ const YoungFellowInsights = ({ update = false }) => {
       required: true,
     },
     {
+      label: "Financial Year",
+      name: "planOfAction",
+      type: "nothing",
+      maxLength: 200,
+      required: true,
+    },
+    /*  {
       label: "Date of Submission",
       name: "dateOfSubmission",
       type: "date",
       maxLength: null,
       required: true,
-    },
+    }, */
     {
       label: "State",
       name: "state_id",
@@ -274,18 +281,19 @@ const YoungFellowInsights = ({ update = false }) => {
                   </option>
                 ))}
               </select>
+            ) : field.type === "nothing" ? (
+              <div className="mb-4">
+                <select
+                  className="p-2 border rounded w-full bg-white"
+                  required={!update}
+                >
+                  <option value="FY 2023-24">FY 2023-24</option>
+                </select>
+              </div>
             ) : null}
           </div>
         ))}
-        <div className="mb-4">
-          <label className="block font-bold mb-2">Financial Year</label>
-          <select
-            className="p-2 border rounded w-full bg-white"
-            required={!update}
-          >
-            <option value="FY 2023-24">FY 2023-24</option>
-          </select>
-        </div>
+
         {!update ? (
           <div className="mb-4">
             <label className="block font-bold mb-2">Achievement Photo</label>
@@ -294,6 +302,7 @@ const YoungFellowInsights = ({ update = false }) => {
               accept="image/*"
               onChange={handleFileChange}
               required={!update}
+              className="block"
             />
             <small>
               Upload a photo that demonstrates your achievements in the last
@@ -310,11 +319,20 @@ const YoungFellowInsights = ({ update = false }) => {
             />
           </div>
         )}
-        <div className="col-span-3 text-right">
-          <Button type="submit" className="px-20">
+        {<div className="cols-span-2"></div>}
+          <div>
+            <label className="block font-bold mb-2">Date of Submission</label>
+            <Input
+              type="date"
+              name={"dateOfSubmission"}
+              value={formData["dateOfSubmission"]}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <Button type="submit" className="px-20 self-end ">
             {update ? "Approve" : "Submit"}
           </Button>
-        </div>
       </form>
     </div>
   );
