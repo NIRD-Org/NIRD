@@ -319,9 +319,9 @@ const YoungFellowInsights = ({ update = false }) => {
             />
           </div>
         )}
-        {<div className="cols-span-2"></div>}
+        <div></div>
           <div>
-            <label className="block font-bold mb-2">Date of Submission</label>
+            <label className="block font-bold mb-2 ">Date of Submission</label>
             <Input
               type="date"
               name={"dateOfSubmission"}
@@ -330,6 +330,8 @@ const YoungFellowInsights = ({ update = false }) => {
               required
             />
           </div>
+          <div></div>
+          <div></div>
           <Button type="submit" className="px-20 self-end ">
             {update ? "Approve" : "Submit"}
           </Button>
