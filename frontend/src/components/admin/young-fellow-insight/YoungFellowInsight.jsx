@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+﻿﻿import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import API from "@/utils/API";
 import { Button } from "@/components/ui/button";
 import AdminHeader from "../AdminHeader";
-import { dummyData } from "./data";
 import { tst } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -129,9 +128,22 @@ const YoungFellowInsights = ({ update = false }) => {
     fetchGrams();
   }, [formData.block_id]);
 
+  const countWords = text => {
+    return text.trim().split(/\s+/).length;
+  };
+
   const handleInputChange = e => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    let maxWords = 0;
+    if (name === "achievement") maxWords = 300;
+    if (name === "failure") maxWords = 200;
+    if (name === "planOfAction") maxWords = 200;
+
+    if (countWords(value) <= maxWords) {
+      setFormData(prev => ({ ...prev, [name]: value }));
+    } else {
+      alert(`The ${name} field cannot exceed ${maxWords} words.`);
+    }
   };
 
   const handleFileChange = e => {
@@ -163,30 +175,20 @@ const YoungFellowInsights = ({ update = false }) => {
       label: "Young Fellow Name",
       name: "name",
       type: "text",
-      maxLength: null,
       required: true,
     },
     {
       label: "Date of Joining",
       name: "dateOfJoining",
       type: "date",
-      maxLength: null,
       required: true,
     },
     {
       label: "Financial Year",
       name: "planOfAction",
       type: "nothing",
-      maxLength: 200,
       required: true,
     },
-    /*  {
-      label: "Date of Submission",
-      name: "dateOfSubmission",
-      type: "date",
-      maxLength: null,
-      required: true,
-    }, */
     {
       label: "State",
       name: "state_id",
@@ -219,21 +221,18 @@ const YoungFellowInsights = ({ update = false }) => {
       label: "Achievements",
       name: "achievement",
       type: "textarea",
-      maxLength: 300,
       required: true,
     },
     {
       label: "Failures",
       name: "failure",
       type: "textarea",
-      maxLength: 200,
       required: true,
     },
     {
       label: "Plan of Action for FY 2024-25",
       name: "planOfAction",
       type: "textarea",
-      maxLength: 200,
       required: true,
     },
   ];
@@ -261,10 +260,12 @@ const YoungFellowInsights = ({ update = false }) => {
                   name={field.name}
                   value={formData[field.name]}
                   onChange={handleInputChange}
-                  maxLength={field.maxLength}
                   required={field.required}
                 ></Textarea>
-                <small>Maximum {field.maxLength} words</small>
+                <small>
+                  Maximum words: {field.name === "achievement" ? 300 : 200} (
+                  {countWords(formData[field.name])} words used)
+                </small>
               </>
             ) : field.type === "select" ? (
               <select
@@ -320,21 +321,21 @@ const YoungFellowInsights = ({ update = false }) => {
           </div>
         )}
         <div></div>
-          <div>
-            <label className="block font-bold mb-2 ">Date of Submission</label>
-            <Input
-              type="date"
-              name={"dateOfSubmission"}
-              value={formData["dateOfSubmission"]}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          <div></div>
-          <div></div>
-          <Button type="submit" className="px-20 self-end ">
-            {update ? "Approve" : "Submit"}
-          </Button>
+        <div>
+          <label className="block font-bold mb-2 ">Date of Submission</label>
+          <Input
+            type="date"
+            name={"dateOfSubmission"}
+            value={formData["dateOfSubmission"]}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div></div>
+        <div></div>
+        <Button type="submit" className="px-20 self-end ">
+          {update ? "Approve" : "Submit"}
+        </Button>
       </form>
     </div>
   );
