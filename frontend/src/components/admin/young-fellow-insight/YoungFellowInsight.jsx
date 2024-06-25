@@ -99,7 +99,11 @@ const YoungFellowInsights = ({ update = false }) => {
             blocks: response.data.blocks || [],
           }));
           if (!update)
-            setFormData(prevData => ({ ...prevData, block_id: "", gp_id: "" }));
+            setFormData(prevData => ({
+              ...prevData,
+              block_id: "",
+              gp_id: "",
+            }));
         } catch (error) {
           console.error("Failed to fetch blocks.");
         }
@@ -119,7 +123,11 @@ const YoungFellowInsights = ({ update = false }) => {
             ...prevData,
             gps: response.data.gram || [],
           }));
-          if (!update) setFormData(prevData => ({ ...prevData, gp_id: "" }));
+          if (!update)
+            setFormData(prevData => ({
+              ...prevData,
+              gp_id: "",
+            }));
         } catch (error) {
           console.log(error);
         }
@@ -129,20 +137,28 @@ const YoungFellowInsights = ({ update = false }) => {
   }, [formData.block_id]);
 
   const countWords = text => {
-    return text.trim().split(/\s+/).length;
+    return text.trim().split(/\s+/).filter(Boolean).length;
   };
 
   const handleInputChange = e => {
     const { name, value } = e.target;
-    let maxWords = 0;
-    if (name === "achievement") maxWords = 300;
-    if (name === "failure") maxWords = 200;
-    if (name === "planOfAction") maxWords = 200;
 
-    if (countWords(value) <= maxWords) {
-      setFormData(prev => ({ ...prev, [name]: value }));
+    if (
+      name === "achievement" ||
+      name === "failure" ||
+      name === "planOfAction"
+    ) {
+      let maxWords = 0;
+      if (name === "achievement") maxWords = 300;
+      if (name === "failure" || name === "planOfAction") maxWords = 200;
+
+      if (countWords(value) <= maxWords) {
+        setFormData(prev => ({ ...prev, [name]: value }));
+      } else {
+        alert(`The ${name} field cannot exceed ${maxWords} words.`);
+      }
     } else {
-      alert(`The ${name} field cannot exceed ${maxWords} words.`);
+      setFormData(prev => ({ ...prev, [name]: value }));
     }
   };
 
@@ -262,10 +278,14 @@ const YoungFellowInsights = ({ update = false }) => {
                   onChange={handleInputChange}
                   required={field.required}
                 ></Textarea>
-                <small>
-                  Maximum words: {field.name === "achievement" ? 300 : 200} (
-                  {countWords(formData[field.name])} words used)
-                </small>
+                {["achievement", "failure", "planOfAction"].includes(
+                  field.name
+                ) && (
+                  <small>
+                    Maximum words: {field.name === "achievement" ? 300 : 200} (
+                    {countWords(formData[field.name])} words used)
+                  </small>
+                )}
               </>
             ) : field.type === "select" ? (
               <select

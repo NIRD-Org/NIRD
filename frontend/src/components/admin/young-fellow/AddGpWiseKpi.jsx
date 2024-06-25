@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+﻿import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -31,7 +31,10 @@ function AddGpWiseKpi({ update }) {
   const [date, setDate] = useState(null);
   const { user } = useAuthContext();
   const [isLoading, setIsLoading] = useState(false);
-
+  const [financialYear, setFinancialYear] = useState("");
+  const [frequency, setFrequency] = useState("");
+  const [month, setMonth] = useState("");
+  const [quarter, setQuarter] = useState("");
   useEffect(() => {
     const fetchKpis = async () => {
       try {
@@ -235,7 +238,7 @@ function AddGpWiseKpi({ update }) {
 
   const handleChange = (e, index) => {
     const { name, value } = e.target;
-    setFormData((prevData) => {
+    setFormData(prevData => {
       const updatedData = [...prevData];
       updatedData[index] = {
         ...updatedData[index],
@@ -260,7 +263,7 @@ function AddGpWiseKpi({ update }) {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
 
     let updatedFormData = kpis.map((item, index) => {
@@ -306,6 +309,90 @@ function AddGpWiseKpi({ update }) {
         </div>
         <YfLayout />
         <form onSubmit={handleSubmit} className="overflow-x-auto mt-10">
+          <div className="mb-4 grid grid-cols-1 md:grid-cols-3 gap-10">
+            <div className="mb-4">
+              <Label htmlFor="financialYear">Financial Year</Label>
+              <select
+                id="financialYear"
+                name="financialYear"
+                value={financialYear}
+                onChange={e => setFinancialYear(e.target.value)}
+                className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
+              >
+                <option value="">Select Financial Year</option>
+                {Array.from({ length: 30 }, (_, i) => {
+                  const startYear = 2021 + i;
+                  const endYear = startYear + 1;
+                  return (
+                    <option key={i} value={`FY${startYear}-${endYear}`}>
+                      FY{startYear}-{endYear}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+
+            <div className="mb-4">
+              <Label htmlFor="frequency">Frequency</Label>
+              <select
+                id="frequency"
+                name="frequency"
+                value={frequency}
+                onChange={e => setFrequency(e.target.value)}
+                className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
+              >
+                <option value="">Select Frequency</option>
+                <option value="Monthly">Monthly</option>
+                <option value="Quarterly">Quarterly</option>
+              </select>
+            </div>
+
+            {frequency === "Monthly" && (
+              <div className="mb-4">
+                <Label htmlFor="month">Month</Label>
+                <select
+                  id="month"
+                  name="month"
+                  value={month}
+                  onChange={e => setMonth(e.target.value)}
+                  className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
+                >
+                  <option value="">Select Month</option>
+                  <option value="January">January</option>
+                  <option value="February">February</option>
+                  <option value="March">March</option>
+                  <option value="April">April</option>
+                  <option value="May">May</option>
+                  <option value="June">June</option>
+                  <option value="July">July</option>
+                  <option value="August">August</option>
+                  <option value="September">September</option>
+                  <option value="October">October</option>
+                  <option value="November">November</option>
+                  <option value="December">December</option>
+                </select>
+              </div>
+            )}
+
+            {frequency === "Quarterly" && (
+              <div className="mb-4">
+                <Label htmlFor="quarter">Quarter</Label>
+                <select
+                  id="quarter"
+                  name="quarter"
+                  value={quarter}
+                  onChange={e => setQuarter(e.target.value)}
+                  className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
+                >
+                  <option value="">Select Quarter</option>
+                  <option value="Q1">Q1</option>
+                  <option value="Q2">Q2</option>
+                  <option value="Q3">Q3</option>
+                  <option value="Q4">Q4</option>
+                </select>
+              </div>
+            )}
+          </div>
           <div>
             <Table>
               <TableHeader>
@@ -343,7 +430,7 @@ function AddGpWiseKpi({ update }) {
                           value={
                             isDisabled ? "0" : formData[index]?.max_range || ""
                           }
-                          onChange={(e) => handleChange(e, index)}
+                          onChange={e => handleChange(e, index)}
                         />
                       </TableCell>
                       <TableCell>
@@ -354,7 +441,7 @@ function AddGpWiseKpi({ update }) {
                             type="number"
                             name="input_data"
                             value={formData[index]?.input_data || ""}
-                            onChange={(e) => handleChange(e, index)}
+                            onChange={e => handleChange(e, index)}
                           />
                         ) : (
                           <Input
@@ -362,7 +449,7 @@ function AddGpWiseKpi({ update }) {
                             type="number"
                             name="input_data"
                             value={formData[index]?.input_data || ""}
-                            onChange={(e) => handleChange(e, index)}
+                            onChange={e => handleChange(e, index)}
                           />
                         )}
                       </TableCell>
@@ -372,7 +459,7 @@ function AddGpWiseKpi({ update }) {
                           type="number"
                           name="score"
                           value={formData[index]?.score || "0"}
-                          onChange={(e) => handleChange(e, index)}
+                          onChange={e => handleChange(e, index)}
                         />
                       </TableCell>
                       <TableCell>
@@ -380,7 +467,7 @@ function AddGpWiseKpi({ update }) {
                           type="text"
                           name="remarks"
                           value={formData[index]?.remarks || ""}
-                          onChange={(e) => handleChange(e, index)}
+                          onChange={e => handleChange(e, index)}
                         />
                       </TableCell>
                     </TableRow>
@@ -397,7 +484,7 @@ function AddGpWiseKpi({ update }) {
               type="date"
               name="date"
               value={date || ""}
-              onChange={(e) => setDate(e.target.value)}
+              onChange={e => setDate(e.target.value)}
               id="date"
               placeholder="Enter date"
               className="px-10"

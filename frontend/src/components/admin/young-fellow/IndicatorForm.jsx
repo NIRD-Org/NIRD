@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,7 @@ function IndicatorForm({ type = "add" }) {
     block_id: "",
     gp_id: "",
     date: "",
+    financialYear: "", // Add this line
   });
   const [indicatorFormData, setIndicatorFormData] = useState([]);
 
@@ -205,6 +206,17 @@ function IndicatorForm({ type = "add" }) {
       options: gp.map((gp) => ({ value: gp.id, label: gp.name })),
       required: true,
     },
+    {
+      name: "financialYear", // Add this field
+      label: "Financial Year",
+      type: "select",
+      options: Array.from({ length: 30 }, (_, i) => {
+        const startYear = 2021 + i;
+        const endYear = startYear + 1;
+        return { value: `FY${startYear}-${endYear}`, label: `FY${startYear}-${endYear}` };
+      }),
+      required: true,
+    },
   ];
 
   const resetForm = () => {
@@ -215,6 +227,7 @@ function IndicatorForm({ type = "add" }) {
       dist_id: "",
       block_id: "",
       gp_id: "",
+      financialYear: "", // Reset this field
     }));
   };
 
@@ -334,7 +347,7 @@ function IndicatorForm({ type = "add" }) {
                   value={formData.date || ""}
                   onChange={handleFormChange}
                   id="date"
-                  placeholder="Enter datte"
+                  placeholder="Enter date"
                   className="px-10"
                 />
               </div>
