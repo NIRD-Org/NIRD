@@ -4,6 +4,7 @@ import Themes from "@/components/KIP/Themes";
 import ThemeFilters from "@/components/ThemeFilters";
 import ThemeFilter from "@/components/admin/filter/ThemeFilter";
 import API from "@/utils/API";
+import { ArrowRight } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 const GoodPractices = () => {
@@ -86,18 +87,19 @@ const GoodPractices = () => {
   return (
     <div className="px-5  py-8 md:px-20 md:py-10">
       {/* Header */}
-      <div className="flex pb-16 justify-between">
+      <div className="flex flex-col sm:flex-row pb-16 gap-5 justify-between">
         <div>
           <h1 className="text-5xl md:text-6xl text-primary font-bold">
             Good Practices
           </h1>
         </div>
-        <button className="text-center py-1 px-4 bg-primary text-white font-semibold">
+        <button className="text-center text-md py-2 px-4 bg-primary text-white font-semibold flex items-center justify-between">
           Explore All Good Practices
+          <ArrowRight />
         </button>
       </div>
       {/* Info Section */}
-      <div className="w-full bg-white p-10 rounded flex flex-col md:flex-row justify-between gap-5">
+      <div className="w-full bg-white p-2 md:p-10 rounded flex flex-col md:flex-row justify-between gap-5">
         {/* Carousel */}
         <div className=" w-full md:w-4/6">
           <CarouselComponent />

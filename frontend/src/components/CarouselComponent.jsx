@@ -35,16 +35,19 @@ const CarouselComponent = () => {
         "https://abp.championsofchange.gov.in/wp-content/uploads/2023/07/Agri_PB_4.png",
       content:
         "Black Rice: Transforming Chandauli District’s Agriculture and Farmers’ Livelihoods",
+      theme: "Poverty Free and Enhanced Livelihoods Village",
     },
     {
       image:
         "https://abp.championsofchange.gov.in/wp-content/uploads/2023/07/GG_Energy_SE_3.png",
       content: "Palli Village – India’s First Carbon-Neutral Panchayat",
+      theme: "Poverty Free and Enhanced Livelihoods Village",
     },
     {
       image:
         "https://abp.championsofchange.gov.in/wp-content/uploads/2023/07/Health_UP_5.png",
       content: "Empowering Communities to Combat Child Malnutrition",
+      theme: "Poverty Free and Enhanced Livelihoods Village",
     },
   ];
   return (
@@ -61,16 +64,19 @@ const CarouselComponent = () => {
           {carouselItems.map((item, index) => (
             <CarouselItem key={index}>
               <Card>
-                <CardContent className="relative w-full flex aspect-auto items-center justify-center p-0 rounded">
+                <CardContent className="relative w-full flex items-center justify-center p-0 rounded">
                   <img
                     src={item.image}
                     alt={item.content}
-                    className="w-full h-full rounded object-center object-cover"
+                    className="w-fit h-full rounded object-center object-cover"
                   />
-                  <div className="absolute bottom-0 left-0 w-full bg-black bg-opacity-50 text-white p-4">
-                    <span className="text-lg px-5 font-semibold">
+                  <div className="absolute bottom-0 left-0 w-full bg-black bg-opacity-60 text-white py-4 md:px-10 px-4">
+                    <p className="text-xs rounded-lg w-fit text-white bg-primary px-1 md:px-5 py-2 md:py-1 font-medium">
+                      {item.theme}
+                    </p>
+                    <p className="text-xs md:text-lg pt-2 px-3 font-semibold">
                       {item.content}
-                    </span>
+                    </p>
                   </div>
                 </CardContent>
               </Card>
