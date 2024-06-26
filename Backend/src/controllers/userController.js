@@ -4,18 +4,19 @@ import { Errorhandler } from "../utils/errorHandler.js";
 
 export const getAllUsers = CatchAsyncError(async (req, res, next) => {
   try {
-    const filter = {status: {$ne: 0}};
-    const {role} = req.query;
+    const filter = {};
 
-    if(role) filter.role = role;
+    const { role, status } = req.query;
+    if (role) filter.role = role;
+    if (status != "all") filter.status = { $ne: 0 };
 
     const users = await User.find(filter);
-    res.status(200).json({data:users});
+    res.status(200).json({ data: users });
   } catch (err) {
+    console.log(err);
     return next(new Errorhandler("failed to get users data", 500));
   }
 });
-
 
 export const getUserById = CatchAsyncError(async (req, res, next) => {
   try {
@@ -23,12 +24,11 @@ export const getUserById = CatchAsyncError(async (req, res, next) => {
     if (!user) {
       return next(new Errorhandler("User not found", 404));
     }
-    res.status(200).json({data: user});
+    res.status(200).json({ data: user });
   } catch (err) {
     return next(new Errorhandler("Failed to get user data", 500));
   }
 });
-
 
 export const deleteUser = CatchAsyncError(async (req, res, next) => {
   try {
@@ -49,14 +49,11 @@ export const deleteUser = CatchAsyncError(async (req, res, next) => {
   }
 });
 
-
 export const updateUser = CatchAsyncError(async (req, res, next) => {
   try {
-    const user = await User.findOneAndUpdate(
-      { id: req.params.id },
-      req.body,
-      { new: true }
-    );
+    const user = await User.findOneAndUpdate({ id: req.params.id }, req.body, {
+      new: true,
+    });
     if (!user) {
       return next(new Errorhandler("User not found", 404));
     }

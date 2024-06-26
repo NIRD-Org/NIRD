@@ -50,45 +50,55 @@ const UserList = ({ role }) => {
               <TableCell className="space-x-4">
                 {role == 2 ? (
                   <>
-                    <Link
-                      to={`/admin/user-location/assign/admin/${user.id}`}
-                      className="text-blue-600 hover:underline"
-                    >
-                      Assign
-                    </Link>
-                    <Link
-                      to={`/admin/user-location/update/admin/${user.id}`}
-                      className="text-blue-600 hover:underline"
-                    >
-                      Update
-                    </Link>
-                    <Link
-                      to={`/admin/user-location/view/admin/${user.id}`}
-                      className="text-blue-600 hover:underline"
-                    >
-                      View
-                    </Link>
+                    {!user.location_assigned ? (
+                      <Link
+                        to={`/admin/user-location/assign/admin/${user.id}`}
+                        className="text-blue-600 hover:underline"
+                      >
+                        Assign
+                      </Link>
+                    ) : (
+                      <>
+                        <Link
+                          to={`/admin/user-location/update/admin/${user.id}`}
+                          className="text-blue-600 hover:underline"
+                        >
+                          Update
+                        </Link>
+                        <Link
+                          to={`/admin/user-location/view/admin/${user.id}`}
+                          className="text-blue-600 hover:underline"
+                        >
+                          View
+                        </Link>
+                      </>
+                    )}
                   </>
                 ) : (
                   <>
-                    <Link
-                      to={`/admin/user-location/assign/young-fellow/${user.id}`}
-                      className="text-blue-600 hover:underline"
-                    >
-                      Assign
-                    </Link>
-                    <Link
-                      to={`/admin/user-location/update/young-fellow/${user.id}`}
-                      className="text-blue-600 hover:underline"
-                    >
-                      Update
-                    </Link>
-                    <Link
-                      to={`/admin/user-location/view/young-fellow/${user.id}`}
-                      className="text-blue-600 hover:underline"
-                    >
-                      View
-                    </Link>
+                    {!user.location_assigned ? (
+                      <Link
+                        to={`/admin/user-location/assign/young-fellow/${user.id}`}
+                        className="text-blue-600 hover:underline"
+                      >
+                        Assign
+                      </Link>
+                    ) : (
+                      <>
+                        <Link
+                          to={`/admin/user-location/update/young-fellow/${user.id}`}
+                          className="text-blue-600 hover:underline"
+                        >
+                          Update
+                        </Link>
+                        <Link
+                          to={`/admin/user-location/view/young-fellow/${user.id}`}
+                          className="text-blue-600 hover:underline"
+                        >
+                          View
+                        </Link>
+                      </>
+                    )}
                   </>
                 )}
               </TableCell>

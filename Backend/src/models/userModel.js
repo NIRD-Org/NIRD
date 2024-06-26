@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
   srlm_state: { type: String },
   count: { type: Number },
   outer_checkbox: { type: Number },
-  status: { type: String },
+  status: { type: String, default: 1 },
 
   created_at: { type: Date, default: Date.now },
   modified_at: { type: Date, default: Date.now },

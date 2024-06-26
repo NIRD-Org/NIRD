@@ -46,8 +46,13 @@ export const createKPI = CatchAsyncError(async (req, res, next) => {
 
 export const getAllKPI = CatchAsyncError(async (req, res, next) => {
   try {
+    const filter = {};
+    const { status } = req.query;
+    console.log(status)
+    if (status != "all") filter.status = { $ne: "0" };
+
     const KPI = await KPIModel.aggregate([
-      { $match: {} },
+      { $match: filter },
       {
         $lookup: {
           from: "themes",
@@ -70,6 +75,7 @@ export const getAllKPI = CatchAsyncError(async (req, res, next) => {
           max_range: 1,
           kpi_type: 1,
           weightage: 1,
+          status: 1,
         },
       },
     ]);
@@ -82,6 +88,7 @@ export const getAllKPI = CatchAsyncError(async (req, res, next) => {
       KPI,
     });
   } catch (error) {
+    console.log(error);
     next(new Errorhandler("Failed to get KPI"));
   }
 });
@@ -115,7 +122,11 @@ export const getKPIByTheme = CatchAsyncError(async (req, res, next) => {
 
 export const deleteKPI = CatchAsyncError(async (req, res, next) => {
   try {
-    await KPIModel.findOneAndDelete({ id: req.params.id });
+    await KPIModel.findOneAndUpdate(
+      { id: req.params.id },
+      { status: "0" },
+      { new: true }
+    );
     res.status(200).json({
       success: true,
       message: "KPI Deleted Successfully",

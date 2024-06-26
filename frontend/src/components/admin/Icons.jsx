@@ -1,5 +1,5 @@
 import React from "react";
-import { Edit, Trash,HamIcon,List,Eye,Download} from "lucide-react";
+import { Edit, Trash,HamIcon,List,Eye,Download ,Ban} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const NirdEditIcon = ({ props }) => (
@@ -21,4 +21,8 @@ export const NirdViewIcon = ({ props }) => (
 
 export const NirdDownloadIcon = ({ props }) => (
   <Download {...props} className={cn("hover:cursor-pointer", "text-primary")} />
+);
+
+export const NirdBanIcon = ({ props }) => (
+  <Ban {...props} className={cn("hover:cursor-pointer", "text-red-700")} />
 );

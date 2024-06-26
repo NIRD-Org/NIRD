@@ -11,7 +11,12 @@ import API from "@/utils/API";
 import { Link, useSearchParams } from "react-router-dom";
 import { useAuthContext } from "@/context/AuthContext";
 import AdminHeader from "../AdminHeader";
-import { NirdDeleteIcon, NirdEditIcon, NirdViewIcon } from "../Icons";
+import {
+  NirdBanIcon,
+  NirdDeleteIcon,
+  NirdEditIcon,
+  NirdViewIcon,
+} from "../Icons";
 import StateFilter from "../filter/StateFilter";
 
 const UserPage = () => {
@@ -23,16 +28,16 @@ const UserPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const stateId = searchParams.get("state_id") || "";
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const { data } = await API.get(`/api/v1/users/all`);
-        setUsers(data.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  const fetchUser = async () => {
+    try {
+      const { data } = await API.get(`/api/v1/users/all?status=all`);
+      setUsers(data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
+  useEffect(() => {
     const fetchUserLocations = async () => {
       try {
         const { data } = await API.get(`/api/v1/user-location/all`);
@@ -45,14 +50,14 @@ const UserPage = () => {
     fetchUser();
     fetchUserLocations();
   }, []);
-
+  // console.log(userLocations)
   const filteredUsers = users?.filter(user => {
     if (roleFilter && user.role !== roleFilter) {
       return false;
     }
     if (stateId) {
       const location = userLocations?.find(loc => loc.user_id === user.id);
-      if (location && location.userLocations.state_ids.includes(stateId)) {
+      if (location && location?.userLocations?.state_ids?.includes(stateId)) {
         return true;
       } else {
         return false;
@@ -70,7 +75,10 @@ const UserPage = () => {
     if (window.confirm("Are you sure you want to delete this user?")) {
       try {
         await API.delete(`/api/v1/users/${id}`);
-        setUsers(users.filter(user => user.id !== id));
+        const updatedUsers = users.map(user =>
+          user.id === id ? { ...user, status: "0" } : user
+        );
+        setUsers(updatedUsers);
       } catch (error) {
         console.log(error);
       }
@@ -130,21 +138,29 @@ const UserPage = () => {
                   : "Young Fellow"}
               </TableCell>
               <TableCell className="flex gap-4 ">
-                <Link
-                  to={`/admin/users/view/${user.id}`}
-                  className="hover:text-blue-600"
-                >
-                  <NirdViewIcon />
-                </Link>
-                <Link
-                  to={`/admin/users/update/${user.id}/`}
-                  className="hover:text-blue-600"
-                >
-                  <NirdEditIcon />
-                </Link>
-                <div onClick={() => handleDelete(user.id)}>
-                  <NirdDeleteIcon />
-                </div>
+                {user.status == 0 ? (
+                  <div>
+                    <NirdBanIcon />
+                  </div>
+                ) : (
+                  <>
+                    <Link
+                      to={`/admin/users/view/${user.id}`}
+                      className="hover:text-blue-600"
+                    >
+                      <NirdViewIcon />
+                    </Link>
+                    <Link
+                      to={`/admin/users/update/${user.id}/`}
+                      className="hover:text-blue-600"
+                    >
+                      <NirdEditIcon />
+                    </Link>
+                    <div onClick={() => handleDelete(user.id)}>
+                      <NirdDeleteIcon />
+                    </div>
+                  </>
+                )}
               </TableCell>
             </TableRow>
           ))}

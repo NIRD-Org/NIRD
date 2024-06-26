@@ -11,7 +11,12 @@ import {
 import TableSkeleton from "@/components/ui/tableskeleton";
 import API from "@/utils/API";
 import { Link, useSearchParams } from "react-router-dom";
-import { NirdDeleteIcon, NirdEditIcon, NirdViewIcon } from "../Icons";
+import {
+  NirdBanIcon,
+  NirdDeleteIcon,
+  NirdEditIcon,
+  NirdViewIcon,
+} from "../Icons";
 import AdminHeader from "../AdminHeader";
 import ThemeFilter from "../filter/ThemeFilter";
 
@@ -24,7 +29,7 @@ const DataPointPage = () => {
   const getAllKpi = async () => {
     try {
       setIsLoading(true);
-      const { data } = await API.get(`/api/v1/kpi/all`);
+      const { data } = await API.get(`/api/v1/kpi/all?status=all`);
       if (theme_id) {
         setKpiData(data?.KPI.filter(kpi => kpi.theme_id === theme_id));
       } else {
@@ -51,6 +56,7 @@ const DataPointPage = () => {
       }
     }
   };
+
   return (
     <div className="container mx-auto p-4">
       <AdminHeader>All KPI</AdminHeader>
@@ -84,15 +90,21 @@ const DataPointPage = () => {
                 <TableCell>{kpi.input_type}</TableCell>
                 <TableCell>{kpi.weightage}</TableCell>
                 <TableCell className="flex gap-3 ">
-                  <Link to={`/admin/data-point/update/${kpi.id}`}>
-                    <NirdEditIcon />
-                  </Link>
-                  <Link to={`/admin/data-point/view/${kpi.id}`}>
-                    <NirdViewIcon />
-                  </Link>
-                  <div onClick={() => handleDelete(kpi.id)}>
-                    <NirdDeleteIcon />
-                  </div>
+                  {kpi.status != 0 ? (
+                    <>
+                      <Link to={`/admin/data-point/update/${kpi.id}`}>
+                        <NirdEditIcon />
+                      </Link>
+                      <Link to={`/admin/data-point/view/${kpi.id}`}>
+                        <NirdViewIcon />
+                      </Link>
+                      <div onClick={() => handleDelete(kpi.id)}>
+                        <NirdDeleteIcon />
+                      </div>
+                    </>
+                  ) : (
+                    <NirdBanIcon />
+                  )}
                 </TableCell>
               </TableRow>
             ))}

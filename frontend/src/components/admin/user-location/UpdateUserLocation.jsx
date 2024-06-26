@@ -167,7 +167,7 @@ const UpdateUserLocation = ({ view,role }) => {
     async function fetchUserLocation() {
       try {
         const response = await API.get(`/api/v1/user-location/${userId}`);
-        const data = response.data.userLocation.userLocations;
+        const data = response.data.data.userLocations;
         console.log(data);
         setState(prev => (prev = data.state_ids));
         setSelectedState(prev => (prev = data.state_ids));
