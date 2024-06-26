@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -7,18 +8,14 @@ import AdminHeader from "../AdminHeader";
 import { tst } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 
-function DataPointForm({ type = "add", onSubmit, kpi }) {
+function DataPointForm({ type = "add", onSubmit }) {
+  const { kpiId } = useParams();
   const [formData, setFormData] = useState({
-    id: kpi?.id || "",
-    theme_id: kpi?.theme_id || "",
-    kpi_name: kpi?.kpi_name || "",
-    max_range: kpi?.max_range || "",
-    input_type: kpi?.input_type || "",
-    status: kpi?.status || "",
-    weightage: kpi?.weightage || "",
-    created_by: kpi?.created_by || "",
-    modified_by: kpi?.modified_by || "",
-    flag: kpi?.flag || "",
+    theme_id: "",
+    kpi_name: "",
+    max_range: "",
+    input_type: "",
+    weightage: "",
   });
   const [themes, setThemes] = useState([]);
   const [pending, setPending] = useState(false);
@@ -36,15 +33,31 @@ function DataPointForm({ type = "add", onSubmit, kpi }) {
     getAllThemes();
   }, []);
 
-  const handleChange = e => {
+  useEffect(() => {
+    if (type === "update" && kpiId) {
+      const fetchKpiDetails = async () => {
+        try {
+          const { data } = await API.get(`/api/v1/kpi/${kpiId}`);
+          console.log(data)
+          setFormData(data?.kpi || {});
+        } catch (error) {
+          console.error("Failed to fetch KPI details.", error);
+        }
+      };
+
+      fetchKpiDetails();
+    }
+  }, [type, kpiId]);
+
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setPending(true);
     try {
@@ -52,7 +65,7 @@ function DataPointForm({ type = "add", onSubmit, kpi }) {
         await API.post("/api/v1/kpi/create", formData);
         tst.success("KPI created successfully");
       } else {
-        await API.put(`/api/v1/kpi/${formData.id}`, formData);
+        await API.put(`/api/v1/kpi/${kpiId}`, formData);
         tst.success("KPI updated successfully");
       }
     } catch (error) {
@@ -67,7 +80,10 @@ function DataPointForm({ type = "add", onSubmit, kpi }) {
       name: "theme_id",
       label: "Theme",
       type: "select",
-      options: themes.map(theme => ({ value: theme.id, label: theme.theme_name })),
+      options: themes.map((theme) => ({
+        value: theme.id,
+        label: theme.theme_name,
+      })),
       required: true,
     },
     { name: "name", label: "KPI Name", type: "textarea", required: true },
@@ -101,17 +117,17 @@ function DataPointForm({ type = "add", onSubmit, kpi }) {
       required: true,
     },
     {
-      name: "score",
+      name: "score_rules",
       label: "Score",
-      type: "number",
+      type: "textarea",
       required: true,
     },
     {
-        name: "Remark",
-        label: "Remark",
-        type: "textarea",
-        required: true,
-      },
+      name: "remark",
+      label: "Remark",
+      type: "textarea",
+      // required: true,
+    },
   ];
 
   return (
@@ -127,20 +143,45 @@ function DataPointForm({ type = "add", onSubmit, kpi }) {
                 </Label>
                 {required && <span className="text-red-500 ml-1">*</span>}
                 {type === "select" ? (
-                  <select required={required} disabled={pending} className="bg-white w-full col-span-3 px-4 py-2 rounded-md bg-transparent border" value={formData[name]} name={name} onChange={handleChange}>
+                  <select
+                    required={required}
+                    disabled={pending}
+                    className="bg-white w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
+                    value={formData[name]}
+                    name={name}
+                    onChange={handleChange}
+                  >
                     <option value="" disabled>
                       Select {label}
                     </option>
-                    {options.map(option => (
+                    {options.map((option) => (
                       <option key={option.value} value={option.value}>
                         {option.label}
                       </option>
                     ))}
                   </select>
                 ) : type === "textarea" ? (
-                  <Textarea required={required} disabled={pending} name={name} value={formData[name]} onChange={handleChange} id={name} placeholder={`Enter ${label}`} />
+                  <Textarea
+                    required={required}
+                    disabled={pending}
+                    name={name}
+                    value={formData[name]}
+                    onChange={handleChange}
+                    id={name}
+                    placeholder={`Enter ${label}`}
+                  />
                 ) : (
-                  <Input required={required} disabled={pending} type={type} name={name} value={formData[name]} onChange={handleChange} id={name} placeholder={`Enter ${label}`} className="col-span-3" />
+                  <Input
+                    required={required}
+                    disabled={pending}
+                    type={type}
+                    name={name}
+                    value={formData[name]}
+                    onChange={handleChange}
+                    id={name}
+                    placeholder={`Enter ${label}`}
+                    className="col-span-3"
+                  />
                 )}
               </div>
             ))}

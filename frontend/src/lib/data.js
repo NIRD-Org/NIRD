@@ -413,6 +413,12 @@ export const getSidebarItems = user => {
         {
           type: "sub-module",
           icon: ArrowBigRight,
+          title: "Users",
+          link: "/admin/users/",
+        },
+        {
+          type: "sub-module",
+          icon: ArrowBigRight,
           title: "Admin location",
           link: "/admin/users/all/admin",
         },

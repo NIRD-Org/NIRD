@@ -36,6 +36,10 @@ const kpiSchema = new Schema(
       type: String,
       required: true,
     },
+    remark:{
+      type:String,
+      required:true
+    },
     status: {
       type: String,
       default: "1",

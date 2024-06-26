@@ -29,7 +29,7 @@ const StateFilter = ({ className }) => {
     <select
       className={cn(
         className,
-        "text-sm px-4 py-2 rounded-md bg-transparent border w-full"
+        "text-sm px-4 py-2 rounded-md bg-transparent border "
       )}
       value={state_id}
       onChange={handleStateChange}

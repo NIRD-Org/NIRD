@@ -4,19 +4,33 @@ import { User } from "../models/userModel.js";
 import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
 import { Errorhandler } from "../utils/errorHandler.js";
 
+
 const getNewId = async () => {
   try {
-    const maxDoc = await User.findOne().sort("-id").exec();
-    const maxId = parseInt(maxDoc ? maxDoc.id : 0);
+    const maxDoc = await User.aggregate([
+      {
+        $addFields: {
+          numericId: { $toInt: "$id" },
+        },
+      },
+      {
+        $sort: { numericId: -1 },
+      },
+      {
+        $limit: 1,
+      },
+    ]).exec();
+
+    const maxId = maxDoc.length > 0 ? maxDoc[0].numericId : 0;
     return maxId + 1;
   } catch (error) {
-    console.log(error);
+    return next(new Errorhandler("failed to get new id", 500));
   }
 };
 
 export const register = CatchAsyncError(async (req, res, next) => {
   try {
-    let user = await User.findOne({ email: req.body.username });
+    let user = await User.findOne({ username: req.body.username });
     if (user) {
       return next(new Errorhandler("User already exists", 400));
     }

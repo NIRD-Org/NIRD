@@ -28,14 +28,14 @@ const ThemeFilter = ({ className }) => {
 
   return (
     <select
-      className={cn(className, "text-sm px-4 py-2 rounded-md bg-transparent border  w-full")}
+      className={cn(className, "text-sm px-4 py-2 rounded-md bg-transparent border  w-max")}
       value={theme_id}
       onChange={handleThemeChange}
     >
-      <option value="">Select a theme</option>
+      <option value="">All</option>
       {themes.map((theme) => (
         <option key={theme.id} value={theme.id}>
-          {theme.name}
+          {theme.theme_name}
         </option>
       ))}
     </select>
