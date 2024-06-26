@@ -46,12 +46,12 @@ const UserPage = () => {
     fetchUserLocations();
   }, []);
 
-  const filteredUsers = users.filter(user => {
+  const filteredUsers = users?.filter(user => {
     if (roleFilter && user.role !== roleFilter) {
       return false;
     }
     if (stateId) {
-      const location = userLocations.find(loc => loc.user_id === user.id);
+      const location = userLocations?.find(loc => loc.user_id === user.id);
       if (location && location.userLocations.state_ids.includes(stateId)) {
         return true;
       } else {

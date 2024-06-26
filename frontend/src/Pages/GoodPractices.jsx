@@ -2,7 +2,7 @@ import CarouselComponent from "@/components/CarouselComponent";
 import GoodPracticesCard from "@/components/GoodPracticesCard";
 import Themes from "@/components/KIP/Themes";
 import ThemeFilters from "@/components/ThemeFilters";
-import ThemeFilter from "@/components/admin/filter/ThemeFitler";
+import ThemeFilter from "@/components/admin/filter/ThemeFilter";
 import API from "@/utils/API";
 import React, { useEffect, useState } from "react";
 
