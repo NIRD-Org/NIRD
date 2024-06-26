@@ -1,16 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {
-  DialogContent,
-  DialogHeader,
-  DialogFooter,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import API from "@/utils/API";
-import ThemeRow from "../theme/ThemeRow";
 import {
   Table,
   TableBody,
@@ -23,10 +13,10 @@ import {
 import StateFilter from "../filter/StateFilter";
 import DistrictFilter from "../filter/DistrictFilter";
 import BlockFilter from "../filter/BlockFilter";
-import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
 import GramFilter from "../filter/GramFilter";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuthContext } from "@/context/AuthContext";
+import TableSkeleton from "@/components/ui/tableskeleton";
 
 function YoungFellowForm({ type, onSubmit, kpiApproval }) {
   const { user } = useAuthContext();
@@ -77,11 +67,8 @@ function YoungFellowForm({ type, onSubmit, kpiApproval }) {
       setThemes([]);
     }
   }, [gram_id]);
-// console.log(user.role);
   const handleGpWiseKpiEdit = id => {
-    // console.log(user.role);
     navigate(`/admin/gp-wise-kpi?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${id}`);
-    // navigate(`/admin/add-gp-wise-kpi?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${id}`);
   };
 
   const resetForm = () => {

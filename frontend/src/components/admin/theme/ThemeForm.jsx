@@ -1,18 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import AdminHeader from "../AdminHeader";
-import { Textarea } from "@/components/ui/textarea";
 import API from "@/utils/API";
 import { tst } from "@/lib/utils";
+import { Textarea } from "@/components/ui/textarea";
 
-function ThemeForm({ type = "add", theme }) {
+function ThemeForm({ type = "add", onSubmit }) {
+  const { themeId } = useParams();
   const [formData, setFormData] = useState({
-    theme_name: theme?.theme_name || "",
+    theme_name: "",
   });
-
   const [pending, setPending] = useState(false);
+
+  useEffect(() => {
+    if (type === "update" && themeId) {
+      const fetchThemeDetails = async () => {
+        try {
+          const { data } = await API.get(`/api/v1/theme/${themeId}`);
+          setFormData(data?.theme || {});
+        } catch (error) {
+          console.error("Failed to fetch theme details.", error);
+        }
+      };
+
+      fetchThemeDetails();
+    }
+  }, [type, themeId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,7 +46,7 @@ function ThemeForm({ type = "add", theme }) {
         await API.post("/api/v1/theme/create", formData);
         tst.success("Theme created successfully");
       } else {
-        await API.put(`/api/v1/theme/${formData.id}`, formData);
+        await API.put(`/api/v1/theme/${themeId}`, formData);
         tst.success("Theme updated successfully");
       }
     } catch (error) {
@@ -40,23 +56,13 @@ function ThemeForm({ type = "add", theme }) {
     }
   };
 
-  const handleCreateTheme = async e => {
-    e.preventDefault();
-    try {
-      await API.post("/api/v1/theme/create", formData);
-      tst.success("Theme created successfully");
-    } catch (error) {
-      tst.error(error);
-    }
-  };
-
   const fields = [
     { name: "theme_name", label: "Theme Name", type: "text", required: true },
   ];
 
   return (
     <div className="container mx-auto p-6">
-      <form onSubmit={handleCreateTheme}>
+      <form onSubmit={handleSubmit}>
         <div className="py-4">
           <AdminHeader>{type === "add" ? "Add Theme" : "Update Theme"}</AdminHeader>
           <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3">
@@ -66,17 +72,29 @@ function ThemeForm({ type = "add", theme }) {
                   {label}
                 </Label>
                 {required && <span className="text-red-500 ml-1">*</span>}
-                <Textarea
-                  required={required}
-                  disabled={pending}
-                  type={type}
-                  name={name}
-                  value={formData[name]}
-                  onChange={handleChange}
-                  id={name}
-                  placeholder={`Enter ${label}`}
-                  className="col-span-3"
-                />
+                {type === "textarea" ? (
+                  <Textarea
+                    required={required}
+                    disabled={pending}
+                    name={name}
+                    value={formData[name]}
+                    onChange={handleChange}
+                    id={name}
+                    placeholder={`Enter ${label}`}
+                  />
+                ) : (
+                  <Input
+                    required={required}
+                    disabled={pending}
+                    type={type}
+                    name={name}
+                    value={formData[name]}
+                    onChange={handleChange}
+                    id={name}
+                    placeholder={`Enter ${label}`}
+                    className="col-span-3"
+                  />
+                )}
               </div>
             ))}
           </div>

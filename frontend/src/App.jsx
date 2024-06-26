@@ -107,6 +107,7 @@ function App() {
             <Route path="block/create" element={<BlockForm />} />
             <Route path="gram/create" element={<GpForm />} />
             <Route path="theme/create" element={<ThemeForm />} />
+            <Route path="theme/update/:themeId" element={<ThemeForm type={"update"}/>} />
             <Route path="indicator/create" element={<IndicatorForm />} />
             <Route path="data-point/create" element={<DataPointForm />} />
             <Route path="data-point/update/:kpiId" element={<DataPointForm  type="update"/>} />
