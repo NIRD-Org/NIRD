@@ -72,7 +72,7 @@ export const getUserLocation = CatchAsyncError(async (req, res, next) => {
       return next(new Errorhandler("No user locations data found", 404));
     }
 
-    res.status(200).json({ success: true, userLocation });
+    res.status(200).json({ success: true, data:userLocation });
   } catch (error) {
     return next(new Errorhandler("Failed to get user location", 500));
   }
@@ -91,7 +91,7 @@ export const getUserLocationById = CatchAsyncError(async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "User locations data fetched successfully",
-      userLocation,
+      data:userLocation,
     });
   } catch (error) {
     console.log("Error: " + error);

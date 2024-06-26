@@ -1,9 +1,16 @@
 import express from "express";
 import { isAuth } from "../middlewares/auth.js";
-import { getAllUsers } from "../controllers/userController.js";
+import {
+  getAllUsers,
+  getUserById,
+  deleteUser,
+  updateUser,
+} from "../controllers/userController.js";
 const router = express.Router();
 
 // router.use("/create", isAuth);
 router.get("/all", isAuth, getAllUsers);
-
+router.get("/:id", isAuth, getUserById);
+router.delete("/:id", isAuth, deleteUser);
+router.put("/:id", isAuth, updateUser);
 export default router;

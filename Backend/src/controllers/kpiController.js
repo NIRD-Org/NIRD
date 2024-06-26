@@ -46,8 +46,34 @@ export const createKPI = CatchAsyncError(async (req, res, next) => {
 
 export const getAllKPI = CatchAsyncError(async (req, res, next) => {
   try {
-    const KPI = await KPIModel.find({});
-    if (!KPI || KPI.length === 0) {
+    const KPI = await KPIModel.aggregate([
+      { $match: {} },
+      {
+        $lookup: {
+          from: "themes",
+          localField: "theme_id",
+          foreignField: "id",
+          as: "theme",
+        },
+      },
+      { $unwind: "$theme" },
+      {
+        $project: {
+          _id: 0,
+          id: 1,
+          name: 1,
+          theme_id: 1,
+          theme_name: "$theme.theme_name",
+          kpi_datapoint: 1,
+          description: 1,
+          input_type: 1,
+          max_range: 1,
+          kpi_type: 1,
+          weightage: 1,
+        },
+      },
+    ]);
+    if (!KPI) {
       return next(new Errorhandler("No KPI Found", 404));
     }
     res.status(200).json({
@@ -89,10 +115,7 @@ export const getKPIByTheme = CatchAsyncError(async (req, res, next) => {
 
 export const deleteKPI = CatchAsyncError(async (req, res, next) => {
   try {
-    const KPI = await KPIModel.findOneAndUpdate({ _id: req.params.id }, { status: "0" });
-    if (!KPI) {
-      return next(new Errorhandler("No KPI Found", 404));
-    }
+    await KPIModel.findOneAndDelete({ id: req.params.id });
     res.status(200).json({
       success: true,
       message: "KPI Deleted Successfully",
@@ -106,7 +129,10 @@ export const deleteKPI = CatchAsyncError(async (req, res, next) => {
 
 export const updateKPI = CatchAsyncError(async (req, res, next) => {
   try {
-    const KPI = await KPIModel.findOneAndUpdate({ _id: req.params.id }, req.body);
+    const KPI = await KPIModel.findOneAndUpdate(
+      { id: req.params.id },
+      req.body
+    );
     if (!KPI) {
       return next(new Errorhandler("No KPI Found", 404));
     }
@@ -130,5 +156,51 @@ export const insertManyKPI = CatchAsyncError(async (req, res, next) => {
     });
   } catch (error) {
     return next(new Errorhandler("Failed to create KPI", 500));
+  }
+});
+
+export const getKpiById = CatchAsyncError(async (req, res, next) => {
+  try {
+    const KPI = await KPIModel.aggregate([
+      { $match: { id: req.params.id } },
+      {
+        $lookup: {
+          from: "themes",
+          localField: "theme_id",
+          foreignField: "id",
+          as: "theme",
+        },
+      },
+      { $unwind: "$theme" },
+      {
+        $project: {
+          _id: 0,
+          id: 1,
+          name: 1,
+          theme_id: 1,
+          theme_name: "$theme.theme_name",
+          kpi_datapoint: 1,
+          description: 1,
+          input_type: 1,
+          max_range: 1,
+          kpi_type: 1,
+          weightage: 1,
+          score_rules: 1,
+        },
+      },
+    ]);
+
+    if (!KPI || KPI.length === 0) {
+      return next(new Errorhandler("KPI not found", 404));
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "KPI found successfully",
+      kpi: KPI[0],
+    });
+  } catch (error) {
+    console.error("Failed to get KPI by ID:", error);
+    return next(new Errorhandler("Failed to get KPI by ID", 500));
   }
 });

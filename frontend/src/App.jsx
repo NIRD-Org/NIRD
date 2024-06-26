@@ -33,8 +33,8 @@ import GpForm from "./components/admin/gp/GpForm";
 import ThemeForm from "./components/admin/theme/ThemeForm";
 import IndicatorForm from "./components/admin/young-fellow/IndicatorForm";
 import AdminMainPage from "./components/admin/AdminMainPage";
-import DataPointForm from "./components/admin/kpi/DataPointForm";
-import DataPointPage from "./components/admin/kpi/DataPointPage";
+import DataPointForm from "./components/admin/kpi/KpiForm";
+import DataPointPage from "./components/admin/kpi/KpiPage";
 import KpiApprovalsList from "./components/admin/young-fellow/KpiApprovalsList";
 import KpiApprovalSubmit from "./components/admin/young-fellow/KpiApprovalSubmit";
 import KpiApprovalView from "./components/admin/young-fellow/KpiApprovalView";
@@ -54,6 +54,9 @@ import GramPanchayatProfile from "./Pages/GramPanchayatProfile";
 import YoungFellowInsights from "./components/admin/young-fellow-insight/YoungFellowInsight";
 import FellowInsightPage from "./components/admin/young-fellow-insight/FellowInsightPage";
 import YfInsightsPage from "./Pages/YfInsightsPage";
+import KpiViewPage from "./components/admin/kpi/KpiViewPage";
+import UserPage from "./components/admin/users/UserPage";
+import UserView from "./components/admin/users/UserView";
 
 function App() {
   const { login } = useAuthContext();
@@ -89,6 +92,10 @@ function App() {
             <Route path="gp-wise-kpi" element={<GpWiseKpiList />} />
             <Route path="add-gp-wise-kpi" element={<AddGpWiseKpi />} />
             <Route path="update-gp-wise-kpi" element={<UpdateGpWiseKpi />} />
+            <Route path="users" element={<UserPage />} />
+            <Route path="users/view/:id" element={<UserView />} />
+            <Route path="users/update/:id" element={<CreateUserForm update />} />
+
             <Route path="state/create" element={<StateForm />} />
             <Route path="district/create" element={<DistrictForm />} />
             <Route path="block/create" element={<BlockForm />} />
@@ -96,7 +103,10 @@ function App() {
             <Route path="theme/create" element={<ThemeForm />} />
             <Route path="indicator/create" element={<IndicatorForm />} />
             <Route path="data-point/create" element={<DataPointForm />} />
+            <Route path="data-point/update/:kpiId" element={<DataPointForm  type="update"/>} />
+            <Route path="data-point/update/:kpiId" element={<DataPointForm  type="update"/>} />
             <Route path="data-point" element={<DataPointPage />} />
+            <Route path="data-point/view/:kpiId" element={<KpiViewPage />} />
             <Route path="kpi-approvals-list" element={<KpiApprovalsList />} />
             <Route path="submit-kpi-approval" element={<KpiApprovalSubmit />} />
             <Route path="view-kpi-approval" element={<KpiApprovalView />} />
