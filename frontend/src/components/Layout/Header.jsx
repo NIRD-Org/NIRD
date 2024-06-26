@@ -72,7 +72,7 @@ const Header = () => {
           <NavLink
             to="/training"
             className={({ isActive }) =>
-              `block px-3 pointer-events-none text-md py-2 font-normal duration-200 ${
+              `block px-3 text-md py-2 font-normal duration-200 ${
                 isActive ? "text-white font-bold" : "text-gray-300"
               } hover:text-white`
             }
@@ -82,7 +82,7 @@ const Header = () => {
           </NavLink>
         </div>
         <NavLink
-          to="/low-cost-voluntary-acticities"
+          to="/low-cost-voluntary-activities"
           className={({ isActive }) =>
             `block px-4 text-md py-2 font-normal duration-200 ${
               isActive ? "text-white font-bold" : "text-gray-300"
@@ -181,7 +181,7 @@ const Header = () => {
                 <br /> Indicators (KPI)
               </NavLink>
               <NavLink
-                to="/low-cost-voluntary-acticities"
+                to="/low-cost-voluntary-activities"
                 onClick={toggleSidebar}
                 className={({ isActive }) =>
                   `block px-3 text-start py-2 font-normal duration-200 ${
@@ -196,7 +196,7 @@ const Header = () => {
                 to="/training"
                 onClick={toggleSidebar}
                 className={({ isActive }) =>
-                  `block px-3 pointer-events-none text-start py-2 font-normal duration-200 ${
+                  `block px-3  text-start py-2 font-normal duration-200 ${
                     isActive ? "text-gray-300" : "text-white"
                   } hover:text-gray-300`
                 }

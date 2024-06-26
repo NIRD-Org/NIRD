@@ -60,6 +60,54 @@ const GpDetailsForm = () => {
       email: "",
       mobile: "",
     },
+    health: {
+      primaryHealthCenters: null,
+      healthSubCenters: null,
+      wellBeingCenters: null,
+      dispensary: null,
+      ayurvedicClinics: null,
+    },
+    education: {
+      totalPrimarySchools: null,
+      totalPrePrimarySchools: null,
+      totalHigherSecondarySchools: null,
+      totalSecondarySchools: null,
+    },
+    sports: {
+      noOfVolleyballCourt: null,
+      noOfFootballCourt: null,
+      noOfBadmintonCourt: null,
+    },
+    general: {
+      noOfSHG: null,
+      noOfDestituteHomesOldAgeHomes: null,
+      noOfJobCardHolders: null,
+      noOfHouseholds: null,
+      noOfAnganwadiCenters: null,
+    },
+    wardDetails: {
+      wardName: "",
+      memberName: "",
+      gender: "",
+      casteCategory: "",
+      highestQualification: "",
+      aproxAge: "",
+    },
+    others: {
+      noOfHouseholdsConnectedToTapWater: null,
+      noOfHouseholdToilets: null,
+      noOfDrinkingWaterSources: null,
+      noOfSeedCenters: null,
+      noOfChildrenParks: null,
+      noOfBusStandWithWaterSources: null,
+      noOfRuralLibrary: null,
+      noOfSolidWasteManagementCenters: null,
+      noOfBanks: null,
+      noOfATMs: null,
+      noOfCommunitySanitaryComplexes: null,
+      noOfDisasterRescueCenters: null,
+      noOfCommonServiceCenters: null,
+    },
   });
 
   const navigate = useNavigate();
@@ -208,6 +256,72 @@ const GpDetailsForm = () => {
     }));
   };
 
+  const handleHealthChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      health: {
+        ...prevValues.health,
+        [name]: value,
+      },
+    }));
+  };
+
+  const handleEducationChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      education: {
+        ...prevValues.education,
+        [name]: value,
+      },
+    }));
+  };
+
+  const handleSportsChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      sports: {
+        ...prevValues.sports,
+        [name]: value,
+      },
+    }));
+  };
+
+  const handleGeneralChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      general: {
+        ...prevValues.general,
+        [name]: value,
+      },
+    }));
+  };
+
+  const handleWardDetailsChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      wardDetails: {
+        ...prevValues.wardDetails,
+        [name]: value,
+      },
+    }));
+  };
+
+  const handleOthersDetailsChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      others: {
+        ...prevValues.others,
+        [name]: value,
+      },
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -221,6 +335,12 @@ const GpDetailsForm = () => {
         panchayatArea: formValues.panchayatArea,
         sarpanchDetails: formValues.sarpanchDetails,
         secretaryDetails: formValues.secretaryDetails,
+        health: formValues.health,
+        education: formValues.education,
+        sports: formValues.sports,
+        general: formValues.general,
+        wardDetails: formValues.wardDetails,
+        others: formValues.others,
       });
       if (data?.success) {
         toast.success(data?.message, { position: "bottom-center" });
@@ -242,6 +362,9 @@ const GpDetailsForm = () => {
         onSubmit={handleSubmit}
         className="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4"
       >
+        <h1 className="text-4xl md:text-5xl font-semibold text-primary text-center">
+          Gram Panchayat Details
+        </h1>
         <div className="grid py-10  grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-10 justify-between">
           <StateFilter />
           <DistrictFilter />
@@ -621,6 +744,387 @@ const GpDetailsForm = () => {
               required
               onChange={handleSecretaryDetailsChange}
               placeholder="Mobile of Secretary"
+              className="input-field  py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+          </div>
+        </div>
+
+        {/* Health */}
+        <div className="mb-6">
+          <h2 className="text-2xl font-semibold text-primary mb-4">Health</h2>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 pb-10">
+            <input
+              type="number"
+              required
+              name="primaryHealthCenters"
+              value={formValues.health.primaryHealthCenters}
+              onChange={handleHealthChange}
+              placeholder="Primary Health Centers"
+              className="input-field py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+            <input
+              required
+              type="number"
+              name="healthSubCenters"
+              value={formValues.health.healthSubCenters}
+              onChange={handleHealthChange}
+              placeholder="Health Sub Centers"
+              className="input-field py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+            <input
+              required
+              type="number"
+              name="wellBeingCenters"
+              value={formValues.health.wellBeingCenters}
+              onChange={handleHealthChange}
+              placeholder="Well Being Centers"
+              className="input-field py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+            <input
+              required
+              type="number"
+              name="dispensary"
+              value={formValues.health.dispensary}
+              onChange={handleHealthChange}
+              placeholder="Dispensary"
+              className="input-field py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+            <input
+              required
+              type="number"
+              name="ayurvedicClinics"
+              value={formValues.health.ayurvedicClinics}
+              onChange={handleHealthChange}
+              placeholder="Ayurvedic Clinics"
+              className="input-field py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+          </div>
+        </div>
+
+        {/* Education */}
+        <div className="mb-6">
+          <h2 className="text-2xl font-semibold text-primary mb-4">
+            Education
+          </h2>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 pb-10">
+            <input
+              required
+              type="number"
+              name="totalPrimarySchools"
+              value={formValues.education.totalPrimarySchools}
+              onChange={handleEducationChange}
+              placeholder="Total Primary Schools"
+              className="input-field py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+            <input
+              required
+              type="number"
+              name="totalPrePrimarySchools"
+              value={formValues.education.totalPrePrimarySchools}
+              onChange={handleEducationChange}
+              placeholder="Total Pre-Primary Schools"
+              className="input-field py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+            <input
+              required
+              type="number"
+              name="totalHigherSecondarySchools"
+              value={formValues.education.totalHigherSecondarySchools}
+              onChange={handleEducationChange}
+              placeholder="Total Higher Secondary Schools"
+              className="input-field py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+            <input
+              required
+              type="number"
+              name="totalSecondarySchools"
+              value={formValues.education.totalSecondarySchools}
+              onChange={handleEducationChange}
+              placeholder="Total Secondary Schools"
+              className="input-field py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+          </div>
+        </div>
+
+        {/* Sports */}
+        <div className="mb-6">
+          <h2 className="text-2xl font-semibold text-primary mb-4">Sports</h2>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 pb-10">
+            <input
+              required
+              type="number"
+              name="noOfVolleyballCourt"
+              value={formValues.sports.noOfVolleyballCourt}
+              onChange={handleSportsChange}
+              placeholder="No of Volleyball Courts"
+              className="input-field py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+            <input
+              required
+              type="number"
+              name="noOfFootballCourt"
+              value={formValues.sports.noOfFootballCourt}
+              onChange={handleSportsChange}
+              placeholder="No of Football Courts"
+              className="input-field py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+            <input
+              required
+              type="number"
+              name="noOfBadmintonCourt"
+              value={formValues.sports.noOfBadmintonCourt}
+              onChange={handleSportsChange}
+              placeholder="No of Badminton Courts"
+              className="input-field py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+          </div>
+        </div>
+
+        {/* General */}
+        <div className="mb-6">
+          <h2 className="text-2xl font-semibold text-primary mb-4">General</h2>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 pb-10">
+            <input
+              type="number"
+              required
+              name="noOfSHG"
+              value={formValues.general.noOfSHG}
+              onChange={handleGeneralChange}
+              placeholder="No of SHG"
+              className="input-field py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+            <input
+              required
+              type="number"
+              name="noOfDestituteHomesOldAgeHomes"
+              value={formValues.general.noOfDestituteHomesOldAgeHomes}
+              onChange={handleGeneralChange}
+              placeholder="No of Destitute Homes/Old Age Homes"
+              className="input-field py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+            <input
+              required
+              type="number"
+              name="noOfJobCardHolders"
+              value={formValues.general.noOfJobCardHolders}
+              onChange={handleGeneralChange}
+              placeholder="No of Job Card Holders"
+              className="input-field py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+            <input
+              required
+              type="number"
+              name="noOfHouseholds"
+              value={formValues.general.noOfHouseholds}
+              onChange={handleGeneralChange}
+              placeholder="No of Households"
+              className="input-field py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+            <input
+              required
+              type="number"
+              name="noOfAnganwadiCenters"
+              value={formValues.general.noOfAnganwadiCenters}
+              onChange={handleGeneralChange}
+              placeholder="No of Anganwadi Centers"
+              className="input-field py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+          </div>
+        </div>
+
+        {/* Ward Details */}
+        <div className="mb-6">
+          <h2 className="text-2xl font-semibold text-primary mb-4">
+            Ward Details
+          </h2>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 pb-10">
+            <input
+              type="text"
+              name="wardName"
+              required
+              value={formValues.wardDetails.wardName}
+              onChange={handleWardDetailsChange}
+              placeholder="Ward Name"
+              className="input-field py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+            <input
+              required
+              type="text"
+              name="memberName"
+              value={formValues.wardDetails.memberName}
+              onChange={handleWardDetailsChange}
+              placeholder="Member Name"
+              className="input-field py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+            <select
+              required
+              name="gender"
+              value={formValues.wardDetails.gender}
+              onChange={handleWardDetailsChange}
+              className="border rounded-sm p-2"
+            >
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Others">Others</option>
+            </select>
+
+            <select
+              required
+              name="casteCategory"
+              value={formValues.wardDetails.casteCategory}
+              onChange={handleWardDetailsChange}
+              className="border rounded-sm p-2"
+            >
+              <option value="">Select Category</option>
+              <option value="General">General</option>
+              <option value="SC">SC</option>
+              <option value="ST">ST</option>
+              <option value="OBC">OBC</option>
+              <option value="Others">Others</option>
+            </select>
+
+            <input
+              type="text"
+              required
+              name="highestQualification"
+              value={formValues.wardDetails.highestQualification}
+              onChange={handleWardDetailsChange}
+              placeholder="Highest Qualification"
+              className="input-field py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+            <input
+              type="number"
+              name="aproxAge"
+              required
+              value={formValues.wardDetails.aproxAge}
+              onChange={handleWardDetailsChange}
+              placeholder="Approx Age"
+              className="input-field py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+          </div>
+        </div>
+
+        <div className="mb-6">
+          <h2 className="text-2xl font-semibold text-primary mb-4">
+            Others Details
+          </h2>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 pb-10">
+            <input
+              type="number"
+              name="noOfHouseholdsConnectedToTapWater"
+              value={formValues.others.noOfHouseholdsConnectedToTapWater}
+              required
+              onChange={handleOthersDetailsChange}
+              placeholder="No. of Households Connected to Tap Water"
+              className="input-field  py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+            <input
+              type="number"
+              name="noOfHouseholdToilets"
+              value={formValues.others.noOfHouseholdToilets}
+              required
+              onChange={handleOthersDetailsChange}
+              placeholder="No. of Household Toilets"
+              className="input-field  py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+            <input
+              type="number"
+              name="noOfDrinkingWaterSources"
+              value={formValues.others.noOfDrinkingWaterSources}
+              required
+              onChange={handleOthersDetailsChange}
+              placeholder="No. of Drinking Water Sources"
+              className="input-field  py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+            <input
+              type="number"
+              name="noOfSeedCenters"
+              value={formValues.others.noOfSeedCenters}
+              required
+              onChange={handleOthersDetailsChange}
+              placeholder="No. of Seed Centers"
+              className="input-field  py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+            <input
+              type="number"
+              name="noOfChildrenParks"
+              value={formValues.others.noOfChildrenParks}
+              required
+              onChange={handleOthersDetailsChange}
+              placeholder="No. of Children Parks"
+              className="input-field  py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+            <input
+              type="number"
+              name="noOfBusStandWithWaterSources"
+              value={formValues.others.noOfBusStandWithWaterSources}
+              required
+              onChange={handleOthersDetailsChange}
+              placeholder="No. of Bus Stands with Water Sources"
+              className="input-field  py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+            <input
+              type="number"
+              name="noOfRuralLibrary"
+              value={formValues.others.noOfRuralLibrary}
+              required
+              onChange={handleOthersDetailsChange}
+              placeholder="No. of Rural Libraries"
+              className="input-field  py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+            <input
+              type="number"
+              name="noOfSolidWasteManagementCenters"
+              value={formValues.others.noOfSolidWasteManagementCenters}
+              required
+              onChange={handleOthersDetailsChange}
+              placeholder="No. of Solid Waste Management Centers"
+              className="input-field  py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+            <input
+              type="number"
+              name="noOfBanks"
+              value={formValues.others.noOfBanks}
+              required
+              onChange={handleOthersDetailsChange}
+              placeholder="No. of Banks"
+              className="input-field  py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+            <input
+              type="number"
+              name="noOfATMs"
+              value={formValues.others.noOfATMs}
+              required
+              onChange={handleOthersDetailsChange}
+              placeholder="No. of ATMs"
+              className="input-field  py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+            <input
+              type="number"
+              name="noOfCommunitySanitaryComplexes"
+              value={formValues.others.noOfCommunitySanitaryComplexes}
+              required
+              onChange={handleOthersDetailsChange}
+              placeholder="No. of Community Sanitary Complexes"
+              className="input-field  py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+            <input
+              type="number"
+              name="noOfDisasterRescueCenters"
+              value={formValues.others.noOfDisasterRescueCenters}
+              required
+              onChange={handleOthersDetailsChange}
+              placeholder="No. of Disaster Rescue Centers"
+              className="input-field  py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+            />
+            <input
+              type="number"
+              name="noOfCommonServiceCenters"
+              value={formValues.others.noOfCommonServiceCenters}
+              required
+              onChange={handleOthersDetailsChange}
+              placeholder="No. of Common Service Centers"
               className="input-field  py-2 px-3 outline-1 border border-gray-200 rounded-sm"
             />
           </div>

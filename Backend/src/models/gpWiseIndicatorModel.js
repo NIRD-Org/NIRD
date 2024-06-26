@@ -60,7 +60,7 @@ const gpWiseIndicatorSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      default: "0",
+      default: "1",
     },
     submitted_id: {
       type: String,

@@ -18,10 +18,10 @@ const GoodPracticesCard = () => {
           Ayushman Bharat’s integrated approach leads to improved
         </h4>
 
-        <h4 className="text-gray-700   text-sm">{"gpName.name"}</h4>
-        <h5 className="text-gray-700 text-sm ">{"gpDistrict.name"}</h5>
-        <p className="text-xs font-normal  text-slate-600">{"gpblock.name"}</p>
-        <p className="text-xs font-normal  text-slate-600">{"gpState.name"}</p>
+        <h4 className="text-gray-700 text-sm">Chamoli</h4>
+        <h5 className="text-gray-700 text-sm">Lohaghat</h5>
+        <p className="text-xs font-normal text-slate-600">Champawat</p>
+        <p className="text-xs font-normal text-slate-600">Uttarakhand</p>
       </div>
     </div>
   );

@@ -38,6 +38,12 @@ export const createPanchayatDetails = CatchAsyncError(
         panchayatArea,
         sarpanchDetails,
         secretaryDetails,
+        health,
+        education,
+        others,
+        sports,
+        wardDetails,
+        general,
       } = req.body;
       const id = await getNewId();
 
@@ -65,6 +71,12 @@ export const createPanchayatDetails = CatchAsyncError(
         panchayatArea,
         sarpanchDetails,
         secretaryDetails,
+        health,
+        education,
+        others,
+        sports,
+        wardDetails,
+        general,
       });
       await panchayat.save();
       res

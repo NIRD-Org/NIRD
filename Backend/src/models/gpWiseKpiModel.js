@@ -60,7 +60,7 @@ const gpWiseKpiSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      default: "0",
+      default: "1",
     },
     frequency: {
       type: String,

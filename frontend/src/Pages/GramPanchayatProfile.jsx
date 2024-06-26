@@ -94,7 +94,7 @@ const GramPanchayatProfile = () => {
   }, [state]);
 
   return (
-    <div className="relative py-10 px-1 lg:px-20">
+    <div className="relative bg-white py-10 px-1 lg:px-20">
       <button
         onClick={() => navigate("/kpi")}
         className="absolute flex items-center justify-center bg-primary text-white p-2 rounded top-2 left-4 md:top-10 md:left-20 "
@@ -226,6 +226,12 @@ const GramPanchayatProfile = () => {
           </h1>
         )}
       </div>
+      {/* <button
+        onClick={() => window.location.reload()}
+        className="fixed z-10 right-10 top-1/2 -translate-y-1/2 text-center rounded mx-5 px-6 py-2 text-white bg-primary"
+      >
+        Reset
+      </button> */}
     </div>
   );
 };

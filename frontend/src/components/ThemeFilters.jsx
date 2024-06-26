@@ -20,7 +20,7 @@ const ThemeCard = ({ id, imgUrl, theme }) => {
     >
       <div className="hover:cursor-pointer relative h-[5.5rem] w-[12rem]  rounded-lg overflow-hidden">
         <img src={imgUrl} alt="" className="h-full w-full object-cover " />
-        <div className="absolute text-sm z-10 inset-0 w-full h-full flex items-center justify-center text-center bg-black/50 text-white font-semibold group-hover:text-[#7d7df3]">
+        <div className="absolute text-sm z-10 inset-0 w-full h-full flex items-center justify-center text-center bg-black/50 text-white font-semibold group-hover:text-gray-300">
           {theme}
         </div>
       </div>
@@ -41,8 +41,12 @@ const ThemeFilters = () => {
   }, []);
 
   return (
-    <div className="w-[90vw] flex overflow-x-auto lg:overflow-hidden lg:grid place-items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
-      <ThemeCard id="" imgUrl="" theme="All Themes" />
+    <div className="w-[90vw] flex overflow-x-auto lg:overflow-hidden lg:flex-wrap gap-8">
+      <ThemeCard
+        id=""
+        imgUrl="https://media.istockphoto.com/id/1351895555/photo/orange-and-yellow-gradient-defocused-blurred-motion-abstract-background.webp?b=1&s=170667a&w=0&k=20&c=pUsEOtS6PgM-WX-tGf7C0_G6_rrukwMfguxJp0zfkww="
+        theme="All Themes"
+      />
       {themeData &&
         themeData.length > 0 &&
         themeData.map((d) => (

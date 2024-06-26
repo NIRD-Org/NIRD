@@ -73,6 +73,63 @@ const PanchayatSchema = new mongoose.Schema({
     email: { type: String, required: false },
     mobile: { type: String, required: true },
   },
+
+  // Health
+  health: {
+    primaryHealthCenters: { type: Number },
+    healthSubCenters: { type: Number },
+    wellBeingCenters: { type: Number },
+    dispensary: { type: Number },
+    ayurvedicClinics: { type: Number },
+  },
+
+  // Education
+  education: {
+    totalPrimarySchools: { type: Number },
+    totalPrePrimarySchools: { type: Number },
+    totalHigherSecondarySchools: { type: Number },
+    totalSecondarySchools: { type: Number },
+  },
+  // Sports
+  sports: {
+    noOfVolleyballCourt: { type: Number },
+    noOfFootballCourt: { type: Number },
+    noOfBadmintonCourt: { type: Number },
+  },
+
+  // General
+  general: {
+    noOfSHG: { type: Number },
+    noOfDestituteHomesOldAgeHomes: { type: Number },
+    noOfJobCardHolders: { type: Number },
+    noOfHouseholds: { type: Number },
+    noOfAnganwadiCenters: { type: Number },
+  },
+  // Others
+  others: {
+    noOfHouseholdsConnectedToTapWater: { type: Number },
+    noOfHouseholdToilets: { type: Number },
+    noOfDrinkingWaterSources: { type: Number },
+    noOfSeedCenters: { type: Number },
+    noOfChildrenParks: { type: Number },
+    noOfBusStandWithWaterSources: { type: Number },
+    noOfRuralLibrary: { type: Number },
+    noOfSolidWasteManagementCenters: { type: Number },
+    noOfBanks: { type: Number },
+    noOfATMs: { type: Number },
+    noOfCommunitySanitaryComplexes: { type: Number },
+    noOfDisasterRescueCenters: { type: Number },
+    noOfCommonServiceCenters: { type: Number },
+  },
+  wardDetails: {
+    wardName: { type: String, required: true },
+    memberName: { type: String, required: true },
+    gender: { type: String, required: true },
+    casteCategory: { type: String, required: true },
+    highestQualification: { type: String, required: true },
+    aproxAge: { type: Number, required: true },
+  },
+  status: { type: String, default: "1" },
 });
 
 export const GpDetailsModel = mongoose.model(
