@@ -37,6 +37,24 @@ const kpiApprovalSchema = new Schema(
       required: true,
       default: "0",
     },
+    frequency: {
+      type: String,
+
+      default: "",
+    },
+    quarter: {
+      type: String,
+      default: "",
+    },
+    month: {
+      type: String,
+      default: "",
+    },
+    financial_year: {
+      type: String,
+      required: true,
+      default: "",
+    },
     submitted_id: {
       type: String,
       required: true,
@@ -59,7 +77,7 @@ const kpiApprovalSchema = new Schema(
     },
     date: {
       type: Date,
-      required : true
+      required: true,
     },
   },
   {

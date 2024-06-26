@@ -76,7 +76,15 @@ const getNewSubmittedId = async () => {
 
 export const submitIndicatorData = CatchAsyncError(async (req, res, next) => {
   try {
-    const { state_id, dist_id, gp_id, block_id, date, formData } = req.body;
+    const {
+      state_id,
+      dist_id,
+      gp_id,
+      block_id,
+      date,
+      formData,
+      financial_year,
+    } = req.body;
     const submitted_id = await getNewSubmittedId();
 
     // Validate if formData is empty
@@ -93,6 +101,7 @@ export const submitIndicatorData = CatchAsyncError(async (req, res, next) => {
         block_id: block_id,
         gp_id: gp_id,
         date: date,
+        financial_year,
         indicator_id: indicator.indicator_id,
         max_range: indicator.max_range,
         input_data: indicator.input_data,
@@ -111,6 +120,7 @@ export const submitIndicatorData = CatchAsyncError(async (req, res, next) => {
       state_id,
       dist_id,
       block_id,
+      financial_year,
       gp_id,
       submitted_id,
       created_by: req.user ? req.user.id : "1",
@@ -131,12 +141,13 @@ export const submitIndicatorData = CatchAsyncError(async (req, res, next) => {
 });
 
 const getGpWiseIndicatorDataWithPercentage = async (query) => {
-  const { state, dist, block, gp, search } = query;
+  const { state, dist, block, gp, search, fy } = query;
   const filter = {};
   if (state) filter.state_id = state;
   if (dist) filter.dist_id = dist;
   if (block) filter.block_id = block;
   if (gp) filter.gp_id = gp;
+  if (fy) filter.financial_year = fy;
 
   const pipeline = [
     { $match: filter },

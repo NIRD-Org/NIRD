@@ -10,7 +10,7 @@ const GpProfile = () => {
   const [districtOptions, setDistrictOptions] = useState([]);
   const [blockOptions, setBlockOptions] = useState([]);
   const [GpOptions, setGpOptions] = useState([]);
-
+  const [financialYear, setFinancialYear] = useState();
   const [state, setState] = useState("");
   const [district, setDistrict] = useState("");
   const [block, setblock] = useState("");
@@ -125,6 +125,18 @@ const GpProfile = () => {
     e.preventDefault();
     getAllKpiSearchData();
   };
+
+  // Dropdown for financial years
+
+  const financialYears = [];
+
+  for (let year = 2022; year <= 2050; year++) {
+    financialYears.push({
+      value: `FY${year}-${year + 1}`,
+      label: `FY ${year}-${year + 1}`,
+    });
+  }
+
   return (
     <div className="px-5 pb-8 lg:px-20 lg:pb-12">
       <div className="flex flex-col lg:flex-row items-center lg:items-end gap-10 justify-between mb-4">
@@ -203,30 +215,45 @@ const GpProfile = () => {
             Reset
           </button>
         </div>
-        <form onSubmit={handleSearch} className="flex items-center space-x-2">
-          <input
-            type="text"
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search for States, Districts and Blocks"
-            className="border border-gray-300 p-2 rounded w-full lg:w-64 focus:ring focus:ring-orange-200"
-          />
-          <button className="bg-primary text-white p-2 rounded focus:outline-none focus:ring focus:ring-orange-200">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-4.35-4.35M16.65 11a5.65 5.65 0 11-11.3 0 5.65 5.65 0 0111.3 0z"
-              />
-            </svg>
-          </button>
-        </form>
+
+        <div>
+          <select
+            value={financialYear}
+            onChange={(e) => setFinancialYear(e.target.value)}
+            className="text-center p-2 rounded"
+          >
+            <option value="">Select Financial Year</option>
+            {financialYears.map((year, index) => (
+              <option key={index} value={year.value}>
+                {year.label}
+              </option>
+            ))}
+          </select>
+          <form onSubmit={handleSearch} className="flex items-center space-x-2">
+            <input
+              type="text"
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search for States, Districts and Blocks"
+              className="border border-gray-300 p-2 rounded w-full lg:w-64 focus:ring focus:ring-orange-200"
+            />
+            <button className="bg-primary text-white p-2 rounded focus:outline-none focus:ring focus:ring-orange-200">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-4.35-4.35M16.65 11a5.65 5.65 0 11-11.3 0 5.65 5.65 0 0111.3 0z"
+                />
+              </svg>
+            </button>
+          </form>
+        </div>
       </div>
       <hr />
       {loading ? (

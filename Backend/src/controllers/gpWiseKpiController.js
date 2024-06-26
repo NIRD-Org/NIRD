@@ -81,6 +81,10 @@ export const submitKpiData = CatchAsyncError(async (req, res, next) => {
     const {
       state_id,
       dist_id,
+      financial_year,
+      frequency,
+      quarter,
+      month,
       gp_id,
       block_id,
       date,
@@ -130,6 +134,10 @@ export const submitKpiData = CatchAsyncError(async (req, res, next) => {
         theme_id: theme_id,
         kpi_id: kpi.kpi_id,
         score: kpi.score,
+        financial_year,
+        frequency,
+        quarter: quarter ?? "",
+        month: month ?? "",
         max_range: kpi.max_range,
         input_data: kpi.input_data,
         remarks: kpi.remarks,
@@ -152,6 +160,10 @@ export const submitKpiData = CatchAsyncError(async (req, res, next) => {
       block_id,
       gp_id,
       theme_id,
+      financial_year,
+      frequency,
+      quarter: quarter ?? "",
+      month: month ?? "",
       remarks: remark,
       submitted_id,
       created_by: user_id,
@@ -178,7 +190,7 @@ export const getGpWiseKpi = CatchAsyncError(async (req, res, next) => {
     const limit = req.query.limit || 50;
     const pageNumber = req.query.page || 1;
     const startIndex = (pageNumber - 1) * limit;
-    const { state, dist, block, gp, search } = req.query;
+    const { state, dist, block, gp, search, fy } = req.query;
 
     // filter object
     const filter = {};
@@ -186,7 +198,7 @@ export const getGpWiseKpi = CatchAsyncError(async (req, res, next) => {
     if (dist) filter.dist_id = dist;
     if (block) filter.block_id = block;
     if (gp) filter.gp_id = gp;
-
+    if (fy) filter.financial_year = fy;
     const pipeline = [
       { $match: filter },
       {
@@ -240,6 +252,10 @@ export const getGpWiseKpi = CatchAsyncError(async (req, res, next) => {
           date: 1,
           theme_id: 1,
           kpi_id: 1,
+          financial_year: 1,
+          quarter: 1,
+          month: 1,
+          frequency: 1,
           question_id: 1,
           max_range: 1,
           input_data: 1,
@@ -257,7 +273,7 @@ export const getGpWiseKpi = CatchAsyncError(async (req, res, next) => {
 
     if (search) {
       const regex = new RegExp(search, "i"); // 'i' makes it case-insensitive
-      console.log("Regex: " + regex);
+      // console.log("Regex: " + regex);
       pipeline.push({
         $match: {
           $or: [
@@ -382,6 +398,7 @@ export const getGpWiseKpiChart = CatchAsyncError(async (req, res, next) => {
           state_id: "$_id.state_id",
           theme_id: "$_id.theme_id",
           kpi_id: "$_id.kpi_id",
+          financial_year: "$_id.financial_year",
           totalInputData: 1,
           totalMaxRange: 1,
           percentage: {
@@ -611,6 +628,10 @@ export const getGpWiseKpiForApprover = CatchAsyncError(
             input_data: 1,
             score: 1,
             remarks: 1,
+            financial_year: 1,
+            quarter: 1,
+            month: 1,
+            frequency: 1,
             approver_remarks: "$approvalDetails.remarks",
             status: 1,
             submitted_id: 1,
@@ -711,9 +732,10 @@ export const reSubmitKpiData = CatchAsyncError(async (req, res, next) => {
 // Get the ranking of the gps
 export const getRankingController = CatchAsyncError(async (req, res, next) => {
   try {
-    const { keyword, theme } = req.query;
+    const { keyword, theme, fy } = req.query;
     const matchStage = {};
     if (theme) matchStage.theme_id = theme;
+    if (fy) matchStage.financial_year = fy;
     const pipeline = [
       {
         $match: matchStage,
@@ -827,9 +849,15 @@ export const getRankingController = CatchAsyncError(async (req, res, next) => {
 export const getBlockRankingController = CatchAsyncError(
   async (req, res, next) => {
     try {
-      const { keyword } = req.query;
+      const { keyword, fy } = req.query;
+      const matchStage = {};
+
+      if (fy) matchStage.financial_year = fy;
 
       const pipeline = [
+        {
+          $match: matchStage,
+        },
         {
           $group: {
             _id: "$block_id",

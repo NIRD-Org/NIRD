@@ -45,7 +45,7 @@ export const getAllKPIApprovals = CatchAsyncError(async (req, res, next) => {
 
 export const getKPIApprovals = CatchAsyncError(async (req, res, next) => {
   try {
-    const { state, dist, block, gp, theme, decision } = req.query;
+    const { state, dist, block, gp, theme, decision, fy } = req.query;
     const match = {};
 
     if (state) match.state_id = state;
@@ -55,6 +55,8 @@ export const getKPIApprovals = CatchAsyncError(async (req, res, next) => {
     if (theme) match.theme_id = theme;
     if (decision) match.decision = decision;
     if (req.user.role == 3) match.created_by = req.user.id;
+    // Financial year
+    if (fy) match.financial_year = fy;
 
     console.log(req.user.id);
     const categorizedKPIApprovals = await KPIApprovalModel.aggregate([
@@ -101,6 +103,10 @@ export const getKPIApprovals = CatchAsyncError(async (req, res, next) => {
           block_id: 1,
           gp_id: 1,
           theme_id: 1,
+          financial_year: 1,
+          quarter: 1,
+          month: 1,
+          frequency: 1,
           theme_name: "$themeDetails.theme_name",
           gp_name: "$gramDetails.name",
           state_name: "$stateDetails.name",

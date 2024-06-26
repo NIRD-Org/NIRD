@@ -6,6 +6,7 @@ const Ranking = () => {
   const [blockRankData, setBlockRankData] = useState([]);
   const [keyword, setKeyword] = useState("");
   const [rankType, setRankType] = useState("gp");
+  const [financialYear, setFinancialYear] = useState("");
 
   const [loading, setLoading] = useState(false);
   const getGpRankData = async () => {
@@ -15,7 +16,7 @@ const Ranking = () => {
       const { data } = await API.get(
         `/api/v1/gp-wise-kpi/get-ranking?keyword=${keyword}&theme=${
           rankType !== "gp" && rankType !== "block" ? rankType : ""
-        }`
+        }&fy=${financialYear}`
       );
       setGpRankData(data?.data);
     } catch (error) {
@@ -31,7 +32,7 @@ const Ranking = () => {
       setGpRankData([]);
       setLoading(true);
       const { data } = await API.get(
-        `/api/v1/gp-wise-kpi/get-block-ranking?keyword=${keyword}`
+        `/api/v1/gp-wise-kpi/get-block-ranking?keyword=${keyword}&fy=${financialYear}`
       );
       setBlockRankData(data?.data);
     } catch (error) {
@@ -42,10 +43,19 @@ const Ranking = () => {
     }
   };
 
+  const financialYears = [];
+
+  for (let year = 2022; year <= 2050; year++) {
+    financialYears.push({
+      value: `FY${year}-${year + 1}`,
+      label: `FY ${year}-${year + 1}`,
+    });
+  }
+
   useEffect(() => {
     if (rankType === "block") getBlockRankData();
     else getGpRankData();
-  }, [rankType]);
+  }, [rankType, financialYear]);
 
   return (
     <div className="flex relative pt-5 pb-20 px-4 md:px-20 lg:px-24">
@@ -77,37 +87,51 @@ const Ranking = () => {
               <option value="9">Theme 9</option>
             </select>
           </div>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              if (rankType === "block") getBlockRankData();
-              else getGpRankData();
-            }}
-            className="flex py-5 items-center space-x-1"
-          >
-            <input
-              type="text"
-              onChange={(e) => setKeyword(e.target.value)}
-              placeholder="Search for States, Districts and Blocks"
-              className="border border-gray-300 p-2 rounded w-full lg:w-64 focus:ring focus:ring-orange-200"
-            />
-            <button className="bg-primary text-white p-2 rounded focus:outline-none focus:ring focus:ring-orange-200">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-4.35-4.35M16.65 11a5.65 5.65 0 11-11.3 0 5.65 5.65 0 0111.3 0z"
-                />
-              </svg>
-            </button>
-          </form>
+          <div>
+            <select
+              value={financialYear}
+              onChange={(e) => setFinancialYear(e.target.value)}
+              className="text-center p-2 rounded"
+            >
+              <option value="">Select Financial Year</option>
+              {financialYears.map((year, index) => (
+                <option key={index} value={year.value}>
+                  {year.label}
+                </option>
+              ))}
+            </select>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (rankType === "block") getBlockRankData();
+                else getGpRankData();
+              }}
+              className="flex py-5 items-center space-x-1"
+            >
+              <input
+                type="text"
+                onChange={(e) => setKeyword(e.target.value)}
+                placeholder="Search for States, Districts and Blocks"
+                className="border border-gray-300 p-2 rounded w-full lg:w-64 focus:ring focus:ring-orange-200"
+              />
+              <button className="bg-primary text-white p-2 rounded focus:outline-none focus:ring focus:ring-orange-200">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 21l-4.35-4.35M16.65 11a5.65 5.65 0 11-11.3 0 5.65 5.65 0 0111.3 0z"
+                  />
+                </svg>
+              </button>
+            </form>
+          </div>
         </div>
         <div className="flex flex-col h-full">
           <div className="overflow-x-auto">

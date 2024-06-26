@@ -57,6 +57,8 @@ import YfInsightsPage from "./Pages/YfInsightsPage";
 import KpiViewPage from "./components/admin/kpi/KpiViewPage";
 import UserPage from "./components/admin/users/UserPage";
 import UserView from "./components/admin/users/UserView";
+import GoodPractices from "./Pages/GoodPractices";
+import LCVAPage from "./Pages/LCVAPage";
 
 function App() {
   const { login } = useAuthContext();
@@ -78,6 +80,8 @@ function App() {
           <Route path="/gp-wise-data/theme/:id" element={<ThemeDataPage />} />
           <Route path="gp-profile/details" element={<GramPanchayatProfile />} />
           <Route path="/yf-insights" element={<YfInsightsPage />} />
+          <Route path="good-practices" element={<GoodPractices />} />
+          <Route path="low-cost-voluntary-acticities" element={<LCVAPage />} />
           <Route path="/admin" element={<AdminPage />}>
             <Route index element={<AdminMainPage />} />
             <Route path="gp-details-form" element={<GpDetailsForm />} />

@@ -30,14 +30,14 @@ const YoungFellowInsights = ({ update = false }) => {
     achievementPhoto: null,
     failure: "",
     planOfAction: "",
-    financialYear: "FY 2023-24",
+    financialYear: "FY2023-2024",
   });
 
   useEffect(() => {
     async function fetchStates() {
       try {
         const response = await API.get("/api/v1/state/all");
-        setLocationData(prevData => ({
+        setLocationData((prevData) => ({
           ...prevData,
           states: response.data.states || [],
         }));
@@ -68,12 +68,12 @@ const YoungFellowInsights = ({ update = false }) => {
           const response = await API.get(
             `/api/v1/dist/state/${formData.state_id}`
           );
-          setLocationData(prevData => ({
+          setLocationData((prevData) => ({
             ...prevData,
             districts: response.data.districts || [],
           }));
           if (!update)
-            setFormData(prevData => ({
+            setFormData((prevData) => ({
               ...prevData,
               dist_id: "",
               block_id: "",
@@ -94,12 +94,12 @@ const YoungFellowInsights = ({ update = false }) => {
           const response = await API.get(
             `/api/v1/block/get?dist=${formData.dist_id}`
           );
-          setLocationData(prevData => ({
+          setLocationData((prevData) => ({
             ...prevData,
             blocks: response.data.blocks || [],
           }));
           if (!update)
-            setFormData(prevData => ({
+            setFormData((prevData) => ({
               ...prevData,
               block_id: "",
               gp_id: "",
@@ -119,12 +119,12 @@ const YoungFellowInsights = ({ update = false }) => {
           const response = await API.get(
             `/api/v1/gram/get?block=${formData.block_id}`
           );
-          setLocationData(prevData => ({
+          setLocationData((prevData) => ({
             ...prevData,
             gps: response.data.gram || [],
           }));
           if (!update)
-            setFormData(prevData => ({
+            setFormData((prevData) => ({
               ...prevData,
               gp_id: "",
             }));
@@ -136,11 +136,11 @@ const YoungFellowInsights = ({ update = false }) => {
     fetchGrams();
   }, [formData.block_id]);
 
-  const countWords = text => {
+  const countWords = (text) => {
     return text.trim().split(/\s+/).filter(Boolean).length;
   };
 
-  const handleInputChange = e => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
 
     if (
@@ -150,24 +150,25 @@ const YoungFellowInsights = ({ update = false }) => {
     ) {
       let maxWords = 0;
       if (name === "achievement") maxWords = 300;
-      if (name === "failure" || name === "planOfAction") maxWords = 200;
+      if (name === "failure") maxWords = 250;
+      if (name === "planOfAction") maxWords = 200;
 
       if (countWords(value) <= maxWords) {
-        setFormData(prev => ({ ...prev, [name]: value }));
+        setFormData((prev) => ({ ...prev, [name]: value }));
       } else {
         alert(`The ${name} field cannot exceed ${maxWords} words.`);
       }
     } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
+      setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
 
-  const handleFileChange = e => {
+  const handleFileChange = (e) => {
     const file = e.target.files[0];
-    setFormData(prev => ({ ...prev, achievementPhoto: file }));
+    setFormData((prev) => ({ ...prev, achievementPhoto: file }));
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       if (update) {
@@ -282,8 +283,13 @@ const YoungFellowInsights = ({ update = false }) => {
                   field.name
                 ) && (
                   <small>
-                    Maximum words: {field.name === "achievement" ? 300 : 200} (
-                    {countWords(formData[field.name])} words used)
+                    Maximum words:{" "}
+                    {field.name === "achievement"
+                      ? 300
+                      : field.name === "failure"
+                      ? 250
+                      : 200}{" "}
+                    ({countWords(formData[field.name])} words used)
                   </small>
                 )}
               </>
@@ -296,7 +302,7 @@ const YoungFellowInsights = ({ update = false }) => {
                 required={field.required}
               >
                 <option value="">Select {field.label}</option>
-                {field.options.map(option => (
+                {field.options.map((option) => (
                   <option key={option.id} value={option.id}>
                     {option.name}
                   </option>

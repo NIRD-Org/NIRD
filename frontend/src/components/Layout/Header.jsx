@@ -47,9 +47,9 @@ const Header = () => {
           </NavLink>
 
           <NavLink
-            to="/practices"
+            to="/good-practices"
             className={({ isActive }) =>
-              `block px-3 pointer-events-none text-md py-2 font-normal duration-200 ${
+              `block px-3 text-md py-2 font-normal duration-200 ${
                 isActive ? "text-white font-bold" : "text-gray-300"
               } hover:text-white`
             }
@@ -82,9 +82,9 @@ const Header = () => {
           </NavLink>
         </div>
         <NavLink
-          to="/voluntary"
+          to="/low-cost-voluntary-acticities"
           className={({ isActive }) =>
-            `block px-4 pointer-events-none text-md py-2 font-normal duration-200 ${
+            `block px-4 text-md py-2 font-normal duration-200 ${
               isActive ? "text-white font-bold" : "text-gray-300"
             } hover:text-white`
           }
@@ -181,10 +181,10 @@ const Header = () => {
                 <br /> Indicators (KPI)
               </NavLink>
               <NavLink
-                to="/voluntary"
+                to="/low-cost-voluntary-acticities"
                 onClick={toggleSidebar}
                 className={({ isActive }) =>
-                  `block px-3 pointer-events-none text-start py-2 font-normal duration-200 ${
+                  `block px-3 text-start py-2 font-normal duration-200 ${
                     isActive ? "text-gray-300" : "text-white"
                   } hover:text-gray-300`
                 }
@@ -205,10 +205,10 @@ const Header = () => {
                 <br /> Building
               </NavLink>
               <NavLink
-                to="/practices"
+                to="/good-practices"
                 onClick={toggleSidebar}
                 className={({ isActive }) =>
-                  `block px-3 pointer-events-none text-start py-2 font-normal duration-200 ${
+                  `block px-3 text-start py-2 font-normal duration-200 ${
                     isActive ? "text-gray-300" : "text-white"
                   } hover:text-gray-300`
                 }
