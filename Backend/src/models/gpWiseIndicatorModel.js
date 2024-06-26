@@ -52,6 +52,12 @@ const gpWiseIndicatorSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+
+    financial_year: {
+      type: String,
+      required: true,
+      default: "",
+    },
     status: {
       type: String,
       default: "0",

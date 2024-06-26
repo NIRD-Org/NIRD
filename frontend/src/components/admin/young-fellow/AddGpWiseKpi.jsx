@@ -238,7 +238,7 @@ function AddGpWiseKpi({ update }) {
 
   const handleChange = (e, index) => {
     const { name, value } = e.target;
-    setFormData(prevData => {
+    setFormData((prevData) => {
       const updatedData = [...prevData];
       updatedData[index] = {
         ...updatedData[index],
@@ -263,7 +263,7 @@ function AddGpWiseKpi({ update }) {
     });
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     let updatedFormData = kpis.map((item, index) => {
@@ -278,6 +278,10 @@ function AddGpWiseKpi({ update }) {
       dist_id,
       block_id,
       gp_id,
+      financial_year: financialYear,
+      frequency,
+      month,
+      quarter,
       user_id: user.id,
       date: date,
       theme_id,
@@ -316,7 +320,7 @@ function AddGpWiseKpi({ update }) {
                 id="financialYear"
                 name="financialYear"
                 value={financialYear}
-                onChange={e => setFinancialYear(e.target.value)}
+                onChange={(e) => setFinancialYear(e.target.value)}
                 className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
               >
                 <option value="">Select Financial Year</option>
@@ -338,7 +342,7 @@ function AddGpWiseKpi({ update }) {
                 id="frequency"
                 name="frequency"
                 value={frequency}
-                onChange={e => setFrequency(e.target.value)}
+                onChange={(e) => setFrequency(e.target.value)}
                 className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
               >
                 <option value="">Select Frequency</option>
@@ -354,7 +358,7 @@ function AddGpWiseKpi({ update }) {
                   id="month"
                   name="month"
                   value={month}
-                  onChange={e => setMonth(e.target.value)}
+                  onChange={(e) => setMonth(e.target.value)}
                   className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
                 >
                   <option value="">Select Month</option>
@@ -381,7 +385,7 @@ function AddGpWiseKpi({ update }) {
                   id="quarter"
                   name="quarter"
                   value={quarter}
-                  onChange={e => setQuarter(e.target.value)}
+                  onChange={(e) => setQuarter(e.target.value)}
                   className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
                 >
                   <option value="">Select Quarter</option>
@@ -430,7 +434,7 @@ function AddGpWiseKpi({ update }) {
                           value={
                             isDisabled ? "0" : formData[index]?.max_range || ""
                           }
-                          onChange={e => handleChange(e, index)}
+                          onChange={(e) => handleChange(e, index)}
                         />
                       </TableCell>
                       <TableCell>
@@ -441,7 +445,7 @@ function AddGpWiseKpi({ update }) {
                             type="number"
                             name="input_data"
                             value={formData[index]?.input_data || ""}
-                            onChange={e => handleChange(e, index)}
+                            onChange={(e) => handleChange(e, index)}
                           />
                         ) : (
                           <Input
@@ -449,7 +453,7 @@ function AddGpWiseKpi({ update }) {
                             type="number"
                             name="input_data"
                             value={formData[index]?.input_data || ""}
-                            onChange={e => handleChange(e, index)}
+                            onChange={(e) => handleChange(e, index)}
                           />
                         )}
                       </TableCell>
@@ -459,7 +463,7 @@ function AddGpWiseKpi({ update }) {
                           type="number"
                           name="score"
                           value={formData[index]?.score || "0"}
-                          onChange={e => handleChange(e, index)}
+                          onChange={(e) => handleChange(e, index)}
                         />
                       </TableCell>
                       <TableCell>
@@ -467,7 +471,7 @@ function AddGpWiseKpi({ update }) {
                           type="text"
                           name="remarks"
                           value={formData[index]?.remarks || ""}
-                          onChange={e => handleChange(e, index)}
+                          onChange={(e) => handleChange(e, index)}
                         />
                       </TableCell>
                     </TableRow>
@@ -484,7 +488,7 @@ function AddGpWiseKpi({ update }) {
               type="date"
               name="date"
               value={date || ""}
-              onChange={e => setDate(e.target.value)}
+              onChange={(e) => setDate(e.target.value)}
               id="date"
               placeholder="Enter date"
               className="px-10"

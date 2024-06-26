@@ -90,10 +90,7 @@ const YfInsightsPdf = ({ insights }) => (
                 <Text style={styles.label}>Financial Year:</Text>
                 <Text style={styles.value}>{insight.financialYear}</Text>
               </View>
-              <View style={styles.row}>
-                <Text style={styles.label}>Plan Of Action:</Text>
-                <Text style={styles.value}>{insight.planOfAction}</Text>
-              </View>
+
               <View style={styles.row}>
                 <Text style={styles.label}>Achievement:</Text>
                 <Text style={styles.value}>{insight.achievement}</Text>
@@ -107,6 +104,10 @@ const YfInsightsPdf = ({ insights }) => (
               <View style={styles.row}>
                 <Text style={styles.label}>Failures:</Text>
                 <Text style={styles.value}>{insight.failure}</Text>
+              </View>
+              <View style={styles.row}>
+                <Text style={styles.label}>Plan Of Action:</Text>
+                <Text style={styles.value}>{insight.planOfAction}</Text>
               </View>
             </View>
           </Page>
