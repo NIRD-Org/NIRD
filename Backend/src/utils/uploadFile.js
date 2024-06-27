@@ -35,3 +35,30 @@ export const uploadFile = async (buffer, folder = "user/uploads", format = "jpg"
     throw error;
   }
 };
+
+export const uploadPDF = async (buffer, folder = "user/uploads") => {
+  try {
+    return new Promise((resolve, reject) => {
+      const cld_upload_stream = cloudinary.uploader.upload_stream(
+        {
+          resource_type: "raw",
+          folder: folder,
+        },
+        (error, result) => {
+          if (error) {
+            console.error(error);
+            reject(error);
+          } else {
+            console.log(result);
+            resolve(result);
+          }
+        }
+      );
+
+      streamifier.createReadStream(buffer).pipe(cld_upload_stream);
+    });
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

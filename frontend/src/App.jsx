@@ -63,6 +63,10 @@ import TrainingPage from "./Pages/TrainingPage";
 import TrainingForm from "./components/admin/training-form/TrainingForm";
 import LocationView from "./components/admin/user-location/LocationView";
 import GoodPracticeForm from "./components/admin/good-practices/GoodPracticeForm";
+import GoodPracticeApprovalsList from "./components/admin/action/admin/good practice/ApprovalList";
+import GoodPracticeApprovalPage from "./components/admin/action/admin/good practice/ApprovalForm";
+import GoodPracticeApprovalsListYF from "./components/admin/action/young-fellow/good-practice/ApprovalList";
+import GoodPracticeResubmit from "./components/admin/action/young-fellow/good-practice/ResubmitForm";
 
 function App() {
   const { login } = useAuthContext();
@@ -185,6 +189,10 @@ function App() {
             />
             <Route path="training" element={<TrainingForm />} />
             <Route path="good-practices" element={<GoodPracticeForm />} />
+            <Route path="action/admin/good-practice" element={<GoodPracticeApprovalsList />} />
+            <Route path="action/young-fellow/good-practice" element={<GoodPracticeApprovalsListYF />} />
+            <Route path="approve/good-practice/:id" element={<GoodPracticeApprovalPage />} />
+            <Route path="resubmit/good-practice/:id" element={<GoodPracticeResubmit />} />
           </Route>
         </Route>
 
