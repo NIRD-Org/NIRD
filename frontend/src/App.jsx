@@ -100,18 +100,30 @@ function App() {
             <Route path="update-gp-wise-kpi" element={<UpdateGpWiseKpi />} />
             <Route path="users" element={<UserPage />} />
             <Route path="users/view/:id" element={<UserView />} />
-            <Route path="users/update/:id" element={<CreateUserForm update />} />
+            <Route
+              path="users/update/:id"
+              element={<CreateUserForm update />}
+            />
 
             <Route path="state/create" element={<StateForm />} />
             <Route path="district/create" element={<DistrictForm />} />
             <Route path="block/create" element={<BlockForm />} />
             <Route path="gram/create" element={<GpForm />} />
             <Route path="theme/create" element={<ThemeForm />} />
-            <Route path="theme/update/:themeId" element={<ThemeForm type={"update"}/>} />
+            <Route
+              path="theme/update/:themeId"
+              element={<ThemeForm type={"update"} />}
+            />
             <Route path="indicator/create" element={<IndicatorForm />} />
             <Route path="data-point/create" element={<DataPointForm />} />
-            <Route path="data-point/update/:kpiId" element={<DataPointForm  type="update"/>} />
-            <Route path="data-point/update/:kpiId" element={<DataPointForm  type="update"/>} />
+            <Route
+              path="data-point/update/:kpiId"
+              element={<DataPointForm type="update" />}
+            />
+            <Route
+              path="data-point/update/:kpiId"
+              element={<DataPointForm type="update" />}
+            />
             <Route path="data-point" element={<DataPointPage />} />
             <Route path="data-point/view/:kpiId" element={<KpiViewPage />} />
             <Route path="kpi-approvals-list" element={<KpiApprovalsList />} />
