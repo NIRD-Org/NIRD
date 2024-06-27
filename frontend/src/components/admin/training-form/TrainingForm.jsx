@@ -179,7 +179,7 @@ const TrainingForm = () => {
 
   return (
     <div className="p-6">
-      <AdminHeader>Add Training</AdminHeader>
+      <AdminHeader>Add Training Details</AdminHeader>
       <form onSubmit={handleSubmit} className="w-full grid grid-cols-3 gap-10">
         {formFields.map((field, index) => (
           <div className="mb-4" key={index}>
