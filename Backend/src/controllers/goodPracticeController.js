@@ -1,7 +1,7 @@
 import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
 import GoodPractice from "../models/goodPracticeModel.js";
 import { Errorhandler } from "../utils/errorHandler.js";
-import { uploadFile } from "../utils/uploadFile.js";
+import { uploadFile, uploadPDF } from "../utils/uploadFile.js";
 
 const getNewId = async () => {
   try {
@@ -33,7 +33,7 @@ export const createGoodPractice = CatchAsyncError(async (req, res, next) => {
 
     const [imageUrl, docUrl, videoUrl] = await Promise.all([
       uploadFile(image.data),
-      uploadFile(document.data, null),
+      uploadPDF(document.data),
       uploadFile(video.data, null),
     ]).then(([image, document, video]) => [image.url, document.url, video.url]);
 
@@ -219,7 +219,7 @@ export const updateGoodPractice = CatchAsyncError(async (req, res, next) => {
     const { goodPracticePhotos, goodPracticeDesign } = req.files || {};
     req.body.decision = 0;
 
-   /*  if (goodPracticePhotos) {
+    /*  if (goodPracticePhotos) {
       const goodPracticePhotosUrl = await uploadFile(goodPracticePhotos.data);
       req.body.goodPracticePhotos = goodPracticePhotosUrl;
     }

@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { tst } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { NirdViewIcon } from "@/components/admin/Icons";
 
 const GoodPracticeApprovalPage = () => {
   const { id } = useParams();
@@ -93,13 +94,28 @@ const GoodPracticeApprovalPage = () => {
           <TableRow>
             <TableCell>Document</TableCell>
             <TableCell>
-              <iframe src={goodPractice.document} width="50%" height="500px" />
+              <a
+                href={goodPractice.document}
+                className="flex gap-3 items-center"
+                target="_blank"
+              >
+                <span>View Document</span>
+                <NirdViewIcon />
+              </a>
             </TableCell>
           </TableRow>
           <TableRow>
             <TableCell>Video</TableCell>
             <TableCell>
-              <video src={goodPractice.video}></video>
+              <a
+                href={goodPractice.video}
+                className="flex gap-3 items-center"
+                target="_blank"
+              >
+                <span>View Video</span>
+                <NirdViewIcon />
+              </a>
+              {/* <video width={"300px"} src={goodPractice.video}></video> */}
             </TableCell>
           </TableRow>
           <TableRow>
