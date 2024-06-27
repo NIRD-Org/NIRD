@@ -89,7 +89,7 @@ const GoodPractices = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row pb-16 gap-5 justify-between">
         <div>
-          <h1 className="text-5xl md:text-6xl text-primary font-bold">
+          <h1 className="text-5xl md:text-6xl text-sky-900 font-bold">
             Good Practices
           </h1>
         </div>
@@ -118,7 +118,7 @@ const GoodPractices = () => {
           </div>
           <div className="bg-gray-200 p-5 flex w-full items-center  justify-between">
             <p className="text-xl text-gray-700 font-semibold">
-              Documents of Best Practices
+              Documents of Good Practices
             </p>
             <p className="text-[#262675] text-2xl font-bold">1</p>
           </div>

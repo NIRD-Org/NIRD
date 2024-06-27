@@ -1,6 +1,35 @@
 import API from "@/utils/API";
 import React, { useEffect, useState } from "react";
 
+const RankingCard = ({ rank, gp, state, block, dist, totalScore }) => {
+  return (
+    <div className="flex flex-col gap-0 min-w-60 border border-gray-300">
+      <h5 className="bg-sky-700 font-semibold text-white py-3 px-4 text-center">
+        Overall Ranking #{rank}
+      </h5>
+      <div className="p-5 pr-0 flex flex-col gap-1">
+        <p className="text-[1rem] font-semibold">
+          Total Score: <span className="text-gray-700 pl-2">{totalScore}</span>
+        </p>
+        {gp && (
+          <p className="text-[1rem] font-semibold">
+            Gram Panchayat: <span className="text-gray-700 pl-2">{gp}</span>
+          </p>
+        )}
+        <p className="text-[1rem] font-semibold">
+          Block: <span className="text-gray-700 pl-2">{block}</span>
+        </p>
+        <p className="text-[1rem] font-semibold">
+          District: <span className="text-gray-700 pl-2">{dist}</span>
+        </p>
+        <p className="text-[1rem] font-semibold">
+          State: <span className="text-gray-700 pl-2">{state}</span>
+        </p>
+      </div>
+    </div>
+  );
+};
+
 const Ranking = () => {
   const [gpRankData, setGpRankData] = useState([]);
   const [blockRankData, setBlockRankData] = useState([]);
@@ -133,107 +162,53 @@ const Ranking = () => {
             </form>
           </div>
         </div>
-        <div className="flex flex-col h-full">
-          <div className="overflow-x-auto">
-            <div className="min-w-full inline-block align-middle">
-              <div className="overflow-x-hidden max-h-screen">
-                <table className="divide-y   divide-gray-200 min-w-full">
-                  <thead className="bg-primary text-white sticky top-0 z-0">
-                    <tr className="text-left divide-x divide-gray-300 border border-gray-300 text-white">
-                      <th className="px-5 py-3 ">Rank</th>
-                      <th className="px-5 py-3">Total Score</th>
-                      {rankType !== "block" && (
-                        <th className="px-5 py-3">Gram Panchayat</th>
-                      )}
-                      <th className="px-5 py-3">Block</th>
-
-                      <th className="px-5 py-3">Distrct</th>
-                      <th className="px-5 py-3">State</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {loading ? (
-                      <tr className="text-center text-2xl text-gray-500">
-                        <td colSpan={6} className="py-10 ">
-                          Loading...
-                        </td>
-                      </tr>
-                    ) : (
-                      <>
-                        {rankType !== "block" ? (
-                          <>
-                            {gpRankData && gpRankData.length > 0 ? (
-                              gpRankData.map((rankData) => (
-                                <tr className="text-left divide-x divide-gray-300 border border-gray-300">
-                                  <td className="px-5 py-2">
-                                    # {rankData.rank}
-                                  </td>
-                                  <td className="px-5 py-2">
-                                    {rankData.totalScore}
-                                  </td>
-
-                                  <td className="px-5 py-2">
-                                    {rankData.gp_name}
-                                  </td>
-                                  <td className="px-5 py-2">
-                                    {rankData.block_name}
-                                  </td>
-
-                                  <td className="px-5 py-2">
-                                    {rankData.dist_name}
-                                  </td>
-                                  <td className="px-5 py-2">
-                                    {rankData.state_name}
-                                  </td>
-                                </tr>
-                              ))
-                            ) : (
-                              <tr className="text-center text-2xl text-gray-500">
-                                <td colSpan={6} className="py-10 ">
-                                  Sorry, No Data Found!
-                                </td>
-                              </tr>
-                            )}
-                          </>
-                        ) : (
-                          <>
-                            {blockRankData && blockRankData.length > 0 ? (
-                              blockRankData.map((rankData) => (
-                                <tr className="text-left divide-x divide-gray-300 border border-gray-300">
-                                  <td className="px-5 py-2">
-                                    # {rankData.rank}
-                                  </td>
-                                  <td className="px-5 py-2">
-                                    {rankData.totalScore}
-                                  </td>
-                                  <td className="px-5 py-2">
-                                    {rankData.block_name}
-                                  </td>
-
-                                  <td className="px-5 py-2">
-                                    {rankData.dist_name}
-                                  </td>
-                                  <td className="px-5 py-2">
-                                    {rankData.state_name}
-                                  </td>
-                                </tr>
-                              ))
-                            ) : (
-                              <tr className="text-center text-2xl text-gray-500">
-                                <td colSpan={6} className="py-10 ">
-                                  Sorry, No Data Found!
-                                </td>
-                              </tr>
-                            )}
-                          </>
-                        )}
-                      </>
-                    )}
-                  </tbody>
-                </table>
-              </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-center items-start  gap-10 h-full">
+          {loading ? (
+            <div className="col-span-full text-center w-full h-full font-bold text-2xl">
+              Loading...
             </div>
-          </div>
+          ) : (
+            <>
+              {rankType !== "block" ? (
+                <>
+                  {gpRankData && gpRankData.length > 0 ? (
+                    gpRankData.map((rankData) => (
+                      <RankingCard
+                        rank={rankData.rank}
+                        gp={rankData.gp_name}
+                        state={rankData.state_name}
+                        block={rankData.block_name}
+                        dist={rankData.dist_name}
+                        totalScore={rankData.totalScore}
+                      />
+                    ))
+                  ) : (
+                    <div className="col-span-full text-center w-full h-full font-bold text-3xl text-gray-700 pl-2">
+                      Sorry, No Data Found!
+                    </div>
+                  )}
+                </>
+              ) : (
+                <>
+                  {blockRankData && blockRankData.length > 0 ? (
+                    blockRankData.map((rankData) => (
+                      <RankingCard
+                        rank={rankData.rank}
+                        state={rankData.state_name}
+                        block={rankData.block_name}
+                        dist={rankData.dist_name}
+                        totalScore={rankData.totalScore}
+                      />
+                    ))
+                  ) : (
+                    <div className="col-span-full text-center w-full h-full font-bold text-3xl text-gray-700 pl-2">
+                      Sorry, No Data Found!
+                    </div>
+                  )}
+                </>
+              )}
+            </>
+          )}
         </div>
       </div>
     </div>

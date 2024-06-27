@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
 const trainingSchema = new mongoose.Schema({
   programmeCode: { type: String, required: true },
@@ -29,4 +29,4 @@ const trainingSchema = new mongoose.Schema({
 
 const Training = mongoose.model("Training", trainingSchema);
 
-export default Training
+export default Training;

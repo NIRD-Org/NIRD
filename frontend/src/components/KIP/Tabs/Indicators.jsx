@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Themes from "../Themes";
 import API from "@/utils/API";
 import Progress from "../Progress";
 import Select from "react-select";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
 const Indicators = () => {
   const [stateOptions, setStateOptions] = useState([]);
   const [districtOptions, setDistrictOptions] = useState([]);
@@ -15,18 +17,36 @@ const Indicators = () => {
   const [gp, setGp] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const tableRef = useRef(null);
+
+  const scrollLeft = () => {
+    tableRef.current.scrollBy({
+      top: 0,
+      left: window.screen.width > 700 ? -700 : -300,
+      behavior: "smooth",
+    });
+  };
+
+  const scrollRight = () => {
+    tableRef.current.scrollBy({
+      top: 0,
+      left: window.screen.width > 700 ? 800 : 300,
+      behavior: "smooth",
+    });
+  };
+
   const getAllStates = async () => {
     const { data } = await API.get(`/api/v1/state/all`);
     setStateOptions(data?.states);
-    // console.log(data?.states);
   };
+
   const getAllDistricts = async () => {
     try {
       const { data } = await API.get(`/api/v1/dist/state/${state}`);
       setDistrictOptions(data?.districts);
     } catch (error) {
       setDistrictOptions([]);
-      console.log("Error gettign district");
+      console.log("Error getting district");
     }
   };
 
@@ -75,16 +95,15 @@ const Indicators = () => {
     if (block) getAllGp();
   }, [block]);
 
-  // Old
   const [indicator, setIndicator] = useState([]);
   const [gpData, setGpData] = useState([]);
   const [gpWiseKpiData, setGpWiseKpiData] = useState([]);
   const [search, setSearch] = useState("");
+
   const getAllKpi = async () => {
     try {
       const { data } = await API.get("/api/v1/indicator/all");
       setIndicator(data.indicators);
-      // console.log(data);
     } catch (error) {
       console.log("Error: " + error);
     }
@@ -125,8 +144,8 @@ const Indicators = () => {
       setLoading(false);
     }
   };
+
   useEffect(() => {
-    // getAllKpiData();
     getGpWiseKpiData();
     getAllKpi();
   }, []);
@@ -187,7 +206,7 @@ const Indicators = () => {
   }
 
   return (
-    <div className="px-10 pb-8 lg:px-20 lg:pb-12">
+    <div className="px-4 pb-8 lg:px-20 lg:pb-12">
       <h1 className="text-xl font-bold mb-4">Institutional Strengthening</h1>
       <div className="flex flex-col md:flex-row items-center gap-10 justify-between pt-10  ">
         <div className="flex flex-wrap items-start py-10 gap-2 sm:gap-5">
@@ -208,7 +227,6 @@ const Indicators = () => {
             </select>
           </div>
           <div className="flex flex-col">
-            {/* <SelectComponent data={districtOptions} name="District" /> */}
             <select
               className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
               value={district}
@@ -303,10 +321,25 @@ const Indicators = () => {
         </div>
       </div>
 
-      <div className="flex relative pt-5 pb-20">
+      <div className="flex justify-end gap-2 mt-5 mb-1">
+        <button
+          onClick={scrollLeft}
+          className="bg-primary text-white  px-3 rounded focus:outline-none focus:ring text-[1.25rem] focus:ring-orange-200"
+        >
+          <ChevronLeft />
+        </button>
+        <button
+          onClick={scrollRight}
+          className="bg-primary text-white text-[1.25rem] p-2 px-3 rounded focus:outline-none focus:ring focus:ring-orange-200"
+        >
+          <ChevronRight />
+        </button>
+      </div>
+
+      <div className="flex relative pb-20">
         <div className="ml-1/4 flex-1 overflow-hidden">
           <div className="flex flex-col h-full">
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto" ref={tableRef}>
               <div className="min-w-full inline-block align-middle">
                 <div className="overflow-x-hidden max-h-screen">
                   {loading ? (
