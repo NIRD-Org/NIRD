@@ -57,7 +57,7 @@ function ThemeForm({ type = "add", onSubmit }) {
   };
 
   const fields = [
-    { name: "theme_name", label: "Theme Name", type: "text", required: true },
+    { name: "theme_name", label: "Theme Name", type: "textarea", required: true },
   ];
 
   return (

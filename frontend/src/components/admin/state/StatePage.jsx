@@ -1,14 +1,19 @@
-import React, { useEffect, useState, useTransition } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Table, TableBody, TableCaption, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TableCell
+} from "@/components/ui/table";
 import TableSkeleton from "@/components/ui/tableskeleton";
-import StateRow from "./StateRow";
-import StateForm from "./StateForm";
-import { states } from "@/lib/data"; // Import states data
 import API from "@/utils/API";
-import { tst } from "@/lib/utils";
 import { Link } from "react-router-dom";
+import { NirdDeleteIcon, NirdEditIcon } from "../Icons";
+import { tst } from "@/lib/utils";
 
 const StatePage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -26,6 +31,18 @@ const StatePage = () => {
     }
   };
 
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this state?")) {
+      try {
+        await API.delete(`/api/v1/state/${id}`);
+        tst.success("State deleted successfully");
+        getAllStates();
+      } catch (error) {
+        tst.error("Failed to delete state:", error);
+      }
+    }
+  };
+
   useEffect(() => {
     getAllStates();
   }, []);
@@ -38,7 +55,7 @@ const StatePage = () => {
           <Button>Add State</Button>
         </Link>
       </div>
-      <Table>
+      <Table className="overscroll-x-scroll">
         <TableCaption>List of all states.</TableCaption>
         <TableHeader>
           <TableRow>
@@ -48,11 +65,22 @@ const StatePage = () => {
           </TableRow>
         </TableHeader>
         {isLoading ? (
-          <TableSkeleton columnCount={7} />
+          <TableSkeleton columnCount={3} />
         ) : (
           <TableBody>
-            {states.map(state => (
-              <StateRow key={state.id} state={state} />
+            {states.map((state) => (
+              <TableRow key={state.id}>
+                <TableCell>{state.id}</TableCell>
+                <TableCell>{state.name}</TableCell>
+                <TableCell className="flex gap-2 items-center">
+                  <Link to={`/admin/state/update/${state.id}`}>
+                    <NirdEditIcon />
+                  </Link>
+                  <div onClick={() => handleDelete(state.id)}>
+                    <NirdDeleteIcon />
+                  </div>
+                </TableCell>
+              </TableRow>
             ))}
           </TableBody>
         )}

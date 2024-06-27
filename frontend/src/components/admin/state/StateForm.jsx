@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import API from "@/utils/API";
 import { tst } from "@/lib/utils";
 import AdminHeader from "../AdminHeader";
+import { useParams } from "react-router-dom";
 
 function StateForm({ type = "add", onSubmit, state }) {
   const [formData, setFormData] = useState({
@@ -12,8 +13,28 @@ function StateForm({ type = "add", onSubmit, state }) {
     state_shortcode: state?.state_shortcode || "",
     country_id: state?.country_id || "",
   });
+  const { stateId } = useParams();
 
   const [pending, setPending] = useState(false);
+
+  useEffect(() => {
+    if (type === "update" && stateId) {
+      const fetchState = async () => {
+        try {
+          const response = await API.get(`/api/v1/state/${stateId}`);
+          const data = response.data.state;
+          setFormData({
+            name: data.name,
+            state_shortcode: data.state_shortcode,
+            country_id: data.country_id,
+          });
+        } catch (error) {
+          tst.error("Failed to fetch state data:", error);
+        }
+      };
+      fetchState();
+    }
+  }, [type, stateId]);
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -23,14 +44,22 @@ function StateForm({ type = "add", onSubmit, state }) {
     }));
   };
 
-  const handleCreateState = async e => {
+  const handleSubmit = async e => {
     e.preventDefault();
+    setPending(true);
     try {
-      setPending(true);
-      await API.post("/api/v1/state/create", formData);
-      tst.success("State created success");
+      if (type === "add") {
+        await API.post("/api/v1/state/create", formData);
+        tst.success("State created successfully");
+      } else {
+        await API.put(`/api/v1/state/${stateId}`, formData);
+        tst.success("State updated successfully");
+      }
+      if (onSubmit) {
+        onSubmit();
+      }
     } catch (error) {
-      tst.error(error);
+      tst.error("Failed to submit form:", error);
     } finally {
       setPending(false);
     }
@@ -42,13 +71,25 @@ function StateForm({ type = "add", onSubmit, state }) {
       label: "Name",
       required: true,
     },
+    {
+      name: "state_shortcode",
+      label: "State Shortcode",
+      required: true,
+    },
+    {
+      name: "country_id",
+      label: "Country ID",
+      required: true,
+    },
   ];
 
   return (
     <div className="container mx-auto p-6">
-      <form onSubmit={handleCreateState}>
+      <form onSubmit={handleSubmit}>
         <div className="py-4">
-          <AdminHeader>{type === "add" ? "Add State" : "Update State"}</AdminHeader>
+          <AdminHeader>
+            {type === "add" ? "Add State" : "Update State"}
+          </AdminHeader>
           <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3">
             {formFields.map(field => (
               <div key={field.name}>
@@ -56,7 +97,17 @@ function StateForm({ type = "add", onSubmit, state }) {
                   {field.label}
                 </Label>
                 {field.required && <span className="text-red-500 ml-1">*</span>}
-                <Input type="text" name={field.name} value={formData[field.name]} onChange={handleChange} id={field.name} placeholder={`Enter ${field.label.toLowerCase()}`} className="col-span-3" />
+                <Input
+                  type="text"
+                  name={field.name}
+                  value={formData[field.name]}
+                  onChange={handleChange}
+                  id={field.name}
+                  placeholder={`Enter ${field.label.toLowerCase()}`}
+                  className="col-span-3"
+                  required={field.required}
+                  disabled={pending}
+                />
               </div>
             ))}
           </div>

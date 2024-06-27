@@ -2,13 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import API from "@/utils/API";
 import AdminHeader from "../AdminHeader";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,6 +11,7 @@ import { tst } from "@/lib/utils";
 function CreateUserForm({ update }) {
   const { id } = useParams();
   const { user } = useAuthContext();
+  const [pending, setPending] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     name: "",
@@ -32,8 +26,6 @@ function CreateUserForm({ update }) {
     role: "",
   });
 
-  const [pending, setPending] = useState(false);
-  console.log(formData);
 
   useEffect(() => {
     if (update) {
@@ -186,7 +178,7 @@ function CreateUserForm({ update }) {
           ))}
         </div>
         <div className="grid grid-cols-3 gap-10 mt-10">
-          <Button type="submit" disabled={pending}>
+          <Button type="submit" pending={pending}>
             {update ? "Update" : "Submit"}
           </Button>
         </div>

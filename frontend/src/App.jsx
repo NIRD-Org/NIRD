@@ -54,12 +54,15 @@ import GramPanchayatProfile from "./Pages/GramPanchayatProfile";
 import YoungFellowInsights from "./components/admin/young-fellow-insight/YoungFellowInsight";
 import FellowInsightPage from "./components/admin/young-fellow-insight/FellowInsightPage";
 import YfInsightsPage from "./Pages/YfInsightsPage";
-import KpiViewPage from "./components/admin/kpi/KpiViewPage";
+import KpiViewPage from "./components/admin/kpi/KpiView";
 import UserPage from "./components/admin/users/UserPage";
 import UserView from "./components/admin/users/UserView";
 import GoodPractices from "./Pages/GoodPractices";
 import LCVAPage from "./Pages/LCVAPage";
 import TrainingPage from "./Pages/TrainingPage";
+import TrainingForm from "./components/admin/training-form/TrainingForm";
+import LocationView from "./components/admin/user-location/LocationView";
+import GoodPracticeForm from "./components/admin/good-practices/GoodPracticeForm";
 
 function App() {
   const { login } = useAuthContext();
@@ -106,6 +109,10 @@ function App() {
             />
 
             <Route path="state/create" element={<StateForm />} />
+            <Route
+              path="state/update/:stateId"
+              element={<StateForm type="update" />}
+            />
             <Route path="district/create" element={<DistrictForm />} />
             <Route path="block/create" element={<BlockForm />} />
             <Route path="gram/create" element={<GpForm />} />
@@ -158,11 +165,11 @@ function App() {
             />
             <Route
               path="user-location/view/admin/:userId"
-              element={<UpdateUserLocation view role={2} />}
+              element={<LocationView view role={2} />}
             />
             <Route
               path="user-location/view/young-fellow/:userId"
-              element={<UpdateUserLocation view role={3} />}
+              element={<LocationView role={3} />}
             />
             <Route
               path="young-fellow-insight"
@@ -176,6 +183,8 @@ function App() {
               path="young-fellow-insight/submissions"
               element={<FellowInsightPage />}
             />
+            <Route path="training" element={<TrainingForm />} />
+            <Route path="good-practices" element={<GoodPracticeForm />} />
           </Route>
         </Route>
 

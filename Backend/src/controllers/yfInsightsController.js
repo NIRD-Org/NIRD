@@ -2,7 +2,7 @@ import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
 import { YfInsightsModel } from "../models/yfInsightsModel.js";
 import { Errorhandler } from "../utils/errorHandler.js";
 import { v2 as cloudinary } from "cloudinary";
-import { uploadImage } from "../utils/uploadImage.js";
+import { uploadFile } from "../utils/uploadFile.js";
 
 const getNewId = async () => {
   try {
@@ -43,7 +43,7 @@ export const createYfInsights = CatchAsyncError(async (req, res, next) => {
       );
     }
     const achievementPhoto = req.files.achievementPhoto;
-    const { url } = await uploadImage(achievementPhoto.data);
+    const { url } = await uploadFile(achievementPhoto.data);
     req.body.achievementPhoto = url;
     const id = await getNewId();
     req.body.id = id.toString();

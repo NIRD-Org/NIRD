@@ -60,7 +60,7 @@ const DataPointPage = () => {
   return (
     <div className="container mx-auto p-4">
       <AdminHeader>All KPI</AdminHeader>
-      <div className="flex justify-between items-center my-4">
+      <div className="flex justify-between items-center my-4 flex-wrap gap-4">
         <ThemeFilter />
         <Link to="/admin/data-point/create">
           <Button>Add KPI</Button>
@@ -78,7 +78,7 @@ const DataPointPage = () => {
           <TableHead>Action</TableHead>
         </TableRow>
         {isLoading ? (
-          <TableSkeleton columnCount={10} />
+          <TableSkeleton columnCount={6} />
         ) : (
           <TableBody>
             {kpiData.map((kpi, index) => (
