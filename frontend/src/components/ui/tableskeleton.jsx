@@ -1,22 +1,23 @@
 "use client";
 import { Skeleton } from "@/components/ui/skeleton";
+import { TableBody, TableHead, TableRow } from "./table";
 
 const TableSkeleton = ({columnCount,rowCount=10}) => {
   return (
-    <tbody>
+    <TableBody>
       {[...Array(rowCount)].map((_, index) => (
-        <tr key={index}>
+        <TableRow key={index}>
           {[...Array(columnCount)].map((_, index) => (
-            <td key={index} className="px-6 py-4">
+            <TableHead key={index} className="px-6 py-4">
               <Skeleton className="h-4 w-full bg-slate-200" />
-            </td>
+            </TableHead>
           ))}
-          <td className="px-6 py-4">
+          <TableHead className="px-6 py-4">
             <Skeleton className="h-4 w-20 bg-slate-200" />
-          </td>
-        </tr>
+          </TableHead>
+        </TableRow>
       ))}
-    </tbody>
+    </TableBody>
   );
 };
 

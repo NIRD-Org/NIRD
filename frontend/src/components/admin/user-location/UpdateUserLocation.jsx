@@ -72,6 +72,13 @@ const UpdateUserLocation = ({ view,role }) => {
     setSelectedGp(prev => prev.filter(id => !gpIds.includes(id)));
   };
 
+  
+  const handleStateRemove = value => {
+    const stateIds = states.filter(state => value.includes(state.name)).map(state => state.id);
+
+    setSelectedState(prev => prev.filter(id => !stateIds.includes(id)));
+  };
+
   const postLocation = async () => {
     const blockIds = Array.from(
       new Set(
@@ -114,8 +121,7 @@ const UpdateUserLocation = ({ view,role }) => {
     const updateUserLocations = {
       state_ids: selectedState,
     };
-
-    // console.log(updateUserLocations)
+    console.log(updateUserLocations)
     // return;
     if (selectedState.length == 0) return;
 

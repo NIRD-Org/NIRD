@@ -18,6 +18,7 @@ import gpWiseIndicatorRoutes from "./routes/gpWiseIndicatorRoutes.js";
 import gpDetailRoutes from "./routes/gpDetailRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import yfInsightsRoutes from "./routes/yfInsightsRoutes.js";
+import trainingRoutes from "./routes/trainingRoutes.js";
 import fileUpload from "express-fileupload";
 const app = express();
 
@@ -44,6 +45,7 @@ app.use("/api/v1/indicator", indicatorRoutes);
 app.use("/api/v1/gp-details", gpDetailRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/yf-insights", yfInsightsRoutes);
+app.use("/api/v1/training", trainingRoutes);
 app.get("/", (req, res) => {
   res.status(200).json({ message: "Server is running" });
 });

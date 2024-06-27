@@ -469,6 +469,12 @@ export const getSidebarItems = user => {
           title: "KPI",
           link: "/admin/data-point",
         },
+        {
+          type: "sub-module",
+          icon: ArrowBigRight,
+          title: "Training",
+          link: "/admin/training",
+        },
       ];
       break;
     case 2:
@@ -490,11 +496,6 @@ export const getSidebarItems = user => {
           title: "User location",
           link: "/admin/users/all/young-fellow",
         },
-        /*  {
-          type: "module",
-          icon: ArrowBigRight,
-          title: "Master",
-        }, */
 
         {
           type: "module",
@@ -506,6 +507,12 @@ export const getSidebarItems = user => {
           icon: ArrowBigRight,
           title: "Action Form",
           link: "/admin/admin-action-form",
+        },
+        {
+          type: "sub-module",
+          icon: ArrowBigRight,
+          title: "Training ",
+          link: "/admin/training",
         },
       ];
       break;

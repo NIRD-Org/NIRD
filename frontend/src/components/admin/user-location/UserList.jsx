@@ -11,6 +11,13 @@ import API from "@/utils/API";
 import { Link, useSearchParams } from "react-router-dom";
 import { useAuthContext } from "@/context/AuthContext";
 import AdminHeader from "../AdminHeader";
+import {
+  NirdAssignIcon,
+  NirdBanIcon,
+  NirdDeleteIcon,
+  NirdEditIcon,
+  NirdViewIcon,
+} from "../Icons";
 
 const UserList = ({ role }) => {
   const { user } = useAuthContext();
@@ -47,7 +54,7 @@ const UserList = ({ role }) => {
               <TableCell>{user.id}</TableCell>
               <TableCell>{user.name}</TableCell>
               <TableCell>{user.username}</TableCell>
-              <TableCell className="space-x-4">
+              <TableCell className="flex gap-4">
                 {role == 2 ? (
                   <>
                     {!user.location_assigned ? (
@@ -55,7 +62,7 @@ const UserList = ({ role }) => {
                         to={`/admin/user-location/assign/admin/${user.id}`}
                         className="text-blue-600 hover:underline"
                       >
-                        Assign
+                        <NirdAssignIcon /> 
                       </Link>
                     ) : (
                       <>
@@ -63,13 +70,13 @@ const UserList = ({ role }) => {
                           to={`/admin/user-location/update/admin/${user.id}`}
                           className="text-blue-600 hover:underline"
                         >
-                          Update
+                          <NirdEditIcon /> 
                         </Link>
                         <Link
                           to={`/admin/user-location/view/admin/${user.id}`}
                           className="text-blue-600 hover:underline"
                         >
-                          View
+                          <NirdViewIcon /> 
                         </Link>
                       </>
                     )}
@@ -81,7 +88,7 @@ const UserList = ({ role }) => {
                         to={`/admin/user-location/assign/young-fellow/${user.id}`}
                         className="text-blue-600 hover:underline"
                       >
-                        Assign
+                        <NirdAssignIcon /> 
                       </Link>
                     ) : (
                       <>
@@ -89,13 +96,13 @@ const UserList = ({ role }) => {
                           to={`/admin/user-location/update/young-fellow/${user.id}`}
                           className="text-blue-600 hover:underline"
                         >
-                          Update
+                          <NirdEditIcon /> 
                         </Link>
                         <Link
                           to={`/admin/user-location/view/young-fellow/${user.id}`}
                           className="text-blue-600 hover:underline"
                         >
-                          View
+                          <NirdViewIcon /> 
                         </Link>
                       </>
                     )}
@@ -111,3 +118,4 @@ const UserList = ({ role }) => {
 };
 
 export default UserList;
+

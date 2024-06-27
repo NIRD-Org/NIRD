@@ -6,6 +6,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  TableCaption,
 } from "@/components/ui/table";
 import API from "@/utils/API";
 import { Link, useSearchParams } from "react-router-dom";
@@ -18,6 +19,7 @@ import {
   NirdViewIcon,
 } from "../Icons";
 import StateFilter from "../filter/StateFilter";
+import TableSkeleton from "@/components/ui/tableskeleton";
 
 const UserPage = () => {
   const { user } = useAuthContext();
@@ -27,13 +29,17 @@ const UserPage = () => {
   const [roleFilter, setRoleFilter] = useState(user.role === 1 ? null : 3);
   const [searchParams, setSearchParams] = useSearchParams();
   const stateId = searchParams.get("state_id") || "";
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchUser = async () => {
     try {
+      setIsLoading(true);
       const { data } = await API.get(`/api/v1/users/all?status=all`);
       setUsers(data.data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -50,7 +56,7 @@ const UserPage = () => {
     fetchUser();
     fetchUserLocations();
   }, []);
-  // console.log(userLocations)
+
   const filteredUsers = users?.filter(user => {
     if (roleFilter && user.role !== roleFilter) {
       return false;
@@ -114,7 +120,9 @@ const UserPage = () => {
           <StateFilter />
         </div>
       </div>
+
       <Table>
+        <TableCaption>User List</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead>ID</TableHead>
@@ -124,47 +132,51 @@ const UserPage = () => {
             <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
-          {filteredUsers.map(user => (
-            <TableRow key={user.id}>
-              <TableCell>{user.id}</TableCell>
-              <TableCell>{user.name}</TableCell>
-              <TableCell>{user.username}</TableCell>
-              <TableCell>
-                {user.role === 1
-                  ? "Superadmin"
-                  : user.role === 2
-                  ? "Admin"
-                  : "Young Fellow"}
-              </TableCell>
-              <TableCell className="flex gap-4 ">
-                {user.status == 0 ? (
-                  <div>
-                    <NirdBanIcon />
-                  </div>
-                ) : (
-                  <>
-                    <Link
-                      to={`/admin/users/view/${user.id}`}
-                      className="hover:text-blue-600"
-                    >
-                      <NirdViewIcon />
-                    </Link>
-                    <Link
-                      to={`/admin/users/update/${user.id}/`}
-                      className="hover:text-blue-600"
-                    >
-                      <NirdEditIcon />
-                    </Link>
-                    <div onClick={() => handleDelete(user.id)}>
-                      <NirdDeleteIcon />
+        {isLoading ? (
+          <TableSkeleton columnCount={4} />
+        ) : (
+          <TableBody>
+            {filteredUsers.map(user => (
+              <TableRow key={user.id}>
+                <TableCell>{user.id}</TableCell>
+                <TableCell>{user.name}</TableCell>
+                <TableCell>{user.username}</TableCell>
+                <TableCell>
+                  {user.role === 1
+                    ? "Superadmin"
+                    : user.role === 2
+                    ? "Admin"
+                    : "Young Fellow"}
+                </TableCell>
+                <TableCell className="flex gap-4 ">
+                  {user.status == 0 ? (
+                    <div>
+                      <NirdBanIcon />
                     </div>
-                  </>
-                )}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
+                  ) : (
+                    <>
+                      <Link
+                        to={`/admin/users/view/${user.id}`}
+                        className="hover:text-blue-600"
+                      >
+                        <NirdViewIcon />
+                      </Link>
+                      <Link
+                        to={`/admin/users/update/${user.id}/`}
+                        className="hover:text-blue-600"
+                      >
+                        <NirdEditIcon />
+                      </Link>
+                      <div onClick={() => handleDelete(user.id)}>
+                        <NirdDeleteIcon />
+                      </div>
+                    </>
+                  )}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        )}
       </Table>
     </div>
   );
