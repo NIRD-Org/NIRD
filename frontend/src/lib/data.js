@@ -470,6 +470,10 @@ export const getSidebarItems = user => {
           link: "/admin/data-point",
         },
         {
+          type: "module",
+          title: "Training",
+        },
+        {
           type: "sub-module",
           icon: ArrowBigRight,
           title: "Training",
@@ -507,6 +511,16 @@ export const getSidebarItems = user => {
           icon: ArrowBigRight,
           title: "Action Form",
           link: "/admin/admin-action-form",
+        },
+        {
+          type: "sub-module",
+          icon: ArrowBigRight,
+          title: "Good Practice",
+          link: "/admin/action/admin/good-practice",
+        },
+        {
+          type: "module",
+          title: "Training",
         },
         {
           type: "sub-module",
@@ -564,6 +578,13 @@ export const getSidebarItems = user => {
           title: "Action Form",
           link: "/admin/action-form",
         },
+        {
+          type: "sub-module",
+          icon: ArrowBigRight,
+          title: "Good Practice Action",
+          link: "/admin/action/young-fellow/good-practice",
+        },
+      
         {
           type: "sub-module",
           icon: ArrowBigRight,

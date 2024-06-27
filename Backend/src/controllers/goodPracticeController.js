@@ -3,18 +3,45 @@ import GoodPractice from "../models/goodPracticeModel.js";
 import { Errorhandler } from "../utils/errorHandler.js";
 import { uploadFile } from "../utils/uploadFile.js";
 
+const getNewId = async () => {
+  try {
+    const maxDoc = await GoodPractice.aggregate([
+      {
+        $addFields: {
+          numericId: { $toInt: "$id" },
+        },
+      },
+      {
+        $sort: { numericId: -1 },
+      },
+      {
+        $limit: 1,
+      },
+    ]).exec();
+
+    const maxId = maxDoc.length > 0 ? maxDoc[0].numericId : 0;
+    return maxId + 1;
+  } catch (error) {
+    return next(new Errorhandler("failed to get new id", 500));
+  }
+};
+
 export const createGoodPractice = CatchAsyncError(async (req, res, next) => {
   try {
     const { image, document, video } = req.files;
     console.log(req.body);
 
-    const { url: imageUrl } = await uploadFile(image.data);
-    const { url: docUrl } = await uploadFile(document.data, null);
-    const { url: videoUrl } = await uploadFile(video.data, null);
+    const [imageUrl, docUrl, videoUrl] = await Promise.all([
+      uploadFile(image.data),
+      uploadFile(document.data, null),
+      uploadFile(video.data, null),
+    ]).then(([image, document, video]) => [image.url, document.url, video.url]);
 
     req.body.image = imageUrl;
     req.body.document = docUrl;
     req.body.video = videoUrl;
+    req.body.id = await getNewId();
+    req.body.created_by = req.user.id;
 
     const newGoodPractice = new GoodPractice(req.body);
     await newGoodPractice.save();
@@ -30,14 +57,73 @@ export const createGoodPractice = CatchAsyncError(async (req, res, next) => {
   }
 });
 
-// Get all good practices
 export const getAllGoodPractices = CatchAsyncError(async (req, res, next) => {
   try {
-    const goodPractices = await GoodPractice.find();
+    const filter = {};
+    if (req.query.state_id) filter.state_id = req.query.state_id;
+    if (req.query.dist_id) filter.dist_id = req.query.dist_id;
+    if (req.query.block_id) filter.block_id = req.query.block_id;
+    if (req.query.gp_id) filter.gp_id = req.query.gp_id;
+    if (req.query.theme_id) filter.theme_id = req.query.theme_id;
+    if (req.query.decision) filter.decision = parseInt(req.query.decision);
 
-    if (!goodPractices || goodPractices.length === 0) {
-      return next(new Errorhandler("No Good Practices found", 404));
-    }
+    const goodPractices = await GoodPractice.aggregate([
+      { $match: filter },
+      {
+        $lookup: {
+          from: "themes",
+          localField: "theme_id",
+          foreignField: "id",
+          as: "theme",
+        },
+      },
+      {
+        $lookup: {
+          from: "states",
+          localField: "state_id",
+          foreignField: "id",
+          as: "state",
+        },
+      },
+      {
+        $lookup: {
+          from: "districts",
+          localField: "dist_id",
+          foreignField: "id",
+          as: "district",
+        },
+      },
+      {
+        $lookup: {
+          from: "blocks",
+          localField: "block_id",
+          foreignField: "id",
+          as: "block",
+        },
+      },
+      {
+        $lookup: {
+          from: "grampanchayats",
+          localField: "gp_id",
+          foreignField: "id",
+          as: "gp",
+        },
+      },
+      { $unwind: "$theme" },
+      { $unwind: "$state" },
+      { $unwind: "$block" },
+      { $unwind: "$district" },
+      { $unwind: "$gp" },
+      {
+        $addFields: {
+          theme_name: "$theme.theme_name",
+          state_name: "$state.name",
+          block_name: "$block.name",
+          dist_name: "$district.name",
+          gp_name: "$gp.name",
+        },
+      },
+    ]);
 
     res.status(200).json({
       success: true,
@@ -45,7 +131,7 @@ export const getAllGoodPractices = CatchAsyncError(async (req, res, next) => {
       data: goodPractices,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return next(new Errorhandler("Failed to get Good Practices", 500));
   }
 });
@@ -53,8 +139,63 @@ export const getAllGoodPractices = CatchAsyncError(async (req, res, next) => {
 // Get good practice by ID
 export const getGoodPracticeById = CatchAsyncError(async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const goodPractice = await GoodPractice.findById(id);
+    const [goodPractice] = await GoodPractice.aggregate([
+      { $match: { id: req.params.id } },
+      {
+        $lookup: {
+          from: "themes",
+          localField: "theme_id",
+          foreignField: "id",
+          as: "theme",
+        },
+      },
+      {
+        $lookup: {
+          from: "states",
+          localField: "state_id",
+          foreignField: "id",
+          as: "state",
+        },
+      },
+      {
+        $lookup: {
+          from: "districts",
+          localField: "dist_id",
+          foreignField: "id",
+          as: "district",
+        },
+      },
+      {
+        $lookup: {
+          from: "blocks",
+          localField: "block_id",
+          foreignField: "id",
+          as: "block",
+        },
+      },
+      {
+        $lookup: {
+          from: "grampanchayats",
+          localField: "gp_id",
+          foreignField: "id",
+          as: "gp",
+        },
+      },
+      { $unwind: "$theme" },
+      { $unwind: "$state" },
+      { $unwind: "$district" },
+      { $unwind: "$block" },
+      { $unwind: "$gp" },
+      {
+        $addFields: {
+          theme_name: "$theme.theme_name",
+          state_name: "$state.name",
+          dist_name: "$district.name",
+          block_name: "$block.name",
+          gp_name: "$gp.name",
+        },
+      },
+    ]);
 
     if (!goodPractice) {
       return next(new Errorhandler("Good Practice not found", 404));
@@ -76,8 +217,9 @@ export const updateGoodPractice = CatchAsyncError(async (req, res, next) => {
   try {
     const { id } = req.params;
     const { goodPracticePhotos, goodPracticeDesign } = req.files || {};
+    req.body.decision = 0;
 
-    if (goodPracticePhotos) {
+   /*  if (goodPracticePhotos) {
       const goodPracticePhotosUrl = await uploadFile(goodPracticePhotos.data);
       req.body.goodPracticePhotos = goodPracticePhotosUrl;
     }
@@ -85,10 +227,10 @@ export const updateGoodPractice = CatchAsyncError(async (req, res, next) => {
     if (goodPracticeDesign) {
       const goodPracticeDesignUrl = await uploadFile(goodPracticeDesign.data);
       req.body.goodPracticeDesign = goodPracticeDesignUrl;
-    }
+    } */
 
-    const updatedGoodPractice = await GoodPractice.findByIdAndUpdate(
-      id,
+    const updatedGoodPractice = await GoodPractice.findOneAndUpdate(
+      { id },
       req.body,
       {
         new: true,
@@ -128,5 +270,33 @@ export const deleteGoodPractice = CatchAsyncError(async (req, res, next) => {
   } catch (error) {
     console.log(error);
     return next(new Errorhandler("Failed to delete Good Practice", 500));
+  }
+});
+
+// Approve good practice by ID
+export const approveGoodPractice = CatchAsyncError(async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { decision, remarks } = req.body;
+    console.log(req.body);
+
+    const updatedGoodPractice = await GoodPractice.findOneAndUpdate(
+      { id },
+      { decision, remarks },
+      { new: true }
+    );
+
+    if (!updatedGoodPractice) {
+      return next(new Errorhandler("Good Practice not found", 404));
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Good Practice approved successfully",
+      data: updatedGoodPractice,
+    });
+  } catch (error) {
+    console.log(error);
+    return next(new Errorhandler("Failed to approve Good Practice", 500));
   }
 });
