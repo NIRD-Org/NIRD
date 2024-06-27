@@ -21,19 +21,22 @@ const ThemeFilter = ({ className }) => {
     }
   };
 
-  const handleThemeChange = (event) => {
+  const handleThemeChange = event => {
     const selectedThemeId = event.target.value;
     setSearchParams({ theme_id: selectedThemeId });
   };
 
   return (
     <select
-      className={cn(className, "text-sm px-4 py-2 rounded-md bg-transparent border  w-max")}
+      className={cn(
+        className,
+        "text-sm px-4 py-2 rounded-md bg-transparent border w-full  md:max-w-60"
+      )}
       value={theme_id}
       onChange={handleThemeChange}
     >
       <option value="">All</option>
-      {themes.map((theme) => (
+      {themes.map(theme => (
         <option key={theme.id} value={theme.id}>
           {theme.theme_name}
         </option>

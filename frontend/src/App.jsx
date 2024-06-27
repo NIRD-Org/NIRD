@@ -62,6 +62,7 @@ import LCVAPage from "./Pages/LCVAPage";
 import TrainingPage from "./Pages/TrainingPage";
 import TrainingForm from "./components/admin/training-form/TrainingForm";
 import LocationView from "./components/admin/user-location/LocationView";
+import GoodPracticeForm from "./components/admin/good-practices/GoodPracticeForm";
 
 function App() {
   const { login } = useAuthContext();
@@ -168,7 +169,7 @@ function App() {
             />
             <Route
               path="user-location/view/young-fellow/:userId"
-              element={<LocationView role={3}/>}
+              element={<LocationView role={3} />}
             />
             <Route
               path="young-fellow-insight"
@@ -183,6 +184,7 @@ function App() {
               element={<FellowInsightPage />}
             />
             <Route path="training" element={<TrainingForm />} />
+            <Route path="good-practices" element={<GoodPracticeForm />} />
           </Route>
         </Route>
 

@@ -576,6 +576,12 @@ export const getSidebarItems = user => {
           title: "Young Fellow Insight",
           link: "/admin/young-fellow-insight",
         },
+        {
+          type: "sub-module",
+          icon: ArrowBigRight,
+          title: "Good Practices",
+          link: "/admin/good-practices",
+        },
       ];
     case 4:
       break;

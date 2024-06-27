@@ -16,7 +16,6 @@ export const uploadFile = async (buffer, folder = "user/uploads", format = "jpg"
         {
           resource_type: "auto",
           folder: folder,
-          format: format,
         },
         (error, result) => {
           if (error) {
