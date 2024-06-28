@@ -64,6 +64,7 @@ const PanchayatSchema = new mongoose.Schema({
     areaOfExpertise: { type: String, required: true },
     email: { type: String, required: false },
     mobile: { type: String, required: true },
+    sarpanchPhoto: { type: String, required: false },
   },
   secretaryDetails: {
     nameOfSecretary: { type: String, required: true },
@@ -72,6 +73,7 @@ const PanchayatSchema = new mongoose.Schema({
     numberOfGPCovered: { type: Number, required: true },
     email: { type: String, required: false },
     mobile: { type: String, required: true },
+    secretaryPhoto: { type: String, required: false },
   },
 
   // Health

@@ -1,6 +1,7 @@
 import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
 import { GpDetailsModel } from "../models/gpDetailsModel.js";
 import { Errorhandler } from "../utils/errorHandler.js";
+import { uploadFile } from "../utils/uploadFile.js";
 
 const getNewId = async () => {
   try {
@@ -47,7 +48,19 @@ export const createPanchayatDetails = CatchAsyncError(
       } = req.body;
       const id = await getNewId();
 
-      //   Check if data already exist
+      if (req.files) {
+        const { sarpanchPhoto, secretaryPhoto } = req.files;
+
+        if (sarpanchPhoto) {
+          const { url: sarpanchUrl } = await uploadFile(sarpanchPhoto.data);
+          sarpanchDetails.sarpanchPhoto = sarpanchUrl;
+        }
+
+        if (secretaryPhoto) {
+          const { url: secretaryUrl } = await uploadFile(secretaryPhoto.data);
+          secretaryDetails.secretaryPhoto = secretaryUrl;
+        }
+      }
 
       const existingData = await GpDetailsModel.findOne({
         state_id,

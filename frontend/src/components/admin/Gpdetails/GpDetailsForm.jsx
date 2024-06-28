@@ -51,6 +51,7 @@ const GpDetailsForm = () => {
       areaOfExpertise: "",
       email: "",
       mobile: "",
+      sarpanchPhoto: null,
     },
     secretaryDetails: {
       nameOfSecretary: "",
@@ -59,6 +60,7 @@ const GpDetailsForm = () => {
       numberOfGPCovered: "",
       email: "",
       mobile: "",
+      secretaryPhoto: null,
     },
     health: {
       primaryHealthCenters: null,
@@ -234,26 +236,71 @@ const GpDetailsForm = () => {
     }));
   };
 
+  // const handleSarpanchDetailsChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFormValues((prevValues) => ({
+  //     ...prevValues,
+  //     sarpanchDetails: {
+  //       ...prevValues.sarpanchDetails,
+  //       [name]: value,
+  //     },
+  //   }));
+  // };
+
   const handleSarpanchDetailsChange = (e) => {
-    const { name, value } = e.target;
-    setFormValues((prevValues) => ({
-      ...prevValues,
-      sarpanchDetails: {
-        ...prevValues.sarpanchDetails,
-        [name]: value,
-      },
-    }));
+    const { name, value, type, files } = e.target;
+
+    if (type === "file" && files[0]) {
+      console.log(files[0]);
+      setFormValues((prevValues) => ({
+        ...prevValues,
+        sarpanchDetails: {
+          ...prevValues.sarpanchDetails,
+          [name]: files[0],
+        },
+      }));
+    } else {
+      setFormValues((prevValues) => ({
+        ...prevValues,
+        sarpanchDetails: {
+          ...prevValues.sarpanchDetails,
+          [name]: value,
+        },
+      }));
+    }
   };
 
+  // const handleSecretaryDetailsChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFormValues((prevValues) => ({
+  //     ...prevValues,
+  //     secretaryDetails: {
+  //       ...prevValues.secretaryDetails,
+  //       [name]: value,
+  //     },
+  //   }));
+  // };
+
   const handleSecretaryDetailsChange = (e) => {
-    const { name, value } = e.target;
-    setFormValues((prevValues) => ({
-      ...prevValues,
-      secretaryDetails: {
-        ...prevValues.secretaryDetails,
-        [name]: value,
-      },
-    }));
+    const { name, value, type, files } = e.target;
+
+    if (type === "file" && files[0]) {
+      setFormValues((prevValues) => ({
+        ...prevValues,
+        secretaryDetails: {
+          ...prevValues.secretaryDetails,
+          [name]: files[0],
+        },
+      }));
+    } else {
+      setFormValues((prevValues) => ({
+        ...prevValues,
+        secretaryDetails: {
+          ...prevValues.secretaryDetails,
+          [name]: value,
+        },
+      }));
+    }
   };
 
   const handleHealthChange = (e) => {
@@ -325,23 +372,27 @@ const GpDetailsForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await API.post("/api/v1/gp-details/create", {
-        state_id,
-        dist_id,
-        block_id,
-        gp_id,
-        panchayatDetails: formValues.panchayatDetails,
-        demography: formValues.demography,
-        panchayatArea: formValues.panchayatArea,
-        sarpanchDetails: formValues.sarpanchDetails,
-        secretaryDetails: formValues.secretaryDetails,
-        health: formValues.health,
-        education: formValues.education,
-        sports: formValues.sports,
-        general: formValues.general,
-        wardDetails: formValues.wardDetails,
-        others: formValues.others,
-      });
+      const { data } = await API.post(
+        "/api/v1/gp-details/create",
+        {
+          state_id,
+          dist_id,
+          block_id,
+          gp_id,
+          panchayatDetails: formValues.panchayatDetails,
+          demography: formValues.demography,
+          panchayatArea: formValues.panchayatArea,
+          sarpanchDetails: formValues.sarpanchDetails,
+          secretaryDetails: formValues.secretaryDetails,
+          health: formValues.health,
+          education: formValues.education,
+          sports: formValues.sports,
+          general: formValues.general,
+          wardDetails: formValues.wardDetails,
+          others: formValues.others,
+        },
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
       if (data?.success) {
         toast.success(data?.message, { position: "bottom-center" });
         navigate("/admin");
@@ -663,23 +714,39 @@ const GpDetailsForm = () => {
               placeholder="Area of Expertise of Sarpanch"
               className="input-field  py-2 px-3 outline-1 border border-gray-200 rounded-sm"
             />
-            <input
-              type="email"
-              name="email"
-              value={formValues.sarpanchDetails.email}
-              onChange={handleSarpanchDetailsChange}
-              placeholder="Email of Sarpanch"
-              className="input-field  py-2 px-3 outline-1 border border-gray-200 rounded-sm"
-            />
-            <input
-              type="text"
-              name="mobile"
-              value={formValues.sarpanchDetails.mobile}
-              required
-              onChange={handleSarpanchDetailsChange}
-              placeholder="Mobile of Sarpanch"
-              className="input-field  py-2 px-3 outline-1 border border-gray-200 rounded-sm"
-            />
+            <div>
+              <input
+                type="email"
+                name="email"
+                value={formValues.sarpanchDetails.email}
+                onChange={handleSarpanchDetailsChange}
+                placeholder="Email of Sarpanch"
+                className="input-field  py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+              />
+            </div>
+            <div>
+              <input
+                type="text"
+                name="mobile"
+                value={formValues.sarpanchDetails.mobile}
+                required
+                onChange={handleSarpanchDetailsChange}
+                placeholder="Mobile of Sarpanch"
+                className="input-field  py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+              />
+            </div>
+            <div className="mb-1">
+              <label className="block font-bold mb-2">
+                Upload Sarpanch Photo
+              </label>
+              <input
+                type="file"
+                accept="image/*"
+                name="sarpanchPhoto"
+                onChange={handleSarpanchDetailsChange}
+                className="block"
+              />
+            </div>
           </div>
         </div>
 
@@ -729,23 +796,40 @@ const GpDetailsForm = () => {
               placeholder="Number of GP Covered by Secretary"
               className="input-field  py-2 px-3 outline-1 border border-gray-200 rounded-sm"
             />
-            <input
-              type="email"
-              name="email"
-              value={formValues.secretaryDetails.email}
-              onChange={handleSecretaryDetailsChange}
-              placeholder="Email of Secretary"
-              className="input-field  py-2 px-3 outline-1 border border-gray-200 rounded-sm"
-            />
-            <input
-              type="text"
-              name="mobile"
-              value={formValues.secretaryDetails.mobile}
-              required
-              onChange={handleSecretaryDetailsChange}
-              placeholder="Mobile of Secretary"
-              className="input-field  py-2 px-3 outline-1 border border-gray-200 rounded-sm"
-            />
+            <div>
+              <input
+                type="email"
+                name="email"
+                value={formValues.secretaryDetails.email}
+                onChange={handleSecretaryDetailsChange}
+                placeholder="Email of Secretary"
+                className="input-field  py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+              />
+            </div>
+            <div>
+              <input
+                type="text"
+                name="mobile"
+                value={formValues.secretaryDetails.mobile}
+                required
+                onChange={handleSecretaryDetailsChange}
+                placeholder="Mobile of Secretary"
+                className="input-field  py-2 px-3 outline-1 border border-gray-200 rounded-sm"
+              />
+            </div>
+            <div className="mb-1">
+              <label className="block font-bold mb-2">
+                Upload Secretary Photo
+              </label>
+              <input
+                type="file"
+                accept="image/*"
+                name="secretaryPhoto"
+                placeholder="Secretary Photo"
+                onChange={handleSecretaryDetailsChange}
+                className="block"
+              />
+            </div>
           </div>
         </div>
 
