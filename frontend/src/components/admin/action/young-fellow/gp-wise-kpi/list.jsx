@@ -9,8 +9,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { NirdEditIcon, NirdViewIcon } from "../Icons";
-import YfLayout from "./YfLayout";
+import { NirdEditIcon, NirdViewIcon } from "../../../Icons";
+import YfLayout from "../../../young-fellow/YfLayout";
 
 function ActionForm() {
   const [searchParams] = useSearchParams();

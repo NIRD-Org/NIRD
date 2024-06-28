@@ -5,11 +5,11 @@ import {
   reSubmitIndicatorData,
   submitIndicatorData,
 } from "../controllers/gpWiseIndicator.js";
+import { isAuth } from "../middlewares/auth.js";
 
 const router = express.Router();
 
-// router.route("/").get(getGpWiseKpi);
-// router.route("/data").get(getGpWiseKpiData);
+router.use("/submit", isAuth);
 
 // Submit the data from the YF
 router.route("/submit").post(submitIndicatorData);

@@ -12,7 +12,7 @@ import {
 import API from "@/utils/API";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import YfLayout from "./YfLayout";
+import YfLayout from "../../../young-fellow/YfLayout";
 import { Textarea } from "@/components/ui/textarea";
 import { tst } from "@/lib/utils";
 function UpdateGpWiseKpi() {

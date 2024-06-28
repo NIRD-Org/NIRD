@@ -136,7 +136,85 @@ export const getAllGoodPractices = CatchAsyncError(async (req, res, next) => {
   }
 });
 
-// Get good practice by ID
+export const getGoodPractices = CatchAsyncError(async (req, res, next) => {
+  try {
+    const filter = {};
+    if (req.query.state_id) filter.state_id = req.query.state_id;
+    if (req.query.dist_id) filter.dist_id = req.query.dist_id;
+    if (req.query.block_id) filter.block_id = req.query.block_id;
+    if (req.query.gp_id) filter.gp_id = req.query.gp_id;
+    if (req.query.theme_id) filter.theme_id = req.query.theme_id;
+    if (req.query.decision) filter.decision = 1;
+
+    const goodPractices = await GoodPractice.aggregate([
+      { $match: filter },
+      {
+        $lookup: {
+          from: "themes",
+          localField: "theme_id",
+          foreignField: "id",
+          as: "theme",
+        },
+      },
+      {
+        $lookup: {
+          from: "states",
+          localField: "state_id",
+          foreignField: "id",
+          as: "state",
+        },
+      },
+      {
+        $lookup: {
+          from: "districts",
+          localField: "dist_id",
+          foreignField: "id",
+          as: "district",
+        },
+      },
+      {
+        $lookup: {
+          from: "blocks",
+          localField: "block_id",
+          foreignField: "id",
+          as: "block",
+        },
+      },
+      {
+        $lookup: {
+          from: "grampanchayats",
+          localField: "gp_id",
+          foreignField: "id",
+          as: "gp",
+        },
+      },
+      { $unwind: "$theme" },
+      { $unwind: "$state" },
+      { $unwind: "$block" },
+      { $unwind: "$district" },
+      { $unwind: "$gp" },
+      {
+        $addFields: {
+          theme_name: "$theme.theme_name",
+          state_name: "$state.name",
+          block_name: "$block.name",
+          dist_name: "$district.name",
+          gp_name: "$gp.name",
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      success: true,
+      message: "Good Practices fetched successfully",
+      data: goodPractices,
+    });
+  } catch (error) {
+    console.error(error);
+    return next(new Errorhandler("Failed to get Good Practices", 500));
+  }
+});
+
 export const getGoodPracticeById = CatchAsyncError(async (req, res, next) => {
   try {
     const [goodPractice] = await GoodPractice.aggregate([
@@ -212,7 +290,6 @@ export const getGoodPracticeById = CatchAsyncError(async (req, res, next) => {
   }
 });
 
-// Update good practice by ID
 export const updateGoodPractice = CatchAsyncError(async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -253,7 +330,6 @@ export const updateGoodPractice = CatchAsyncError(async (req, res, next) => {
   }
 });
 
-// Delete good practice by ID
 export const deleteGoodPractice = CatchAsyncError(async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -273,7 +349,6 @@ export const deleteGoodPractice = CatchAsyncError(async (req, res, next) => {
   }
 });
 
-// Approve good practice by ID
 export const approveGoodPractice = CatchAsyncError(async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -298,5 +373,32 @@ export const approveGoodPractice = CatchAsyncError(async (req, res, next) => {
   } catch (error) {
     console.log(error);
     return next(new Errorhandler("Failed to approve Good Practice", 500));
+  }
+});
+
+
+export const approveTraining = CatchAsyncError(async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { decision, remarks } = req.body;
+
+    const updatedTraining = await Training.findOneAndUpdate(
+      { id },
+      { decision, remarks },
+      { new: true }
+    );
+
+    if (!updatedTraining) {
+      return next(new Errorhandler('Training not found', 404));
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Training approved successfully',
+      data: updatedTraining,
+    });
+  } catch (error) {
+    console.error(error);
+    return next(new Errorhandler('Failed to approve Training', 500));
   }
 });

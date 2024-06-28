@@ -9,11 +9,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { NirdEditIcon,NirdViewIcon } from "@/components/admin/Icons";
+import { NirdEditIcon, NirdViewIcon } from "@/components/admin/Icons";
 import AdminHeader from "@/components/admin/AdminHeader";
 import { Input } from "@/components/ui/input";
 
-const GoodPracticeApprovalsListYF = () => {
+const GoodPracticeApprovalsList = () => {
   const [searchParams] = useSearchParams();
   const state_id = searchParams.get("state_id") || "";
   const dist_id = searchParams.get("dist_id") || "";
@@ -34,11 +34,17 @@ const GoodPracticeApprovalsListYF = () => {
 
   const getAllGoodPracticeApprovals = async () => {
     try {
-      const { data } = await API.get(
-        `/api/v1/good-practice/?decision=2&state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gp_id=${gram_id}&theme_id=${theme_id}`
-      );
+      const { data } = await API.get(`/api/v1/good-practice/all`, {
+        params: {
+          state_id,
+          dist_id,
+          block_id,
+          gp_id: gram_id,
+          theme_id,
+        },
+      });
       data?.data?.sort(
-        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+        (a, b) => b.id - a.id
       );
       setGoodPracticeApprovals(data?.data || []);
     } catch (error) {
@@ -53,7 +59,7 @@ const GoodPracticeApprovalsListYF = () => {
 
   const handleSearchQueryChange = e => {
     setSearchQuery(e.target.value);
-    setCurrentPage(1); 
+    setCurrentPage(1);
   };
 
   const filteredApprovals = goodPracticeApprovals.filter(approval => {
@@ -95,8 +101,8 @@ const GoodPracticeApprovalsListYF = () => {
           >
             <option value="all">All</option>
             <option value="0">Not Approved</option>
-            <option value="1">Sent back for Approval</option>
-            <option value="2">Approved</option>
+            <option value="1">Approved</option>
+            <option value="2">Sent back for Modification</option>
           </select>
           <Input
             type="text"
@@ -126,20 +132,24 @@ const GoodPracticeApprovalsListYF = () => {
                     <TableCell>{approval.gp_name}</TableCell>
                     <TableCell>
                       {approval.decision == 0
-                        ? "Not Approved"
+                        ? "Pending"
                         : approval.decision == 1
                         ? "Approved"
                         : "Sent back for Approval"}
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-3">
-                        <span
-                          onClick={() =>
-                            navigate(`/admin/resubmit/good-practice/${approval.id}`)
-                          }
-                        >
-                          <NirdEditIcon />
-                        </span>
+                        {approval.decision == 0 && (
+                          <span
+                            onClick={() =>
+                              navigate(
+                                `/admin/approve/good-practice/${approval.id}`
+                              )
+                            }
+                          >
+                            <NirdEditIcon />
+                          </span>
+                        )}
                         <span
                           onClick={() =>
                             navigate(`/admin/view/good-practice/${approval.id}`)
@@ -185,4 +195,4 @@ const GoodPracticeApprovalsListYF = () => {
   );
 };
 
-export default GoodPracticeApprovalsListYF;
+export default GoodPracticeApprovalsList;

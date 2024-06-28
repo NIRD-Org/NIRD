@@ -12,7 +12,6 @@ import BlockPage from "./components/admin/block/BlockPage";
 import GpPage from "./components/admin/gp/GpPage";
 import ThemePage from "./components/admin/theme/ThemePage";
 import DistrictPage from "./components/admin/district/DistrictPage";
-import KPIApprovalPage from "./components/admin/kpi-approval/KPIApprovalPage";
 import KPIDetails from "./Pages/KPIDetails";
 import StatePage from "./components/admin/state/StatePage";
 import { Toaster } from "react-hot-toast";
@@ -36,12 +35,12 @@ import AdminMainPage from "./components/admin/AdminMainPage";
 import DataPointForm from "./components/admin/kpi/KpiForm";
 import DataPointPage from "./components/admin/kpi/KpiPage";
 import KpiApprovalsList from "./components/admin/young-fellow/KpiApprovalsList";
-import KpiApprovalSubmit from "./components/admin/young-fellow/KpiApprovalSubmit";
-import KpiApprovalView from "./components/admin/young-fellow/KpiApprovalView";
-import UpdateGpWiseKpi from "./components/admin/young-fellow/UpdateGpWiseKpi";
+import KpiApprovalSubmit from "./components/admin/action/admin/gp-wise-kpi/KpiApprovalSubmit";
+import KpiApprovalView from "./components/admin/action/young-fellow/gp-wise-kpi/view";
+import UpdateGpWiseKpi from "./components/admin/action/young-fellow/gp-wise-kpi/edit";
 import ThemeDataPage from "./Pages/ThemeDataPage";
-import ActionForm from "./components/admin/young-fellow/YfActionForm";
-import AdminActionForm from "./components/admin/young-fellow/AdminActionForm";
+import ActionForm from "./components/admin/action/young-fellow/gp-wise-kpi/list";
+import AdminActionForm from "./components/admin/action/admin/gp-wise-kpi/ApprovalList";
 import UserLocation from "./components/admin/user-location/UserLocation";
 import GpDetailsForm from "./components/admin/Gpdetails/GpDetailsForm";
 import UserList from "./components/admin/user-location/UserList";
@@ -63,10 +62,21 @@ import TrainingPage from "./Pages/TrainingPage";
 import TrainingForm from "./components/admin/training-form/TrainingForm";
 import LocationView from "./components/admin/user-location/LocationView";
 import GoodPracticeForm from "./components/admin/good-practices/GoodPracticeForm";
-import GoodPracticeApprovalsList from "./components/admin/action/admin/good practice/ApprovalList";
-import GoodPracticeApprovalPage from "./components/admin/action/admin/good practice/ApprovalForm";
-import GoodPracticeApprovalsListYF from "./components/admin/action/young-fellow/good-practice/ApprovalList";
-import GoodPracticeResubmit from "./components/admin/action/young-fellow/good-practice/ResubmitForm";
+import GoodPracticeApprovalsList from "./components/admin/action/admin/good practice/list";
+import GoodPracticeApprovalPage from "./components/admin/action/admin/good practice/approve";
+import GoodPracticeApprovalsListYF from "./components/admin/action/young-fellow/good-practice/list";
+import GoodPracticeResubmit from "./components/admin/action/young-fellow/good-practice/approve";
+import AdminIndicatorApprovalList from "./components/admin/action/admin/indicator/list";
+import IndicatorApprovalAdminForm from "./components/admin/action/admin/indicator/approve";
+import YFIndicatorApprovalList from "./components/admin/action/young-fellow/indicator/list";
+import IndicatorApprovalResubmit from "./components/admin/action/young-fellow/indicator/edit";
+import TrainingApprovalsList from "./components/admin/action/admin/training/list";
+import TrainingApprovalPage from "./components/admin/action/admin/training/approve";
+import TrainingApprovalsListYf from "./components/admin/action/young-fellow/training/list";
+import TrainingResubmit from "./components/admin/action/young-fellow/training/resubmit";
+import GoodPracticeView from "./components/admin/action/components/GoodPracticeView";
+import TrainingViewDetails from "./components/admin/action/admin/training/view";
+import GoodPracticeViewDetails from "./components/admin/action/admin/good practice/view";
 
 function App() {
   const { login } = useAuthContext();
@@ -98,7 +108,6 @@ function App() {
             <Route path="gram-panchayats" element={<GpPage />} />
             <Route path="themes" element={<ThemePage />} />
             <Route path="districts" element={<DistrictPage />} />
-            <Route path="kpi-approvals" element={<KPIApprovalPage />} />
             <Route path="states" element={<StatePage />} />
             <Route path="users/create" element={<CreateUserForm />} />
             <Route path="young-professionals" element={<YoungFellowForm />} />
@@ -187,12 +196,25 @@ function App() {
               path="young-fellow-insight/submissions"
               element={<FellowInsightPage />}
             />
-            <Route path="training" element={<TrainingForm />} />
             <Route path="good-practices" element={<GoodPracticeForm />} />
             <Route path="action/admin/good-practice" element={<GoodPracticeApprovalsList />} />
-            <Route path="action/young-fellow/good-practice" element={<GoodPracticeApprovalsListYF />} />
             <Route path="approve/good-practice/:id" element={<GoodPracticeApprovalPage />} />
+            <Route path="view/good-practice/:id" element={<GoodPracticeViewDetails />} />
+            <Route path="action/young-fellow/good-practice" element={<GoodPracticeApprovalsListYF />} />
             <Route path="resubmit/good-practice/:id" element={<GoodPracticeResubmit />} />
+
+            <Route path="training" element={<TrainingForm />} />
+            <Route path="action/admin/training" element={<TrainingApprovalsList />} />
+            <Route path="approve/training/:id" element={<TrainingApprovalPage />} />
+            <Route path="view/training/:id" element={<TrainingViewDetails />} />
+            {<Route path="action/young-fellow/training" element={<TrainingApprovalsListYf />} />}
+            {<Route path="resubmit/training/:id" element={<TrainingResubmit />} />}
+
+            <Route path="action/admin/indicator" element={<AdminIndicatorApprovalList />} />
+            <Route path="action/young-fellow/indicator" element={<YFIndicatorApprovalList />} />
+            <Route path="action/admin/approve/indicator" element={<IndicatorApprovalAdminForm />} />
+            <Route path="action/young-fellow/resubmit/indicator" element={<IndicatorApprovalResubmit />} />
+
           </Route>
         </Route>
 

@@ -22,7 +22,7 @@ function IndicatorForm({ type = "add" }) {
     block_id: "",
     gp_id: "",
     date: "",
-    financialYear: "", // Add this line
+    financial_year: "", // Add this line
   });
   const [indicatorFormData, setIndicatorFormData] = useState([]);
 
@@ -64,7 +64,7 @@ function IndicatorForm({ type = "add" }) {
             `/api/v1/dist/state/${formData.state_id}`
           );
           setDistricts(response.data?.districts || []);
-          setFormData((prevData) => ({
+          setFormData(prevData => ({
             ...prevData,
             // state_id: "",
             dist_id: "",
@@ -88,7 +88,7 @@ function IndicatorForm({ type = "add" }) {
             `/api/v1/block/get?dist=${formData.dist_id}`
           );
           setBlocks(response.data?.blocks || []);
-          setFormData((prevData) => ({
+          setFormData(prevData => ({
             ...prevData,
             // state_id: "",
             // dist_id: "",
@@ -111,7 +111,7 @@ function IndicatorForm({ type = "add" }) {
           `/api/v1/gram/get?block=${formData.block_id}`
         );
         setGp(data?.gram || []);
-        setFormData((prevData) => ({
+        setFormData(prevData => ({
           ...prevData,
           // state_id: "",
           // dist_id: "",
@@ -125,9 +125,9 @@ function IndicatorForm({ type = "add" }) {
     fetchGrams();
   }, [formData.block_id]);
 
-  const handleFormChange = (e) => {
+  const handleFormChange = e => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
+    setFormData(prevData => ({
       ...prevData,
       [name]: value,
     }));
@@ -135,7 +135,7 @@ function IndicatorForm({ type = "add" }) {
 
   const handleChange = (e, index) => {
     const { name, value } = e.target;
-    setIndicatorFormData((prevData) => {
+    setIndicatorFormData(prevData => {
       const updatedData = [...prevData];
       updatedData[index] = {
         ...updatedData[index],
@@ -145,7 +145,7 @@ function IndicatorForm({ type = "add" }) {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
 
     let updatedFormData = indicators.map((item, index) => {
@@ -160,7 +160,6 @@ function IndicatorForm({ type = "add" }) {
       ...formData,
       formData: updatedFormData,
     };
-
     try {
       const response = await API.post(
         "/api/v1/gp-wise-indicator/submit",
@@ -179,14 +178,14 @@ function IndicatorForm({ type = "add" }) {
       name: "state_id",
       label: "State",
       type: "select",
-      options: states.map((state) => ({ value: state.id, label: state.name })),
+      options: states.map(state => ({ value: state.id, label: state.name })),
       required: true,
     },
     {
       name: "dist_id",
       label: "District",
       type: "select",
-      options: districts.map((district) => ({
+      options: districts.map(district => ({
         value: district.id,
         label: district.name,
       })),
@@ -196,24 +195,27 @@ function IndicatorForm({ type = "add" }) {
       name: "block_id",
       label: "Block",
       type: "select",
-      options: blocks.map((block) => ({ value: block.id, label: block.name })),
+      options: blocks.map(block => ({ value: block.id, label: block.name })),
       required: true,
     },
     {
       name: "gp_id",
       label: "GP",
       type: "select",
-      options: gp.map((gp) => ({ value: gp.id, label: gp.name })),
+      options: gp.map(gp => ({ value: gp.id, label: gp.name })),
       required: true,
     },
     {
-      name: "financialYear", // Add this field
+      name: "financial_year", // Add this field
       label: "Financial Year",
       type: "select",
       options: Array.from({ length: 30 }, (_, i) => {
         const startYear = 2021 + i;
         const endYear = startYear + 1;
-        return { value: `FY${startYear}-${endYear}`, label: `FY${startYear}-${endYear}` };
+        return {
+          value: `FY${startYear}-${endYear}`,
+          label: `FY${startYear}-${endYear}`,
+        };
       }),
       required: true,
     },
@@ -221,13 +223,13 @@ function IndicatorForm({ type = "add" }) {
 
   const resetForm = () => {
     console.log("first");
-    setFormData((prevData) => ({
+    setFormData(prevData => ({
       ...prevData,
       state_id: "",
       dist_id: "",
       block_id: "",
       gp_id: "",
-      financialYear: "", // Reset this field
+      financial_year: "", // Reset this field
     }));
   };
 
@@ -240,7 +242,7 @@ function IndicatorForm({ type = "add" }) {
               ? "Young Fellow - Indicators Entry"
               : "Update Gram Panchayat"}
           </AdminHeader>
-          <div className="grid  gap-10 grid-cols-2 sm:grid-cols-4 md:grid-cols-5">
+          <div className="grid  gap-10 grid-cols-2 sm:grid-cols-4 md:grid-cols-4">
             {fields.map(
               ({ name, label, type, options, required, disabled = false }) => (
                 <div key={name}>
@@ -260,7 +262,7 @@ function IndicatorForm({ type = "add" }) {
                       <option value="" disabled>
                         Select {label}
                       </option>
-                      {options.map((option) => (
+                      {options.map(option => (
                         <option key={option.value} value={option.value}>
                           {option.label}
                         </option>
@@ -295,7 +297,7 @@ function IndicatorForm({ type = "add" }) {
                     <TableHead className="w-[400px]">Indicator</TableHead>
                     <TableHead className="w-40">Max Range</TableHead>
                     <TableHead className="w-40">Input</TableHead>
-                    <TableHead className="w-80 ">Remarks</TableHead>
+                    <TableHead className="w-76 ">Remarks</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -312,7 +314,7 @@ function IndicatorForm({ type = "add" }) {
                             indicatorFormData[index]?.max_range ||
                             data.max_range
                           }
-                          onChange={(e) => handleChange(e, index)}
+                          onChange={e => handleChange(e, index)}
                         />
                       </TableCell>
                       <TableCell>
@@ -322,7 +324,7 @@ function IndicatorForm({ type = "add" }) {
                           max={data.max_range}
                           name="input_data"
                           value={indicatorFormData[index]?.input_data || ""}
-                          onChange={(e) => handleChange(e, index)}
+                          onChange={e => handleChange(e, index)}
                         />
                       </TableCell>
                       <TableCell>
@@ -330,7 +332,7 @@ function IndicatorForm({ type = "add" }) {
                           type="text"
                           name="remarks"
                           value={indicatorFormData[index]?.remarks || ""}
-                          onChange={(e) => handleChange(e, index)}
+                          onChange={e => handleChange(e, index)}
                         />
                       </TableCell>
                     </TableRow>

@@ -395,7 +395,7 @@ export const getSidebarItems = user => {
 
     return sidebarItems;
   }
-  
+
   switch (user.role) {
     case 1:
       sidebarItems = [
@@ -504,12 +504,12 @@ export const getSidebarItems = user => {
         {
           type: "module",
           icon: ArrowBigRight,
-          title: "Young Fellow",
+          title: "Action",
         },
         {
           type: "sub-module",
           icon: ArrowBigRight,
-          title: "Action Form",
+          title: "KPI",
           link: "/admin/admin-action-form",
         },
         {
@@ -517,6 +517,18 @@ export const getSidebarItems = user => {
           icon: ArrowBigRight,
           title: "Good Practice",
           link: "/admin/action/admin/good-practice",
+        },
+        {
+          type: "sub-module",
+          icon: ArrowBigRight,
+          title: "Indicator",
+          link: "/admin/action/admin/indicator",
+        },
+        {
+          type: "sub-module",
+          icon: ArrowBigRight,
+          title: "Training",
+          link: "/admin/action/admin/training",
         },
         {
           type: "module",
@@ -558,6 +570,36 @@ export const getSidebarItems = user => {
         {
           type: "module",
           icon: ArrowBigRight,
+          title: "Action",
+          link: "/admin/action-form",
+        },
+        {
+          type: "sub-module",
+          icon: ArrowBigRight,
+          title: "KPI",
+          link: "/admin/action-form",
+        },
+        {
+          type: "sub-module",
+          icon: ArrowBigRight,
+          title: "Good Practice",
+          link: "/admin/action/young-fellow/good-practice",
+        },
+        {
+          type: "sub-module",
+          icon: ArrowBigRight,
+          title: "Training",
+          link: "/admin/action/young-fellow/training",
+        },
+        {
+          type: "sub-module",
+          icon: ArrowBigRight,
+          title: "Indicator",
+          link: "/admin/action/young-fellow/indicator",
+        },
+        {
+          type: "module",
+          icon: ArrowBigRight,
           title: "Young Fellow",
         },
         {
@@ -572,19 +614,7 @@ export const getSidebarItems = user => {
           title: "Indicator",
           link: "/admin/indicator/create",
         },
-        {
-          type: "sub-module",
-          icon: ArrowBigRight,
-          title: "Action Form",
-          link: "/admin/action-form",
-        },
-        {
-          type: "sub-module",
-          icon: ArrowBigRight,
-          title: "Good Practice Action",
-          link: "/admin/action/young-fellow/good-practice",
-        },
-      
+
         {
           type: "sub-module",
           icon: ArrowBigRight,
@@ -602,6 +632,12 @@ export const getSidebarItems = user => {
           icon: ArrowBigRight,
           title: "Good Practices",
           link: "/admin/good-practices",
+        },
+        {
+          type: "sub-module",
+          icon: ArrowBigRight,
+          title: "Training ",
+          link: "/admin/training",
         },
       ];
     case 4:
