@@ -74,6 +74,9 @@ import TrainingApprovalsList from "./components/admin/action/admin/training/list
 import TrainingApprovalPage from "./components/admin/action/admin/training/approve";
 import TrainingApprovalsListYf from "./components/admin/action/young-fellow/training/list";
 import TrainingResubmit from "./components/admin/action/young-fellow/training/resubmit";
+import GoodPracticeView from "./components/admin/action/components/GoodPracticeView";
+import TrainingViewDetails from "./components/admin/action/admin/training/view";
+import GoodPracticeViewDetails from "./components/admin/action/admin/good practice/view";
 
 function App() {
   const { login } = useAuthContext();
@@ -196,12 +199,14 @@ function App() {
             <Route path="good-practices" element={<GoodPracticeForm />} />
             <Route path="action/admin/good-practice" element={<GoodPracticeApprovalsList />} />
             <Route path="approve/good-practice/:id" element={<GoodPracticeApprovalPage />} />
+            <Route path="view/good-practice/:id" element={<GoodPracticeViewDetails />} />
             <Route path="action/young-fellow/good-practice" element={<GoodPracticeApprovalsListYF />} />
             <Route path="resubmit/good-practice/:id" element={<GoodPracticeResubmit />} />
 
             <Route path="training" element={<TrainingForm />} />
             <Route path="action/admin/training" element={<TrainingApprovalsList />} />
             <Route path="approve/training/:id" element={<TrainingApprovalPage />} />
+            <Route path="view/training/:id" element={<TrainingViewDetails />} />
             {<Route path="action/young-fellow/training" element={<TrainingApprovalsListYf />} />}
             {<Route path="resubmit/training/:id" element={<TrainingResubmit />} />}
 

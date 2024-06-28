@@ -416,6 +416,12 @@ const GpDetailsForm = () => {
       formData.append("dist_id", dist_id);
       formData.append("block_id", block_id);
       formData.append("gp_id", gp_id);
+
+      formValues.panchayatDetails.state = state_id;
+      formValues.panchayatDetails.district = dist_id;
+      formValues.panchayatDetails.block = block_id;
+      formValues.panchayatDetails.panchayat = gp_id;
+      
       formData.append(
         "panchayatDetails",
         JSON.stringify(formValues.panchayatDetails)

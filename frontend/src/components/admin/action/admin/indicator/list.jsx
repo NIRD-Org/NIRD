@@ -61,7 +61,7 @@ function AdminIndicatorApprovalList() {
   };
 
   const filteredIndicators = indicators.filter((indicator) => {
-    if (statusFilter !== "all" && indicator.status !== statusFilter) {
+    if (statusFilter !== "all" && indicator.decision !== statusFilter) {
       return false;
     }
     if (
@@ -70,7 +70,7 @@ function AdminIndicatorApprovalList() {
     ) {
       return false;
     }
-    return indicator.status !== "approved"; 
+    return indicator.decision !== "1"; 
   });
 
   const totalPages = Math.ceil(filteredIndicators.length / itemsPerPage);
@@ -92,8 +92,9 @@ function AdminIndicatorApprovalList() {
             className="p-2 border rounded"
           >
             <option value="all">All</option>
-            <option value="submitted">Submitted</option>
-            <option value="modification">Sent for Modification</option>
+            <option value="0">Submitted</option>
+            <option value="1">Approved</option>
+            <option value="2">Sent for Modification</option>
           </select>
           <input
             type="text"
