@@ -5,6 +5,7 @@ import {
   createPanchayatDetails,
   getPanchayatDetails,
 } from "../controllers/gpDetailsController.js";
+import formidable from "express-formidable";
 
 const router = express.Router();
 router.use("/create", isAuth);
