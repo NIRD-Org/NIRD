@@ -102,7 +102,7 @@ const GoodPracticeApprovalsList = () => {
             <option value="all">All</option>
             <option value="0">Not Approved</option>
             <option value="1">Approved</option>
-            <option value="2">Sent back for Approval</option>
+            <option value="2">Sent back for Modification</option>
           </select>
           <Input
             type="text"

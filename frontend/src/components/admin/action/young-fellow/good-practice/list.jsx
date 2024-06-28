@@ -129,7 +129,7 @@ const GoodPracticeApprovalsListYF = () => {
                         ? "Not Approved"
                         : approval.decision == 1
                         ? "Approved"
-                        : "Sent back for Approval"}
+                        : "Sent back for Modification"}
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-3">

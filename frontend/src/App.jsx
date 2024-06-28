@@ -70,6 +70,10 @@ import AdminIndicatorApprovalList from "./components/admin/action/admin/indicato
 import IndicatorApprovalAdminForm from "./components/admin/action/admin/indicator/approve";
 import YFIndicatorApprovalList from "./components/admin/action/young-fellow/indicator/list";
 import IndicatorApprovalResubmit from "./components/admin/action/young-fellow/indicator/edit";
+import TrainingApprovalsList from "./components/admin/action/admin/training/list";
+import TrainingApprovalPage from "./components/admin/action/admin/training/approve";
+import TrainingApprovalsListYf from "./components/admin/action/young-fellow/training/list";
+import TrainingResubmit from "./components/admin/action/young-fellow/training/resubmit";
 
 function App() {
   const { login } = useAuthContext();
@@ -189,12 +193,17 @@ function App() {
               path="young-fellow-insight/submissions"
               element={<FellowInsightPage />}
             />
-            <Route path="training" element={<TrainingForm />} />
             <Route path="good-practices" element={<GoodPracticeForm />} />
             <Route path="action/admin/good-practice" element={<GoodPracticeApprovalsList />} />
-            <Route path="action/young-fellow/good-practice" element={<GoodPracticeApprovalsListYF />} />
             <Route path="approve/good-practice/:id" element={<GoodPracticeApprovalPage />} />
+            <Route path="action/young-fellow/good-practice" element={<GoodPracticeApprovalsListYF />} />
             <Route path="resubmit/good-practice/:id" element={<GoodPracticeResubmit />} />
+
+            <Route path="training" element={<TrainingForm />} />
+            <Route path="action/admin/training" element={<TrainingApprovalsList />} />
+            <Route path="approve/training/:id" element={<TrainingApprovalPage />} />
+            {<Route path="action/young-fellow/training" element={<TrainingApprovalsListYf />} />}
+            {<Route path="resubmit/training/:id" element={<TrainingResubmit />} />}
 
             <Route path="action/admin/indicator" element={<AdminIndicatorApprovalList />} />
             <Route path="action/young-fellow/indicator" element={<YFIndicatorApprovalList />} />

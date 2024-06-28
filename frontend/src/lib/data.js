@@ -525,6 +525,12 @@ export const getSidebarItems = user => {
           link: "/admin/action/admin/indicator",
         },
         {
+          type: "sub-module",
+          icon: ArrowBigRight,
+          title: "Training",
+          link: "/admin/action/admin/training",
+        },
+        {
           type: "module",
           title: "Training",
         },
@@ -582,6 +588,12 @@ export const getSidebarItems = user => {
         {
           type: "sub-module",
           icon: ArrowBigRight,
+          title: "Training",
+          link: "/admin/action/young-fellow/training",
+        },
+        {
+          type: "sub-module",
+          icon: ArrowBigRight,
           title: "Indicator",
           link: "/admin/action/young-fellow/indicator",
         },
@@ -620,6 +632,12 @@ export const getSidebarItems = user => {
           icon: ArrowBigRight,
           title: "Good Practices",
           link: "/admin/good-practices",
+        },
+        {
+          type: "sub-module",
+          icon: ArrowBigRight,
+          title: "Training ",
+          link: "/admin/training",
         },
       ];
     case 4:

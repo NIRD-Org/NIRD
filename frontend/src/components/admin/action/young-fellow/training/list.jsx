@@ -13,56 +13,49 @@ import { NirdEditIcon, NirdViewIcon } from "@/components/admin/Icons";
 import AdminHeader from "@/components/admin/AdminHeader";
 import { Input } from "@/components/ui/input";
 
-const GpDetailsApprovalsList = () => {
-  const [searchParams] = useSearchParams();
-  const state_id = searchParams.get("state_id") || "";
-  const dist_id = searchParams.get("dist_id") || "";
-  const block_id = searchParams.get("block_id") || "";
-  const gram_id = searchParams.get("gram_id") || "";
+const TrainingApprovalsListYf = () => {
   const navigate = useNavigate();
-
-  const [gpDetailsApprovals, setGpDetailsApprovals] = useState([]);
+  const [trainingApprovals, setTrainingApprovals] = useState([]);
   const [statusFilter, setStatusFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 50;
 
   useEffect(() => {
-    getAllGpDetailsApprovals();
+    getAllTrainingApprovals();
   }, []);
 
-  const getAllGpDetailsApprovals = async () => {
+  const getAllTrainingApprovals = async () => {
     try {
-      const { data } = await API.get(`/api/v1/gp-details/all`, {
-        params: {
-          state_id,
-          dist_id,
-          block_id,
-          gp_id: gram_id,
-        },
-      });
+      const { data } = await API.get(`/api/v1/training/all?decision=2`, {});
       data?.data?.sort((a, b) => b.id - a.id);
-      setGpDetailsApprovals(data?.data || []);
+      setTrainingApprovals(data?.data || []);
     } catch (error) {
-      console.log("Error fetching GP Details Approvals:", error);
+      console.log("Error fetching Training Approvals:", error);
     }
   };
 
-  const handleStatusFilterChange = (e) => {
+  const handleStatusFilterChange = e => {
     setStatusFilter(e.target.value);
     setCurrentPage(1);
   };
 
-  const handleSearchQueryChange = (e) => {
+  const handleSearchQueryChange = e => {
     setSearchQuery(e.target.value);
     setCurrentPage(1);
   };
 
-  const filteredApprovals = gpDetailsApprovals.filter((approval) => {
-    if (statusFilter !== "all" && approval.decision.toString() !== statusFilter) {
+  const filteredApprovals = trainingApprovals.filter(approval => {
+    if (
+      statusFilter !== "all" &&
+      approval.decision.toString() !== statusFilter
+    ) {
       return false;
     }
-    if (searchQuery && !approval.gp_name.toLowerCase().includes(searchQuery.toLowerCase())) {
+    if (
+      searchQuery &&
+      !approval.title.toLowerCase().includes(searchQuery.toLowerCase())
+    ) {
       return false;
     }
     return true;
@@ -70,16 +63,19 @@ const GpDetailsApprovalsList = () => {
 
   const totalPages = Math.ceil(filteredApprovals.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentData = filteredApprovals.slice(startIndex, startIndex + itemsPerPage);
+  const currentData = filteredApprovals.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
-  const handlePageChange = (page) => {
+  const handlePageChange = page => {
     setCurrentPage(page);
   };
 
   return (
     <div>
       <div className="p-6">
-        <AdminHeader>GP Details Approvals List</AdminHeader>
+        <AdminHeader>Training Approvals List</AdminHeader>
         <div className="flex justify-between mb-4">
           <select
             value={statusFilter}
@@ -89,13 +85,13 @@ const GpDetailsApprovalsList = () => {
             <option value="all">All</option>
             <option value="0">Not Approved</option>
             <option value="1">Approved</option>
-            <option value="2">Sent back for Modification</option>
+            <option value="2">Sent back for Approval</option>
           </select>
           <Input
             type="text"
             value={searchQuery}
             onChange={handleSearchQueryChange}
-            placeholder="Search by GP"
+            placeholder="Search by Training Title"
             className="w-min"
           />
         </div>
@@ -103,31 +99,35 @@ const GpDetailsApprovalsList = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Submitted Id</TableHead>
-                <TableHead>GP Name</TableHead>
+                <TableHead>Programme Code</TableHead>
+                <TableHead>Title</TableHead>
+                <TableHead>Type</TableHead>
+                <TableHead>Online/Offline</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Action</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {currentData.length > 0 ? (
-                currentData.map((approval) => (
+                currentData.map(approval => (
                   <TableRow key={approval._id}>
-                    <TableCell>{approval.id}</TableCell>
-                    <TableCell>{approval.gp_name}</TableCell>
+                    <TableCell>{approval.programmeCode}</TableCell>
+                    <TableCell>{approval.title}</TableCell>
+                    <TableCell>{approval.type}</TableCell>
+                    <TableCell>{approval.onlineOffline}</TableCell>
                     <TableCell>
-                      {approval.decision == 0
+                      {approval.decision === 0
                         ? "Pending"
-                        : approval.decision == 1
+                        : approval.decision === 1
                         ? "Approved"
                         : "Sent back for Modification"}
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-3">
-                        {approval.decision == 0 && (
+                        {approval.decision === 2 && (
                           <span
                             onClick={() =>
-                              navigate(`/admin/approve/gp-details/${approval.id}`)
+                              navigate(`/admin/resubmit/training/${approval.id}`)
                             }
                           >
                             <NirdEditIcon />
@@ -135,7 +135,7 @@ const GpDetailsApprovalsList = () => {
                         )}
                         <span
                           onClick={() =>
-                            navigate(`/admin/view/gp-details/${approval.id}`)
+                            navigate(`/admin/view/training/${approval.id}`)
                           }
                         >
                           <NirdViewIcon />
@@ -146,7 +146,7 @@ const GpDetailsApprovalsList = () => {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan="4" className="text-center">
+                  <TableCell colSpan="8" className="text-center">
                     No data found
                   </TableCell>
                 </TableRow>
@@ -178,4 +178,4 @@ const GpDetailsApprovalsList = () => {
   );
 };
 
-export default GpDetailsApprovalsList;
+export default TrainingApprovalsListYf;

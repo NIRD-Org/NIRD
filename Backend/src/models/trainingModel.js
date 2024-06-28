@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const trainingSchema = new mongoose.Schema(
   {
+    id: { type: String, required: true, unique: true },
     programmeCode: { type: String, required: true },
     type: { type: String, required: true },
     onlineOffline: { type: String, required: true },
@@ -28,6 +29,7 @@ const trainingSchema = new mongoose.Schema(
     coOrdinate: { type: Number, required: true },
     decision: { type: Number, default: 0 },
     status: { type: String, default: 1 },
+    remarks: { type: String, default: "" },
     created_by: { type: String, required: true },
   },
   { timestamps: true }
