@@ -11,20 +11,19 @@ import {
 } from "@/components/ui/table";
 import API from "@/utils/API";
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import YfLayout from "./YfLayout";
-import { kpiApprovals } from "@/lib/data";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import YfLayout from "../../../young-fellow/YfLayout";
 import { Textarea } from "@/components/ui/textarea";
+import { tst } from "@/lib/utils";
 
-function KpiApprovalView() {
+function KpiApprovalSubmit() {
   const [searchParams] = useSearchParams();
   const theme_id = searchParams.get("theme_id") || "";
   const [kpiApprovalData, setKpiApprovalData] = useState([]);
-  const state_id = searchParams.get("state_id") || "";
-  const dist_id = searchParams.get("dist_id") || "";
-  const block_id = searchParams.get("block_id") || "";
   const gp_id = searchParams.get("gram_id") || "";
   const submitted_id = searchParams.get("submitted_id") || "";
+  const [formData, setFormData] = useState({ decision: "", remarks: "" });
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchKpiApprovalData = async () => {
@@ -39,6 +38,25 @@ function KpiApprovalView() {
     fetchKpiApprovalData();
   }, []);
 
+  const handleSubmit = async e => {
+    e.preventDefault();
+    try {
+      const body = {
+        decision: formData.decision,
+        remarks: formData.remarks,
+      };
+
+      const url = `/api/v1/kpi-approvals/update/${submitted_id}`;
+      const response = await API.put(url, body);
+      console.log(response.data);
+      tst.success("Form submitted successfully");
+      navigate("/admin/admin-action-form");
+    } catch (error) {
+      tst.error("Failed to submit form");
+      console.log(error);
+    }
+  };
+
   return (
     <div className="w-full">
       <div>
@@ -48,7 +66,7 @@ function KpiApprovalView() {
           </h2>
         </div>
         <YfLayout />
-        <form className="overflow-x-auto  mt-6">
+        <div className="overflow-x-auto  mt-6">
           <div>
             <Table>
               <TableHeader>
@@ -66,7 +84,7 @@ function KpiApprovalView() {
               <TableBody>
                 {kpiApprovalData.map((data, index) => (
                   <TableRow key={data.id}>
-                    <TableCell>{data?.kpiDetails?.id}</TableCell>
+                    <TableCell>{data?.kpi_id}</TableCell>
                     <TableCell>{data?.kpiDetails.name}</TableCell>
                     <TableCell>
                       {data.kpiDetails.kpi_datapoint || "No question"}
@@ -85,6 +103,7 @@ function KpiApprovalView() {
                         name="remarks"
                         value={data?.remarks}
                       />
+                      {/* <Input value={data?.remarks} disabled type="number" /> */}
                     </TableCell>
                     {/* <TableCell>
                       <Input disabled type="text" />
@@ -107,19 +126,67 @@ function KpiApprovalView() {
               }
               type="date"
               name="date"
-              onChange={(e) => setDate(e.target.value)}
+              onChange={e => setDate(e.target.value)}
               id="date"
               placeholder="Enter date"
               className="px-10"
             />
 
-            {/* <Input disabled value={kpiApprovalData[0]?.date} type="date" name="date" onChange={e => setDate(e.target.value)} id="date" placeholder="Enter datte" className="px-10" /> */}
+            {/* <Input disabled value={kpiApprovalData[0]?.date} type="date" name="date" onChange={e => setFormData(prevData => ({ ...prevData, date: e.target.value }))} id="date" placeholder="Enter date" className="px-10" /> */}
           </div>
           {/* <Button type="submit">Submit</Button> */}
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <div className="mt-8 flex  gap-4">
+            <div className="w-max my-4">
+              <Label htmlFor="decision" className="mb-2 block">
+                Decision
+              </Label>
+              <select
+                required
+                className="px-4 py-2 rounded-md bg-white "
+                id="decision"
+                name="decision"
+                value={formData.decision || ""}
+                onChange={e =>
+                  setFormData(prevData => ({
+                    ...prevData,
+                    decision: e.target.value,
+                  }))
+                }
+              >
+                <option value="" disabled>
+                  Select
+                </option>
+                <option value="1">Approve</option>
+                <option value="2">Send for Modification</option>
+              </select>
+            </div>
+            <div>
+              <Label htmlFor="decision" className="mb-2 block">
+                Remark
+              </Label>
+              <Textarea
+                required={formData.decision === "2"}
+                value={formData.remarks || ""}
+                onChange={e =>
+                  setFormData(prevData => ({
+                    ...prevData,
+                    remarks: e.target.value,
+                  }))
+                }
+                className="w-80"
+                type="text"
+                name="remarks"
+              />
+            </div>
+          </div>
+          <Button type="submit">Submit</Button>
         </form>
       </div>
     </div>
   );
 }
 
-export default KpiApprovalView;
+export default KpiApprovalSubmit;

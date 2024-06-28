@@ -12,7 +12,6 @@ import BlockPage from "./components/admin/block/BlockPage";
 import GpPage from "./components/admin/gp/GpPage";
 import ThemePage from "./components/admin/theme/ThemePage";
 import DistrictPage from "./components/admin/district/DistrictPage";
-import KPIApprovalPage from "./components/admin/kpi-approval/KPIApprovalPage";
 import KPIDetails from "./Pages/KPIDetails";
 import StatePage from "./components/admin/state/StatePage";
 import { Toaster } from "react-hot-toast";
@@ -36,12 +35,12 @@ import AdminMainPage from "./components/admin/AdminMainPage";
 import DataPointForm from "./components/admin/kpi/KpiForm";
 import DataPointPage from "./components/admin/kpi/KpiPage";
 import KpiApprovalsList from "./components/admin/young-fellow/KpiApprovalsList";
-import KpiApprovalSubmit from "./components/admin/young-fellow/KpiApprovalSubmit";
-import KpiApprovalView from "./components/admin/young-fellow/KpiApprovalView";
-import UpdateGpWiseKpi from "./components/admin/young-fellow/UpdateGpWiseKpi";
+import KpiApprovalSubmit from "./components/admin/action/admin/gp-wise-kpi/KpiApprovalSubmit";
+import KpiApprovalView from "./components/admin/action/young-fellow/gp-wise-kpi/KpiApprovalView";
+import UpdateGpWiseKpi from "./components/admin/action/young-fellow/gp-wise-kpi/UpdateGpWiseKpi";
 import ThemeDataPage from "./Pages/ThemeDataPage";
-import ActionForm from "./components/admin/young-fellow/YfActionForm";
-import AdminActionForm from "./components/admin/young-fellow/AdminActionForm";
+import ActionForm from "./components/admin/action/young-fellow/gp-wise-kpi/ApprovalList";
+import AdminActionForm from "./components/admin/action/admin/gp-wise-kpi/ApprovalList";
 import UserLocation from "./components/admin/user-location/UserLocation";
 import GpDetailsForm from "./components/admin/Gpdetails/GpDetailsForm";
 import UserList from "./components/admin/user-location/UserList";
@@ -98,7 +97,6 @@ function App() {
             <Route path="gram-panchayats" element={<GpPage />} />
             <Route path="themes" element={<ThemePage />} />
             <Route path="districts" element={<DistrictPage />} />
-            <Route path="kpi-approvals" element={<KPIApprovalPage />} />
             <Route path="states" element={<StatePage />} />
             <Route path="users/create" element={<CreateUserForm />} />
             <Route path="young-professionals" element={<YoungFellowForm />} />

@@ -44,7 +44,7 @@ const GoodPracticeApprovalsList = () => {
         },
       });
       data?.data?.sort(
-        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+        (a, b) => b.id - a.id
       );
       setGoodPracticeApprovals(data?.data || []);
     } catch (error) {

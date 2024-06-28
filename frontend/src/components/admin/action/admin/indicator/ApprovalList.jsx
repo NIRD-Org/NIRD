@@ -9,11 +9,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { NirdEditIcon,NirdViewIcon } from "@/components/admin/Icons";
-import AdminHeader from "@/components/admin/AdminHeader";
-import { Input } from "@/components/ui/input";
+import { NirdEditIcon, NirdViewIcon } from "../../../Icons";
+import YfLayout from "../../../young-fellow/YfLayout";
 
-const GoodPracticeApprovalsList = () => {
+function AdminIndicatorForm() {
   const [searchParams] = useSearchParams();
   const state_id = searchParams.get("state_id") || "";
   const dist_id = searchParams.get("dist_id") || "";
@@ -21,72 +20,67 @@ const GoodPracticeApprovalsList = () => {
   const gram_id = searchParams.get("gram_id") || "";
   const theme_id = searchParams.get("theme_id") || "";
   const navigate = useNavigate();
-
-  const [goodPracticeApprovals, setGoodPracticeApprovals] = useState([]);
+  const [indicators, setIndicators] = useState([]);
   const [statusFilter, setStatusFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalIndicators, setTotalIndicators] = useState([]);
   const itemsPerPage = 50;
 
-  useEffect(() => {
-    getAllGoodPracticeApprovals();
-  }, []);
-
-  const getAllGoodPracticeApprovals = async () => {
+  const getAllIndicators = async () => {
     try {
       const { data } = await API.get(
-        `/api/v1/good-practice/?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gp_id=${gram_id}&theme_id=${theme_id}`
+        `/api/v1/indicators/get-indicators-approval?state=${state_id}&dist=${dist_id}&block=${block_id}&gp=${gram_id}&theme=${theme_id}`
       );
       data?.data?.sort(
         (a, b) => new Date(b.created_at) - new Date(a.created_at)
       );
-      setGoodPracticeApprovals(data?.data || []);
+      setIndicators(data?.data || []);
+      setTotalIndicators(data?.data || []);
     } catch (error) {
-      console.log("Error fetching Good Practice Approvals:", error);
+      console.log(error);
     }
   };
 
-  const handleStatusFilterChange = e => {
+  useEffect(() => {
+    getAllIndicators();
+  }, []);
+
+  const handleStatusFilterChange = (e) => {
     setStatusFilter(e.target.value);
     setCurrentPage(1);
   };
 
-  const handleSearchQueryChange = e => {
+  const handleSearchQueryChange = (e) => {
     setSearchQuery(e.target.value);
     setCurrentPage(1); 
   };
 
-  const filteredApprovals = goodPracticeApprovals.filter(approval => {
-    if (
-      statusFilter !== "all" &&
-      approval.decision.toString() !== statusFilter
-    ) {
+  const filteredIndicators = indicators.filter((indicator) => {
+    if (statusFilter !== "all" && indicator.status !== statusFilter) {
       return false;
     }
     if (
       searchQuery &&
-      !approval.gp_name.toLowerCase().includes(searchQuery.toLowerCase())
+      !indicator.gp_name.toLowerCase().includes(searchQuery.toLowerCase())
     ) {
       return false;
     }
-    return true;
+    return indicator.status !== "approved"; 
   });
 
-  const totalPages = Math.ceil(filteredApprovals.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredIndicators.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentData = filteredApprovals.slice(
-    startIndex,
-    startIndex + itemsPerPage
-  );
+  const currentData = filteredIndicators.slice(startIndex, startIndex + itemsPerPage);
 
-  const handlePageChange = page => {
+  const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
   return (
     <div>
       <div className="p-6">
-        <AdminHeader>Good Practice Approvals List</AdminHeader>
+        {/* <YfLayout /> */}
         <div className="flex justify-between mb-4">
           <select
             value={statusFilter}
@@ -94,55 +88,59 @@ const GoodPracticeApprovalsList = () => {
             className="p-2 border rounded"
           >
             <option value="all">All</option>
-            <option value="0">Not Approved</option>
-            <option value="1">Sent back for Approval</option>
-            <option value="2">Approved</option>
+            <option value="submitted">Submitted</option>
+            <option value="modification">Sent for Modification</option>
           </select>
-          <Input
+          <input
             type="text"
             value={searchQuery}
             onChange={handleSearchQueryChange}
-            placeholder="Search by GP"
-            className="w-min"
+            placeholder="Search by GP name"
+            className="p-2 border rounded"
           />
         </div>
         <div className="mt-8">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Submitted Id </TableHead>
-                <TableHead>Theme </TableHead>
-                <TableHead>GP </TableHead>
+                <TableHead>Submission ID</TableHead>
+                <TableHead>Theme</TableHead>
+                <TableHead>GP</TableHead>
+                <TableHead>Submission Date</TableHead>
+                <TableHead>Date of Sent Back</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Action</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {currentData.length > 0 ? (
-                currentData.map(approval => (
-                  <TableRow key={approval._id}>
-                    <TableCell>{approval.id}</TableCell>
-                    <TableCell>{approval.theme_name}</TableCell>
-                    <TableCell>{approval.gp_name}</TableCell>
+                currentData.map((indicator) => (
+                  <TableRow key={indicator.id}>
+                    <TableCell>{indicator.submitted_id}</TableCell>
+                    <TableCell>{indicator.theme_name}</TableCell>
+                    <TableCell>{indicator.gp_name}</TableCell>
                     <TableCell>
-                      {approval.decision == 0
-                        ? "Not Approved"
-                        : approval.decision == 1
-                        ? "Approved"
-                        : "Sent back for Approval"}
+                      {new Date(
+                        indicator.date || indicator.created_at
+                      ).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {indicator.status === "modification"
+                        ? new Date(indicator.modified_at).toLocaleDateString()
+                        : "-"}
+                    </TableCell>
+                    <TableCell>
+                      {indicator.status === "submitted"
+                        ? "Submitted"
+                        : "Sent for modification"}
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-3">
                         <span
                           onClick={() =>
-                            navigate(`/admin/approve/good-practice/${approval.id}`)
-                          }
-                        >
-                          <NirdEditIcon />
-                        </span>
-                        <span
-                          onClick={() =>
-                            navigate(`/admin/view/good-practice/${approval.id}`)
+                            navigate(
+                              `/admin/view-indicator?state_id=${indicator.state_id}&dist_id=${indicator.dist_id}&block_id=${indicator.block_id}&gram_id=${indicator.gp_id}&theme_id=${indicator.theme_id}&submitted_id=${indicator.submitted_id}&indicator_id=${indicator.id}`
+                            )
                           }
                         >
                           <NirdViewIcon />
@@ -153,7 +151,7 @@ const GoodPracticeApprovalsList = () => {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan="8" className="text-center">
+                  <TableCell colSpan="7" className="text-center">
                     No data found
                   </TableCell>
                 </TableRow>
@@ -168,9 +166,7 @@ const GoodPracticeApprovalsList = () => {
             >
               Previous
             </button>
-            <span>
-              Page {currentPage} of {totalPages}
-            </span>
+            <span>Page {currentPage} of {totalPages}</span>
             <button
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
@@ -183,6 +179,6 @@ const GoodPracticeApprovalsList = () => {
       </div>
     </div>
   );
-};
+}
 
-export default GoodPracticeApprovalsList;
+export default AdminIndicatorForm;
