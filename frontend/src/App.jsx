@@ -36,10 +36,10 @@ import DataPointForm from "./components/admin/kpi/KpiForm";
 import DataPointPage from "./components/admin/kpi/KpiPage";
 import KpiApprovalsList from "./components/admin/young-fellow/KpiApprovalsList";
 import KpiApprovalSubmit from "./components/admin/action/admin/gp-wise-kpi/KpiApprovalSubmit";
-import KpiApprovalView from "./components/admin/action/young-fellow/gp-wise-kpi/KpiApprovalView";
-import UpdateGpWiseKpi from "./components/admin/action/young-fellow/gp-wise-kpi/UpdateGpWiseKpi";
+import KpiApprovalView from "./components/admin/action/young-fellow/gp-wise-kpi/view";
+import UpdateGpWiseKpi from "./components/admin/action/young-fellow/gp-wise-kpi/edit";
 import ThemeDataPage from "./Pages/ThemeDataPage";
-import ActionForm from "./components/admin/action/young-fellow/gp-wise-kpi/ApprovalList";
+import ActionForm from "./components/admin/action/young-fellow/gp-wise-kpi/list";
 import AdminActionForm from "./components/admin/action/admin/gp-wise-kpi/ApprovalList";
 import UserLocation from "./components/admin/user-location/UserLocation";
 import GpDetailsForm from "./components/admin/Gpdetails/GpDetailsForm";
@@ -62,10 +62,14 @@ import TrainingPage from "./Pages/TrainingPage";
 import TrainingForm from "./components/admin/training-form/TrainingForm";
 import LocationView from "./components/admin/user-location/LocationView";
 import GoodPracticeForm from "./components/admin/good-practices/GoodPracticeForm";
-import GoodPracticeApprovalsList from "./components/admin/action/admin/good practice/ApprovalList";
-import GoodPracticeApprovalPage from "./components/admin/action/admin/good practice/ApprovalForm";
-import GoodPracticeApprovalsListYF from "./components/admin/action/young-fellow/good-practice/ApprovalList";
-import GoodPracticeResubmit from "./components/admin/action/young-fellow/good-practice/ResubmitForm";
+import GoodPracticeApprovalsList from "./components/admin/action/admin/good practice/list";
+import GoodPracticeApprovalPage from "./components/admin/action/admin/good practice/approve";
+import GoodPracticeApprovalsListYF from "./components/admin/action/young-fellow/good-practice/list";
+import GoodPracticeResubmit from "./components/admin/action/young-fellow/good-practice/approve";
+import AdminIndicatorApprovalList from "./components/admin/action/admin/indicator/list";
+import IndicatorApprovalAdminForm from "./components/admin/action/admin/indicator/approve";
+import YFIndicatorApprovalList from "./components/admin/action/young-fellow/indicator/list";
+import IndicatorApprovalResubmit from "./components/admin/action/young-fellow/indicator/edit";
 
 function App() {
   const { login } = useAuthContext();
@@ -191,6 +195,12 @@ function App() {
             <Route path="action/young-fellow/good-practice" element={<GoodPracticeApprovalsListYF />} />
             <Route path="approve/good-practice/:id" element={<GoodPracticeApprovalPage />} />
             <Route path="resubmit/good-practice/:id" element={<GoodPracticeResubmit />} />
+
+            <Route path="action/admin/indicator" element={<AdminIndicatorApprovalList />} />
+            <Route path="action/young-fellow/indicator" element={<YFIndicatorApprovalList />} />
+            <Route path="action/admin/approve/indicator" element={<IndicatorApprovalAdminForm />} />
+            <Route path="action/young-fellow/resubmit/indicator" element={<IndicatorApprovalResubmit />} />
+
           </Route>
         </Route>
 

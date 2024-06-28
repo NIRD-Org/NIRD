@@ -34,7 +34,7 @@ const GoodPracticeApprovalsList = () => {
 
   const getAllGoodPracticeApprovals = async () => {
     try {
-      const { data } = await API.get(`/api/v1/good-practice/`, {
+      const { data } = await API.get(`/api/v1/good-practice/all`, {
         params: {
           state_id,
           dist_id,

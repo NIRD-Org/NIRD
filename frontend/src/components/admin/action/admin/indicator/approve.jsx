@@ -16,13 +16,8 @@ import YfLayout from "../../../young-fellow/YfLayout";
 import { Textarea } from "@/components/ui/textarea";
 import { tst } from "@/lib/utils";
 
-function IndicatorApprovalSubmit() {
+function IndicatorApprovalAdminForm() {
   const [searchParams] = useSearchParams();
-  const theme_id = searchParams.get("theme_id") || "";
-  const state_id = searchParams.get("state_id") || "";
-  const dist_id = searchParams.get("dist_id") || "";
-  const block_id = searchParams.get("block_id") || "";
-  const gp_id = searchParams.get("gram_id") || "";
   const submitted_id = searchParams.get("submitted_id") || "";
   const [indicatorApprovalData, setIndicatorApprovalData] = useState([]);
   const [formData, setFormData] = useState({ decision: "", remarks: "" });
@@ -31,7 +26,7 @@ function IndicatorApprovalSubmit() {
   useEffect(() => {
     const fetchIndicatorApprovalData = async () => {
       try {
-        const url = `/api/v1/gp-wise-indicator/approval-data?gp=${gp_id}&theme=${theme_id}&submitted_id=${submitted_id}`;
+        const url = `/api/v1/gp-wise-indicator/approval-data?submitted_id=${submitted_id}`;
         const response = await API.get(url);
         setIndicatorApprovalData(response.data.data || []);
       } catch (error) {
@@ -51,9 +46,8 @@ function IndicatorApprovalSubmit() {
 
       const url = `/api/v1/indicator-approvals/update/${submitted_id}`;
       const response = await API.put(url, body);
-      console.log(response.data);
       tst.success("Form submitted successfully");
-      navigate("/admin/admin-action-form");
+      //   navigate("/admin/admin-action-form");
     } catch (error) {
       tst.error("Failed to submit form");
       console.log(error);
@@ -68,7 +62,24 @@ function IndicatorApprovalSubmit() {
             Young Fellow - Indicator Entry Form
           </h2>
         </div>
-        <YfLayout />
+        <div>
+          <div className="p-6">
+            <div className=" mt-4">
+              <div className="flex flex-wrap justify-around">
+                {[
+                  { label: "State:", value: indicatorApprovalData[0]?.state?.name },
+                  { label: "District:", value: indicatorApprovalData[0]?.district?.name },
+                  { label: "Block:", value: indicatorApprovalData[0]?.block?.name },
+                  { label: "GP:", value: indicatorApprovalData[0]?.gp?.name },
+                ].map(({ label, value }) => (
+                  <h3 key={label}>
+                    <strong className="text-primary">{label}</strong> {value}
+                  </h3>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
         <div className="overflow-x-auto mt-6">
           <div>
             <Table>
@@ -77,8 +88,8 @@ function IndicatorApprovalSubmit() {
                   <TableHead className="w-20">ID</TableHead>
                   <TableHead className="w-[200px]">Indicator Name</TableHead>
                   <TableHead className="w-[200px]">Data point</TableHead>
-                  <TableHead className="w-32">Max Number </TableHead>
-                  <TableHead className="w-20">Achieved Number</TableHead>
+                  <TableHead className="w-32">Max Range </TableHead>
+                  <TableHead className="w-20">Input</TableHead>
                   <TableHead className="w-40">Remarks</TableHead>
                 </TableRow>
               </TableHeader>
@@ -86,9 +97,9 @@ function IndicatorApprovalSubmit() {
                 {indicatorApprovalData.map((data, index) => (
                   <TableRow key={data.id}>
                     <TableCell>{data?.indicator_id}</TableCell>
-                    <TableCell>{data?.indicatorDetails.name}</TableCell>
+                    <TableCell>{data?.indicator.name}</TableCell>
                     <TableCell>
-                      {data.indicatorDetails.indicator_datapoint ||
+                      {data.indicator.indicator_datapoint ||
                         "No question"}
                     </TableCell>
                     <TableCell>
@@ -182,4 +193,4 @@ function IndicatorApprovalSubmit() {
   );
 }
 
-export default IndicatorApprovalSubmit;
+export default IndicatorApprovalAdminForm;

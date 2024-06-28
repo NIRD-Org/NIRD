@@ -5,7 +5,8 @@ import {
   getGoodPracticeById,
   updateGoodPractice,
   deleteGoodPractice,
-  approveGoodPractice
+  approveGoodPractice,
+  getGoodPractices
 } from "../controllers/goodPracticeController.js";
 import { isAuth } from "../middlewares/auth.js";
 
@@ -14,7 +15,12 @@ const router = express.Router();
 router.use('/create', isAuth);
 
 router.route("/create").post(createGoodPractice);
-router.route("/").get(getAllGoodPractices);
+// only for admins
+router.route("/all").get(getAllGoodPractices);
+
+// for homepage
+router.route("/").get(getGoodPractices);
+
 router.route("/:id").get(getGoodPracticeById).put(updateGoodPractice).delete(deleteGoodPractice);
 router.route('/:id/approve').put(approveGoodPractice);
 export default router;

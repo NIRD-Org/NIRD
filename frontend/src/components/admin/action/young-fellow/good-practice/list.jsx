@@ -35,7 +35,7 @@ const GoodPracticeApprovalsListYF = () => {
   const getAllGoodPracticeApprovals = async () => {
     try {
       const { data } = await API.get(
-        `/api/v1/good-practice/?decision=2&state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gp_id=${gram_id}&theme_id=${theme_id}`
+        `/api/v1/good-practice/all?decision=2&state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gp_id=${gram_id}&theme_id=${theme_id}`
       );
       data?.data?.sort(
         (a, b) => new Date(b.created_at) - new Date(a.created_at)

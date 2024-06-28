@@ -94,7 +94,7 @@ export const submitIndicatorData = CatchAsyncError(async (req, res, next) => {
     // Prepare the GpWiseKPI documents for insertion
     let currentMaxId = await getNewIdIndicator();
     const indicatorDocuments = await Promise.all(
-      formData.map(async (indicator) => ({
+      formData.map(async indicator => ({
         id: currentMaxId++,
         state_id: state_id,
         dist_id: dist_id,
@@ -107,7 +107,7 @@ export const submitIndicatorData = CatchAsyncError(async (req, res, next) => {
         input_data: indicator.input_data,
         remarks: indicator.remarks,
         submitted_id: submitted_id,
-        created_by: req.user ? req.user.id : "1",
+        created_by: req.user.id
       }))
     );
 
@@ -144,16 +144,10 @@ export const submitIndicatorData = CatchAsyncError(async (req, res, next) => {
 export const getGpWiseIndicatorForApprover = CatchAsyncError(
   async (req, res, next) => {
     try {
-      const { state, dist, block, gp, submitted_id } = req.query;
-
+      const { submitted_id } = req.query;
       const matchStage = {
-        gp_id: gp,
         submitted_id,
       };
-
-      if (state) matchStage.state_id = state;
-      if (dist) matchStage.dist_id = dist;
-      if (block) matchStage.block_id = block;
 
       const pipeline = [
         { $match: matchStage },
@@ -162,72 +156,72 @@ export const getGpWiseIndicatorForApprover = CatchAsyncError(
             from: "indicators",
             localField: "indicator_id",
             foreignField: "id",
-            as: "indicatorDetails",
+            as: "indicator",
           },
         },
 
         {
-          $unwind: "$indicatorDetails",
+          $unwind: "$indicator",
         },
         {
           $lookup: {
             from: "indicatorapprovals",
             localField: "submitted_id",
             foreignField: "submitted_id",
-            as: "approvalDetails",
+            as: "approval",
           },
         },
         {
-          $unwind: "$approvalDetails",
+          $unwind: "$approval",
         },
         {
           $lookup: {
             from: "states",
             localField: "state_id",
             foreignField: "id",
-            as: "stateDetails",
+            as: "state",
           },
         },
-        { $unwind: "$stateDetails" },
+        { $unwind: "$state" },
         {
           $lookup: {
             from: "districts",
             localField: "dist_id",
             foreignField: "id",
-            as: "districtDetails",
+            as: "district",
           },
         },
-        { $unwind: "$districtDetails" },
+        { $unwind: "$district" },
         {
           $lookup: {
             from: "blocks",
             localField: "block_id",
             foreignField: "id",
-            as: "blockDetails",
+            as: "block",
           },
         },
-        { $unwind: "$blockDetails" },
+        { $unwind: "$block" },
         {
           $lookup: {
             from: "grampanchayats",
             localField: "gp_id",
             foreignField: "id",
-            as: "gpDetails",
+            as: "gp",
           },
         },
-        { $unwind: "$gpDetails" },
+        { $unwind: "$gp" },
         {
           $project: {
             _id: 0,
             id: 1,
             state_id: 1,
-            "stateDetails.name": 1,
+            "state.name": 1,
             dist_id: 1,
-            "districtDetails.name": 1,
+            "district.name": 1,
             block_id: 1,
-            "blockDetails.name": 1,
+            "block.name": 1,
             gp_id: 1,
-            "gpDetails.name": 1,
+            "gp.name": 1,
             date: 1,
             indicator_id: 1,
             max_range: 1,
@@ -235,14 +229,14 @@ export const getGpWiseIndicatorForApprover = CatchAsyncError(
             score: 1,
             remarks: 1,
             financial_year: 1,
-            approver_remarks: "$approvalDetails.remarks",
+            approver_remarks: "$approval.remarks",
             status: 1,
             submitted_id: 1,
             created_by: 1,
             modified_by: 1,
             created_at: 1,
             modified_at: 1,
-            indicatorDetails: 1,
+            indicator: 1,
           },
         },
       ];
@@ -292,7 +286,7 @@ export const reSubmitIndicatorData = CatchAsyncError(async (req, res, next) => {
     }
 
     // Prepare the updated GpWiseKPI documents
-    const indicatorDocuments = formData.map((indicator) => ({
+    const indicatorDocuments = formData.map(indicator => ({
       indicator_id: indicator.indicator_id,
       max_range: indicator.max_range,
       input_data: indicator.input_data,
@@ -302,7 +296,7 @@ export const reSubmitIndicatorData = CatchAsyncError(async (req, res, next) => {
 
     // Update the KPI documents in the gpWiseKpi collection based on submitted_id and kpi_id
     await Promise.all(
-      indicatorDocuments.map((indicatorDocument) =>
+      indicatorDocuments.map(indicatorDocument =>
         GpWiseIndicatorModel.updateOne(
           { submitted_id, indicator_id: indicatorDocument.indicator_id },
           indicatorDocument,
@@ -332,7 +326,7 @@ export const reSubmitIndicatorData = CatchAsyncError(async (req, res, next) => {
   }
 });
 
-const getGpWiseIndicatorDataWithPercentage = async (query) => {
+const getGpWiseIndicatorDataWithPercentage = async query => {
   const { state, dist, block, gp, search, fy } = query;
   const filter = {};
   if (state) filter.state_id = state;

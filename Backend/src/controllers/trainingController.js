@@ -18,6 +18,7 @@ export const createTraining = CatchAsyncError(async (req, res, next) => {
 
     req.body.trainingPhotos = trainingPhotosUrl;
     req.body.trainingDesign = trainingDesignUrl;
+    req.body.created_by = req.user.id;
 
     const newTraining = new Training(req.body);
     await newTraining.save();
@@ -36,7 +37,8 @@ export const createTraining = CatchAsyncError(async (req, res, next) => {
 // Get all trainings
 export const getAllTrainings = CatchAsyncError(async (req, res, next) => {
   try {
-    const trainings = await Training.find();
+    const { decision } = req.query;
+    const trainings = await Training.find({ decision });
 
     if (!trainings) {
       return next(new Errorhandler("No trainings found", 404));
@@ -57,7 +59,7 @@ export const getAllTrainings = CatchAsyncError(async (req, res, next) => {
 export const getTrainingById = CatchAsyncError(async (req, res, next) => {
   try {
     const { id } = req.params;
-    const training = await Training.findById(id);
+    const training = await Training.findOne({id});
 
     if (!training) {
       return next(new Errorhandler("Training not found", 404));

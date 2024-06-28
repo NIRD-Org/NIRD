@@ -9,10 +9,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { NirdEditIcon, NirdViewIcon } from "../../../Icons";
-import YfLayout from "../../../young-fellow/YfLayout";
+import {  NirdEditIcon, NirdViewIcon } from "../../../Icons";
 
-function AdminIndicatorForm() {
+function YFIndicatorApprovalList() {
   const [searchParams] = useSearchParams();
   const state_id = searchParams.get("state_id") || "";
   const dist_id = searchParams.get("dist_id") || "";
@@ -29,9 +28,15 @@ function AdminIndicatorForm() {
 
   const getAllIndicators = async () => {
     try {
-      const { data } = await API.get(
-        `/api/v1/indicators/get-indicators-approval?state=${state_id}&dist=${dist_id}&block=${block_id}&gp=${gram_id}&theme=${theme_id}`
-      );
+      const queryParams = {
+        state: state_id,
+        dist: dist_id,
+        block: block_id,
+        gp: gram_id,
+        theme: theme_id,
+        decision: "2",
+      };
+      const { data } = await API.get(`/api/v1/indicator-approvals/get-approvals`, { params: queryParams });
       data?.data?.sort(
         (a, b) => new Date(b.created_at) - new Date(a.created_at)
       );
@@ -108,6 +113,7 @@ function AdminIndicatorForm() {
                 <TableHead>GP</TableHead>
                 <TableHead>Submission Date</TableHead>
                 <TableHead>Date of Sent Back</TableHead>
+                <TableHead>Approval Date</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Action</TableHead>
               </TableRow>
@@ -125,13 +131,20 @@ function AdminIndicatorForm() {
                       ).toLocaleDateString()}
                     </TableCell>
                     <TableCell className="text-center">
-                      {indicator.status === "modification"
+                      {indicator.decision == 2
+                        ? new Date(indicator.modified_at).toLocaleDateString()
+                        : "-"}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {indicator.decision == 1
                         ? new Date(indicator.modified_at).toLocaleDateString()
                         : "-"}
                     </TableCell>
                     <TableCell>
-                      {indicator.status === "submitted"
+                      {indicator.decision == 0
                         ? "Submitted"
+                        : indicator.decision == 1
+                        ? "Approved"
                         : "Sent for modification"}
                     </TableCell>
                     <TableCell>
@@ -139,12 +152,25 @@ function AdminIndicatorForm() {
                         <span
                           onClick={() =>
                             navigate(
-                              `/admin/view-indicator?state_id=${indicator.state_id}&dist_id=${indicator.dist_id}&block_id=${indicator.block_id}&gram_id=${indicator.gp_id}&theme_id=${indicator.theme_id}&submitted_id=${indicator.submitted_id}&indicator_id=${indicator.id}`
+                              `/admin/view-indicator?submitted_id=${indicator.submitted_id}&indicator_id=${indicator.id}`
                             )
                           }
                         >
                           <NirdViewIcon />
                         </span>
+                     {
+                        indicator.decision == 2 ? (
+                          <span
+                            onClick={() =>
+                              navigate(
+                                `/admin/action/young-fellow/resubmit/indicator?submitted_id=${indicator.submitted_id}&indicator_id=${indicator.id}`
+                              )
+                            }
+                          >
+                            <NirdEditIcon />
+                          </span>
+                        ) : null
+                     }
                       </div>
                     </TableCell>
                   </TableRow>
@@ -181,4 +207,4 @@ function AdminIndicatorForm() {
   );
 }
 
-export default AdminIndicatorForm;
+export default YFIndicatorApprovalList;
