@@ -89,8 +89,9 @@ const Header = () => {
             } hover:text-white`
           }
         >
-          Low cost Voluntary
-          <br /> Activities
+          Low Cost/No Cost
+          <br />
+          Voluntary Activities
         </NavLink>
 
         <div>
@@ -189,8 +190,9 @@ const Header = () => {
                   } hover:text-gray-300`
                 }
               >
-                Low cost Voluntary
-                <br /> Activities
+                Low Cost/No Cost
+                <br />
+                Voluntary Activities
               </NavLink>
               <NavLink
                 to="/training"

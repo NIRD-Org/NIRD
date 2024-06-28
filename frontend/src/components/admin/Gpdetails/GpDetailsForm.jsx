@@ -112,6 +112,12 @@ const GpDetailsForm = () => {
     },
   });
 
+  const [loading, setLoading] = useState(false);
+
+  const [sarpanchPhoto, setSarpanchPhoto] = useState("");
+
+  const [secretaryPhoto, setSecretaryPhoto] = useState("");
+
   const navigate = useNavigate();
 
   const getStateById = async () => {
@@ -236,29 +242,11 @@ const GpDetailsForm = () => {
     }));
   };
 
-  // const handleSarpanchDetailsChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setFormValues((prevValues) => ({
-  //     ...prevValues,
-  //     sarpanchDetails: {
-  //       ...prevValues.sarpanchDetails,
-  //       [name]: value,
-  //     },
-  //   }));
-  // };
-
   const handleSarpanchDetailsChange = (e) => {
     const { name, value, type, files } = e.target;
 
     if (type === "file" && files[0]) {
-      console.log(files[0]);
-      setFormValues((prevValues) => ({
-        ...prevValues,
-        sarpanchDetails: {
-          ...prevValues.sarpanchDetails,
-          [name]: files[0],
-        },
-      }));
+      setSarpanchPhoto(files[0]);
     } else {
       setFormValues((prevValues) => ({
         ...prevValues,
@@ -270,28 +258,11 @@ const GpDetailsForm = () => {
     }
   };
 
-  // const handleSecretaryDetailsChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setFormValues((prevValues) => ({
-  //     ...prevValues,
-  //     secretaryDetails: {
-  //       ...prevValues.secretaryDetails,
-  //       [name]: value,
-  //     },
-  //   }));
-  // };
-
   const handleSecretaryDetailsChange = (e) => {
     const { name, value, type, files } = e.target;
 
     if (type === "file" && files[0]) {
-      setFormValues((prevValues) => ({
-        ...prevValues,
-        secretaryDetails: {
-          ...prevValues.secretaryDetails,
-          [name]: files[0],
-        },
-      }));
+      setSecretaryPhoto(files[0]);
     } else {
       setFormValues((prevValues) => ({
         ...prevValues,
@@ -369,104 +340,48 @@ const GpDetailsForm = () => {
     }));
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const { data } = await API.post(
-  //       "/api/v1/gp-details/create",
-  //       {
-  //         state_id,
-  //         dist_id,
-  //         block_id,
-  //         gp_id,
-  //         panchayatDetails: formValues.panchayatDetails,
-  //         demography: formValues.demography,
-  //         panchayatArea: formValues.panchayatArea,
-  //         sarpanchDetails: formValues.sarpanchDetails,
-  //         secretaryDetails: formValues.secretaryDetails,
-  //         health: formValues.health,
-  //         education: formValues.education,
-  //         sports: formValues.sports,
-  //         general: formValues.general,
-  //         wardDetails: formValues.wardDetails,
-  //         others: formValues.others,
-  //       },
-  //       { headers: { "Content-Type": "multipart/form-data" } }
-  //     );
-  //     if (data?.success) {
-  //       toast.success(data?.message, { position: "bottom-center" });
-  //       navigate("/admin");
-  //     }
-  //   } catch (error) {
-  //     toast.error(
-  //       error.response.data.message
-  //         ? error.response.data.message
-  //         : error.message,
-  //       { position: "bottom-center" }
-  //     );
-  //   }
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      const formData = new FormData();
-      formData.append("state_id", state_id);
-      formData.append("dist_id", dist_id);
-      formData.append("block_id", block_id);
-      formData.append("gp_id", gp_id);
-      formData.append(
-        "panchayatDetails",
-        JSON.stringify(formValues.panchayatDetails)
+      setLoading(true);
+      const { data } = await API.post(
+        "/api/v1/gp-details/create",
+        {
+          state_id,
+          dist_id,
+          block_id,
+          gp_id,
+          panchayatDetails: formValues.panchayatDetails,
+          demography: formValues.demography,
+          panchayatArea: formValues.panchayatArea,
+          sarpanchDetails: formValues.sarpanchDetails,
+          secretaryDetails: formValues.secretaryDetails,
+          health: formValues.health,
+          education: formValues.education,
+          sports: formValues.sports,
+          general: formValues.general,
+          wardDetails: formValues.wardDetails,
+          others: formValues.others,
+          secretaryPhoto,
+          sarpanchPhoto,
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
       );
-      formData.append("demography", JSON.stringify(formValues.demography));
-      formData.append(
-        "panchayatArea",
-        JSON.stringify(formValues.panchayatArea)
-      );
-      formData.append(
-        "sarpanchDetails",
-        JSON.stringify(formValues.sarpanchDetails)
-      );
-      formData.append(
-        "secretaryDetails",
-        JSON.stringify(formValues.secretaryDetails)
-      );
-      formData.append("health", JSON.stringify(formValues.health));
-      formData.append("education", JSON.stringify(formValues.education));
-      formData.append("sports", JSON.stringify(formValues.sports));
-      formData.append("general", JSON.stringify(formValues.general));
-      formData.append("wardDetails", JSON.stringify(formValues.wardDetails));
-      formData.append("others", JSON.stringify(formValues.others));
-
-      // Append file inputs if they exist
-      if (formValues.sarpanchDetails.sarpanchPhoto) {
-        formData.append(
-          "sarpanchPhoto",
-          formValues.sarpanchDetails.sarpanchPhoto
-        );
-      }
-      if (formValues.secretaryDetails.secretaryPhoto) {
-        formData.append(
-          "secretaryPhoto",
-          formValues.secretaryDetails.secretaryPhoto
-        );
-      }
-
-      const { data } = await API.post("/api/v1/gp-details/create", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-
-      if (data.success) {
-        toast.success(data.message, { position: "bottom-center" });
+      if (data?.success) {
+        toast.success(data?.message, { position: "bottom-center" });
         navigate("/admin");
-      } else {
-        toast.error(data.message, { position: "bottom-center" });
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
-      toast.error("Failed to submit form", { position: "bottom-center" });
+      toast.error(
+        error.response.data.message
+          ? error.response.data.message
+          : error.message,
+        { position: "bottom-center" }
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -1281,9 +1196,10 @@ const GpDetailsForm = () => {
         <div className="flex items-center justify-end">
           <button
             type="submit"
-            className="bg-primary hover:bg-primary text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            disabled={loading}
+            className="bg-primary disabled:bg-sky-900 disabled:texgray-300 hover:bg-primary text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
-            Submit
+            {loading ? "Saving..." : " Submit"}
           </button>
         </div>
       </form>
