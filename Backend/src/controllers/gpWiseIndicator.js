@@ -140,6 +140,198 @@ export const submitIndicatorData = CatchAsyncError(async (req, res, next) => {
   }
 });
 
+// Get the gpWiseKpi for the approver
+export const getGpWiseIndicatorForApprover = CatchAsyncError(
+  async (req, res, next) => {
+    try {
+      const { state, dist, block, gp, submitted_id } = req.query;
+
+      const matchStage = {
+        gp_id: gp,
+        submitted_id,
+      };
+
+      if (state) matchStage.state_id = state;
+      if (dist) matchStage.dist_id = dist;
+      if (block) matchStage.block_id = block;
+
+      const pipeline = [
+        { $match: matchStage },
+        {
+          $lookup: {
+            from: "indicators",
+            localField: "indicator_id",
+            foreignField: "id",
+            as: "indicatorDetails",
+          },
+        },
+
+        {
+          $unwind: "$indicatorDetails",
+        },
+        {
+          $lookup: {
+            from: "indicatorapprovals",
+            localField: "submitted_id",
+            foreignField: "submitted_id",
+            as: "approvalDetails",
+          },
+        },
+        {
+          $unwind: "$approvalDetails",
+        },
+        {
+          $lookup: {
+            from: "states",
+            localField: "state_id",
+            foreignField: "id",
+            as: "stateDetails",
+          },
+        },
+        { $unwind: "$stateDetails" },
+        {
+          $lookup: {
+            from: "districts",
+            localField: "dist_id",
+            foreignField: "id",
+            as: "districtDetails",
+          },
+        },
+        { $unwind: "$districtDetails" },
+        {
+          $lookup: {
+            from: "blocks",
+            localField: "block_id",
+            foreignField: "id",
+            as: "blockDetails",
+          },
+        },
+        { $unwind: "$blockDetails" },
+        {
+          $lookup: {
+            from: "grampanchayats",
+            localField: "gp_id",
+            foreignField: "id",
+            as: "gpDetails",
+          },
+        },
+        { $unwind: "$gpDetails" },
+        {
+          $project: {
+            _id: 0,
+            id: 1,
+            state_id: 1,
+            "stateDetails.name": 1,
+            dist_id: 1,
+            "districtDetails.name": 1,
+            block_id: 1,
+            "blockDetails.name": 1,
+            gp_id: 1,
+            "gpDetails.name": 1,
+            date: 1,
+            indicator_id: 1,
+            max_range: 1,
+            input_data: 1,
+            score: 1,
+            remarks: 1,
+            financial_year: 1,
+            approver_remarks: "$approvalDetails.remarks",
+            status: 1,
+            submitted_id: 1,
+            created_by: 1,
+            modified_by: 1,
+            created_at: 1,
+            modified_at: 1,
+            indicatorDetails: 1,
+          },
+        },
+      ];
+
+      const gpWiseIndicatorData = await GpWiseIndicatorModel.aggregate(
+        pipeline
+      );
+
+      if (!gpWiseIndicatorData) {
+        return next(
+          new Errorhandler("No KPI data found for the specified filters", 404)
+        );
+      }
+
+      res.status(200).json({
+        success: true,
+        message: "KPI data fetched successfully",
+        data: gpWiseIndicatorData,
+      });
+    } catch (error) {
+      console.log(error);
+      return next(new Errorhandler("Failed to getGp wise data", 500));
+    }
+  }
+);
+
+// Resubmit the Indicator data
+export const reSubmitIndicatorData = CatchAsyncError(async (req, res, next) => {
+  try {
+    const { formData, submitted_id } = req.body;
+
+    // Validate if formData is empty
+    if (!formData || formData.length === 0) {
+      return next(new Errorhandler("Form data cannot be empty", 400));
+    }
+
+    // Check if the submitted_id exists in the KPIApprovalModel
+    const existingData = await IndicatorApprovalModel.findOne({ submitted_id });
+
+    if (!existingData) {
+      return next(
+        new Errorhandler(
+          "KPI data with the given submitted_id does not exist",
+          404
+        )
+      );
+    }
+
+    // Prepare the updated GpWiseKPI documents
+    const indicatorDocuments = formData.map((indicator) => ({
+      indicator_id: indicator.indicator_id,
+      max_range: indicator.max_range,
+      input_data: indicator.input_data,
+      remarks: indicator.remarks,
+      submitted_id: submitted_id,
+    }));
+
+    // Update the KPI documents in the gpWiseKpi collection based on submitted_id and kpi_id
+    await Promise.all(
+      indicatorDocuments.map((indicatorDocument) =>
+        GpWiseIndicatorModel.updateOne(
+          { submitted_id, indicator_id: indicatorDocument.indicator_id },
+          indicatorDocument,
+          { upsert: true }
+        )
+      )
+    );
+
+    // Update the approval request document in the KPIApprovalModel
+    await IndicatorApprovalModel.findOneAndUpdate(
+      { submitted_id },
+      { decision: "0" },
+      {
+        new: true,
+      }
+    );
+
+    // Send success response
+    res.status(200).json({
+      success: true,
+      message:
+        "Indicator data updated and approval request updated successfully",
+    });
+  } catch (error) {
+    console.error("Failed to update Indicator data:", error);
+    return next(new Errorhandler("Failed to update Indicator data", 500));
+  }
+});
+
 const getGpWiseIndicatorDataWithPercentage = async (query) => {
   const { state, dist, block, gp, search, fy } = query;
   const filter = {};
