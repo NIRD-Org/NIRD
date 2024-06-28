@@ -1,6 +1,8 @@
 import express from "express";
 import {
   getGpWiseIndicatorDataWithPercentageController,
+  getGpWiseIndicatorForApprover,
+  reSubmitIndicatorData,
   submitIndicatorData,
 } from "../controllers/gpWiseIndicator.js";
 
@@ -11,6 +13,8 @@ const router = express.Router();
 
 // Submit the data from the YF
 router.route("/submit").post(submitIndicatorData);
+router.route("/resubmit").put(reSubmitIndicatorData);
+router.route("/approval-data").get(getGpWiseIndicatorForApprover);
 
 // Get teh chart
 

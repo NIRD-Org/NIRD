@@ -20,6 +20,7 @@ import userRoutes from "./routes/userRoutes.js";
 import yfInsightsRoutes from "./routes/yfInsightsRoutes.js";
 import trainingRoutes from "./routes/trainingRoutes.js";
 import goodPracticeRoutes from "./routes/goodPracticeRoutes.js";
+import indicatorApprovalRoutes from "./routes/indicatorApprovalRoutes.js";
 import fileUpload from "express-fileupload";
 const app = express();
 
@@ -40,6 +41,7 @@ app.use("/api/v1/gram", gpRoutes);
 app.use("/api/v1/kpi", kpiRoutes);
 app.use("/api/v1/theme", themeRoutes);
 app.use("/api/v1/kpi-approvals", kpiApprovalRoutes);
+app.use("/api/v1/indicator-approvals", indicatorApprovalRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/user-location", userLocationRoutes);
 app.use("/api/v1/indicator", indicatorRoutes);
