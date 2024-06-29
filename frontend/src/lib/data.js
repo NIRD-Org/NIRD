@@ -171,6 +171,12 @@ export const getSidebarItems = (user) => {
               title: "Gp details",
               link: "/admin/action/admin/gp-details",
             },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "LCVA",
+              link: "/admin/action/admin/lcva",
+            },
           ],
         },
         {
@@ -250,6 +256,12 @@ export const getSidebarItems = (user) => {
               title: "Gp details",
               link: "/admin/action/young-fellow/gp-details",
             },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "LCVA",
+              link: "/admin/action/young-fellow/lcva",
+            },
           ],
         },
         {
@@ -292,6 +304,12 @@ export const getSidebarItems = (user) => {
               icon: ArrowBigRight,
               title: "Training",
               link: "/admin/training",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "LCVA",
+              link: "/admin/lcvas",
             },
           ],
         },

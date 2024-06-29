@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import API from "@/utils/API";
 import { Button } from "@/components/ui/button";
+import AdminHeader from "../AdminHeader";
 import { Input } from "@/components/ui/input";
-import { tst } from "@/lib/utils";
-import AdminHeader from "@/components/admin/AdminHeader";
 import { Textarea } from "@/components/ui/textarea";
+import { tst } from "@/lib/utils";
 
-const LCVAResubmit = ({}) => {
+const LCVAForm = ({ update = false }) => {
   const navigate = useNavigate();
   const [pending, setPending] = useState(false);
-  const { id } = useParams();
   const [locationData, setLocationData] = useState({
     states: [],
     districts: [],
@@ -29,18 +28,6 @@ const LCVAResubmit = ({}) => {
     document: null,
     video: null,
   });
-
-  useEffect(() => {
-    const fetchLCVA = async () => {
-      try {
-        const { data } = await API.get(`/api/v1/lcva/${id}`);
-        setFormData(data?.data);
-      } catch (error) {
-        console.error("Error fetching Good Practice:", error);
-      }
-    };
-    fetchLCVA();
-  }, []);
 
   useEffect(() => {
     async function fetchStates() {
@@ -69,7 +56,13 @@ const LCVAResubmit = ({}) => {
             ...prevData,
             districts: response.data.districts || [],
           }));
-         
+          if (!update)
+            setFormData(prevData => ({
+              ...prevData,
+              dist_id: "",
+              block_id: "",
+              gp_id: "",
+            }));
         } catch (error) {
           console.error("Failed to fetch districts.");
         }
@@ -89,7 +82,12 @@ const LCVAResubmit = ({}) => {
             ...prevData,
             blocks: response.data.blocks || [],
           }));
-         
+          if (!update)
+            setFormData(prevData => ({
+              ...prevData,
+              block_id: "",
+              gp_id: "",
+            }));
         } catch (error) {
           console.error("Failed to fetch blocks.");
         }
@@ -109,6 +107,11 @@ const LCVAResubmit = ({}) => {
             ...prevData,
             gps: response.data.gram || [],
           }));
+          if (!update)
+            setFormData(prevData => ({
+              ...prevData,
+              gp_id: "",
+            }));
         } catch (error) {
           console.log(error);
         }
@@ -130,10 +133,16 @@ const LCVAResubmit = ({}) => {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      setPending(true)
-      await API.put(`/api/v1/lcva/${formData.id}`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      if (update) {
+        await API.put(`/api/v1/lcva/update/${formData.id}`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+      } else {
+        setPending(true);
+        await API.post("/api/v1/lcva/create", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+      }
       tst.success("Data submitted successfully");
     } catch (error) {
       tst.error("Failed to submit form");
@@ -200,6 +209,20 @@ const LCVAResubmit = ({}) => {
       required: true,
     },
     {
+      name: "financial_year", 
+      label: "Financial Year",
+      type: "select",
+      options: Array.from({ length: 30 }, (_, i) => {
+        const startYear = 2021 + i;
+        const endYear = startYear + 1;
+        return {
+          value: `FY${startYear}-${endYear}`,
+          label: `FY${startYear}-${endYear}`,
+        };
+      }),
+      required: true,
+    },
+    {
       label: "GP",
       name: "gp_id",
       type: "select",
@@ -220,9 +243,11 @@ const LCVAResubmit = ({}) => {
   if (!locationData.themes) return;
 
   return (
-    <div className="p-6">
-      <AdminHeader>Edit Good Practice</AdminHeader>
-      <form onSubmit={handleSubmit} className="w-full grid grid-cols-3 gap-10">
+    <div className="p-2 md:p-6">
+      <AdminHeader>
+        {update ? "Edit LCVA" : "Add LCVA"}
+      </AdminHeader>
+      <form onSubmit={handleSubmit} className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
         {formFields.map((field, index) => (
           <div className="mb-4" key={index}>
             <label className="block font-bold mb-2">{field.label}</label>
@@ -256,53 +281,44 @@ const LCVAResubmit = ({}) => {
           <label className="block font-bold mb-2">
             Upload Photo for Display
           </label>
-          <Input
+          <input
             type="file"
             accept="image/*"
             name="image"
             onChange={handleFileChange}
+            required={!update}
             className="block"
           />
         </div>
         <div className="mb-4">
           <label className="block font-bold mb-2">Upload Document</label>
-          <Input
+          <input
             type="file"
             accept=".pdf,.doc,.docx"
             name="document"
             onChange={handleFileChange}
+            required={!update}
             className="block"
           />
         </div>
         <div className="mb-4">
           <label className="block font-bold mb-2">Upload Video</label>
-          <Input
+          <input
             type="file"
             accept="video/*"
             name="video"
             onChange={handleFileChange}
+            required={!update}
             className="block"
           />
         </div>
-        <div>
-          <label className="block font-bold mb-2">Remarks</label>
-          <Textarea
-            type="text"
-            name="remarks"
-            disabled
-            value={formData.remarks}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div ></div>
-        <div ></div>
+        <div></div>
         <Button pending={pending} type="submit" className="px-20 self-end">
-          Resubmit
+          {update ? "Update" : "Submit"}
         </Button>
       </form>
     </div>
   );
 };
 
-export default LCVAResubmit;
+export default LCVAForm;

@@ -65,7 +65,14 @@ import GoodPracticeForm from "./components/admin/good-practices/GoodPracticeForm
 import GoodPracticeApprovalsList from "./components/admin/action/admin/good practice/list";
 import GoodPracticeApprovalPage from "./components/admin/action/admin/good practice/approve";
 import GoodPracticeApprovalsListYF from "./components/admin/action/young-fellow/good-practice/list";
-import GoodPracticeResubmit from "./components/admin/action/young-fellow/good-practice/approve";
+import GoodPracticeResubmit from "./components/admin/action/young-fellow/good-practice/resubmit";
+import GoodPracticeViewDetails from "./components/admin/action/admin/good practice/view";
+import LCVAForm from "./components/admin/lcva/LCVAForm";
+import LCVAApprovalsList from "./components/admin/action/admin/lcva/list";
+import LCVAApprovalPage from "./components/admin/action/admin/lcva/approve";
+import LCVAApprovalsListYF from "./components/admin/action/young-fellow/lcva/list";
+import LCVAResubmit from "./components/admin/action/young-fellow/lcva/resubmit";
+import LCVAViewDetails from "./components/admin/action/admin/lcva/view";
 import AdminIndicatorApprovalList from "./components/admin/action/admin/indicator/list";
 import IndicatorApprovalAdminForm from "./components/admin/action/admin/indicator/approve";
 import YFIndicatorApprovalList from "./components/admin/action/young-fellow/indicator/list";
@@ -76,7 +83,6 @@ import TrainingApprovalsListYf from "./components/admin/action/young-fellow/trai
 import TrainingResubmit from "./components/admin/action/young-fellow/training/resubmit";
 import GoodPracticeView from "./components/admin/action/components/GoodPracticeView";
 import TrainingViewDetails from "./components/admin/action/admin/training/view";
-import GoodPracticeViewDetails from "./components/admin/action/admin/good practice/view";
 import GpDetailsApprovalsList from "./components/admin/action/admin/gp-details/list";
 import GpDetailsApprovalPage from "./components/admin/action/admin/gp-details/approve";
 import GpDetailsViewDetials from "./components/admin/action/admin/gp-details/view";
@@ -202,30 +208,97 @@ function App() {
               element={<FellowInsightPage />}
             />
             <Route path="good-practices" element={<GoodPracticeForm />} />
-            <Route path="action/admin/good-practice" element={<GoodPracticeApprovalsList />} />
-            <Route path="approve/good-practice/:id" element={<GoodPracticeApprovalPage />} />
-            <Route path="view/good-practice/:id" element={<GoodPracticeViewDetails />} />
-            <Route path="action/young-fellow/good-practice" element={<GoodPracticeApprovalsListYF />} />
-            <Route path="resubmit/good-practice/:id" element={<GoodPracticeResubmit />} />
+            <Route
+              path="action/admin/good-practice"
+              element={<GoodPracticeApprovalsList />}
+            />
+            <Route
+              path="approve/good-practice/:id"
+              element={<GoodPracticeApprovalPage />}
+            />
+            <Route
+              path="view/good-practice/:id"
+              element={<GoodPracticeViewDetails />}
+            />
+            <Route
+              path="action/young-fellow/good-practice"
+              element={<GoodPracticeApprovalsListYF />}
+            />
+            <Route
+              path="resubmit/good-practice/:id"
+              element={<GoodPracticeResubmit />}
+            />
 
-            <Route path="action/admin/gp-details" element={<GpDetailsApprovalsList />} />
-            <Route path="approve/gp-details/:id" element={<GpDetailsApprovalPage />} />
-            <Route path="view/gp-details/:id" element={<GpDetailsViewDetials />} />
-            <Route path="action/young-fellow/gp-details" element={<GpDetailsApprovalsListYf />} />
-            <Route path="resubmit/gp-details/:id" element={<GpDetailsApprovalResubmit />} />
+            <Route path="lcvas" element={<LCVAForm />} />
+            <Route path="action/admin/lcva" element={<LCVAApprovalsList />} />
+            <Route path="approve/lcva/:id" element={<LCVAApprovalPage />} />
+            <Route path="view/lcva/:id" element={<LCVAViewDetails />} />
+            <Route
+              path="action/young-fellow/lcva"
+              element={<LCVAApprovalsListYF />}
+            />
+            <Route path="resubmit/lcva/:id" element={<LCVAResubmit />} />
+
+            <Route
+              path="action/admin/gp-details"
+              element={<GpDetailsApprovalsList />}
+            />
+            <Route
+              path="approve/gp-details/:id"
+              element={<GpDetailsApprovalPage />}
+            />
+            <Route
+              path="view/gp-details/:id"
+              element={<GpDetailsViewDetials />}
+            />
+            <Route
+              path="action/young-fellow/gp-details"
+              element={<GpDetailsApprovalsListYf />}
+            />
+            <Route
+              path="resubmit/gp-details/:id"
+              element={<GpDetailsApprovalResubmit />}
+            />
 
             <Route path="training" element={<TrainingForm />} />
-            <Route path="action/admin/training" element={<TrainingApprovalsList />} />
-            <Route path="approve/training/:id" element={<TrainingApprovalPage />} />
+            <Route
+              path="action/admin/training"
+              element={<TrainingApprovalsList />}
+            />
+            <Route
+              path="approve/training/:id"
+              element={<TrainingApprovalPage />}
+            />
             <Route path="view/training/:id" element={<TrainingViewDetails />} />
-            {<Route path="action/young-fellow/training" element={<TrainingApprovalsListYf />} />}
-            {<Route path="resubmit/training/:id" element={<TrainingResubmit />} />}
+            {
+              <Route
+                path="action/young-fellow/training"
+                element={<TrainingApprovalsListYf />}
+              />
+            }
+            {
+              <Route
+                path="resubmit/training/:id"
+                element={<TrainingResubmit />}
+              />
+            }
 
-            <Route path="action/admin/indicator" element={<AdminIndicatorApprovalList />} />
-            <Route path="action/young-fellow/indicator" element={<YFIndicatorApprovalList />} />
-            <Route path="action/admin/approve/indicator" element={<IndicatorApprovalAdminForm />} />
-            <Route path="action/young-fellow/resubmit/indicator" element={<IndicatorApprovalResubmit />} />
-
+            <Route
+              path="action/admin/indicator"
+              element={<AdminIndicatorApprovalList />}
+            />
+            <Route
+              path="action/young-fellow/indicator"
+              element={<YFIndicatorApprovalList />}
+            />
+            <Route
+              path="action/admin/approve/indicator"
+              element={<IndicatorApprovalAdminForm />}
+            />
+            <Route
+              path="action/young-fellow/resubmit/indicator"
+              element={<IndicatorApprovalResubmit />}
+            />
           </Route>
         </Route>
 

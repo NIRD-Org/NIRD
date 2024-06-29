@@ -9,57 +9,51 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { NirdEditIcon, NirdViewIcon } from "@/components/admin/Icons";
+import { NirdEditIcon,NirdViewIcon } from "@/components/admin/Icons";
 import AdminHeader from "@/components/admin/AdminHeader";
 import { Input } from "@/components/ui/input";
-import { useAdminState } from "@/components/hooks/useAdminState";
 
-const LCVAApprovalsList = () => {
+const LCVAApprovalsListYF = () => {
   const [searchParams] = useSearchParams();
+  const state_id = searchParams.get("state_id") || "";
   const dist_id = searchParams.get("dist_id") || "";
   const block_id = searchParams.get("block_id") || "";
   const gram_id = searchParams.get("gram_id") || "";
   const theme_id = searchParams.get("theme_id") || "";
   const navigate = useNavigate();
+
   const [lCVAApprovals, setLCVAApprovals] = useState([]);
   const [statusFilter, setStatusFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 50;
-  const [state_id, setStateId] = useState(null);
-  const { adminStates } = useAdminState();  
 
   useEffect(() => {
     getAllLCVAApprovals();
-  }, [state_id]);
+  }, []);
 
   const getAllLCVAApprovals = async () => {
     try {
-      const { data } = await API.get(`/api/v1/lcva/all`, {
-        params: {
-          state_id,
-          dist_id,
-          block_id,
-          gp_id: gram_id,
-          theme_id,
-        },
-      });
-      data?.data?.sort((a, b) => b.id - a.id);
+      const { data } = await API.get(
+        `/api/v1/lcva/all?decision=2&state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gp_id=${gram_id}&theme_id=${theme_id}`
+      );
+      data?.data?.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+      );
       setLCVAApprovals(data?.data || []);
     } catch (error) {
       console.log("Error fetching Good Practice Approvals:", error);
     }
   };
 
-
   const handleStatusFilterChange = e => {
     setStatusFilter(e.target.value);
     setCurrentPage(1);
   };
-  
+
   const handleSearchQueryChange = e => {
     setSearchQuery(e.target.value);
-    setCurrentPage(1);
+    setCurrentPage(1); 
   };
 
   const filteredApprovals = lCVAApprovals.filter(approval => {
@@ -97,24 +91,12 @@ const LCVAApprovalsList = () => {
           <select
             value={statusFilter}
             onChange={handleStatusFilterChange}
-            className={"text-sm px-4 py-2 rounded-md bg-white border w-[200px]"}
+            className="p-2 border rounded"
           >
             <option value="all">All</option>
             <option value="0">Not Approved</option>
-            <option value="1">Approved</option>
-            <option value="2">Sent back for Modification</option>
-          </select>
-          <select
-            className={"text-sm px-4 py-2 rounded-md bg-white border w-[200px]"}
-            value={state_id}
-            onChange={e => setStateId(e.target.value)}
-          >
-            <option value="">Select a state</option>
-            {adminStates?.map(state => (
-              <option key={state.id} value={state.id}>
-                {state.name}
-              </option>
-            ))}
+            <option value="1">Sent back for Approval</option>
+            <option value="2">Approved</option>
           </select>
           <Input
             type="text"
@@ -144,24 +126,20 @@ const LCVAApprovalsList = () => {
                     <TableCell>{approval.gp_name}</TableCell>
                     <TableCell>
                       {approval.decision == 0
-                        ? "Pending"
+                        ? "Not Approved"
                         : approval.decision == 1
                         ? "Approved"
-                        : "Sent back for Approval"}
+                        : "Sent back for Modification"}
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-3">
-                        {approval.decision == 0 && (
-                          <span
-                            onClick={() =>
-                              navigate(
-                                `/admin/approve/good-practice/${approval.id}`
-                              )
-                            }
-                          >
-                            <NirdEditIcon />
-                          </span>
-                        )}
+                        <span
+                          onClick={() =>
+                            navigate(`/admin/resubmit/good-practice/${approval.id}`)
+                          }
+                        >
+                          <NirdEditIcon />
+                        </span>
                         <span
                           onClick={() =>
                             navigate(`/admin/view/good-practice/${approval.id}`)
@@ -207,4 +185,4 @@ const LCVAApprovalsList = () => {
   );
 };
 
-export default LCVAApprovalsList;
+export default LCVAApprovalsListYF;

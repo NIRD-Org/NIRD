@@ -20,6 +20,7 @@ import userRoutes from "./routes/userRoutes.js";
 import yfInsightsRoutes from "./routes/yfInsightsRoutes.js";
 import trainingRoutes from "./routes/trainingRoutes.js";
 import goodPracticeRoutes from "./routes/goodPracticeRoutes.js";
+import LCVARoutes from "./routes/LCVARoutes.js";
 import indicatorApprovalRoutes from "./routes/indicatorApprovalRoutes.js";
 import fileUpload from "express-fileupload";
 const app = express();
@@ -50,6 +51,7 @@ app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/yf-insights", yfInsightsRoutes);
 app.use("/api/v1/training", trainingRoutes);
 app.use("/api/v1/good-practice", goodPracticeRoutes);
+app.use("/api/v1/lcva", LCVARoutes);
 app.get("/", (req, res) => {
   res.status(200).json({ message: "Server is running" });
 });
