@@ -19,10 +19,7 @@ const Footer = () => {
           </div>
           <div className="mb-4 lg:mb-0">
             <h3 className="text-md  md:font-semibold">
-              Low cost{" "}
-              <a href="#" className="underline">
-                Voluntary Activities
-              </a>
+              Low Cost/No Cost Voluntary Activity
             </h3>
           </div>
           <div className="mb-4 lg:mb-0">

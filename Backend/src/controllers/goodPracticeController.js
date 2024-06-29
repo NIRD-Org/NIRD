@@ -41,7 +41,7 @@ export const createGoodPractice = CatchAsyncError(async (req, res, next) => {
     req.body.document = docUrl;
     req.body.video = videoUrl;
     req.body.id = await getNewId();
-    req.body.created_by = req.user.id;
+    req.body.created_by = req?.user?.id;
 
     const newGoodPractice = new GoodPractice(req.body);
     await newGoodPractice.save();
@@ -146,6 +146,8 @@ export const getGoodPractices = CatchAsyncError(async (req, res, next) => {
     if (req.query.gp_id) filter.gp_id = req.query.gp_id;
     if (req.query.theme_id) filter.theme_id = req.query.theme_id;
     if (req.query.decision) filter.decision = 1;
+    if (req.query.fy) filter.financial_year = req.query.fy;
+    const keyword = req.query.keyword ? req.query.keyword : "";
 
     const goodPractices = await GoodPractice.aggregate([
       { $match: filter },
@@ -203,12 +205,57 @@ export const getGoodPractices = CatchAsyncError(async (req, res, next) => {
           gp_name: "$gp.name",
         },
       },
+      {
+        $match: {
+          $or: [
+            { theme_name: { $regex: keyword, $options: "i" } },
+            { state_name: { $regex: keyword, $options: "i" } },
+            { block_name: { $regex: keyword, $options: "i" } },
+            { dist_name: { $regex: keyword, $options: "i" } },
+            { gp_name: { $regex: keyword, $options: "i" } },
+            { activityTitle: { $regex: keyword, $options: "i" } },
+          ],
+        },
+      },
+      {
+        $sort: {
+          _id: -1,
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalGoodPractices: { $sum: 1 },
+          totalDocuments: {
+            $sum: { $cond: [{ $ne: ["$document", ""] }, 1, 0] },
+          },
+          totalVideos: { $sum: { $cond: [{ $ne: ["$video", ""] }, 1, 0] } },
+          goodPractices: { $push: "$$ROOT" },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          totalGoodPractices: 1,
+          totalDocuments: 1,
+          totalVideos: 1,
+          goodPractices: 1,
+        },
+      },
     ]);
 
     res.status(200).json({
       success: true,
       message: "Good Practices fetched successfully",
-      data: goodPractices,
+      data:
+        goodPractices.length > 0
+          ? goodPractices[0]
+          : {
+              totalGoodPractices: 0,
+              totalDocuments: 0,
+              totalVideos: 0,
+              goodPractices: [],
+            },
     });
   } catch (error) {
     console.error(error);
@@ -400,5 +447,12 @@ export const approveTraining = CatchAsyncError(async (req, res, next) => {
   } catch (error) {
     console.error(error);
     return next(new Errorhandler("Failed to approve Training", 500));
+  }
+});
+
+export const getGoodPracticesData = CatchAsyncError(async (req, res, next) => {
+  try {
+  } catch (error) {
+    return next(new Errorhandler("Failed to get GoodPractices ", 500));
   }
 });

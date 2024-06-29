@@ -9,7 +9,11 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export const uploadFile = async (buffer, folder = "user/uploads", format = "jpg") => {
+export const uploadFile = async (
+  buffer,
+  folder = "user/uploads",
+  format = "jpg"
+) => {
   try {
     return new Promise((resolve, reject) => {
       const cld_upload_stream = cloudinary.uploader.upload_stream(
@@ -22,7 +26,7 @@ export const uploadFile = async (buffer, folder = "user/uploads", format = "jpg"
             console.error(error);
             reject(error);
           } else {
-            console.log(result);
+            // console.log(result);
             resolve(result);
           }
         }

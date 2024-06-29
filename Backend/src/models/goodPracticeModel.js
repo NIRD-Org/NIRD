@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 // Define Mongoose schema
 const GoodPracticeSchema = new Schema(
   {
-    id:{
+    id: {
       type: String,
       required: true,
       unique: true,
@@ -53,6 +53,15 @@ const GoodPracticeSchema = new Schema(
     },
     remarks: {
       type: String,
+      default: "",
+    },
+    status: {
+      type: String,
+      default: "1",
+    },
+    financial_year: {
+      type: String,
+      required: true,
       default: "",
     },
     created_by: {
