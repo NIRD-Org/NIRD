@@ -2,18 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import API from "@/utils/API";
 import AdminHeader from "@/components/admin/AdminHeader";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-} from "@/components/ui/table";
 import { Label } from "@/components/ui/label";
 import { tst } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { NirdViewIcon } from "@/components/admin/Icons";
 import GoodPracticeView from "../../components/GoodPracticeView";
 
 const GoodPracticeApprovalPage = () => {
@@ -30,8 +22,6 @@ const GoodPracticeApprovalPage = () => {
       tst.error("Error approving Good Practice");
     }
   };
-
- 
 
   return (
     <div className="container mx-auto p-4">

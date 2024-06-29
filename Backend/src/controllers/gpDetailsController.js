@@ -114,10 +114,6 @@ export const updatePanchayatDetails = CatchAsyncError(
   async (req, res, next) => {
     try {
       const {
-        state_id,
-        dist_id,
-        block_id,
-        gp_id,
         panchayatDetails,
         demography,
         panchayatArea,
@@ -125,16 +121,16 @@ export const updatePanchayatDetails = CatchAsyncError(
         secretaryDetails,
       } = req.body;
 
-      console.log(req.body);
 
       const panchayat = await GpDetailsModel.findOneAndUpdate(
-        { state_id, dist_id, block_id, gp_id },
+        { id: req.params.id },
         {
           panchayatDetails,
           demography,
           panchayatArea,
           sarpanchDetails,
           secretaryDetails,
+          decision: 0,
         },
         { new: true }
       );
@@ -161,9 +157,11 @@ export const getAllPanchayatDetails = CatchAsyncError(
       if (gp_id) filter.gp_id = gp_id;
       if (dist_id) filter.dist_id = dist_id;
       if (req.user.role == 3) filter.created_by = req.user.id;
-      if (req.user.role == 2  && !req.query.state_id) {
-        const {userLocations} = await UserLocationModel.findOne({ user_id: req.user.id });
-        const stateIds = userLocations.state_ids
+      if (req.user.role == 2 && !req.query.state_id) {
+        const { userLocations } = await UserLocationModel.findOne({
+          user_id: req.user.id,
+        });
+        const stateIds = userLocations.state_ids;
         filter.state_id = { $in: stateIds };
       }
       // const gpDetails = await GpDetailsModel.find(filter);
@@ -355,7 +353,6 @@ export const getPanchayatDetailsById = CatchAsyncError(
     }
   }
 );
-
 
 export const approveGpDetails = CatchAsyncError(async (req, res, next) => {
   try {

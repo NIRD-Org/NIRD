@@ -3,19 +3,21 @@ import StateFilter from "../filter/StateFilter";
 import GramFilter from "../filter/GramFilter";
 import BlockFilter from "../filter/BlockFilter";
 import DistrictFilter from "../filter/DistrictFilter";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import API from "@/utils/API";
 import toast from "react-hot-toast";
 import AdminHeader from "../AdminHeader";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-const GpDetailsForm = () => {
+const GpDetailsForm = ({ update }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const state_id = searchParams.get("state_id") || "";
   const dist_id = searchParams.get("dist_id") || "";
   const block_id = searchParams.get("block_id") || "";
   const gp_id = searchParams.get("gram_id") || "";
+  const { id } = useParams();
+
   const [formValues, setFormValues] = useState({
     panchayatDetails: {
       state: "",
@@ -388,9 +390,56 @@ const GpDetailsForm = () => {
     }
   };
 
+  useEffect(() => {
+    const getPanchayat = async () => {
+      try {
+        const { data } = await API.get(`/api/v1/gp-details/${id}`);
+        // console.log(data?.data);
+        setFormValues(prevValues => ({
+          ...prevValues,
+          ...data?.data,
+        }));
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    if (update) getPanchayat();
+  }, []);
+
+  const handleUpdate = async (e) => {
+    e.preventDefault()
+    try {
+      setLoading(true);
+      const { data } = await API.put(
+        `/api/v1/gp-details/${id}`,
+        {
+          ...formValues,
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      if (data?.success) {
+        toast.success(data?.message, { position: "bottom-center" });
+      }
+    } catch (error) {
+      toast.error(
+        error.response.data.message
+          ? error.response.data.message
+          : error.message,
+        { position: "bottom-center" }
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="w-full  p-4">
-      <form onSubmit={handleSubmit} className="  pb-8 mb-4">
+      <form
+        onSubmit={!update ? handleSubmit : handleUpdate}
+        className="  pb-8 mb-4"
+      >
         <AdminHeader>Gram Panchayat Details</AdminHeader>
         <div className="grid py-10  grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-10 justify-between">
           <StateFilter />
@@ -500,9 +549,7 @@ const GpDetailsForm = () => {
 
         {/* Section: Demography */}
         <div className="mb-6">
-          <h2 className="text-xl font-medium text-primary mb-4">
-            Demography
-          </h2>
+          <h2 className="text-xl font-medium text-primary mb-4">Demography</h2>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 pb-10">
             <Input
               type="number"
@@ -824,9 +871,7 @@ const GpDetailsForm = () => {
 
         {/* Education */}
         <div className="mb-6">
-          <h2 className="text-xl font-medium text-primary mb-4">
-            Education
-          </h2>
+          <h2 className="text-xl font-medium text-primary mb-4">Education</h2>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 pb-10">
             <Input
               required
@@ -1124,11 +1169,8 @@ const GpDetailsForm = () => {
 
         {/* Submit Button */}
         <div className="flex items-center justify-end">
-          <Button
-            type="submit"
-            disabled={loading}
-          >
-            {loading ? "Saving..." : " Submit"}
+          <Button type="submit" disabled={loading}>
+            {loading ? "Saving..." : update ? "Update" : "Submit"}
           </Button>
         </div>
       </form>

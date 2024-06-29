@@ -30,7 +30,6 @@ const GoodPracticeApprovalsList = () => {
   const { adminStates } = useAdminState();  
 
   useEffect(() => {
-    console.log(state_id)
     getAllGoodPracticeApprovals();
   }, [state_id]);
 
