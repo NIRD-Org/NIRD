@@ -16,16 +16,16 @@ const LCVAApprovalPage = () => {
     e.preventDefault();
     try {
       await API.put(`/api/v1/lcva/${id}/approve`, formData);
-      tst.success("Good Practice approved");
+      tst.success("LCVA approved");
     } catch (error) {
-      console.error("Error approving Good Practice:", error);
-      tst.error("Error approving Good Practice");
+      console.error("Error approving LCVA:", error);
+      tst.error("Error approving LCVA");
     }
   };
 
   return (
     <div className="container mx-auto p-4">
-      <AdminHeader>Good Practice Details</AdminHeader>
+      <AdminHeader>LCVA Details</AdminHeader>
       <LCVAView />
       <form onSubmit={handleSubmit}>
         <div className="mt-8 flex  gap-4">

@@ -135,14 +135,14 @@ const LCVAApprovalsListYF = () => {
                       <div className="flex items-center gap-3">
                         <span
                           onClick={() =>
-                            navigate(`/admin/resubmit/good-practice/${approval.id}`)
+                            navigate(`/admin/resubmit/lcva/${approval.id}`)
                           }
                         >
                           <NirdEditIcon />
                         </span>
                         <span
                           onClick={() =>
-                            navigate(`/admin/view/good-practice/${approval.id}`)
+                            navigate(`/admin/view/lcva/${approval.id}`)
                           }
                         >
                           <NirdViewIcon />

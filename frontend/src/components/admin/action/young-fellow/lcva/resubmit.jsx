@@ -36,7 +36,7 @@ const LCVAResubmit = ({}) => {
         const { data } = await API.get(`/api/v1/lcva/${id}`);
         setFormData(data?.data);
       } catch (error) {
-        console.error("Error fetching Good Practice:", error);
+        console.error("Error fetching LCVA:", error);
       }
     };
     fetchLCVA();
@@ -221,7 +221,7 @@ const LCVAResubmit = ({}) => {
 
   return (
     <div className="p-6">
-      <AdminHeader>Edit Good Practice</AdminHeader>
+      <AdminHeader>Edit LCVA</AdminHeader>
       <form onSubmit={handleSubmit} className="w-full grid grid-cols-3 gap-10">
         {formFields.map((field, index) => (
           <div className="mb-4" key={index}>

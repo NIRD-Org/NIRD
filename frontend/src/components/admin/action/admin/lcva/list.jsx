@@ -47,7 +47,7 @@ const LCVAApprovalsList = () => {
       data?.data?.sort((a, b) => b.id - a.id);
       setLCVAApprovals(data?.data || []);
     } catch (error) {
-      console.log("Error fetching Good Practice Approvals:", error);
+      console.log("Error fetching LCVA Approvals:", error);
     }
   };
 
@@ -92,7 +92,7 @@ const LCVAApprovalsList = () => {
   return (
     <div>
       <div className="p-6">
-        <AdminHeader>Good Practice Approvals List</AdminHeader>
+        <AdminHeader>LCVA Approvals List</AdminHeader>
         <div className="flex justify-between mb-4">
           <select
             value={statusFilter}
@@ -155,7 +155,7 @@ const LCVAApprovalsList = () => {
                           <span
                             onClick={() =>
                               navigate(
-                                `/admin/approve/good-practice/${approval.id}`
+                                `/admin/approve/lcva/${approval.id}`
                               )
                             }
                           >
@@ -164,7 +164,7 @@ const LCVAApprovalsList = () => {
                         )}
                         <span
                           onClick={() =>
-                            navigate(`/admin/view/good-practice/${approval.id}`)
+                            navigate(`/admin/view/lcva/${approval.id}`)
                           }
                         >
                           <NirdViewIcon />
