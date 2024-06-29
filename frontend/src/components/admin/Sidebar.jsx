@@ -3,6 +3,12 @@ import { Link } from "react-router-dom";
 import { ArrowBigRight } from "lucide-react";
 import { useAuthContext } from "@/context/AuthContext";
 import { getSidebarItems } from "@/lib/data";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 
 function Sidebar({ className }) {
   const { user } = useAuthContext();

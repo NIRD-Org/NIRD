@@ -66,6 +66,7 @@ export const getAllGoodPractices = CatchAsyncError(async (req, res, next) => {
     if (req.query.gp_id) filter.gp_id = req.query.gp_id;
     if (req.query.theme_id) filter.theme_id = req.query.theme_id;
     if (req.query.decision) filter.decision = parseInt(req.query.decision);
+    if (req.user.role == 3) filter.created_by = req.user.id;
 
     const goodPractices = await GoodPractice.aggregate([
       { $match: filter },
@@ -376,7 +377,6 @@ export const approveGoodPractice = CatchAsyncError(async (req, res, next) => {
   }
 });
 
-
 export const approveTraining = CatchAsyncError(async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -389,16 +389,16 @@ export const approveTraining = CatchAsyncError(async (req, res, next) => {
     );
 
     if (!updatedTraining) {
-      return next(new Errorhandler('Training not found', 404));
+      return next(new Errorhandler("Training not found", 404));
     }
 
     res.status(200).json({
       success: true,
-      message: 'Training approved successfully',
+      message: "Training approved successfully",
       data: updatedTraining,
     });
   } catch (error) {
     console.error(error);
-    return next(new Errorhandler('Failed to approve Training', 500));
+    return next(new Errorhandler("Failed to approve Training", 500));
   }
 });

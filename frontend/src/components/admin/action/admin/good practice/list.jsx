@@ -12,14 +12,15 @@ import {
 import { NirdEditIcon, NirdViewIcon } from "@/components/admin/Icons";
 import AdminHeader from "@/components/admin/AdminHeader";
 import { Input } from "@/components/ui/input";
+import { useAdminState } from "@/components/hooks/useAdminState";
 
 const GoodPracticeApprovalsList = () => {
   const [searchParams] = useSearchParams();
-  const state_id = searchParams.get("state_id") || "";
   const dist_id = searchParams.get("dist_id") || "";
   const block_id = searchParams.get("block_id") || "";
   const gram_id = searchParams.get("gram_id") || "";
   const theme_id = searchParams.get("theme_id") || "";
+  const [state_id, setState_id] = useState(null);
   const navigate = useNavigate();
 
   const [goodPracticeApprovals, setGoodPracticeApprovals] = useState([]);
@@ -30,7 +31,7 @@ const GoodPracticeApprovalsList = () => {
 
   useEffect(() => {
     getAllGoodPracticeApprovals();
-  }, []);
+  }, [state_id]);
 
   const getAllGoodPracticeApprovals = async () => {
     try {
@@ -43,20 +44,20 @@ const GoodPracticeApprovalsList = () => {
           theme_id,
         },
       });
-      data?.data?.sort(
-        (a, b) => b.id - a.id
-      );
+      data?.data?.sort((a, b) => b.id - a.id);
       setGoodPracticeApprovals(data?.data || []);
     } catch (error) {
       console.log("Error fetching Good Practice Approvals:", error);
     }
   };
 
+  const { adminStates } = useAdminState();  
+
   const handleStatusFilterChange = e => {
     setStatusFilter(e.target.value);
     setCurrentPage(1);
   };
-
+  
   const handleSearchQueryChange = e => {
     setSearchQuery(e.target.value);
     setCurrentPage(1);
@@ -97,12 +98,24 @@ const GoodPracticeApprovalsList = () => {
           <select
             value={statusFilter}
             onChange={handleStatusFilterChange}
-            className="p-2 border rounded"
+            className={"text-sm px-4 py-2 rounded-md bg-white border w-[200px]"}
           >
             <option value="all">All</option>
             <option value="0">Not Approved</option>
             <option value="1">Approved</option>
             <option value="2">Sent back for Modification</option>
+          </select>
+          <select
+            className={"text-sm px-4 py-2 rounded-md bg-white border w-[200px]"}
+            value={state_id}
+            onChange={e => setState_id(e.target.value)}
+          >
+            <option value="">Select a state</option>
+            {adminStates?.map(state => (
+              <option key={state.id} value={state.id}>
+                {state.name}
+              </option>
+            ))}
           </select>
           <Input
             type="text"

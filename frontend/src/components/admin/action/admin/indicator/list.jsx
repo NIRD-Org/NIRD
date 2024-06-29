@@ -10,14 +10,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {  NirdEditIcon, NirdViewIcon } from "../../../Icons";
+import { useAdminState } from "@/components/hooks/useAdminState";
 
 function AdminIndicatorApprovalList() {
-  const [searchParams] = useSearchParams();
-  const state_id = searchParams.get("state_id") || "";
-  const dist_id = searchParams.get("dist_id") || "";
-  const block_id = searchParams.get("block_id") || "";
-  const gram_id = searchParams.get("gram_id") || "";
-  const theme_id = searchParams.get("theme_id") || "";
   const navigate = useNavigate();
   const [indicators, setIndicators] = useState([]);
   const [statusFilter, setStatusFilter] = useState("all");
@@ -25,15 +20,13 @@ function AdminIndicatorApprovalList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalIndicators, setTotalIndicators] = useState([]);
   const itemsPerPage = 50;
+  const [state_id, setStateId] = useState(null);
+  const { adminStates } = useAdminState();
 
   const getAllIndicators = async () => {
     try {
       const queryParams = {
         state: state_id,
-        dist: dist_id,
-        block: block_id,
-        gp: gram_id,
-        theme: theme_id,
       };
       const { data } = await API.get(`/api/v1/indicator-approvals/get-approvals`, { params: queryParams });
       data?.data?.sort(
@@ -48,7 +41,7 @@ function AdminIndicatorApprovalList() {
 
   useEffect(() => {
     getAllIndicators();
-  }, []);
+  }, [state_id]);
 
   const handleStatusFilterChange = (e) => {
     setStatusFilter(e.target.value);
@@ -95,6 +88,18 @@ function AdminIndicatorApprovalList() {
             <option value="0">Submitted</option>
             <option value="1">Approved</option>
             <option value="2">Sent for Modification</option>
+          </select>
+          <select
+            className={"text-sm px-4 py-2 rounded-md bg-white border w-[200px]"}
+            value={state_id}
+            onChange={e => setStateId(e.target.value)}
+          >
+            <option value="">Select a state</option>
+            {adminStates?.map(state => (
+              <option key={state.id} value={state.id}>
+                {state.name}
+              </option>
+            ))}
           </select>
           <input
             type="text"

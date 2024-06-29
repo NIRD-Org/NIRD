@@ -46,8 +46,7 @@ export const assignUserLocation = CatchAsyncError(async (req, res, next) => {
       userLocations,
       created_by: req?.user?.id,
     });
-    await User.findOneAndUpdate({id:user_id} , { location_assigned: true });
-
+    await User.findOneAndUpdate({ id: user_id }, { location_assigned: true });
 
     if (!userLocation) {
       return next(new Errorhandler("Failed to assign user location", 500));
@@ -64,7 +63,7 @@ export const assignUserLocation = CatchAsyncError(async (req, res, next) => {
 
 // Get all users Location info -- Super Admin
 
-export const getUserLocation = CatchAsyncError(async (req, res, next) => {
+export const getAllUserLocation = CatchAsyncError(async (req, res, next) => {
   try {
     const userLocation = await UserLocationModel.find();
 
@@ -72,7 +71,7 @@ export const getUserLocation = CatchAsyncError(async (req, res, next) => {
       return next(new Errorhandler("No user locations data found", 404));
     }
 
-    res.status(200).json({ success: true, data:userLocation });
+    res.status(200).json({ success: true, data: userLocation });
   } catch (error) {
     return next(new Errorhandler("Failed to get user location", 500));
   }
@@ -91,7 +90,26 @@ export const getUserLocationById = CatchAsyncError(async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "User locations data fetched successfully",
-      data:userLocation,
+      data: userLocation,
+    });
+  } catch (error) {
+    console.log("Error: " + error);
+    return next(new Errorhandler("Failed to get user location", 500));
+  }
+});
+
+export const getUserLocation = CatchAsyncError(async (req, res, next) => {
+  try {
+    const user_id = req.user.id;
+    const userLocation = await UserLocationModel.findOne({ user_id });
+    if (!userLocation) {
+      return next(new Errorhandler("User locations data not found", 404));
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "User locations data fetched successfully",
+      data: userLocation,
     });
   } catch (error) {
     console.log("Error: " + error);

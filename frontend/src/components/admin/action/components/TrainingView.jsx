@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import API from "@/utils/API";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { NirdViewIcon } from "@/components/admin/Icons";
 
 const TrainingView = () => {
@@ -38,58 +33,57 @@ const TrainingView = () => {
     return <div>Training not found</div>;
   }
 
+  const fields = [
+    { label: "Programme Code", value: training.programmeCode },
+    { label: "Title", value: training.title },
+    { label: "Type", value: training.type },
+    { label: "Online/Offline", value: training.onlineOffline },
+    { label: "Dates", value: training.dates },
+    { label: "Duration", value: training.duration },
+    { label: "Venue", value: training.venue },
+    { label: "Govt. Officials", value: training.govtOfficials },
+    { label: "Bankers & Comm Orgns.", value: training.bankersCommOrgns },
+    { label: "ZP & PRIs", value: training.zpPRIs },
+    { label: "Vol. Orgns/NGOs", value: training.volOrgnsNGOs },
+    { label: "Natl. / State Instts for Res. & Trg", value: training.natlStateInstts },
+    { label: "Univ. / Colleges", value: training.univColleges },
+    { label: "International", value: training.international },
+    { label: "Others/Youth/PSUs/Individuals", value: training.others },
+    { label: "Total", value: training.total },
+    { label: "Female", value: training.female },
+    { label: "Training Methods", value: training.trainingMethods },
+    { label: "Total Sessions", value: training.totalSessions },
+    { label: "Total Session Time (Hrs)", value: training.totalSessionTime },
+    { label: "Evaluation is done on TMP/Google Form", value: training.evaluation },
+    { label: "Co Ordinate", value: training.coOrdinate },
+  ];
+
   return (
-      <Table>
-        <TableBody>
-          <TableRow>
-            <TableCell>Programme Code</TableCell>
-            <TableCell>{training.programmeCode}</TableCell>
+    <Table>
+      <TableBody>
+        {fields.map((field, index) => (
+          <TableRow key={index}>
+            <TableCell>{field.label}</TableCell>
+            <TableCell>{field.value}</TableCell>
           </TableRow>
-          <TableRow>
-            <TableCell>Title</TableCell>
-            <TableCell>{training.title}</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Type</TableCell>
-            <TableCell>{training.type}</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Online/Offline</TableCell>
-            <TableCell>{training.onlineOffline}</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Dates</TableCell>
-            <TableCell>{training.dates}</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Venue</TableCell>
-            <TableCell>{training.venue}</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Created By</TableCell>
-            <TableCell>{training.created_by}</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Image</TableCell>
-            <TableCell>
-              <img className="w-[300px]" src={training.trainingPhotos} alt="" />
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Document</TableCell>
-            <TableCell>
-              <a
-                href={training.trainingDesign}
-                className="flex gap-3 items-center"
-                target="_blank"
-              >
-                <span>View Document</span>
-                <NirdViewIcon />
-              </a>
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
+        ))}
+        <TableRow>
+          <TableCell>Image</TableCell>
+          <TableCell>
+            <img className="w-[300px]" src={training.trainingPhotos} alt="Training" />
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>Document</TableCell>
+          <TableCell>
+            <a href={training.trainingDesign} className="flex gap-3 items-center" target="_blank" rel="noopener noreferrer">
+              <span>View Document</span>
+              <NirdViewIcon />
+            </a>
+          </TableCell>
+        </TableRow>
+      </TableBody>
+    </Table>
   );
 };
 

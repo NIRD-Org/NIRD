@@ -57,9 +57,16 @@ export const createTraining = CatchAsyncError(async (req, res, next) => {
 // Get all trainings
 export const getAllTrainings = CatchAsyncError(async (req, res, next) => {
   try {
-    const { decision } = req.query;
+    const { decision, state_id, dist_id, block_id, gp_id } = req.query;
     const filter = {};
+
     if (decision) filter.decision = decision;
+    if (state_id) filter.state_id = state_id;
+    if (block_id) filter.block_id = block_id;
+    if (gp_id) filter.gp_id = gp_id;
+    if (dist_id) filter.dist_id = dist_id;
+    if (req.user.role == 3) filter.created_by = req.user.id;
+
     const trainings = await Training.find(filter);
 
     if (!trainings) {

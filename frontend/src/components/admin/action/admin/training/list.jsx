@@ -12,6 +12,7 @@ import {
 import { NirdEditIcon, NirdViewIcon } from "@/components/admin/Icons";
 import AdminHeader from "@/components/admin/AdminHeader";
 import { Input } from "@/components/ui/input";
+import { useAdminState } from "@/components/hooks/useAdminState";
 
 const TrainingApprovalsList = () => {
   const navigate = useNavigate();
@@ -20,15 +21,18 @@ const TrainingApprovalsList = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 50;
+  const [state_id, setStateId] = useState(null);
+  const { adminStates } = useAdminState();
 
   useEffect(() => {
     getAllTrainingApprovals();
-  }, []);
+  }, [state_id]);
 
   const getAllTrainingApprovals = async () => {
     try {
-      const { data } = await API.get(`/api/v1/training/all`, {
-      });
+      const { data } = await API.get(
+        `/api/v1/training/all?state_id=${state_id || ""}`,
+      );
       data?.data?.sort((a, b) => b.id - a.id);
       setTrainingApprovals(data?.data || []);
     } catch (error) {
@@ -36,18 +40,21 @@ const TrainingApprovalsList = () => {
     }
   };
 
-  const handleStatusFilterChange = (e) => {
+  const handleStatusFilterChange = e => {
     setStatusFilter(e.target.value);
     setCurrentPage(1);
   };
 
-  const handleSearchQueryChange = (e) => {
+  const handleSearchQueryChange = e => {
     setSearchQuery(e.target.value);
     setCurrentPage(1);
   };
 
-  const filteredApprovals = trainingApprovals.filter((approval) => {
-    if (statusFilter !== "all" && approval.decision.toString() !== statusFilter) {
+  const filteredApprovals = trainingApprovals.filter(approval => {
+    if (
+      statusFilter !== "all" &&
+      approval.decision.toString() !== statusFilter
+    ) {
       return false;
     }
     if (
@@ -66,7 +73,7 @@ const TrainingApprovalsList = () => {
     startIndex + itemsPerPage
   );
 
-  const handlePageChange = (page) => {
+  const handlePageChange = page => {
     setCurrentPage(page);
   };
 
@@ -84,6 +91,18 @@ const TrainingApprovalsList = () => {
             <option value="0">Not Approved</option>
             <option value="1">Approved</option>
             <option value="2">Sent back for Approval</option>
+          </select>
+          <select
+            className={"text-sm px-4 py-2 rounded-md bg-white border w-[200px]"}
+            value={state_id}
+            onChange={e => setStateId(e.target.value)}
+          >
+            <option value="">Select a state</option>
+            {adminStates?.map(state => (
+              <option key={state.id} value={state.id}>
+                {state.name}
+              </option>
+            ))}
           </select>
           <Input
             type="text"
@@ -107,7 +126,7 @@ const TrainingApprovalsList = () => {
             </TableHeader>
             <TableBody>
               {currentData.length > 0 ? (
-                currentData.map((approval) => (
+                currentData.map(approval => (
                   <TableRow key={approval._id}>
                     <TableCell>{approval.programmeCode}</TableCell>
                     <TableCell>{approval.title}</TableCell>
