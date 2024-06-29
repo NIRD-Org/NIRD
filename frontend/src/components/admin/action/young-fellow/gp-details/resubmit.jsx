@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import AdminHeader from "@/components/admin/AdminHeader";
+import { Label } from "@/components/ui/label";
+import { tst } from "@/lib/utils";
 
 const GpDetailsApprovalResubmit = () => {
   const navigate = useNavigate();
@@ -235,7 +237,7 @@ const GpDetailsApprovalResubmit = () => {
     e.preventDefault();
     try {
       setPending(true);
-      await API.put(`/api/v1/gp-details/${formData.id}`, formData, {
+      await API.put(`/api/v1/gp-details/${id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       tst.success("Data submitted successfully");
@@ -683,16 +685,15 @@ const GpDetailsApprovalResubmit = () => {
         {nestedFields.map((section, sectionIndex) => (
           <div key={sectionIndex} className="col-span-3">
             <h2 className="font-bold mb-4">{section.section}</h2>
-            <div className="grid grid-cols-3 gap-10">
+            <div className="grid grid-cols-4 gap-10">
               {section.fields.map((field, fieldIndex) => (
                 <div className="mb-4" key={fieldIndex}>
-                  <label className="block font-bold mb-2">{field.label}</label>
-                  <input
+                  <Label className="block font-bold mb-2">{field.label}</Label>
+                  <Input
                     type={field.type}
                     name={field.name}
                     value={formData[section.section][field.name] || ""}
                     onChange={e => handleNestedInputChange(e, section.section)}
-                    className="p-2 border rounded w-full"
                     required={field.required}
                   />
                 </div>

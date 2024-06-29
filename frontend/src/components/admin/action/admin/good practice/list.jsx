@@ -20,16 +20,17 @@ const GoodPracticeApprovalsList = () => {
   const block_id = searchParams.get("block_id") || "";
   const gram_id = searchParams.get("gram_id") || "";
   const theme_id = searchParams.get("theme_id") || "";
-  const [state_id, setState_id] = useState(null);
   const navigate = useNavigate();
-
   const [goodPracticeApprovals, setGoodPracticeApprovals] = useState([]);
   const [statusFilter, setStatusFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 50;
+  const [state_id, setStateId] = useState(null);
+  const { adminStates } = useAdminState();  
 
   useEffect(() => {
+    console.log(state_id)
     getAllGoodPracticeApprovals();
   }, [state_id]);
 
@@ -51,7 +52,6 @@ const GoodPracticeApprovalsList = () => {
     }
   };
 
-  const { adminStates } = useAdminState();  
 
   const handleStatusFilterChange = e => {
     setStatusFilter(e.target.value);
@@ -108,7 +108,7 @@ const GoodPracticeApprovalsList = () => {
           <select
             className={"text-sm px-4 py-2 rounded-md bg-white border w-[200px]"}
             value={state_id}
-            onChange={e => setState_id(e.target.value)}
+            onChange={e => setStateId(e.target.value)}
           >
             <option value="">Select a state</option>
             {adminStates?.map(state => (

@@ -1,5 +1,6 @@
 import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
 import GoodPractice from "../models/goodPracticeModel.js";
+import { UserLocationModel } from "../models/userLocationModel.js";
 import { Errorhandler } from "../utils/errorHandler.js";
 import { uploadFile, uploadPDF } from "../utils/uploadFile.js";
 
@@ -67,6 +68,13 @@ export const getAllGoodPractices = CatchAsyncError(async (req, res, next) => {
     if (req.query.theme_id) filter.theme_id = req.query.theme_id;
     if (req.query.decision) filter.decision = parseInt(req.query.decision);
     if (req.user.role == 3) filter.created_by = req.user.id;
+    if (req.user.role == 2 && !req.query.state_id) {
+      const { userLocations } = await UserLocationModel.findOne({
+        user_id: req.user.id,
+      });
+      const stateIds = userLocations.state_ids;
+      filter.state_id = { $in: stateIds };
+    }
 
     const goodPractices = await GoodPractice.aggregate([
       { $match: filter },
@@ -421,32 +429,6 @@ export const approveGoodPractice = CatchAsyncError(async (req, res, next) => {
   } catch (error) {
     console.log(error);
     return next(new Errorhandler("Failed to approve Good Practice", 500));
-  }
-});
-
-export const approveTraining = CatchAsyncError(async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const { decision, remarks } = req.body;
-
-    const updatedTraining = await Training.findOneAndUpdate(
-      { id },
-      { decision, remarks },
-      { new: true }
-    );
-
-    if (!updatedTraining) {
-      return next(new Errorhandler("Training not found", 404));
-    }
-
-    res.status(200).json({
-      success: true,
-      message: "Training approved successfully",
-      data: updatedTraining,
-    });
-  } catch (error) {
-    console.error(error);
-    return next(new Errorhandler("Failed to approve Training", 500));
   }
 });
 

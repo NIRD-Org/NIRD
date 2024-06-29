@@ -77,6 +77,11 @@ import TrainingResubmit from "./components/admin/action/young-fellow/training/re
 import GoodPracticeView from "./components/admin/action/components/GoodPracticeView";
 import TrainingViewDetails from "./components/admin/action/admin/training/view";
 import GoodPracticeViewDetails from "./components/admin/action/admin/good practice/view";
+import GpDetailsApprovalsList from "./components/admin/action/admin/gp-details/list";
+import GpDetailsApprovalPage from "./components/admin/action/admin/gp-details/approve";
+import GpDetailsViewDetials from "./components/admin/action/admin/gp-details/view";
+import GpDetailsApprovalsListYf from "./components/admin/action/young-fellow/gp-details/list";
+import GpDetailsApprovalResubmit from "./components/admin/action/young-fellow/gp-details/resubmit";
 
 function App() {
   const { login } = useAuthContext();
@@ -202,6 +207,12 @@ function App() {
             <Route path="view/good-practice/:id" element={<GoodPracticeViewDetails />} />
             <Route path="action/young-fellow/good-practice" element={<GoodPracticeApprovalsListYF />} />
             <Route path="resubmit/good-practice/:id" element={<GoodPracticeResubmit />} />
+
+            <Route path="action/admin/gp-details" element={<GpDetailsApprovalsList />} />
+            <Route path="approve/gp-details/:id" element={<GpDetailsApprovalPage />} />
+            <Route path="view/gp-details/:id" element={<GpDetailsViewDetials />} />
+            <Route path="action/young-fellow/gp-details" element={<GpDetailsApprovalsListYf />} />
+            <Route path="resubmit/gp-details/:id" element={<GpDetailsApprovalResubmit />} />
 
             <Route path="training" element={<TrainingForm />} />
             <Route path="action/admin/training" element={<TrainingApprovalsList />} />

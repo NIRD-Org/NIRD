@@ -14,10 +14,11 @@ import { Button } from "@/components/ui/button";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useAuthContext } from "@/context/AuthContext";
 import { Label } from "@/components/ui/label";
+import { useAdminState } from "@/components/hooks/useAdminState";
 
 const UserLocation = ({role}) => {
   const [state, setState] = useState(null);
-  const [states, setStates] = useState([]);
+  // const [states, setStates] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [blocks, setBlocks] = useState([]);
   const [selectedState, setSelectedState] = useState([]);
@@ -26,6 +27,7 @@ const UserLocation = ({role}) => {
   const [gps, setGps] = useState([]);
   const { user } = useAuthContext();
   const { userId } = useParams();
+  const {adminStates: states} = useAdminState();
 
   const handleStateChange = value => {
     const stateId = states
@@ -93,7 +95,7 @@ const UserLocation = ({role}) => {
 
     const userLocations = {
       state_ids: [state],
-      district_ids: distIds,
+      dist_ids: distIds,
       block_ids: blockIds,
       gp_ids: selectedGp,
     };
@@ -178,7 +180,7 @@ const UserLocation = ({role}) => {
       }
     }
 
-    Promise.all([fetchDistricts(), fetchBlocks(), fetchGPs(), fetchStates()]);
+    Promise.all([fetchDistricts(), fetchBlocks(), fetchGPs()]);
   }, [state]);
 
   if (role == 2) {

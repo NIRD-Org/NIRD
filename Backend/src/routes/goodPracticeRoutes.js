@@ -12,11 +12,10 @@ import { isAuth } from "../middlewares/auth.js";
 
 const router = express.Router();
 
-// router.use('/create', isAuth);
 
-router.route("/create").post(createGoodPractice);
+router.route("/create").post(isAuth,createGoodPractice);
 // only for admins
-router.route("/all").get(getAllGoodPractices);
+router.route("/all").get(isAuth,getAllGoodPractices);
 
 // for homepage
 router.route("/").get(getGoodPractices);

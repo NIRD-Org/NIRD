@@ -114,7 +114,7 @@ function AdminIndicatorApprovalList() {
             <TableHeader>
               <TableRow>
                 <TableHead>Submission ID</TableHead>
-                <TableHead>Theme</TableHead>
+                <TableHead>State </TableHead>
                 <TableHead>GP</TableHead>
                 <TableHead>Submission Date</TableHead>
                 <TableHead>Date of Sent Back</TableHead>
@@ -128,7 +128,7 @@ function AdminIndicatorApprovalList() {
                 currentData.map((indicator) => (
                   <TableRow key={indicator.id}>
                     <TableCell>{indicator.submitted_id}</TableCell>
-                    <TableCell>{indicator.theme_name}</TableCell>
+                    <TableCell>{indicator.state_name}</TableCell>
                     <TableCell>{indicator.gp_name}</TableCell>
                     <TableCell>
                       {new Date(

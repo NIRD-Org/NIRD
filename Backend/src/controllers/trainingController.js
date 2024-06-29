@@ -1,5 +1,6 @@
 import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
 import Training from "../models/trainingModel.js";
+import { UserLocationModel } from "../models/userLocationModel.js";
 import { Errorhandler } from "../utils/errorHandler.js";
 import { uploadFile, uploadPDF } from "../utils/uploadFile.js";
 
@@ -66,7 +67,11 @@ export const getAllTrainings = CatchAsyncError(async (req, res, next) => {
     if (gp_id) filter.gp_id = gp_id;
     if (dist_id) filter.dist_id = dist_id;
     if (req.user.role == 3) filter.created_by = req.user.id;
-
+    /* if (req.user.role == 2) {
+      const {userLocations} = await UserLocationModel.findOne({ user_id: req.user.id });
+      const stateIds = userLocations.state_ids
+      filter.state_id = { $in: stateIds };
+    } */
     const trainings = await Training.find(filter);
 
     if (!trainings) {

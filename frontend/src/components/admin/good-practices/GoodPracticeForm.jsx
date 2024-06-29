@@ -209,6 +209,20 @@ const GoodPracticeForm = ({ update = false }) => {
       required: true,
     },
     {
+      name: "financial_year", 
+      label: "Financial Year",
+      type: "select",
+      options: Array.from({ length: 30 }, (_, i) => {
+        const startYear = 2021 + i;
+        const endYear = startYear + 1;
+        return {
+          value: `FY${startYear}-${endYear}`,
+          label: `FY${startYear}-${endYear}`,
+        };
+      }),
+      required: true,
+    },
+    {
       label: "GP",
       name: "gp_id",
       type: "select",
@@ -229,11 +243,11 @@ const GoodPracticeForm = ({ update = false }) => {
   if (!locationData.themes) return;
 
   return (
-    <div className="p-6">
+    <div className="p-2 md:p-6">
       <AdminHeader>
         {update ? "Edit Good Practice" : "Add Good Practice"}
       </AdminHeader>
-      <form onSubmit={handleSubmit} className="w-full grid grid-cols-3 gap-10">
+      <form onSubmit={handleSubmit} className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
         {formFields.map((field, index) => (
           <div className="mb-4" key={index}>
             <label className="block font-bold mb-2">{field.label}</label>

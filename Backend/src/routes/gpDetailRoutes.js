@@ -7,13 +7,15 @@ import {
   getPanchayatDetailsById,
   updatePanchayatDetails,
   getAllPanchayatDetails,
+  approveGpDetails
 } from "../controllers/gpDetailsController.js";
 
 const router = express.Router();
-router.use("/create", isAuth);
-router.route("/create").post(createPanchayatDetails);
+router.route("/create").post(isAuth, createPanchayatDetails);
 router.route("/get").get(getPanchayatDetails);
 
-router.route("/all", isAuth).get(getAllPanchayatDetails);
+router.route("/all").get(isAuth, getAllPanchayatDetails);
 router.route("/:id").get(getPanchayatDetailsById).put(updatePanchayatDetails);
+
+router.route('/:id/approve').put(approveGpDetails)
 export default router;

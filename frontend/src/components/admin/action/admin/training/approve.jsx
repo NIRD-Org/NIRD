@@ -24,7 +24,7 @@ const TrainingApprovalPage = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 ">
       <AdminHeader>Training Details</AdminHeader>
       <TrainingView />
       <form onSubmit={handleSubmit}>

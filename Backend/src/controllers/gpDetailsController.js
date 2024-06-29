@@ -4,6 +4,7 @@ import { Errorhandler } from "../utils/errorHandler.js";
 import { uploadFile } from "../utils/uploadFile.js";
 import path from "path";
 import fs from "fs";
+import { UserLocationModel } from "../models/userLocationModel.js";
 const __dirname = path.resolve();
 const getNewId = async () => {
   try {
@@ -94,6 +95,7 @@ export const createPanchayatDetails = CatchAsyncError(
         sports,
         wardDetails,
         general,
+        created_by: req.user.id,
       });
       await panchayat.save();
       res
@@ -150,10 +152,68 @@ export const updatePanchayatDetails = CatchAsyncError(
 export const getAllPanchayatDetails = CatchAsyncError(
   async (req, res, next) => {
     try {
-      const { decision } = req.query;
+      const { decision, state_id, dist_id, block_id, gp_id } = req.query;
       const filter = {};
-      if (decision) filter.decision = decision;
-      const gpDetails = await GpDetailsModel.find(filter);
+
+      if (decision) filter.decision = parseInt(decision);
+      if (state_id) filter.state_id = state_id;
+      if (block_id) filter.block_id = block_id;
+      if (gp_id) filter.gp_id = gp_id;
+      if (dist_id) filter.dist_id = dist_id;
+      if (req.user.role == 3) filter.created_by = req.user.id;
+      if (req.user.role == 2  && !req.query.state_id) {
+        const {userLocations} = await UserLocationModel.findOne({ user_id: req.user.id });
+        const stateIds = userLocations.state_ids
+        filter.state_id = { $in: stateIds };
+      }
+      // const gpDetails = await GpDetailsModel.find(filter);
+      const gpDetails = await GpDetailsModel.aggregate([
+        { $match: filter },
+        {
+          $lookup: {
+            from: "states",
+            localField: "state_id",
+            foreignField: "id",
+            as: "state",
+          },
+        },
+        {
+          $lookup: {
+            from: "districts",
+            localField: "dist_id",
+            foreignField: "id",
+            as: "district",
+          },
+        },
+        {
+          $lookup: {
+            from: "blocks",
+            localField: "block_id",
+            foreignField: "id",
+            as: "block",
+          },
+        },
+        {
+          $lookup: {
+            from: "grampanchayats",
+            localField: "gp_id",
+            foreignField: "id",
+            as: "gp",
+          },
+        },
+        { $unwind: "$state" },
+        { $unwind: "$block" },
+        { $unwind: "$district" },
+        { $unwind: "$gp" },
+        {
+          $addFields: {
+            state_name: "$state.name",
+            block_name: "$block.name",
+            dist_name: "$district.name",
+            gp_name: "$gp.name",
+          },
+        },
+      ]);
 
       res.status(200).json({
         success: true,
@@ -224,73 +284,102 @@ export const approvePanchayatDetails = CatchAsyncError(
   }
 );
 
+export const getPanchayatDetailsById = CatchAsyncError(
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
 
-export const getPanchayatDetailsById = CatchAsyncError(async (req, res, next) => {
+      const pipeline = [
+        {
+          $match: { id },
+        },
+        {
+          $lookup: {
+            from: "states",
+            localField: "state_id",
+            foreignField: "id",
+            as: "state",
+          },
+        },
+        {
+          $unwind: "$state",
+        },
+        {
+          $lookup: {
+            from: "districts",
+            localField: "dist_id",
+            foreignField: "id",
+            as: "district",
+          },
+        },
+        {
+          $unwind: "$district",
+        },
+        {
+          $lookup: {
+            from: "blocks",
+            localField: "block_id",
+            foreignField: "id",
+            as: "block",
+          },
+        },
+        {
+          $unwind: "$block",
+        },
+        {
+          $lookup: {
+            from: "grampanchayats",
+            localField: "gp_id",
+            foreignField: "id",
+            as: "gp",
+          },
+        },
+        {
+          $unwind: "$gp",
+        },
+      ];
+
+      const [panchayat] = await GpDetailsModel.aggregate(pipeline);
+
+      if (!panchayat) {
+        return next(new Errorhandler("Panchayat data not found", 404));
+      }
+
+      res.status(200).json({
+        success: true,
+        message: "Panchayat Data Fetched Successfully",
+        data: panchayat,
+      });
+    } catch (error) {
+      return next(new Errorhandler("Failed to get panchayat data", 500));
+    }
+  }
+);
+
+
+export const approveGpDetails = CatchAsyncError(async (req, res, next) => {
   try {
     const { id } = req.params;
+    const { decision, remarks } = req.body;
+    console.log(req.body);
 
-    const pipeline = [
-      {
-        $match: { id },
-      },
-      {
-        $lookup: {
-          from: "states",
-          localField: "state_id",
-          foreignField: "id",
-          as: "state",
-        },
-      },
-      {
-        $unwind: "$state",
-      },
-      {
-        $lookup: {
-          from: "districts",
-          localField: "dist_id",
-          foreignField: "id",
-          as: "district",
-        },
-      },
-      {
-        $unwind: "$district",
-      },
-      {
-        $lookup: {
-          from: "blocks",
-          localField: "block_id",
-          foreignField: "id",
-          as: "block",
-        },
-      },
-      {
-        $unwind: "$block",
-      },
-      {
-        $lookup: {
-          from: "grampanchayats",
-          localField: "gp_id",
-          foreignField: "id",
-          as: "gp",
-        },
-      },
-      {
-        $unwind: "$gp",
-      },
-    ];
+    const updatedGpDetails = await GpDetailsModel.findOneAndUpdate(
+      { id },
+      { decision, remarks },
+      { new: true }
+    );
 
-    const [panchayat] = await GpDetailsModel.aggregate(pipeline);
-
-    if (!panchayat) {
-      return next(new Errorhandler("Panchayat data not found", 404));
+    if (!updatedGpDetails) {
+      return next(new Errorhandler("Good Practice not found", 404));
     }
 
     res.status(200).json({
       success: true,
-      message: "Panchayat Data Fetched Successfully",
-      data: panchayat,
+      message: "Good Practice approved successfully",
+      data: updatedGpDetails,
     });
   } catch (error) {
-    return next(new Errorhandler("Failed to get panchayat data", 500));
+    console.log(error);
+    return next(new Errorhandler("Failed to approve Good Practice", 500));
   }
 });

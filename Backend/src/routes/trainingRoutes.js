@@ -13,7 +13,7 @@ const router = express.Router();
 
 router.route("/create").post(isAuth, createTraining);
 
-router.route("/all").get(getAllTrainings);
+router.route("/all").get(isAuth,getAllTrainings);
 
 router
   .route("/:id")

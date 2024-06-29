@@ -12,9 +12,8 @@ import {
 import { NirdEditIcon, NirdViewIcon } from "@/components/admin/Icons";
 import AdminHeader from "@/components/admin/AdminHeader";
 import { Input } from "@/components/ui/input";
-import { useAdminState } from "@/components/hooks/useAdminState";
 
-const GpDetailsApprovalsList = () => {
+const GpDetailsApprovalsListYf = () => {
   const [searchParams] = useSearchParams();
   const dist_id = searchParams.get("dist_id") || "";
   const block_id = searchParams.get("block_id") || "";
@@ -26,21 +25,19 @@ const GpDetailsApprovalsList = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 50;
-  const [state_id, setState_id] = useState(null);
-  const { adminStates } = useAdminState();  
-
+  
   useEffect(() => {
     getAllGpDetailsApprovals();
-  }, [state_id]);
+  }, []);
 
   const getAllGpDetailsApprovals = async () => {
     try {
       const { data } = await API.get(`/api/v1/gp-details/all`, {
         params: {
-          state_id,
           dist_id,
           block_id,
           gp_id: gram_id,
+          decision:2
         },
       });
       data?.data?.sort((a, b) => b.id - a.id);
@@ -93,18 +90,6 @@ const GpDetailsApprovalsList = () => {
             <option value="1">Approved</option>
             <option value="2">Sent back for Modification</option>
           </select>
-          <select
-            className={"text-sm px-4 py-2 rounded-md bg-white border w-[200px]"}
-            value={state_id}
-            onChange={e => setState_id(e.target.value)}
-          >
-            <option value="">Select a state</option>
-            {adminStates?.map(state => (
-              <option key={state.id} value={state.id}>
-                {state.name}
-              </option>
-            ))}
-          </select>
           <Input
             type="text"
             value={searchQuery}
@@ -138,10 +123,10 @@ const GpDetailsApprovalsList = () => {
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-3">
-                        {approval.decision == 0 && (
+                        {approval.decision == 2 && (
                           <span
                             onClick={() =>
-                              navigate(`/admin/approve/gp-details/${approval.id}`)
+                              navigate(`/admin/resubmit/gp-details/${approval.id}`)
                             }
                           >
                             <NirdEditIcon />
@@ -192,4 +177,4 @@ const GpDetailsApprovalsList = () => {
   );
 };
 
-export default GpDetailsApprovalsList;
+export default GpDetailsApprovalsListYf;

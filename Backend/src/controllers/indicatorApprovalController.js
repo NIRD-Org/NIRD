@@ -1,5 +1,6 @@
 import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
 import { IndicatorApprovalModel } from "../models/indicatorApprovalModel.js";
+import { UserLocationModel } from "../models/userLocationModel.js";
 import { Errorhandler } from "../utils/errorHandler.js";
 
 export const getIndicatorApprovals = CatchAsyncError(async (req, res, next) => {
@@ -15,7 +16,11 @@ export const getIndicatorApprovals = CatchAsyncError(async (req, res, next) => {
     if (req?.user?.role == 3) match.created_by = req.user.id;
     // Financial year
     if (fy) match.financial_year = fy;
-
+    if (req.user.role == 2  && !req.query.state) {
+      const {userLocations} = await UserLocationModel.findOne({ user_id: req.user.id });
+      const stateIds = userLocations.state_ids
+      match.state_id = { $in: stateIds };
+    }
     const categorizedIndicatorApprovals =
       await IndicatorApprovalModel.aggregate([
         { $match: match },

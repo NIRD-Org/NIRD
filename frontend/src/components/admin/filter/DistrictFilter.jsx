@@ -34,7 +34,7 @@ const DistrictFilter = ({ className }) => {
   };
 
   return (
-    <select className={cn(className, "text-sm px-4 py-2 rounded-md bg-transparent border  w-full")} value={dist_id} onChange={handleDistrictChange} disabled={!state_id}>
+    <select className={cn(className, "text-sm px-4 py-2 rounded-md bg-white border  w-full")} value={dist_id} onChange={handleDistrictChange} disabled={!state_id}>
       <option value="">Select a district</option>
       {districts.map(district => (
         <option key={district.id} value={district.id}>
