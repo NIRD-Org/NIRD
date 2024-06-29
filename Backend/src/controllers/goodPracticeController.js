@@ -217,6 +217,11 @@ export const getGoodPractices = CatchAsyncError(async (req, res, next) => {
         },
       },
       {
+        $sort: {
+          _id: -1,
+        },
+      },
+      {
         $group: {
           _id: null,
           totalGoodPractices: { $sum: 1 },

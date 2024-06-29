@@ -123,30 +123,34 @@ const GoodPractices = () => {
         </div>
         {/* Info */}
         <div className="w-full md:w-2/6 flex flex-col gap-4 ">
-          <div className="bg-gray-200 p-5 flex w-full items-center  justify-between">
-            <p className="text-xl text-gray-700 font-semibold">Themes</p>
-            <p className="text-[#262675] text-2xl font-bold">9</p>
+          <div className="bg-gray-200 md:p-5 p-3 flex w-full items-center  justify-between ">
+            <p className="text-sm md:text-xl text-gray-700 font-semibold">
+              Themes
+            </p>
+            <p className="text-[#262675] text-xl md:text-2xl font-bold">9</p>
           </div>
-          <div className="bg-gray-200 p-5 flex w-full items-center  justify-between">
-            <p className="text-xl text-gray-700 font-semibold">
+          <div className="bg-gray-200 md:p-5 p-3 flex w-full items-center  justify-between ">
+            <p className="text-sm md:text-xl text-gray-700 font-semibold">
               No. of Good Practices
             </p>
-            <p className="text-[#262675] text-2xl font-bold">
+            <p className="text-[#262675] text-xl md:text-2xl font-bold">
               {goodPractices?.totalGoodPractices ?? 0}
             </p>
           </div>
-          <div className="bg-gray-200 p-5 flex w-full items-center  justify-between">
-            <p className="text-xl text-gray-700 font-semibold">
+          <div className="bg-gray-200 md:p-5 p-3 flex w-full items-center  justify-between ">
+            <p className="text-sm md:text-xl text-gray-700 font-semibold">
               Documents of Good Practices
             </p>
-            <p className="text-[#262675] text-2xl font-bold">
+            <p className="text-[#262675] text-xl md:text-2xl font-bold">
               {" "}
               {goodPractices?.totalDocuments ?? 0}
             </p>
           </div>
-          <div className="bg-gray-200 p-5 flex w-full items-center  justify-between">
-            <p className="text-xl text-gray-700 font-semibold">Videos</p>
-            <p className="text-[#262675] text-2xl font-bold">
+          <div className="bg-gray-200 md:p-5 p-3 flex w-full items-center  justify-between ">
+            <p className="text-sm md:text-xl text-gray-700 font-semibold">
+              Videos
+            </p>
+            <p className="text-[#262675] text-xl md:text-2xl font-bold">
               {" "}
               {goodPractices?.totalVideos ?? 0}
             </p>
@@ -178,7 +182,7 @@ const GoodPractices = () => {
               Reset
             </Button>
           </div>
-          <div>
+          <div className="flex flex-col justify-between md:gap-10 gap-4 w-full md:w-fit">
             <select
               value={fy}
               onChange={(e) => {
