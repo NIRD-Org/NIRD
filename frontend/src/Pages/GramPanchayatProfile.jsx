@@ -77,7 +77,7 @@ const GramPanchayatProfile = () => {
   }, [dist]);
 
   useEffect(() => {
-    getAllGp();
+    if (block) getAllGp();
   }, [block]);
 
   const getStateById = async (stateId) => {
@@ -117,7 +117,7 @@ const GramPanchayatProfile = () => {
                 State
               </label>
               <select
-                className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
+                className="border text-sm bg-white p-2 rounded-md focus:ring "
                 value={state}
                 onChange={(e) => {
                   setSearchParams({ state: e.target.value });
@@ -141,8 +141,9 @@ const GramPanchayatProfile = () => {
               </label>
 
               <select
-                className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
+                className="border text-sm bg-white p-2 rounded-md focus:ring "
                 value={dist}
+                disabled={!districtOptions.length}
                 onChange={(e) => {
                   setSearchParams({ state, dist: e.target.value });
                 }}
@@ -164,8 +165,9 @@ const GramPanchayatProfile = () => {
               </label>
 
               <select
-                className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
+                className="border text-sm bg-white p-2 rounded-md focus:ring "
                 value={block}
+                disabled={!blockOptions.length}
                 onChange={(e) => {
                   setSearchParams({ state, dist, block: e.target.value });
                 }}
@@ -187,8 +189,9 @@ const GramPanchayatProfile = () => {
               </label>
 
               <select
-                className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
+                className="border text-sm bg-white p-2 rounded-md focus:ring "
                 value={gp}
+                disabled={!GpOptions.length}
                 onChange={(e) => {
                   setSearchParams({ state, dist, block, gp: e.target.value });
                 }}

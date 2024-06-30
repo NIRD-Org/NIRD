@@ -86,7 +86,7 @@ const Achievement = () => {
                 State
               </label>
               <select
-                className="border max-w-full md:max-w-48 text-sm border-gray-200 p-2 rounded-md focus:ring focus:ring-orange-200"
+                className="border max-w-full md:max-w-48 text-sm border-gray-200 p-2 rounded-md "
                 value={state}
                 onChange={(e) => {
                   setSearchParams({ tab, state: e.target.value });
@@ -110,7 +110,7 @@ const Achievement = () => {
               </label>
 
               <select
-                className="border text-sm border-gray-200 p-2 rounded-md focus:ring focus:ring-orange-200"
+                className="border text-sm border-gray-200 p-2 rounded-md "
                 value={dist}
                 disabled={!districtOptions.length}
                 onChange={(e) => {
@@ -134,7 +134,7 @@ const Achievement = () => {
               </label>
 
               <select
-                className="border text-sm border-gray-200 p-2 rounded-md focus:ring focus:ring-orange-200"
+                className="border text-sm border-gray-200 p-2 rounded-md "
                 value={block}
                 disabled={!blockOptions.length}
                 onChange={(e) => {
@@ -158,7 +158,7 @@ const Achievement = () => {
               </label>
 
               <select
-                className="border text-sm border-gray-200 p-2 rounded-md focus:ring focus:ring-orange-200"
+                className="border text-sm border-gray-200 p-2 rounded-md "
                 value={gp}
                 disabled={!GpOptions.length}
                 onChange={(e) => {
@@ -193,7 +193,13 @@ const Achievement = () => {
       </div>
 
       <div className="py-10">
-        <AchievementChart block={1} state={1} dist={1} gp={1} themeId={1} />
+        <AchievementChart
+          block={block}
+          state={state}
+          dist={dist}
+          gp={gp}
+          themeId={1}
+        />
       </div>
     </div>
   );

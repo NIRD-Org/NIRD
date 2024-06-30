@@ -99,16 +99,19 @@ const GoodPractices = () => {
   return (
     <div className="bg-white">
       {/* Header */}
-      <div className="flex bg-gray-100 px-5  py-8 md:px-20 md:py-10 flex-col sm:flex-row pb-16 gap-5 justify-between">
+      <div className="flex bg-gray-100 px-5  py-8 md:px-20 md:py-10 flex-col sm:flex-row pb-16 gap-5 justify-between items-center">
         <div>
           <h1 className="text-5xl md:text-6xl text-sky-900 font-bold">
             Good Practices
           </h1>
         </div>
-        <button className="text-center text-md py-2 px-4 bg-primary text-white font-semibold flex items-center justify-between">
+        <a
+          href="#good-practices"
+          className="text-center text-md py-3 h-fit px-4 bg-primary text-white font-semibold flex items-center justify-between gap-5"
+        >
           Explore All Good Practices
           <ArrowRight />
-        </button>
+        </a>
       </div>
       <GradientLine />
       {/* Info Section */}
@@ -162,7 +165,10 @@ const GoodPractices = () => {
 
       {/* Details Section */}
 
-      <div className="py-16 bg-gray-100 px-5  md:px-20 md:py-10">
+      <div
+        id="good-practices"
+        className="py-16 bg-gray-100 px-5  md:px-20 md:py-10"
+      >
         <div className="pb-10">
           <h1 className="text-4xl pb-5 font-semibold">
             Explore Good Practices
@@ -208,9 +214,9 @@ const GoodPractices = () => {
                 type="text"
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search for States, Districts and Blocks"
-                className="border border-gray-300 p-2 rounded w-full lg:w-40 focus:ring focus:ring-orange-200"
+                className="border border-gray-300 p-2 rounded w-full lg:w-40 "
               />
-              <button className="bg-primary text-white p-2 rounded focus:outline-none focus:ring focus:ring-orange-200">
+              <button className="bg-primary text-white p-2 rounded focus:outline-none ">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-5 w-5"

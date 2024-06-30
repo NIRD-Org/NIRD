@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
-import Themes from "../Themes";
 import API from "@/utils/API";
 import Progress from "../Progress";
-import Select from "react-select";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const Indicators = () => {
@@ -10,7 +8,7 @@ const Indicators = () => {
   const [districtOptions, setDistrictOptions] = useState([]);
   const [blockOptions, setBlockOptions] = useState([]);
   const [GpOptions, setGpOptions] = useState([]);
-  const [financialYear, setFinancialYear] = useState();
+  const [financialYear, setFinancialYear] = useState("");
   const [state, setState] = useState("");
   const [district, setDistrict] = useState("");
   const [block, setBlock] = useState("");
@@ -19,7 +17,8 @@ const Indicators = () => {
 
   const tableRef = useRef(null);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 15;
   const scrollLeft = () => {
     tableRef.current.scrollBy({
       top: 0,
@@ -165,6 +164,7 @@ const Indicators = () => {
     setDistrict("");
     setBlock("");
     setGp("");
+    setCurrentPage(1);
     getGpWiseKpiData();
   };
 
@@ -189,6 +189,7 @@ const Indicators = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
+    setCurrentPage(1);
     getGpWiseKpiSearchData();
   };
 
@@ -228,6 +229,17 @@ const Indicators = () => {
     setGpWiseKpiData(sortedData);
   };
 
+  const paginatedData = gpWiseKpiData.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const totalPages = Math.ceil(gpWiseKpiData.length / itemsPerPage);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [state, district, block, gp]);
+
   return (
     <div className="px-4 pb-8 lg:px-20 lg:pb-12">
       <h1 className="text-xl font-bold mb-4">Institutional Strengthening</h1>
@@ -237,7 +249,7 @@ const Indicators = () => {
             <label className="text-gray-600 text-sm mb-1">Select State</label>
 
             <select
-              className="border w-full md:max-w-40 text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
+              className="border w-full md:max-w-40 text-sm  p-2 rounded-md "
               value={state}
               onChange={(e) => {
                 setState(e.target.value);
@@ -253,8 +265,9 @@ const Indicators = () => {
           </div>
           <div className="flex flex-col">
             <select
-              className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
+              className="border text-sm  p-2 rounded-md "
               value={district}
+              disabled={!districtOptions.length}
               onChange={(e) => {
                 setDistrict(e.target.value);
               }}
@@ -269,8 +282,9 @@ const Indicators = () => {
           </div>
           <div className="flex flex-col">
             <select
-              className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
+              className="border text-sm  p-2 rounded-md "
               value={block}
+              disabled={!blockOptions.length}
               onChange={(e) => {
                 setBlock(e.target.value);
               }}
@@ -285,8 +299,9 @@ const Indicators = () => {
           </div>
           <div className="flex flex-col">
             <select
-              className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
+              className="border text-sm  p-2 rounded-md "
               value={gp}
+              disabled={!GpOptions.length}
               onChange={(e) => {
                 setGp(e.target.value);
               }}
@@ -311,7 +326,7 @@ const Indicators = () => {
           <select
             value={financialYear}
             onChange={(e) => setFinancialYear(e.target.value)}
-            className="w-full md:w-40 text-center p-2 rounded"
+            className="w-full md:w-40 text-center p-2 rounded-md"
           >
             <option value="">Select Financial Year</option>
             {financialYears.map((year, index) => (
@@ -325,9 +340,9 @@ const Indicators = () => {
               type="text"
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search for States, Districts and Blocks"
-              className="border border-gray-300 p-2 rounded w-full lg:w-40 focus:ring focus:ring-orange-200"
+              className="border  p-2 rounded-md w-full lg:w-40 "
             />
-            <button className="bg-primary text-white p-2 rounded focus:outline-none focus:ring focus:ring-orange-200">
+            <button className="bg-primary text-white p-2 rounded-md focus:outline-none ">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
@@ -347,134 +362,153 @@ const Indicators = () => {
         </div>
       </div>
 
-      <div className="flex justify-end gap-2 mt-10 md:mt-5 mb-1">
-        <button
-          onClick={scrollLeft}
-          className="bg-primary text-white  px-3 rounded focus:outline-none focus:ring text-[1.25rem] focus:ring-orange-200"
-        >
-          <ChevronLeft />
-        </button>
-        <button
-          onClick={scrollRight}
-          className="bg-primary text-white text-[1.25rem] p-2 px-3 rounded focus:outline-none focus:ring focus:ring-orange-200"
-        >
-          <ChevronRight />
-        </button>
-      </div>
-
-      <div className="flex relative pb-20">
-        <div className="ml-1/4 flex-1 overflow-hidden">
-          <div className="flex flex-col h-full">
-            <div
-              className="overflow-x-auto"
-              ref={tableRef}
-              style={{ maxWidth: "100%", overflowX: "auto" }}
+      {paginatedData.length > 0 && (
+        <>
+          {" "}
+          <div className="flex justify-end gap-2 mt-10 md:mt-5 mb-1">
+            <button
+              onClick={scrollLeft}
+              className="bg-primary text-white  px-3 rounded focus:outline-none focus:ring text-[1.25rem] "
             >
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-primary text-white sticky top-0 z-0">
-                  <tr>
-                    <th className="pl-5 sticky -left-1 bg-primary">
-                      <h1 className="text-3xl">Gram Panchayat</h1>
-                    </th>
-                    {indicator?.map((i) => (
-                      <th
-                        scope="col"
-                        className="px-4 w-[10rem] py-3 text-start text-xs font-medium text-white uppercase cursor-pointer"
-                        key={i.id}
-                        onClick={() => sortData(i.id)}
-                      >
-                        {i.name}{" "}
-                        {sortConfig.key === i.id &&
-                          (sortConfig.direction === "asc" ? (
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-4 w-4 inline"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M5 15l7-7 7 7"
-                              />
-                            </svg>
-                          ) : (
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-4 w-4 inline"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M19 9l-7 7-7-7"
-                              />
-                            </svg>
-                          ))}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className="divide-y border-2 border-red-600 divide-gray-200">
-                  {gpWiseKpiData.map((gpData, index) => (
-                    <tr key={index}>
-                      <td className="pl-5 sticky -left-1 bg-white">
-                        <div className="mb-4">
-                          <h3 className="text-xl font-semibold">
-                            {gpData.gp_name}
-                          </h3>
-                          <p>{gpData.block_name}</p>
-                          <p className="text-md">{gpData.dist_name}</p>
-                          <p className="text-sm">{gpData.state_name}</p>
-                        </div>
-                      </td>
-                      {indicator.map((i) => {
-                        const indicatorData = gpData.gp_percentage.find(
-                          (item) => item.indicator_id === i.id
-                        );
-
-                        return (
-                          <td className="px-4" key={i.id}>
-                            {indicatorData ? (
-                              <>
-                                <p className="text-[0.8em] font-semibold">
-                                  Max Range: {indicatorData.max_range}
-                                </p>
-                                <p className="text-[0.8rem] font-semibold">
-                                  Input: {indicatorData.input_data}
-                                </p>
-
-                                <Progress
-                                  value={indicatorData.percentage.toFixed(2)}
-                                />
-                              </>
-                            ) : (
-                              "N/A"
-                            )}
-                          </td>
-                        );
-                      })}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            {gpWiseKpiData.length === 0 && (
-              <div className="absolute top-0 left-0 w-full h-full bg-white  flex justify-center items-center">
-                <h1 className="text-center font-semibold text-gray-700 text-5xl">
-                  {loading ? "Loading...." : "No Data Found"}
-                </h1>
-              </div>
-            )}
+              <ChevronLeft />
+            </button>
+            <button
+              onClick={scrollRight}
+              className="bg-primary text-white text-[1.25rem] p-2 px-3 rounded focus:outline-none "
+            >
+              <ChevronRight />
+            </button>
           </div>
-        </div>
-      </div>
+          <div className="flex relative pb-5">
+            <div className="ml-1/4 flex-1 overflow-hidden">
+              <div className="flex flex-col h-full">
+                <div
+                  className="overflow-x-auto"
+                  ref={tableRef}
+                  style={{ maxWidth: "100%", overflowX: "auto" }}
+                >
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-primary text-white sticky top-0 z-0">
+                      <tr>
+                        <th className="pl-5 sticky -left-1 bg-primary">
+                          <h1 className="text-3xl">Gram Panchayat</h1>
+                        </th>
+                        {indicator?.map((i) => (
+                          <th
+                            scope="col"
+                            className="px-4 w-[10rem] py-3 text-start text-xs font-medium text-white uppercase cursor-pointer"
+                            key={i.id}
+                            onClick={() => sortData(i.id)}
+                          >
+                            {i.name}{" "}
+                            {sortConfig.key === i.id &&
+                              (sortConfig.direction === "asc" ? (
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-4 w-4 inline"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M5 15l7-7 7 7"
+                                  />
+                                </svg>
+                              ) : (
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-4 w-4 inline"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M19 9l-7 7-7-7"
+                                  />
+                                </svg>
+                              ))}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y border-2 border-red-600 divide-gray-200">
+                      {paginatedData.map((gpData, index) => (
+                        <tr key={index}>
+                          <td className="pl-5 sticky -left-1 bg-white">
+                            <div className="mb-4">
+                              <h3 className="text-xl font-semibold">
+                                {gpData.gp_name}
+                              </h3>
+                              <p>{gpData.block_name}</p>
+                              <p className="text-md">{gpData.dist_name}</p>
+                              <p className="text-sm">{gpData.state_name}</p>
+                            </div>
+                          </td>
+                          {indicator.map((i) => {
+                            const indicatorData = gpData.gp_percentage.find(
+                              (item) => item.indicator_id === i.id
+                            );
+
+                            return (
+                              <td className="px-4" key={i.id}>
+                                {indicatorData ? (
+                                  <>
+                                    <p className="text-[0.8em] font-semibold">
+                                      Max Range: {indicatorData.max_range}
+                                    </p>
+                                    <p className="text-[0.8rem] font-semibold">
+                                      Input: {indicatorData.input_data}
+                                    </p>
+
+                                    <Progress
+                                      value={indicatorData.percentage.toFixed(
+                                        2
+                                      )}
+                                    />
+                                  </>
+                                ) : (
+                                  "N/A"
+                                )}
+                              </td>
+                            );
+                          })}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-end items-center pb-16">
+            <button
+              className="bg-primary text-white px-3 py-2 rounded  disabled:opacity-55"
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <span className="px-5">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              className="bg-primary text-white px-3 py-2 rounded  disabled:opacity-55"
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
+              disabled={currentPage === totalPages}
+            >
+              <ChevronRight className="h-5 w-5" />
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 };
