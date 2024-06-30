@@ -1,5 +1,6 @@
 import CarouselComponent from "@/components/CarouselComponent";
 import GoodPracticesCard from "@/components/GoodPracticesCard";
+import GradientLine from "@/components/GradientLine";
 import Themes from "@/components/KIP/Themes";
 import ThemeFilters from "@/components/ThemeFilters";
 import BlockFilter from "@/components/admin/filter/BlockFilter";
@@ -109,6 +110,7 @@ const GoodPractices = () => {
           <ArrowRight />
         </button>
       </div>
+      <GradientLine />
       {/* Info Section */}
       <div className="w-full px-5  py-8 md:px-20 md:py-10 bg-white p-2 md:p-10 rounded flex flex-col md:flex-row justify-between gap-5">
         {/* Carousel */}
@@ -200,7 +202,7 @@ const GoodPractices = () => {
             </select>
             <form
               onSubmit={handleSearch}
-              className="flex items-center space-x-2"
+              className="w-full flex items-center space-x-2"
             >
               <input
                 type="text"

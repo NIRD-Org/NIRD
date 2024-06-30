@@ -140,7 +140,7 @@ const GpProfile = () => {
   return (
     <div className="px-5 pb-8 lg:px-20 lg:pb-12">
       <div className="flex flex-col lg:flex-row items-center lg:items-end gap-10 justify-between mb-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 lg:grid-cols-5  items-end gap-2 sm:gap-5">
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 lg:grid-cols-5  items-end gap-2 sm:gap-5">
           <div className="flex flex-col">
             <label className="text-gray-600 text-sm mb-1">Select State</label>
 
@@ -219,11 +219,11 @@ const GpProfile = () => {
           </button>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-5">
+        <div className="w-full md:w-fit flex flex-col md:flex-row gap-5">
           <select
             value={financialYear}
             onChange={(e) => setFinancialYear(e.target.value)}
-            className="text-center border p-2 rounded-md"
+            className="w-full md:w-40 text-center border p-2 rounded-md"
           >
             <option value="">Select Financial Year</option>
             {financialYears.map((year, index) => (

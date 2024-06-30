@@ -307,11 +307,11 @@ const Indicators = () => {
           </button>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-5">
+        <div className="w-full md:w-fit flex flex-col md:flex-row gap-5">
           <select
             value={financialYear}
             onChange={(e) => setFinancialYear(e.target.value)}
-            className="text-center p-2 rounded"
+            className="w-full md:w-40 text-center p-2 rounded"
           >
             <option value="">Select Financial Year</option>
             {financialYears.map((year, index) => (
@@ -347,7 +347,7 @@ const Indicators = () => {
         </div>
       </div>
 
-      <div className="flex justify-end gap-2 mt-5 mb-1">
+      <div className="flex justify-end gap-2 mt-10 md:mt-5 mb-1">
         <button
           onClick={scrollLeft}
           className="bg-primary text-white  px-3 rounded focus:outline-none focus:ring text-[1.25rem] focus:ring-orange-200"
@@ -367,6 +367,7 @@ const Indicators = () => {
           <div className="flex flex-col h-full">
             <div
               className="overflow-x-auto"
+              ref={tableRef}
               style={{ maxWidth: "100%", overflowX: "auto" }}
             >
               <table className="min-w-full divide-y divide-gray-200">
@@ -436,6 +437,7 @@ const Indicators = () => {
                         const indicatorData = gpData.gp_percentage.find(
                           (item) => item.indicator_id === i.id
                         );
+
                         return (
                           <td className="px-4" key={i.id}>
                             {indicatorData ? (
@@ -461,21 +463,15 @@ const Indicators = () => {
                   ))}
                 </tbody>
               </table>
-              {loading && (
-                <div className="absolute top-0 left-0 w-full h-full bg-white bg-opacity-50 flex justify-center items-center">
-                  <h1 className="text-center py-10 text-2xl text-gray-500">
-                    Loading...
-                  </h1>
-                </div>
-              )}
-              {!loading && gpWiseKpiData.length === 0 && (
-                <div className="absolute top-0 left-0 w-full h-full bg-white bg-opacity-50 flex justify-center items-center">
-                  <h1 className="text-center font-semibold text-gray-700 text-5xl">
-                    No Data Found
-                  </h1>
-                </div>
-              )}
             </div>
+
+            {gpWiseKpiData.length === 0 && (
+              <div className="absolute top-0 left-0 w-full h-full bg-white  flex justify-center items-center">
+                <h1 className="text-center font-semibold text-gray-700 text-5xl">
+                  {loading ? "Loading...." : "No Data Found"}
+                </h1>
+              </div>
+            )}
           </div>
         </div>
       </div>

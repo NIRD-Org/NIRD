@@ -94,7 +94,7 @@ export const submitIndicatorData = CatchAsyncError(async (req, res, next) => {
     // Prepare the GpWiseKPI documents for insertion
     let currentMaxId = await getNewIdIndicator();
     const indicatorDocuments = await Promise.all(
-      formData.map(async indicator => ({
+      formData.map(async (indicator) => ({
         id: currentMaxId++,
         state_id: state_id,
         dist_id: dist_id,
@@ -107,7 +107,7 @@ export const submitIndicatorData = CatchAsyncError(async (req, res, next) => {
         input_data: indicator.input_data,
         remarks: indicator.remarks,
         submitted_id: submitted_id,
-        created_by: req.user.id
+        created_by: req.user.id,
       }))
     );
 
@@ -286,7 +286,7 @@ export const reSubmitIndicatorData = CatchAsyncError(async (req, res, next) => {
     }
 
     // Prepare the updated GpWiseKPI documents
-    const indicatorDocuments = formData.map(indicator => ({
+    const indicatorDocuments = formData.map((indicator) => ({
       indicator_id: indicator.indicator_id,
       max_range: indicator.max_range,
       input_data: indicator.input_data,
@@ -296,7 +296,7 @@ export const reSubmitIndicatorData = CatchAsyncError(async (req, res, next) => {
 
     // Update the KPI documents in the gpWiseKpi collection based on submitted_id and kpi_id
     await Promise.all(
-      indicatorDocuments.map(indicatorDocument =>
+      indicatorDocuments.map((indicatorDocument) =>
         GpWiseIndicatorModel.updateOne(
           { submitted_id, indicator_id: indicatorDocument.indicator_id },
           indicatorDocument,
@@ -326,7 +326,7 @@ export const reSubmitIndicatorData = CatchAsyncError(async (req, res, next) => {
   }
 });
 
-const getGpWiseIndicatorDataWithPercentage = async query => {
+const getGpWiseIndicatorDataWithPercentage = async (query) => {
   const { state, dist, block, gp, search, fy } = query;
   const filter = {};
   if (state) filter.state_id = state;
@@ -488,10 +488,6 @@ export const getGpWiseIndicatorDataWithPercentageController = CatchAsyncError(
       );
 
       const paginatedData = gpWiseIndicatorData;
-      // .slice(
-      //   startIndex,
-      //   startIndex + limit
-      // );
 
       res.status(200).json({
         success: true,

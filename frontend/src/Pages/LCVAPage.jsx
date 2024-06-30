@@ -11,6 +11,8 @@ import API from "@/utils/API";
 import { ArrowRight } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import GradientLine from "@/components/GradientLine";
+import LCVADropdown from "@/components/LCVADropdown";
 
 const LCVAPage = () => {
   const [search, setSearch] = useState("");
@@ -102,6 +104,7 @@ const LCVAPage = () => {
           </h1>
         </div>
       </div>
+      <GradientLine />
       {/* Info Section */}
       <div className="w-full px-5  py-8 md:px-20 md:py-10 bg-white p-2 md:p-10 rounded flex flex-col md:flex-row justify-between gap-5">
         {/* Carousel */}
@@ -163,13 +166,14 @@ const LCVAPage = () => {
             fostering inclusive and resilient socities.
           </p>
         </div>
-        <div className="flex pb-10 flex-col lg:flex-row items-center lg:items-end gap-5 justify-between mb-4">
+        <div className="flex flex-col lg:flex-row items-center lg:items-end gap-5 justify-between mb-4">
           <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 lg:grid-cols-4  items-end gap-2 sm:gap-5">
             <StateFilter className={"!w-full md:w-36"} />
             <DistrictFilter />
             <BlockFilter />
             <GramFilter />
           </div>
+
           <div className="flex flex-col md:flex-row items-center justify-between md:gap-5 gap-4 w-full md:w-fit">
             <Button className="self-end w-fit" onClick={handleReset}>
               Reset
@@ -191,15 +195,15 @@ const LCVAPage = () => {
             </select>
             <form
               onSubmit={handleSearch}
-              className="flex items-center space-x-2"
+              className="w-full flex items-center space-x-2"
             >
               <input
                 type="text"
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search for States, Districts and Blocks"
-                className="border border-gray-300 p-2 rounded w-full lg:w-40 focus:ring focus:ring-orange-200"
+                className="border border-gray-300 p-2 rounded w-full lg:w-40 focus:ring focus:ring-primary"
               />
-              <button className="bg-primary text-white p-2 rounded focus:outline-none focus:ring focus:ring-orange-200">
+              <button className="bg-primary text-white p-2 rounded focus:outline-none focus:ring focus:ring-primary">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-5 w-5"
@@ -218,7 +222,9 @@ const LCVAPage = () => {
             </form>
           </div>
         </div>
-
+        <div className="pb-10">
+          <LCVADropdown />
+        </div>
         <ThemeFilters />
       </div>
       <h1 className="px-5 pt-8 md:px-20 md:pt-10 text-primary font-semibold text-2xl">
