@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import API from "@/utils/API";
 import {
   Table,
@@ -9,8 +9,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {  NirdEditIcon, NirdViewIcon } from "../../../Icons";
+import { NirdEditIcon, NirdViewIcon } from "../../../Icons";
 import { useAdminState } from "@/components/hooks/useAdminState";
+import AdminHeader from "@/components/admin/AdminHeader";
+import { useAuthContext } from "@/context/AuthContext";
+import useStates from "@/components/hooks/location/useState";
 
 function AdminIndicatorApprovalList() {
   const navigate = useNavigate();
@@ -22,13 +25,18 @@ function AdminIndicatorApprovalList() {
   const itemsPerPage = 50;
   const [state_id, setStateId] = useState(null);
   const { adminStates } = useAdminState();
+  const { user } = useAuthContext();
+  const { states } = useStates();
 
   const getAllIndicators = async () => {
     try {
       const queryParams = {
         state: state_id,
       };
-      const { data } = await API.get(`/api/v1/indicator-approvals/get-approvals`, { params: queryParams });
+      const { data } = await API.get(
+        `/api/v1/indicator-approvals/get-approvals`,
+        { params: queryParams }
+      );
       data?.data?.sort(
         (a, b) => new Date(b.created_at) - new Date(a.created_at)
       );
@@ -43,17 +51,17 @@ function AdminIndicatorApprovalList() {
     getAllIndicators();
   }, [state_id]);
 
-  const handleStatusFilterChange = (e) => {
+  const handleStatusFilterChange = e => {
     setStatusFilter(e.target.value);
     setCurrentPage(1);
   };
 
-  const handleSearchQueryChange = (e) => {
+  const handleSearchQueryChange = e => {
     setSearchQuery(e.target.value);
-    setCurrentPage(1); 
+    setCurrentPage(1);
   };
 
-  const filteredIndicators = indicators.filter((indicator) => {
+  const filteredIndicators = indicators.filter(indicator => {
     if (statusFilter !== "all" && indicator.decision !== statusFilter) {
       return false;
     }
@@ -63,20 +71,24 @@ function AdminIndicatorApprovalList() {
     ) {
       return false;
     }
-    return indicator.decision !== "1"; 
+    return indicator.decision !== "1";
   });
 
   const totalPages = Math.ceil(filteredIndicators.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentData = filteredIndicators.slice(startIndex, startIndex + itemsPerPage);
+  const currentData = filteredIndicators.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
-  const handlePageChange = (page) => {
+  const handlePageChange = page => {
     setCurrentPage(page);
   };
 
   return (
     <div>
       <div className="p-6">
+        <AdminHeader>Indicator Approvals List</AdminHeader>
         {/* <YfLayout /> */}
         <div className="flex justify-between mb-4">
           <select
@@ -95,7 +107,7 @@ function AdminIndicatorApprovalList() {
             onChange={e => setStateId(e.target.value)}
           >
             <option value="">Select a state</option>
-            {adminStates?.map(state => (
+            {(user.role == 1 ? states : adminStates)?.map(state => (
               <option key={state.id} value={state.id}>
                 {state.name}
               </option>
@@ -125,7 +137,7 @@ function AdminIndicatorApprovalList() {
             </TableHeader>
             <TableBody>
               {currentData.length > 0 ? (
-                currentData.map((indicator) => (
+                currentData.map(indicator => (
                   <TableRow key={indicator.id}>
                     <TableCell>{indicator.submitted_id}</TableCell>
                     <TableCell>{indicator.state_name}</TableCell>
@@ -163,8 +175,7 @@ function AdminIndicatorApprovalList() {
                         >
                           <NirdViewIcon />
                         </span>
-                     {
-                        indicator.decision == 0 ? (
+                        {indicator.decision == 0 && user.role != 1 ? (
                           <span
                             onClick={() =>
                               navigate(
@@ -174,8 +185,7 @@ function AdminIndicatorApprovalList() {
                           >
                             <NirdEditIcon />
                           </span>
-                        ) : null
-                     }
+                        ) : null}
                       </div>
                     </TableCell>
                   </TableRow>
@@ -197,7 +207,9 @@ function AdminIndicatorApprovalList() {
             >
               Previous
             </button>
-            <span>Page {currentPage} of {totalPages}</span>
+            <span>
+              Page {currentPage} of {totalPages}
+            </span>
             <button
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}

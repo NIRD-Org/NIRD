@@ -1,16 +1,16 @@
-// useGoodPractice.js
+// useLCVA.js
 import { useEffect, useState } from "react";
 import API from "@/utils/API";
 
-const useGoodPractice = ({state_id, dist_id, block_id, gram_id, theme_id}) => {
-  const [goodPractice, setGoodPractice] = useState([]);
+const useLCVA = ({state_id, dist_id, block_id, gram_id, theme_id}) => {
+  const [LCVA, setLCVA] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const getAllGoodPractice = async () => {
+    const getAllLCVA = async () => {
       setLoading(true);
       try {
-        const { data } = await API.get(`/api/v1/good-practice/all`, {
+        const { data } = await API.get(`/api/v1/lcva/all`, {
           params: {
             state_id,
             dist_id,
@@ -20,17 +20,17 @@ const useGoodPractice = ({state_id, dist_id, block_id, gram_id, theme_id}) => {
           },
         });
         data?.data?.sort((a, b) => b.id - a.id);
-        setGoodPractice(data?.data || []);
+        setLCVA(data?.data || []);
       } catch (error) {
-        console.log("Error fetching Good Practice :", error);
+        console.log("Error fetching LCVA :", error);
       } finally {
         setLoading(false);
       }
     };
-    getAllGoodPractice();
+    getAllLCVA();
   }, [state_id, dist_id, block_id, gram_id, theme_id]);
 
-  return { goodPractice, loading };
+  return { LCVA, loading };
 };
 
-export default useGoodPractice;
+export default useLCVA;

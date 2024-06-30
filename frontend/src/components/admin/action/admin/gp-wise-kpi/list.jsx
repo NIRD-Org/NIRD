@@ -12,6 +12,9 @@ import {
 import { NirdEditIcon, NirdViewIcon } from "../../../Icons";
 import YfLayout from "../../../young-fellow/YfLayout";
 import { useAdminState } from "@/components/hooks/useAdminState";
+import AdminHeader from "@/components/admin/AdminHeader";
+import useStates from "@/components/hooks/location/useState";
+import { useAuthContext } from "@/context/AuthContext";
 
 function AdminActionForm() {
   const navigate = useNavigate();
@@ -23,6 +26,8 @@ function AdminActionForm() {
   const itemsPerPage = 50;
   const [state_id, setStateId] = useState(null);
   const { adminStates } = useAdminState();
+  const { states } = useStates();
+  const {user} = useAuthContext();
 
   const getAllKpiApprovals = async () => {
     try {
@@ -83,6 +88,7 @@ function AdminActionForm() {
   return (
     <div>
       <div className="p-6">
+        <AdminHeader>KPI Approvals List</AdminHeader>
         <div className="flex justify-between mb-4">
           <select
             value={statusFilter}
@@ -100,7 +106,7 @@ function AdminActionForm() {
             onChange={e => setStateId(e.target.value)}
           >
             <option value="">Select a state</option>
-            {adminStates?.map(state => (
+            {(user.role == 1 ? states : adminStates)?.map(state => (
               <option key={state.id} value={state.id}>
                 {state.name}
               </option>
@@ -159,7 +165,7 @@ function AdminActionForm() {
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-3">
-                        {kpiApproval.decision == 0 && (
+                        {kpiApproval.decision == 0 && user.role!=1 && (
                           <span
                             onClick={() =>
                               navigate(

@@ -19,9 +19,6 @@ function KpiApprovalView() {
   const [searchParams] = useSearchParams();
   const theme_id = searchParams.get("theme_id") || "";
   const [kpiApprovalData, setKpiApprovalData] = useState([]);
-  const state_id = searchParams.get("state_id") || "";
-  const dist_id = searchParams.get("dist_id") || "";
-  const block_id = searchParams.get("block_id") || "";
   const gp_id = searchParams.get("gram_id") || "";
   const submitted_id = searchParams.get("submitted_id") || "";
 

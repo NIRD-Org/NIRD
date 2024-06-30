@@ -112,6 +112,18 @@ export const getSidebarItems = (user) => {
             },
           ],
         },
+        {
+          type: "module",
+          title: "Action",
+          submodules: [
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "Action",
+              link: "/admin/action/superadmin",
+            },
+          ],
+        },
       ];
       break;
 
