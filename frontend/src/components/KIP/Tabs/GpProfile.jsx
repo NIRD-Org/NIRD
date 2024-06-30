@@ -140,12 +140,12 @@ const GpProfile = () => {
   return (
     <div className="px-5 pb-8 lg:px-20 lg:pb-12">
       <div className="flex flex-col lg:flex-row items-center lg:items-end gap-10 justify-between mb-4">
-        <div className="flex flex-wrap items-end gap-2 sm:gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 lg:grid-cols-5  items-end gap-2 sm:gap-5">
           <div className="flex flex-col">
             <label className="text-gray-600 text-sm mb-1">Select State</label>
 
             <select
-              className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
+              className="border w-full md:max-w-40 text-sm border-gray-200 p-2 rounded-md focus:ring focus:ring-orange-200"
               value={state}
               onChange={(e) => {
                 setState(e.target.value);
@@ -162,8 +162,9 @@ const GpProfile = () => {
           <div className="flex flex-col">
             {/* <SelectComponent data={districtOptions} name="District" /> */}
             <select
-              className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
+              className="border text-sm border-gray-200 p-2 rounded-md focus:ring focus:ring-orange-200"
               value={district}
+              disabled={!districtOptions.length}
               onChange={(e) => {
                 setDistrict(e.target.value);
               }}
@@ -178,8 +179,9 @@ const GpProfile = () => {
           </div>
           <div className="flex flex-col">
             <select
-              className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
+              className="border text-sm border-gray-200 p-2 rounded-md focus:ring focus:ring-orange-200"
               value={block}
+              disabled={!blockOptions.length}
               onChange={(e) => {
                 setblock(e.target.value);
               }}
@@ -194,8 +196,9 @@ const GpProfile = () => {
           </div>
           <div className="flex flex-col">
             <select
-              className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
+              className="border text-sm border-gray-200 p-2 rounded-md focus:ring focus:ring-orange-200"
               value={gp}
+              disabled={!GpOptions.length}
               onChange={(e) => {
                 setGp(e.target.value);
               }}
@@ -210,17 +213,17 @@ const GpProfile = () => {
           </div>
           <button
             onClick={handleReset}
-            className="bg-primary rounded text-white text-sm p-2 px-4"
+            className="bg-primary rounded text-white text-sm p-2 px-2"
           >
             Reset
           </button>
         </div>
 
-        <div>
+        <div className="flex flex-col md:flex-row gap-5">
           <select
             value={financialYear}
             onChange={(e) => setFinancialYear(e.target.value)}
-            className="text-center p-2 rounded"
+            className="text-center border p-2 rounded-md"
           >
             <option value="">Select Financial Year</option>
             {financialYears.map((year, index) => (
@@ -234,7 +237,7 @@ const GpProfile = () => {
               type="text"
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search for States, Districts and Blocks"
-              className="border border-gray-300 p-2 rounded w-full lg:w-64 focus:ring focus:ring-orange-200"
+              className="border border-gray-200 p-2 rounded-md w-full lg:w-40 focus:ring focus:ring-orange-200"
             />
             <button className="bg-primary text-white p-2 rounded focus:outline-none focus:ring focus:ring-orange-200">
               <svg

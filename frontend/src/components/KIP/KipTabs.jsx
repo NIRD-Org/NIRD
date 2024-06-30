@@ -3,6 +3,7 @@ import GpProfile from "./Tabs/GpProfile";
 import Indicators from "./Tabs/Indicators";
 import Ranking from "./Tabs/Ranking";
 import { Link, useSearchParams } from "react-router-dom";
+import Achievement from "./Tabs/Achievement";
 
 const KipTabs = ({ setTagline }) => {
   const [searchparams, setSearchParams] = useSearchParams();
@@ -30,6 +31,7 @@ const KipTabs = ({ setTagline }) => {
     "Localised Sustainable Goals",
     "Institutional Strengthening",
     "Ranking",
+    "Achievements",
   ];
 
   return (
@@ -70,6 +72,7 @@ const KipTabs = ({ setTagline }) => {
         {tab === "Localised Sustainable Goals" && <GpProfile />}
         {tab === "Institutional Strengthening" && <Indicators />}
         {tab === "Ranking" && <Ranking />}
+        {tab === "Achievements" && <Achievement />}
       </div>
     </div>
   );

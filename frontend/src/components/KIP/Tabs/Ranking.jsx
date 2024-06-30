@@ -116,11 +116,11 @@ const Ranking = () => {
               <option value="9">Theme 9</option>
             </select>
           </div>
-          <div>
+          <div className="flex flex-col md:flex-row items-center gap-5">
             <select
               value={financialYear}
               onChange={(e) => setFinancialYear(e.target.value)}
-              className="text-center p-2 rounded"
+              className="text-center w-full h-fit p-2 rounded"
             >
               <option value="">Select Financial Year</option>
               {financialYears.map((year, index) => (
@@ -135,13 +135,13 @@ const Ranking = () => {
                 if (rankType === "block") getBlockRankData();
                 else getGpRankData();
               }}
-              className="flex py-5 items-center space-x-1"
+              className="flex items-center space-x-1"
             >
               <input
                 type="text"
                 onChange={(e) => setKeyword(e.target.value)}
                 placeholder="Search for States, Districts and Blocks"
-                className="border border-gray-300 p-2 rounded w-full lg:w-64 focus:ring focus:ring-orange-200"
+                className="border border-gray-300 p-2 rounded w-full lg:w-48 focus:ring focus:ring-orange-200"
               />
               <button className="bg-primary text-white p-2 rounded focus:outline-none focus:ring focus:ring-orange-200">
                 <svg

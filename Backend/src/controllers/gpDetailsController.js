@@ -121,7 +121,6 @@ export const updatePanchayatDetails = CatchAsyncError(
         secretaryDetails,
       } = req.body;
 
-
       const panchayat = await GpDetailsModel.findOneAndUpdate(
         { id: req.params.id },
         {
@@ -233,7 +232,7 @@ export const getPanchayatDetails = CatchAsyncError(async (req, res, next) => {
     const match = {
       gp_id: gp,
     };
-    match.decision = "1";
+    // match.decision = "1";
 
     if (state) match.state_id = state;
     if (dist) match.dist_id = dist;

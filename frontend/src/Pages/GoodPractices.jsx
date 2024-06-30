@@ -172,24 +172,24 @@ const GoodPractices = () => {
             resilient socities.
           </p>
         </div>
-        <div className="flex pb-10 flex-col lg:flex-row items-center lg:items-end gap-10 justify-between mb-4">
-          <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
-            <StateFilter />
+        <div className="flex pb-10 flex-col lg:flex-row items-center lg:items-end gap-5 justify-between mb-4">
+          <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 lg:grid-cols-4  items-end gap-2 sm:gap-5">
+            <StateFilter className={"!w-full md:w-36"} />
             <DistrictFilter />
             <BlockFilter />
             <GramFilter />
-            <Button className="self-end" onClick={handleReset}>
+          </div>
+          <div className="flex flex-col md:flex-row items-center justify-between md:gap-5 gap-4 w-full md:w-fit">
+            <Button className="self-end w-fit" onClick={handleReset}>
               Reset
             </Button>
-          </div>
-          <div className="flex flex-col justify-between md:gap-10 gap-4 w-full md:w-fit">
             <select
               value={fy}
               onChange={(e) => {
                 searchParams.set("financial_year", e.target.value);
                 setSearchParams(searchParams);
               }}
-              className="text-center p-2 rounded"
+              className="text-center w-full md:w-40 p-2 rounded"
             >
               <option value="">Select Financial Year</option>
               {financialYears.map((year, index) => (
@@ -206,7 +206,7 @@ const GoodPractices = () => {
                 type="text"
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search for States, Districts and Blocks"
-                className="border border-gray-300 p-2 rounded w-full lg:w-64 focus:ring focus:ring-orange-200"
+                className="border border-gray-300 p-2 rounded w-full lg:w-40 focus:ring focus:ring-orange-200"
               />
               <button className="bg-primary text-white p-2 rounded focus:outline-none focus:ring focus:ring-orange-200">
                 <svg
@@ -233,7 +233,7 @@ const GoodPractices = () => {
       <p className="px-5  pt-8 md:px-20 md:pt-10">
         Showing{" "}
         <span className="text-primary font-bold">
-          {goodPractices?.goodPractices?.length ?? 0}
+          {filteredGoodPractices?.goodPractices?.length ?? 0}
         </span>{" "}
         results
       </p>

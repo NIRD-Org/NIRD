@@ -12,18 +12,13 @@ import { isAuth } from "../middlewares/auth.js";
 
 const router = express.Router();
 
-
-router.route("/create").post(isAuth,createLCVA);
+router.route("/create").post(isAuth, createLCVA);
 // only for admins
-router.route("/all").get(isAuth,getAllLCVAs);
+router.route("/all").get(isAuth, getAllLCVAs);
 
 // for homepage
 router.route("/").get(getLCVAs);
 
-router
-  .route("/:id")
-  .get(getLCVAById)
-  .put(updateLCVA)
-  .delete(deleteLCVA);
+router.route("/:id").get(getLCVAById).put(updateLCVA).delete(deleteLCVA);
 router.route("/:id/approve").put(approveLCVA);
 export default router;

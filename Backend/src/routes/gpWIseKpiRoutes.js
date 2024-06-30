@@ -1,6 +1,7 @@
 import express from "express";
 import {
   deleteGpWiseKpiData,
+  getAchievementsChart,
   getBlockRankingController,
   getGpWiseKpi,
   getGpWiseKpiChart,
@@ -26,6 +27,8 @@ router.route("/resubmit").put(reSubmitKpiData);
 // Get teh chart
 
 router.route("/chart").get(getGpWiseKpiChart);
+router.route("/achievement-chart").get(getAchievementsChart);
+
 // router.route("/indicators").get(getGpWiseKpiDataWithPercentageController);
 
 router.route("/delete/:id").put(deleteGpWiseKpiData);
