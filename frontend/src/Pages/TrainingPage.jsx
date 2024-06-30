@@ -15,6 +15,8 @@ const TrainingPage = () => {
   );
   const [totalPages, setTotalPages] = useState();
 
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     setSearchParams({ page: currentPage });
     getTrainingData(currentPage);
@@ -32,6 +34,7 @@ const TrainingPage = () => {
 
   const getTrainingData = async (page) => {
     try {
+      setLoading(true);
       const { data } = await API.get(`/api/v1/training?page=${page}`);
       const trainingList = data?.data?.trainingData;
       setTrainingData(trainingList);
@@ -41,6 +44,8 @@ const TrainingPage = () => {
       console.log(error.message);
       setTrainingData([]);
       setSelectedTraining(null);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -52,6 +57,13 @@ const TrainingPage = () => {
   useEffect(() => {
     getTrainingGallery();
   }, []);
+
+  if (loading)
+    return (
+      <div className="h-full w-full text-center text-2xl text-gray-600">
+        Loading...
+      </div>
+    );
 
   return (
     <div className=" bg-white">
@@ -92,76 +104,88 @@ const TrainingPage = () => {
           Training Reports
         </h1>
 
-        <h1 className="text-sky-950 px-5 text-2xl font-bold">
-          Title of the Training
-        </h1>
-        <div className="flex flex-col md:flex-row py-1">
-          <div className="w-full md:w-2/6 border border-gray-400">
-            <div className="flex gap-0 flex-col items-center h-full justify-between">
-              {trainingData.map((data) => (
-                <p
-                  key={data._id}
-                  onClick={() => setSelectedTraining(data)}
-                  className={`text-lg flex items-center px-4 w-full h-full border-t border-gray-400 font-semibold py-3 cursor-pointer  ${
-                    selectedTraining?._id === data._id
-                      ? "bg-primary text-white"
-                      : ""
-                  }`}
-                >
-                  {data.title}
-                </p>
-              ))}
+        {trainingData.length > 0 ? (
+          <>
+            <h1 className="text-sky-950 px-5 text-2xl font-bold">
+              Title of the Training
+            </h1>
+            <div className="flex flex-col md:flex-row py-1">
+              <div className="w-full md:w-2/6 border border-gray-400">
+                <div className="flex gap-0 flex-col items-center h-full justify-between">
+                  {trainingData.map((data) => (
+                    <p
+                      key={data._id}
+                      onClick={() => setSelectedTraining(data)}
+                      className={`text-lg flex items-center px-4 w-full h-full border-t border-gray-400 font-semibold py-3 cursor-pointer  ${
+                        selectedTraining?._id === data._id
+                          ? "bg-primary text-white"
+                          : ""
+                      }`}
+                    >
+                      {data.title}
+                    </p>
+                  ))}
+                </div>
+              </div>
+              <div className="w-full bg-gray-100 md:w-4/6 mt-10 md:mt-0 flex flex-col">
+                {selectedTraining ? (
+                  <div className="flex-grow flex flex-col">
+                    <a
+                      href={selectedTraining.trainingDesign}
+                      download
+                      target="_blank"
+                      className="px-3 md:px-10 flex justify-center w-fit gap-2 items-center text-xl text-sky-900 hover:text-sky-950 font-semibold"
+                    >
+                      Download training report
+                      <Download />
+                    </a>
+                    <img
+                      src={selectedTraining.trainingPhotos}
+                      alt={selectedTraining.title}
+                      className="w-full h-full max-h-[70vh] rounded flex-grow mt-5 object-cover"
+                    />
+                  </div>
+                ) : (
+                  <div className="text-center text-3xl flex-grow">
+                    Select a training report to view
+                  </div>
+                )}
+              </div>
             </div>
+            <div className="flex justify-end mt-1">
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                className="px-2 flex items-center justify-center bg-primary text-white rounded mr-2 disabled:opacity-50"
+                disabled={currentPage === 1}
+              >
+                <ChevronLeft />
+              </button>
+              <span className="px-4 py-2">{`Page ${currentPage} of ${totalPages}`}</span>
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                className="px-2 flex items-center justify-center bg-primary text-white rounded ml-2 disabled:opacity-50"
+                disabled={currentPage === totalPages}
+              >
+                <ChevronRight />
+              </button>
+            </div>
+          </>
+        ) : (
+          <div className="text-center text-3xl py-20">
+            No training reports found
           </div>
-          <div className="w-full bg-gray-100 md:w-4/6 mt-10 md:mt-0 flex flex-col">
-            {selectedTraining ? (
-              <div className="flex-grow flex flex-col">
-                <a
-                  href={selectedTraining.trainingDesign}
-                  download
-                  target="_blank"
-                  className="px-3 md:px-10 flex justify-center w-fit gap-2 items-center text-xl text-sky-900 hover:text-sky-950 font-semibold"
-                >
-                  Download training report
-                  <Download />
-                </a>
-                <img
-                  src={selectedTraining.trainingPhotos}
-                  alt={selectedTraining.title}
-                  className="w-full h-full max-h-[70vh] rounded flex-grow mt-5 object-cover"
-                />
-              </div>
-            ) : (
-              <div className="text-center text-3xl flex-grow">
-                Select a training report to view
-              </div>
-            )}
-          </div>
-        </div>
-        <div className="flex justify-end mt-1">
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            className="px-2 flex items-center justify-center bg-primary text-white rounded mr-2 disabled:opacity-50"
-            disabled={currentPage === 1}
-          >
-            <ChevronLeft />
-          </button>
-          <span className="px-4 py-2">{`Page ${currentPage} of ${totalPages}`}</span>
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            className="px-2 flex items-center justify-center bg-primary text-white rounded ml-2 disabled:opacity-50"
-            disabled={currentPage === totalPages}
-          >
-            <ChevronRight />
-          </button>
-        </div>
+        )}
       </div>
       {/* Image gallery */}
       <div className="py-10 px-4 md:px-20 md:py-10">
         <h1 className="text-4xl pb-10 text-primary font-bold">Image Gallery</h1>
         <div className="relative overflow-hidden">
-          {gallery && gallery.length > 0 && (
+          {gallery && gallery.length > 0 ? (
             <TrainingGallery images={gallery} />
+          ) : (
+            <h1 className="text-center text-gray-500 text-2xl">
+              No Images Found
+            </h1>
           )}
         </div>
       </div>
