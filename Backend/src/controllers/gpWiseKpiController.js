@@ -124,7 +124,7 @@ export const submitKpiData = CatchAsyncError(async (req, res, next) => {
 
     // Prepare the GpWiseKPI documents for insertion
     const kpiDocuments = await Promise.all(
-      formData.map(async (kpi) => ({
+      formData.map(async kpi => ({
         id: currentMaxId++,
         state_id: state_id,
         dist_id: dist_id,
@@ -536,17 +536,11 @@ export const deleteGpWiseKpiData = CatchAsyncError(async (req, res, next) => {
 export const getGpWiseKpiForApprover = CatchAsyncError(
   async (req, res, next) => {
     try {
-      const { state, dist, block, gp, theme, submitted_id } = req.query;
+      const { submitted_id } = req.query;
 
       const matchStage = {
-        gp_id: gp,
-        theme_id: theme,
         submitted_id,
       };
-
-      if (state) matchStage.state_id = state;
-      if (dist) matchStage.dist_id = dist;
-      if (block) matchStage.block_id = block;
 
       const pipeline = [
         { $match: matchStage },
@@ -602,6 +596,15 @@ export const getGpWiseKpiForApprover = CatchAsyncError(
         { $unwind: "$blockDetails" },
         {
           $lookup: {
+            from: "themes",
+            localField: "theme_id",
+            foreignField: "id",
+            as: "themeDetails",
+          },
+        },
+        { $unwind: "$themeDetails" },
+        {
+          $lookup: {
             from: "grampanchayats",
             localField: "gp_id",
             foreignField: "id",
@@ -623,6 +626,7 @@ export const getGpWiseKpiForApprover = CatchAsyncError(
             "gpDetails.name": 1,
             date: 1,
             theme_id: 1,
+            "themeDetails.theme_name": 1,
             kpi_id: 1,
             max_range: 1,
             input_data: 1,
@@ -689,7 +693,7 @@ export const reSubmitKpiData = CatchAsyncError(async (req, res, next) => {
     }
 
     // Prepare the updated GpWiseKPI documents
-    const kpiDocuments = formData.map((kpi) => ({
+    const kpiDocuments = formData.map(kpi => ({
       kpi_id: kpi.kpi_id,
       score: kpi.score,
       max_range: kpi.max_range,
@@ -700,7 +704,7 @@ export const reSubmitKpiData = CatchAsyncError(async (req, res, next) => {
 
     // Update the KPI documents in the gpWiseKpi collection based on submitted_id and kpi_id
     await Promise.all(
-      kpiDocuments.map((kpiDocument) =>
+      kpiDocuments.map(kpiDocument =>
         GpWiseKpiModel.updateOne(
           { submitted_id, kpi_id: kpiDocument.kpi_id },
           kpiDocument,
@@ -825,7 +829,7 @@ export const getRankingController = CatchAsyncError(async (req, res, next) => {
     if (keyword) {
       const regex = new RegExp(keyword, "i");
       ranking = ranking.filter(
-        (item) =>
+        item =>
           regex.test(item.gp_name) ||
           regex.test(item.state_name) ||
           regex.test(item.dist_name) ||
@@ -953,7 +957,7 @@ export const getBlockRankingController = CatchAsyncError(
       if (keyword) {
         const regex = new RegExp(keyword, "i"); // 'i' for case-insensitive
         ranking = ranking.filter(
-          (item) =>
+          item =>
             regex.test(item.block_name) ||
             regex.test(item.state_name) ||
             regex.test(item.dist_name)

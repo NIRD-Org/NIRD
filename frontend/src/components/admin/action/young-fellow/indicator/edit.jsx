@@ -14,7 +14,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
-import { useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 
 function IndicatorApprovalResubmit({ type = "add" }) {
   const [formData, setFormData] = useState({
@@ -26,10 +26,9 @@ function IndicatorApprovalResubmit({ type = "add" }) {
     financial_year: "",
   });
   const [indicatorFormData, setIndicatorFormData] = useState([]);
-  const [searchParams] = useSearchParams();
-  const submitted_id = searchParams.get("submitted_id") || "";
   const [indicatorApprovalData, setIndicatorApprovalData] = useState([]);
   const [indicators, setIndicators] = useState([]);
+  const {id:submitted_id} = useParams();
 
   useEffect(() => {
     const fetchIndicatorApprovalData = async () => {

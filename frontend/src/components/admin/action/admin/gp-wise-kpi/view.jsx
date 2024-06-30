@@ -11,21 +11,18 @@ import {
 } from "@/components/ui/table";
 import API from "@/utils/API";
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { Textarea } from "@/components/ui/textarea";
-import YfLayout from "@/components/admin/young-fellow/YfLayout";
+import LocationHeader from "../../components/LocationHeader";
 
-function KpiApprovalView() {
-  const [searchParams] = useSearchParams();
-  const theme_id = searchParams.get("theme_id") || "";
+function GpWiseKpiApprovalView() {
   const [kpiApprovalData, setKpiApprovalData] = useState([]);
-  const gp_id = searchParams.get("gram_id") || "";
-  const submitted_id = searchParams.get("submitted_id") || "";
+  const { id: submitted_id } = useParams();
 
   useEffect(() => {
     const fetchKpiApprovalData = async () => {
       try {
-        const url = `/api/v1/gp-wise-kpi/approval-data?gp=${gp_id}&theme=${theme_id}&submitted_id=${submitted_id}`;
+        const url = `/api/v1/gp-wise-kpi/approval-data?submitted_id=${submitted_id}`;
         const response = await API.get(url);
         setKpiApprovalData(response.data.data || []);
       } catch (error) {
@@ -43,7 +40,13 @@ function KpiApprovalView() {
             Young Fellow - KPI Entry Form
           </h2>
         </div>
-        <YfLayout />
+        <LocationHeader
+          state_name={kpiApprovalData[0]?.stateDetails?.name}
+          dist_name={kpiApprovalData[0]?.districtDetails?.name}
+          block_name={kpiApprovalData[0]?.blockDetails?.name}
+          gp_name={kpiApprovalData[0]?.gpDetails?.name}
+          theme_name={kpiApprovalData[0]?.themeDetails?.theme_name}
+        />
         <form className="overflow-x-auto  mt-6">
           <div>
             <Table>
@@ -118,4 +121,4 @@ function KpiApprovalView() {
   );
 }
 
-export default KpiApprovalView;
+export default GpWiseKpiApprovalView;

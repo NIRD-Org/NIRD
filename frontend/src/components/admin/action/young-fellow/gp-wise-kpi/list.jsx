@@ -10,9 +10,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { NirdEditIcon, NirdViewIcon } from "../../../Icons";
-import YfLayout from "../../../young-fellow/YfLayout";
 
-function ActionForm() {
+function YfGpWiseKpiApprovalList() {
   const [searchParams] = useSearchParams();
   const state_id = searchParams.get("state_id") || "";
   const dist_id = searchParams.get("dist_id") || "";
@@ -129,4 +128,4 @@ function ActionForm() {
   );
 }
 
-export default ActionForm;
+export default YfGpWiseKpiApprovalList;

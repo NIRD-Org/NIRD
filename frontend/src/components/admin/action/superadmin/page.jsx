@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import GoodPracticeApprovalsList from "../admin/good practice/list";
 import IndicatorApprovalsList from "../admin/gp-wise-indicator/list";
 import LCVAApprovalsList from "../admin/lcva/list";
@@ -7,8 +8,8 @@ import KpiApprovalsList from "../admin/gp-wise-kpi/list";
 import GpDetailsApprovalsList from "../admin/gp-details/list";
 
 function SuperadminApprovalList() {
-  const [approvalItem, setApprovalItem] = useState("");
-
+  const [searchParams, setSearchParams] = useSearchParams();
+  const approvalItem = searchParams.get("approvalItem") || "";
 
   const ApprovalComponent =
     {
@@ -20,12 +21,21 @@ function SuperadminApprovalList() {
       "gp-details": GpDetailsApprovalsList,
     }[approvalItem] || (() => <div className="text-center mt-10">Select an approval item</div>);
 
+  useEffect(() => {
+    if (!approvalItem) {
+      setSearchParams({});
+    }
+  }, [approvalItem, setSearchParams]);
+
+  const handleSelectionChange = (event) => {
+    setSearchParams({ approvalItem: event.target.value });
+  };
 
   return (
-    <div className="p-4 ">
+    <div className="p-4">
       <select
         className="text-sm px-4 py-2 rounded-md bg-white border w-[200px] mx-auto block"
-        onChange={(event) => setApprovalItem(event.target.value)}
+        onChange={handleSelectionChange}
         value={approvalItem}
       >
         <option value="">Select</option>

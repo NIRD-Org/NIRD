@@ -11,24 +11,21 @@ import {
 } from "@/components/ui/table";
 import API from "@/utils/API";
 import React, { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import YfLayout from "../../../young-fellow/YfLayout";
+import { useNavigate, useParams } from "react-router-dom";
 import { Textarea } from "@/components/ui/textarea";
 import { tst } from "@/lib/utils";
+import LocationHeader from "../../components/LocationHeader";
 
-function KpiApprovalSubmit() {
-  const [searchParams] = useSearchParams();
-  const theme_id = searchParams.get("theme_id") || "";
+function GpWiseKpiApprovalPage() {
   const [kpiApprovalData, setKpiApprovalData] = useState([]);
-  const gp_id = searchParams.get("gram_id") || "";
-  const submitted_id = searchParams.get("submitted_id") || "";
   const [formData, setFormData] = useState({ decision: "", remarks: "" });
   const navigate = useNavigate();
+  const { id: submitted_id } = useParams();
 
   useEffect(() => {
     const fetchKpiApprovalData = async () => {
       try {
-        const url = `/api/v1/gp-wise-kpi/approval-data?gp=${gp_id}&theme=${theme_id}&submitted_id=${submitted_id}`;
+        const url = `/api/v1/gp-wise-kpi/approval-data?submitted_id=${submitted_id}`;
         const response = await API.get(url);
         setKpiApprovalData(response.data.data || []);
       } catch (error) {
@@ -50,7 +47,7 @@ function KpiApprovalSubmit() {
       const response = await API.put(url, body);
       console.log(response.data);
       tst.success("Form submitted successfully");
-      navigate("/admin/admin-action-form");
+      // navigate("/admin/admin-action-form");
     } catch (error) {
       tst.error("Failed to submit form");
       console.log(error);
@@ -65,7 +62,13 @@ function KpiApprovalSubmit() {
             Young Fellow - KPI Entry Form
           </h2>
         </div>
-        <YfLayout />
+        <LocationHeader
+          state_name={kpiApprovalData[0]?.stateDetails?.name}
+          dist_name={kpiApprovalData[0]?.districtDetails?.name}
+          block_name={kpiApprovalData[0]?.blockDetails?.name}
+          gp_name={kpiApprovalData[0]?.gpDetails?.name}
+          theme_name={kpiApprovalData[0]?.themeDetails?.theme_name}
+        />
         <div className="overflow-x-auto  mt-6">
           <div>
             <Table>
@@ -74,10 +77,8 @@ function KpiApprovalSubmit() {
                   <TableHead className="w-20">ID</TableHead>
                   <TableHead className="w-[200px]">KPI Name</TableHead>
                   <TableHead className="w-[200px]">Data point</TableHead>
-                  {/* <TableHead className="w-20"></TableHead> */}
                   <TableHead className="w-32">Max Number </TableHead>
                   <TableHead className="w-20">Achieved Number</TableHead>
-                  {/* <TableHead className="w-40">Score</TableHead> */}
                   <TableHead className="w-40 ">Remarks</TableHead>
                 </TableRow>
               </TableHeader>
@@ -89,7 +90,6 @@ function KpiApprovalSubmit() {
                     <TableCell>
                       {data.kpiDetails.kpi_datapoint || "No question"}
                     </TableCell>
-                    {/* <TableCell>{data?.kpiDetails.input_type}</TableCell> */}
                     <TableCell>
                       <Input value={data?.max_range} disabled />
                     </TableCell>
@@ -103,11 +103,7 @@ function KpiApprovalSubmit() {
                         name="remarks"
                         value={data?.remarks}
                       />
-                      {/* <Input value={data?.remarks} disabled type="number" /> */}
                     </TableCell>
-                    {/* <TableCell>
-                      <Input disabled type="text" />
-                    </TableCell> */}
                   </TableRow>
                 ))}
               </TableBody>
@@ -131,10 +127,7 @@ function KpiApprovalSubmit() {
               placeholder="Enter date"
               className="px-10"
             />
-
-            {/* <Input disabled value={kpiApprovalData[0]?.date} type="date" name="date" onChange={e => setFormData(prevData => ({ ...prevData, date: e.target.value }))} id="date" placeholder="Enter date" className="px-10" /> */}
           </div>
-          {/* <Button type="submit">Submit</Button> */}
         </div>
 
         <form onSubmit={handleSubmit}>
@@ -189,4 +182,4 @@ function KpiApprovalSubmit() {
   );
 }
 
-export default KpiApprovalSubmit;
+export default GpWiseKpiApprovalPage;

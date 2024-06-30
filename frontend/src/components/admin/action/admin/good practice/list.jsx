@@ -18,10 +18,10 @@ const GoodPracticeApprovalsList = () => {
 
   return (
     <CommonApprovalsList
-      apiEndpoint="/api/v1/gp-details/all"
+      apiEndpoint="/api/v1/good-practice/all"
       title="Good Practice Approvals List"
       columns={columns}
-      redirect={"gp-details"}
+      redirect={"good-practice"}
     />
   );
 };

@@ -1,6 +1,6 @@
 import AdminHeader from "@/components/admin/AdminHeader";
 import React from "react";
-import GoodPracticeView from "../../components/GoodPracticeView";
+import GoodPracticeView from "./cview";
 
 function GoodPracticeViewDetails() {
   return (

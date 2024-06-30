@@ -16,7 +16,13 @@ import { useAdminState } from "@/components/hooks/useAdminState";
 import useStates from "@/components/hooks/location/useState";
 import { useAuthContext } from "@/context/AuthContext";
 
-const CommonApprovalsList = ({ apiEndpoint, title, columns, redirect, id }) => {
+const CommonApprovalsList = ({
+  apiEndpoint,
+  title,
+  columns,
+  redirect,
+  master,
+}) => {
   const [searchParams] = useSearchParams();
   const dist_id = searchParams.get("dist_id") || "";
   const block_id = searchParams.get("block_id") || "";
@@ -33,25 +39,26 @@ const CommonApprovalsList = ({ apiEndpoint, title, columns, redirect, id }) => {
   const { user } = useAuthContext();
 
   useEffect(() => {
+    const getAllApprovals = async () => {
+      try {
+        const { data } = await API.get(apiEndpoint, {
+          params: {
+            state_id,
+            dist_id,
+            block_id,
+            gp_id: gram_id,
+          },
+        });
+        data?.data?.sort((a, b) => b.id - a.id);
+        console.log(data)
+        setApprovals(data?.data || []);
+      } catch (error) {
+        console.log("Error fetching Approvals:", error);
+      }
+    };
+
     getAllApprovals();
   }, [state_id]);
-
-  const getAllApprovals = async () => {
-    try {
-      const { data } = await API.get(apiEndpoint, {
-        params: {
-          state_id,
-          dist_id,
-          block_id,
-          gp_id: gram_id,
-        },
-      });
-      data?.data?.sort((a, b) => b.id - a.id);
-      setApprovals(data?.data || []);
-    } catch (error) {
-      console.log("Error fetching Approvals:", error);
-    }
-  };
 
   const handleStatusFilterChange = e => {
     setStatusFilter(e.target.value);
@@ -90,6 +97,7 @@ const CommonApprovalsList = ({ apiEndpoint, title, columns, redirect, id }) => {
     setCurrentPage(page);
   };
 
+
   return (
     <div>
       <div className="p-6">
@@ -105,18 +113,22 @@ const CommonApprovalsList = ({ apiEndpoint, title, columns, redirect, id }) => {
             <option value="1">Approved</option>
             <option value="2">Sent back for Modification</option>
           </select>
-          <select
-            className={"text-sm px-4 py-2 rounded-md bg-white border w-[200px]"}
-            value={state_id}
-            onChange={e => setStateId(e.target.value)}
-          >
-            <option value="">Select a state</option>
-            {(user.role == 1 ? states : adminStates)?.map(state => (
-              <option key={state.id} value={state.id}>
-                {state.name}
-              </option>
-            ))}
-          </select>
+          {user.role != 3 && (
+            <select
+              className={
+                "text-sm px-4 py-2 rounded-md bg-white border w-[200px]"
+              }
+              value={state_id}
+              onChange={e => setStateId(e.target.value)}
+            >
+              <option value="">Select a state</option>
+              {(user.role == 1 ? states : adminStates)?.map(state => (
+                <option key={state.id} value={state.id}>
+                  {state.name}
+                </option>
+              ))}
+            </select>
+          )}
           <Input
             type="text"
             value={searchQuery}
@@ -144,11 +156,26 @@ const CommonApprovalsList = ({ apiEndpoint, title, columns, redirect, id }) => {
                     ))}
                     <TableCell>
                       <div className="flex items-center gap-3">
-                        {approval.decision == 0 && user.role != 1 && (
+                        {approval.decision == 0 && user.role == 2 && (
                           <span
                             onClick={() =>
                               navigate(
-                                `/admin/approve/${redirect}/${approval.id}`
+                                `/admin/approve/${redirect}/${
+                                  master ? approval.submitted_id : approval.id
+                                }`
+                              )
+                            }
+                          >
+                            <NirdEditIcon />
+                          </span>
+                        )}
+                        { user.role == 3 && approval.decision == 2  && (
+                          <span
+                            onClick={() =>
+                              navigate(
+                                `/admin/resubmit/${redirect}/${
+                                  master ? approval.submitted_id : approval.id
+                                }`
                               )
                             }
                           >
@@ -157,7 +184,11 @@ const CommonApprovalsList = ({ apiEndpoint, title, columns, redirect, id }) => {
                         )}
                         <span
                           onClick={() =>
-                            navigate(`/admin/view/${redirect}/${approval.id}`)
+                            navigate(
+                              `/admin/view/${redirect}/${
+                                master ? approval.submitted_id : approval.id
+                              }`
+                            )
                           }
                         >
                           <NirdViewIcon />

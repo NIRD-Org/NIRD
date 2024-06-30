@@ -1,6 +1,6 @@
 import AdminHeader from "@/components/admin/AdminHeader";
 import React from "react";
-import LCVAView from "../../components/LCVAView";
+import LCVAView from "./cview";
 
 function LCVAViewDetails() {
   return (

@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import API from "@/utils/API";
-import AdminHeader from "@/components/admin/AdminHeader";
 import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
   TableRow,
 } from "@/components/ui/table";
 import { NirdViewIcon } from "@/components/admin/Icons";

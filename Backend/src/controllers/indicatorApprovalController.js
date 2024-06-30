@@ -5,18 +5,23 @@ import { Errorhandler } from "../utils/errorHandler.js";
 
 export const getIndicatorApprovals = CatchAsyncError(async (req, res, next) => {
   try {
-    const { state, dist, block, gp, decision, fy } = req.query;
+    const { state, dist, block, gp, decision, fy,state_id,dist_id,block_id,gp_id,theme_id } = req.query;
     const match = {};
 
     if (state) match.state_id = state;
     if (dist) match.dist_id = dist;
     if (block) match.block_id = block;
     if (gp) match.gp_id = gp;
+    if (state_id) match.state_id = state_id;
+    if (dist_id) match.dist_id = dist_id;
+    if (block_id) match.block_id = block_id;
+    if (gp_id) match.gp_id = gp_id;
+    if (theme_id) match.theme_id = theme_id;
     if (decision) match.decision = decision;
     if (req?.user?.role == 3) match.created_by = req.user.id;
     // Financial year
     if (fy) match.financial_year = fy;
-    if (req.user.role == 2  && !req.query.state) {
+    if (req.user.role == 2  && !req.query.state_id) {
       const {userLocations} = await UserLocationModel.findOne({ user_id: req.user.id });
       const stateIds = userLocations.state_ids
       match.state_id = { $in: stateIds };

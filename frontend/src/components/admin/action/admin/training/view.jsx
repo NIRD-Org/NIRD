@@ -1,6 +1,6 @@
 import AdminHeader from "@/components/admin/AdminHeader";
 import React from "react";
-import TrainingView from "../../components/TrainingView";
+import TrainingView from "./cview";
 
 function TrainingViewDetails() {
   return (

@@ -2,7 +2,7 @@ function LocationHeader({
   state_name,
   dist_name,
   block_name,
-  gram_name,
+  gp_name,
   theme_name,
 }) {
   return (
@@ -14,7 +14,7 @@ function LocationHeader({
               { label: "State:", value: state_name },
               { label: "District:", value: dist_name },
               { label: "Block:", value: block_name },
-              { label: "GP:", value: gram_name },
+              { label: "GP:", value: gp_name },
             ].map(({ label, value }) => (
               <h3 key={label}>
                 <strong className="text-primary">{label}</strong> {value}
