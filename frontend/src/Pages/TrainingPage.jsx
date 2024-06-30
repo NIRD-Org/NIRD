@@ -16,6 +16,23 @@ const TrainingPage = () => {
   const [totalPages, setTotalPages] = useState();
 
   const [loading, setLoading] = useState(false);
+  // static data for table
+  const [data, setData] = useState({
+    trainings: 45,
+    workshops: 56,
+    seminars: 56,
+    webinars: 67,
+    onlineTrainings: 34,
+    offlineTrainings: 15,
+    ersTrained: 123,
+    functionariesTrained: 345,
+    shgsTrained: 345,
+    ngosTrained: 10,
+    panchayatBandhuTrained: 43,
+    projectStaffTrained: 23,
+    malesTrained: 34,
+    femalesTrained: 45,
+  });
 
   useEffect(() => {
     setSearchParams({ page: currentPage });
@@ -96,6 +113,92 @@ const TrainingPage = () => {
           learning materials and operational guidelines are distributed to
           enhance the training of project GPs.
         </p>
+      </div>
+
+      {/* Tabular data */}
+
+      <div className="w-full px-4 py-8  md:px-20 md:py-10 bg-white max-w-lg ">
+        <h1 className="text-2xl font-bold py-2  text-center text-white bg-primary">
+          Training Summary
+        </h1>
+        <div className="grid grid-cols-1  gap-4 border border-gray-400">
+          <div className="flex justify-between items-center py-0 px-4">
+            <span className="font-semibold text-sky-950">No. of Trainings</span>
+            <span className="text-gray-600">{data.trainings}</span>
+          </div>
+          <div className="flex justify-between items-center py-0 px-4">
+            <span className="font-semibold text-sky-950">No. of Workshops</span>
+            <span className="text-gray-600">{data.workshops}</span>
+          </div>
+          <div className="flex justify-between items-center py-0 px-4">
+            <span className="font-semibold text-sky-950">No. of Seminars</span>
+            <span className="text-gray-600">{data.seminars}</span>
+          </div>
+          <div className="flex justify-between items-center py-0 px-4">
+            <span className="font-semibold text-sky-950">No. of Webinars</span>
+            <span className="text-gray-600">{data.webinars}</span>
+          </div>
+          <div className="flex justify-between items-center py-0 px-4">
+            <span className="font-semibold text-sky-950">
+              No. of Online Trainings
+            </span>
+            <span className="text-gray-600">{data.onlineTrainings}</span>
+          </div>
+          <div className="flex justify-between items-center py-0 px-4">
+            <span className="font-semibold text-sky-950">
+              No. of Offline Trainings
+            </span>
+            <span className="text-gray-600">{data.offlineTrainings}</span>
+          </div>
+          <div className="flex justify-between items-center py-0 px-4">
+            <span className="font-semibold text-sky-950">
+              No. of ERs trained
+            </span>
+            <span className="text-gray-600">{data.ersTrained}</span>
+          </div>
+          <div className="flex justify-between items-center py-0 px-4">
+            <span className="font-semibold text-sky-950">
+              No. of Functionaries trained
+            </span>
+            <span className="text-gray-600">{data.functionariesTrained}</span>
+          </div>
+          <div className="flex justify-between items-center py-0 px-4">
+            <span className="font-semibold text-sky-950">
+              No. of SHGs trained
+            </span>
+            <span className="text-gray-600">{data.shgsTrained}</span>
+          </div>
+          <div className="flex justify-between items-center py-0 px-4">
+            <span className="font-semibold text-sky-950">
+              No. of Vol. Organisations/ NGOs trained
+            </span>
+            <span className="text-gray-600">{data.ngosTrained}</span>
+          </div>
+          <div className="flex justify-between items-center py-0 px-4">
+            <span className="font-semibold text-sky-950">
+              No. of Panchayat Bandhu trained
+            </span>
+            <span className="text-gray-600">{data.panchayatBandhuTrained}</span>
+          </div>
+          <div className="flex justify-between items-center py-0 px-4">
+            <span className="font-semibold text-sky-950">
+              No. of Project Staff Trained
+            </span>
+            <span className="text-gray-600">{data.projectStaffTrained}</span>
+          </div>
+          <div className="flex justify-between items-center py-0 px-4">
+            <span className="font-semibold text-sky-950">
+              No. of Males trained
+            </span>
+            <span className="text-gray-600">{data.malesTrained}</span>
+          </div>
+          <div className="flex justify-between items-center py-0 px-4">
+            <span className="font-semibold text-sky-950">
+              No. of Females trained
+            </span>
+            <span className="text-gray-600">{data.femalesTrained}</span>
+          </div>
+        </div>
       </div>
 
       {/* Training Reports */}
