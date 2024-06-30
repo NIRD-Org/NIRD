@@ -56,7 +56,7 @@ const TrainingPage = () => {
   return (
     <div className=" bg-white">
       <div className="px-4 py-8 bg-gray-100 md:px-20 md:py-10">
-        <h1 className="text-5xl md:text-6xl text-primary font-bold">
+        <h1 className="text-4xl text-center md:text-left md:text-6xl text-primary font-bold">
           Training & Capacity Building
         </h1>
       </div>
@@ -120,7 +120,7 @@ const TrainingPage = () => {
                   href={selectedTraining.trainingDesign}
                   download
                   target="_blank"
-                  className="px-10 flex justify-center w-fit gap-2 items-center text-xl text-sky-900 hover:text-sky-950 font-semibold"
+                  className="px-3 md:px-10 flex justify-center w-fit gap-2 items-center text-xl text-sky-900 hover:text-sky-950 font-semibold"
                 >
                   Download training report
                   <Download />
