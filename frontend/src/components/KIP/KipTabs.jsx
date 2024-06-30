@@ -3,6 +3,8 @@ import GpProfile from "./Tabs/GpProfile";
 import Indicators from "./Tabs/Indicators";
 import Ranking from "./Tabs/Ranking";
 import { Link, useSearchParams } from "react-router-dom";
+import Achievement from "./Tabs/Achievement";
+import GradientLine from "../GradientLine";
 
 const KipTabs = ({ setTagline }) => {
   const [searchparams, setSearchParams] = useSearchParams();
@@ -30,6 +32,7 @@ const KipTabs = ({ setTagline }) => {
     "Localised Sustainable Goals",
     "Institutional Strengthening",
     "Ranking",
+    "Achievements",
   ];
 
   return (
@@ -58,18 +61,13 @@ const KipTabs = ({ setTagline }) => {
           </button>
         ))}
       </div>
-      <div
-        class="w-full h-1"
-        style={{
-          background:
-            "linear-gradient(to right, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff, #ff1493, #00ced1)",
-        }}
-      ></div>
+      <GradientLine />
 
       <div className="mt-4">
         {tab === "Localised Sustainable Goals" && <GpProfile />}
         {tab === "Institutional Strengthening" && <Indicators />}
         {tab === "Ranking" && <Ranking />}
+        {tab === "Achievements" && <Achievement />}
       </div>
     </div>
   );

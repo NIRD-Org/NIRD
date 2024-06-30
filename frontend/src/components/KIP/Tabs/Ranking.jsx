@@ -3,26 +3,26 @@ import React, { useEffect, useState } from "react";
 
 const RankingCard = ({ rank, gp, state, block, dist, totalScore }) => {
   return (
-    <div className="flex flex-col gap-0 min-w-60 border border-gray-300">
-      <h5 className="bg-sky-700 font-semibold text-white py-3 px-4 text-center">
+    <div className="flex flex-col gap-0 min-w-48 border border-gray-300">
+      <h5 className="bg-sky-700 font-semibold text-white py-3 px-1 text-center">
         Overall Ranking #{rank}
       </h5>
-      <div className="p-5 pr-0 flex flex-col gap-1">
+      <div className="p-2 pr-0 flex flex-col gap-1">
         <p className="text-[1rem] font-semibold">
           Total Score: <span className="text-gray-700 pl-2">{totalScore}</span>
         </p>
         {gp && (
-          <p className="text-[1rem] font-semibold">
-            Gram Panchayat: <span className="text-gray-700 pl-2">{gp}</span>
+          <p className="text-sm font-semibold">
+            GP: <span className="text-gray-700 pl-2">{gp}</span>
           </p>
         )}
-        <p className="text-[1rem] font-semibold">
+        <p className="text-sm font-semibold">
           Block: <span className="text-gray-700 pl-2">{block}</span>
         </p>
-        <p className="text-[1rem] font-semibold">
+        <p className="text-sm font-semibold">
           District: <span className="text-gray-700 pl-2">{dist}</span>
         </p>
-        <p className="text-[1rem] font-semibold">
+        <p className="text-sm font-semibold">
           State: <span className="text-gray-700 pl-2">{state}</span>
         </p>
       </div>
@@ -116,11 +116,11 @@ const Ranking = () => {
               <option value="9">Theme 9</option>
             </select>
           </div>
-          <div>
+          <div className="flex flex-col md:flex-row items-center gap-5">
             <select
               value={financialYear}
               onChange={(e) => setFinancialYear(e.target.value)}
-              className="text-center p-2 rounded"
+              className="text-center w-full h-fit p-2 rounded"
             >
               <option value="">Select Financial Year</option>
               {financialYears.map((year, index) => (
@@ -135,13 +135,13 @@ const Ranking = () => {
                 if (rankType === "block") getBlockRankData();
                 else getGpRankData();
               }}
-              className="flex py-5 items-center space-x-1"
+              className="flex items-center space-x-1"
             >
               <input
                 type="text"
                 onChange={(e) => setKeyword(e.target.value)}
                 placeholder="Search for States, Districts and Blocks"
-                className="border border-gray-300 p-2 rounded w-full lg:w-64 focus:ring focus:ring-orange-200"
+                className="border border-gray-300 p-2 rounded w-full lg:w-48 focus:ring focus:ring-orange-200"
               />
               <button className="bg-primary text-white p-2 rounded focus:outline-none focus:ring focus:ring-orange-200">
                 <svg
@@ -162,7 +162,7 @@ const Ranking = () => {
             </form>
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-center items-start  gap-10 h-full">
+        <div className="w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 justify-center items-start  gap-10 h-full">
           {loading ? (
             <div className="col-span-full text-center w-full h-full font-bold text-2xl">
               Loading...

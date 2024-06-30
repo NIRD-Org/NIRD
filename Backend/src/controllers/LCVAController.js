@@ -42,7 +42,7 @@ export const createLCVA = CatchAsyncError(async (req, res, next) => {
     req.body.document = docUrl;
     req.body.video = videoUrl;
     req.body.id = await getNewId();
-    req.body.created_by = req?.user?.id;
+    req.body.created_by = req?.user?.id || "1";
 
     const newLCVA = new LCVA(req.body);
     await newLCVA.save();
@@ -362,14 +362,10 @@ export const updateLCVA = CatchAsyncError(async (req, res, next) => {
       req.body.lCVADesign = lCVADesignUrl;
     } */
 
-    const updatedLCVA = await LCVA.findOneAndUpdate(
-      { id },
-      req.body,
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
+    const updatedLCVA = await LCVA.findOneAndUpdate({ id }, req.body, {
+      new: true,
+      runValidators: true,
+    });
 
     if (!updatedLCVA) {
       return next(new Errorhandler("Good Practice not found", 404));

@@ -89,6 +89,77 @@ export const getAllTrainings = CatchAsyncError(async (req, res, next) => {
   }
 });
 
+// Get training data for homepage
+export const getTrainingData = CatchAsyncError(async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 5;
+    const skip = (page - 1) * limit;
+    const trainingData = await Training.find()
+      .sort({ _id: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean()
+      .exec();
+    const totalItems = await Training.countDocuments();
+
+    res.status(200).json({
+      success: true,
+      data: {
+        trainingData,
+        pagination: {
+          totalItems,
+          totalPages: Math.ceil(totalItems / limit),
+          currentPage: page,
+        },
+      },
+    });
+  } catch (error) {
+    return next(new Errorhandler("Failed to get training data", 500));
+  }
+});
+
+// Get all training images
+export const getAllTrainingImages = CatchAsyncError(async (req, res, next) => {
+  try {
+    const result = await Training.aggregate([
+      {
+        $project: {
+          trainingPhotos: 1,
+        },
+      },
+      {
+        $unwind: "$trainingPhotos",
+      },
+      {
+        $group: {
+          _id: null,
+          allTrainingPhotos: { $push: "$trainingPhotos" },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          allTrainingPhotos: 1,
+        },
+      },
+    ]);
+
+    if (!result || result.length === 0) {
+      return next(new Errorhandler("Trainings not found", 404));
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Training images retrieved successfully",
+      data: result[0].allTrainingPhotos,
+    });
+  } catch (error) {
+    console.log(error);
+    return next(new Errorhandler("Failed to get training images", 500));
+  }
+});
+
 // Get training by ID
 export const getTrainingById = CatchAsyncError(async (req, res, next) => {
   try {

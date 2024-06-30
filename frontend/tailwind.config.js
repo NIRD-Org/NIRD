@@ -17,10 +17,11 @@ module.exports = {
       },
     },
     extend: {
-      colors: {
-        primary: "#00203F",
-      },
       keyframes: {
+        marquee: {
+          "0%": { transform: "translateX(100%)" },
+          "100%": { transform: "translateX(-100%)" },
+        },
         "accordion-down": {
           from: { height: "0" },
           to: { height: "var(--radix-accordion-content-height)" },
@@ -30,7 +31,11 @@ module.exports = {
           to: { height: "0" },
         },
       },
+      colors: {
+        primary: "#00203F",
+      },
       animation: {
+        marquee: "marquee 20s linear infinite",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
