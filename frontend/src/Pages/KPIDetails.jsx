@@ -99,7 +99,7 @@ const KPIDetails = () => {
                 State
               </label>
               <select
-                className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
+                className="border text-sm bg-white p-2 rounded-md"
                 value={state}
                 onChange={(e) => {
                   setSearchParams({ state: e.target.value });
@@ -123,8 +123,9 @@ const KPIDetails = () => {
               </label>
 
               <select
-                className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
+                className="border text-sm bg-white p-2 rounded-md"
                 value={dist}
+                disabled={!districtOptions.length}
                 onChange={(e) => {
                   setSearchParams({ state, dist: e.target.value });
                 }}
@@ -146,8 +147,9 @@ const KPIDetails = () => {
               </label>
 
               <select
-                className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
+                className="border text-sm bg-white p-2 rounded-md"
                 value={block}
+                disabled={!blockOptions.length}
                 onChange={(e) => {
                   setSearchParams({ state, dist, block: e.target.value });
                 }}
@@ -169,8 +171,9 @@ const KPIDetails = () => {
               </label>
 
               <select
-                className="border text-sm border-gray-300 p-2 rounded focus:ring focus:ring-orange-200"
+                className="border text-sm bg-white p-2 rounded-md"
                 value={gp}
+                disabled={!GpOptions.length}
                 onChange={(e) => {
                   setSearchParams({ state, dist, block, gp: e.target.value });
                 }}

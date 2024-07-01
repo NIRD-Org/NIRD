@@ -14,7 +14,7 @@ const AchievementChart = ({ state, block, dist, gp, themeId }) => {
         );
         setChartData(data[0]);
 
-        // For testing purposes, using static data
+        // For testing purposes, you can uncomment and use the static data below
         // const testData = {
         //   theme_id: 1,
         //   theme_name: "Education",
@@ -23,129 +23,9 @@ const AchievementChart = ({ state, block, dist, gp, themeId }) => {
         //   dist_name: "Sample District",
         //   block_name: "Sample Block",
         //   chartData: [
-        //     {
-        //       kpi_id: "1",
-        //       kpi_name: "Literacy Rate",
-        //       currentPercentage: {
-        //         financial_year: "FY2023-2024",
-        //         percentage: "85.50",
-        //       },
-        //       lastPercentage: {
-        //         financial_year: "FY2022-2023",
-        //         percentage: "82.30",
-        //       },
-        //     },
-        //     {
-        //       kpi_id: "2",
-        //       kpi_name: "School Enrollment",
-        //       currentPercentage: {
-        //         financial_year: "FY2023-2024",
-        //         percentage: "92.10",
-        //       },
-        //       lastPercentage: {
-        //         financial_year: "FY2022-2023",
-        //         percentage: "91.80",
-        //       },
-        //     },
-        //     {
-        //       kpi_id: "3",
-        //       kpi_name: "Teacher-Student Ratio",
-        //       currentPercentage: {
-        //         financial_year: "FY2023-2024",
-        //         percentage: "15.20",
-        //       },
-        //       lastPercentage: {
-        //         financial_year: "FY2022-2023",
-        //         percentage: "14.50",
-        //       },
-        //     },
-        //     {
-        //       kpi_id: "4",
-        //       kpi_name: "Dropout Rate",
-        //       currentPercentage: {
-        //         financial_year: "FY2023-2024",
-        //         percentage: "3.80",
-        //       },
-        //       lastPercentage: {
-        //         financial_year: "FY2022-2023",
-        //         percentage: "4.20",
-        //       },
-        //     },
-        //     {
-        //       kpi_id: "5",
-        //       kpi_name: "Student Performance",
-        //       currentPercentage: {
-        //         financial_year: "FY2023-2024",
-        //         percentage: "87.50",
-        //       },
-        //       lastPercentage: {
-        //         financial_year: "FY2022-2023",
-        //         percentage: "86.20",
-        //       },
-        //     },
-        //     {
-        //       kpi_id: "6",
-        //       kpi_name: "Infrastructure Development",
-        //       currentPercentage: {
-        //         financial_year: "FY2023-2024",
-        //         percentage: "68.90",
-        //       },
-        //       lastPercentage: {
-        //         financial_year: "FY2022-2023",
-        //         percentage: "67.80",
-        //       },
-        //     },
-        //     {
-        //       kpi_id: "7",
-        //       kpi_name: "Digital Literacy",
-        //       currentPercentage: {
-        //         financial_year: "FY2023-2024",
-        //         percentage: "42.10",
-        //       },
-        //       lastPercentage: {
-        //         financial_year: "FY2022-2023",
-        //         percentage: "40.50",
-        //       },
-        //     },
-        //     {
-        //       kpi_id: "8",
-        //       kpi_name: "Teacher Training",
-        //       currentPercentage: {
-        //         financial_year: "FY2023-2024",
-        //         percentage: "57.80",
-        //       },
-        //       lastPercentage: {
-        //         financial_year: "FY2022-2023",
-        //         percentage: "55.90",
-        //       },
-        //     },
-        //     {
-        //       kpi_id: "9",
-        //       kpi_name: "Parental Involvement",
-        //       currentPercentage: {
-        //         financial_year: "FY2023-2024",
-        //         percentage: "72.30",
-        //       },
-        //       lastPercentage: {
-        //         financial_year: "FY2022-2023",
-        //         percentage: "70.50",
-        //       },
-        //     },
-        //     {
-        //       kpi_id: "10",
-        //       kpi_name: "Gender Parity Index",
-        //       currentPercentage: {
-        //         financial_year: "FY2023-2024",
-        //         percentage: "0.94",
-        //       },
-        //       lastPercentage: {
-        //         financial_year: "FY2022-2023",
-        //         percentage: "0.92",
-        //       },
-        //     },
+        //     // Sample KPI data here...
         //   ],
         // };
-
         // setChartData(testData);
       } catch (error) {
         console.error("Error fetching chart data:", error);
@@ -162,11 +42,11 @@ const AchievementChart = ({ state, block, dist, gp, themeId }) => {
     );
   }
 
-  const labels = chartData?.chartData.map((item) => item.kpi_name);
-  const baselineData = chartData?.chartData.map((item) =>
+  const labels = chartData.chartData.map((item) => item.kpi_name);
+  const baselineData = chartData.chartData.map((item) =>
     parseFloat(item.lastPercentage?.percentage || 0)
   );
-  const currentData = chartData?.chartData.map((item) =>
+  const currentData = chartData.chartData.map((item) =>
     parseFloat(item.currentPercentage?.percentage || 0)
   );
 
@@ -218,8 +98,8 @@ const AchievementChart = ({ state, block, dist, gp, themeId }) => {
           autoSkip: false,
           callback: function (value) {
             const label = this.getLabelForValue(value);
-            return label.length > 10
-              ? label.match(/.{1,10}/g).join("\n")
+            return label.length > 20
+              ? label.match(/.{1,20}/g).join("\n")
               : label;
           },
         },

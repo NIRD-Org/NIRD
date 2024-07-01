@@ -145,7 +145,7 @@ const GpProfile = () => {
             <label className="text-gray-600 text-sm mb-1">Select State</label>
 
             <select
-              className="border w-full md:max-w-40 text-sm border-gray-200 p-2 rounded-md focus:ring focus:ring-orange-200"
+              className="border w-full md:max-w-40 text-sm border-gray-200 p-2 rounded-md "
               value={state}
               onChange={(e) => {
                 setState(e.target.value);
@@ -162,7 +162,7 @@ const GpProfile = () => {
           <div className="flex flex-col">
             {/* <SelectComponent data={districtOptions} name="District" /> */}
             <select
-              className="border text-sm border-gray-200 p-2 rounded-md focus:ring focus:ring-orange-200"
+              className="border text-sm border-gray-200 p-2 rounded-md "
               value={district}
               disabled={!districtOptions.length}
               onChange={(e) => {
@@ -179,7 +179,7 @@ const GpProfile = () => {
           </div>
           <div className="flex flex-col">
             <select
-              className="border text-sm border-gray-200 p-2 rounded-md focus:ring focus:ring-orange-200"
+              className="border text-sm border-gray-200 p-2 rounded-md "
               value={block}
               disabled={!blockOptions.length}
               onChange={(e) => {
@@ -196,7 +196,7 @@ const GpProfile = () => {
           </div>
           <div className="flex flex-col">
             <select
-              className="border text-sm border-gray-200 p-2 rounded-md focus:ring focus:ring-orange-200"
+              className="border text-sm border-gray-200 p-2 rounded-md "
               value={gp}
               disabled={!GpOptions.length}
               onChange={(e) => {
@@ -237,9 +237,9 @@ const GpProfile = () => {
               type="text"
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search for States, Districts and Blocks"
-              className="border border-gray-200 p-2 rounded-md w-full lg:w-40 focus:ring focus:ring-orange-200"
+              className="border border-gray-200 p-2 rounded-md w-full lg:w-40 "
             />
-            <button className="bg-primary text-white p-2 rounded focus:outline-none focus:ring focus:ring-orange-200">
+            <button className="bg-primary text-white p-2 rounded focus:outline-none ">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"

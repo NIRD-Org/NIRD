@@ -30,6 +30,7 @@ const LCVADropdown = () => {
     "Drive for setting up of a library with Book Bank for school children at every village.",
     "Organising groups of adolescent girls and involving them in social issues.",
     "Organising children’s clubs for games and sports.",
+    "others",
   ];
 
   const handleChange = (event) => {

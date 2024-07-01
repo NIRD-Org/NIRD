@@ -119,6 +119,21 @@ const LCVAPage = () => {
         </div>
         {/* Info */}
         <div className="w-full md:w-2/6 flex flex-col gap-4 ">
+          <select
+            value={fy}
+            onChange={(e) => {
+              searchParams.set("financial_year", e.target.value);
+              setSearchParams(searchParams);
+            }}
+            className="border border-gray-300 text-center w-full p-2  rounded-md"
+          >
+            <option value="">Select Financial Year</option>
+            {financialYears.map((year, index) => (
+              <option key={index} value={year.value}>
+                {year.label}
+              </option>
+            ))}
+          </select>
           <div className="bg-gray-200 md:p-5 p-3 flex w-full items-center  justify-between ">
             <p className="text-sm md:text-xl text-gray-700 font-semibold">
               Themes
@@ -178,21 +193,7 @@ const LCVAPage = () => {
             <Button className="self-end w-fit" onClick={handleReset}>
               Reset
             </Button>
-            <select
-              value={fy}
-              onChange={(e) => {
-                searchParams.set("financial_year", e.target.value);
-                setSearchParams(searchParams);
-              }}
-              className="text-center w-full md:w-40 p-2 rounded"
-            >
-              <option value="">Select Financial Year</option>
-              {financialYears.map((year, index) => (
-                <option key={index} value={year.value}>
-                  {year.label}
-                </option>
-              ))}
-            </select>
+
             <form
               onSubmit={handleSearch}
               className="w-full flex items-center space-x-2"

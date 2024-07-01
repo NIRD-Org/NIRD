@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 
 const RankingCard = ({ rank, gp, state, block, dist, totalScore }) => {
   return (
-    <div className="flex flex-col gap-0 min-w-48 border border-gray-300">
+    <div className="flex flex-col gap-0 min-w-48 border ">
       <h5 className="bg-sky-700 font-semibold text-white py-3 px-1 text-center">
         Overall Ranking #{rank}
       </h5>
@@ -99,7 +99,7 @@ const Ranking = () => {
             </label>
             <select
               value={rankType}
-              className="p-2 border rounded border-gray-300"
+              className="p-2 border rounded-md "
               onChange={(e) => setRankType(e.target.value)}
             >
               <option value="">Select Ranking Type</option>
@@ -120,7 +120,7 @@ const Ranking = () => {
             <select
               value={financialYear}
               onChange={(e) => setFinancialYear(e.target.value)}
-              className="text-center w-full h-fit p-2 rounded"
+              className="text-center w-full h-fit p-2 rounded-md"
             >
               <option value="">Select Financial Year</option>
               {financialYears.map((year, index) => (
@@ -141,9 +141,9 @@ const Ranking = () => {
                 type="text"
                 onChange={(e) => setKeyword(e.target.value)}
                 placeholder="Search for States, Districts and Blocks"
-                className="border border-gray-300 p-2 rounded w-full lg:w-48 focus:ring focus:ring-orange-200"
+                className="border  p-2 rounded-md w-full lg:w-48 "
               />
-              <button className="bg-primary text-white p-2 rounded focus:outline-none focus:ring focus:ring-orange-200">
+              <button className="bg-primary text-white p-2 rounded-md focus:outline-none ">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-5 w-5"
