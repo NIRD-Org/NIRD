@@ -77,11 +77,7 @@ export const getGpByLocation = CatchAsyncError(async (req, res, next) => {
 export const deleteGP = CatchAsyncError(async (req, res, next) => {
   try {
     const { id } = req.params;
-    const gp = await GpModel.findOneAndUpdate(
-      id,
-      { status: "0" },
-      { new: true }
-    );
+    const gp = await GpModel.findOneAndUpdate(id, { status: "0" }, { new: true });
     if (!gp) {
       return next(new Errorhandler("No Gram Panchayat Found", 404));
     }
@@ -113,7 +109,6 @@ export const updateGP = CatchAsyncError(async (req, res, next) => {
   }
 });
 
-
 // get gp by id
 
 export const getGpById = CatchAsyncError(async (req, res, next) => {
@@ -132,15 +127,55 @@ export const getGpById = CatchAsyncError(async (req, res, next) => {
   }
 });
 
-
 // get all gps
 
 export const getAllGps = CatchAsyncError(async (req, res, next) => {
   try {
-    const gps = await GpModel.find({});
-    if (!gps || gps.length === 0) {
-      return next(new Errorhandler("No Gram Panchayats Found", 404));
-    }
+    const filter = {};
+    filter.status = "1";
+    const { state_id, dist_id, block_id, status } = req.query;
+    if (state_id) filter.state_id = state_id;
+    if (dist_id) filter.dist_id = dist_id;
+    if (block_id) filter.block_id = block_id;
+    if (status) filter.status = status;
+
+    const gps = await GpModel.aggregate([
+      {
+        $match: filter,
+      },
+      {
+        $lookup: {
+          from: "states",
+          localField: "state_id",
+          foreignField: "id",
+          as: "state",
+        },
+      },
+      {
+        $lookup: {
+          from: "districts",
+          localField: "dist_id",
+          foreignField: "id",
+          as: "district",
+        },
+      },
+      {
+        $lookup: {
+          from: "blocks",
+          localField: "block_id",
+          foreignField: "id",
+          as: "block",
+        },
+      },
+      {
+        $sort: {
+          "state.name": 1,
+          // "district.name": 1,
+          // "block.name": 1,
+        },
+      },
+    ]);
+
     res.status(200).json({
       success: true,
       message: "Gram Panchayats Fetched Successfully",

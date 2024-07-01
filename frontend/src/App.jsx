@@ -1,10 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import {
-  Route,
-  RouterProvider,
-  createBrowserRouter,
-  createRoutesFromElements,
-} from "react-router-dom";
+import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from "react-router-dom";
 import "./App.css";
 import Layout from "./Layout";
 import AdminPage from "./Pages/admin/AdminPage";
@@ -37,7 +32,7 @@ import DataPointPage from "./components/admin/kpi/KpiPage";
 import KpiApprovalsList from "./components/admin/young-fellow/KpiApprovalsList";
 import GpWiseKpiApprovalPage from "./components/admin/action/admin/gp-wise-kpi/approve";
 import GpWiseKpiApprovalView from "./components/admin/action/admin/gp-wise-kpi/view";
-import UpdateGpWiseKpi from "./components/admin/action/young-fellow/gp-wise-kpi/edit";
+import UpdateGpWiseKpi from "./components/admin/action/young-fellow/gp-wise-kpi/resubmit";
 import ThemeDataPage from "./Pages/ThemeDataPage";
 import YfGpWiseKpiApprovalList from "./components/admin/action/young-fellow/gp-wise-kpi/list";
 import GpWiseKpiApprovalList from "./components/admin/action/admin/gp-wise-kpi/list";
@@ -76,7 +71,7 @@ import LCVAViewDetails from "./components/admin/action/admin/lcva/view";
 import AdminIndicatorApprovalList from "./components/admin/action/admin/gp-wise-indicator/list";
 import IndicatorApprovalAdminForm from "./components/admin/action/admin/gp-wise-indicator/approve";
 import YFIndicatorApprovalList from "./components/admin/action/young-fellow/indicator/list";
-import IndicatorApprovalResubmit from "./components/admin/action/young-fellow/indicator/edit";
+import IndicatorApprovalResubmit from "./components/admin/action/young-fellow/indicator/resubmit";
 import TrainingApprovalsList from "./components/admin/action/admin/training/list";
 import TrainingApprovalPage from "./components/admin/action/admin/training/approve";
 import TrainingApprovalsListYf from "./components/admin/action/young-fellow/training/list";
@@ -90,6 +85,10 @@ import GpDetailsApprovalResubmit from "./components/admin/action/young-fellow/gp
 import AchievementChart from "./AchievemetnChart";
 import SuperadminApprovalList from "./components/admin/action/superadmin/page";
 import IndicatorViewDetials from "./components/admin/action/admin/gp-wise-indicator/view";
+import DataTable from "./components/admin/master/Deleted";
+import DeletedItems from "./components/admin/master/Deleted";
+import Masters from "./components/admin/master/Masters";
+import ChangePassword from "./components/admin/change-password/page";
 
 function App() {
   const { login } = useAuthContext();
@@ -126,7 +125,8 @@ function App() {
             <Route path="users/create" element={<CreateUserForm />} />
             <Route path="young-professionals" element={<YoungFellowForm />} />
             <Route path="gp-wise-kpi" element={<GpWiseKpiList />} />
-      
+            <Route path="change-password" element={<ChangePassword />} />
+
             <Route path="users" element={<UserPage />} />
             <Route path="users/view/:id" element={<UserView />} />
             <Route path="data-point" element={<DataPointPage />} />
@@ -139,14 +139,14 @@ function App() {
             <Route path="theme/create" element={<ThemeForm />} />
             <Route path="data-point/create" element={<DataPointForm />} />
 
-            <Route path="users/update/:id"element={<CreateUserForm update />}/>
+            <Route path="users/update/:id" element={<CreateUserForm update />} />
             <Route path="theme/update/:themeId" element={<ThemeForm type={"update"} />} />
             <Route path="data-point/update/:kpiId" element={<DataPointForm type="update" />} />
-            <Route path="state/update/:stateId" element={<StateForm type="update" />}/>
-          
-            <Route path="user-location/assign/admin/:userId" element={<UserLocation role={2} />}/>
-            <Route path="user-location/assign/young-fellow/:userId" element={<UserLocation role={3} />}/>
-            <Route path="user-location/update/admin/:userId" element={<UpdateUserLocation role={2} />}/>
+            <Route path="state/update/:stateId" element={<StateForm type="update" />} />
+
+            <Route path="user-location/assign/admin/:userId" element={<UserLocation role={2} />} />
+            <Route path="user-location/assign/young-fellow/:userId" element={<UserLocation role={3} />} />
+            <Route path="user-location/update/admin/:userId" element={<UpdateUserLocation role={2} />} />
             <Route path="user-location/update/young-fellow/:userId" element={<UpdateUserLocation role={3} />} />
             <Route path="user-location/view/admin/:userId" element={<LocationView view role={2} />} />
             <Route path="user-location/view/young-fellow/:userId" element={<LocationView role={3} />} />
@@ -157,7 +157,7 @@ function App() {
             <Route path="attendance/attendance" element={<Attendance />} />
             <Route path="attendance/amu-upload" element={<AmUploadForm />} />
             <Route path="attendance/pmu-upload" element={<PmUploadForm />} />
-      
+
             <Route path="young-fellow-insight" element={<YoungFellowInsights />} />
             <Route path="young-fellow-insight/edit/:id" element={<YoungFellowInsights update={true} />} />
             <Route path="young-fellow-insight/submissions" element={<FellowInsightPage />} />
@@ -168,7 +168,7 @@ function App() {
             <Route path="view/gp-wise-kpi/:id" element={<GpWiseKpiApprovalView />} />
             <Route path="resubmit/gp-wise-kpi/:id" element={<UpdateGpWiseKpi />} />
             <Route path="action/young-fellow/gp-wise-kpi" element={<YfGpWiseKpiApprovalList />} />
- 
+
             <Route path="kpi-approvals-list" element={<KpiApprovalsList />} />
 
             <Route path="good-practices" element={<GoodPracticeForm />} />
@@ -186,11 +186,11 @@ function App() {
             <Route path="resubmit/lcva/:id" element={<LCVAResubmit />} />
 
             <Route path="gp-details" element={<GpDetailsForm />} />
-            <Route path="action/admin/gp-details" element={<GpDetailsApprovalsList />}/>
-            <Route path="approve/gp-details/:id" element={<GpDetailsApprovalPage />}/>
-            <Route path="view/gp-details/:id" element={<GpDetailsViewDetials />}/>
-            <Route path="action/young-fellow/gp-details" element={<GpDetailsApprovalsListYf />}/>
-            <Route path="resubmit/gp-details/:id" element={<GpDetailsApprovalResubmit />}/>
+            <Route path="action/admin/gp-details" element={<GpDetailsApprovalsList />} />
+            <Route path="approve/gp-details/:id" element={<GpDetailsApprovalPage />} />
+            <Route path="view/gp-details/:id" element={<GpDetailsViewDetials />} />
+            <Route path="action/young-fellow/gp-details" element={<GpDetailsApprovalsListYf />} />
+            <Route path="resubmit/gp-details/:id" element={<GpDetailsApprovalResubmit />} />
 
             <Route path="training" element={<TrainingForm />} />
             <Route path="action/admin/training" element={<TrainingApprovalsList />} />
@@ -198,7 +198,7 @@ function App() {
             <Route path="view/training/:id" element={<TrainingViewDetails />} />
             <Route path="action/young-fellow/training" element={<TrainingApprovalsListYf />} />
             <Route path="resubmit/training/:id" element={<TrainingResubmit />} />
-            
+
             <Route path="indicator" element={<IndicatorForm />} />
             <Route path="action/admin/indicator" element={<AdminIndicatorApprovalList />} />
             <Route path="action/young-fellow/indicator" element={<YFIndicatorApprovalList />} />
@@ -207,8 +207,9 @@ function App() {
             <Route path="resubmit/indicator/:id" element={<IndicatorApprovalResubmit />} />
 
             <Route path="action/superadmin" element={<SuperadminApprovalList />} />
+            <Route path="deleted-masters" element={<DeletedItems />} />
+            <Route path="masters" element={<Masters />} />
           </Route>
-
         </Route>
       </Route>
     )

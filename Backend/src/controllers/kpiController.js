@@ -47,9 +47,10 @@ export const createKPI = CatchAsyncError(async (req, res, next) => {
 export const getAllKPI = CatchAsyncError(async (req, res, next) => {
   try {
     const filter = {};
-    const { status } = req.query;
-    console.log(status)
-    if (status != "all") filter.status = { $ne: "0" };
+    filter.status = "1";
+    const { theme_id, status } = req.query;
+    if (theme_id) filter.theme_id = theme_id;
+    if (status) filter.status = status;
 
     const KPI = await KPIModel.aggregate([
       { $match: filter },
@@ -122,11 +123,7 @@ export const getKPIByTheme = CatchAsyncError(async (req, res, next) => {
 
 export const deleteKPI = CatchAsyncError(async (req, res, next) => {
   try {
-    await KPIModel.findOneAndUpdate(
-      { id: req.params.id },
-      { status: "0" },
-      { new: true }
-    );
+    await KPIModel.findOneAndUpdate({ id: req.params.id }, { status: "0" }, { new: true });
     res.status(200).json({
       success: true,
       message: "KPI Deleted Successfully",
@@ -140,10 +137,7 @@ export const deleteKPI = CatchAsyncError(async (req, res, next) => {
 
 export const updateKPI = CatchAsyncError(async (req, res, next) => {
   try {
-    const KPI = await KPIModel.findOneAndUpdate(
-      { id: req.params.id },
-      req.body
-    );
+    const KPI = await KPIModel.findOneAndUpdate({ id: req.params.id }, req.body);
     if (!KPI) {
       return next(new Errorhandler("No KPI Found", 404));
     }

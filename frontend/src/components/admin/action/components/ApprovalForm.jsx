@@ -5,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { tst } from "@/lib/utils";
 import API from "@/utils/API";
+import AdminHeader from "../../AdminHeader";
 
 const ApprovalForm = ({ endpoint, headerText, DetailsView }) => {
   const { id } = useParams();

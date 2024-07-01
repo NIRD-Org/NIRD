@@ -46,14 +46,16 @@ export const createState = CatchAsyncError(async (req, res, next) => {
 
 export const getAllStates = CatchAsyncError(async (req, res, next) => {
   try {
-    const states = await StateModel.find().sort({
+    const filter = {};
+    filter.status = "1";
+    if (req.query.status) filter.status = req.query.status;
+
+    const states = await StateModel.find(filter).sort({
       name: 1,
     });
-   /*  if (!states || states.length === 0) {
-      return next(new Errorhandler("No States Found", 404));
-    } */
     res.status(200).json({ success: true, message: "States fetched", states });
-  } catch (err) {
+  } catch (error) {
+    console.log(error)
     return next(new Errorhandler("Failed to fetch states", 500));
   }
 });
@@ -102,4 +104,3 @@ export const updateState = CatchAsyncError(async (req, res, next) => {
     return next(new Errorhandler("Failed to update state", 500));
   }
 });
-

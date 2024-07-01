@@ -45,11 +45,12 @@ export const createTheme = CatchAsyncError(async (req, res, next) => {
 
 export const getAllThemes = CatchAsyncError(async (req, res, next) => {
   try {
-    const themes = await ThemeModel.find().sort({ id: 1 });
+    const filter = {};
+    filter.status = "1";
+    const { status } = req.query;
+    if (status) filter.status = status;
 
-    if (!themes || themes.length === 0) {
-      return next(new Errorhandler("No themes found", 404));
-    }
+    const themes = await ThemeModel.find(filter).sort({ id: 1 });
 
     res.status(200).json({
       status: "success",

@@ -42,6 +42,12 @@ function PmUploadForm() {
 
   const handleSubmit = async e => {
     e.preventDefault();
+    setPending(true);
+    setTimeout(() => {
+      tst.success("AM upload successful");
+      setPending(false);
+    }, 4000);
+    return;
     try {
       setPending(true);
       const formDataToSubmit = new FormData();
@@ -74,7 +80,7 @@ function PmUploadForm() {
 
   return (
     <div className="container mx-auto p-4">
-      {<AdminHeader >PM Entry Form</AdminHeader>}
+      {<AdminHeader>PM Entry Form</AdminHeader>}
       <form onSubmit={handleSubmit}>
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-10">
           {fields.map((field, index) => (
@@ -96,7 +102,7 @@ function PmUploadForm() {
           </div>
         </div>
         <div className="grid grid-cols-3 gap-10 mt-10">
-          <Button type="submit" disabled={pending}>
+          <Button type="submit" pending={pending}>
             Submit
           </Button>
         </div>

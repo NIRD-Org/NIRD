@@ -48,7 +48,7 @@ export const getDistrictByState = CatchAsyncError(async (req, res, next) => {
     const districtData = await DistrictModel.find({
       state_id: req.params.state,
     }).sort({ name: 1 });
-   /*  if (!districtData || districtData.length === 0) {
+    /*  if (!districtData || districtData.length === 0) {
       return next(new Errorhandler("No District Data Found", 404));
     } */
     res.status(200).json({
@@ -90,13 +90,9 @@ export const deleteDistrict = CatchAsyncError(async (req, res, next) => {
 
 export const updateDistrict = CatchAsyncError(async (req, res, next) => {
   try {
-    const districtData = await DistrictModel.findOneAndUpdate(
-      { id: req.params.id },
-      req.body,
-      {
-        new: true,
-      }
-    );
+    const districtData = await DistrictModel.findOneAndUpdate({ id: req.params.id }, req.body, {
+      new: true,
+    });
     if (!districtData) {
       return next(new Errorhandler("No District Data Found", 404));
     }
@@ -109,7 +105,6 @@ export const updateDistrict = CatchAsyncError(async (req, res, next) => {
     return next(new Errorhandler("Failed to update District", 500));
   }
 });
-
 
 // Get district by id
 
@@ -126,5 +121,42 @@ export const getDistrictById = CatchAsyncError(async (req, res, next) => {
     });
   } catch (error) {
     return next(new Errorhandler("Failed to fetch District", 500));
+  }
+});
+
+// Controller to get all districts
+export const getAllDistricts = CatchAsyncError(async (req, res, next) => {
+  try {
+    const filter = {};
+    filter.status = "1";
+    const { state_id, status } = req.query;
+    if (state_id) filter.state_id = state_id;
+    if (status) filter.status = status;
+
+    const districts = await DistrictModel.aggregate([
+      {
+        $match: filter,
+      },
+      {
+        $lookup: {
+          from: "states",
+          localField: "state_id",
+          foreignField: "id",
+          as: "state",
+        },
+      },
+      {
+        $unwind: "$state",
+      },
+      {
+        $sort: {
+          "state.name": 1,
+        },
+      },
+    ]);
+    
+    res.status(200).json(districts);
+  } catch (err) {
+    return next(new Errorhandler("failed to get districts data", 500));
   }
 });

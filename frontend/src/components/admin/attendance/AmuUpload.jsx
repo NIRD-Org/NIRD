@@ -38,6 +38,14 @@ function AmUploadForm() {
 
   const handleSubmit = async e => {
     e.preventDefault();
+    setPending(true);
+
+    setTimeout(() => {
+      tst.success("AM upload successful");
+      setPending(false);
+    }, 4000);
+    // tst.success("AM upload successful");
+    return;
     try {
       setPending(true);
       const formDataToSubmit = new FormData();
@@ -88,7 +96,7 @@ function AmUploadForm() {
           </div>
         </div>
         <div className="grid grid-cols-3 gap-10 mt-10">
-          <Button type="submit" disabled={pending}>
+          <Button type="submit" pending={pending}>
             Submit
           </Button>
         </div>

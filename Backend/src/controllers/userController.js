@@ -5,10 +5,11 @@ import { Errorhandler } from "../utils/errorHandler.js";
 export const getAllUsers = CatchAsyncError(async (req, res, next) => {
   try {
     const filter = {};
-
+    filter.status = { $ne: "0" };
     const { role, status } = req.query;
+
+    if (req.query.status) filter.status = req.query.status;
     if (role) filter.role = role;
-    if (status != "all") filter.status = { $ne: 0 };
 
     const users = await User.find(filter);
     res.status(200).json({ data: users });

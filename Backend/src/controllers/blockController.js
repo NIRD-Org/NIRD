@@ -46,10 +46,41 @@ export const createblock = CatchAsyncError(async (req, res, next) => {
 // Controller to get all blocks
 export const getAllblocks = CatchAsyncError(async (req, res, next) => {
   try {
-    const blocks = await BlockModel.find();
-    /* if (blocks.length === 0) {
-      return next(new Errorhandler("blocks data not found", 400));
-    } */
+    const filter = {};
+    filter.status = "1";
+    const { state_id, dist_id, status } = req.query;
+    if (state_id) filter.state_id = state_id;
+    if (dist_id) filter.dist_id = dist_id;
+    if (status) filter.status = status;
+
+    const blocks = await BlockModel.aggregate([
+      {
+        $match: filter,
+      },
+      {
+        $lookup: {
+          from: "states",
+          localField: "state_id",
+          foreignField: "id",
+          as: "state",
+        },
+      },
+      {
+        $lookup: {
+          from: "districts",
+          localField: "dist_id",
+          foreignField: "id",
+          as: "district",
+        },
+      },
+      {
+        $sort: {
+          "state.name": 1,
+          // "district.name": 1,
+        },
+      },
+    ]);
+
     res.status(200).json(blocks);
   } catch (err) {
     return next(new Errorhandler("failed to get blocks data", 500));
@@ -118,11 +149,7 @@ export const deleteblock = CatchAsyncError(async (req, res, next) => {
 
 export const updateblock = CatchAsyncError(async (req, res, next) => {
   try {
-    const block = await BlockModel.findOneAndUpdate(
-      { id: req.params.id },
-      req.body,
-      { new: true }
-    );
+    const block = await BlockModel.findOneAndUpdate({ id: req.params.id }, req.body, { new: true });
     if (!block) {
       return next(new Errorhandler("Block not found", 404));
     }
@@ -135,7 +162,6 @@ export const updateblock = CatchAsyncError(async (req, res, next) => {
     return next(new Errorhandler("Failed to update block", 500));
   }
 });
-
 
 // get block by id
 

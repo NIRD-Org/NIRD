@@ -1,152 +1,103 @@
-﻿import React, { useEffect, useState } from "react";
+﻿//3
+import React, { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
-import API from "@/utils/API";
+import Chart from "chart.js/auto";
 
 const AchievementChart = ({ state, block, dist, gp, themeId }) => {
   const [chartData, setChartData] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Replace with actual API call once backend integration is ready
+        // Replace this with the actual API call
         // const { data } = await API.get(
         //   `/api/v1/gp-wise-kpi/achievement-chart?gp=${gp}&theme=${themeId}&state=${state}&dist=${dist}&block=${block}`
         // );
-        
-        // For testing purposes, using static data
-        const testData = {
+        // setChartData(data[0]);
+
+        // Dummy data based on the provided table
+        const dummyData = {
           theme_id: 1,
-          theme_name: "Education",
-          gp_name: "Sample GP",
-          state_name: "Sample State",
-          dist_name: "Sample District",
-          block_name: "Sample Block",
+          theme_name: "Poverty Free and Enhanced Livelihoods Village",
+          gp_name: "E. Lungdar",
+          state_name: "Mizoram",
+          dist_name: "Serchhip",
+          block_name: "East Lungdar",
           chartData: [
             {
-              kpi_id: "1",
-              kpi_name: "Literacy Rate",
-              currentPercentage: {
-                financial_year: "FY2023-2024",
-                percentage: "85.50",
-              },
-              lastPercentage: {
-                financial_year: "FY2022-2023",
-                percentage: "82.30",
-              },
+              kpi_name: "Percentage of job card holders in the GP that received wage employment under MGNREGS",
+              lastPercentage: { percentage: 70 },
+              currentPercentage: { percentage: 65 },
             },
             {
-              kpi_id: "2",
-              kpi_name: "School Enrollment",
-              currentPercentage: {
-                financial_year: "FY2023-2024",
-                percentage: "92.10",
-              },
-              lastPercentage: {
-                financial_year: "FY2022-2023",
-                percentage: "91.80",
-              },
+              kpi_name:
+                "Percentage of Households (HHs) in the GP covered under Pradhan Mantri Awas Yojana-Grameen (PMAY-G)/Similar State schemes.",
+              lastPercentage: { percentage: 75 },
+              currentPercentage: { percentage: 60 },
             },
             {
-              kpi_id: "3",
-              kpi_name: "Teacher-Student Ratio",
-              currentPercentage: {
-                financial_year: "FY2023-2024",
-                percentage: "15.20",
-              },
-              lastPercentage: {
-                financial_year: "FY2022-2023",
-                percentage: "14.50",
-              },
+              kpi_name:
+                "Percentage of farmers in the GP benefited under the Pradhan Mantri Kisan Samman Nidhi (PM-KISAN) Scheme",
+              lastPercentage: { percentage: 80 },
+              currentPercentage: { percentage: 90 },
             },
             {
-              kpi_id: "4",
-              kpi_name: "Dropout Rate",
-              currentPercentage: {
-                financial_year: "FY2023-2024",
-                percentage: "3.80",
-              },
-              lastPercentage: {
-                financial_year: "FY2022-2023",
-                percentage: "4.20",
-              },
+              kpi_name: "Percentage of population of the GP covered under National Food Security Act, 2013",
+              lastPercentage: { percentage: 85 },
+              currentPercentage: { percentage: 88 },
             },
             {
-              kpi_id: "5",
-              kpi_name: "Student Performance",
-              currentPercentage: {
-                financial_year: "FY2023-2024",
-                percentage: "87.50",
-              },
-              lastPercentage: {
-                financial_year: "FY2022-2023",
-                percentage: "86.20",
-              },
+              kpi_name:
+                "Percentage of population in the GP covered under National Social Assistance Programme (NSAP)/similar State pension scheme in the State/UT",
+              lastPercentage: { percentage: 40 },
+              currentPercentage: { percentage: 42 },
             },
             {
-              kpi_id: "6",
-              kpi_name: "Infrastructure Development",
-              currentPercentage: {
-                financial_year: "FY2023-2024",
-                percentage: "68.90",
-              },
-              lastPercentage: {
-                financial_year: "FY2022-2023",
-                percentage: "67.80",
-              },
+              kpi_name: "Percentage of population in the GP covered under Pradhan Mantri Jan-Dhan Yojana (PMJDY)",
+              lastPercentage: { percentage: 65 },
+              currentPercentage: { percentage: 70 },
             },
             {
-              kpi_id: "7",
-              kpi_name: "Digital Literacy",
-              currentPercentage: {
-                financial_year: "FY2023-2024",
-                percentage: "42.10",
-              },
-              lastPercentage: {
-                financial_year: "FY2022-2023",
-                percentage: "40.50",
-              },
+              kpi_name:
+                "Percentage of women belonging to BPL HHs (as per SECC 2011) in the GP who became members of Self-Help Groups (SHGs) in the GP.",
+              lastPercentage: { percentage: 55 },
+              currentPercentage: { percentage: 58 },
             },
             {
-              kpi_id: "8",
-              kpi_name: "Teacher Training",
-              currentPercentage: {
-                financial_year: "FY2023-2024",
-                percentage: "57.80",
-              },
-              lastPercentage: {
-                financial_year: "FY2022-2023",
-                percentage: "55.90",
-              },
+              kpi_name: "Percentage of SHGs in the GP which availed themselves of Bank loan.",
+              lastPercentage: { percentage: 45 },
+              currentPercentage: { percentage: 48 },
             },
             {
-              kpi_id: "9",
-              kpi_name: "Parental Involvement",
-              currentPercentage: {
-                financial_year: "FY2023-2024",
-                percentage: "72.30",
-              },
-              lastPercentage: {
-                financial_year: "FY2022-2023",
-                percentage: "70.50",
-              },
+              kpi_name: "Percentage of SHGs engaged in income generation activities in the GP",
+              lastPercentage: { percentage: 50 },
+              currentPercentage: { percentage: 55 },
             },
             {
-              kpi_id: "10",
-              kpi_name: "Gender Parity Index",
-              currentPercentage: {
-                financial_year: "FY2023-2024",
-                percentage: "0.94",
-              },
-              lastPercentage: {
-                financial_year: "FY2022-2023",
-                percentage: "0.92",
-              },
+              kpi_name:
+                "Percentage of persons certified through the skill development training institutes/ITIs in the GP",
+              lastPercentage: { percentage: 60 },
+              currentPercentage: { percentage: 62 },
+            },
+            {
+              kpi_name:
+                "Percentage of the total Budget of the GP allocated for implementing various poverty reduction & livelihood activities other than MGNREGS & NRLM",
+              lastPercentage: { percentage: 75 },
+              currentPercentage: { percentage: 78 },
+            },
+            {
+              kpi_name:
+                "Percentage of OSR Spent by the GP to address various poverty reduction & livelihood activities in the GP",
+              lastPercentage: { percentage: 80 },
+              currentPercentage: { percentage: 85 },
             },
           ],
         };
 
-        setChartData(testData);
+        setChartData(dummyData);
       } catch (error) {
+        setError("Error fetching chart data");
         console.error("Error fetching chart data:", error);
       }
     };
@@ -154,32 +105,24 @@ const AchievementChart = ({ state, block, dist, gp, themeId }) => {
   }, [state, dist, gp, themeId]);
 
   if (!chartData) {
-    return (
-      <div className="w-full h-screen flex justify-center items-center text-3xl">
-        Loading...
-      </div>
-    );
+    return <div className="w-full h-[50vh] flex justify-center items-center text-3xl">{error || "Loading..."}</div>;
   }
 
-  const labels = chartData?.chartData.map((item) => item.kpi_name);
-  const baselineData = chartData?.chartData.map((item) =>
-    parseFloat(item.lastPercentage?.percentage || 0)
-  );
-  const currentData = chartData?.chartData.map((item) =>
-    parseFloat(item.currentPercentage?.percentage || 0)
-  );
+  const labels = chartData.chartData.map(item => item.kpi_name);
+  const lastYearData = chartData.chartData.map(item => parseFloat(item.lastPercentage.percentage || 0));
+  const currentYearData = chartData.chartData.map(item => parseFloat(item.currentPercentage.percentage || 0));
 
   const data = {
     labels,
     datasets: [
       {
-        label: "Baseline Status (as on 31.03.2022)",
-        data: baselineData,
+        label: "Baseline Status (Last Year)",
+        data: lastYearData,
         backgroundColor: "rgba(0, 75, 134, 1)",
       },
       {
         label: "Status as on 31.03.2024",
-        data: currentData,
+        data: currentYearData,
         backgroundColor: "rgba(255, 127, 0,1)",
       },
     ],
@@ -187,7 +130,6 @@ const AchievementChart = ({ state, block, dist, gp, themeId }) => {
 
   const options = {
     responsive: true,
-    indexAxis: 'y',
     plugins: {
       legend: {
         position: "bottom",
@@ -201,42 +143,54 @@ const AchievementChart = ({ state, block, dist, gp, themeId }) => {
         beginAtZero: true,
         title: {
           display: true,
-          text: "Percentage",
+          text: "KPI Names",
         },
         ticks: {
-          stepSize: 10,
+          autoSkip: false,
+          maxRotation: 0,
+          minRotation: 0,
+          // maxTicksLimit: 10,
+          // padding: 5,
+          callback: function (value) {
+            const label = this.getLabelForValue(value);
+            const words = label.split(" ");
+            let lines = [];
+            let currentLine = [];
+
+            words.forEach(word => {
+              if (currentLine.join(" ").length + word.length + 1 <= 20) {
+                currentLine.push(word);
+              } else {
+                lines.push(currentLine.join(" "));
+                currentLine = [word];
+              }
+            });
+            lines.push(currentLine.join(" "));
+
+            return lines.join("\n");
+          },
         },
       },
       y: {
         beginAtZero: true,
         title: {
           display: true,
-          text: "KPI Names",
+          text: "Percentage",
         },
         ticks: {
-          autoSkip: false,
-          callback: function (value) {
-            const label = this.getLabelForValue(value);
-            return label.length > 10 ? label.match(/.{1,10}/g).join('\n') : label;
-          },
-        },
-        grid: {
-          drawTicks: false,
-          offset: true,
+          stepSize: 10,
         },
       },
     },
-    barPercentage: 0.5,
-    barThickness: 30,
-    maxBarThickness: 40,
-    categorySpacing: 0.2,
+    barPercentage: 0.4,
+    barThickness: 20,
+    maxBarThickness: 30,
+    categorySpacing: 0.5,
   };
 
   return (
-    <div className="px-2 py-10 ">
-      <h2 className="text-green-600 text-center mb-4">
-        Achievements of Project GPs under Women Friendly Village
-      </h2>
+    <div className="px-2 py-10">
+      <h2 className="text-green-600 text-center mb-4">Achievements of Project GPs under Women Friendly Village</h2>
       <div className="flex border-2 py-10 justify-between items-center">
         <div className="w-full p-1">
           <Bar data={data} options={options} />

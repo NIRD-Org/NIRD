@@ -98,7 +98,7 @@ const LocationView = ({role}) => {
   }, [state]);
 
   if (isLoading) {
-    return ;
+    return <div>Loading...</div>;
   }
 
   if (!userLocations || !states || !districts || !blocks || !gps) {

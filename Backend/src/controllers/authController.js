@@ -4,7 +4,6 @@ import { User } from "../models/userModel.js";
 import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
 import { Errorhandler } from "../utils/errorHandler.js";
 
-
 const getNewId = async () => {
   try {
     const maxDoc = await User.aggregate([
@@ -69,10 +68,10 @@ export const login = CatchAsyncError(async (req, res, next) => {
     }
 
     const payload = {
-        id: user.id,
-        name: user.name,
-        username: user.username,
-        role: user.role,
+      id: user.id,
+      name: user.name,
+      username: user.username,
+      role: user.role,
     };
 
     const token = jwt.sign(payload, "secret", { expiresIn: "10 d" });
@@ -82,5 +81,29 @@ export const login = CatchAsyncError(async (req, res, next) => {
   } catch (error) {
     console.log(error);
     return next(new Errorhandler("Failed to login", 500));
+  }
+});
+
+export const changePassword = CatchAsyncError(async (req, res, next) => {
+  try {
+    const { oldPassword, newPassword } = req.body;
+    const user = await User.findOne({ id: req.user.id });
+
+    if (!user) {
+      return next(new Errorhandler("User not found", 404));
+    }
+
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      return next(new Errorhandler("Invalid credentials", 400));
+    }
+
+    user.password = await bcrypt.hash(newPassword, 10);
+    await user.save();
+
+    res.status(200).json({ message: "Password changed successfully" });
+  } catch (error) {
+    console.log(error);
+    return next(new Errorhandler("Failed to change password", 500));
   }
 });

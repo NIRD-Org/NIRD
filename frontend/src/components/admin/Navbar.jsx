@@ -10,12 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { getSidebarItems } from "@/lib/data";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 function Navbar() {
   const { logout, user } = useAuthContext();
@@ -35,36 +30,25 @@ function Navbar() {
           <div className="flex gap-2">
             <h2>{user?.name}</h2>
             <h2>
-              (
-              {user?.role == 1
-                ? "Superadmin"
-                : user?.role == 2
-                ? "Admin"
-                : user?.role == 3
-                ? "Young Fellow"
-                : ""}
-              )
+              ({user?.role == 1 ? "Superadmin" : user?.role == 2 ? "Admin" : user?.role == 3 ? "Young Fellow" : ""})
             </h2>
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger>
               <NirdHamIcon />
             </DropdownMenuTrigger>
-            <DropdownMenuContent
-              align="end"
-              className="bg-primary text-slate-100 rounded-none mt-2 w-60"
-            >
-              <DropdownMenuItem>Change Password</DropdownMenuItem>
+            <DropdownMenuContent align="end" className="bg-primary text-slate-100 rounded-none mt-2 w-60">
+              <Link to="/admin/change-password">
+                <DropdownMenuItem>Change Password</DropdownMenuItem>
+              </Link>
               <DropdownMenuSeparator />
               <DropdownMenuItem>Change Mobile Number</DropdownMenuItem>
-              <DropdownMenuSeparator className="md:hidden"/>
+              <DropdownMenuSeparator className="md:hidden" />
               <Accordion type="single" collapsible className=" list-none md:hidden">
                 {sidebarItems.map((item, index) => (
                   <AccordionItem value={index + 1}>
                     <AccordionTrigger className="flex bg-primary text-slate-100 mb-1 items-center px-4 py-3 w-full font-semibold">
-                      <span className="ml-4 text-[0.8rem] tracking-wider">
-                        {item.title}
-                      </span>
+                      <span className="ml-4 text-[0.8rem] tracking-wider">{item.title}</span>
                     </AccordionTrigger>
                     {item.submodules && (
                       <AccordionContent>
@@ -75,9 +59,7 @@ function Navbar() {
                               className="flex mb-2 no-underline px-2 mx-6 items-center py-2 rounded-xl text-slate-200 hover:bg-[#004B86]/70 hover:text-white transition duration-150 cursor-pointer"
                             >
                               <subItem.icon size={20} />
-                              <span className="ml-4 text-[0.7rem] font-semibold tracking-wider">
-                                {subItem.title}
-                              </span>
+                              <span className="ml-4 text-[0.7rem] font-semibold tracking-wider">{subItem.title}</span>
                             </Link>
                           </li>
                         ))}

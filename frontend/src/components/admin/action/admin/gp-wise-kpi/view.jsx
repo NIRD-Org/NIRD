@@ -111,10 +111,7 @@ function GpWiseKpiApprovalView() {
               placeholder="Enter date"
               className="px-10"
             />
-
-            {/* <Input disabled value={kpiApprovalData[0]?.date} type="date" name="date" onChange={e => setDate(e.target.value)} id="date" placeholder="Enter datte" className="px-10" /> */}
           </div>
-          {/* <Button type="submit">Submit</Button> */}
         </form>
       </div>
     </div>

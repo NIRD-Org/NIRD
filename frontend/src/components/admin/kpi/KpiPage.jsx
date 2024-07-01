@@ -29,7 +29,7 @@ const DataPointPage = () => {
   const getAllKpi = async () => {
     try {
       setIsLoading(true);
-      const { data } = await API.get(`/api/v1/kpi/all?status=all`);
+      const { data } = await API.get(`/api/v1/kpi/all`);
       if (theme_id) {
         setKpiData(data?.KPI.filter(kpi => kpi.theme_id === theme_id));
       } else {

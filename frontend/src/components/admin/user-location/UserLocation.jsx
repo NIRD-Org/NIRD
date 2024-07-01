@@ -18,7 +18,7 @@ import { useAdminState } from "@/components/hooks/useAdminState";
 
 const UserLocation = ({role}) => {
   const [state, setState] = useState(null);
-  // const [states, setStates] = useState([]);
+  const [states, setStates] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [blocks, setBlocks] = useState([]);
   const [selectedState, setSelectedState] = useState([]);
@@ -27,7 +27,7 @@ const UserLocation = ({role}) => {
   const [gps, setGps] = useState([]);
   const { user } = useAuthContext();
   const { userId } = useParams();
-  const {adminStates: states} = useAdminState();
+  const {adminStates} = useAdminState();
 
   const handleStateChange = value => {
     const stateId = states
@@ -180,7 +180,7 @@ const UserLocation = ({role}) => {
       }
     }
 
-    Promise.all([fetchDistricts(), fetchBlocks(), fetchGPs()]);
+    Promise.all([fetchDistricts(), fetchBlocks(), fetchGPs(), fetchStates()]);
   }, [state]);
 
   if (role == 2) {
@@ -218,7 +218,7 @@ const UserLocation = ({role}) => {
           onChange={e => setState(e.target.value)}
         >
           <option value="">Select a state</option>
-          {states?.map(state => (
+          {(user.role==1 ? states : adminStates)?.map(state => (
             <option key={state.id} value={state.id}>
               {state.name}
             </option>

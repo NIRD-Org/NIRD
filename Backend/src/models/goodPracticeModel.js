@@ -69,7 +69,9 @@ const GoodPracticeSchema = new Schema(
       required: true,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: { createdAt: "created_at", updatedAt: "modified_at" },
+  }
 );
 
 GoodPracticeSchema.index({ id: 1 });

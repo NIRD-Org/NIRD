@@ -137,7 +137,9 @@ const PanchayatSchema = new mongoose.Schema(
     remarks: { type: String, default: "" },
     created_by: { type: String, required: true },
   },
-  { timestamps: true }
+  {
+    timestamps: { createdAt: "created_at", updatedAt: "modified_at" },
+  }
 );
 
 export const GpDetailsModel = mongoose.model(
