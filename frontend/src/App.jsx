@@ -207,7 +207,7 @@ function App() {
             <Route path="resubmit/indicator/:id" element={<IndicatorApprovalResubmit />} />
 
             <Route path="action/superadmin" element={<SuperadminApprovalList />} />
-            <Route path="deleted-masters" element={<DeletedItems />} />
+            <Route path="master-deleted" element={<DeletedItems />} />
             <Route path="masters" element={<Masters />} />
           </Route>
         </Route>

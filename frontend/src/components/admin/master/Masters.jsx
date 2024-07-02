@@ -9,6 +9,7 @@ const Masters = () => {
       title: "States",
       createLink: "/admin/state/create",
       endpoint: "/api/v1/state/all",
+      crudpoint: "/api/v1/state",
       headers: ["ID", "Name", "Action"],
       columnItems: ["id", "name"],
     },
@@ -16,6 +17,7 @@ const Masters = () => {
       title: "Districts",
       createLink: "/admin/district/create",
       endpoint: "/api/v1/dist/all",
+      crudpoint: "/api/v1/dist",
       headers: ["ID", "State ID", "Name", "Special Area", "Actions"],
       columnItems: ["id", "state_id", "name", "special_area"],
     },
@@ -23,6 +25,7 @@ const Masters = () => {
       title: "Blocks",
       createLink: "/admin/block/create",
       endpoint: "/api/v1/block/all",
+      crudpoint: "/api/v1/block",
       headers: ["ID", "State ID", "District ID", "Name", "Mapped to Another District"],
       columnItems: ["id", "state_id", "dist_id", "name", "is_maped_to_another_district"],
     },
@@ -30,6 +33,7 @@ const Masters = () => {
       title: "GPs",
       createLink: "/admin/gp/create",
       endpoint: "/api/v1/gp/all",
+      crudpoint: "/api/v1/gp",
       headers: ["ID", "State ID", "District ID", " Block ID", "Name", "Action"],
       columnItems: ["id", "state_id", "dist_id", "block_id", "name"],
     },
@@ -37,6 +41,7 @@ const Masters = () => {
       title: "Themes",
       createLink: "/admin/theme/create",
       endpoint: "/api/v1/theme/all",
+      crudpoint: "/api/v1/theme",
       headers: ["ID", "Theme Name", "Action"],
       columnItems: ["id", "theme_name"],
     },
@@ -44,6 +49,7 @@ const Masters = () => {
       title: "KPIs",
       createLink: "/admin/data-point/create",
       endpoint: "/api/v1/kpi/all",
+      crudpoint: "/api/v1/kpi",
       headers: ["ID", "Theme", "KPI Name", "Data Point", "Input Type", "Weightage", "Action"],
       columnItems: ["id", "theme_name", "name", "kpi_datapoint", "input_type", "weightage"],
     },
@@ -85,6 +91,7 @@ const Masters = () => {
         endpoint={config.endpoint}
         headers={config.headers}
         columnItems={config.columnItems}
+        crudpoint={config.crudpoint}
         master
       />
     </div>
@@ -92,3 +99,4 @@ const Masters = () => {
 };
 
 export default Masters;
+

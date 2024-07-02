@@ -34,7 +34,7 @@ const UserPage = () => {
   const fetchUser = async () => {
     try {
       setIsLoading(true);
-      const { data } = await API.get(`/api/v1/users/all?status=all`);
+      const { data } = await API.get(`/api/v1/users/all`);
       setUsers(data.data);
     } catch (error) {
       console.log(error);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
     Table,
     TableBody,
@@ -10,6 +10,9 @@ import {
 import LocationHeader from "../../components/LocationHeader";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useParams } from "react-router-dom";
+import API from "@/utils/API";
+import { Textarea } from "@/components/ui/textarea";
 
 function GpWiseKpiView() {
     const [kpiApprovalData, setKpiApprovalData] = useState([]);

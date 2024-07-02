@@ -14,7 +14,7 @@ router.use('/create',isAuth);
 router.route("/all").get(getAllDistricts);
 router.route("/state/:state").get(getDistrictByState);
 router.route("/create").post(createDistrict);
-router.route("/delete/:id").put(deleteDistrict);
+router.route("/:id").delete(deleteDistrict);
 router.route("/:id").put(updateDistrict);
 router.route("/get-dist/:id").get(getDistrictById);
 

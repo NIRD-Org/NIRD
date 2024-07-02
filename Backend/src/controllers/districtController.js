@@ -47,6 +47,7 @@ export const getDistrictByState = CatchAsyncError(async (req, res, next) => {
   try {
     const districtData = await DistrictModel.find({
       state_id: req.params.state,
+      status: "1",
     }).sort({ name: 1 });
     /*  if (!districtData || districtData.length === 0) {
       return next(new Errorhandler("No District Data Found", 404));
@@ -74,9 +75,7 @@ export const deleteDistrict = CatchAsyncError(async (req, res, next) => {
         new: true,
       }
     );
-    if (!districtData) {
-      return next(new Errorhandler("No District Data Found", 404));
-    }
+  
     res.status(200).json({
       success: true,
       message: "District Deleted Successfully",
@@ -154,7 +153,7 @@ export const getAllDistricts = CatchAsyncError(async (req, res, next) => {
         },
       },
     ]);
-    
+
     res.status(200).json(districts);
   } catch (err) {
     return next(new Errorhandler("failed to get districts data", 500));

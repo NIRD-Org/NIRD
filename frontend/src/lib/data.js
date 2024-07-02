@@ -40,7 +40,7 @@ export const getSidebarItems = (user) => {
             {
               type: "sub-module",
               icon: ArrowBigRight,
-              title: "Users",
+              title: "All Users",
               link: "/admin/users/",
             },
             {
@@ -97,6 +97,12 @@ export const getSidebarItems = (user) => {
               icon: ArrowBigRight,
               title: "KPI",
               link: "/admin/data-point",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "Deleted",
+              link: "/admin/master-deleted",
             },
           ],
         },

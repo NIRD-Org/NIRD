@@ -17,7 +17,7 @@ router.route("/all").get(getAllblocks);
 router.route("/get-block/:id").get(getblockById);
 router.route("/get").get(getblocksByLocation);
 router.route("/create").post(createblock);
-router.route("/delete/:id").put(deleteblock);
+router.route("/:id").delete(deleteblock);
 router.route("/:id").put(updateblock);
 router.route("/get-blocks/:id").get(getBlockById);
 

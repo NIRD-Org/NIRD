@@ -12,10 +12,14 @@ import DistrictFilter from "../filter/DistrictFilter";
 import ThemeFilter from "../filter/ThemeFilter";
 import BlockFilter from "../filter/BlockFilter";
 
-const DataTable = ({ title, endpoint, headers, columnItems, createLink, master }) => {
+const DataTable = ({ title, endpoint, headers, columnItems, createLink, master, crudpoint }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 10; 
+
   const state_id = searchParams.get("state_id") || "";
   const dist_id = searchParams.get("dist_id") || "";
   const block_id = searchParams.get("block_id") || "";
@@ -29,7 +33,7 @@ const DataTable = ({ title, endpoint, headers, columnItems, createLink, master }
       const dataStructure =
         data.states || data.dist || data.blocks || data.themes || data.KPI || data.data || data || data.gps;
       setData(dataStructure);
-      console.log(dataStructure)
+      setTotalPages(Math.ceil(dataStructure.length / itemsPerPage));
     } catch (error) {
       console.log(error);
     } finally {
@@ -44,7 +48,7 @@ const DataTable = ({ title, endpoint, headers, columnItems, createLink, master }
   const handleRestore = async id => {
     if (window.confirm(`Are you sure you want to delete this ${title.toLowerCase()}?`)) {
       try {
-        await API.delete(`${endpoint}/${id}`);
+        await API.delete(`${crudpoint}/${id}`);
         tst.success(`${title} deleted successfully`);
         fetchData();
       } catch (error) {
@@ -52,10 +56,11 @@ const DataTable = ({ title, endpoint, headers, columnItems, createLink, master }
       }
     }
   };
+
   const handleDelete = async id => {
     if (window.confirm(`Are you sure you want to delete this ${title.toLowerCase()}?`)) {
       try {
-        await API.delete(`${endpoint}/${id}`);
+        await API.delete(`${crudpoint}/${id}`);
         tst.success(`${title} deleted successfully`);
         fetchData();
       } catch (error) {
@@ -63,6 +68,22 @@ const DataTable = ({ title, endpoint, headers, columnItems, createLink, master }
       }
     }
   };
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [state_id, dist_id, block_id, gp_id, theme_id]);
+
+  const handleReset = () => {
+    setSearchParams({});
+  };
+
+  const handlePageChange = page => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
+  const paginatedData = data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
     <div className="container mx-auto p-4">
@@ -70,30 +91,22 @@ const DataTable = ({ title, endpoint, headers, columnItems, createLink, master }
         <div className="flex items-center justify-between mb-10">
           <div className="flex items-center gap-4 mb-4">
             <h2 className="text-xl font-semibold  w-max">All {title}</h2>
-
-            {title == "Districts" && (
-              <>
-                <StateFilter />
-              </>
-            )}
-            {title == "Blocks" && (
+            {title === "Districts" && <StateFilter />}
+            {title === "Blocks" && (
               <>
                 <StateFilter />
                 <DistrictFilter />
               </>
             )}
-            {title == "GPs" && (
+            {title === "GPs" && (
               <>
                 <StateFilter />
                 <DistrictFilter />
                 <BlockFilter />
               </>
             )}
-            {title == "KPIs" && (
-              <>
-                <ThemeFilter />
-              </>
-            )}
+            {title === "KPIs" && <ThemeFilter />}
+            {title != "States" && title != "Themes" && <Button onClick={handleReset}>Reset</Button>}
           </div>
           {createLink && (
             <Link to={createLink}>
@@ -117,14 +130,14 @@ const DataTable = ({ title, endpoint, headers, columnItems, createLink, master }
           <TableSkeleton columnCount={headers.length} />
         ) : (
           <TableBody>
-            {data?.length == 0 && (
+            {paginatedData?.length === 0 && (
               <TableRow>
                 <TableCell colSpan={headers.length} className="text-center">
                   No {title.toLowerCase()} found
                 </TableCell>
               </TableRow>
             )}
-            {data?.map(item => (
+            {paginatedData?.map(item => (
               <TableRow key={item.id}>
                 {columnItems.map(column => (
                   <TableCell key={column}>{item[column] || ""}</TableCell>
@@ -132,7 +145,7 @@ const DataTable = ({ title, endpoint, headers, columnItems, createLink, master }
                 <TableCell className="flex gap-2 items-center">
                   {master ? (
                     <>
-                      <Link to={`/admin/${title.toLowerCase()}/update/${item.id}`}>
+                      <Link to={`/admin/${title.toLowerCase().slice(0, -1)}/update/${item.id}`}>
                         <NirdEditIcon />
                       </Link>
                       <div onClick={() => handleDelete(item.id)}>
@@ -150,6 +163,17 @@ const DataTable = ({ title, endpoint, headers, columnItems, createLink, master }
           </TableBody>
         )}
       </Table>
+      <div className="flex justify-between mt-4">
+        <Button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+          Previous
+        </Button>
+        <span>
+          Page {currentPage} of {totalPages}
+        </span>
+        <Button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+          Next
+        </Button>
+      </div>
     </div>
   );
 };
