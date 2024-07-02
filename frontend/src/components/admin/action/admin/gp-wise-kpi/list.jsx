@@ -19,13 +19,6 @@ const GpWiseKpiApprovalList = () => {
           ? new Date(approval.modified_at).toLocaleDateString()
           : "-"
     },
-    { header: "Status", render: (approval) =>
-        approval.decision == 0
-          ? "Submitted"
-          : approval.decision == 1
-          ? "Approved"
-          : "Sent for modification"
-    },
   ];
 
   return (

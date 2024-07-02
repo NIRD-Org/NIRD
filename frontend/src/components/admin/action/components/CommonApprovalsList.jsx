@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import API from "@/utils/API";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { NirdEditIcon, NirdViewIcon } from "@/components/admin/Icons";
 import AdminHeader from "@/components/admin/AdminHeader";
 import { Input } from "@/components/ui/input";
@@ -16,13 +9,7 @@ import { useAdminState } from "@/components/hooks/useAdminState";
 import useStates from "@/components/hooks/location/useStates";
 import { useAuthContext } from "@/context/AuthContext";
 
-const CommonApprovalsList = ({
-  apiEndpoint,
-  title,
-  columns,
-  redirect,
-  master,
-}) => {
+const CommonApprovalsList = ({ apiEndpoint, title, columns, redirect, master }) => {
   const [searchParams] = useSearchParams();
   const dist_id = searchParams.get("dist_id") || "";
   const block_id = searchParams.get("block_id") || "";
@@ -50,7 +37,7 @@ const CommonApprovalsList = ({
           },
         });
         data?.data?.sort((a, b) => b.id - a.id);
-        console.log(data)
+        // console.log(data)
         setApprovals(data?.data || []);
       } catch (error) {
         console.log("Error fetching Approvals:", error);
@@ -71,16 +58,10 @@ const CommonApprovalsList = ({
   };
 
   const filteredApprovals = approvals.filter(approval => {
-    if (
-      statusFilter !== "all" &&
-      approval.decision.toString() !== statusFilter
-    ) {
+    if (statusFilter !== "all" && approval.decision.toString() !== statusFilter) {
       return false;
     }
-    if (
-      searchQuery &&
-      !approval.gp_name.toLowerCase().includes(searchQuery.toLowerCase())
-    ) {
+    if (searchQuery && !approval.gp_name.toLowerCase().includes(searchQuery.toLowerCase())) {
       return false;
     }
     return true;
@@ -88,15 +69,11 @@ const CommonApprovalsList = ({
 
   const totalPages = Math.ceil(filteredApprovals.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentData = filteredApprovals.slice(
-    startIndex,
-    startIndex + itemsPerPage
-  );
+  const currentData = filteredApprovals.slice(startIndex, startIndex + itemsPerPage);
 
   const handlePageChange = page => {
     setCurrentPage(page);
   };
-
 
   return (
     <div>
@@ -115,9 +92,7 @@ const CommonApprovalsList = ({
           </select>
           {user.role != 3 && (
             <select
-              className={
-                "text-sm px-4 py-2 rounded-md bg-white border w-[200px]"
-              }
+              className={"text-sm px-4 py-2 rounded-md bg-white border w-[200px]"}
               value={state_id}
               onChange={e => setStateId(e.target.value)}
             >
@@ -144,6 +119,7 @@ const CommonApprovalsList = ({
                 {columns.map((col, index) => (
                   <TableHead key={index}>{col.header}</TableHead>
                 ))}
+                <TableHead>Status</TableHead>
                 <TableHead>Action</TableHead>
               </TableRow>
             </TableHeader>
@@ -155,28 +131,36 @@ const CommonApprovalsList = ({
                       <TableCell key={index}>{col.render(approval)}</TableCell>
                     ))}
                     <TableCell>
+                      {approval.decision === 0
+                        ? "Pending"
+                        : approval.decision === 1
+                        ? "Approved"
+                        : "Sent back for Modification"}
+                    </TableCell>
+                    <TableCell>
                       <div className="flex items-center gap-3">
                         {approval.decision == 0 && user.role == 2 && (
                           <span
                             onClick={() =>
-                              navigate(
-                                `/admin/approve/${redirect}/${
-                                  master ? approval.submitted_id : approval.id
-                                }`
-                              )
+                              navigate(`/admin/approve/${redirect}/${master ? approval.submitted_id : approval.id}`)
                             }
                           >
                             <NirdEditIcon />
                           </span>
                         )}
-                        { user.role == 3 && approval.decision == 2  && (
+                        {user.role == 3 && approval.decision == 2 && (
                           <span
                             onClick={() =>
-                              navigate(
-                                `/admin/resubmit/${redirect}/${
-                                  master ? approval.submitted_id : approval.id
-                                }`
-                              )
+                              navigate(`/admin/resubmit/${redirect}/${master ? approval.submitted_id : approval.id}`)
+                            }
+                          >
+                            <NirdEditIcon />
+                          </span>
+                        )}
+                        {user.role == 3 && approval.decision == 0 && master && (
+                          <span
+                            onClick={() =>
+                              navigate(`/admin/edit/${redirect}/${master ? approval.submitted_id : approval.id}`)
                             }
                           >
                             <NirdEditIcon />
@@ -184,11 +168,7 @@ const CommonApprovalsList = ({
                         )}
                         <span
                           onClick={() =>
-                            navigate(
-                              `/admin/view/${redirect}/${
-                                master ? approval.submitted_id : approval.id
-                              }`
-                            )
+                            navigate(`/admin/view/${redirect}/${master ? approval.submitted_id : approval.id}`)
                           }
                         >
                           <NirdViewIcon />
@@ -199,10 +179,7 @@ const CommonApprovalsList = ({
                 ))
               ) : (
                 <TableRow>
-                  <TableCell
-                    colSpan={columns.length + 1}
-                    className="text-center"
-                  >
+                  <TableCell colSpan={columns.length + 1} className="text-center">
                     No data found
                   </TableCell>
                 </TableRow>

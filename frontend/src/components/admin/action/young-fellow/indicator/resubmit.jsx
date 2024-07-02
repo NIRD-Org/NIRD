@@ -5,18 +5,11 @@ import { Button } from "@/components/ui/button";
 import API from "@/utils/API";
 import { tst } from "@/lib/utils";
 import AdminHeader from "@/components/admin/AdminHeader";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 import { useParams, useSearchParams } from "react-router-dom";
 
-function IndicatorApprovalResubmit({ type = "add" }) {
+function IndicatorApprovalResubmit({ type = "add", edit}) {
   const [formData, setFormData] = useState({
     state_id: "",
     dist_id: "",
@@ -28,7 +21,7 @@ function IndicatorApprovalResubmit({ type = "add" }) {
   const [indicatorFormData, setIndicatorFormData] = useState([]);
   const [indicatorApprovalData, setIndicatorApprovalData] = useState([]);
   const [indicators, setIndicators] = useState([]);
-  const {id:submitted_id} = useParams();
+  const { id: submitted_id } = useParams();
 
   useEffect(() => {
     const fetchIndicatorApprovalData = async () => {
@@ -113,15 +106,11 @@ function IndicatorApprovalResubmit({ type = "add" }) {
     <div className="container mx-auto p-6">
       <div>
         <div className="py-4">
-          <AdminHeader>
-            {type === "add"
-              ? "Young Fellow - Indicators Entry"
-              : "Update Gram Panchayat"}
-          </AdminHeader>
+          <AdminHeader>{type === "add" ? "Young Fellow - Indicators Entry" : "Update Gram Panchayat"}</AdminHeader>
           <div>
             <div className="p-6">
               <div className=" mt-4">
-                <div className="flex flex-wrap justify-around">
+                <div className="flex flex-wrap justify-around gap-10">
                   {[
                     {
                       label: "State:",
@@ -138,6 +127,10 @@ function IndicatorApprovalResubmit({ type = "add" }) {
                     {
                       label: "GP:",
                       value: indicatorApprovalData[0]?.gp?.name,
+                    },
+                    {
+                      label: "Financial Year:",
+                      value: indicatorApprovalData[0]?.financial_year,
                     },
                   ].map(({ label, value }) => (
                     <h3 key={label}>
@@ -170,10 +163,7 @@ function IndicatorApprovalResubmit({ type = "add" }) {
                           type="number"
                           disabled
                           name="max_range"
-                          value={
-                            indicatorFormData[index]?.max_range ||
-                            data.max_range
-                          }
+                          value={indicatorFormData[index]?.max_range || data.max_range}
                           onChange={e => handleChange(e, index)}
                         />
                       </TableCell>
@@ -199,39 +189,37 @@ function IndicatorApprovalResubmit({ type = "add" }) {
                   ))}
                 </TableBody>
               </Table>
-
-              <div className="w-max my-4 flex gap-10">
-                <Label htmlFor="date" className="text-right mt-2">
-                  Date
-                </Label>
-                <Input
-                  disabled
-                  value={
-                    indicatorApprovalData[0]?.date
-                      ? indicatorApprovalData[0]?.date.substring(0, 10)
-                      : ""
-                  }
-                  type="date"
-                  name="date"
-                  onChange={e => setDate(e.target.value)}
-                  id="date"
-                  placeholder="Enter date"
-                  className="px-10"
-                />
-
-                <div>
-                  <Label htmlFor="decision" className="mb-2 block">
-                    Remark
+              {!edit && (
+                <div className="w-max my-4 flex gap-10">
+                  <Label htmlFor="date" className="text-right mt-2">
+                    Date
                   </Label>
-                  <Textarea
+                  <Input
                     disabled
-                    value={indicatorApprovalData[0]?.approver_remarks || ""}
-                    className="w-80"
-                    type="text"
-                    name="remarks"
+                    value={indicatorApprovalData[0]?.date ? indicatorApprovalData[0]?.date.substring(0, 10) : ""}
+                    type="date"
+                    name="date"
+                    onChange={e => setDate(e.target.value)}
+                    id="date"
+                    placeholder="Enter date"
+                    className="px-10"
                   />
+
+                  <div>
+                    <Label htmlFor="decision" className="mb-2 block">
+                      Remark
+                    </Label>
+                    <Textarea
+                      disabled
+                      value={indicatorApprovalData[0]?.approver_remarks || ""}
+                      className="w-80"
+                      type="text"
+                      name="remarks"
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
+
               <Button className="mt-10 px-20" type="submit">
                 Submit
               </Button>

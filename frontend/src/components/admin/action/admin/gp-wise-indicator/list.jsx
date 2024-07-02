@@ -19,13 +19,6 @@ const AdminIndicatorApprovalList = () => {
           ? new Date(indicator.modified_at).toLocaleDateString()
           : "-"
     },
-    { header: "Status", render: (indicator) =>
-        indicator.decision == 0
-          ? "Submitted"
-          : indicator.decision == 1
-          ? "Approved"
-          : "Sent for modification"
-    },
   ];
 
   return (

@@ -1,29 +1,15 @@
 ﻿import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useAuthContext } from "@/context/AuthContext";
 import { tst } from "@/lib/utils";
 import API from "@/utils/API";
 import { useState } from "react";
 import AdminHeader from "../AdminHeader";
 
 function PmUploadForm() {
-  const { user } = useAuthContext();
   const [formData, setFormData] = useState({
-    state: "",
-    district_id: "",
-    taluk_id: "",
-    gp_id: "",
-    pm_state: "",
-    pm_dist_id: "",
-    pm_taluk_id: "",
-    pm_gp_id: "",
-    date: "",
     pm_upload_file: null,
-    pm_remarks: "",
-    status: "",
   });
-
   const [pending, setPending] = useState(false);
 
   const handleChange = ({ target: { name, value } }) => {
@@ -66,13 +52,13 @@ function PmUploadForm() {
 
   const fields = [
     { name: "state", label: "State", required: true },
-    { name: "district_id", label: "District ID", required: true },
-    { name: "taluk_id", label: "Taluk ID", required: true },
-    { name: "gp_id", label: "GP ID", required: true },
+    { name: "district_id", label: "District ", required: true },
+    { name: "block_id", label: "Block ", required: true },
+    { name: "gp_id", label: "GP ", required: true },
     { name: "pm_state", label: "PM State" },
-    { name: "pm_dist_id", label: "PM District ID" },
-    { name: "pm_taluk_id", label: "PM Taluk ID" },
-    { name: "pm_gp_id", label: "PM GP ID" },
+    { name: "pm_dist_id", label: "PM District " },
+    { name: "pm_block_id", label: "PM Block " },
+    { name: "pm_gp_id", label: "PM GP " },
     { name: "date", label: "Date", type: "date", required: true },
     { name: "pm_remarks", label: "PM Remarks" },
     { name: "status", label: "Status", required: true },

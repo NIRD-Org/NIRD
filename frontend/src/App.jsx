@@ -180,6 +180,7 @@ function App() {
             <Route path="approve/gp-wise-kpi/:id" element={<GpWiseKpiApprovalPage />} />
             <Route path="view/gp-wise-kpi/:id" element={<GpWiseKpiApprovalView />} />
             <Route path="resubmit/gp-wise-kpi/:id" element={<UpdateGpWiseKpi />} />
+            <Route path="edit/gp-wise-kpi/:id" element={<UpdateGpWiseKpi edit/>} />
 
 
             <Route path="good-practices" element={<GoodPracticeForm />} />
@@ -211,6 +212,7 @@ function App() {
             <Route path="approve/indicator/:id" element={<IndicatorApprovalAdminForm />} />
             <Route path="view/indicator/:id" element={<IndicatorViewDetials />} />
             <Route path="resubmit/indicator/:id" element={<IndicatorApprovalResubmit />} />
+            <Route path="edit/indicator/:id" element={<IndicatorApprovalResubmit edit/>} />
 
 
            
