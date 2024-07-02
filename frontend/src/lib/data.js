@@ -1,7 +1,6 @@
 import { ArrowBigRight } from "lucide-react";
 
-
-export const getSidebarItems = (user) => {
+export const getSidebarItems = user => {
   let sidebarItems;
 
   if (user.username == "cpr") {
@@ -66,37 +65,37 @@ export const getSidebarItems = (user) => {
               type: "sub-module",
               icon: ArrowBigRight,
               title: "States",
-              link: "/admin/states",
+              link: "/admin/master-states",
             },
             {
               type: "sub-module",
               icon: ArrowBigRight,
               title: "Districts",
-              link: "/admin/districts",
+              link: "/admin/master-districts",
             },
             {
               type: "sub-module",
               icon: ArrowBigRight,
               title: "Blocks",
-              link: "/admin/blocks",
+              link: "/admin/master-blocks",
             },
             {
               type: "sub-module",
               icon: ArrowBigRight,
               title: "Gram Panchayats",
-              link: "/admin/gram-panchayats",
+              link: "/admin/master-gps",
             },
             {
               type: "sub-module",
               icon: ArrowBigRight,
               title: "Themes",
-              link: "/admin/themes",
+              link: "/admin/master-themes",
             },
             {
               type: "sub-module",
               icon: ArrowBigRight,
               title: "KPI",
-              link: "/admin/data-point",
+              link: "/admin/master-kpis",
             },
             {
               type: "sub-module",

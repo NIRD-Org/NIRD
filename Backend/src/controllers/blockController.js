@@ -90,7 +90,7 @@ export const getAllblocks = CatchAsyncError(async (req, res, next) => {
 // Controller to get a block by ID
 export const getblockById = CatchAsyncError(async (req, res, next) => {
   try {
-    const block = await BlockModel.findOne({ id: req.params.id ,status:"1"});
+    const block = await BlockModel.findOne({ id: req.params.id, status: "1" });
     if (!block) {
       return next(new Errorhandler("blocks data not found", 400));
     }
@@ -106,7 +106,7 @@ export const getblocksByLocation = CatchAsyncError(async (req, res, next) => {
   try {
     const { state, dist } = req.query;
 
-    const blocks = await BlockModel.find({ dist_id: dist }).sort({ name: 1 });
+    const blocks = await BlockModel.find({ dist_id: dist, status: "1" }).sort({ name: 1 });
     if (!blocks || blocks.length === 0) {
       return next(new Errorhandler("blocks data not found", 404));
     }

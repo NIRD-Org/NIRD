@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import API from "@/utils/API";
 import { tst } from "@/lib/utils";
 import AdminHeader from "../AdminHeader";
+import { useParams } from "react-router-dom";
 
 function GpForm({ type = "add", gp }) {
   const [formData, setFormData] = useState({
@@ -14,11 +15,11 @@ function GpForm({ type = "add", gp }) {
     name: gp?.name || "",
     is_maped_to_another_district: gp?.is_maped_to_another_district || "",
   });
-
   const [states, setStates] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [blocks, setBlocks] = useState([]);
   const [pending, setPending] = useState(false);
+  const {id} = useParams()
 
   useEffect(() => {
     async function fetchStates() {
@@ -30,7 +31,26 @@ function GpForm({ type = "add", gp }) {
       }
     }
 
+    const fetchGpData = async () => {
+      try {
+        const response = await API.get(`/api/v1/gram/get-gram/${id}`);
+        const data = response.data.gp;
+        setFormData({
+          id: data.id,
+          state_id: data.state_id,
+          dist_id: data.dist_id,
+          block_id: data.block_id,
+          name: data.name,
+          is_maped_to_another_district: data.is_maped_to_another_district,
+        });
+      } catch (error) {
+        console.log(error)
+        // tst.error("Failed to fetch GP data.");
+      }
+    };
+
     fetchStates();
+    if (type == "update") fetchGpData();
   }, []);
 
   useEffect(() => {
@@ -63,23 +83,23 @@ function GpForm({ type = "add", gp }) {
     fetchBlocks();
   }, [formData.dist_id]);
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
+    setFormData(prevData => ({
       ...prevData,
       [name]: value,
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     setPending(true);
     try {
       if (type === "add") {
-        await API.post("/api/v1/gp/create", formData);
+        await API.post("/api/v1/gram/create", formData);
         tst.success("Gram Panchayat created successfully");
       } else {
-        await API.put(`/api/v1/gp/${formData.id}`, formData);
+        await API.put(`/api/v1/gram/${id}`, formData);
         tst.success("Gram Panchayat updated successfully");
       }
       setPending(false);
@@ -90,36 +110,26 @@ function GpForm({ type = "add", gp }) {
   };
 
 
-  const handleCreateGp = async e => {
-    e.preventDefault()
-    try {
-      await API.post("/api/v1/gram/create", formData);
-      tst.success("GP created successfully");
-    } catch (error) {
-      tst.error(error);
-    }
-  };
-
   const fields = [
     {
       name: "state_id",
       label: "State",
       type: "select",
-      options: states.map((state) => ({ value: state.id, label: state.name })),
+      options: states.map(state => ({ value: state.id, label: state.name })),
       required: true,
     },
     {
       name: "dist_id",
       label: "District",
       type: "select",
-      options: districts.map((district) => ({ value: district.id, label: district.name })),
+      options: districts.map(district => ({ value: district.id, label: district.name })),
       required: true,
     },
     {
       name: "block_id",
       label: "Block",
       type: "select",
-      options: blocks.map((block) => ({ value: block.id, label: block.name })),
+      options: blocks.map(block => ({ value: block.id, label: block.name })),
       required: true,
     },
     { name: "name", label: "Name", type: "text", required: true },
@@ -136,7 +146,7 @@ function GpForm({ type = "add", gp }) {
 
   return (
     <div className="container mx-auto p-6">
-      <form onSubmit={handleCreateGp}>
+      <form onSubmit={handleSubmit}>
         <div className="py-4">
           <AdminHeader>{type === "add" ? "Add Gram Panchayat" : "Update Gram Panchayat"}</AdminHeader>
           <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3">
@@ -158,7 +168,7 @@ function GpForm({ type = "add", gp }) {
                     <option value="" disabled>
                       Select {label}
                     </option>
-                    {options.map((option) => (
+                    {options.map(option => (
                       <option key={option.value} value={option.value}>
                         {option.label}
                       </option>

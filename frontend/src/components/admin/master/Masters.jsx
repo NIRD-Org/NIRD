@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import DataTable from "./DataTable";
 
-const Masters = () => {
-  const [item, setItem] = useState("state");
+const Masters = ({item}) => {
 
   const configurations = {
     state: {
@@ -13,7 +12,7 @@ const Masters = () => {
       headers: ["ID", "Name", "Action"],
       columnItems: ["id", "name"],
     },
-    dist: {
+    district: {
       title: "Districts",
       createLink: "/admin/district/create",
       endpoint: "/api/v1/dist/all",
@@ -26,14 +25,14 @@ const Masters = () => {
       createLink: "/admin/block/create",
       endpoint: "/api/v1/block/all",
       crudpoint: "/api/v1/block",
-      headers: ["ID", "State ID", "District ID", "Name", "Mapped to Another District"],
+      headers: ["ID", "State ID", "District ID", "Name", "Mapped to Another District","Actions"],
       columnItems: ["id", "state_id", "dist_id", "name", "is_maped_to_another_district"],
     },
     gp: {
       title: "GPs",
       createLink: "/admin/gp/create",
-      endpoint: "/api/v1/gp/all",
-      crudpoint: "/api/v1/gp",
+      endpoint: "/api/v1/gram/all",
+      crudpoint: "/api/v1/gram",
       headers: ["ID", "State ID", "District ID", " Block ID", "Name", "Action"],
       columnItems: ["id", "state_id", "dist_id", "block_id", "name"],
     },
@@ -47,19 +46,12 @@ const Masters = () => {
     },
     kpi: {
       title: "KPIs",
-      createLink: "/admin/data-point/create",
+      createLink: "/admin/kpi/create",
       endpoint: "/api/v1/kpi/all",
       crudpoint: "/api/v1/kpi",
       headers: ["ID", "Theme", "KPI Name", "Data Point", "Input Type", "Weightage", "Action"],
       columnItems: ["id", "theme_name", "name", "kpi_datapoint", "input_type", "weightage"],
     },
-    /*  user: {
-      title: "Users",
-      createLink: "/admin/users/create",
-      endpoint: "/api/v1/users/all",
-      headers: ["ID", "Name", "Username", "Role", "Action"],
-      columnItems: ["id", "name", "username", "role"],
-    }, */
   };
 
   const config = configurations[item];
@@ -70,7 +62,7 @@ const Masters = () => {
 
   return (
     <div>
-      <select
+     {/*  <select
         className="text-sm px-4 py-2 rounded-md bg-white border mx-auto block mb-10 w-60 max-sm:w-full"
         name="item"
         id="item"
@@ -84,7 +76,7 @@ const Masters = () => {
         <option value="theme">Theme</option>
         <option value="kpi">KPI</option>
         <option value="user">User</option>
-      </select>
+      </select> */}
       <DataTable
         title={config.title}
         createLink={config.createLink}

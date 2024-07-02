@@ -79,7 +79,7 @@ export const getGpByLocation = CatchAsyncError(async (req, res, next) => {
 export const deleteGP = CatchAsyncError(async (req, res, next) => {
   try {
     const { id } = req.params;
-    const gp = await GpModel.findOneAndUpdate(id, { status: "0" }, { new: true });
+    const gp = await GpModel.findOneAndUpdate({ id }, { status: "0" }, { new: true });
     if (!gp) {
       return next(new Errorhandler("No Gram Panchayat Found", 404));
     }
@@ -88,6 +88,7 @@ export const deleteGP = CatchAsyncError(async (req, res, next) => {
       message: "Gram Panchayat Deleted Successfully",
     });
   } catch (error) {
+    console.log(error);
     return next(new Errorhandler("Failed to delete Gram Panchayat", 500));
   }
 });
@@ -97,7 +98,7 @@ export const deleteGP = CatchAsyncError(async (req, res, next) => {
 export const updateGP = CatchAsyncError(async (req, res, next) => {
   try {
     const { id } = req.params;
-    const gp = await GpModel.findOneAndUpdate(id, req.body, { new: true });
+    const gp = await GpModel.findOneAndUpdate({ id }, req.body, { new: true });
     if (!gp) {
       return next(new Errorhandler("No Gram Panchayat Found", 404));
     }

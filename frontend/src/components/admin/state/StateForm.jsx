@@ -13,15 +13,15 @@ function StateForm({ type = "add", onSubmit, state }) {
     state_shortcode: state?.state_shortcode || "",
     country_id: state?.country_id || "",
   });
-  const { stateId } = useParams();
+  const { id } = useParams();
 
   const [pending, setPending] = useState(false);
 
   useEffect(() => {
-    if (type === "update" && stateId) {
+    if (type === "update" && id) {
       const fetchState = async () => {
         try {
-          const response = await API.get(`/api/v1/state/${stateId}`);
+          const response = await API.get(`/api/v1/state/${id}`);
           const data = response.data.state;
           setFormData({
             name: data.name,
@@ -34,7 +34,7 @@ function StateForm({ type = "add", onSubmit, state }) {
       };
       fetchState();
     }
-  }, [type, stateId]);
+  }, [type, id]);
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -52,7 +52,7 @@ function StateForm({ type = "add", onSubmit, state }) {
         await API.post("/api/v1/state/create", formData);
         tst.success("State created successfully");
       } else {
-        await API.put(`/api/v1/state/${stateId}`, formData);
+        await API.put(`/api/v1/state/${id}`, formData);
         tst.success("State updated successfully");
       }
       if (onSubmit) {

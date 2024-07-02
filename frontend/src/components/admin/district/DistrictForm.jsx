@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import API from "@/utils/API";
 import { tst } from "@/lib/utils";
 import AdminHeader from "../AdminHeader";
+import { useParams } from "react-router-dom";
 
 function DistrictForm({ type = "add", onSubmit, district }) {
   const [formData, setFormData] = useState({
@@ -13,9 +14,9 @@ function DistrictForm({ type = "add", onSubmit, district }) {
     name: district?.name || "",
     special_area: district?.special_area || "",
   });
-
   const [states, setStates] = useState([]);
   const [pending, setPending] = useState(false);
+  const { id } = useParams();
 
   useEffect(() => {
     async function fetchStates() {
@@ -26,7 +27,23 @@ function DistrictForm({ type = "add", onSubmit, district }) {
         tst.error("Failed to fetch states.");
       }
     }
+
+    const fetchDistData = async () => {
+      try {
+        const response = await API.get(`/api/v1/dist/${id}`);
+        const data = response.data.district;
+        setFormData({
+          id: data.id,
+          state_id: data.state_id,
+          name: data.name,
+          special_area: data.special_area,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
     fetchStates();
+    if (type == "update") fetchDistData();
   }, []);
 
   const handleChange = e => {
@@ -38,17 +55,21 @@ function DistrictForm({ type = "add", onSubmit, district }) {
   };
 
   const handleCreateDistrict = async e => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      await API.post("/api/v1/dist/create", formData);
-      tst.success("District created successfully");
+      if (type == "add") {
+        await API.post("/api/v1/dist/create", formData);
+        tst.success("District created successfully");
+      } else {
+        await API.put(`/api/v1/dist/${id}`, formData);
+        tst.success("District updated successfully");
+      }
     } catch (error) {
       tst.error(error);
       console.log(error);
     }
   };
 
-  const handleUpdateDistrict = {};
   const fields = [
     {
       name: "state_id",
@@ -67,7 +88,6 @@ function DistrictForm({ type = "add", onSubmit, district }) {
       ],
     },
   ];
-  
 
   return (
     <div className="container mx-auto p-6">
@@ -75,13 +95,18 @@ function DistrictForm({ type = "add", onSubmit, district }) {
         <div className="py-4">
           <AdminHeader>{type === "add" ? "Add District" : "Update District"}</AdminHeader>
           <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3">
-            {fields.map(({ name, label, options ,type}) => (
+            {fields.map(({ name, label, options, type }) => (
               <div key={name}>
                 <Label htmlFor={name} className="inline-block mb-2">
                   {label}
                 </Label>
-                {type==='select' ? (
-                  <select className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border" value={formData[name]} name={name} onChange={handleChange}>
+                {type === "select" ? (
+                  <select
+                    className="w-full col-span-3 px-4 py-2 rounded-md bg-transparent border"
+                    value={formData[name]}
+                    name={name}
+                    onChange={handleChange}
+                  >
                     <option value="" disabled>
                       Select a {label}
                     </option>
@@ -92,7 +117,15 @@ function DistrictForm({ type = "add", onSubmit, district }) {
                     ))}
                   </select>
                 ) : (
-                  <Input type={fields.type} name={name} value={formData[name]} onChange={handleChange} id={name} placeholder={`Enter ${label}`} className="col-span-3" />
+                  <Input
+                    type={fields.type}
+                    name={name}
+                    value={formData[name]}
+                    onChange={handleChange}
+                    id={name}
+                    placeholder={`Enter ${label}`}
+                    className="col-span-3"
+                  />
                 )}
               </div>
             ))}

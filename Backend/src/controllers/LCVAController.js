@@ -49,12 +49,12 @@ export const createLCVA = CatchAsyncError(async (req, res, next) => {
 
     res.status(201).json({
       success: true,
-      message: "Good Practice created successfully",
+      message: "LCVA created successfully",
       data: newLCVA,
     });
   } catch (error) {
     console.log(error);
-    return next(new Errorhandler("Failed to create Good Practice", 500));
+    return next(new Errorhandler("Failed to create LCVA", 500));
   }
 });
 
@@ -136,12 +136,12 @@ export const getAllLCVAs = CatchAsyncError(async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      message: "Good Practices fetched successfully",
+      message: "LCVAs fetched successfully",
       data: lCVAs,
     });
   } catch (error) {
     console.error(error);
-    return next(new Errorhandler("Failed to get Good Practices", 500));
+    return next(new Errorhandler("Failed to get LCVAs", 500));
   }
 });
 
@@ -254,7 +254,7 @@ export const getLCVAs = CatchAsyncError(async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      message: "Good Practices fetched successfully",
+      message: "LCVAs fetched successfully",
       data:
         lCVAs.length > 0
           ? lCVAs[0]
@@ -267,7 +267,7 @@ export const getLCVAs = CatchAsyncError(async (req, res, next) => {
     });
   } catch (error) {
     console.error(error);
-    return next(new Errorhandler("Failed to get Good Practices", 500));
+    return next(new Errorhandler("Failed to get LCVAs", 500));
   }
 });
 
@@ -332,17 +332,17 @@ export const getLCVAById = CatchAsyncError(async (req, res, next) => {
     ]);
 
     if (!lCVA) {
-      return next(new Errorhandler("Good Practice not found", 404));
+      return next(new Errorhandler("LCVA not found", 404));
     }
 
     res.status(200).json({
       success: true,
-      message: "Good Practice retrieved successfully",
+      message: "LCVA retrieved successfully",
       data: lCVA,
     });
   } catch (error) {
     console.log(error);
-    return next(new Errorhandler("Failed to get Good Practice by ID", 500));
+    return next(new Errorhandler("Failed to get LCVA by ID", 500));
   }
 });
 
@@ -368,17 +368,17 @@ export const updateLCVA = CatchAsyncError(async (req, res, next) => {
     });
 
     if (!updatedLCVA) {
-      return next(new Errorhandler("Good Practice not found", 404));
+      return next(new Errorhandler("LCVA not found", 404));
     }
 
     res.status(200).json({
       success: true,
-      message: "Good Practice updated successfully",
+      message: "LCVA updated successfully",
       data: updatedLCVA,
     });
   } catch (error) {
     console.log(error);
-    return next(new Errorhandler("Failed to update Good Practice", 500));
+    return next(new Errorhandler("Failed to update LCVA", 500));
   }
 });
 
@@ -388,16 +388,16 @@ export const deleteLCVA = CatchAsyncError(async (req, res, next) => {
     const deletedLCVA = await LCVA.findByIdAndDelete(id);
 
     if (!deletedLCVA) {
-      return next(new Errorhandler("Good Practice not found", 404));
+      return next(new Errorhandler("LCVA not found", 404));
     }
 
     res.status(200).json({
       success: true,
-      message: "Good Practice deleted successfully",
+      message: "LCVA deleted successfully",
     });
   } catch (error) {
     console.log(error);
-    return next(new Errorhandler("Failed to delete Good Practice", 500));
+    return next(new Errorhandler("Failed to delete LCVA", 500));
   }
 });
 
@@ -414,17 +414,17 @@ export const approveLCVA = CatchAsyncError(async (req, res, next) => {
     );
 
     if (!updatedLCVA) {
-      return next(new Errorhandler("Good Practice not found", 404));
+      return next(new Errorhandler("LCVA not found", 404));
     }
 
     res.status(200).json({
       success: true,
-      message: "Good Practice approved successfully",
+      message: "LCVA approved successfully",
       data: updatedLCVA,
     });
   } catch (error) {
     console.log(error);
-    return next(new Errorhandler("Failed to approve Good Practice", 500));
+    return next(new Errorhandler("Failed to approve LCVA", 500));
   }
 });
 

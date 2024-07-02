@@ -19,7 +19,7 @@ router.route("/get").get(getblocksByLocation);
 router.route("/create").post(createblock);
 router.route("/:id").delete(deleteblock);
 router.route("/:id").put(updateblock);
-router.route("/get-blocks/:id").get(getBlockById);
+router.route("/:id").get(getBlockById);
 
 
 export default router;

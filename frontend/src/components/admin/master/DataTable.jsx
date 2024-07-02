@@ -18,7 +18,7 @@ const DataTable = ({ title, endpoint, headers, columnItems, createLink, master, 
   const [searchParams, setSearchParams] = useSearchParams();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const itemsPerPage = 10; 
+  const itemsPerPage = 10;
 
   const state_id = searchParams.get("state_id") || "";
   const dist_id = searchParams.get("dist_id") || "";
@@ -31,8 +31,9 @@ const DataTable = ({ title, endpoint, headers, columnItems, createLink, master, 
       setIsLoading(true);
       const { data } = await API.get(endpoint, { params: { state_id, dist_id, block_id, gp_id, theme_id } });
       const dataStructure =
-        data.states || data.dist || data.blocks || data.themes || data.KPI || data.data || data || data.gps;
-      setData(dataStructure);
+        data.states || data.dist || data.blocks || data.themes || data.KPI || data.data || data.gps || data;
+      setData(prev => (prev = []));
+      setData(prev => (prev = dataStructure));
       setTotalPages(Math.ceil(dataStructure.length / itemsPerPage));
     } catch (error) {
       console.log(error);
@@ -83,7 +84,7 @@ const DataTable = ({ title, endpoint, headers, columnItems, createLink, master, 
     }
   };
 
-  const paginatedData = data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const paginatedData = data?.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
     <div className="container mx-auto p-4">

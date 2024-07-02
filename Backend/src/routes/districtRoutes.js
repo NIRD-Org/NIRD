@@ -16,6 +16,7 @@ router.route("/state/:state").get(getDistrictByState);
 router.route("/create").post(createDistrict);
 router.route("/:id").delete(deleteDistrict);
 router.route("/:id").put(updateDistrict);
+router.route("/:id").get(getDistrictById);
 router.route("/get-dist/:id").get(getDistrictById);
 
 export default router;
