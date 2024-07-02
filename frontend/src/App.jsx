@@ -128,11 +128,11 @@ function App() {
             <Route path="young-professionals" element={<YoungFellowForm />} />
             <Route path="gp-wise-kpi" element={<GpWiseKpiList />} />
             <Route path="change-password" element={<ChangePassword />} />
-
             <Route path="users" element={<UserPage />} />
             <Route path="users/view/:id" element={<UserView />} />
-
             <Route path="data-point/view/:kpiId" element={<KpiViewPage />} />
+            <Route path="kpi-approvals-list" element={<KpiApprovalsList />} />
+            <Route path="action/superadmin" element={<SuperadminApprovalList />} />
 
             <Route path="master-states" element={<Masters item="state" />} />
             <Route path="master-districts" element={<Masters item="district" />} />
@@ -164,7 +164,6 @@ function App() {
             <Route path="user-location/update/young-fellow/:userId" element={<UpdateUserLocation role={3} />} />
             <Route path="user-location/view/admin/:userId" element={<LocationView view role={2} />} />
             <Route path="user-location/view/young-fellow/:userId" element={<LocationView role={3} />} />
-
             <Route path="users/all/admin" element={<UserList role={2} />} />
             <Route path="users/all/young-fellow" element={<UserList role={3} />} />
 
@@ -181,46 +180,38 @@ function App() {
             <Route path="approve/gp-wise-kpi/:id" element={<GpWiseKpiApprovalPage />} />
             <Route path="view/gp-wise-kpi/:id" element={<GpWiseKpiApprovalView />} />
             <Route path="resubmit/gp-wise-kpi/:id" element={<UpdateGpWiseKpi />} />
-            <Route path="action/young-fellow/gp-wise-kpi" element={<YfGpWiseKpiApprovalList />} />
 
-            <Route path="kpi-approvals-list" element={<KpiApprovalsList />} />
 
             <Route path="good-practices" element={<GoodPracticeForm />} />
             <Route path="action/admin/good-practice" element={<GoodPracticeApprovalsList />} />
             <Route path="approve/good-practice/:id" element={<GoodPracticeApprovalPage />} />
             <Route path="view/good-practice/:id" element={<GoodPracticeViewDetails />} />
-            <Route path="action/young-fellow/good-practice" element={<GoodPracticeApprovalsListYF />} />
             <Route path="resubmit/good-practice/:id" element={<GoodPracticeResubmit />} />
 
             <Route path="lcvas" element={<LCVAForm />} />
             <Route path="action/admin/lcva" element={<LCVAApprovalsList />} />
             <Route path="approve/lcva/:id" element={<LCVAApprovalPage />} />
             <Route path="view/lcva/:id" element={<LCVAViewDetails />} />
-            <Route path="action/young-fellow/lcva" element={<LCVAApprovalsListYF />} />
             <Route path="resubmit/lcva/:id" element={<LCVAResubmit />} />
 
             <Route path="gp-details" element={<GpDetailsForm />} />
             <Route path="action/admin/gp-details" element={<GpDetailsApprovalsList />} />
             <Route path="approve/gp-details/:id" element={<GpDetailsApprovalPage />} />
             <Route path="view/gp-details/:id" element={<GpDetailsViewDetials />} />
-            <Route path="action/young-fellow/gp-details" element={<GpDetailsApprovalsListYf />} />
             <Route path="resubmit/gp-details/:id" element={<GpDetailsApprovalResubmit />} />
 
             <Route path="training" element={<TrainingForm />} />
             <Route path="action/admin/training" element={<TrainingApprovalsList />} />
             <Route path="approve/training/:id" element={<TrainingApprovalPage />} />
             <Route path="view/training/:id" element={<TrainingViewDetails />} />
-            <Route path="action/young-fellow/training" element={<TrainingApprovalsListYf />} />
             <Route path="resubmit/training/:id" element={<TrainingResubmit />} />
 
             <Route path="indicator" element={<IndicatorForm />} />
             <Route path="action/admin/indicator" element={<AdminIndicatorApprovalList />} />
-            <Route path="action/young-fellow/indicator" element={<YFIndicatorApprovalList />} />
             <Route path="approve/indicator/:id" element={<IndicatorApprovalAdminForm />} />
             <Route path="view/indicator/:id" element={<IndicatorViewDetials />} />
             <Route path="resubmit/indicator/:id" element={<IndicatorApprovalResubmit />} />
 
-            <Route path="action/superadmin" element={<SuperadminApprovalList />} />
 
            
           </Route>

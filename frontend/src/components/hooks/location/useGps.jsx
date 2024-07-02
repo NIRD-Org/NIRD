@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import API from "@/utils/API";
 
-const useGp = ({block_id}) => {
+const useGps = ({block_id}) => {
   const [grams, setGrams] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -27,4 +27,4 @@ const useGp = ({block_id}) => {
   return { grams, loading };
 };
 
-export default useGp
+export default useGps

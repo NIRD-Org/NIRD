@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import API from "@/utils/API";
 
-const useBlock = ({dist_id}) => {
+const useBlocks = ({dist_id}) => {
   const [blocks, setBlocks] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -26,5 +26,5 @@ const useBlock = ({dist_id}) => {
   return { blocks, loading };
 };
 
-export default useBlock;
+export default useBlocks;
 

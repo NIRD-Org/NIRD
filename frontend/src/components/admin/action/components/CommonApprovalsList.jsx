@@ -13,7 +13,7 @@ import { NirdEditIcon, NirdViewIcon } from "@/components/admin/Icons";
 import AdminHeader from "@/components/admin/AdminHeader";
 import { Input } from "@/components/ui/input";
 import { useAdminState } from "@/components/hooks/useAdminState";
-import useStates from "@/components/hooks/location/useState";
+import useStates from "@/components/hooks/location/useStates";
 import { useAuthContext } from "@/context/AuthContext";
 
 const CommonApprovalsList = ({

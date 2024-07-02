@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import API from "@/utils/API";
 
-const useDistrict = ({state_id}) => {
+const useDistricts = ({state_id}) => {
   const [districts, setDistricts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -26,4 +26,4 @@ const useDistrict = ({state_id}) => {
 
   return { districts, isLoading };
 };
-export default useDistrict;
+export default useDistricts;
