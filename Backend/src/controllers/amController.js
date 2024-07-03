@@ -43,8 +43,9 @@ export const getAllAM = CatchAsyncError(async (req, res, next) => {
       const stateIds = userLocations.state_ids;
       filter.state_id = { $in: stateIds };
     }
-    console.log(filter)
-    const am = await AmModel.aggregate([{ $match: {} }]);
+    
+    const am = await AmModel.aggregate([{ $match: filter }, ...location_pipeline]);
+    console.log(am)
 
     res.status(200).json({
       status: "success",

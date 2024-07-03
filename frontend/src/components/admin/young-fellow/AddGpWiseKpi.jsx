@@ -66,6 +66,11 @@ function AddGpWiseKpi({ update }) {
     return scores[thresholds.length];
   };
 
+  const booleanKpiScoringRules = {
+    100: { yesScore: 5, noScore: 0 },
+    101: { yesScore: 10, noScore: 0 },
+    102: { yesScore: 6, noScore: 0 },
+  };
 
   const handleChange = (e, index) => {
     const { name, value } = e.target;
@@ -80,14 +85,19 @@ function AddGpWiseKpi({ update }) {
         const maxRange = updatedData[index].max_range || 0;
         const inputData = updatedData[index].input_data || 0;
         const percentage = (inputData / maxRange) * 100;
-
         const kpiId = kpis[index].id;
+        const inputType = kpis[index].input_type
+
         const { thresholds, scores } = kpiScoringRules[kpiId];
-        updatedData[index].score = calculateScore(
-          percentage,
-          thresholds,
-          scores
-        );
+
+        if (inputType === "Percentage") {
+          const percentage = (inputData / maxRange) * 100;
+          updatedData[index].score =  calculateScore(percentage, thresholds, scores);
+        } else if (inputType === "Number") {
+          updatedData[index].score =  calculateScore(inputData, thresholds, scores);
+        } else if (inputType === "Boolean") {
+          updatedData[index].score =  inputData ? booleanKpiScoringRules[kpiId].yesScore : booleanKpiScoringRules[kpiId].noScore;
+        }
       }
 
       return updatedData;
