@@ -9,11 +9,11 @@ import { useAdminState } from "@/components/hooks/useAdminState";
 import useStates from "@/components/hooks/location/useStates";
 import { useAuthContext } from "@/context/AuthContext";
 
-const CommonApprovalsList = ({ apiEndpoint, title, columns, redirect, master }) => {
+const CommonApprovalsList = ({ apiEndpoint, title, columns, redirect, master, normal }) => {
   const [searchParams] = useSearchParams();
   const dist_id = searchParams.get("dist_id") || "";
   const block_id = searchParams.get("block_id") || "";
-  const gram_id = searchParams.get("gram_id") || "";
+  const gp_id = searchParams.get("gram_id") || "";
   const navigate = useNavigate();
   const [approvals, setApprovals] = useState([]);
   const [statusFilter, setStatusFilter] = useState("all");
@@ -33,7 +33,7 @@ const CommonApprovalsList = ({ apiEndpoint, title, columns, redirect, master }) 
             state_id,
             dist_id,
             block_id,
-            gp_id: gram_id,
+            gp_id,
           },
         });
         data?.data?.sort((a, b) => b.id - a.id);
@@ -80,16 +80,18 @@ const CommonApprovalsList = ({ apiEndpoint, title, columns, redirect, master }) 
       <div className="p-6">
         <AdminHeader>{title}</AdminHeader>
         <div className="flex justify-between mb-4">
-          <select
-            value={statusFilter}
-            onChange={handleStatusFilterChange}
-            className={"text-sm px-4 py-2 rounded-md bg-white border w-[200px]"}
-          >
-            <option value="all">All</option>
-            <option value="0">Pending</option>
-            <option value="1">Approved</option>
-            <option value="2">Sent back for Modification</option>
-          </select>
+          {!normal && (
+            <select
+              value={statusFilter}
+              onChange={handleStatusFilterChange}
+              className={"text-sm px-4 py-2 rounded-md bg-white border w-[200px]"}
+            >
+              <option value="all">All</option>
+              <option value="0">Pending</option>
+              <option value="1">Approved</option>
+              <option value="2">Sent back for Modification</option>
+            </select>
+          )}
           {user.role != 3 && (
             <select
               className={"text-sm px-4 py-2 rounded-md bg-white border w-[200px]"}
@@ -119,7 +121,8 @@ const CommonApprovalsList = ({ apiEndpoint, title, columns, redirect, master }) 
                 {columns.map((col, index) => (
                   <TableHead key={index}>{col.header}</TableHead>
                 ))}
-                <TableHead>Status</TableHead>
+                {!normal && <TableHead>Status</TableHead>}
+
                 <TableHead>Action</TableHead>
               </TableRow>
             </TableHeader>
@@ -130,51 +133,69 @@ const CommonApprovalsList = ({ apiEndpoint, title, columns, redirect, master }) 
                     {columns.map((col, index) => (
                       <TableCell key={index}>{col.render(approval)}</TableCell>
                     ))}
-                    <TableCell>
-                      {approval.decision === 0
-                        ? "Pending"
-                        : approval.decision === 1
-                        ? "Approved"
-                        : "Sent back for Modification"}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-3">
-                        {approval.decision == 0 && user.role == 2 && (
+                    {!normal && (
+                      <TableCell>
+                        {approval.decision === 0
+                          ? "Pending"
+                          : approval.decision === 1
+                          ? "Approved"
+                          : "Sent back for Modification"}
+                      </TableCell>
+                    )}
+                    {!normal && (
+                      <TableCell>
+                        <div className="flex items-center gap-3">
+                          {approval.decision == 0 && user.role == 2 && (
+                            <span
+                              onClick={() =>
+                                navigate(`/admin/approve/${redirect}/${master ? approval.submitted_id : approval.id}`)
+                              }
+                            >
+                              <NirdEditIcon />
+                            </span>
+                          )}
+                          {user.role == 3 && approval.decision == 2 && (
+                            <span
+                              onClick={() =>
+                                navigate(`/admin/resubmit/${redirect}/${master ? approval.submitted_id : approval.id}`)
+                              }
+                            >
+                              <NirdEditIcon />
+                            </span>
+                          )}
+                          {user.role == 3 && approval.decision == 0 && master && (
+                            <span
+                              onClick={() =>
+                                navigate(`/admin/edit/${redirect}/${master ? approval.submitted_id : approval.id}`)
+                              }
+                            >
+                              <NirdEditIcon />
+                            </span>
+                          )}
                           <span
                             onClick={() =>
-                              navigate(`/admin/approve/${redirect}/${master ? approval.submitted_id : approval.id}`)
+                              navigate(`/admin/view/${redirect}/${master ? approval.submitted_id : approval.id}`)
                             }
                           >
-                            <NirdEditIcon />
+                            <NirdViewIcon />
                           </span>
-                        )}
-                        {user.role == 3 && approval.decision == 2 && (
+                        </div>
+                      </TableCell>
+                    )}
+                    {
+                      normal && 
+                      <TableCell>
+                        <div className="flex items-center gap-3">
                           <span
                             onClick={() =>
-                              navigate(`/admin/resubmit/${redirect}/${master ? approval.submitted_id : approval.id}`)
+                              navigate(`/admin/view/${redirect}/${approval.id}`)
                             }
                           >
-                            <NirdEditIcon />
+                            <NirdViewIcon />
                           </span>
-                        )}
-                        {user.role == 3 && approval.decision == 0 && master && (
-                          <span
-                            onClick={() =>
-                              navigate(`/admin/edit/${redirect}/${master ? approval.submitted_id : approval.id}`)
-                            }
-                          >
-                            <NirdEditIcon />
-                          </span>
-                        )}
-                        <span
-                          onClick={() =>
-                            navigate(`/admin/view/${redirect}/${master ? approval.submitted_id : approval.id}`)
-                          }
-                        >
-                          <NirdViewIcon />
-                        </span>
-                      </div>
-                    </TableCell>
+                        </div>
+                      </TableCell>
+                    }
                   </TableRow>
                 ))
               ) : (

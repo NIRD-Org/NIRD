@@ -15,6 +15,7 @@ const router = express.Router();
 router.use('/create',isAuth);
 router.route("/all").get(getAllblocks);
 router.route("/get-block/:id").get(getblockById);
+router.route("/get-blocks/:id").get(getblockById);
 router.route("/get").get(getblocksByLocation);
 router.route("/create").post(createblock);
 router.route("/:id").delete(deleteblock);

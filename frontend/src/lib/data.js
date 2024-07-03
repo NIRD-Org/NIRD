@@ -208,6 +208,24 @@ export const getSidebarItems = user => {
             },
           ],
         },
+        {
+          type: "module",
+          title: "Attendance",
+          submodules: [
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "AM Entry",
+              link: "/admin/attendance/amu-upload/list",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "PM Entry",
+              link: "/admin/attendance/pmu-upload/list",
+            },
+          ],
+        },
       ];
       break;
 

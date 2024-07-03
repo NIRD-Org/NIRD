@@ -94,7 +94,7 @@ export const getblockById = CatchAsyncError(async (req, res, next) => {
     if (!block) {
       return next(new Errorhandler("blocks data not found", 400));
     }
-    res.status(200).json(block);
+    res.status(200).json({ block });
   } catch (err) {
     return next(new Errorhandler("failed to get blocks data", 500));
   }

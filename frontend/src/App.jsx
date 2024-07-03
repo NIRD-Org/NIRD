@@ -89,6 +89,9 @@ import DataTable from "./components/admin/master/Deleted";
 import DeletedItems from "./components/admin/master/Deleted";
 import Masters from "./components/admin/master/Masters";
 import ChangePassword from "./components/admin/change-password/page";
+import AmUploadView from "./components/admin/attendance/AmuView";
+import AmUploadList from "./components/admin/attendance/AmuList";
+import PmUploadList from "./components/admin/attendance/PmuList";
 
 function App() {
   const { login } = useAuthContext();
@@ -170,6 +173,9 @@ function App() {
             <Route path="attendance/attendance" element={<Attendance />} />
             <Route path="attendance/amu-upload" element={<AmUploadForm />} />
             <Route path="attendance/pmu-upload" element={<PmUploadForm />} />
+            <Route path="attendance/view/amu-upload/:id" element={<AmUploadView />} />
+            <Route path="attendance/amu-upload/list" element={<AmUploadList />} />
+            <Route path="attendance/pmu-upload/list" element={<PmUploadList />} />
 
             <Route path="young-fellow-insight" element={<YoungFellowInsights />} />
             <Route path="young-fellow-insight/edit/:id" element={<YoungFellowInsights update={true} />} />

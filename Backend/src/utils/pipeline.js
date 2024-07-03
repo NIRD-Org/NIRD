@@ -35,4 +35,12 @@ export const location_pipeline = [
   { $unwind: "$district" },
   { $unwind: "$block" },
   { $unwind: "$gp" },
+  {
+    $addFields: {
+      state_name: "$state.name",
+      district_name: "$district.name",
+      block_name: "$block.name",
+      gp_name: "$gp.name",
+    },
+  },
 ];

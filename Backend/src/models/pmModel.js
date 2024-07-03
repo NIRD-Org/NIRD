@@ -1,13 +1,12 @@
+import mongoose from "mongoose";
+
 const pmSchema = new mongoose.Schema(
   {
+    id: { type: Number, required: true },
     state_id: { type: Number, required: true },
     dist_id: { type: Number, required: true },
     block_id: { type: Number, required: true },
     gp_id: { type: Number, required: true },
-    pm_state_id: { type: Number, required: true },
-    pm_dist_id: { type: Number, required: true },
-    pm_block_id: { type: Number, required: true },
-    pm_gp_id: { type: Number, required: true },
     date: { type: String, required: true },
     remarks: { type: String, required: true },
     file: { type: String, required: true },
@@ -18,4 +17,6 @@ const pmSchema = new mongoose.Schema(
   { timestamps: { createdAt: "created_at", updatedAt: "modified_at" } }
 );
 
-export const PmModel = mongoose.model("Pm", pmSchema);
+const PmModel = mongoose.model("Pm", pmSchema);
+
+export default PmModel;

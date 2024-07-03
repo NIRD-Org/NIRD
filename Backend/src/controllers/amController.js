@@ -1,12 +1,12 @@
 import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
-import PmModel from "../models/pmModel.js";
+import AmModel from "../models/amModel.js";
 import { UserLocationModel } from "../models/userLocationModel.js";
 import { location_pipeline } from "../utils/pipeline.js";
 import { uploadFile } from "../utils/uploadFile.js";
 
 const getNewId = async () => {
   try {
-    const maxDoc = await PmModel.aggregate([
+    const maxDoc = await AmModel.aggregate([
       {
         $addFields: {
           numericId: { $toInt: "$id" },
@@ -27,7 +27,7 @@ const getNewId = async () => {
   }
 };
 
-export const getAllPM = CatchAsyncError(async (req, res, next) => {
+export const getAllAM = CatchAsyncError(async (req, res, next) => {
   try {
     const filter = {};
     const { state_id, dist_id, block_id, gp_id } = req.query;
@@ -44,12 +44,12 @@ export const getAllPM = CatchAsyncError(async (req, res, next) => {
       filter.state_id = { $in: stateIds };
     }
     console.log(filter)
-    const pm = await PmModel.aggregate([{ $match: {} }]);
+    const am = await AmModel.aggregate([{ $match: {} }]);
 
     res.status(200).json({
       status: "success",
       data: {
-        pm,
+        am,
       },
     });
   } catch (error) {
@@ -57,51 +57,51 @@ export const getAllPM = CatchAsyncError(async (req, res, next) => {
   }
 });
 
-export const getPMById = CatchAsyncError(async (req, res, next) => {
-  const [pm] = await PmModel.aggregate([{ $match: { id: req.params.id } }, ...location_pipeline]);
+export const getAMById = CatchAsyncError(async (req, res, next) => {
+  const [am] = await AmModel.aggregate([{ $match: { id: req.params.id } }, ...location_pipeline]);
   res.status(200).json({
     status: "success",
     data: {
-      pm,
+      am,
     },
   });
 });
 
-export const createPM = CatchAsyncError(async (req, res, next) => {
-  const { pm_upload_file } = req.files;
-  const { url: fileUrl } = await uploadFile(pm_upload_file.data);
+export const createAM = CatchAsyncError(async (req, res, next) => {
+  const { am_upload_file } = req.files;
+  const { url: fileUrl } = await uploadFile(am_upload_file.data);
   req.body.file = fileUrl;
   req.body.created_by = req?.user?.id;
   req.body.id = await getNewId();
 
-  const newPM = await PmModel.create(req.body);
+  const newAM = await AmModel.create(req.body);
   res.status(201).json({
     status: "success",
     data: {
-      pm: newPM,
+      am: newAM,
     },
   });
 });
 
-export const deletePM = CatchAsyncError(async (req, res, next) => {
-  const pm = await PmModel.findOneAndDelete({ id: req.params.id });
+export const deleteAM = CatchAsyncError(async (req, res, next) => {
+  const am = await AmModel.findOneAndDelete({ id: req.params.id });
   res.status(200).json({
     status: "success",
     data: {
-      pm,
+      am,
     },
   });
 });
 
-export const updatePM = CatchAsyncError(async (req, res, next) => {
-  const pm = await PmModel.findOneAndUpdate({ id: req.params.id }, req.body, {
+export const updateAM = CatchAsyncError(async (req, res, next) => {
+  const am = await AmModel.findOneAndUpdate({ id: req.params.id }, req.body, {
     new: true,
     runValidators: true,
   });
   res.status(200).json({
     status: "success",
     data: {
-      pm,
+      am,
     },
   });
 });
