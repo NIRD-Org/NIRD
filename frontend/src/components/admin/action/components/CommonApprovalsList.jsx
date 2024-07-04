@@ -134,9 +134,9 @@ const CommonApprovalsList = ({ apiEndpoint, title, columns, redirect, master, no
                     ))}
                     {!normal && (
                       <TableCell>
-                        {approval.decision === 0
+                        {approval.decision == 0
                           ? "Pending"
-                          : approval.decision === 1
+                          : approval.decision == 1
                           ? "Approved"
                           : "Sent back for Modification"}
                       </TableCell>

@@ -49,6 +49,19 @@ const FormField = ({ name, label, type, options, required, disabled, value, onCh
             className="block"
           />
         );
+      case "checkbox":
+        return (
+          <input
+            required={required}
+            disabled={disabled}
+            type="checkbox"
+            name={name}
+            value={value}
+            onChange={onChange}
+            id={name}
+            className="col-span-3 block border border-slate-200 bg-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-slate-400 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300"
+          />
+        );
       default:
         return (
           <Input
