@@ -17,7 +17,7 @@ import { useSearchParams } from "react-router-dom";
 
 Chart.register(ArcElement, Tooltip, Legend);
 
-const ManregsChart = ({ kpi, kpiId, theme, kpi_img }) => {
+const ManregsChart = ({ kpi, kpiId, theme, kpi_img, financialYear }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [gpwiseKpiChart, setGpwiseKpiChart] = useState();
   const chartRef = useRef();
@@ -28,7 +28,7 @@ const ManregsChart = ({ kpi, kpiId, theme, kpi_img }) => {
   const getChartData = async () => {
     try {
       const { data } = await API.get(
-        `/api/v1/gp-wise-kpi/chart?state=${state}&dist=${dist}&gp=${gp}&kpi=${kpiId}&theme=${theme}`
+        `/api/v1/gp-wise-kpi/chart?state=${state}&dist=${dist}&gp=${gp}&kpi=${kpiId}&theme=${theme}&financial_year=${financialYear}`
       );
       setGpwiseKpiChart(data);
     } catch (error) {
@@ -46,7 +46,7 @@ const ManregsChart = ({ kpi, kpiId, theme, kpi_img }) => {
 
   useEffect(() => {
     getChartData();
-  }, []);
+  }, [financialYear]);
 
   // Data for the doughnut chart
   const barData = {
@@ -55,10 +55,10 @@ const ManregsChart = ({ kpi, kpiId, theme, kpi_img }) => {
       {
         label: kpi.substr(0, 50) + "...",
         data: [
-          gpwiseKpiChart?.quarterlyPercentage?.quarter1,
-          gpwiseKpiChart?.quarterlyPercentage?.quarter2,
-          gpwiseKpiChart?.quarterlyPercentage?.quarter3,
-          gpwiseKpiChart?.quarterlyPercentage?.quarter4,
+          gpwiseKpiChart?.quarterlyPercentage?.Q1,
+          gpwiseKpiChart?.quarterlyPercentage?.Q2,
+          gpwiseKpiChart?.quarterlyPercentage?.Q3,
+          gpwiseKpiChart?.quarterlyPercentage?.Q4,
         ],
         backgroundColor: "#00203F",
 
@@ -208,9 +208,7 @@ const ManregsChart = ({ kpi, kpiId, theme, kpi_img }) => {
               <option value="polar">Polar</option>
             </select>
           </div>
-          <h1 className="text-center py-4  text-gray-700 textxgl font-semibold">
-            FY 2023-24
-          </h1>
+          <h1 className="text-center py-4  text-gray-700 textxgl font-semibold"></h1>
 
           {chartType === "pie" && <Pie data={pieData} options={options} />}
           {chartType === "polar" && (

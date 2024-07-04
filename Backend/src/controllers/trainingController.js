@@ -160,6 +160,91 @@ export const getAllTrainingImages = CatchAsyncError(async (req, res, next) => {
   }
 });
 
+// Get Yearly training report
+
+export const getYearlyTrainingReport = CatchAsyncError(
+  async (req, res, next) => {
+    let financialYear = req.query.financial_year;
+
+    try {
+      if (!financialYear) {
+        // If no financial year is provided, find the latest financial year
+        const latestYearDoc = await Training.findOne()
+          .sort({ financialYear: -1 })
+          .select("financialYear")
+          .exec();
+        if (latestYearDoc) {
+          financialYear = latestYearDoc.financialYear;
+        } else {
+          return res.status(404).json({ message: "No data available" });
+        }
+      }
+
+      const result = await Training.aggregate([
+        { $match: { financialYear } },
+        {
+          $group: {
+            _id: "$financialYear",
+            noOfTrainings: {
+              $sum: {
+                $cond: [{ $eq: ["$type", "Training"] }, 1, 0],
+              },
+            },
+            noOfWorkshops: {
+              $sum: {
+                $cond: [{ $eq: ["$type", "Workshop"] }, 1, 0],
+              },
+            },
+            noOfSeminars: {
+              $sum: {
+                $cond: [{ $eq: ["$type", "Seminar"] }, 1, 0],
+              },
+            },
+            noOfWebinars: {
+              $sum: {
+                $cond: [{ $eq: ["$type", "Webinar"] }, 1, 0],
+              },
+            },
+            noOfOnlineTrainings: {
+              $sum: {
+                $cond: [{ $eq: ["$onlineOffline", "Online"] }, 1, 0],
+              },
+            },
+            noOfOfflineTrainings: {
+              $sum: {
+                $cond: [{ $eq: ["$onlineOffline", "Offline"] }, 1, 0],
+              },
+            },
+            noOfERsTrained: { $sum: "$noOfERs" },
+            noOfGPFunctionariesTrained: { $sum: "$noOfGPFunctionaries" },
+            noOfMembersOfSHGsTrained: { $sum: "$noOfMembersOfSHGs" },
+            noOfRepsFromVolOrgnsNGOsTrained: {
+              $sum: "$noOfRepsFromVolOrgnsNGOs",
+            },
+            noOfRepsFromNatlStateInstnsTrained: {
+              $sum: "$noOfRepsFromNatlStateInstns",
+            },
+            noOfPanchayatBandhusTrained: { $sum: "$noOfPanchayatBandhus" },
+            noOfProjectStaffTrained: { $sum: "$noOfProjectStaffTrained" },
+            totalOthersTrained: { $sum: "$others" },
+            totalMalesTrained: { $sum: "$noOfMale" },
+            totalFemalesTrained: { $sum: "$noOfFemale" },
+            totalParticipantsTrained: { $sum: "$total" },
+          },
+        },
+      ]);
+
+      if (result.length === 0) {
+        return next(new Errorhandler("No training reports found", 404));
+      }
+
+      res.status(200).json(result[0]);
+    } catch (error) {
+      return next(new Errorhandler("Failed to get training Reports", 500));
+    }
+  }
+);
+
 // Get training by ID
 export const getTrainingById = CatchAsyncError(async (req, res, next) => {
   try {

@@ -18,13 +18,13 @@ const YfInsightsPage = () => {
   const [stateOptions, setStateOptions] = useState([]);
   const [districtOptions, setDistrictOptions] = useState([]);
   const [blockOptions, setBlockOptions] = useState([]);
-  const [GpOptions, setGpOptions] = useState([]);
+  // const [GpOptions, setGpOptions] = useState([]);
   const [stateData, setStateData] = useState();
   const [yfInsights, setYfInsights] = useState([]);
   const state = searchParams.get("state") || "";
   const dist = searchParams.get("dist") || "";
   const block = searchParams.get("block") || "";
-  const gp = searchParams.get("gp") || "";
+  // const gp = searchParams.get("gp") || "";
   const navigate = useNavigate();
 
   const getAllStates = async () => {
@@ -43,14 +43,9 @@ const YfInsightsPage = () => {
     setBlockOptions(data.blocks);
   };
 
-  const getAllGp = async () => {
-    const { data } = await API.get(`/api/v1/gram/get?block=${block}`);
-    setGpOptions(data.gram);
-  };
-
   const getYfInsightsData = async () => {
     try {
-      const { data } = await API.get(`api/v1/yf-insights/get?gp=${gp}`);
+      const { data } = await API.get(`api/v1/yf-insights/get?block=${block}`);
       setYfInsights(data?.data);
     } catch (error) {
       console.log("Error: " + error.message);
@@ -59,13 +54,12 @@ const YfInsightsPage = () => {
   };
 
   useEffect(() => {
-    if (gp) {
+    if (block) {
       getYfInsightsData();
     }
-  }, [gp]);
+  }, [block]);
 
   useEffect(() => {
-    setGpOptions([]);
     setBlockOptions([]);
     getAllStates();
     getAllDistricts();
@@ -76,10 +70,6 @@ const YfInsightsPage = () => {
       getAllBlocks();
     }
   }, [dist]);
-
-  useEffect(() => {
-    getAllGp();
-  }, [block]);
 
   const getStateById = async (stateId) => {
     try {
@@ -203,7 +193,7 @@ const YfInsightsPage = () => {
                 ))}
               </select>
             </div>
-            <div className="flex flex-col">
+            {/* <div className="flex flex-col">
               <label className="text-sm text-primary text-start px-4 py-2 font-semibold">
                 Gram Panchayat
               </label>
@@ -222,7 +212,7 @@ const YfInsightsPage = () => {
                   </option>
                 ))}
               </select>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="w-full md:w-1/3 flex justify-center items-center lg:w-1/2 h-full">
@@ -233,12 +223,6 @@ const YfInsightsPage = () => {
           />
         </div>
       </div>
-      {/* <button
-        onClick={() => generatePDF()}
-        className="mt-4 bg-primary hover:bg-blue-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-      >
-        Download as PDF
-      </button> */}
 
       <PDFDownloadLink
         document={<YfInsightsPdf insights={yfInsights} />}

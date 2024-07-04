@@ -1,4 +1,5 @@
 import GradientLine from "@/components/GradientLine";
+import TrainingChart from "@/components/TrainingChart";
 import TrainingGallery from "@/components/TrainingGallery";
 import API from "@/utils/API";
 import { ChevronLeft, ChevronRight, Download } from "lucide-react";
@@ -13,8 +14,9 @@ const TrainingPage = () => {
   const [currentPage, setCurrentPage] = useState(
     parseInt(searchParams.get("page")) || 1
   );
+  const [financialYear, setFinancialYear] = useState();
   const [totalPages, setTotalPages] = useState();
-
+  const [trainingSummary, setTrainingSummary] = useState();
   const [loading, setLoading] = useState(false);
   // static data for table
   const [data, setData] = useState({
@@ -66,12 +68,25 @@ const TrainingPage = () => {
     }
   };
 
+  const getTrainingSummary = async () => {
+    try {
+      const { data } = await API.get(
+        `/api/v1/training/yearly-report?financialYear=${financialYear}`
+      );
+      setTrainingSummary(data);
+    } catch (error) {
+      setTrainingSummary();
+      console.log(error);
+    }
+  };
+
   const handlePageChange = (newPage) => {
     if (newPage < 1 || newPage > totalPages) return;
     setCurrentPage(newPage);
   };
 
   useEffect(() => {
+    getTrainingSummary();
     getTrainingGallery();
   }, []);
 
@@ -81,6 +96,15 @@ const TrainingPage = () => {
         Loading...
       </div>
     );
+
+  const financialYears = [];
+
+  for (let year = 2022; year <= 2050; year++) {
+    financialYears.push({
+      value: `FY${year}-${year + 1}`,
+      label: `FY ${year}-${year + 1}`,
+    });
+  }
 
   return (
     <div className=" bg-white">
@@ -117,7 +141,7 @@ const TrainingPage = () => {
 
       {/* Tabular data */}
 
-      <div className="w-full px-4 py-8  md:px-20 md:py-10 bg-white max-w-lg ">
+      {/* <div className="w-full px-4 py-8  md:px-20 md:py-10 bg-white max-w-lg ">
         <h1 className="text-2xl font-bold py-2  text-center text-white bg-primary">
           Training Summary
         </h1>
@@ -199,6 +223,173 @@ const TrainingPage = () => {
             <span className="text-gray-600">{data.femalesTrained}</span>
           </div>
         </div>
+      </div> */}
+
+      <div className="w-full px-4 py-8 md:px-20 md:py-10 bg-white">
+        <div className="flex flex-col md:flex-row gap-3 items-center justify-end mb-2">
+          <label className="font-semibold">Select Financial Year: </label>
+          <select
+            value={financialYear}
+            onChange={(e) => setFinancialYear(e.target.value)}
+            className="w-full md:w-40 text-center border p-2 rounded-md"
+          >
+            <option value="">Select Financial Year</option>
+            {financialYears.map((year, index) => (
+              <option key={index} value={year.value}>
+                {year.label}
+              </option>
+            ))}
+          </select>
+        </div>
+        <h1 className="text-2xl font-bold py-2 text-center text-white bg-primary">
+          Training Summary
+        </h1>
+        {trainingSummary && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+            <div className="bg-gray-100 p-1 rounded-lg shadow-md">
+              <span className="font-semibold text-sky-950">
+                No. of Trainings
+              </span>
+              <span className="block text-gray-600">
+                {trainingSummary?.noOfTrainings ?? 0}
+              </span>
+            </div>
+            <div className="bg-gray-100 p-1 rounded-lg shadow-md">
+              <span className="font-semibold text-sky-950">
+                No. of Workshops
+              </span>
+              <span className="block text-gray-600">
+                {trainingSummary.noOfWorkshops ?? 0}
+              </span>
+            </div>
+            <div className="bg-gray-100 p-1 rounded-lg shadow-md">
+              <span className="font-semibold text-sky-950">
+                No. of Seminars
+              </span>
+              <span className="block text-gray-600">
+                {trainingSummary.noOfSeminars ?? 0}
+              </span>
+            </div>
+            <div className="bg-gray-100 p-1 rounded-lg shadow-md">
+              <span className="font-semibold text-sky-950">
+                No. of Webinars
+              </span>
+              <span className="block text-gray-600">
+                {trainingSummary.noOfWebinars ?? 0}
+              </span>
+            </div>
+            <div className="bg-gray-100 p-1 rounded-lg shadow-md">
+              <span className="font-semibold text-sky-950">
+                No. of Online Trainings
+              </span>
+              <span className="block text-gray-600">
+                {trainingSummary.noOfOnlineTrainings ?? 0}
+              </span>
+            </div>
+            <div className="bg-gray-100 p-1 rounded-lg shadow-md">
+              <span className="font-semibold text-sky-950">
+                No. of Offline Trainings
+              </span>
+              <span className="block text-gray-600">
+                {trainingSummary.noOfOfflineTrainings ?? 0}
+              </span>
+            </div>
+            <div className="bg-gray-100 p-1 rounded-lg shadow-md">
+              <span className="font-semibold text-sky-950">
+                No. of ERs trained
+              </span>
+              <span className="block text-gray-600">
+                {trainingSummary.noOfERsTrained ?? 0}
+              </span>
+            </div>
+            <div className="bg-gray-100 p-1 rounded-lg shadow-md">
+              <span className="font-semibold text-sky-950">
+                No. of Functionaries trained
+              </span>
+              <span className="block text-gray-600">
+                {trainingSummary.noOfGPFunctionariesTrained ?? 0}
+              </span>
+            </div>
+            <div className="bg-gray-100 p-1 rounded-lg shadow-md">
+              <span className="font-semibold text-sky-950">
+                No. of SHGs trained
+              </span>
+              <span className="block text-gray-600">
+                {trainingSummary.noOfMembersOfSHGsTrained ?? 0}
+              </span>
+            </div>
+            <div className="bg-gray-100 p-1 rounded-lg shadow-md">
+              <span className="font-semibold text-sky-950">
+                No. of Vol. Organisations/ NGOs trained
+              </span>
+              <span className="block text-gray-600">
+                {trainingSummary.noOfRepsFromVolOrgnsNGOsTrained ?? 0}
+              </span>
+            </div>
+            <div className="bg-gray-100 p-1 rounded-lg shadow-md">
+              <span className="font-semibold text-sky-950">
+                No. of Reps. From Natl. / State Level Institutions Trained
+              </span>
+              <span className="block text-gray-600">
+                {trainingSummary.noOfRepsFromNatlStateInstnsTrained ?? 0}
+              </span>
+            </div>
+            <div className="bg-gray-100 p-1 rounded-lg shadow-md">
+              <span className="font-semibold text-sky-950">
+                No. of Panchayat Bandhu trained
+              </span>
+              <span className="block text-gray-600">
+                {trainingSummary.noOfPanchayatBandhusTrained ?? 0}
+              </span>
+            </div>
+            <div className="bg-gray-100 p-1 rounded-lg shadow-md">
+              <span className="font-semibold text-sky-950">
+                No. of Project Staff Trained
+              </span>
+              <span className="block text-gray-600">
+                {trainingSummary.noOfProjectStaffTrained ?? 0}
+              </span>
+            </div>
+            <div className="bg-gray-100 p-1 rounded-lg shadow-md">
+              <span className="font-semibold text-sky-950">
+                Others (Youth/PSUs/ Individuals etc.)
+              </span>
+              <span className="block text-gray-600">
+                {trainingSummary.totalOthersTrained ?? 0}
+              </span>
+            </div>
+            <div className="bg-gray-100 p-1 rounded-lg shadow-md">
+              <span className="font-semibold text-sky-950">
+                No. of Males trained
+              </span>
+              <span className="block text-gray-600">
+                {trainingSummary.totalMalesTrained ?? 0}
+              </span>
+            </div>
+            <div className="bg-gray-100 p-1 rounded-lg shadow-md">
+              <span className="font-semibold text-sky-950">
+                No. of Females trained
+              </span>
+              <span className="block text-gray-600">
+                {trainingSummary.totalFemalesTrained ?? 0}
+              </span>
+            </div>
+            <div className="bg-gray-100 p-1 rounded-lg shadow-md">
+              <span className="font-semibold text-sky-950">
+                Total Number of Participants Trained
+              </span>
+              <span className="block text-gray-600">
+                {trainingSummary.totalParticipantsTrained ?? 0}
+              </span>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Charts */}
+
+      <div className="w-full bg-white py-10 px-5 md:py-20 md:px-10">
+        <TrainingChart />
       </div>
 
       {/* Training Reports */}

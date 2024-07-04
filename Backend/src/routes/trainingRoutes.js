@@ -8,6 +8,7 @@ import {
   approveTraining,
   getTrainingData,
   getAllTrainingImages,
+  getYearlyTrainingReport,
 } from "../controllers/trainingController.js";
 import { isAuth } from "../middlewares/auth.js";
 
@@ -18,7 +19,7 @@ router.route("/create").post(isAuth, createTraining);
 router.route("/all").get(isAuth, getAllTrainings);
 router.route("/").get(getTrainingData);
 router.route("/gallery").get(getAllTrainingImages);
-
+router.route("/yearly-report").get(getYearlyTrainingReport);
 router
   .route("/:id")
   .get(getTrainingById)

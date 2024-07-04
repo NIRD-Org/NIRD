@@ -15,7 +15,7 @@ const ThemeDataPage = () => {
   const [dist, setDist] = useState();
   const [block, setBlock] = useState();
   const [gp, setGp] = useState();
-
+  const [financialYear, setFinancialYear] = useState("");
   const state_id = searchParams.get("state") || "";
   const dist_id = searchParams.get("dist") || "";
   const block_id = searchParams.get("block") || "";
@@ -86,6 +86,17 @@ const ThemeDataPage = () => {
     getThemeById();
     getKpiByTheme();
   }, []);
+  // Dropdown for financial years
+
+  const financialYears = [];
+
+  for (let year = 2022; year <= 2050; year++) {
+    financialYears.push({
+      value: `FY${year}-${year + 1}`,
+      label: `FY ${year}-${year + 1}`,
+    });
+  }
+
   return (
     <div className="relative overflow-hidden">
       <button
@@ -99,22 +110,39 @@ const ThemeDataPage = () => {
         <h1 className="text-xl font-bold text-primary">Theme : </h1>
         <p className="text-lg text-center">{theme}</p>
       </div>
-      <div className="mx-auto px-4 pb-10 pt-5 w-full md:w-1/2 flex flex-wrap justify-between gap-5">
-        <div className="flex gap-2 items-center">
+      <div className="px-4 pb-10 pt-5 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 md:px-20 gap-0">
+        <div className="flex gap-2 items-center w-fit">
           <h1 className="font-semibold text-lg">State : </h1>
           <p className="text-lg text-gray-700">{state}</p>
         </div>
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-2 items-center w-fit">
           <h1 className="font-semibold text-lg">District : </h1>
           <p className="text-lg text-gray-700">{dist}</p>
         </div>
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-2 items-center w-fit">
           <h1 className="font-semibold text-lg">Block : </h1>
           <p className="text-lg text-gray-700">{block}</p>
         </div>
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-2 items-center w-fit">
           <h1 className="font-semibold text-lg">GP : </h1>
           <p className="text-lg text-gray-700">{gp}</p>
+        </div>
+        <div className="flex gap-2 items-center w-fit">
+          <label className="font-semibold text-lg text-nowrap">
+            Financial Year:
+          </label>
+          <select
+            value={financialYear}
+            onChange={(e) => setFinancialYear(e.target.value)}
+            className="w-full md:w-40 text-center border p-2 rounded-md"
+          >
+            <option value="">Select Financial Year</option>
+            {financialYears.map((year, index) => (
+              <option key={index} value={year.value}>
+                {year.label}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
@@ -129,6 +157,7 @@ const ThemeDataPage = () => {
               kpiId={k.id}
               kpi_img={k.kpi_image}
               theme={id}
+              financialYear={financialYear}
             />
           ))}
       </div>
