@@ -5,6 +5,7 @@ import API from "@/utils/API";
 import { tst } from "@/lib/utils";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthContext } from "@/context/AuthContext";
+import { Button } from "@/components/ui/button";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -12,6 +13,7 @@ const LoginPage = () => {
     password: "",
   });
   const { login,isAuthenticated } = useAuthContext();
+  const [pending,setPending] = useState(false);
   const navigate = useNavigate();
   const {user} = useAuthContext();
 
@@ -26,6 +28,7 @@ const LoginPage = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
+      setPending(true)
       const response = await API.post("/api/v1/auth/login", formData);
       tst.success("User login successful");
       const authHeader = response.headers.get("Authorization");
@@ -38,6 +41,9 @@ const LoginPage = () => {
     } catch (error) {
       tst.error(error);
       console.error("Login failed:", error.message);
+    }
+    finally{
+      setPending(false);
     }
   };
 
@@ -77,9 +83,9 @@ const LoginPage = () => {
             required
           />
         </div>
-        <button type="submit" className="bg-primary w-full text-white px-4 py-2 mt-4 rounded-md">
+        <Button pending={pending} type="submit" className="bg-primary w-full text-white px-4 py-2 mt-4 rounded-md">
           Login
-        </button>
+        </Button>
       </form>
     </div>
   );
