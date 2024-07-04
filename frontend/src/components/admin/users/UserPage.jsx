@@ -126,6 +126,7 @@ const UserPage = () => {
         <TableHeader>
           <TableRow>
             <TableHead>ID</TableHead>
+            <TableHead>Employee ID</TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Username</TableHead>
             <TableHead>Role</TableHead>
@@ -139,6 +140,7 @@ const UserPage = () => {
             {filteredUsers.map(user => (
               <TableRow key={user.id}>
                 <TableCell>{user.id}</TableCell>
+                <TableCell>{user.employee_id || "N/A"}</TableCell>
                 <TableCell>{user.name}</TableCell>
                 <TableCell>{user.username}</TableCell>
                 <TableCell>
