@@ -1,13 +1,6 @@
 import Multiselect from "multiselect-react-dropdown";
 import { useState, useEffect } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { cn, tst } from "@/lib/utils";
 import API from "@/utils/API";
 import { Button } from "@/components/ui/button";
@@ -16,7 +9,7 @@ import { useAuthContext } from "@/context/AuthContext";
 import { Label } from "@/components/ui/label";
 import { useAdminState } from "@/components/hooks/useAdminState";
 
-const UserLocation = ({role}) => {
+const UserLocation = ({ role }) => {
   const [state, setState] = useState(null);
   const [states, setStates] = useState([]);
   const [districts, setDistricts] = useState([]);
@@ -27,12 +20,11 @@ const UserLocation = ({role}) => {
   const [gps, setGps] = useState([]);
   const { user } = useAuthContext();
   const { userId } = useParams();
-  const {adminStates} = useAdminState();
+  const { adminStates } = useAdminState();
+  const [adists, setAdists] = useState([]);
 
   const handleStateChange = value => {
-    const stateId = states
-      .filter(state => state.name == value)
-      .map(state => state.id);
+    const stateId = states.filter(state => state.name == value).map(state => state.id);
 
     setSelectedState(prev => {
       const newSelectedState = new Set([...prev, ...stateId]);
@@ -41,9 +33,7 @@ const UserLocation = ({role}) => {
   };
 
   const handleBlockChange = (value, dist_id) => {
-    const blockIds = blocks
-      .filter(block => value.includes(block.name))
-      .map(block => block.id);
+    const blockIds = blocks.filter(block => value.includes(block.name)).map(block => block.id);
 
     setSelectedBlock(prev => {
       const newSelectedBlocks = new Set([...prev, ...blockIds]);
@@ -52,9 +42,7 @@ const UserLocation = ({role}) => {
   };
 
   const handleBlockRemove = (value, dist_id) => {
-    const blockIds = blocks
-      .filter(block => value.includes(block.name))
-      .map(block => block.id);
+    const blockIds = blocks.filter(block => value.includes(block.name)).map(block => block.id);
 
     setSelectedBlock(prev => prev.filter(id => !blockIds.includes(id)));
   };
@@ -75,26 +63,16 @@ const UserLocation = ({role}) => {
   };
 
   const postLocation = async () => {
-
-    const blockIds = Array.from(
-      new Set(
-        gps
-          .filter(gp => selectedGp.includes(gp.id))
-          .map(gp => gp.block_id)
-      )
-    );
+    const blockIds = Array.from(new Set(gps.filter(gp => selectedGp.includes(gp.id)).map(gp => gp.block_id)));
 
     const distIds = Array.from(
-      new Set(
-        blocks
-          .filter(block => blockIds.includes(block.id))
-          .map(block => block.dist_id)
-      )
+      new Set(blocks.filter(block => blockIds.includes(block.id)).map(block => block.dist_id))
     );
-    
+
+    const stateIds = Array.from(new Set(adists.filter(dist => distIds.includes(dist.id)).map(dist => dist.state_id)));
 
     const userLocations = {
-      state_ids: [state],
+      state_ids: stateIds,
       dist_ids: distIds,
       block_ids: blockIds,
       gp_ids: selectedGp,
@@ -151,6 +129,15 @@ const UserLocation = ({role}) => {
       }
     }
 
+    async function fetchADists(){
+      try {
+        const response = await API.get(`/api/v1/dist/all`);
+        setAdists(response.data || []);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
     async function fetchDistricts() {
       if (state) {
         try {
@@ -180,7 +167,7 @@ const UserLocation = ({role}) => {
       }
     }
 
-    Promise.all([fetchDistricts(), fetchBlocks(), fetchGPs(), fetchStates()]);
+    Promise.all([fetchDistricts(), fetchBlocks(), fetchGPs(), fetchStates(),fetchADists()]);
   }, [state]);
 
   if (role == 2) {
@@ -196,10 +183,7 @@ const UserLocation = ({role}) => {
             onSelect={(_, value) => handleStateChange(value)}
             options={states.map(state => state.name)}
           />
-          <Button
-            onClick={postAdminLocation}
-            className="mx-auto block px-20 mt-20"
-          >
+          <Button onClick={postAdminLocation} className="mx-auto block px-20 mt-20">
             Submit
           </Button>
         </div>
@@ -211,14 +195,12 @@ const UserLocation = ({role}) => {
     <div>
       <div>
         <select
-          className={cn(
-            "text-sm px-4 py-2 rounded-md bg-transparent border max-w-[500px] mx-auto block"
-          )}
+          className={cn("text-sm px-4 py-2 rounded-md bg-transparent border max-w-[500px] mx-auto block")}
           value={state || ""}
           onChange={e => setState(e.target.value)}
         >
           <option value="">Select a state</option>
-          {(user.role==1 ? states : adminStates)?.map(state => (
+          {(user.role == 1 ? states : adminStates)?.map(state => (
             <option key={state.id} value={state.id}>
               {state.name}
             </option>
@@ -230,7 +212,7 @@ const UserLocation = ({role}) => {
           <TableHeader>
             <TableRow>
               <TableHead className="w-10">S.No.</TableHead>
-              <TableHead className="w-[400px]">Districts</TableHead>
+              <TableHead className="w-[200px]">Districts</TableHead>
               <TableHead className="w-40">Blocks</TableHead>
               <TableHead className="w-40">GP</TableHead>
             </TableRow>
@@ -244,16 +226,10 @@ const UserLocation = ({role}) => {
                   <Multiselect
                     isObject={false}
                     onKeyPressFn={function noRefCheck() {}}
-                    onRemove={(_, value) =>
-                      handleBlockRemove(value, district.id)
-                    }
+                    onRemove={(_, value) => handleBlockRemove(value, district.id)}
                     onSearch={function noRefCheck() {}}
-                    onSelect={(_, value) =>
-                      handleBlockChange(value, district.id)
-                    }
-                    options={blocks
-                      .filter(block => block.dist_id == district.id)
-                      .map(block => block.name)}
+                    onSelect={(_, value) => handleBlockChange(value, district.id)}
+                    options={blocks.filter(block => block.dist_id == district.id).map(block => block.name)}
                   />
                 </TableCell>
                 <TableCell>
@@ -264,11 +240,7 @@ const UserLocation = ({role}) => {
                     onSearch={function noRefCheck() {}}
                     onSelect={(_, value) => handleGPChange(value)}
                     options={gps
-                      .filter(
-                        gp =>
-                          gp.dist_id == district.id &&
-                          selectedBlock.includes(gp.block_id)
-                      )
+                      .filter(gp => gp.dist_id == district.id && selectedBlock.includes(gp.block_id))
                       .map(gp => gp.name)}
                   />
                 </TableCell>

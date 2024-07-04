@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import API from "@/utils/API";
+import { useYfLocation } from "@/components/hooks/useYfLocation";
 
 const GramFilter = ({ className }) => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -10,6 +11,7 @@ const GramFilter = ({ className }) => {
   const block_id = searchParams.get("block_id") || "";
   const gram_id = searchParams.get("gram_id") || "";
   const [grams, setGrams] = useState([]);
+  const { yfGp } = useYfLocation({ state_id, block_id, dist_id});
 
   useEffect(() => {
     if (block_id) {
@@ -53,7 +55,7 @@ const GramFilter = ({ className }) => {
       disabled={!block_id}
     >
       <option value="">Select a GP</option>
-      {grams.map(gram => (
+      {(yfGp ? yfGp : grams).map(gram => (
         <option key={gram.id} value={gram.id}>
           {gram.name}
         </option>

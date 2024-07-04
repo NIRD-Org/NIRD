@@ -43,14 +43,13 @@ export const getAllPM = CatchAsyncError(async (req, res, next) => {
       const stateIds = userLocations.state_ids;
       filter.state_id = { $in: stateIds };
     }
-    console.log(filter)
-    const pm = await PmModel.aggregate([{ $match: {} }]);
+    console.log(filter);
+    // const pm = await PmModel.aggregate([{ $match: {} }]);
+    const pm = await PmModel.find(filter);
 
     res.status(200).json({
       status: "success",
-      data: {
-        pm,
-      },
+      data: pm,
     });
   } catch (error) {
     console.log(error);
@@ -58,12 +57,12 @@ export const getAllPM = CatchAsyncError(async (req, res, next) => {
 });
 
 export const getPMById = CatchAsyncError(async (req, res, next) => {
-  const [pm] = await PmModel.aggregate([{ $match: { id: req.params.id } }, ...location_pipeline]);
+  // const [pm] = await PmModel.aggregate([{ $match: { id: req.params.id } }, ...location_pipeline]);
+  const pm = await PmModel.findOne({ id: req.params.id });
+
   res.status(200).json({
     status: "success",
-    data: {
-      pm,
-    },
+    data: pm,
   });
 });
 

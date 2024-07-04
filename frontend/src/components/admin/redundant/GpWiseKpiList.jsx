@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { NirdEditIcon, NirdViewIcon } from "../../../Icons";
+import { NirdEditIcon, NirdViewIcon } from "../Icons";
 
 function YfGpWiseKpiApprovalList() {
   const [searchParams] = useSearchParams();

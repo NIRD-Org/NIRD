@@ -3,12 +3,7 @@ import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } 
 import "./App.css";
 import Layout from "./Layout";
 import AdminPage from "./Pages/admin/AdminPage";
-import BlockPage from "./components/admin/block/BlockPage";
-import GpPage from "./components/admin/gp/GpPage";
-import ThemePage from "./components/admin/theme/ThemePage";
-import DistrictPage from "./components/admin/district/DistrictPage";
 import KPIDetails from "./Pages/KPIDetails";
-import StatePage from "./components/admin/state/StatePage";
 import { Toaster } from "react-hot-toast";
 import LoginPage from "./Pages/LoginPage";
 import RegisterPage from "./Pages/RegisterPage";
@@ -20,27 +15,24 @@ import YoungFellowForm from "./components/admin/young-fellow/YoungFellowForm";
 import { useAuthContext } from "./context/AuthContext";
 import GpWiseKpiList from "./components/admin/young-fellow/GpWiseKpiList";
 import AddGpWiseKpi from "./components/admin/young-fellow/AddGpWiseKpi";
-import StateForm from "./components/admin/state/StateForm";
-import DistrictForm from "./components/admin/district/DistrictForm";
-import BlockForm from "./components/admin/block/BlockForm";
-import GpForm from "./components/admin/gp/GpForm";
-import ThemeForm from "./components/admin/theme/ThemeForm";
+import StateForm from "./components/admin/master/forms/StateForm";
+import DistrictForm from "./components/admin/master/forms/DistrictForm";
+import BlockForm from "./components/admin/master/forms/BlockForm";
+import GpForm from "./components/admin/master/forms/GpForm";
+import ThemeForm from "./components/admin/master/forms/ThemeForm";
 import IndicatorForm from "./components/admin/young-fellow/IndicatorForm";
-import AdminMainPage from "./components/admin/AdminMainPage";
-import DataPointForm from "./components/admin/kpi/KpiForm";
-import DataPointPage from "./components/admin/kpi/KpiPage";
+import AdminMainPage from "./components/admin/redundant/AdminMainPage";
+import DataPointForm from "./components/admin/master/forms/KpiForm";
 import KpiApprovalsList from "./components/admin/young-fellow/KpiApprovalsList";
 import GpWiseKpiApprovalPage from "./components/admin/action/admin/gp-wise-kpi/approve";
 import GpWiseKpiApprovalView from "./components/admin/action/admin/gp-wise-kpi/view";
 import UpdateGpWiseKpi from "./components/admin/action/young-fellow/gp-wise-kpi/resubmit";
 import ThemeDataPage from "./Pages/ThemeDataPage";
-import YfGpWiseKpiApprovalList from "./components/admin/action/young-fellow/gp-wise-kpi/list";
 import GpWiseKpiApprovalList from "./components/admin/action/admin/gp-wise-kpi/list";
 import UserLocation from "./components/admin/user-location/UserLocation";
-import GpDetailsForm from "./components/admin/Gpdetails/GpDetailsForm";
+import GpDetailsForm from "./components/admin/young-fellow/GpDetailsForm";
 import UserList from "./components/admin/user-location/UserList";
 import PmUploadForm from "./components/admin/attendance/PmuUpload";
-// import AttendanceLayout from "./components/admin/attendance/AttendanceLayout";
 import AmUploadForm from "./components/admin/attendance/AmuUpload";
 import Attendance from "./components/admin/attendance/Attendance";
 import UpdateUserLocation from "./components/admin/user-location/UpdateUserLocation";
@@ -48,50 +40,45 @@ import GramPanchayatProfile from "./Pages/GramPanchayatProfile";
 import YoungFellowInsights from "./components/admin/young-fellow-insight/YoungFellowInsight";
 import FellowInsightPage from "./components/admin/young-fellow-insight/FellowInsightPage";
 import YfInsightsPage from "./Pages/YfInsightsPage";
-import KpiViewPage from "./components/admin/kpi/KpiView";
+// import KpiViewPage from "./components/admin/kpi/KpiView";
 import UserPage from "./components/admin/users/UserPage";
 import UserView from "./components/admin/users/UserView";
 import GoodPractices from "./Pages/GoodPractices";
 import LCVAPage from "./Pages/LCVAPage";
 import TrainingPage from "./Pages/TrainingPage";
-import TrainingForm from "./components/admin/training-form/TrainingForm";
+import TrainingForm from "./components/admin/young-fellow/TrainingForm";
 import LocationView from "./components/admin/user-location/LocationView";
-import GoodPracticeForm from "./components/admin/good-practices/GoodPracticeForm";
+import GoodPracticeForm from "./components/admin/young-fellow/GoodPracticeForm";
 import GoodPracticeApprovalsList from "./components/admin/action/admin/good practice/list";
 import GoodPracticeApprovalPage from "./components/admin/action/admin/good practice/approve";
-import GoodPracticeApprovalsListYF from "./components/admin/action/young-fellow/good-practice/list";
 import GoodPracticeResubmit from "./components/admin/action/young-fellow/good-practice/resubmit";
 import GoodPracticeViewDetails from "./components/admin/action/admin/good practice/view";
-import LCVAForm from "./components/admin/lcva/LCVAForm";
+import LCVAForm from "./components/admin/young-fellow/LCVAForm";
 import LCVAApprovalsList from "./components/admin/action/admin/lcva/list";
 import LCVAApprovalPage from "./components/admin/action/admin/lcva/approve";
-import LCVAApprovalsListYF from "./components/admin/action/young-fellow/lcva/list";
 import LCVAResubmit from "./components/admin/action/young-fellow/lcva/resubmit";
 import LCVAViewDetails from "./components/admin/action/admin/lcva/view";
 import AdminIndicatorApprovalList from "./components/admin/action/admin/gp-wise-indicator/list";
 import IndicatorApprovalAdminForm from "./components/admin/action/admin/gp-wise-indicator/approve";
-import YFIndicatorApprovalList from "./components/admin/action/young-fellow/indicator/list";
 import IndicatorApprovalResubmit from "./components/admin/action/young-fellow/indicator/resubmit";
 import TrainingApprovalsList from "./components/admin/action/admin/training/list";
 import TrainingApprovalPage from "./components/admin/action/admin/training/approve";
-import TrainingApprovalsListYf from "./components/admin/action/young-fellow/training/list";
-import TrainingResubmit from "./components/admin/action/young-fellow/training/resubmit";
+import TrainingResubmit from "./components/admin/resubmit";
 import TrainingViewDetails from "./components/admin/action/admin/training/view";
 import GpDetailsApprovalsList from "./components/admin/action/admin/gp-details/list";
 import GpDetailsApprovalPage from "./components/admin/action/admin/gp-details/approve";
 import GpDetailsViewDetials from "./components/admin/action/admin/gp-details/view";
-import GpDetailsApprovalsListYf from "./components/admin/action/young-fellow/gp-details/list";
 import GpDetailsApprovalResubmit from "./components/admin/action/young-fellow/gp-details/resubmit";
 import AchievementChart from "./AchievemetnChart";
 import SuperadminApprovalList from "./components/admin/action/superadmin/page";
 import IndicatorViewDetials from "./components/admin/action/admin/gp-wise-indicator/view";
-import DataTable from "./components/admin/master/Deleted";
 import DeletedItems from "./components/admin/master/Deleted";
 import Masters from "./components/admin/master/Masters";
 import ChangePassword from "./components/admin/change-password/page";
 import AmUploadView from "./components/admin/attendance/AmuView";
 import AmUploadList from "./components/admin/attendance/AmuList";
 import PmUploadList from "./components/admin/attendance/PmuList";
+import PmUploadView from "./components/admin/attendance/PmuView";
 
 function App() {
   const { login } = useAuthContext();
@@ -121,19 +108,12 @@ function App() {
           <Route path="/admin" element={<AdminPage />}>
             <Route index element={<AdminMainPage />} />
 
-            <Route path="blocks" element={<BlockPage />} />
-            <Route path="gram-panchayats" element={<GpPage />} />
-            <Route path="themes" element={<ThemePage />} />
-            <Route path="districts" element={<DistrictPage />} />
-            <Route path="states" element={<StatePage />} />
-            <Route path="data-point" element={<DataPointPage />} />
-
             <Route path="young-professionals" element={<YoungFellowForm />} />
             <Route path="gp-wise-kpi" element={<GpWiseKpiList />} />
             <Route path="change-password" element={<ChangePassword />} />
             <Route path="users" element={<UserPage />} />
             <Route path="users/view/:id" element={<UserView />} />
-            <Route path="data-point/view/:kpiId" element={<KpiViewPage />} />
+            {/* <Route path="data-point/view/:kpiId" element={<KpiViewPage />} /> */}
             <Route path="kpi-approvals-list" element={<KpiApprovalsList />} />
             <Route path="action/superadmin" element={<SuperadminApprovalList />} />
 
@@ -173,9 +153,10 @@ function App() {
             <Route path="attendance/attendance" element={<Attendance />} />
             <Route path="attendance/amu-upload" element={<AmUploadForm />} />
             <Route path="attendance/pmu-upload" element={<PmUploadForm />} />
-            <Route path="attendance/view/amu-upload/:id" element={<AmUploadView />} />
             <Route path="attendance/amu-upload/list" element={<AmUploadList />} />
             <Route path="attendance/pmu-upload/list" element={<PmUploadList />} />
+            <Route path="view/amu-upload/:id" element={<AmUploadView />} />
+            <Route path="view/pmu-upload/:id" element={<PmUploadView />} />
 
             <Route path="young-fellow-insight" element={<YoungFellowInsights />} />
             <Route path="young-fellow-insight/edit/:id" element={<YoungFellowInsights update={true} />} />

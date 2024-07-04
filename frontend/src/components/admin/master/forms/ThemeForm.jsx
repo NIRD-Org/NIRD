@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import AdminHeader from "../AdminHeader";
+import AdminHeader from "../../AdminHeader";
 import API from "@/utils/API";
 import { tst } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";

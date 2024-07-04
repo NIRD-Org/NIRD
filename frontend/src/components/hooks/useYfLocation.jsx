@@ -2,29 +2,20 @@ import API from "@/utils/API";
 import { useEffect, useState } from "react";
 
 export function useYfLocation({ state_id, dist_id, block_id }) {
-  const [yfState, setYfState] = useState(null);
-  const [yfDist, setYfDist] = useState(null);
-  const [yfBlock, setYfBlock] = useState(null);
-  const [yfGp, setYfGp] = useState(null);
+  const [yfState, setYfState] = useState([]);
+  const [yfDist, setYfDist] = useState([]);
+  const [yfBlock, setYfBlock] = useState([]);
+  const [yfGp, setYfGp] = useState([]);
 
-  const [userLocationIds, setUserLocationIds] = useState({
-    state_ids: [],
-    district_ids: [],
-    block_state_ids: [],
-    gp_ids: []
-  });
+  const [userLocation, setUserLocation] = useState({});
 
   useEffect(() => {
     const fetchUserLocations = async () => {
       try {
         const response = await API.get("/api/v1/user-location");
-        const { userLocations } = response.data.data;
-        setUserLocationIds({
-          state_ids: userLocations?.state_ids || [],
-          district_ids: userLocations?.district_ids || [],
-          block_state_ids: userLocations?.block_state_ids || [],
-          gp_ids: userLocations?.gp_ids || []
-        });
+        const data = response.data.data;
+        setUserLocation(data);
+        setYfState(data.states);
       } catch (error) {
         console.log(error);
       }
@@ -34,67 +25,52 @@ export function useYfLocation({ state_id, dist_id, block_id }) {
   }, []);
 
   useEffect(() => {
-    const fetchStates = async () => {
-      try {
-        const stateResponse = await API.get("/api/v1/state/all");
-        const states = stateResponse.data.states;
-        const yfState = states ? states.filter(state => userLocationIds.state_ids.includes(state.id)) : [];
-        setYfState(yfState || []);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+    setYfDist([]);
+    setYfBlock([]);
+    setYfGp([]);
 
-    fetchStates();
-  }, [userLocationIds]);
-
-  useEffect(() => {
     const fetchDistricts = async () => {
-      if (!state_id) return;
       try {
-        const distResponse = await API.get(`/api/v1/district/all?state_id=${state_id}`);
-        const districts = distResponse.data.districts;
-        const yfDist = districts ? districts.filter(district => userLocationIds.district_ids.includes(district.id)) : [];
+        const yfDist = userLocation.districts.filter(dist => dist.state_id === state_id);
         setYfDist(yfDist || []);
       } catch (error) {
         console.log(error);
       }
     };
 
-    fetchDistricts();
-  }, [state_id, userLocationIds]);
+    if (state_id) fetchDistricts();
+  }, [state_id, userLocation.districts]);
 
   useEffect(() => {
+    setYfBlock([]);
+    setYfGp([]);
+
     const fetchBlocks = async () => {
-      if (!dist_id) return;
       try {
-        const blockResponse = await API.get(`/api/v1/block/all?district_id=${dist_id}`);
-        const blocks = blockResponse.data.blocks;
-        const yfBlock = blocks ? blocks.filter(block => userLocationIds.block_state_ids.includes(block.id)) : [];
+        const yfBlock = userLocation.blocks.filter(block => block.dist_id === dist_id);
         setYfBlock(yfBlock || []);
       } catch (error) {
         console.log(error);
       }
     };
 
-    fetchBlocks();
-  }, [dist_id, userLocationIds]);
+    if (dist_id) fetchBlocks();
+  }, [dist_id, userLocation.blocks]);
 
   useEffect(() => {
+    setYfGp([]);
+
     const fetchGps = async () => {
-      if (!block_id) return;
       try {
-        const gpResponse = await API.get(`/api/v1/gp/all?block_id=${block_id}`);
-        const gps = gpResponse.data.gps;
-        const yfGp = gps ? gps.filter(gp => userLocationIds.gp_ids.includes(gp.id)) : [];
+        const yfGp = userLocation.gps.filter(gps => gps.block_id === block_id);
         setYfGp(yfGp || []);
       } catch (error) {
         console.log(error);
       }
     };
 
-    fetchGps();
-  }, [block_id, userLocationIds]);
+    if (block_id) fetchGps();
+  }, [block_id, userLocation.gps]);
 
   return { yfState, yfDist, yfBlock, yfGp };
 }

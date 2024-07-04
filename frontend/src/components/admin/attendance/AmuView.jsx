@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import API from "@/utils/API";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { NirdViewIcon } from "@/components/admin/Icons";
+import AdminHeader from "../AdminHeader";
 
 const AmUploadView = () => {
   const { id } = useParams();
@@ -39,42 +35,38 @@ const AmUploadView = () => {
   }
 
   const fields = [
-    { label: "State", value: amUpload.state_name },
-    { label: "District", value: amUpload.dist_name },
-    { label: "Block", value: amUpload.block_name },
-    { label: "GP", value: amUpload.gp_name },
+    { label: "State", value: amUpload.state_id },
+    { label: "District", value: amUpload.dist_id },
+    { label: "Block", value: amUpload.block_id },
+    { label: "GP", value: amUpload.gp_id },
     { label: "Date", value: amUpload.date },
     { label: "Remarks", value: amUpload.remarks },
     {
       label: "File",
       value: (
-        <a
-          href={amUpload.file}
-          className="flex gap-3 items-center"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <a href={amUpload.file} className="flex gap-3 items-center">
           <span>View File</span>
           <NirdViewIcon />
         </a>
       ),
     },
-    { label: "Created By", value: amUpload.created_by },
-    { label: "Decision", value: amUpload.decision },
     { label: "Status", value: amUpload.status },
   ];
 
   return (
-    <Table>
-      <TableBody>
-        {fields.map((field, index) => (
-          <TableRow key={index}>
-            <TableCell>{field.label}</TableCell>
-            <TableCell>{field.value}</TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <div>
+      <AdminHeader>AM Upload</AdminHeader>
+      <Table>
+        <TableBody>
+          {fields.map((field, index) => (
+            <TableRow key={index}>
+              <TableCell>{field.label}</TableCell>
+              <TableCell>{field.value}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 };
 

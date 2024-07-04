@@ -6,6 +6,7 @@ import AdminHeader from "../AdminHeader";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { tst } from "@/lib/utils";
+import FormField from "@/components/ui/formfield";
 
 const TrainingForm = () => {
   const navigate = useNavigate();
@@ -65,7 +66,7 @@ const TrainingForm = () => {
     }
   };
 
-  const formFields = [
+  const fields = [
     {
       label: "Programme Code",
       name: "programmeCode",
@@ -181,28 +182,15 @@ const TrainingForm = () => {
     <div className="p-2 md:p-6">
       <AdminHeader>Add Training Details</AdminHeader>
       <form onSubmit={handleSubmit} className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-        {formFields.map((field, index) => (
-          <div className="mb-4" key={index}>
-            <Label className="inline-block font-bold mb-2">{field.label}</Label>
-            {field.required && <span className="text-red-500 ml-1">*</span>}
-            {field.type === "file" ? (
-              <Input
-                type={field.type}
-                name={field.name}
-                onChange={handleFileChange}
-                required={field.required}
-                className="block"
-              />
-            ) : (
-              <Input
-                type={field.type}
-                name={field.name}
-                value={formData[field.name]}
-                onChange={handleInputChange}
-                required={field.required}
-              />
-            )}
-          </div>
+      {fields.map(field => (
+          <FormField
+            key={field.name}
+            {...field}
+            disabled={pending}
+            value={formData[field.name] || ""}
+            onChange={handleInputChange}
+            onFileChange={handleFileChange}
+          />
         ))}
         <Button
           pending={pending}

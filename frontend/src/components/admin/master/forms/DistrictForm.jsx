@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import API from "@/utils/API";
 import { tst } from "@/lib/utils";
-import AdminHeader from "../AdminHeader";
+import AdminHeader from "../../AdminHeader";
 import { useParams } from "react-router-dom";
 
 function DistrictForm({ type = "add", onSubmit, district }) {

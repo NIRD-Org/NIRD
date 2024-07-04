@@ -9,7 +9,7 @@ export default function useThemes() {
     const fetchThemes = async () => {
       try {
         const response = await API.get("/api/v1/theme/all");
-        setThemes(response.data?.data || []);
+        setThemes(response?.data?.themes || []);
       } catch (error) {
         console.log(error);
       }

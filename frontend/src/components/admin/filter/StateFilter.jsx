@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import API from "@/utils/API";
-const StateFilter = ({ className }) => {
+import { useYfLocation } from "@/components/hooks/useYfLocation";
+const StateFilter = ({ className,yf }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const state_id = searchParams.get("state_id") || "";
   const [states, setStates] = useState([]);
+  const { yfState } = useYfLocation({ state_id: state_id, block_id: "", dist_id: "" });
 
   useEffect(() => {
     getAllStates();
@@ -16,7 +18,7 @@ const StateFilter = ({ className }) => {
     setStates(data?.states);
   };
 
-  const handleStateChange = (event) => {
+  const handleStateChange = event => {
     const selectedStateId = event.target.value;
     if (selectedStateId) {
       setSearchParams({ state_id: selectedStateId });
@@ -27,15 +29,12 @@ const StateFilter = ({ className }) => {
 
   return (
     <select
-      className={cn(
-        className,
-        "text-sm px-4 py-2 rounded-md bg-white border w-[200px]"
-      )}
+      className={cn(className, "text-sm px-4 py-2 rounded-md bg-white border w-[200px]")}
       value={state_id}
       onChange={handleStateChange}
     >
       <option value="">Select a state</option>
-      {states?.map((state) => (
+      {(yf ? yfState : states)?.map(state => (
         <option key={state.id} value={state.id}>
           {state.name}
         </option>

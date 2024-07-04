@@ -9,7 +9,6 @@ import {
 import { isAuth } from "../middlewares/auth.js";
 
 const router = express.Router();
-router.use("/create", isAuth);
 
 router.route("/all").get(isAuth,getAllAM);
 router.route("/create").post(isAuth,createAM);

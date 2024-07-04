@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const pmSchema = new mongoose.Schema(
   {
-    id: { type: Number, required: true },
+    id: { type: Number, required: true ,unique:true},
     state_id: { type: Number, required: true },
     dist_id: { type: Number, required: true },
     block_id: { type: Number, required: true },

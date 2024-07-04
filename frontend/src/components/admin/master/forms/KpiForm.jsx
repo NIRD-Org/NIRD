@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import API from "@/utils/API";
-import AdminHeader from "../AdminHeader";
+import AdminHeader from "../../AdminHeader";
 import { tst } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 

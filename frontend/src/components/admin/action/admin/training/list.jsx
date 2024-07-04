@@ -3,6 +3,7 @@ import CommonApprovalsList from "../../components/CommonApprovalsList";
 
 const TrainingApprovalsList = () => {
   const columns = [
+    { header: "Submitted Id", render: (approval) => approval.id },
     { header: "Programme Code", render: (approval) => approval.programmeCode },
     { header: "Title", render: (approval) => approval.title },
     { header: "Type", render: (approval) => approval.type },
