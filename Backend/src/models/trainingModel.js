@@ -4,33 +4,31 @@ const trainingSchema = new mongoose.Schema(
   {
     id: { type: String, required: true, unique: true },
     programmeCode: { type: String, required: true },
-    type: { type: String, required: true },
-    onlineOffline: { type: String, required: true },
+    type: { type: String, required: true }, // Type (Training/Workshop/Seminar/Webinar/Off-Campus/)
+    onlineOffline: { type: String, required: true }, // Online/Offline
     title: { type: String, required: true },
     dates: { type: String, required: true },
     duration: { type: String, required: true },
     venue: { type: String, required: true },
-    govtOfficials: { type: Number, required: true },
-    bankersCommOrgns: { type: Number, required: true },
-    zpPRIs: { type: Number, required: true },
-    volOrgnsNGOs: { type: Number, required: true },
-    natlStateInstts: { type: Number, required: true },
-    univColleges: { type: Number, required: true },
-    international: { type: Number, required: true },
-    others: { type: Number, required: true },
+    noOfERs: { type: Number, required: true }, // No. of ERs
+    noOfGPFunctionaries: { type: Number, required: true }, // No. of GP Functionaries
+    noOfMembersOfSHGs: { type: Number, required: true }, // No. of Members of SHGs
+    noOfRepsFromVolOrgnsNGOs: { type: Number, required: true }, // No. of Reps. from Vol. Orgns/ NGOs
+    noOfRepsFromNatlStateInstns: { type: Number, required: true }, // No. of Reps. from Natl. / State Level Instns.
+    noOfPanchayatBandhus: { type: Number, required: true }, // No. of Panchayat Bandhus
+    noOfProjectStaffTrained: { type: Number, required: true }, // No. of Project Staff Trained
+    others: { type: Number, required: true }, // Others (Youth/PSUs/ Individuals etc.)
     total: { type: Number, required: true },
-    female: { type: Number, required: true },
+    noOfFemale: { type: Number, required: true }, // No. of Female
+    noOfMale: { type: Number, required: true }, // No. of Male
     trainingMethods: { type: String, required: true },
     totalSessions: { type: Number, required: true },
     totalSessionTime: { type: Number, required: true },
-    evaluation: { type: String, required: true },
-    trainingPhotos: { type: String, required: true },
-    trainingDesign: { type: String, required: true },
-    coOrdinate: { type: Number, required: true },
-    decision: { type: Number, default: 0 },
-    status: { type: String, default: 1 },
-    remarks: { type: String, default: "" },
-    created_by: { type: String, required: true },
+    evalGoogle: { type: Boolean, required: true }, // Evaluation is done on TMP/Google Form ?
+    trainingPhotos: { type: String, required: true }, // Upload Training Photos
+    trainingDesign: { type: String, required: true }, // Upload Training Design (PDF)
+    nameOfTrainingCoordinator: { type: String, required: true }, // Name of the Training Coordinator
+    financialYear: { type: String, required: true }, // Financial Year (Drop down menu)
   },
   {
     timestamps: { createdAt: "created_at", updatedAt: "modified_at" },

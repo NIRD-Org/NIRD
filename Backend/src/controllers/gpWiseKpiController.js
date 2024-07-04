@@ -123,7 +123,7 @@ export const submitKpiData = CatchAsyncError(async (req, res, next) => {
 
     // Prepare the GpWiseKPI documents for insertion
     const kpiDocuments = await Promise.all(
-      formData.map(async kpi => ({
+      formData.map(async (kpi) => ({
         id: currentMaxId++,
         state_id: state_id,
         dist_id: dist_id,
@@ -327,9 +327,26 @@ export const getGpWiseKpiData = CatchAsyncError(async (req, res, next) => {
 });
 
 // Charts for different KPIs
+
 export const getGpWiseKpiChart = CatchAsyncError(async (req, res, next) => {
   try {
-    const { state, dist, block, theme, gp, kpi } = req.query;
+    const { state, dist, block, theme, gp, kpi, financial_year } = req.query;
+
+    // Helper function to calculate cumulative mean
+    const calculateCumulativeMean = (data) => {
+      const monthCount = data.length;
+      const totalInputData = data.reduce(
+        (sum, value) => sum + value.totalInputData,
+        0
+      );
+      const totalMaxRange = data.reduce(
+        (sum, value) => sum + value.totalMaxRange,
+        0
+      );
+      const mean =
+        totalMaxRange !== 0 ? (totalInputData / totalMaxRange) * 100 : 0;
+      return mean.toFixed(2);
+    };
 
     // 1. Calculate Quarterly Data
     const matchStageQuarterly = {
@@ -340,31 +357,90 @@ export const getGpWiseKpiChart = CatchAsyncError(async (req, res, next) => {
     if (block) matchStageQuarterly.block_id = block;
     if (gp) matchStageQuarterly.gp_id = gp;
     if (kpi) matchStageQuarterly.kpi_id = kpi;
+    if (financial_year) {
+      matchStageQuarterly.financial_year = financial_year;
+    } else {
+      // If no financial_year from frontend, use the latest year
+      const latestYear = await GpWiseKpiModel.findOne()
+        .sort({ financial_year: -1 })
+        .select("financial_year")
+        .lean();
+      matchStageQuarterly.financial_year = latestYear.financial_year;
+    }
 
     const pipelineQuarterly = [
       { $match: matchStageQuarterly },
       {
         $group: {
-          _id: "$submitted_id",
+          _id: {
+            frequency: "$frequency",
+            quarter: {
+              $switch: {
+                branches: [
+                  {
+                    case: { $in: ["$month", ["January", "February", "March"]] },
+                    then: "Q1",
+                  },
+                  {
+                    case: { $in: ["$month", ["April", "May", "June"]] },
+                    then: "Q2",
+                  },
+                  {
+                    case: { $in: ["$month", ["July", "August", "September"]] },
+                    then: "Q3",
+                  },
+                  {
+                    case: {
+                      $in: ["$month", ["October", "November", "December"]],
+                    },
+                    then: "Q4",
+                  },
+                ],
+                default: "$quarter",
+              },
+            },
+            month: "$month",
+            financial_year: "$financial_year",
+          },
           totalInputData: { $sum: "$input_data" },
           totalMaxRange: { $sum: "$max_range" },
         },
       },
       {
-        $sort: { _id: 1 },
+        $group: {
+          _id: {
+            frequency: "$_id.frequency",
+            quarter: "$_id.quarter",
+            financial_year: "$_id.financial_year",
+          },
+          monthsData: {
+            $push: {
+              totalInputData: "$totalInputData",
+              totalMaxRange: "$totalMaxRange",
+            },
+          },
+        },
+      },
+      {
+        $sort: { "_id.quarter": 1 },
       },
     ];
 
     const quarterlyResults = await GpWiseKpiModel.aggregate(pipelineQuarterly);
 
-    const quarterlyPercentage = {};
-    quarterlyResults.forEach((result, index) => {
-      const quarterInputData = result.totalInputData || 0;
-      const quarterMaxRange = result.totalMaxRange || 1;
+    console.log(
+      "Quarterly Results:",
+      JSON.stringify(quarterlyResults, null, 2)
+    ); // Debugging statement
 
-      const quarterPercentage =
-        quarterMaxRange !== 0 ? (quarterInputData / quarterMaxRange) * 100 : 0;
-      quarterlyPercentage[`quarter${index + 1}`] = quarterPercentage.toFixed(2);
+    const quarterlyPercentage = {};
+    quarterlyResults.forEach((result) => {
+      if (result._id.quarter) {
+        // Check if the quarter is not null
+        const monthsData = result.monthsData;
+        quarterlyPercentage[result._id.quarter] =
+          calculateCumulativeMean(monthsData);
+      }
     });
 
     // 2. Calculate Yearly Data
@@ -374,6 +450,16 @@ export const getGpWiseKpiChart = CatchAsyncError(async (req, res, next) => {
     if (state) matchStageYearly.state_id = state;
     if (gp) matchStageYearly.gp_id = gp;
     if (kpi) matchStageYearly.kpi_id = kpi;
+    if (financial_year) {
+      matchStageYearly.financial_year = financial_year;
+    } else {
+      // If no financial_year from frontend, use the latest year
+      const latestYear = await GpWiseKpiModel.findOne()
+        .sort({ financial_year: -1 })
+        .select("financial_year")
+        .lean();
+      matchStageYearly.financial_year = latestYear.financial_year;
+    }
 
     // For GP Yearly Data
     const pipelineGP = [
@@ -385,6 +471,7 @@ export const getGpWiseKpiChart = CatchAsyncError(async (req, res, next) => {
             gp_id: "$gp_id",
             theme_id: theme,
             kpi_id: kpi,
+            financial_year: "$financial_year",
           },
           totalInputData: { $sum: "$input_data" },
           totalMaxRange: { $sum: "$max_range" },
@@ -417,16 +504,25 @@ export const getGpWiseKpiChart = CatchAsyncError(async (req, res, next) => {
     ];
 
     const gpYearlyData = await GpWiseKpiModel.aggregate(pipelineGP);
+    console.log("GP Yearly Data:", JSON.stringify(gpYearlyData, null, 2)); // Debugging statement
 
     // For State Yearly Data
     const pipelineState = [
-      { $match: { state_id: state, theme_id: theme, kpi_id: kpi } },
+      {
+        $match: {
+          state_id: state,
+          theme_id: theme,
+          kpi_id: kpi,
+          financial_year: matchStageYearly.financial_year,
+        },
+      },
       {
         $group: {
           _id: {
             state_id: state,
             theme_id: theme,
             kpi_id: kpi,
+            financial_year: matchStageYearly.financial_year,
           },
           totalInputData: { $sum: "$input_data" },
           totalMaxRange: { $sum: "$max_range" },
@@ -438,6 +534,7 @@ export const getGpWiseKpiChart = CatchAsyncError(async (req, res, next) => {
           state_id: "$_id.state_id",
           theme_id: "$_id.theme_id",
           kpi_id: "$_id.kpi_id",
+          financial_year: "$_id.financial_year",
           totalInputData: 1,
           totalMaxRange: 1,
           percentage: {
@@ -457,13 +554,24 @@ export const getGpWiseKpiChart = CatchAsyncError(async (req, res, next) => {
     ];
 
     const stateYearlyData = await GpWiseKpiModel.aggregate(pipelineState);
+    console.log("State Yearly Data:", JSON.stringify(stateYearlyData, null, 2)); // Debugging statement
 
     // For Country Yearly Data
     const pipelineCountry = [
-      { $match: { theme_id: theme, kpi_id: kpi } },
+      {
+        $match: {
+          theme_id: theme,
+          kpi_id: kpi,
+          financial_year: matchStageYearly.financial_year,
+        },
+      },
       {
         $group: {
-          _id: null,
+          _id: {
+            theme_id: theme,
+            kpi_id: kpi,
+            financial_year: matchStageYearly.financial_year,
+          },
           totalInputData: { $sum: "$input_data" },
           totalMaxRange: { $sum: "$max_range" },
         },
@@ -471,8 +579,9 @@ export const getGpWiseKpiChart = CatchAsyncError(async (req, res, next) => {
       {
         $project: {
           _id: 0,
-          theme_id: theme,
-          kpi_id: kpi,
+          theme_id: "$_id.theme_id",
+          kpi_id: "$_id.kpi_id",
+          financial_year: "$_id.financial_year",
           totalInputData: 1,
           totalMaxRange: 1,
           percentage: {
@@ -492,6 +601,10 @@ export const getGpWiseKpiChart = CatchAsyncError(async (req, res, next) => {
     ];
 
     const countryYearlyData = await GpWiseKpiModel.aggregate(pipelineCountry);
+    console.log(
+      "Country Yearly Data:",
+      JSON.stringify(countryYearlyData, null, 2)
+    ); // Debugging statement
 
     const response = {
       quarterlyPercentage,
@@ -505,7 +618,7 @@ export const getGpWiseKpiChart = CatchAsyncError(async (req, res, next) => {
     res.json(response);
   } catch (error) {
     console.error(error);
-    return next(new Errorhandler("Failed to get KPI data", 500));
+    return next(new Errorhandler("Failed to get KPI Chart data", 500));
   }
 });
 
@@ -1115,7 +1228,7 @@ export const reSubmitKpiData = CatchAsyncError(async (req, res, next) => {
     }
 
     // Prepare the updated GpWiseKPI documents
-    const kpiDocuments = formData.map(kpi => ({
+    const kpiDocuments = formData.map((kpi) => ({
       kpi_id: kpi.kpi_id,
       score: kpi.score,
       max_range: kpi.max_range,
@@ -1126,7 +1239,7 @@ export const reSubmitKpiData = CatchAsyncError(async (req, res, next) => {
 
     // Update the KPI documents in the gpWiseKpi collection based on submitted_id and kpi_id
     await Promise.all(
-      kpiDocuments.map(kpiDocument =>
+      kpiDocuments.map((kpiDocument) =>
         GpWiseKpiModel.updateOne(
           { submitted_id, kpi_id: kpiDocument.kpi_id },
           kpiDocument,
@@ -1251,7 +1364,7 @@ export const getRankingController = CatchAsyncError(async (req, res, next) => {
     if (keyword) {
       const regex = new RegExp(keyword, "i");
       ranking = ranking.filter(
-        item =>
+        (item) =>
           regex.test(item.gp_name) ||
           regex.test(item.state_name) ||
           regex.test(item.dist_name) ||
@@ -1379,7 +1492,7 @@ export const getBlockRankingController = CatchAsyncError(
       if (keyword) {
         const regex = new RegExp(keyword, "i"); // 'i' for case-insensitive
         ranking = ranking.filter(
-          item =>
+          (item) =>
             regex.test(item.block_name) ||
             regex.test(item.state_name) ||
             regex.test(item.dist_name)

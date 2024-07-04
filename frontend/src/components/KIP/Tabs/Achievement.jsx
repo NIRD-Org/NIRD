@@ -193,13 +193,7 @@ const Achievement = () => {
       </div>
 
       <div className="py-10">
-        <AchievementChart
-          block={block}
-          state={state}
-          dist={dist}
-          gp={gp}
-          themeId={1}
-        />
+        <AchievementChart block={1} state={1} dist={1} gp={1} themeId={1} />
       </div>
     </div>
   );
