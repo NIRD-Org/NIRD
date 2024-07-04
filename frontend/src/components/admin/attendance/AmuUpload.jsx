@@ -5,16 +5,11 @@ import { Label } from "@/components/ui/label";
 import { tst } from "@/lib/utils";
 import API from "@/utils/API";
 import AdminHeader from "../AdminHeader";
+import FormField from "@/components/ui/formfield";
+import { useYfLocation } from "@/components/hooks/useYfLocation";
 
 function AmUploadForm() {
   const [pending, setPending] = useState(false);
-  const [locationData, setLocationData] = useState({
-    states: [],
-    districts: [],
-    blocks: [],
-    gps: [],
-  });
-
   const [formData, setFormData] = useState({
     state_id: "",
     dist_id: "",
@@ -25,90 +20,32 @@ function AmUploadForm() {
     remarks: "",
     status: "",
   });
+  
+  const {
+    yfState: states,
+    yfBlock: blocks,
+    yfDist: districts,
+    yfGp: gps,
+  } = useYfLocation({
+    state_id: formData.state_id,
+    dist_id: formData.dist_id,
+    block_id: formData.block_id,
+  });
+  
 
   useEffect(() => {
-    async function fetchStates() {
-      try {
-        const response = await API.get("/api/v1/state/all");
-        setLocationData(prevData => ({
-          ...prevData,
-          states: response.data.states || [],
-        }));
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    fetchStates();
-  }, []);
-
-  useEffect(() => {
-    async function fetchDistricts() {
-      if (formData.state_id) {
-        try {
-          const response = await API.get(`/api/v1/dist/state/${formData.state_id}`);
-          setLocationData(prevData => ({
-            ...prevData,
-            districts: response.data.districts || [],
-          }));
-          setFormData(prevData => ({
-            ...prevData,
-            dist_id: "",
-            block_id: "",
-            gp_id: "",
-          }));
-        } catch (error) {
-          console.error("Failed to fetch districts.");
-        }
-      }
-    }
-    fetchDistricts();
+    setFormData(prevData => ({ ...prevData, dist_id: "" }));
   }, [formData.state_id]);
 
   useEffect(() => {
-    async function fetchBlocks() {
-      if (formData.dist_id) {
-        try {
-          const response = await API.get(`/api/v1/block/get?dist=${formData.dist_id}`);
-          setLocationData(prevData => ({
-            ...prevData,
-            blocks: response.data.blocks || [],
-          }));
-          setFormData(prevData => ({
-            ...prevData,
-            block_id: "",
-            gp_id: "",
-          }));
-        } catch (error) {
-          console.error("Failed to fetch blocks.");
-        }
-      }
-    }
-    fetchBlocks();
+    setFormData(prevData => ({ ...prevData, block_id: "" }));
   }, [formData.dist_id]);
 
   useEffect(() => {
-    async function fetchGrams() {
-      if (formData.block_id) {
-        try {
-          const response = await API.get(`/api/v1/gram/get?block=${formData.block_id}`);
-          setLocationData(prevData => ({
-            ...prevData,
-            gps: response.data.gram || [],
-          }));
-          setFormData(prevData => ({
-            ...prevData,
-            gp_id: "",
-          }));
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    }
-    fetchGrams();
+    setFormData(prevData => ({ ...prevData, gp_id: "" }));
   }, [formData.block_id]);
 
-  const handleChange = e => {
+  const handleInputChange = e => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
@@ -117,7 +54,10 @@ function AmUploadForm() {
     const { name, files } = e.target;
     setFormData(prev => ({ ...prev, [name]: files[0] }));
   };
+ 
 
+  
+ 
   const handleSubmit = async e => {
     e.preventDefault();
     try {
@@ -137,7 +77,7 @@ function AmUploadForm() {
       label: "State",
       name: "state_id",
       type: "select",
-      options: locationData.states.map(state => ({
+      options: states.map(state => ({
         value: state.id,
         label: state.name,
       })),
@@ -147,7 +87,7 @@ function AmUploadForm() {
       label: "District",
       name: "dist_id",
       type: "select",
-      options: locationData.districts.map(district => ({
+      options: districts.map(district => ({
         value: district.id,
         label: district.name,
       })),
@@ -157,7 +97,7 @@ function AmUploadForm() {
       label: "Block",
       name: "block_id",
       type: "select",
-      options: locationData.blocks.map(block => ({
+      options: blocks.map(block => ({
         value: block.id,
         label: block.name,
       })),
@@ -167,7 +107,7 @@ function AmUploadForm() {
       label: "GP",
       name: "gp_id",
       type: "select",
-      options: locationData.gps.map(gp => ({
+      options: gps.map(gp => ({
         value: gp.id,
         label: gp.name,
       })),
@@ -191,6 +131,7 @@ function AmUploadForm() {
       type: "text",
       required: true,
     },
+    
   ];
 
   return (
@@ -198,36 +139,16 @@ function AmUploadForm() {
       <AdminHeader>AM Entry Form</AdminHeader>
       <form onSubmit={handleSubmit}>
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-10">
-          {fields.map((field, index) => (
-            <div key={index}>
-              <Label className="mb-2 inline-block">{field.label}</Label>
-              {field.required && <span className="text-red-500 ml-1">*</span>}
-              {field.type === "select" ? (
-                <select
-                  name={field.name}
-                  value={formData[field.name]}
-                  onChange={handleChange}
-                  className="p-2 border rounded w-full bg-white"
-                  required={field.required}
-                >
-                  <option value="">Select {field.label}</option>
-                  {field.options.map(option => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              ) : (
-                <Input
-                  type={field.type || "text"}
-                  name={field.name}
-                  value={formData[field.name]}
-                  onChange={handleChange}
-                  required={field.required}
-                />
-              )}
-            </div>
-          ))}
+        {fields.map(field => (
+          <FormField
+            key={field.name}
+            {...field}
+            disabled={pending}
+            value={formData[field.name] || ""}
+            onChange={handleInputChange}
+            onFileChange={handleFileChange}
+          />
+        ))}
           <div>
             <Label className="mb-2 inline-block">AM Upload File</Label>
             <Input type="file" name="am_upload_file" onChange={handleFileChange} required />
