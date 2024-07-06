@@ -4,21 +4,22 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import API from "@/utils/API";
 import { tst } from "@/lib/utils";
-import AdminHeader from "../AdminHeader";
+import AdminHeader from "../../AdminHeader";
 import { useParams } from "react-router-dom";
 
-function BlockForm({ type = "add", block }) {
+function GpForm({ type = "add", gp }) {
   const [formData, setFormData] = useState({
-    id: block?.id || "",
-    state_id: block?.state_id || "",
-    dist_id: block?.dist_id || "",
-    name: block?.name || "",
-    is_maped_to_another_district: block?.is_maped_to_another_district || "",
+    state_id: gp?.state_id || "",
+    dist_id: gp?.dist_id || "",
+    block_id: gp?.block_id || "",
+    name: gp?.name || "",
+    is_maped_to_another_district: gp?.is_maped_to_another_district || "",
   });
   const [states, setStates] = useState([]);
   const [districts, setDistricts] = useState([]);
+  const [blocks, setBlocks] = useState([]);
   const [pending, setPending] = useState(false);
-  const {id} = useParams();
+  const {id} = useParams()
 
   useEffect(() => {
     async function fetchStates() {
@@ -30,25 +31,26 @@ function BlockForm({ type = "add", block }) {
       }
     }
 
-    const fetchBlockData = async () => {
+    const fetchGpData = async () => {
       try {
-        const response = await API.get(`/api/v1/block/${id}`);
-        const data = response.data.block;
+        const response = await API.get(`/api/v1/gram/get-gram/${id}`);
+        const data = response.data.gp;
         setFormData({
           id: data.id,
           state_id: data.state_id,
           dist_id: data.dist_id,
+          block_id: data.block_id,
           name: data.name,
-          is_maped_to_another_district:
-            data.is_maped_to_another_district,
+          is_maped_to_another_district: data.is_maped_to_another_district,
         });
       } catch (error) {
-        tst.error("Failed to fetch block data:", error);
+        console.log(error)
+        // tst.error("Failed to fetch GP data.");
       }
     };
 
     fetchStates();
-    if(type=="update") fetchBlockData();
+    if (type == "update") fetchGpData();
   }, []);
 
   useEffect(() => {
@@ -66,6 +68,21 @@ function BlockForm({ type = "add", block }) {
     fetchDistricts();
   }, [formData.state_id]);
 
+  useEffect(() => {
+    async function fetchBlocks() {
+      if (formData.dist_id) {
+        try {
+          const response = await API.get(`/api/v1/block/get?dist=${formData.dist_id}`);
+          setBlocks(response.data?.blocks || []);
+        } catch (error) {
+          tst.error("Failed to fetch blocks.");
+        }
+      }
+    }
+
+    fetchBlocks();
+  }, [formData.dist_id]);
+
   const handleChange = e => {
     const { name, value } = e.target;
     setFormData(prevData => ({
@@ -74,26 +91,24 @@ function BlockForm({ type = "add", block }) {
     }));
   };
 
-  const handleCreateBlock = async e => {
+  const handleSubmit = async e => {
     e.preventDefault();
+    setPending(true);
     try {
-      await API.post("/api/v1/block/create", formData);
-      tst.success("block created successfully");
+      if (type === "add") {
+        await API.post("/api/v1/gram/create", formData);
+        tst.success("Gram Panchayat created successfully");
+      } else {
+        await API.put(`/api/v1/gram/${id}`, formData);
+        tst.success("Gram Panchayat updated successfully");
+      }
+      setPending(false);
     } catch (error) {
-      tst.error(error);
-      console.log(error);
+      tst.error("Failed to submit form:", error);
+      setPending(false);
     }
   };
 
-  const handleUpdateBlock = async e => {
-    e.preventDefault();
-    try {
-      await API.put(`/api/v1/block/${id}`, formData);
-      tst.success("Block updated successfully");
-    } catch (error) {
-      tst.error("Failed to update block.", error);
-    }
-  };
 
   const fields = [
     {
@@ -101,14 +116,21 @@ function BlockForm({ type = "add", block }) {
       label: "State",
       type: "select",
       options: states.map(state => ({ value: state.id, label: state.name })),
-      required: "true",
+      required: true,
     },
     {
       name: "dist_id",
       label: "District",
       type: "select",
       options: districts.map(district => ({ value: district.id, label: district.name })),
-      required: "true",
+      required: true,
+    },
+    {
+      name: "block_id",
+      label: "Block",
+      type: "select",
+      options: blocks.map(block => ({ value: block.id, label: block.name })),
+      required: true,
     },
     { name: "name", label: "Name", type: "text", required: true },
     {
@@ -124,9 +146,9 @@ function BlockForm({ type = "add", block }) {
 
   return (
     <div className="container mx-auto p-6">
-      <form onSubmit={type === "add" ? handleCreateBlock : handleUpdateBlock}>
+      <form onSubmit={handleSubmit}>
         <div className="py-4">
-          <AdminHeader>{type === "add" ? "Add Block" : "Update Block"}</AdminHeader>
+          <AdminHeader>{type === "add" ? "Add Gram Panchayat" : "Update Gram Panchayat"}</AdminHeader>
           <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3">
             {fields.map(({ name, label, type, options, required }) => (
               <div key={name}>
@@ -171,7 +193,7 @@ function BlockForm({ type = "add", block }) {
         </div>
         <div className="mt-6">
           <Button pending={pending} type="submit">
-            {type === "add" ? "Add Block" : "Update Block"}
+            {type === "add" ? "Add Gram Panchayat" : "Update Gram Panchayat"}
           </Button>
         </div>
       </form>
@@ -179,4 +201,4 @@ function BlockForm({ type = "add", block }) {
   );
 }
 
-export default BlockForm;
+export default GpForm;

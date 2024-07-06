@@ -161,7 +161,7 @@ export const getSidebarItems = user => {
             {
               type: "sub-module",
               icon: ArrowBigRight,
-              title: "Kpi",
+              title: "Themewise Kpi",
               link: "/admin/action/admin/gp-wise-kpi",
             },
             {
@@ -179,6 +179,12 @@ export const getSidebarItems = user => {
             {
               type: "sub-module",
               icon: ArrowBigRight,
+              title: "LCVA",
+              link: "/admin/action/admin/lcva",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
               title: "Training",
               link: "/admin/action/admin/training",
             },
@@ -187,12 +193,6 @@ export const getSidebarItems = user => {
               icon: ArrowBigRight,
               title: "Gp details",
               link: "/admin/action/admin/gp-details",
-            },
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "LCVA",
-              link: "/admin/action/admin/lcva",
             },
           ],
         },
@@ -239,12 +239,6 @@ export const getSidebarItems = user => {
             {
               type: "sub-module",
               icon: ArrowBigRight,
-              title: "All Attendance",
-              link: "/admin/attendance/attendance",
-            },
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
               title: "AM Entry Form",
               link: "/admin/attendance/amu-upload",
             },
@@ -264,7 +258,7 @@ export const getSidebarItems = user => {
             {
               type: "sub-module",
               icon: ArrowBigRight,
-              title: "Kpi",
+              title: "Themewise Kpi",
               link: "/admin/action/admin/gp-wise-kpi",
             },
             {
@@ -276,8 +270,14 @@ export const getSidebarItems = user => {
             {
               type: "sub-module",
               icon: ArrowBigRight,
-              title: "Good practice",
+              title: "Good Practice",
               link: "/admin/action/admin/good-practice",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "LCVA",
+              link: "/admin/action/admin/lcva",
             },
             {
               type: "sub-module",
@@ -291,12 +291,7 @@ export const getSidebarItems = user => {
               title: "Gp details",
               link: "/admin/action/admin/gp-details",
             },
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "LCVA",
-              link: "/admin/action/admin/lcva",
-            },
+          
           ],
         },
         {
@@ -319,20 +314,20 @@ export const getSidebarItems = user => {
             {
               type: "sub-module",
               icon: ArrowBigRight,
-              title: "GP Details",
-              link: "/admin/gp-details",
-            },
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "Young Fellow Insight",
-              link: "/admin/young-fellow-insight",
-            },
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
               title: "Good Practices",
               link: "/admin/good-practices",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "LCVA",
+              link: "/admin/lcvas",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "GP Details",
+              link: "/admin/gp-details",
             },
             {
               type: "sub-module",
@@ -343,8 +338,8 @@ export const getSidebarItems = user => {
             {
               type: "sub-module",
               icon: ArrowBigRight,
-              title: "LCVA",
-              link: "/admin/lcvas",
+              title: "YF Insight",
+              link: "/admin/young-fellow-insight",
             },
           ],
         },

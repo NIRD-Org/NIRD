@@ -19,18 +19,6 @@ import { useAuthContext } from "@/context/AuthContext";
 import TableSkeleton from "@/components/ui/tableskeleton";
 
 function YoungFellowForm({ type, onSubmit, kpiApproval }) {
-  const { user } = useAuthContext();
-  const [formData, setFormData] = useState({
-    id: kpiApproval ? kpiApproval.id : "",
-    state_id: kpiApproval ? kpiApproval.state_id : "",
-    district_id: kpiApproval ? kpiApproval.district_id : "",
-    block_id: kpiApproval ? kpiApproval.block_id : "",
-    gp_id: kpiApproval ? kpiApproval.gp_id : "",
-    theme_id: kpiApproval ? kpiApproval.theme_id : "",
-    decision: kpiApproval ? kpiApproval.decision : "",
-    submitted_id: kpiApproval ? kpiApproval.submitted_id : "",
-    remarks: kpiApproval ? kpiApproval.remarks : "",
-  });
   const [searchParams, setSearchParams] = useSearchParams();
   const state_id = searchParams.get("state_id") || "";
   const dist_id = searchParams.get("dist_id") || "";
@@ -46,14 +34,6 @@ function YoungFellowForm({ type, onSubmit, kpiApproval }) {
     setThemes(data?.themes);
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     setPending(true);
@@ -67,12 +47,12 @@ function YoungFellowForm({ type, onSubmit, kpiApproval }) {
       setThemes([]);
     }
   }, [gram_id]);
+
   const handleGpWiseKpiEdit = id => {
     navigate(`/admin/gp-wise-kpi?state_id=${state_id}&dist_id=${dist_id}&block_id=${block_id}&gram_id=${gram_id}&theme_id=${id}`);
   };
 
   const resetForm = () => {
-    console.log("first");
     setSearchParams({});
   };
 
@@ -83,10 +63,10 @@ function YoungFellowForm({ type, onSubmit, kpiApproval }) {
           Young Fellow - KPI Entry Form
         </h2>
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10">
-          <StateFilter />
-          <DistrictFilter />
-          <BlockFilter />
-          <GramFilter />
+          <StateFilter yf/>
+          <DistrictFilter yf/>
+          <BlockFilter yf/>
+          <GramFilter yf/>
           <Button className="self-end" onClick={() => resetForm()}>
             Reset
           </Button>

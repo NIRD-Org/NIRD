@@ -1,4 +1,4 @@
-import GpDetailsForm from '@/components/admin/Gpdetails/GpDetailsForm';
+import GpDetailsForm from '@/components/admin/young-fellow/GpDetailsForm';
 import React from 'react';
 
 function GpDetailsApprovalResubmit() {

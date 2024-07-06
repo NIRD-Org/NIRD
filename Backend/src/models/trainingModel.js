@@ -29,6 +29,9 @@ const trainingSchema = new mongoose.Schema(
     trainingDesign: { type: String, required: true }, // Upload Training Design (PDF)
     nameOfTrainingCoordinator: { type: String, required: true }, // Name of the Training Coordinator
     financialYear: { type: String, required: true }, // Financial Year (Drop down menu)
+    decision: { type: Number, required: true, default: 0 },
+    remarks:{type:String,default:""},
+    created_by: { type: String, required: true },
   },
   {
     timestamps: { createdAt: "created_at", updatedAt: "modified_at" },

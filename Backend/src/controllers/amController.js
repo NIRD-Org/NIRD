@@ -43,15 +43,13 @@ export const getAllAM = CatchAsyncError(async (req, res, next) => {
       const stateIds = userLocations.state_ids;
       filter.state_id = { $in: stateIds };
     }
-    
-    const am = await AmModel.aggregate([{ $match: filter }, ...location_pipeline]);
-    console.log(am)
+
+    // const am = await AmModel.aggregate([{$match:filter,...location_pipeline}]);
+    const am = await AmModel.find(filter);
 
     res.status(200).json({
       status: "success",
-      data: {
-        am,
-      },
+      data: am,
     });
   } catch (error) {
     console.log(error);
@@ -59,12 +57,21 @@ export const getAllAM = CatchAsyncError(async (req, res, next) => {
 });
 
 export const getAMById = CatchAsyncError(async (req, res, next) => {
-  const [am] = await AmModel.aggregate([{ $match: { id: req.params.id } }, ...location_pipeline]);
+  console.log(req.params.id);
+  // const [am] = await AmModel.aggregate([{ $match: { id: req.params.id } }]);
+  const am = await AmModel.findOne({ id: req.params.id });
+  console.log(am)
+  
+  if (!am) {
+    return res.status(404).json({
+      status: "fail",
+      message: "No AM found with that ID",
+    });
+  }
+
   res.status(200).json({
     status: "success",
-    data: {
-      am,
-    },
+    data: am,
   });
 });
 

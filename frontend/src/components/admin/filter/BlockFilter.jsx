@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import API from "@/utils/API";
+import { useYfLocation } from "@/components/hooks/useYfLocation";
 
 const BlockFilter = ({ className }) => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -9,6 +10,7 @@ const BlockFilter = ({ className }) => {
   const dist_id = searchParams.get("dist_id") || "";
   const block_id = searchParams.get("block_id") || "";
   const [blocks, setblocks] = useState([]);
+  const { yfBlock } = useYfLocation({ state_id: state_id, block_id: "", dist_id: dist_id });
 
   useEffect(() => {
     if (state_id && dist_id) {
@@ -47,7 +49,7 @@ const BlockFilter = ({ className }) => {
       disabled={!state_id || !dist_id}
     >
       <option value="">Select a block</option>
-      {blocks.map((block) => (
+      {(yfBlock ? yfBlock : blocks).map((block) => (
         <option key={block.id} value={block.id}>
           {block.name}
         </option>

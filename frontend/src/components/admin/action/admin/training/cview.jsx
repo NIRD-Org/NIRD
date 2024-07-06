@@ -32,30 +32,31 @@ const TrainingView = () => {
   if (!training) {
     return <div>Training not found</div>;
   }
-
   const fields = [
     { label: "Programme Code", value: training.programmeCode },
     { label: "Title", value: training.title },
-    { label: "Type", value: training.type },
+    { label: "Type (Training/Workshop/Seminar/Webinar/Off-Campus)", value: training.type },
     { label: "Online/Offline", value: training.onlineOffline },
     { label: "Dates", value: training.dates },
     { label: "Duration", value: training.duration },
     { label: "Venue", value: training.venue },
-    { label: "Govt. Officials", value: training.govtOfficials },
-    { label: "Bankers & Comm Orgns.", value: training.bankersCommOrgns },
-    { label: "ZP & PRIs", value: training.zpPRIs },
-    { label: "Vol. Orgns/NGOs", value: training.volOrgnsNGOs },
-    { label: "Natl. / State Instts for Res. & Trg", value: training.natlStateInstts },
-    { label: "Univ. / Colleges", value: training.univColleges },
-    { label: "International", value: training.international },
-    { label: "Others/Youth/PSUs/Individuals", value: training.others },
+    { label: "No. of ERs", value: training.noOfERs },
+    { label: "No. of GP Functionaries", value: training.noOfGPFunctionaries },
+    { label: "No. of Members of SHGs", value: training.noOfMembersOfSHGs },
+    { label: "No. of Reps. from Vol. Orgns/ NGOs", value: training.noOfRepsFromVolOrgnsNGOs },
+    { label: "No. of Reps. from Natl. / State Level Instns.", value: training.noOfRepsFromNatlStateInstns },
+    { label: "No. of Panchayat Bandhus", value: training.noOfPanchayatBandhus },
+    { label: "No. of Project Staff Trained", value: training.noOfProjectStaffTrained },
+    { label: "Others (Youth/PSUs/ Individuals etc.)", value: training.others },
     { label: "Total", value: training.total },
-    { label: "Female", value: training.female },
+    { label: "No. of Female", value: training.noOfFemale },
+    { label: "No. of Male", value: training.noOfMale },
     { label: "Training Methods", value: training.trainingMethods },
     { label: "Total Sessions", value: training.totalSessions },
     { label: "Total Session Time (Hrs)", value: training.totalSessionTime },
-    { label: "Evaluation is done on TMP/Google Form", value: training.evaluation },
-    { label: "Co Ordinate", value: training.coOrdinate },
+    { label: "Evaluation is done on TMP/Google Form", value: training.evalGoogle ? "Yes" : "No" },
+    { label: "Name of the Training Coordinator", value: training.nameOfTrainingCoordinator },
+    { label: "Financial Year", value: training.financialYear },
   ];
 
   return (
@@ -76,7 +77,12 @@ const TrainingView = () => {
         <TableRow>
           <TableCell>Document</TableCell>
           <TableCell>
-            <a href={training.trainingDesign} className="flex gap-3 items-center" target="_blank" rel="noopener noreferrer">
+            <a
+              href={training.trainingDesign}
+              className="flex gap-3 items-center"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <span>View Document</span>
               <NirdViewIcon />
             </a>

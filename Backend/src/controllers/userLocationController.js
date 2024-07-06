@@ -52,9 +52,7 @@ export const assignUserLocation = CatchAsyncError(async (req, res, next) => {
       return next(new Errorhandler("Failed to assign user location", 500));
     }
 
-    res
-      .status(201)
-      .json({ success: true, message: "User Location has been assigned" });
+    res.status(201).json({ success: true, message: "User Location has been assigned" });
   } catch (error) {
     console.log("Error: " + error);
     return next(new Errorhandler("Failed to assign user location", 500));
@@ -101,7 +99,42 @@ export const getUserLocationById = CatchAsyncError(async (req, res, next) => {
 export const getUserLocation = CatchAsyncError(async (req, res, next) => {
   try {
     const user_id = req.user.id;
-    const userLocation = await UserLocationModel.findOne({ user_id });
+    // const userLocation = await UserLocationModel.findOne({ user_id });
+    const [userLocation] = await UserLocationModel.aggregate([
+      { $match: { user_id } },
+      {
+        $lookup: {
+          from: "states",
+          localField: "userLocations.state_ids",
+          foreignField: "id",
+          as: "states",
+        },
+      },
+      {
+        $lookup: {
+          from: "districts",
+          localField: "userLocations.dist_ids",
+          foreignField: "id",
+          as: "districts",
+        },
+      },
+      {
+        $lookup: {
+          from: "blocks",
+          localField: "userLocations.block_ids",
+          foreignField: "id",
+          as: "blocks",
+        },
+      },
+      {
+        $lookup: {
+          from: "grampanchayats",
+          localField: "userLocations.gp_ids",
+          foreignField: "id",
+          as: "gps",
+        },
+      },
+    ]);
     if (!userLocation) {
       return next(new Errorhandler("User locations data not found", 404));
     }
@@ -129,19 +162,13 @@ export const updateUserLocation = CatchAsyncError(async (req, res, next) => {
       return next(new Errorhandler("User location not found", 404));
     }
 
-    const userLocation = await UserLocationModel.findOneAndUpdate(
-      { user_id },
-      { userLocations },
-      { new: true }
-    );
+    const userLocation = await UserLocationModel.findOneAndUpdate({ user_id }, { userLocations }, { new: true });
 
     if (!userLocation) {
       return next(new Errorhandler("Failed to update user location", 500));
     }
 
-    res
-      .status(201)
-      .json({ success: true, message: "User Location has been updated" });
+    res.status(201).json({ success: true, message: "User Location has been updated" });
   } catch (err) {
     console.log("Error: " + err);
     return next(new Errorhandler("Failed to update user location", 500));

@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 const YoungFellowInsights = ({ update = false }) => {
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const [pending, setPending] = useState(false);
   const [locationData, setLocationData] = useState({
     states: [],
     districts: [],
@@ -37,7 +37,7 @@ const YoungFellowInsights = ({ update = false }) => {
     async function fetchStates() {
       try {
         const response = await API.get("/api/v1/state/all");
-        setLocationData((prevData) => ({
+        setLocationData(prevData => ({
           ...prevData,
           states: response.data.states || [],
         }));
@@ -65,15 +65,13 @@ const YoungFellowInsights = ({ update = false }) => {
     async function fetchDistricts() {
       if (formData.state_id) {
         try {
-          const response = await API.get(
-            `/api/v1/dist/state/${formData.state_id}`
-          );
-          setLocationData((prevData) => ({
+          const response = await API.get(`/api/v1/dist/state/${formData.state_id}`);
+          setLocationData(prevData => ({
             ...prevData,
             districts: response.data.districts || [],
           }));
           if (!update)
-            setFormData((prevData) => ({
+            setFormData(prevData => ({
               ...prevData,
               dist_id: "",
               block_id: "",
@@ -91,15 +89,13 @@ const YoungFellowInsights = ({ update = false }) => {
     async function fetchBlocks() {
       if (formData.dist_id) {
         try {
-          const response = await API.get(
-            `/api/v1/block/get?dist=${formData.dist_id}`
-          );
-          setLocationData((prevData) => ({
+          const response = await API.get(`/api/v1/block/get?dist=${formData.dist_id}`);
+          setLocationData(prevData => ({
             ...prevData,
             blocks: response.data.blocks || [],
           }));
           if (!update)
-            setFormData((prevData) => ({
+            setFormData(prevData => ({
               ...prevData,
               block_id: "",
               gp_id: "",
@@ -116,15 +112,13 @@ const YoungFellowInsights = ({ update = false }) => {
     async function fetchGrams() {
       if (formData.block_id) {
         try {
-          const response = await API.get(
-            `/api/v1/gram/get?block=${formData.block_id}`
-          );
-          setLocationData((prevData) => ({
+          const response = await API.get(`/api/v1/gram/get?block=${formData.block_id}`);
+          setLocationData(prevData => ({
             ...prevData,
             gps: response.data.gram || [],
           }));
           if (!update)
-            setFormData((prevData) => ({
+            setFormData(prevData => ({
               ...prevData,
               gp_id: "",
             }));
@@ -136,47 +130,45 @@ const YoungFellowInsights = ({ update = false }) => {
     fetchGrams();
   }, [formData.block_id]);
 
-  const countWords = (text) => {
+  const countWords = text => {
     return text.trim().split(/\s+/).filter(Boolean).length;
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = e => {
     const { name, value } = e.target;
 
-    if (
-      name === "achievement" ||
-      name === "failure" ||
-      name === "planOfAction"
-    ) {
+    if (name === "achievement" || name === "failure" || name === "planOfAction") {
       let maxWords = 0;
       if (name === "achievement") maxWords = 300;
       if (name === "failure") maxWords = 250;
       if (name === "planOfAction") maxWords = 200;
 
       if (countWords(value) <= maxWords) {
-        setFormData((prev) => ({ ...prev, [name]: value }));
+        setFormData(prev => ({ ...prev, [name]: value }));
       } else {
         alert(`The ${name} field cannot exceed ${maxWords} words.`);
       }
     } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
+      setFormData(prev => ({ ...prev, [name]: value }));
     }
   };
 
-  const handleFileChange = (e) => {
+  const handleFileChange = e => {
     const file = e.target.files[0];
-    setFormData((prev) => ({ ...prev, achievementPhoto: file }));
+    setFormData(prev => ({ ...prev, achievementPhoto: file }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     try {
       if (update) {
+        setPending(true);
         await API.put(`/api/v1/yf-insights/update/${id}`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         tst.success("Data approved successfully");
       } else {
+        setPending(true);
         await API.post("/api/v1/yf-insights/create", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
@@ -184,6 +176,9 @@ const YoungFellowInsights = ({ update = false }) => {
       }
     } catch (error) {
       console.log(error);
+    }
+    finally{
+      setPending(false)
     }
   };
 
@@ -256,9 +251,7 @@ const YoungFellowInsights = ({ update = false }) => {
 
   return (
     <div className="p-6">
-      <AdminHeader>
-        {update ? "Edit Young Fellow Insight" : "Add Young Fellow Insight"}
-      </AdminHeader>
+      <AdminHeader>{update ? "Edit Young Fellow Insight" : "Add Young Fellow Insight"}</AdminHeader>
       <form onSubmit={handleSubmit} className="w-full grid grid-cols-3 gap-10">
         {formFields.map((field, index) => (
           <div className="mb-4" key={index}>
@@ -279,17 +272,10 @@ const YoungFellowInsights = ({ update = false }) => {
                   onChange={handleInputChange}
                   required={field.required}
                 ></Textarea>
-                {["achievement", "failure", "planOfAction"].includes(
-                  field.name
-                ) && (
+                {["achievement", "failure", "planOfAction"].includes(field.name) && (
                   <small>
-                    Maximum words:{" "}
-                    {field.name === "achievement"
-                      ? 300
-                      : field.name === "failure"
-                      ? 250
-                      : 200}{" "}
-                    ({countWords(formData[field.name])} words used)
+                    Maximum words: {field.name === "achievement" ? 300 : field.name === "failure" ? 250 : 200} (
+                    {countWords(formData[field.name])} words used)
                   </small>
                 )}
               </>
@@ -302,7 +288,7 @@ const YoungFellowInsights = ({ update = false }) => {
                 required={field.required}
               >
                 <option value="">Select {field.label}</option>
-                {field.options.map((option) => (
+                {field.options.map(option => (
                   <option key={option.id} value={option.id}>
                     {option.name}
                   </option>
@@ -310,10 +296,7 @@ const YoungFellowInsights = ({ update = false }) => {
               </select>
             ) : field.type === "nothing" ? (
               <div className="mb-4">
-                <select
-                  className="p-2 border rounded w-full bg-white"
-                  required={!update}
-                >
+                <select className="p-2 border rounded w-full bg-white" required={!update}>
                   <option value="FY 2023-24">FY 2023-24</option>
                 </select>
               </div>
@@ -324,26 +307,15 @@ const YoungFellowInsights = ({ update = false }) => {
         {!update ? (
           <div className="mb-4">
             <label className="block font-bold mb-2">Achievement Photo</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-              required={!update}
-              className="block"
-            />
+            <input type="file" accept="image/*" onChange={handleFileChange} required={!update} className="block" />
             <small>
-              Upload a photo that demonstrates your achievements in the last
-              financial year with you present in it
+              Upload a photo that demonstrates your achievements in the last financial year with you present in it
             </small>
           </div>
         ) : (
           <div>
             <label className="block font-bold mb-2">Achievement Photo</label>
-            <img
-              className=" rounded-md "
-              src={formData.achievementPhoto}
-              alt=""
-            />
+            <img className=" rounded-md " src={formData.achievementPhoto} alt="" />
           </div>
         )}
         <div></div>
@@ -359,7 +331,7 @@ const YoungFellowInsights = ({ update = false }) => {
         </div>
         <div></div>
         <div></div>
-        <Button type="submit" className="px-20 self-end ">
+        <Button type="submit" className="px-20 self-end " pending={pending}>
           {update ? "Approve" : "Submit"}
         </Button>
       </form>

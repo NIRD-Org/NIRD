@@ -43,6 +43,7 @@ const UserList = ({ role }) => {
         <TableHeader>
           <TableRow>
             <TableHead>ID</TableHead>
+            <TableHead>Employee ID</TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Username</TableHead>
             <TableHead>Action</TableHead>
@@ -52,6 +53,7 @@ const UserList = ({ role }) => {
           {users.map(user => (
             <TableRow key={user.id}>
               <TableCell>{user.id}</TableCell>
+              <TableCell>{user.employee_id || "NA"}</TableCell>
               <TableCell>{user.name}</TableCell>
               <TableCell>{user.username}</TableCell>
               <TableCell className="flex gap-4">
