@@ -1,8 +1,21 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-const LcvaCard = ({ image, theme, activity, state, district, block, gp }) => {
+const LcvaCard = ({
+  id,
+  image,
+  theme,
+  activity,
+  state,
+  district,
+  block,
+  gp,
+}) => {
   return (
-    <div className="w-[19rem] h-full md:w-[15rem] relative group  border flex flex-col justify-between cursor-pointer bg-white">
+    <Link
+      to={`/low-cost-activities/${activity}/${id}`}
+      className="w-[19rem] h-full md:w-[15rem] relative group  border flex flex-col justify-between cursor-pointer bg-white"
+    >
       <div className="overflow-hidden">
         <img
           src={image}
@@ -21,7 +34,7 @@ const LcvaCard = ({ image, theme, activity, state, district, block, gp }) => {
         <p className="text-xs font-normal text-slate-600">{district}</p>
         <p className="text-xs font-normal text-slate-600">{state}</p>
       </div>
-    </div>
+    </Link>
   );
 };
 

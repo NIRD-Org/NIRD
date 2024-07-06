@@ -389,7 +389,7 @@ const TrainingPage = () => {
       {/* Charts */}
 
       <div className="w-full bg-white py-10 px-5 md:py-20 md:px-10">
-        <TrainingChart />
+        {trainingSummary && <TrainingChart data={trainingSummary} />}
       </div>
 
       {/* Training Reports */}

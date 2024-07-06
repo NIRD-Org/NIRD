@@ -1,35 +1,13 @@
 import React from "react";
 import { Pie, Bar, Line, Doughnut } from "react-chartjs-2";
 
-const TrainingChart = () => {
-  // Data from backend
-  const data = {
-    _id: "FY2023-2024",
-    noOfTrainings: 2,
-    noOfWorkshops: 0,
-    noOfSeminars: 0,
-    noOfWebinars: 0,
-    noOfOnlineTrainings: 2,
-    noOfOfflineTrainings: 0,
-    noOfERsTrained: 64,
-    noOfGPFunctionariesTrained: 130,
-    noOfMembersOfSHGsTrained: 130,
-    noOfRepsFromVolOrgnsNGOsTrained: 130,
-    noOfRepsFromNatlStateInstnsTrained: 130,
-    noOfPanchayatBandhusTrained: 130,
-    noOfProjectStaffTrained: 130,
-    totalOthersTrained: 130,
-    totalMalesTrained: 12,
-    totalFemalesTrained: 10,
-    totalParticipantsTrained: 12,
-  };
-
+const TrainingChart = ({ data }) => {
   // Prepare data for charts
   const trainingsData = {
     labels: ["Trainings", "Workshops", "Seminars", "Webinars"],
     datasets: [
       {
-        label: "FY2023-2024",
+        label: data._id,
         data: [
           data.noOfTrainings,
           data.noOfWorkshops,
@@ -59,7 +37,7 @@ const TrainingChart = () => {
     ],
     datasets: [
       {
-        label: "FY2023-2024",
+        label: data._id,
         data: [
           data.noOfERsTrained,
           data.noOfGPFunctionariesTrained,
@@ -88,7 +66,7 @@ const TrainingChart = () => {
     labels: ["Males Trained", "Females Trained"],
     datasets: [
       {
-        label: "FY2023-2024",
+        label: data._id,
         data: [data.totalMalesTrained, data.totalFemalesTrained],
         backgroundColor: ["rgba(54,162,235,1)", "rgba(255,99,132,1)"],
       },
@@ -127,7 +105,7 @@ const TrainingChart = () => {
         />
       </div>
 
-      <div className="w-full h-[90vh]">
+      <div className="w-full h-[80vh]">
         <h2 className="text-center">Participants Trained</h2>
         <Bar
           className="h-full"

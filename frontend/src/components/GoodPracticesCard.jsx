@@ -1,6 +1,8 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const GoodPracticesCard = ({
+  id,
   image,
   theme,
   activity,
@@ -10,7 +12,10 @@ const GoodPracticesCard = ({
   gp,
 }) => {
   return (
-    <div className="w-[19rem] h-full md:w-[15rem] relative group  border flex flex-col justify-between cursor-pointer bg-white">
+    <Link
+      to={`/good-practice/${activity}/${id}`}
+      className="w-[19rem] h-full md:w-[15rem] relative group  border flex flex-col justify-between cursor-pointer bg-white"
+    >
       <div className="overflow-hidden">
         <img
           src={image}
@@ -29,7 +34,7 @@ const GoodPracticesCard = ({
         <p className="text-xs font-normal text-slate-600">{district}</p>
         <p className="text-xs font-normal text-slate-600">{state}</p>
       </div>
-    </div>
+    </Link>
   );
 };
 

@@ -251,6 +251,7 @@ const GoodPractices = () => {
         filteredGoodPractices.goodPractices.length > 0 ? (
           filteredGoodPractices.goodPractices.map((data) => (
             <GoodPracticesCard
+              id={data.id}
               activity={data.activityTitle}
               block={data.block_name}
               district={data.dist_name}

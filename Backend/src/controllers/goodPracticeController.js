@@ -271,6 +271,90 @@ export const getGoodPractices = CatchAsyncError(async (req, res, next) => {
   }
 });
 
+// Get similar good practices
+
+export const getSimilarGoodPractices = CatchAsyncError(
+  async (req, res, next) => {
+    try {
+      const goodPractices = await GoodPractice.aggregate([
+        { $match: { id: { $ne: req.params.id } } },
+        {
+          $lookup: {
+            from: "themes",
+            localField: "theme_id",
+            foreignField: "id",
+            as: "theme",
+          },
+        },
+        {
+          $lookup: {
+            from: "states",
+            localField: "state_id",
+            foreignField: "id",
+            as: "state",
+          },
+        },
+        {
+          $lookup: {
+            from: "districts",
+            localField: "dist_id",
+            foreignField: "id",
+            as: "district",
+          },
+        },
+        {
+          $lookup: {
+            from: "blocks",
+            localField: "block_id",
+            foreignField: "id",
+            as: "block",
+          },
+        },
+        {
+          $lookup: {
+            from: "grampanchayats",
+            localField: "gp_id",
+            foreignField: "id",
+            as: "gp",
+          },
+        },
+        { $unwind: "$theme" },
+        { $unwind: "$state" },
+        { $unwind: "$block" },
+        { $unwind: "$district" },
+        { $unwind: "$gp" },
+        {
+          $addFields: {
+            theme_name: "$theme.theme_name",
+            state_name: "$state.name",
+            block_name: "$block.name",
+            dist_name: "$district.name",
+            gp_name: "$gp.name",
+          },
+        },
+
+        {
+          $sort: {
+            _id: -1,
+          },
+        },
+        {
+          $limit: 8,
+        },
+      ]);
+
+      res.status(200).json({
+        success: true,
+        message: "Good Practices fetched successfully",
+        data: goodPractices,
+      });
+    } catch (error) {
+      console.error(error);
+      return next(new Errorhandler("Failed to get Good Practices", 500));
+    }
+  }
+);
+
 export const getGoodPracticeById = CatchAsyncError(async (req, res, next) => {
   try {
     const [goodPractice] = await GoodPractice.aggregate([
