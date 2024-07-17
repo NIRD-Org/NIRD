@@ -7,6 +7,8 @@ export const getAllUsers = CatchAsyncError(async (req, res, next) => {
     const filter = {};
     filter.status = { $ne: "0" };
     const { role, status } = req.query;
+    if(req.user.role==2) filter.createdBy  = req.user.id;
+    // if (status) filter.status = status;
 
     if (req.query.status) filter.status = req.query.status;
     if (role) filter.role = role;

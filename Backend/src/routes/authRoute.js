@@ -3,7 +3,7 @@ import { changePassword, login, register } from "../controllers/authController.j
 import { isAuth } from "../middlewares/auth.js";
 const router = express.Router();
 
-router.route("/register").post(register);
+router.route("/register").post(isAuth,register);
 router.route("/login").post(login);
 router.route("/change-password").post(isAuth,changePassword);
 

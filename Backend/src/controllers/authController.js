@@ -36,6 +36,7 @@ export const register = CatchAsyncError(async (req, res, next) => {
 
     const id = await getNewId();
     req.body.id = id.toString();
+    req.body.createdBy = req.user.id;
 
     user = new User(req.body);
 
