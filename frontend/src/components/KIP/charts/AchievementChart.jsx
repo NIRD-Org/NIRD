@@ -7,7 +7,9 @@ const AchievementChart = ({
   block = "",
   dist = "",
   gp = "",
+  fy,
   themeId,
+  theme,
 }) => {
   const [chartData, setChartData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -16,7 +18,7 @@ const AchievementChart = ({
     try {
       // Replace with actual API call once backend integration is ready
       const { data } = await API.get(
-        `/api/v1/gp-wise-kpi/achievement-chart?gp=${gp}&theme=${themeId}&state=${state}&dist=${dist}&block=${block}`
+        `/api/v1/gp-wise-kpi/achievement-chart?gp=${gp}&theme=${themeId}&state=${state}&dist=${dist}&block=${block}&financial_year=${fy}`
       );
       setChartData(data[0]);
 
@@ -39,10 +41,11 @@ const AchievementChart = ({
       setLoading(false);
     }
   };
+
   useEffect(() => {
     console.log("Use Effect");
     fetchData();
-  }, [state, dist, gp, themeId]);
+  }, [gp, themeId, fy]);
 
   if (loading) {
     return (
@@ -66,19 +69,26 @@ const AchievementChart = ({
   const currentData = chartData.chartData.map((item) =>
     parseFloat(item.currentPercentage?.percentage || 0)
   );
+  const getLastFinancialYear = (fy) => {
+    const [startYear, endYear] = fy.substring(2, 11).split("-").map(Number);
+    console.log("Start: ", startYear, " End: ", endYear);
+    const lastStartYear = startYear - 1;
+    const lastEndYear = endYear - 1;
+    return `FY${lastStartYear}-${lastEndYear}`;
+  };
 
   const data = {
     labels,
     datasets: [
       {
-        label: "Baseline Status (as on 31.03.2022)",
+        label: `Baseline Status as on ${getLastFinancialYear(fy)}`,
         data: baselineData,
-        backgroundColor: "rgba(0, 75, 134, 1)",
+        backgroundColor: "darkOrange",
       },
       {
-        label: "Status as on 31.03.2024",
+        label: `Status as on ${fy}`,
         data: currentData,
-        backgroundColor: "rgba(255, 127, 0,1)",
+        backgroundColor: "#0a2c4e",
       },
     ],
   };
@@ -89,9 +99,19 @@ const AchievementChart = ({
     plugins: {
       legend: {
         position: "bottom",
+        labels: {
+          font: {
+            size: 14,
+            weight: "bold",
+          },
+          color: "#333",
+        },
       },
       tooltip: {
         enabled: true,
+        backgroundColor: "#333",
+        titleColor: "#fff",
+        bodyColor: "#fff",
       },
     },
     scales: {
@@ -100,9 +120,17 @@ const AchievementChart = ({
         title: {
           display: true,
           text: "Percentage",
+          color: "#333",
+          font: {
+            size: 16,
+            weight: "bold",
+          },
         },
         ticks: {
-          stepSize: 10,
+          font: {
+            size: 14,
+          },
+          color: "#333",
         },
       },
       y: {
@@ -110,34 +138,36 @@ const AchievementChart = ({
         title: {
           display: true,
           text: "KPI Names",
-        },
-        ticks: {
-          autoSkip: false,
-          callback: function (value) {
-            const label = this.getLabelForValue(value);
-            return label.substring(0, 40);
+          color: "#333",
+          font: {
+            size: 16,
+            weight: "bold",
           },
         },
-        grid: {
-          drawTicks: false,
-          offset: true,
+        ticks: {
+          font: {
+            size: 14,
+          },
+          color: "#333",
+          callback: function (value) {
+            const label = this.getLabelForValue(value);
+            return label.length > 40 ? label.substring(0, 40) + "..." : label;
+          },
         },
       },
     },
-    barPercentage: 0.5,
-    barThickness: 30,
-    maxBarThickness: 40,
-    categorySpacing: 0.2,
+    barPercentage: 1,
+    categoryPercentage: 0.7,
   };
 
   return (
     <div className="px-2 py-10">
       <h2 className="text-green-600 text-center mb-4">
-        Achievements of Project GPs under Women Friendly Village
+        Achievements of Project GPs Under {"  " + theme}
       </h2>
       <div className="flex border-2 py-10 justify-between items-center">
         <div className="w-full p-1">
-          <Bar data={data} options={options} />
+          <Bar data={data} height={null} width={null} options={options} />
         </div>
       </div>
     </div>

@@ -11,11 +11,14 @@ const Achievement = () => {
   const [blockOptions, setBlockOptions] = useState([]);
   const [GpOptions, setGpOptions] = useState([]);
   const [stateData, setStateData] = useState();
+  const [themes, setThemes] = useState([]);
   const state = searchParams.get("state") || "";
   const dist = searchParams.get("dist") || "";
   const block = searchParams.get("block") || "";
   const gp = searchParams.get("gp") || "";
   const tab = searchParams.get("tab");
+  const theme = searchParams.get("theme");
+  const financialYear = searchParams.get("financial_year");
   const navigate = useNavigate();
 
   const getAllStates = async () => {
@@ -56,6 +59,15 @@ const Achievement = () => {
     if (block) getAllGp();
   }, [block]);
 
+  const getAllThemes = async () => {
+    try {
+      const { data } = await API.get(`/api/v1/theme/all`);
+      setThemes(data?.themes || []);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const getStateById = async (stateId) => {
     try {
       const { data } = await API.get(`/api/v1/state/${stateId}`);
@@ -69,14 +81,27 @@ const Achievement = () => {
     getStateById(state);
   }, [state]);
 
+  useEffect(() => {
+    getAllThemes();
+  }, []);
+
+  const financialYears = [];
+
+  for (let year = 2022; year <= 2050; year++) {
+    financialYears.push({
+      value: `FY${year}-${year + 1}`,
+      label: `FY ${year}-${year + 1}`,
+    });
+  }
+
   return (
     <div className="relative py-10 pt-16 px-5 lg:px-20">
       <h1 className="text-3xl text-primary text-center font-bold">
         Achievements Data
       </h1>
-      <div className="flex flex-col justify-between items-center  lg:flex-row text-center text-3xl h-full">
+      <div className="flex text-center justify-between items-end text-3xl h-full">
         {/* Info */}
-        <div className="w-full  h-fit">
+        <div className="w-full h-fit">
           <div className="flex flex-wrap items-end py-10 gap-2 sm:gap-5">
             <div className="flex flex-col">
               <label
@@ -179,10 +204,58 @@ const Achievement = () => {
                 ))}
               </select>
             </div>
+            <div className="flex flex-col">
+              <label
+                className="text-sm text-primary text-start px-4 py-2 font-semibold"
+                htmlFor=""
+              >
+                Financial Year
+              </label>
+              <select
+                value={financialYear}
+                onChange={(e) => {
+                  searchParams.set("financial_year", e.target.value);
+                  setSearchParams(searchParams);
+                }}
+                className="w-full text-sm md:w-40 text-center border p-2 rounded-md"
+              >
+                <option value="">Select Financial Year</option>
+                {financialYears.map((year, index) => (
+                  <option key={index} value={year.value}>
+                    {year.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex flex-col">
+              <label
+                className="text-sm text-primary text-start px-4 py-2 font-semibold"
+                htmlFor=""
+              >
+                Theme
+              </label>
+
+              <select
+                className="border text-sm border-gray-200 p-2 rounded-md "
+                value={theme}
+                disabled={!themes.length}
+                onChange={(e) => {
+                  searchParams.set("theme", e.target.value);
+                  setSearchParams(searchParams);
+                }}
+              >
+                <option>Select Theme</option>
+                {themes.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.theme_name}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
         {/* img */}
-        <div className="w-full md:w-1/3 flex justify-center items-center lg:w-1/2 h-full ">
+        <div className="w-full md:w-1/3 lg:w-1/2 h-full ">
           <img
             src={stateData?.state_icon}
             alt=""
@@ -193,7 +266,24 @@ const Achievement = () => {
       </div>
 
       <div className="py-10">
-        <AchievementChart block={block} state={state} dist={dist} gp={gp} />
+        {/* <AchievementChart
+          block={block}
+          state={state}
+          dist={dist}
+          gp={gp}
+          themeId={theme}
+          fy={financialYear}
+          theme={themes.find((t) => t.id === theme)?.theme_name}
+        /> */}
+        <AchievementChart
+          block={"8"}
+          state={"3"}
+          dist={"8"}
+          gp={"31"}
+          themeId={"1"}
+          fy={"FY2023-2024"}
+          theme={"Poverty Free and Enhanced Livelihoods Village"}
+        />
       </div>
     </div>
   );

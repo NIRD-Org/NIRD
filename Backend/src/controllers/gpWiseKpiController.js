@@ -624,10 +624,18 @@ export const getGpWiseKpiChart = CatchAsyncError(async (req, res, next) => {
 
 export const getAchievementsChart = CatchAsyncError(async (req, res, next) => {
   try {
-    const { state, dist, block, theme, gp, financial_year } = req.query;
+    const { state, dist, block, theme = "1", gp, financial_year } = req.query;
 
     let currentFY;
     let lastFY;
+
+    // Helper function to calculate the last financial year
+    const getLastFinancialYear = (fy) => {
+      const [startYear, endYear] = fy.substring(2, 11).split("-").map(Number);
+      const lastStartYear = startYear - 1;
+      const lastEndYear = endYear - 1;
+      return `FY${lastStartYear}-${lastEndYear}`;
+    };
 
     if (!financial_year) {
       // Fetch distinct financial years from the database
@@ -644,13 +652,12 @@ export const getAchievementsChart = CatchAsyncError(async (req, res, next) => {
         return next(new Errorhandler("No financial year data available", 400));
       }
 
-      [currentFY, lastFY] =
-        financialYears.length > 1
-          ? financialYears.slice(0, 2)
-          : [financialYears[0], null];
+      currentFY = financialYears[0];
+      lastFY =
+        financialYears.length > 1 ? getLastFinancialYear(currentFY) : null;
     } else {
       currentFY = financial_year;
-      lastFY = null;
+      lastFY = getLastFinancialYear(currentFY);
     }
 
     // Helper function to build match stages for different financial years
@@ -665,7 +672,6 @@ export const getAchievementsChart = CatchAsyncError(async (req, res, next) => {
       if (gp) matchStage.gp_id = gp;
       return matchStage;
     };
-
     // Calculate Yearly Data for Current Financial Year and, if available, Last Financial Year
     const matchStageYearlyCurrent = buildMatchStage(currentFY);
     const pipelineYearly = (matchStage) => [
