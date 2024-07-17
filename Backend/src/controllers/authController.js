@@ -57,7 +57,7 @@ export const login = CatchAsyncError(async (req, res, next) => {
     console.log(req.body);
     const { username, password } = req.body;
 
-    let user = await User.findOne({ username });
+    let user = await User.findOne({ username, status: "1" });
     if (!user) {
       return next(new Errorhandler("Invalid credentials", 400));
     }
