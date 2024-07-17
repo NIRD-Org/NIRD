@@ -48,7 +48,7 @@ const CarouselComponent = ({ data }) => {
                     <img
                       src={item.image}
                       alt={item.activityTitle}
-                      className="w-full h-full rounded  object-cover"
+                      className="w-full h-full max-h-[65vh] rounded  object-cover"
                     />
                     <div className="absolute bottom-0 left-0 w-full bg-black bg-opacity-60 text-white py-4 md:px-10 px-4">
                       <p className="text-xs rounded-lg w-fit text-white bg-primary px-1 md:px-5 py-2 md:py-1 font-medium">

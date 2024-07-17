@@ -117,7 +117,7 @@ const GoodPractices = () => {
       {/* Info Section */}
       <div className="w-full px-5  py-8 md:px-20 md:py-10 bg-white p-2 md:p-10 rounded flex flex-col md:flex-row justify-between gap-5">
         {/* Carousel */}
-        <div className=" w-full md:w-4/6">
+        <div className=" w-full md:w-4/6 max-h-[70vh]">
           {goodPractices && goodPractices.goodPractices?.length > 0 ? (
             <CarouselComponent data={goodPractices.goodPractices} />
           ) : (

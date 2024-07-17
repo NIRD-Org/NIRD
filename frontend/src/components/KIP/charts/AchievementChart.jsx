@@ -2,39 +2,49 @@ import React, { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 import API from "@/utils/API";
 
-const AchievementChart = ({ state, block, dist, gp, themeId }) => {
+const AchievementChart = ({
+  state = "",
+  block = "",
+  dist = "",
+  gp = "",
+  themeId,
+}) => {
   const [chartData, setChartData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      // Replace with actual API call once backend integration is ready
+      const { data } = await API.get(
+        `/api/v1/gp-wise-kpi/achievement-chart?gp=${gp}&theme=${themeId}&state=${state}&dist=${dist}&block=${block}`
+      );
+      setChartData(data[0]);
 
+      // For testing purposes, you can uncomment and use the static data below
+      // const testData = {
+      //   theme_id: 1,
+      //   theme_name: "Education",
+      //   gp_name: "Sample GP",
+      //   state_name: "Sample State",
+      //   dist_name: "Sample District",
+      //   block_name: "Sample Block",
+      //   chartData: [
+      //     // Sample KPI data here...
+      //   ],
+      // };
+      // setChartData(testData);
+    } catch (error) {
+      console.error("Error fetching chart data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Replace with actual API call once backend integration is ready
-        const { data } = await API.get(
-          `/api/v1/gp-wise-kpi/achievement-chart?gp=${gp}&theme=${themeId}&state=${state}&dist=${dist}&block=${block}`
-        );
-        setChartData(data[0]);
-
-        // For testing purposes, you can uncomment and use the static data below
-        // const testData = {
-        //   theme_id: 1,
-        //   theme_name: "Education",
-        //   gp_name: "Sample GP",
-        //   state_name: "Sample State",
-        //   dist_name: "Sample District",
-        //   block_name: "Sample Block",
-        //   chartData: [
-        //     // Sample KPI data here...
-        //   ],
-        // };
-        // setChartData(testData);
-      } catch (error) {
-        console.error("Error fetching chart data:", error);
-      }
-    };
+    console.log("Use Effect");
     fetchData();
   }, [state, dist, gp, themeId]);
 
-  if (!chartData) {
+  if (loading) {
     return (
       <div className="w-full h-[50vh] flex justify-center items-center text-3xl">
         Loading...
@@ -42,6 +52,13 @@ const AchievementChart = ({ state, block, dist, gp, themeId }) => {
     );
   }
 
+  if (!chartData && !loading) {
+    return (
+      <div className="w-full h-[30vh] flex justify-center items-center text-3xl">
+        No Data Found
+      </div>
+    );
+  }
   const labels = chartData.chartData.map((item) => item.kpi_name);
   const baselineData = chartData.chartData.map((item) =>
     parseFloat(item.lastPercentage?.percentage || 0)
@@ -98,9 +115,7 @@ const AchievementChart = ({ state, block, dist, gp, themeId }) => {
           autoSkip: false,
           callback: function (value) {
             const label = this.getLabelForValue(value);
-            return label.length > 20
-              ? label.match(/.{1,20}/g).join("\n")
-              : label;
+            return label.substring(0, 40);
           },
         },
         grid: {

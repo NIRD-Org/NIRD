@@ -15,7 +15,7 @@ const GoodPracticeForm = ({ update = false }) => {
     dist_id: "",
     block_id: "",
     gp_id: "",
-    financial_year:"",
+    financial_year: "",
     activityTitle: "",
     image: null,
     document: null,
@@ -35,28 +35,28 @@ const GoodPracticeForm = ({ update = false }) => {
   const { themes } = useThemes();
 
   useEffect(() => {
-    setFormData(prevData => ({ ...prevData, dist_id: "" }));
+    setFormData((prevData) => ({ ...prevData, dist_id: "" }));
   }, [formData.state_id]);
 
   useEffect(() => {
-    setFormData(prevData => ({ ...prevData, block_id: "" }));
+    setFormData((prevData) => ({ ...prevData, block_id: "" }));
   }, [formData.dist_id]);
 
   useEffect(() => {
-    setFormData(prevData => ({ ...prevData, gp_id: "" }));
+    setFormData((prevData) => ({ ...prevData, gp_id: "" }));
   }, [formData.block_id]);
 
-  const handleInputChange = e => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFileChange = e => {
+  const handleFileChange = (e) => {
     const { name, files } = e.target;
-    setFormData(prev => ({ ...prev, [name]: files[0] }));
+    setFormData((prev) => ({ ...prev, [name]: files[0] }));
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       if (update) {
@@ -83,7 +83,7 @@ const GoodPracticeForm = ({ update = false }) => {
       label: "Theme Name",
       name: "theme_id",
       type: "select",
-      options: themes?.map(theme => ({
+      options: themes?.map((theme) => ({
         value: theme.id,
         label: theme.theme_name,
       })),
@@ -93,7 +93,7 @@ const GoodPracticeForm = ({ update = false }) => {
       label: "State",
       name: "state_id",
       type: "select",
-      options: states?.map(state => ({
+      options: states?.map((state) => ({
         value: state.id,
         label: state.name,
       })),
@@ -103,7 +103,7 @@ const GoodPracticeForm = ({ update = false }) => {
       label: "District",
       name: "dist_id",
       type: "select",
-      options: districts?.map(district => ({
+      options: districts?.map((district) => ({
         value: district.id,
         label: district.name,
       })),
@@ -113,7 +113,7 @@ const GoodPracticeForm = ({ update = false }) => {
       label: "Block",
       name: "block_id",
       type: "select",
-      options: blocks?.map(block => ({
+      options: blocks?.map((block) => ({
         value: block.id,
         label: block.name,
       })),
@@ -123,7 +123,7 @@ const GoodPracticeForm = ({ update = false }) => {
       label: "GP",
       name: "gp_id",
       type: "select",
-      options: gps?.map(gp => ({
+      options: gps?.map((gp) => ({
         value: gp.id,
         label: gp.name,
       })),
@@ -159,6 +159,7 @@ const GoodPracticeForm = ({ update = false }) => {
       label: "Upload Document",
       name: "document",
       type: "file",
+      accept: "application/pdf,.pdf",
       required: !update,
     },
     {
@@ -173,9 +174,14 @@ const GoodPracticeForm = ({ update = false }) => {
 
   return (
     <div className="p-2 md:p-6">
-      <AdminHeader>{update ? "Edit Good Practice" : "Good Practice Entry Form"}</AdminHeader>
-      <form onSubmit={handleSubmit} className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-        {fields.map(field => (
+      <AdminHeader>
+        {update ? "Edit Good Practice" : "Good Practice Entry Form"}
+      </AdminHeader>
+      <form
+        onSubmit={handleSubmit}
+        className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"
+      >
+        {fields.map((field) => (
           <FormField
             key={field.name}
             {...field}

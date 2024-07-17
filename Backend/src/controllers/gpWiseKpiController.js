@@ -622,224 +622,36 @@ export const getGpWiseKpiChart = CatchAsyncError(async (req, res, next) => {
   }
 });
 
-// Get Acheivements Charts
-
-// export const getAchievementsChart = CatchAsyncError(async (req, res, next) => {
-//   try {
-//     const { state, dist, block, theme, gp } = req.query;
-
-//     // Fetch distinct financial years
-//     let financialYears = await GpWiseKpiModel.distinct("financial_year");
-
-//     // Extract start year and sort in descending order
-//     financialYears.sort((a, b) => {
-//       const yearA = parseInt(a.split("-")[0].substring(2), 10);
-//       const yearB = parseInt(b.split("-")[0].substring(2), 10);
-//       return yearB - yearA;
-//     });
-
-//     if (financialYears.length === 0) {
-//       return next(new Errorhandler("No financial year data available", 400));
-//     }
-
-//     const [currentFY, lastFY] =
-//       financialYears.length > 1
-//         ? financialYears.slice(0, 2)
-//         : [financialYears[0], null];
-
-//     // Helper function to build match stages for different financial years
-//     const buildMatchStage = (financialYear) => {
-//       const matchStage = {
-//         theme_id: theme,
-//         financial_year: financialYear,
-//       };
-//       if (state) matchStage.state_id = state;
-//       if (dist) matchStage.dist_id = dist;
-//       if (block) matchStage.block_id = block;
-//       if (gp) matchStage.gp_id = gp;
-//       return matchStage;
-//     };
-
-//     // Calculate Yearly Data for Current Financial Year and, if available, Last Financial Year
-//     const matchStageYearlyCurrent = buildMatchStage(currentFY);
-//     const pipelineYearly = (matchStage) => [
-//       { $match: matchStage },
-//       {
-//         $group: {
-//           _id: {
-//             state_id: "$state_id",
-//             dist_id: "$dist_id",
-//             block_id: "$block_id",
-//             gp_id: "$gp_id",
-//             theme_id: "$theme_id",
-//             kpi_id: "$kpi_id",
-//           },
-//           totalInputData: { $sum: "$input_data" },
-//           totalMaxRange: { $sum: "$max_range" },
-//         },
-//       },
-//       {
-//         $lookup: {
-//           from: "states",
-//           localField: "_id.state_id",
-//           foreignField: "id",
-//           as: "state_info",
-//         },
-//       },
-//       {
-//         $lookup: {
-//           from: "districts",
-//           localField: "_id.dist_id",
-//           foreignField: "id",
-//           as: "district_info",
-//         },
-//       },
-//       {
-//         $lookup: {
-//           from: "blocks",
-//           localField: "_id.block_id",
-//           foreignField: "id",
-//           as: "block_info",
-//         },
-//       },
-//       {
-//         $lookup: {
-//           from: "gps",
-//           localField: "_id.gp_id",
-//           foreignField: "id",
-//           as: "gp_info",
-//         },
-//       },
-//       {
-//         $lookup: {
-//           from: "themes",
-//           localField: "_id.theme_id",
-//           foreignField: "id",
-//           as: "theme_info",
-//         },
-//       },
-//       {
-//         $lookup: {
-//           from: "kpis",
-//           localField: "_id.kpi_id",
-//           foreignField: "id",
-//           as: "kpi_info",
-//         },
-//       },
-//       {
-//         $project: {
-//           _id: 0,
-//           gp_id: "$_id.gp_id",
-//           gp_name: { $arrayElemAt: ["$gp_info.name", 0] },
-//           state_name: { $arrayElemAt: ["$state_info.name", 0] },
-//           dist_name: { $arrayElemAt: ["$district_info.name", 0] },
-//           block_name: { $arrayElemAt: ["$block_info.name", 0] },
-//           theme_id: "$_id.theme_id",
-//           theme_name: { $arrayElemAt: ["$theme_info.theme_name", 0] },
-//           kpi_id: "$_id.kpi_id",
-//           kpi_name: { $arrayElemAt: ["$kpi_info.name", 0] },
-//           totalInputData: 1,
-//           totalMaxRange: 1,
-//           percentage: {
-//             $cond: [
-//               { $eq: ["$totalMaxRange", 0] },
-//               0,
-//               {
-//                 $multiply: [
-//                   { $divide: ["$totalInputData", "$totalMaxRange"] },
-//                   100,
-//                 ],
-//               },
-//             ],
-//           },
-//         },
-//       },
-//     ];
-
-//     const currentYearData = await GpWiseKpiModel.aggregate(
-//       pipelineYearly(matchStageYearlyCurrent)
-//     );
-
-//     let lastYearData = [];
-//     if (lastFY) {
-//       const matchStageYearlyLast = buildMatchStage(lastFY);
-//       lastYearData = await GpWiseKpiModel.aggregate(
-//         pipelineYearly(matchStageYearlyLast)
-//       );
-//     }
-
-//     // Combine current and last year data by theme
-//     const combinedData = {};
-
-//     currentYearData.forEach((current) => {
-//       if (!combinedData[current.theme_id]) {
-//         combinedData[current.theme_id] = {
-//           theme_id: current.theme_id,
-//           theme_name: current.theme_name,
-//           gp_name: current.gp_name,
-//           state_name: current.state_name,
-//           dist_name: current.dist_name,
-//           block_name: current.block_name,
-//           chartData: [],
-//         };
-//       }
-//       const last = lastYearData.find(
-//         (last) => last.gp_id === current.gp_id && last.kpi_id === current.kpi_id
-//       );
-//       combinedData[current.theme_id].chartData.push({
-//         kpi_id: current.kpi_id,
-//         kpi_name: current.kpi_name,
-//         currentPercentage: {
-//           financial_year: currentFY,
-//           percentage: current.percentage.toFixed(2),
-//         },
-//         lastPercentage: last
-//           ? {
-//               financial_year: lastFY,
-//               percentage: last.percentage.toFixed(2),
-//             }
-//           : null,
-//       });
-//     });
-
-//     // Sort according to kpi
-//     Object.values(combinedData).forEach((themeData) => {
-//       themeData.chartData.sort((a, b) => {
-//         const kpiIdA = parseInt(a.kpi_id, 10);
-//         const kpiIdB = parseInt(b.kpi_id, 10);
-//         return kpiIdA - kpiIdB;
-//       });
-//     });
-
-//     res.json(Object.values(combinedData));
-//   } catch (error) {
-//     console.error(error);
-//     return next(new Errorhandler("Failed to get KPI data", 500));
-//   }
-// });
-
 export const getAchievementsChart = CatchAsyncError(async (req, res, next) => {
   try {
-    const { state, dist, block, theme, gp, dataType = "gp" } = req.query;
+    const { state, dist, block, theme, gp, financial_year } = req.query;
 
-    // Fetch distinct financial years
-    let financialYears = await GpWiseKpiModel.distinct("financial_year");
+    let currentFY;
+    let lastFY;
 
-    // Extract start year and sort in descending order
-    financialYears.sort((a, b) => {
-      const yearA = parseInt(a.split("-")[0].substring(2), 10);
-      const yearB = parseInt(b.split("-")[0].substring(2), 10);
-      return yearB - yearA;
-    });
+    if (!financial_year) {
+      // Fetch distinct financial years from the database
+      let financialYears = await GpWiseKpiModel.distinct("financial_year");
 
-    if (financialYears.length === 0) {
-      return next(new Errorhandler("No financial year data available", 400));
+      // Extract start year and sort in descending order
+      financialYears.sort((a, b) => {
+        const yearA = parseInt(a.split("-")[0].substring(2), 10);
+        const yearB = parseInt(b.split("-")[0].substring(2), 10);
+        return yearB - yearA;
+      });
+
+      if (financialYears.length === 0) {
+        return next(new Errorhandler("No financial year data available", 400));
+      }
+
+      [currentFY, lastFY] =
+        financialYears.length > 1
+          ? financialYears.slice(0, 2)
+          : [financialYears[0], null];
+    } else {
+      currentFY = financial_year;
+      lastFY = null;
     }
-
-    const [currentFY, lastFY] =
-      financialYears.length > 1
-        ? financialYears.slice(0, 2)
-        : [financialYears[0], null];
 
     // Helper function to build match stages for different financial years
     const buildMatchStage = (financialYear) => {
@@ -854,7 +666,9 @@ export const getAchievementsChart = CatchAsyncError(async (req, res, next) => {
       return matchStage;
     };
 
-    const buildPipeline = (matchStage) => [
+    // Calculate Yearly Data for Current Financial Year and, if available, Last Financial Year
+    const matchStageYearlyCurrent = buildMatchStage(currentFY);
+    const pipelineYearly = (matchStage) => [
       { $match: matchStage },
       {
         $group: {
@@ -866,7 +680,8 @@ export const getAchievementsChart = CatchAsyncError(async (req, res, next) => {
             theme_id: "$theme_id",
             kpi_id: "$kpi_id",
           },
-          totalScore: { $sum: "$score" },
+          totalInputData: { $sum: "$input_data" },
+          totalMaxRange: { $sum: "$max_range" },
         },
       },
       {
@@ -929,63 +744,35 @@ export const getAchievementsChart = CatchAsyncError(async (req, res, next) => {
           theme_name: { $arrayElemAt: ["$theme_info.theme_name", 0] },
           kpi_id: "$_id.kpi_id",
           kpi_name: { $arrayElemAt: ["$kpi_info.name", 0] },
-          totalScore: 1,
+          totalInputData: 1,
+          totalMaxRange: 1,
+          percentage: {
+            $cond: [
+              { $eq: ["$totalMaxRange", 0] },
+              0,
+              {
+                $multiply: [
+                  { $divide: ["$totalInputData", "$totalMaxRange"] },
+                  100,
+                ],
+              },
+            ],
+          },
         },
       },
     ];
 
-    const matchStageYearlyCurrent = buildMatchStage(currentFY);
-    const pipelineYearlyCurrent = buildPipeline(matchStageYearlyCurrent);
     const currentYearData = await GpWiseKpiModel.aggregate(
-      pipelineYearlyCurrent
+      pipelineYearly(matchStageYearlyCurrent)
     );
 
     let lastYearData = [];
     if (lastFY) {
       const matchStageYearlyLast = buildMatchStage(lastFY);
-      const pipelineYearlyLast = buildPipeline(matchStageYearlyLast);
-      lastYearData = await GpWiseKpiModel.aggregate(pipelineYearlyLast);
+      lastYearData = await GpWiseKpiModel.aggregate(
+        pipelineYearly(matchStageYearlyLast)
+      );
     }
-
-    // Calculate reference score based on dataType
-    const calculateReferenceScore = async (dataType, financialYear) => {
-      const matchStage = { theme_id: theme, financial_year: financialYear };
-      switch (dataType) {
-        case "gp":
-          if (gp) matchStage.gp_id = gp;
-          break;
-        case "state":
-          if (state) matchStage.state_id = state;
-          break;
-        case "country":
-          // No additional filter needed for country level
-          break;
-      }
-      const pipeline = [
-        { $match: matchStage },
-        {
-          $group: {
-            _id: null,
-            totalScore: { $sum: "$score" },
-          },
-        },
-      ];
-      const result = await GpWiseKpiModel.aggregate(pipeline);
-      return result.length > 0 ? result[0].totalScore : 0;
-    };
-
-    const referenceScoreCurrent = await calculateReferenceScore(
-      dataType,
-      currentFY
-    );
-    const referenceScoreLast = lastFY
-      ? await calculateReferenceScore(dataType, lastFY)
-      : 0;
-
-    // Helper function to calculate percentages based on dataType
-    const calculatePercentage = (totalScore, referenceScore) => {
-      return referenceScore === 0 ? 0 : (totalScore / referenceScore) * 100;
-    };
 
     // Combine current and last year data by theme
     const combinedData = {};
@@ -1002,32 +789,26 @@ export const getAchievementsChart = CatchAsyncError(async (req, res, next) => {
           chartData: [],
         };
       }
-
       const last = lastYearData.find(
         (last) => last.gp_id === current.gp_id && last.kpi_id === current.kpi_id
       );
-
       combinedData[current.theme_id].chartData.push({
         kpi_id: current.kpi_id,
         kpi_name: current.kpi_name,
         currentPercentage: {
           financial_year: currentFY,
-          percentage: calculatePercentage(
-            current.totalScore,
-            referenceScoreCurrent
-          ).toFixed(2),
+          percentage: current.percentage.toFixed(2),
         },
         lastPercentage: last
           ? {
               financial_year: lastFY,
-              percentage: calculatePercentage(
-                last.totalScore,
-                referenceScoreLast
-              ).toFixed(2),
+              percentage: last.percentage.toFixed(2),
             }
           : null,
       });
     });
+
+    console.log(currentFY);
 
     // Sort according to kpi
     Object.values(combinedData).forEach((themeData) => {
@@ -1044,6 +825,233 @@ export const getAchievementsChart = CatchAsyncError(async (req, res, next) => {
     return next(new Errorhandler("Failed to get KPI data", 500));
   }
 });
+
+// export const getAchievementsChart = CatchAsyncError(async (req, res, next) => {
+//   try {
+//     const { state, dist, block, theme, gp, dataType = "gp" } = req.query;
+
+//     // Fetch distinct financial years
+//     let financialYears = await GpWiseKpiModel.distinct("financial_year");
+
+//     // Extract start year and sort in descending order
+//     financialYears.sort((a, b) => {
+//       const yearA = parseInt(a.split("-")[0].substring(2), 10);
+//       const yearB = parseInt(b.split("-")[0].substring(2), 10);
+//       return yearB - yearA;
+//     });
+
+//     if (financialYears.length === 0) {
+//       return next(new Errorhandler("No financial year data available", 400));
+//     }
+
+//     const [currentFY, lastFY] =
+//       financialYears.length > 1
+//         ? financialYears.slice(0, 2)
+//         : [financialYears[0], null];
+
+//     // Helper function to build match stages for different financial years
+//     const buildMatchStage = (financialYear) => {
+//       const matchStage = {
+//         theme_id: theme,
+//         financial_year: financialYear,
+//       };
+//       if (state) matchStage.state_id = state;
+//       if (dist) matchStage.dist_id = dist;
+//       if (block) matchStage.block_id = block;
+//       if (gp) matchStage.gp_id = gp;
+//       return matchStage;
+//     };
+
+//     const buildPipeline = (matchStage) => [
+//       { $match: matchStage },
+//       {
+//         $group: {
+//           _id: {
+//             state_id: "$state_id",
+//             dist_id: "$dist_id",
+//             block_id: "$block_id",
+//             gp_id: "$gp_id",
+//             theme_id: "$theme_id",
+//             kpi_id: "$kpi_id",
+//           },
+//           totalScore: { $sum: "$score" },
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: "states",
+//           localField: "_id.state_id",
+//           foreignField: "id",
+//           as: "state_info",
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: "districts",
+//           localField: "_id.dist_id",
+//           foreignField: "id",
+//           as: "district_info",
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: "blocks",
+//           localField: "_id.block_id",
+//           foreignField: "id",
+//           as: "block_info",
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: "gps",
+//           localField: "_id.gp_id",
+//           foreignField: "id",
+//           as: "gp_info",
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: "themes",
+//           localField: "_id.theme_id",
+//           foreignField: "id",
+//           as: "theme_info",
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: "kpis",
+//           localField: "_id.kpi_id",
+//           foreignField: "id",
+//           as: "kpi_info",
+//         },
+//       },
+//       {
+//         $project: {
+//           _id: 0,
+//           gp_id: "$_id.gp_id",
+//           gp_name: { $arrayElemAt: ["$gp_info.name", 0] },
+//           state_name: { $arrayElemAt: ["$state_info.name", 0] },
+//           dist_name: { $arrayElemAt: ["$district_info.name", 0] },
+//           block_name: { $arrayElemAt: ["$block_info.name", 0] },
+//           theme_id: "$_id.theme_id",
+//           theme_name: { $arrayElemAt: ["$theme_info.theme_name", 0] },
+//           kpi_id: "$_id.kpi_id",
+//           kpi_name: { $arrayElemAt: ["$kpi_info.name", 0] },
+//           totalScore: 1,
+//         },
+//       },
+//     ];
+
+//     const matchStageYearlyCurrent = buildMatchStage(currentFY);
+//     const pipelineYearlyCurrent = buildPipeline(matchStageYearlyCurrent);
+//     const currentYearData = await GpWiseKpiModel.aggregate(
+//       pipelineYearlyCurrent
+//     );
+
+//     let lastYearData = [];
+//     if (lastFY) {
+//       const matchStageYearlyLast = buildMatchStage(lastFY);
+//       const pipelineYearlyLast = buildPipeline(matchStageYearlyLast);
+//       lastYearData = await GpWiseKpiModel.aggregate(pipelineYearlyLast);
+//     }
+
+//     // Calculate reference score based on dataType
+//     const calculateReferenceScore = async (dataType, financialYear) => {
+//       const matchStage = { theme_id: theme, financial_year: financialYear };
+//       switch (dataType) {
+//         case "gp":
+//           if (gp) matchStage.gp_id = gp;
+//           break;
+//         case "state":
+//           if (state) matchStage.state_id = state;
+//           break;
+//         case "country":
+//           // No additional filter needed for country level
+//           break;
+//       }
+//       const pipeline = [
+//         { $match: matchStage },
+//         {
+//           $group: {
+//             _id: null,
+//             totalScore: { $sum: "$score" },
+//           },
+//         },
+//       ];
+//       const result = await GpWiseKpiModel.aggregate(pipeline);
+//       return result.length > 0 ? result[0].totalScore : 0;
+//     };
+
+//     const referenceScoreCurrent = await calculateReferenceScore(
+//       dataType,
+//       currentFY
+//     );
+//     const referenceScoreLast = lastFY
+//       ? await calculateReferenceScore(dataType, lastFY)
+//       : 0;
+
+//     // Helper function to calculate percentages based on dataType
+//     const calculatePercentage = (totalScore, referenceScore) => {
+//       return referenceScore === 0 ? 0 : (totalScore / referenceScore) * 100;
+//     };
+
+//     // Combine current and last year data by theme
+//     const combinedData = {};
+
+//     currentYearData.forEach((current) => {
+//       if (!combinedData[current.theme_id]) {
+//         combinedData[current.theme_id] = {
+//           theme_id: current.theme_id,
+//           theme_name: current.theme_name,
+//           gp_name: current.gp_name,
+//           state_name: current.state_name,
+//           dist_name: current.dist_name,
+//           block_name: current.block_name,
+//           chartData: [],
+//         };
+//       }
+
+//       const last = lastYearData.find(
+//         (last) => last.gp_id === current.gp_id && last.kpi_id === current.kpi_id
+//       );
+
+//       combinedData[current.theme_id].chartData.push({
+//         kpi_id: current.kpi_id,
+//         kpi_name: current.kpi_name,
+//         currentPercentage: {
+//           financial_year: currentFY,
+//           percentage: calculatePercentage(
+//             current.totalScore,
+//             referenceScoreCurrent
+//           ).toFixed(2),
+//         },
+//         lastPercentage: last
+//           ? {
+//               financial_year: lastFY,
+//               percentage: calculatePercentage(
+//                 last.totalScore,
+//                 referenceScoreLast
+//               ).toFixed(2),
+//             }
+//           : null,
+//       });
+//     });
+
+//     // Sort according to kpi
+//     Object.values(combinedData).forEach((themeData) => {
+//       themeData.chartData.sort((a, b) => {
+//         const kpiIdA = parseInt(a.kpi_id, 10);
+//         const kpiIdB = parseInt(b.kpi_id, 10);
+//         return kpiIdA - kpiIdB;
+//       });
+//     });
+
+//     res.json(Object.values(combinedData));
+//   } catch (error) {
+//     console.error(error);
+//     return next(new Errorhandler("Failed to get KPI data", 500));
+//   }
+// });
 
 // Delete gpwise data - set the status to "0"
 

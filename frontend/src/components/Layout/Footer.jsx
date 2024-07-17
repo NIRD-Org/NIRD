@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -12,26 +13,29 @@ const Footer = () => {
           />
         </div>
         <div className="flex flex-1 justify-around text-center lg:text-left flex-wrap">
-          <div className="mb-4 lg:mb-0">
+          <Link
+            to="/kpi?tab=Localised+Sustainable+Goals"
+            className="mb-4 lg:mb-0"
+          >
             <h3 className="text-md  md:font-semibold">
               Key Performance Indicators
             </h3>
-          </div>
-          <div className="mb-4 lg:mb-0">
+          </Link>
+          <Link to="/low-cost-voluntary-activities" className="mb-4 lg:mb-0">
             <h3 className="text-md  md:font-semibold">
               Low Cost/No Cost Voluntary Activity
             </h3>
-          </div>
-          <div className="mb-4 lg:mb-0">
+          </Link>
+          <Link to={"/training"} className="mb-4 lg:mb-0">
             <h3 className="text-md  md:font-semibold">
               Training & Capacity Building
             </h3>
-          </div>
-          <div className="mb-4 lg:mb-0">
+          </Link>
+          <Link to={"/good-practices"} className="mb-4 lg:mb-0">
             <h3 className="text-md  md:font-semibold">
               Good Practices & Achievements
             </h3>
-          </div>
+          </Link>
         </div>
       </div>
       <hr className="mt-4 border-gray-500" />

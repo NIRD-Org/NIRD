@@ -20,7 +20,7 @@ const GoodPracticesCard = ({
         <img
           src={image}
           alt="Good Practices"
-          className="w-full group-hover:scale-125 transition-all duration-700 ease-in-out"
+          className="w-full h-36 object-cover group-hover:scale-125 transition-all duration-700 ease-in-out"
         />
       </div>
       <div className={`flex  flex-col font-semibold p-2`}>

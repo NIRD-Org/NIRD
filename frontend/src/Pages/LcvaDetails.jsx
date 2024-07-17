@@ -73,11 +73,7 @@ const LcvaDetails = () => {
                 <Download />
                 Download
               </a>
-              <ReactPlayer
-                url={"https://www.youtube.com/watch?v=5UwowxgxS7g"}
-                controls
-                width={"100%"}
-              />
+              <ReactPlayer url={Lcva?.video} controls width={"100%"} />
             </div>
             <div className="mt-9 w-full md:w-2/6 h-fit py-6 flex flex-col justify-between  bg-gray-200">
               <div className="border bg-gray-200 rounded px-5 py-2">
