@@ -129,7 +129,7 @@ const Indicators = () => {
     try {
       setLoading(true);
       const { data } = await API.get(
-        `/api/v1/gp-wise-indicator/indicators?state=${state}&dist=${district}&block=${block}&gp=${gp}`
+        `/api/v1/gp-wise-indicator/indicators?state=${state}&dist=${district}&block=${block}&gp=${gp}&f=${financialYear}`
       );
       if (data.success) {
         setGpWiseKpiData(data.data);

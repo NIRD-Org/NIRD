@@ -220,7 +220,7 @@ const GpProfile = () => {
         </div>
 
         <div className="w-full md:w-fit flex flex-col md:flex-row gap-5">
-          <select
+          {/* <select
             value={financialYear}
             onChange={(e) => setFinancialYear(e.target.value)}
             className="w-full md:w-40 text-center border p-2 rounded-md"
@@ -231,7 +231,7 @@ const GpProfile = () => {
                 {year.label}
               </option>
             ))}
-          </select>
+          </select> */}
           <form onSubmit={handleSearch} className="flex items-center space-x-2">
             <input
               type="text"

@@ -19,6 +19,8 @@ const Achievement = () => {
   const tab = searchParams.get("tab");
   const theme = searchParams.get("theme");
   const financialYear = searchParams.get("financial_year");
+  const financialYear2 = searchParams.get("financial_year2");
+
   const navigate = useNavigate();
 
   const getAllStates = async () => {
@@ -209,29 +211,6 @@ const Achievement = () => {
                 className="text-sm text-primary text-start px-4 py-2 font-semibold"
                 htmlFor=""
               >
-                Financial Year
-              </label>
-              <select
-                value={financialYear}
-                onChange={(e) => {
-                  searchParams.set("financial_year", e.target.value);
-                  setSearchParams(searchParams);
-                }}
-                className="w-full text-sm md:w-40 text-center border p-2 rounded-md"
-              >
-                <option value="">Select Financial Year</option>
-                {financialYears.map((year, index) => (
-                  <option key={index} value={year.value}>
-                    {year.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="flex flex-col">
-              <label
-                className="text-sm text-primary text-start px-4 py-2 font-semibold"
-                htmlFor=""
-              >
                 Theme
               </label>
 
@@ -252,6 +231,52 @@ const Achievement = () => {
                 ))}
               </select>
             </div>
+            <div className="flex flex-col">
+              <label
+                className="text-sm text-primary text-start px-4 py-2 font-semibold"
+                htmlFor=""
+              >
+                Financial Year
+              </label>
+              <select
+                value={financialYear}
+                onChange={(e) => {
+                  searchParams.set("financial_year", e.target.value);
+                  setSearchParams(searchParams);
+                }}
+                className="w-full text-sm md:w-40 text-center border p-2 rounded-md"
+              >
+                <option value="">Select Financial Year</option>
+                {financialYears.map((year, index) => (
+                  <option key={index} value={year.value}>
+                    {year.label}
+                  </option>
+                ))}
+              </select>
+            </div>{" "}
+            <div className="flex flex-col">
+              <label
+                className="text-sm text-primary text-start px-4 py-2 font-semibold"
+                htmlFor=""
+              >
+                Another Financial Year
+              </label>
+              <select
+                value={financialYear2}
+                onChange={(e) => {
+                  searchParams.set("financial_year2", e.target.value);
+                  setSearchParams(searchParams);
+                }}
+                className="w-full text-sm md:w-40 text-center border p-2 rounded-md"
+              >
+                <option value="">Select Financial Year</option>
+                {financialYears.map((year, index) => (
+                  <option key={index} value={year.value}>
+                    {year.label}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
         {/* img */}
@@ -266,24 +291,26 @@ const Achievement = () => {
       </div>
 
       <div className="py-10">
-        {/* <AchievementChart
+        <AchievementChart
           block={block}
           state={state}
           dist={dist}
           gp={gp}
           themeId={theme}
           fy={financialYear}
+          fy2={financialYear2}
           theme={themes.find((t) => t.id === theme)?.theme_name}
-        /> */}
-        <AchievementChart
+        />
+        {/* <AchievementChart
           block={"8"}
           state={"3"}
           dist={"8"}
           gp={"31"}
           themeId={"1"}
           fy={"FY2023-2024"}
+          fy2={"FY2022-2023"}
           theme={"Poverty Free and Enhanced Livelihoods Village"}
-        />
+        /> */}
       </div>
     </div>
   );

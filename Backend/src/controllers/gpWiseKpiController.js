@@ -613,41 +613,21 @@ export const getGpWiseKpiChart = CatchAsyncError(async (req, res, next) => {
 
 export const getAchievementsChart = CatchAsyncError(async (req, res, next) => {
   try {
-    const { state, dist, block, theme = "1", gp, financial_year } = req.query;
+    const {
+      state,
+      dist,
+      block,
+      theme = "1",
+      gp,
+      financial_year,
+      financial_year2,
+    } = req.query;
 
     let currentFY;
     let lastFY;
 
-    // Helper function to calculate the last financial year
-    const getLastFinancialYear = (fy) => {
-      const [startYear, endYear] = fy.substring(2, 11).split("-").map(Number);
-      const lastStartYear = startYear - 1;
-      const lastEndYear = endYear - 1;
-      return `FY${lastStartYear}-${lastEndYear}`;
-    };
-
-    if (!financial_year) {
-      // Fetch distinct financial years from the database
-      let financialYears = await GpWiseKpiModel.distinct("financial_year");
-
-      // Extract start year and sort in descending order
-      financialYears.sort((a, b) => {
-        const yearA = parseInt(a.split("-")[0].substring(2), 10);
-        const yearB = parseInt(b.split("-")[0].substring(2), 10);
-        return yearB - yearA;
-      });
-
-      if (financialYears.length === 0) {
-        return next(new Errorhandler("No financial year data available", 400));
-      }
-
-      currentFY = financialYears[0];
-      lastFY =
-        financialYears.length > 1 ? getLastFinancialYear(currentFY) : null;
-    } else {
-      currentFY = financial_year;
-      lastFY = getLastFinancialYear(currentFY);
-    }
+    currentFY = financial_year;
+    lastFY = financial_year2;
 
     // Helper function to build match stages for different financial years
     const buildMatchStage = (financialYear) => {
@@ -762,8 +742,8 @@ export const getAchievementsChart = CatchAsyncError(async (req, res, next) => {
     );
 
     let lastYearData = [];
-    if (lastFY) {
-      const matchStageYearlyLast = buildMatchStage(lastFY);
+    if (financial_year2) {
+      const matchStageYearlyLast = buildMatchStage(financial_year2);
       lastYearData = await GpWiseKpiModel.aggregate(
         pipelineYearly(matchStageYearlyLast)
       );
@@ -796,7 +776,7 @@ export const getAchievementsChart = CatchAsyncError(async (req, res, next) => {
         },
         lastPercentage: last
           ? {
-              financial_year: lastFY,
+              financial_year: financial_year2,
               percentage: last.percentage.toFixed(2),
             }
           : null,

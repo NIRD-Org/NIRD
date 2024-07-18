@@ -10,6 +10,7 @@ const AchievementChart = ({
   fy,
   themeId,
   theme,
+  fy2,
 }) => {
   const [chartData, setChartData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -18,23 +19,9 @@ const AchievementChart = ({
     try {
       // Replace with actual API call once backend integration is ready
       const { data } = await API.get(
-        `/api/v1/gp-wise-kpi/achievement-chart?gp=${gp}&theme=${themeId}&state=${state}&dist=${dist}&block=${block}&financial_year=${fy}`
+        `/api/v1/gp-wise-kpi/achievement-chart?gp=${gp}&theme=${themeId}&state=${state}&dist=${dist}&block=${block}&financial_year=${fy}&financial_year2=${fy2}`
       );
       setChartData(data[0]);
-
-      // For testing purposes, you can uncomment and use the static data below
-      // const testData = {
-      //   theme_id: 1,
-      //   theme_name: "Education",
-      //   gp_name: "Sample GP",
-      //   state_name: "Sample State",
-      //   dist_name: "Sample District",
-      //   block_name: "Sample Block",
-      //   chartData: [
-      //     // Sample KPI data here...
-      //   ],
-      // };
-      // setChartData(testData);
     } catch (error) {
       console.error("Error fetching chart data:", error);
     } finally {
@@ -43,9 +30,9 @@ const AchievementChart = ({
   };
 
   useEffect(() => {
-    console.log("Use Effect");
+    if (!fy || !fy2) return;
     fetchData();
-  }, [gp, themeId, fy]);
+  }, [gp, themeId, fy, fy2]);
 
   if (loading) {
     return (
@@ -69,19 +56,12 @@ const AchievementChart = ({
   const currentData = chartData.chartData.map((item) =>
     parseFloat(item.currentPercentage?.percentage || 0)
   );
-  const getLastFinancialYear = (fy) => {
-    const [startYear, endYear] = fy.substring(2, 11).split("-").map(Number);
-    console.log("Start: ", startYear, " End: ", endYear);
-    const lastStartYear = startYear - 1;
-    const lastEndYear = endYear - 1;
-    return `FY${lastStartYear}-${lastEndYear}`;
-  };
 
   const data = {
     labels,
     datasets: [
       {
-        label: `Baseline Status as on ${getLastFinancialYear(fy)}`,
+        label: `Baseline Status as on ${fy2}`,
         data: baselineData,
         backgroundColor: "darkOrange",
       },
