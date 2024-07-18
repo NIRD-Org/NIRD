@@ -428,11 +428,6 @@ export const getGpWiseKpiChart = CatchAsyncError(async (req, res, next) => {
 
     const quarterlyResults = await GpWiseKpiModel.aggregate(pipelineQuarterly);
 
-    console.log(
-      "Quarterly Results:",
-      JSON.stringify(quarterlyResults, null, 2)
-    ); // Debugging statement
-
     const quarterlyPercentage = {};
     quarterlyResults.forEach((result) => {
       if (result._id.quarter) {
@@ -504,7 +499,6 @@ export const getGpWiseKpiChart = CatchAsyncError(async (req, res, next) => {
     ];
 
     const gpYearlyData = await GpWiseKpiModel.aggregate(pipelineGP);
-    console.log("GP Yearly Data:", JSON.stringify(gpYearlyData, null, 2)); // Debugging statement
 
     // For State Yearly Data
     const pipelineState = [
@@ -554,7 +548,6 @@ export const getGpWiseKpiChart = CatchAsyncError(async (req, res, next) => {
     ];
 
     const stateYearlyData = await GpWiseKpiModel.aggregate(pipelineState);
-    console.log("State Yearly Data:", JSON.stringify(stateYearlyData, null, 2)); // Debugging statement
 
     // For Country Yearly Data
     const pipelineCountry = [
@@ -601,10 +594,6 @@ export const getGpWiseKpiChart = CatchAsyncError(async (req, res, next) => {
     ];
 
     const countryYearlyData = await GpWiseKpiModel.aggregate(pipelineCountry);
-    console.log(
-      "Country Yearly Data:",
-      JSON.stringify(countryYearlyData, null, 2)
-    ); // Debugging statement
 
     const response = {
       quarterlyPercentage,

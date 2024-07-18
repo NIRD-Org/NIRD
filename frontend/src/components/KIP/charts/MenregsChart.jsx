@@ -172,16 +172,16 @@ const ManregsChart = ({ kpi, kpiId, theme, kpi_img, financialYear }) => {
           <tbody>
             <tr>
               <td className="p-2 border-2 text-center">
-                {gpwiseKpiChart?.quarterlyPercentage?.quarter1 || "N/A"}
+                {gpwiseKpiChart?.quarterlyPercentage?.Q1 || "N/A"}
               </td>
               <td className="p-2 border-2 text-center">
-                {gpwiseKpiChart?.quarterlyPercentage?.quarter2 || "N/A"}
+                {gpwiseKpiChart?.quarterlyPercentage?.Q2 || "N/A"}
               </td>
               <td className="p-2 border-2 text-center">
-                {gpwiseKpiChart?.quarterlyPercentage?.quarter3 || "N/A"}
+                {gpwiseKpiChart?.quarterlyPercentage?.Q3 || "N/A"}
               </td>
               <td className="p-2 border-2 text-center">
-                {gpwiseKpiChart?.quarterlyPercentage?.quarter4 || "N/A"}
+                {gpwiseKpiChart?.quarterlyPercentage?.Q4 || "N/A"}
               </td>
             </tr>
           </tbody>
