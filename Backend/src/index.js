@@ -25,6 +25,9 @@ import indicatorApprovalRoutes from "./routes/indicatorApprovalRoutes.js";
 import amRoutes from "./routes/amRoutes.js";
 import pmRoutes from "./routes/pmRoutes.js";
 import fileUpload from "express-fileupload";
+import soeprThemesRoutes from "./routes/soeprThemesRoutes.js";
+import soeprKpiRoutes from "./routes/soeprKpiRoutes.js";
+import soeprKpiDataRoutes from "./routes/soeprKpiDataRoutes.js";
 const app = express();
 
 dotenv.config();
@@ -43,6 +46,7 @@ app.use("/api/v1/dist", districtRoutes);
 app.use("/api/v1/gram", gpRoutes);
 app.use("/api/v1/kpi", kpiRoutes);
 app.use("/api/v1/theme", themeRoutes);
+
 app.use("/api/v1/kpi-approvals", kpiApprovalRoutes);
 app.use("/api/v1/indicator-approvals", indicatorApprovalRoutes);
 app.use("/api/v1/auth", authRoutes);
@@ -56,6 +60,12 @@ app.use("/api/v1/good-practice", goodPracticeRoutes);
 app.use("/api/v1/lcva", LCVARoutes);
 app.use("/api/v1/am-upload", amRoutes);
 app.use("/api/v1/pm-upload", pmRoutes);
+// Soepr
+
+app.use("/api/v1/soepr-theme", soeprThemesRoutes);
+app.use("/api/v1/soepr-kpi", soeprKpiRoutes);
+app.use("/api/v1/soepr-kpi-data", soeprKpiDataRoutes);
+
 app.get("/", (req, res) => {
   res.status(200).json({ message: "Server is running" });
 });
