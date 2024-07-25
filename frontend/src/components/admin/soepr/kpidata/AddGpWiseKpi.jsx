@@ -38,6 +38,7 @@ function SoeprAddGpWiseKpi({ update }) {
   const [quarter, setQuarter] = useState("");
   const [state, setState] = useState({});
   const [theme, setTheme] = useState({});
+  const [userData, setUserData] = useState({});
 
   useEffect(() => {
     const fetchKpis = async () => {
@@ -57,7 +58,7 @@ function SoeprAddGpWiseKpi({ update }) {
     };
 
     run();
-  }, [theme_id, state_id]);
+  }, [theme_id]);
 
   const calculateScore = (percentage, thresholds, scores) => {
     for (let i = 0; i < thresholds.length; i++) {
@@ -97,7 +98,7 @@ function SoeprAddGpWiseKpi({ update }) {
     });
 
     const dataToSend = {
-      state_id,
+      state_id: userData.state_id,
       financial_year: financialYear,
       frequency,
       month,
@@ -121,9 +122,18 @@ function SoeprAddGpWiseKpi({ update }) {
 
   const getState = async () => {
     try {
-      const { data } = await API.get(`/api/v1/state/get-state/${state_id}`);
+      const { data } = await API.get(`/api/v1/state/get-state/${userData.state_id}`);
       setState(data?.state);
       console.log(state);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getUser = async () => {
+    try {
+      const { data } = await API.get(`/api/v1/users/${user.id}`);
+      setUserData(data?.data);
     } catch (error) {
       console.log(error);
     }
@@ -140,11 +150,12 @@ function SoeprAddGpWiseKpi({ update }) {
   };
 
   useEffect(() => {
-    if (state_id && theme_id) {
+    if (theme_id) {
+      getUser();
       getState();
       getTheme();
     }
-  }, [state_id, theme_id]);
+  }, [userData, theme_id]);
 
   return (
     <div className="w-full">
@@ -153,6 +164,7 @@ function SoeprAddGpWiseKpi({ update }) {
           <h2 className="text-xl font-semibold mb-10 bg-slate-100 py-3">
             SoEPR - Theme wise KPI Entry Form
           </h2>
+          <h2>State : {state?.name}</h2>
         </div>
         <div className="flex justify-around py-6 items-center ">
           {/* <h1 className="text-2xl font-bold">Gram Panchayat wise KPI</h1> */}

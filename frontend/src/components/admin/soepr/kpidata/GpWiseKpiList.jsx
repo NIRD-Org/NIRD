@@ -2,8 +2,16 @@ import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import API from "@/utils/API";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCaption } from "@/components/ui/table";
-import { NirdEditIcon,NirdViewIcon } from "../../Icons";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TableCaption,
+} from "@/components/ui/table";
+import { NirdEditIcon, NirdViewIcon } from "../../Icons";
 
 function SoeprGpWiseKpiList() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -16,12 +24,10 @@ function SoeprGpWiseKpiList() {
   const [kpiApprovals, setKpiApprovals] = useState([]);
   const [state, setState] = useState({});
   const [theme, setTheme] = useState({});
-
+  
   const getAllKpiApprovals = async () => {
     try {
-      const response = await API.get(
-        `/api/v1/soepr-kpi-data`
-      );
+      const response = await API.get(`/api/v1/soepr-kpi-data`);
       let data = response.data.data;
       data?.sort((a, b) => a.created_at - b.created_at);
       data = data?.filter(item => item.decision != 1);
@@ -30,7 +36,6 @@ function SoeprGpWiseKpiList() {
       console.log(error);
     }
   };
-
 
   const getState = async () => {
     try {
@@ -41,31 +46,28 @@ function SoeprGpWiseKpiList() {
     }
   };
 
-  
-
   const getTheme = async () => {
     try {
       const { data } = await API.get(`/api/v1/soepr-theme/get-theme/${theme_id}`);
       setTheme(data?.theme);
-      console.log(theme)
+      console.log(theme);
     } catch (error) {
       console.log(error);
     }
   };
 
-
-    useEffect(() => {
-      if (state_id &&  theme_id) {
-        getState();
-        getTheme();
-      }
-    }, [state_id,  theme_id]);
+  useEffect(() => {
+    if (theme_id) {
+      getState();
+      getTheme();
+    }
+  }, [theme_id]);
 
   useEffect(() => {
-    if (state_id &&  theme_id) {
+    if (theme_id) {
       getAllKpiApprovals();
     }
-  }, [state_id, theme_id]);
+  }, [theme_id]);
 
   return (
     <div>
@@ -76,9 +78,7 @@ function SoeprGpWiseKpiList() {
           <h2>Theme : {theme?.theme_name}</h2>
         </div>
         <div className="flex justify-center mt-10">
-          <Link
-            to={`/admin/soepr/add-gp-wise-kpi?state_id=${state_id}&theme_id=${theme_id}`}
-          >
+          <Link to={`/admin/soepr/add-gp-wise-kpi?theme_id=${theme_id}`}>
             <Button>Add New</Button>
           </Link>
         </div>
@@ -105,7 +105,9 @@ function SoeprGpWiseKpiList() {
                   <TableRow key={kpiApproval.id}>
                     <TableCell>{kpiApproval.id}</TableCell>
                     <TableCell>{kpiApproval.theme_id}</TableCell>
-                    <TableCell>{new Date(kpiApproval.date || kpiApproval.created_at).toLocaleDateString()}</TableCell>
+                    <TableCell>
+                      {new Date(kpiApproval.date || kpiApproval.created_at).toLocaleDateString()}
+                    </TableCell>
                     {/* <TableCell>
                       {kpiApproval.decision == 0
                         ? "Submitted"
@@ -120,7 +122,7 @@ function SoeprGpWiseKpiList() {
                         </Link>
                       )}
                       {/* <Link to={`/admin/view/gp-wise-kpi/${kpiApproval.submitted_id}`}> */}
-                        <NirdViewIcon />
+                      <NirdViewIcon />
                       {/* </Link> */}
                     </TableCell>
                   </TableRow>

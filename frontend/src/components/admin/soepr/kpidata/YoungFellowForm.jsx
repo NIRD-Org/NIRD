@@ -21,8 +21,6 @@ function SoeprYoungFellowForm({ type, onSubmit, kpiApproval }) {
   const [pending, setPending] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [themes, setThemes] = useState([]);
-  const [userData,setUser] = useState({});
-  const { user } = useAuthContext();
   const navigate = useNavigate();
 
   const getAllThemes = async () => {
@@ -30,19 +28,8 @@ function SoeprYoungFellowForm({ type, onSubmit, kpiApproval }) {
     setThemes(data?.themes);
   };
 
-  const getUser  = async () => {
-    try {
-      const { data } = await API.get(`/api/v1/users/${user.id}`);
-      setUser(data?.user);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     getAllThemes();
-    getUser();
-
   }, []);
 
   const handleSubmit = e => {
@@ -52,7 +39,7 @@ function SoeprYoungFellowForm({ type, onSubmit, kpiApproval }) {
   };
 
   const handleGpWiseKpiEdit = id => {
-    navigate(`/admin/soepr/gp-wise-kpi?state_id=${"3"}&theme_id=${id}`);
+    navigate(`/admin/soepr/gp-wise-kpi?theme_id=${id}`);
   };
 
   const resetForm = () => {
