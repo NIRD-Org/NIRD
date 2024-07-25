@@ -38,7 +38,7 @@ const soeprKpiSchema = new mongoose.Schema(
     },
     remark: {
       type: String,
-      required: true,
+      default: "",
     },
     status: {
       type: String,
@@ -47,6 +47,7 @@ const soeprKpiSchema = new mongoose.Schema(
     weightage: {
       type: Number,
       required: true,
+      default: 0,
     },
     created_by: {
       type: String,

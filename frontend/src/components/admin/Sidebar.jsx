@@ -27,34 +27,34 @@ function Sidebar({ className }) {
       </div>
 
       <div className="pt-6 w-full">
-          <Accordion  type="single" collapsible className=" list-none">
-            {sidebarItems.map((item, index) => (
-              <AccordionItem value={index+1}>
-                <AccordionTrigger className="flex bg-primary text-slate-100 mb-1 items-center px-4 py-3 w-full font-semibold">
-                  <span className="ml-4 text-[0.8rem] tracking-wider">
-                    {item.title}
-                  </span>
-                </AccordionTrigger>
-                {item.submodules && (
-                  <AccordionContent>
-                    {item.submodules.map(subItem => (
-                      <li key={subItem.title}>
-                        <Link
-                          to={subItem.link}
-                          className="flex mb-2 px-2 mx-6 items-center py-2 rounded-xl text-slate-700 hover:bg-[#004B86]/70 hover:text-white transition duration-150 cursor-pointer"
-                        >
-                          <subItem.icon size={20} />
-                          <span className="ml-4 text-[0.7rem] font-semibold tracking-wider">
-                            {subItem.title}
-                          </span>
-                        </Link>
-                      </li>
-                    ))}
-                  </AccordionContent>
-                )}
-              </AccordionItem>
-            ))}
-          </Accordion>
+        <Accordion type="single" collapsible className=" list-none">
+          {sidebarItems?.map((item, index) => (
+            <AccordionItem value={index + 1}>
+              <AccordionTrigger className="flex bg-primary text-slate-100 mb-1 items-center px-4 py-3 w-full font-semibold">
+                <span className="ml-4 text-[0.8rem] tracking-wider">
+                  {item.title}
+                </span>
+              </AccordionTrigger>
+              {item.submodules && (
+                <AccordionContent>
+                  {item.submodules.map((subItem) => (
+                    <li key={subItem.title}>
+                      <Link
+                        to={subItem.link}
+                        className="flex mb-2 px-2 mx-6 items-center py-2 rounded-xl text-slate-700 hover:bg-[#004B86]/70 hover:text-white transition duration-150 cursor-pointer"
+                      >
+                        <subItem.icon size={20} />
+                        <span className="ml-4 text-[0.7rem] font-semibold tracking-wider">
+                          {subItem.title}
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </AccordionContent>
+              )}
+            </AccordionItem>
+          ))}
+        </Accordion>
       </div>
     </aside>
   );
