@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 // Auth middleware
 export const isAuth = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
@@ -8,7 +8,7 @@ export const isAuth = (req, res, next) => {
     return res.status(401).json({ message: "Please login to account" });
   }
   try {
-    const decoded = jwt.verify(token, 'secret');
+    const decoded = jwt.verify(token, "secret");
     // console.log(decoded);
     req.user = decoded;
     next();

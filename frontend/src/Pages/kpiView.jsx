@@ -42,6 +42,7 @@ function KpiView({ type, onSubmit, kpiApproval }) {
       setKpiData(processedData);
     } catch (error) {
       console.error("Failed to fetch KPI data", error);
+      setKpiData([]);
     } finally {
       setIsLoading(false);
     }
@@ -155,9 +156,9 @@ function KpiView({ type, onSubmit, kpiApproval }) {
             <TableSkeleton columnCount={4} />
           ) : (
             <TableBody>
-              {kpiData.map((kpi) => (
-                <TableRow key={kpi.slNo}>
-                  <TableCell>{kpi.slNo}</TableCell>
+              {kpiData.map((kpi, i) => (
+                <TableRow key={i + 1}>
+                  <TableCell>{i + 1}</TableCell>
                   <TableCell>{kpi.kpiName}</TableCell>
                   <TableCell>{kpi.maxRange}</TableCell>
                   <TableCell>{kpi.achievedValue}</TableCell>

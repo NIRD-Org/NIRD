@@ -72,7 +72,8 @@ export const getsoeprKpi = CatchAsyncError(async (req, res, next) => {
     if (state) filter.state_id = state;
     if (fy) filter.financial_year = fy;
     if (theme) filter.theme_id = theme;
-    filter.created_by = req?.user?.id ?? "88";
+    filter.created_by = req?.user?.id;
+    console.log(req?.user?.id);
 
     const pipeline = [
       { $match: filter },
