@@ -86,6 +86,8 @@ import PmUploadList from "./components/admin/attendance/PmuList";
 import PmUploadView from "./components/admin/attendance/PmuView";
 import GoodPracticeDetails from "./Pages/GoodPracticeDetails";
 import LcvaDetails from "./Pages/LcvaDetails";
+import ViewAttendance from "./components/admin/attendance/ViewAttendance";
+import KpiView from "./Pages/kpiView";
 
 function App() {
   const { login } = useAuthContext();
@@ -115,12 +117,14 @@ function App() {
             path="/good-practice/:activity/:id"
             element={<GoodPracticeDetails />}
           />
+          <Route path="/view/kpi" element={<KpiView />} />
           <Route
             path="/low-cost-activities/:activity/:id"
             element={<LcvaDetails />}
           />
           <Route path="/admin" element={<AdminPage />}>
             <Route index element={<AdminMainPage />} />
+            <Route path="view/attendance" element={<ViewAttendance />} />
 
             <Route path="young-professionals" element={<YoungFellowForm />} />
             <Route path="gp-wise-kpi" element={<GpWiseKpiList />} />

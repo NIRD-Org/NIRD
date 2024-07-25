@@ -1,9 +1,11 @@
 import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
 import AmModel from "../models/amModel.js";
 import { UserLocationModel } from "../models/userLocationModel.js";
+import { Errorhandler } from "../utils/errorHandler.js";
 import { location_pipeline } from "../utils/pipeline.js";
 import { uploadFile } from "../utils/uploadFile.js";
-
+import PmModel from "../models/pmModel.js";
+import { User } from "../models/userModel.js";
 const getNewId = async () => {
   try {
     const maxDoc = await AmModel.aggregate([
@@ -60,8 +62,8 @@ export const getAMById = CatchAsyncError(async (req, res, next) => {
   console.log(req.params.id);
   // const [am] = await AmModel.aggregate([{ $match: { id: req.params.id } }]);
   const am = await AmModel.findOne({ id: req.params.id });
-  console.log(am)
-  
+  console.log(am);
+
   if (!am) {
     return res.status(404).json({
       status: "fail",
@@ -112,4 +114,104 @@ export const updateAM = CatchAsyncError(async (req, res, next) => {
       am,
     },
   });
+});
+
+export const getAllAttendaceData = CatchAsyncError(async (req, res, next) => {
+  try {
+    const { role, fromDate, toDate } = req.query;
+
+    const userRole = parseInt(role, 10);
+    // Fetch employees with the given role
+    const employees = await User.find({ role: userRole });
+
+    if (!employees || employees.length === 0) {
+      return next(
+        new Errorhandler("No employees found with the given role", 404)
+      );
+    }
+
+    const employeeIds = employees.map((employee) => employee.id);
+    const amAttendance = await AmModel.aggregate([
+      {
+        $match: {
+          created_by: { $in: employeeIds },
+          date: { $gte: fromDate, $lte: toDate },
+        },
+      },
+      {
+        $lookup: {
+          from: "states",
+          localField: "state_id",
+          foreignField: "id",
+          as: "stateInfo",
+        },
+      },
+      { $unwind: "$stateInfo" },
+      {
+        $group: {
+          _id: "$created_by",
+          state: { $first: "$stateInfo.name" },
+          amWorkingDays: { $sum: 1 },
+        },
+      },
+    ]);
+    console.log(amAttendance);
+
+    const pmAttendance = await PmModel.aggregate([
+      {
+        $match: {
+          created_by: { $in: employeeIds },
+          date: { $gte: fromDate, $lte: toDate },
+        },
+      },
+      {
+        $lookup: {
+          from: "states",
+          localField: "state_id",
+          foreignField: "id",
+          as: "stateInfo",
+        },
+      },
+      { $unwind: "$stateInfo" },
+      {
+        $group: {
+          _id: "$created_by",
+          state: { $first: "$stateInfo.state_name" },
+          pmWorkingDays: { $sum: 1 },
+        },
+      },
+    ]);
+
+    const amAttendanceMap = amAttendance.reduce((acc, record) => {
+      acc[record.id] = record;
+      return acc;
+    }, {});
+
+    const pmAttendanceMap = pmAttendance.reduce((acc, record) => {
+      acc[record.id] = record;
+      return acc;
+    }, {});
+
+    const attendanceData = employees.map((employee) => {
+      const { id, employee_id, name } = employee;
+      const amData = amAttendanceMap[id] || { amWorkingDays: 0, state: "" };
+      const pmData = pmAttendanceMap[id] || { pmWorkingDays: 0, state: "" };
+      return {
+        employeeId: employee_id,
+        name,
+        state: amData.state || pmData.state, // Assuming state will be the same for AM and PM
+        role,
+        amWorkingDays: amData.amWorkingDays,
+        pmWorkingDays: pmData.pmWorkingDays,
+      };
+    });
+
+    res.status(200).json({
+      success: true,
+      data: attendanceData,
+    });
+  } catch (error) {
+    console.log(error);
+    return next(new Errorhandler("Failed to get Attendance 1 data", 500));
+  }
 });
