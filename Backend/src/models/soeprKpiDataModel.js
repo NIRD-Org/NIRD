@@ -49,24 +49,26 @@ const soeprKpiDataSchema = new mongoose.Schema(
     modified_by: {
       type: String,
     },
-    status:{
-      type:String,
-      default:"1"
+    status: {
+      type: String,
+      default: "1",
     },
-    formData: {
-      input_data: {
-        type: Number,
-        required: true,
+    formData: [
+      {
+        input_data: {
+          type: Number,
+          required: true,
+        },
+        remarks: {
+          type: String,
+          required: true,
+        },
+        max_range: {
+          type: Number,
+          required: true,
+        },
       },
-      remarks: {
-        type: String,
-        required: true,
-      },
-      max_range: {
-        type: Number,
-        required: true,
-      },
-    },
+    ],
   },
   {
     timestamps: { createdAt: "created_at", updatedAt: "modified_at" },

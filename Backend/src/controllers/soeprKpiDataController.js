@@ -29,7 +29,7 @@ const getNewIdKPI = async () => {
 export const submitKpiData = CatchAsyncError(async (req, res, next) => {
   try {
     const parsedDate = new Date(req.body.date);
-    console.log(req.body)
+    // console.log(req.body)
 
     const existingData = await SoeprKpiDataModel.findOne({
       state_id: req.body.state_id,
@@ -45,6 +45,7 @@ export const submitKpiData = CatchAsyncError(async (req, res, next) => {
     req.body.id = currentMaxId.toString();
     req.body.created_by = req.body.user_id;
 
+    console.log(req.body);
     await SoeprKpiDataModel.create(req.body);
 
     res.status(201).json({
