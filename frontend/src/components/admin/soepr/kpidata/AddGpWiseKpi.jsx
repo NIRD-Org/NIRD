@@ -82,28 +82,6 @@ function SoeprAddGpWiseKpi({ update }) {
         ...updatedData[index],
         [name]: value,
       };
-
-      if (name === "max_range" || name === "input_data") {
-        const maxRange = updatedData[index].max_range || 0;
-        const inputData = updatedData[index].input_data || 0;
-        const percentage = (inputData / maxRange) * 100;
-        const kpiId = kpis[index].id;
-        const inputType = kpis[index].input_type;
-
-        const { thresholds, scores } = kpiScoringRules[kpiId];
-
-        if (inputType === "Percentage") {
-          const percentage = (inputData / maxRange) * 100;
-          updatedData[index].score = calculateScore(percentage, thresholds, scores);
-        } else if (inputType === "Number") {
-          updatedData[index].score = calculateScore(inputData, thresholds, scores);
-        } else if (inputType === "Boolean") {
-          updatedData[index].score = inputData
-            ? booleanKpiScoringRules[kpiId].yesScore
-            : booleanKpiScoringRules[kpiId].noScore;
-        }
-      }
-
       return updatedData;
     });
   };
@@ -289,15 +267,13 @@ function SoeprAddGpWiseKpi({ update }) {
                       <TableCell>{data?.input_type}</TableCell>
                       <TableCell>
                         <Input
-                          disabled={isDisabled}
                           type="number"
                           name="max_range"
-                          value={isDisabled ? "0" : formData[index]?.max_range || ""}
+                          value={formData[index]?.max_range || ""}
                           onChange={e => handleChange(e, index)}
                         />
                       </TableCell>
                       <TableCell>
-                        {!isDisabled ? (
                           <Input
                             required
                             max={formData[index]?.max_range}
@@ -306,15 +282,6 @@ function SoeprAddGpWiseKpi({ update }) {
                             value={formData[index]?.input_data || ""}
                             onChange={e => handleChange(e, index)}
                           />
-                        ) : (
-                          <Input
-                            required
-                            type="number"
-                            name="input_data"
-                            value={formData[index]?.input_data || ""}
-                            onChange={e => handleChange(e, index)}
-                          />
-                        )}
                       </TableCell>
 
                       <TableCell>

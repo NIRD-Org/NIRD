@@ -18,6 +18,7 @@ const userSchema = new mongoose.Schema({
   createdBy: { type: String },
   modifiedBy: { type: String },
   location_assigned: { type: Boolean, default: false },
+  state_id: { type: String },
 
   hr_profile_id: { type: Number },
   esop_certified: { type: Boolean },

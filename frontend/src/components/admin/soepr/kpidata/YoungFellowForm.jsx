@@ -21,6 +21,8 @@ function SoeprYoungFellowForm({ type, onSubmit, kpiApproval }) {
   const [pending, setPending] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [themes, setThemes] = useState([]);
+  const [userData,setUser] = useState({});
+  const { user } = useAuthContext();
   const navigate = useNavigate();
 
   const getAllThemes = async () => {
@@ -28,8 +30,19 @@ function SoeprYoungFellowForm({ type, onSubmit, kpiApproval }) {
     setThemes(data?.themes);
   };
 
+  const getUser  = async () => {
+    try {
+      const { data } = await API.get(`/api/v1/users/${user.id}`);
+      setUser(data?.user);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getAllThemes();
+    getUser();
+
   }, []);
 
   const handleSubmit = e => {
@@ -49,10 +62,12 @@ function SoeprYoungFellowForm({ type, onSubmit, kpiApproval }) {
   return (
     <div className="container p-6">
       <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">
-          SoEPR - KPI Entry Form
-        </h2>
-       
+      <div className="text-center">
+          <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">
+            SoEPR - KPI Entry Form
+          </h2>
+         {/* <h2>State: {userData?.state?.state}</h2> */}
+      </div>
       </div>
       <form onSubmit={handleSubmit}>
         <Table className="overscroll-x-scroll">
