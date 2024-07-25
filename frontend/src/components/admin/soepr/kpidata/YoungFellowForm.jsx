@@ -66,7 +66,7 @@ function SoeprYoungFellowForm({ type, onSubmit, kpiApproval }) {
           <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">
             SoEPR - KPI Entry Form
           </h2>
-         {/* <h2>State: {userData?.state?.state}</h2> */}
+         {/* <h2>State: {userData?.state_name}</h2> */}
       </div>
       </div>
       <form onSubmit={handleSubmit}>

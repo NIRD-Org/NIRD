@@ -23,7 +23,7 @@ export const getSidebarItems = (user) => {
     return sidebarItems;
   }
 
-  if (user.role == 4) {
+  if (user.role == 4 || user.role == 5) {
     sidebarItems = [
       {
         type: "module",
