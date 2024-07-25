@@ -28,16 +28,11 @@ function SoeprYoungFellowForm({ type, onSubmit, kpiApproval }) {
     setThemes(data?.themes);
   };
 
-
   useEffect(() => {
-    if (state_id) {
-      getAllThemes();
-    } else {
-      setThemes([]);
-    }
-  }, [state_id]);
-  
-  const handleSubmit = (e) => {
+    getAllThemes();
+  }, []);
+
+  const handleSubmit = e => {
     e.preventDefault();
     setPending(true);
     setPending(false);
@@ -78,14 +73,12 @@ function SoeprYoungFellowForm({ type, onSubmit, kpiApproval }) {
             <TableSkeleton columnCount={7} />
           ) : (
             <TableBody>
-              {themes.map((theme) => (
+              {themes.map(theme => (
                 <TableRow>
                   <TableCell>{theme.id}</TableCell>
                   <TableCell>{theme.theme_name}</TableCell>
                   <TableCell>
-                    <Button onClick={() => handleGpWiseKpiEdit(theme.id)}>
-                      Edit
-                    </Button>
+                    <Button onClick={() => handleGpWiseKpiEdit(theme.id)}>Edit</Button>
                   </TableCell>
                 </TableRow>
               ))}
