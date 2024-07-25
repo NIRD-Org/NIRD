@@ -119,9 +119,9 @@ function SoeprGpWiseKpiList() {
                           <NirdEditIcon />
                         </Link>
                       )}
-                      <Link to={`/admin/view/gp-wise-kpi/${kpiApproval.submitted_id}`}>
+                      {/* <Link to={`/admin/view/gp-wise-kpi/${kpiApproval.submitted_id}`}> */}
                         <NirdViewIcon />
-                      </Link>
+                      {/* </Link> */}
                     </TableCell>
                   </TableRow>
                 ))

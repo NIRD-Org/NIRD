@@ -55,6 +55,9 @@ const soeprKpiDataSchema = new mongoose.Schema(
     },
     formData: [
       {
+        kpi_id: {
+          type: String,
+        },
         input_data: {
           type: Number,
           required: true,

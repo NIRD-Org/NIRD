@@ -151,7 +151,7 @@ function SoeprAddGpWiseKpi({ update }) {
       <div>
         <div className="mb-2 text-center">
           <h2 className="text-xl font-semibold mb-10 bg-slate-100 py-3">
-          SoEPR -  Theme wise KPI Entry Form
+            SoEPR - Theme wise KPI Entry Form
           </h2>
         </div>
         <div className="flex justify-around py-6 items-center ">
@@ -274,16 +274,15 @@ function SoeprAddGpWiseKpi({ update }) {
                         />
                       </TableCell>
                       <TableCell>
-                          <Input
-                            required
-                            max={formData[index]?.max_range}
-                            type="number"
-                            name="input_data"
-                            value={formData[index]?.input_data || ""}
-                            onChange={e => handleChange(e, index)}
-                          />
+                        <Input
+                          required
+                          max={formData[index]?.max_range}
+                          type="number"
+                          name="input_data"
+                          value={formData[index]?.input_data || ""}
+                          onChange={e => handleChange(e, index)}
+                        />
                       </TableCell>
-
                       <TableCell>
                         <Textarea
                           type="text"
