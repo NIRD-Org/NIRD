@@ -89,7 +89,7 @@ function SoeprGpWiseKpiList() {
                 <TableHead>Submission ID</TableHead>
                 <TableHead>Theme</TableHead>
                 <TableHead>Date</TableHead>
-                <TableHead>Status</TableHead>
+                {/* <TableHead>Status</TableHead> */}
                 <TableHead>Action</TableHead>
               </TableRow>
             </TableHeader>
@@ -106,13 +106,13 @@ function SoeprGpWiseKpiList() {
                     <TableCell>{kpiApproval.id}</TableCell>
                     <TableCell>{kpiApproval.theme_id}</TableCell>
                     <TableCell>{new Date(kpiApproval.date || kpiApproval.created_at).toLocaleDateString()}</TableCell>
-                    <TableCell>
+                    {/* <TableCell>
                       {kpiApproval.decision == 0
                         ? "Submitted"
                         : kpiApproval.decision == 1
                         ? "Approved"
                         : "Send for modification"}
-                    </TableCell>
+                    </TableCell> */}
                     <TableCell className="flex gap-2">
                       {kpiApproval.decision == 0 && (
                         <Link to={`/admin/edit/gp-wise-kpi/${kpiApproval.submitted_id}`}>
