@@ -50,7 +50,7 @@ function SoeprYoungFellowForm({ type, onSubmit, kpiApproval }) {
     <div className="container p-6">
       <div className="mb-8">
         <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">
-          Young Fellow - KPI Entry Form
+          SoEPR - KPI Entry Form
         </h2>
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10">
           <StateFilter />

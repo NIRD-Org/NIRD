@@ -91,6 +91,7 @@ import SoeprGpWiseKpiList from "./components/admin/soepr/kpidata/GpWiseKpiList";
 import SoeprAddGpWiseKpi from "./components/admin/soepr/kpidata/AddGpWiseKpi";
 import SoeprAmUploadForm from "./components/admin/soepr/attendance/AmUpload";
 import SoeprPmUploadForm from "./components/admin/soepr/attendance/PmUpload";
+import SrSoeprGpWiseKpiList from "./components/admin/soepr/kpidata/List";
 
 function App() {
   const { login } = useAuthContext();
@@ -203,6 +204,7 @@ function App() {
             <Route path="soepr/young-professionals" element={<SoeprYoungFellowForm />} />
             <Route path="soepr/add-gp-wise-kpi" element={<SoeprAddGpWiseKpi />} />
             <Route path="soepr/gp-wise-kpi" element={<SoeprGpWiseKpiList />} />
+            <Route path="soepr-sr/gp-wise-kpi" element={<SrSoeprGpWiseKpiList/>} />
 
             <Route path="good-practices" element={<GoodPracticeForm />} />
             <Route path="action/admin/good-practice" element={<GoodPracticeApprovalsList />} />

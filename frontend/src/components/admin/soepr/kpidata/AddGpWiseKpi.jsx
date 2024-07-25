@@ -173,7 +173,7 @@ function SoeprAddGpWiseKpi({ update }) {
       <div>
         <div className="mb-2 text-center">
           <h2 className="text-xl font-semibold mb-10 bg-slate-100 py-3">
-            Young Fellow - LSG _ Theme wise KPI Entry Form
+          SoEPR -  Theme wise KPI Entry Form
           </h2>
         </div>
         <div className="flex justify-around py-6 items-center ">
