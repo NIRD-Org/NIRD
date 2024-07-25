@@ -89,6 +89,8 @@ import LcvaDetails from "./Pages/LcvaDetails";
 import SoeprYoungFellowForm from "./components/admin/soepr/kpidata/YoungFellowForm";
 import SoeprGpWiseKpiList from "./components/admin/soepr/kpidata/GpWiseKpiList";
 import SoeprAddGpWiseKpi from "./components/admin/soepr/kpidata/AddGpWiseKpi";
+import SoeprAmUploadForm from "./components/admin/soepr/attendance/AmUpload";
+import SoeprPmUploadForm from "./components/admin/soepr/attendance/PmUpload";
 
 function App() {
   const { login } = useAuthContext();
@@ -232,6 +234,9 @@ function App() {
             <Route path="view/indicator/:id" element={<IndicatorViewDetials />} />
             <Route path="resubmit/indicator/:id" element={<IndicatorApprovalResubmit />} />
             <Route path="edit/indicator/:id" element={<IndicatorApprovalResubmit edit />} />
+
+            <Route path="soepr/attendance/amu-upload" element={<SoeprAmUploadForm />} />
+            <Route path="soepr/attendance/pmu-upload" element={<SoeprPmUploadForm />} />
           </Route>
         </Route>
       </Route>
