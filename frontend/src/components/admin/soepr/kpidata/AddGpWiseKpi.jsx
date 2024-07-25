@@ -178,7 +178,6 @@ function SoeprAddGpWiseKpi({ update }) {
         </div>
         <div className="flex justify-around py-6 items-center ">
           {/* <h1 className="text-2xl font-bold">Gram Panchayat wise KPI</h1> */}
-          <h2>State: {state.name}</h2>
           <h2>Theme : {theme?.theme_name}</h2>
         </div>
         <form onSubmit={handleSubmit} className="overflow-x-auto mt-10">

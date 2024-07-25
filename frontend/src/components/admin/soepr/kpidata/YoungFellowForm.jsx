@@ -39,7 +39,7 @@ function SoeprYoungFellowForm({ type, onSubmit, kpiApproval }) {
   };
 
   const handleGpWiseKpiEdit = id => {
-    navigate(`/admin/soepr/gp-wise-kpi?state_id=${state_id}&theme_id=${id}`);
+    navigate(`/admin/soepr/gp-wise-kpi?state_id=${"3"}&theme_id=${id}`);
   };
 
   const resetForm = () => {
@@ -52,12 +52,7 @@ function SoeprYoungFellowForm({ type, onSubmit, kpiApproval }) {
         <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">
           SoEPR - KPI Entry Form
         </h2>
-        <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10">
-          <StateFilter />
-          <Button className="self-end" onClick={() => resetForm()}>
-            Reset
-          </Button>
-        </div>
+       
       </div>
       <form onSubmit={handleSubmit}>
         <Table className="overscroll-x-scroll">
