@@ -29,6 +29,7 @@ const getNewIdKPI = async () => {
 export const submitKpiData = CatchAsyncError(async (req, res, next) => {
   try {
     const parsedDate = new Date(req.body.date);
+    console.log(req.body)
 
     const existingData = await SoeprKpiDataModel.findOne({
       state_id: req.body.state_id,
