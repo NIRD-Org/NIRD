@@ -40,7 +40,7 @@ function AddGpWiseKpi({ update }) {
   useEffect(() => {
     const fetchKpis = async () => {
       try {
-        const response = await API.get(`/api/v1/soper-kpi/theme/${theme_id}`);
+        const response = await API.get(`/api/v1/kpi/theme/${theme_id}`);
         const kpis = response.data.KPI;
         setKpis(kpis);
       } catch (error) {
