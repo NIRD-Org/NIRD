@@ -32,8 +32,9 @@ export const getUserById = CatchAsyncError(async (req, res, next) => {
     const state = await StateModel.findOne({ id: user.state_id });
 
     if (state) {
-      user.state = state.name;
+      user.state_name= state.name;
     }
+    console.log(user.state_name)
 
     res.status(200).json({ data: user });
   } catch (err) {

@@ -130,7 +130,7 @@ function AddGpWiseKpi({ update }) {
     };
 
     try {
-      const response = await API.post("/api/v1/soepr/soepr-kpi-data/submit", dataToSend);
+      const response = await API.post("/api/v1/gp-wise-kpi/submit", dataToSend);
       console.log("Success:", response.data);
       tst.success("Form submitted successfully");
       navigate("/admin/young-professionals");
