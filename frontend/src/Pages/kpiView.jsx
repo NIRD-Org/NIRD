@@ -143,7 +143,7 @@ function KpiView({ type, onSubmit, kpiApproval }) {
       </div>
       <form onSubmit={handleSubmit}>
         <Table className="overscroll-x-scroll">
-          <TableCaption>SoEPR - Yearly Status</TableCaption>
+          <TableCaption>SoEPR - Yearly Status and Reports</TableCaption>
           <TableHeader>
             <TableRow>
               <TableHead>Sl. No.</TableHead>
