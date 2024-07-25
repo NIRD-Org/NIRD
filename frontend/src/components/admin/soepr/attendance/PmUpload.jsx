@@ -54,13 +54,14 @@ function SoeprPmUploadForm() {
     //   await API.post("/api/v1/pm-upload/create", formData, { headers: { "Content-Type": "multipart/form-data" } });
       setTimeout(() => {
         tst.success("PM upload successful");
+        setPending(false);
           
       }, 3000);
     } catch (error) {
       console.error(error);
       tst.error(error);
     } finally {
-      setPending(false);
+    //   setPending(false);
     }
   };
 
