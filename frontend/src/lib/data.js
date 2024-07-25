@@ -350,6 +350,25 @@ export const getSidebarItems = user => {
         {
           type: "module",
           icon: ArrowBigRight,
+          title: "Attendance",
+          submodules: [
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "AM Entry Form",
+              link: "/admin/attendance/amu-upload",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "PM Entry Form",
+              link: "/admin/attendance/pmu-upload",
+            },
+          ],
+        },
+        {
+          type: "module",
+          icon: ArrowBigRight,
           title: "KPI",
           submodules: [
             {
