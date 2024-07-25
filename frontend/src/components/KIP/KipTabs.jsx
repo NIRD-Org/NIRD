@@ -41,14 +41,14 @@ const KipTabs = ({ setTagline }) => {
         {" "}
         <Link
           to="/gp-profile/details"
-          className="px-4 py-3 text-sm text-gray-600 md:text-xl focus:outline-none"
+          className="px-4 py-3 text-sm text-gray-600 md:text-lg focus:outline-none"
         >
           Gram Panchayat Profile
         </Link>
         {tabs.map((t) => (
           <button
             key={t}
-            className={`px-4 py-3 text-sm md:text-xl focus:outline-none ${
+            className={`px-4 py-3 text-sm md:text-lg focus:outline-none ${
               tab === t
                 ? "bg-primary text-white  font-semibold"
                 : "text-gray-600"
@@ -60,6 +60,12 @@ const KipTabs = ({ setTagline }) => {
             {t}
           </button>
         ))}
+        <Link
+          to="/view/kpi"
+          className="px-4 py-3 text-sm text-gray-600 md:text-lg focus:outline-none"
+        >
+          SOEPR
+        </Link>
       </div>
       <GradientLine />
 
