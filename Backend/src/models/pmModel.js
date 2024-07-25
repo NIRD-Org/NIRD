@@ -2,11 +2,11 @@ import mongoose from "mongoose";
 
 const pmSchema = new mongoose.Schema(
   {
-    id: { type: Number, required: true ,unique:true},
-    state_id: { type: Number, required: true },
-    dist_id: { type: Number, required: true },
-    block_id: { type: Number, required: true },
-    gp_id: { type: Number, required: true },
+    id: { type: Number, required: true, unique: true },
+    state_id: { type: String, required: true },
+    dist_id: { type: String, required: true },
+    block_id: { type: String, required: true },
+    gp_id: { type: String, required: true },
     date: { type: String, required: true },
     remarks: { type: String, required: true },
     file: { type: String, required: true },

@@ -25,7 +25,6 @@ const getNewIdKPI = async () => {
   }
 };
 
-
 export const submitKpiData = CatchAsyncError(async (req, res, next) => {
   try {
     const parsedDate = new Date(req.body.date);
@@ -38,7 +37,9 @@ export const submitKpiData = CatchAsyncError(async (req, res, next) => {
     });
 
     if (existingData) {
-      return next(new Errorhandler("KPI data for this theme and date already exists", 400));
+      return next(
+        new Errorhandler("KPI data for this theme and date already exists", 400)
+      );
     }
 
     let currentMaxId = await getNewIdKPI();
@@ -64,13 +65,15 @@ export const getsoeprKpi = CatchAsyncError(async (req, res, next) => {
     const limit = req.query.limit || 50;
     const pageNumber = req.query.page || 1;
     const startIndex = (pageNumber - 1) * limit;
-    const { state, search, fy } = req.query;
+    const { state, search, fy, theme } = req.query;
 
     // filter object
     const filter = {};
     if (state) filter.state_id = state;
     if (fy) filter.financial_year = fy;
-    // filter.user_id = req.user.id;
+    if (theme) filter.theme_id = theme;
+    filter.created_by = req?.user?.id ?? "88";
+
     const pipeline = [
       { $match: filter },
       {
@@ -81,21 +84,56 @@ export const getsoeprKpi = CatchAsyncError(async (req, res, next) => {
           as: "state",
         },
       },
+      {
+        $unwind: {
+          path: "$formData",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $lookup: {
+          from: "soeprkpis", // Replace with the actual KPI model collection name
+          localField: "formData.kpi_id",
+          foreignField: "id",
+          as: "kpiData",
+        },
+      },
+      {
+        $unwind: {
+          path: "$kpiData",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $group: {
+          _id: "$_id",
+          id: { $first: "$id" },
+          state_id: { $first: "$state_id" },
+          date: { $first: "$date" },
+          theme_id: { $first: "$theme_id" },
+          status: { $first: "$status" },
+          frequency: { $first: "$frequency" },
+          quarter: { $first: "$quarter" },
+          month: { $first: "$month" },
+          financial_year: { $first: "$financial_year" },
+          created_by: { $first: "$created_by" },
+          formData: { $push: "$formData" },
+          kpiData: { $push: "$kpiData" },
+          created_at: { $first: "$created_at" },
+          modified_at: { $first: "$modified_at" },
+        },
+      },
+      { $sort: { created_at: -1 } },
     ];
 
     if (search) {
-      const regex = new RegExp(search, "i"); // 'i' makes it case-insensitive
-      // console.log("Regex: " + regex);
+      const regex = new RegExp(search, "i");
       pipeline.push({
         $match: {
           $or: [{ "state.name": { $regex: regex } }],
         },
       });
     }
-
-    // pipeline.push({ $skip: startIndex });
-    // pipeline.push({ $limit: limit });
-    pipeline.push({ $sort: { created_at: -1 } });
 
     const soeprKpiData = await SoeprKpiDataModel.aggregate(pipeline);
     if (!soeprKpiData || soeprKpiData.length === 0) {
@@ -114,7 +152,13 @@ export const getsoeprKpi = CatchAsyncError(async (req, res, next) => {
 
 export const getsoeprKpiData = CatchAsyncError(async (req, res, next) => {
   try {
+    const filters = {};
+    const theme_id = req.query.theme;
+    if (theme_id) filters.theme_id = theme_id;
     const data = await SoeprKpiDataModel.aggregate([
+      {
+        $match: { filters },
+      },
       {
         $group: {
           _id: "$gp_id", // Group by gp_id
@@ -139,7 +183,11 @@ export const getsoeprKpiData = CatchAsyncError(async (req, res, next) => {
 export const deletesoeprKpiData = CatchAsyncError(async (req, res, next) => {
   try {
     const { id } = req.params;
-    const soeprKpi = await GpModel.findOneAndUpdate(id, { status: "0" }, { new: true });
+    const soeprKpi = await GpModel.findOneAndUpdate(
+      id,
+      { status: "0" },
+      { new: true }
+    );
     if (!soeprKpi) {
       return next(new Errorhandler("No Gram Panchayat Found", 404));
     }
@@ -153,106 +201,110 @@ export const deletesoeprKpiData = CatchAsyncError(async (req, res, next) => {
 });
 
 // Get the soeprKpi for the approver
-export const getsoeprKpiForApprover = CatchAsyncError(async (req, res, next) => {
-  try {
-    const { submitted_id } = req.query;
+export const getsoeprKpiForApprover = CatchAsyncError(
+  async (req, res, next) => {
+    try {
+      const { submitted_id } = req.query;
 
-    const matchStage = {
-      submitted_id,
-    };
+      const matchStage = {
+        submitted_id,
+      };
 
-    const pipeline = [
-      { $match: matchStage },
-      {
-        $lookup: {
-          from: "soeprkpis",
-          localField: "kpi_id",
-          foreignField: "id",
-          as: "kpiDetails",
+      const pipeline = [
+        { $match: matchStage },
+        {
+          $lookup: {
+            from: "soeprkpis",
+            localField: "kpi_id",
+            foreignField: "id",
+            as: "kpiDetails",
+          },
         },
-      },
 
-      {
-        $unwind: "$kpiDetails",
-      },
-      // {
-      //   $lookup: {
-      //     from: "kpiapprovals",
-      //     localField: "submitted_id",
-      //     foreignField: "submitted_id",
-      //     as: "approvalDetails",
-      //   },
-      // },
-      // {
-      //   $unwind: "$approvalDetails",
-      // },
-      {
-        $lookup: {
-          from: "states",
-          localField: "state_id",
-          foreignField: "id",
-          as: "stateDetails",
+        {
+          $unwind: "$kpiDetails",
         },
-      },
-      { $unwind: "$stateDetails" },
-
-      {
-        $lookup: {
-          from: "soeprthemes",
-          localField: "theme_id",
-          foreignField: "id",
-          as: "themeDetails",
+        // {
+        //   $lookup: {
+        //     from: "kpiapprovals",
+        //     localField: "submitted_id",
+        //     foreignField: "submitted_id",
+        //     as: "approvalDetails",
+        //   },
+        // },
+        // {
+        //   $unwind: "$approvalDetails",
+        // },
+        {
+          $lookup: {
+            from: "states",
+            localField: "state_id",
+            foreignField: "id",
+            as: "stateDetails",
+          },
         },
-      },
-      { $unwind: "$themeDetails" },
+        { $unwind: "$stateDetails" },
 
-      {
-        $project: {
-          _id: 0,
-          id: 1,
-          state_id: 1,
-          "stateDetails.name": 1,
-
-          date: 1,
-          theme_id: 1,
-          "themeDetails.theme_name": 1,
-          kpi_id: 1,
-          max_range: 1,
-          input_data: 1,
-          score: 1,
-          remarks: 1,
-          financial_year: 1,
-          quarter: 1,
-          month: 1,
-          frequency: 1,
-          approver_remarks: "$approvalDetails.remarks",
-          status: 1,
-          submitted_id: 1,
-          created_by: 1,
-          modified_by: 1,
-          created_at: 1,
-          modified_at: 1,
-          kpiDetails: 1,
+        {
+          $lookup: {
+            from: "soeprthemes",
+            localField: "theme_id",
+            foreignField: "id",
+            as: "themeDetails",
+          },
         },
-      },
-    ];
+        { $unwind: "$themeDetails" },
 
-    const soeprKpiData = await SoeprKpiDataModel.aggregate(pipeline);
+        {
+          $project: {
+            _id: 0,
+            id: 1,
+            state_id: 1,
+            "stateDetails.name": 1,
 
-    if (!soeprKpiData) {
-      return next(new Errorhandler("No KPI data found for the specified filters", 404));
+            date: 1,
+            theme_id: 1,
+            "themeDetails.theme_name": 1,
+            kpi_id: 1,
+            max_range: 1,
+            input_data: 1,
+            score: 1,
+            remarks: 1,
+            financial_year: 1,
+            quarter: 1,
+            month: 1,
+            frequency: 1,
+            approver_remarks: "$approvalDetails.remarks",
+            status: 1,
+            submitted_id: 1,
+            created_by: 1,
+            modified_by: 1,
+            created_at: 1,
+            modified_at: 1,
+            kpiDetails: 1,
+          },
+        },
+      ];
+
+      const soeprKpiData = await SoeprKpiDataModel.aggregate(pipeline);
+
+      if (!soeprKpiData) {
+        return next(
+          new Errorhandler("No KPI data found for the specified filters", 404)
+        );
+      }
+
+      res.status(200).json({
+        success: true,
+        message: "KPI data fetched successfully",
+        data: soeprKpiData,
+      });
+    } catch (error) {
+      console.log(error);
+      return next(new Errorhandler("Failed to getSOEPR data", 500));
     }
-
-    res.status(200).json({
-      success: true,
-      message: "KPI data fetched successfully",
-      data: soeprKpiData,
-    });
-  } catch (error) {
-    console.log(error);
-    return next(new Errorhandler("Failed to getSOEPR data", 500));
   }
-});
+);
 
 // Resubmit the kpi data
 
@@ -270,11 +322,16 @@ export const reSubmitKpiData = CatchAsyncError(async (req, res, next) => {
     const existingData = await KPIApprovalModel.findOne({ submitted_id });
 
     if (!existingData) {
-      return next(new Errorhandler("KPI data with the given submitted_id does not exist", 404));
+      return next(
+        new Errorhandler(
+          "KPI data with the given submitted_id does not exist",
+          404
+        )
+      );
     }
 
     // Prepare the updated soeprKpi documents
-    const kpiDocuments = formData.map(kpi => ({
+    const kpiDocuments = formData.map((kpi) => ({
       kpi_id: kpi.kpi_id,
       score: kpi.score,
       max_range: kpi.max_range,
@@ -285,10 +342,14 @@ export const reSubmitKpiData = CatchAsyncError(async (req, res, next) => {
 
     // Update the KPI documents in the soeprKpi collection based on submitted_id and kpi_id
     await Promise.all(
-      kpiDocuments.map(kpiDocument =>
-        SoeprKpiDataModel.updateOne({ submitted_id, kpi_id: kpiDocument.kpi_id }, kpiDocument, {
-          upsert: true,
-        })
+      kpiDocuments.map((kpiDocument) =>
+        SoeprKpiDataModel.updateOne(
+          { submitted_id, kpi_id: kpiDocument.kpi_id },
+          kpiDocument,
+          {
+            upsert: true,
+          }
+        )
       )
     );
 

@@ -1,88 +1,92 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import API from "@/utils/API";
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-import { NirdViewIcon } from "@/components/admin/Icons";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  TableHead,
+} from "@/components/ui/table";
 import AdminHeader from "../AdminHeader";
 
 const ViewAttendance = () => {
-  const { id } = useParams();
-  const [attendance, setattendance] = useState(null);
+  const [attendance, setAttendance] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [financialYear, setFinancialYear] = useState();
+  const [state, setState] = useState("");
   const [role, setRole] = useState("");
   const [stateOptions, setStateOptions] = useState([]);
-  const [roleOptions, setRoleOptions] = useState([]);
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [search, setSearch] = useState("");
 
   const getAllStates = async () => {
     const { data } = await API.get(`/api/v1/state/all`);
     setStateOptions(data?.states);
   };
 
-  useEffect(() => {
-    const fetchattendance = async () => {
-      try {
-        setIsLoading(true);
-        const { data } = await API.get(`/api/v1/am-upload/${id}`);
-        setattendance(data?.data);
-      } catch (error) {
-        console.error("Error fetching AM upload:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchattendance();
-  }, [id]);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!attendance) {
-    return <div>AM Upload not found</div>;
-  }
-
-  const fields = [
-    { label: "id", value: attendance?.id },
-    { label: "Employee Id", value: attendance.employee_id },
-    { label: "Employee Full Name", value: attendance.employee_name },
-
-    { label: "State", value: attendance.state_name },
-    { label: "Role", value: attendance.block_id },
-    { label: "AM Working Days", value: attendance.gp_id },
-    { label: "PM Working Days", value: attendance.date },
-  ];
-
-  const handleSearch = (e) => {
-    e.preventDefault();
+  const fetchAttendance = async () => {
+    try {
+      setIsLoading(true);
+      const { data } = await API.get(
+        `api/v1/am-upload/attendance/all?role=${role}&fromDate=${fromDate}&toDate=${toDate}`
+      );
+      const filteredData = data?.data.filter((att) => att.state);
+      setAttendance(filteredData);
+    } catch (error) {
+      console.error("Error fetching AM upload:", error);
+    } finally {
+      setAttendance([]);
+      setIsLoading(false);
+    }
   };
 
-  // Dropdown for financial years
+  const roleOptions = [
+    { value: 1, name: "PMU Admin" },
+    { value: 2, name: "SPC Admin" },
+    { value: 3, name: "Young Fellow" },
+  ];
 
-  const financialYears = [];
-
-  for (let year = 2022; year <= 2050; year++) {
-    financialYears.push({
-      value: `FY${year}-${year + 1}`,
-      label: `FY ${year}-${year + 1}`,
-    });
-  }
+  useEffect(() => {
+    if (state && role && toDate && fromDate) {
+      fetchAttendance();
+    }
+  }, [state, role, toDate, fromDate]);
 
   useEffect(() => {
     getAllStates();
   }, []);
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const currentDate = new Date().toISOString().split("T")[0];
+    if (new Date(fromDate) > new Date(toDate)) {
+      alert("From Date cannot be greater than To Date");
+    } else if (
+      new Date(fromDate) > new Date(currentDate) ||
+      new Date(toDate) > new Date(currentDate)
+    ) {
+      alert("Dates cannot be greater than the current date");
+    } else {
+      fetchAttendance();
+    }
+  };
+
+  const handleReset = () => {
+    setRole("");
+    setFromDate("");
+    setToDate("");
+  };
+
   return (
     <div>
       <AdminHeader>Attendance Data</AdminHeader>
       <div className="flex flex-col lg:flex-row items-center lg:items-end gap-10 justify-between mb-4">
-        <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 lg:grid-cols-5  items-end gap-2 sm:gap-5">
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 lg:grid-cols-5 items-end gap-2 sm:gap-5">
           <div className="flex flex-col">
             <label className="text-gray-600 text-sm mb-1">Select State</label>
-
             <select
-              className="border w-full md:max-w-40 text-sm border-gray-200 p-2 rounded-md "
+              className="border w-full md:max-w-40 text-sm border-gray-200 p-2 rounded-md"
               value={state}
               onChange={(e) => {
                 setState(e.target.value);
@@ -97,24 +101,42 @@ const ViewAttendance = () => {
             </select>
           </div>
           <div className="flex flex-col">
-            {/* <SelectComponent data={districtOptions} name="District" /> */}
+            <label className="text-gray-600 text-sm mb-1">Select Role</label>
             <select
-              className="border text-sm border-gray-200 p-2 rounded-md "
+              className="border text-sm border-gray-200 p-2 rounded-md"
               value={role}
-              disabled={!roleOptions.length}
               onChange={(e) => {
-                setDistrict(e.target.value);
+                setRole(e.target.value);
               }}
             >
               <option>Select Role</option>
               {roleOptions.map((item) => (
-                <option key={item.id} value={item.id}>
+                <option key={item.value} value={item.value}>
                   {item.name}
                 </option>
               ))}
             </select>
           </div>
-
+          <div className="flex flex-col">
+            <label className="text-gray-600 text-sm mb-1">From Date</label>
+            <input
+              type="date"
+              className="border text-sm border-gray-200 p-2 rounded-md"
+              value={fromDate}
+              max={new Date().toISOString().split("T")[0]}
+              onChange={(e) => setFromDate(e.target.value)}
+            />
+          </div>
+          <div className="flex flex-col">
+            <label className="text-gray-600 text-sm mb-1">To Date</label>
+            <input
+              type="date"
+              className="border text-sm border-gray-200 p-2 rounded-md"
+              value={toDate}
+              max={new Date().toISOString().split("T")[0]}
+              onChange={(e) => setToDate(e.target.value)}
+            />
+          </div>
           <button
             onClick={handleReset}
             className="bg-primary rounded text-white text-sm p-2 px-2"
@@ -124,26 +146,14 @@ const ViewAttendance = () => {
         </div>
 
         <div className="w-full md:w-fit flex flex-col md:flex-row gap-5">
-          <select
-            value={financialYear}
-            onChange={(e) => setFinancialYear(e.target.value)}
-            className="w-full md:w-40 text-center border p-2 rounded-md"
-          >
-            <option value="">Select Financial Year</option>
-            {financialYears.map((year, index) => (
-              <option key={index} value={year.value}>
-                {year.label}
-              </option>
-            ))}
-          </select>
           <form onSubmit={handleSearch} className="flex items-center space-x-2">
             <input
               type="text"
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search for States, Districts and Blocks"
-              className="border border-gray-200 p-2 rounded-md w-full lg:w-40 "
+              className="border border-gray-200 p-2 rounded-md w-full lg:w-40"
             />
-            <button className="bg-primary text-white p-2 rounded focus:outline-none ">
+            <button className="bg-primary text-white p-2 rounded focus:outline-none">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
@@ -162,16 +172,49 @@ const ViewAttendance = () => {
           </form>
         </div>
       </div>
-      <Table>
-        <TableBody>
-          {fields?.map((field, index) => (
-            <TableRow key={index}>
-              <TableCell>{field.label}</TableCell>
-              <TableCell>{field.value}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+
+      {!isLoading && attendance.length == 0 ? (
+        <div className="text-center text-xl text-gray-700 py-20">
+          <h3>No attendance data found for the selected criteria.</h3>
+        </div>
+      ) : (
+        <Table>
+          <TableRow>
+            <TableCell>
+              <strong>Employee Id</strong>
+            </TableCell>
+            <TableCell>
+              <strong>Name</strong>
+            </TableCell>
+            <TableCell>
+              <strong>State</strong>
+            </TableCell>
+            <TableCell>
+              <strong>Role</strong>
+            </TableCell>
+            <TableCell>
+              <strong>AM Working Days</strong>
+            </TableCell>
+            <TableCell>
+              <strong>PM Working Days</strong>
+            </TableCell>
+          </TableRow>
+          <TableBody>
+            {attendance.map((att, index) => (
+              <TableRow key={index}>
+                <TableCell>{att.employeeId}</TableCell>
+                <TableCell>{att.name}</TableCell>
+                <TableCell>{att.state}</TableCell>
+                <TableCell>
+                  {roleOptions.find((r) => r.value == att.role).name}
+                </TableCell>
+                <TableCell>{att.amWorkingDays}</TableCell>
+                <TableCell>{att.pmWorkingDays}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
     </div>
   );
 };

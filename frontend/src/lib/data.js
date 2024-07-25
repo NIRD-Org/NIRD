@@ -1,7 +1,7 @@
 import { ArrowBigRight } from "lucide-react";
 
-export const getSidebarItems = user => {
-  console.log(user)
+export const getSidebarItems = (user) => {
+  console.log(user);
   let sidebarItems;
 
   if (user.username == "cpr") {
@@ -23,41 +23,41 @@ export const getSidebarItems = user => {
     return sidebarItems;
   }
 
-  if(user.role == 4 || user.role==5){
-      sidebarItems = [
-        {
-          type: "module",
-          icon: ArrowBigRight,
-          title: "Attendance",
-          submodules: [
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "AM Entry Form",
-              link: "/admin/soepr/attendance/amu-upload",
-            },
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "PM Entry Form",
-              link: "/admin/soepr/attendance/pmu-upload",
-            },
-          ],
-        },
-        {
-          type: "module",
-          icon: ArrowBigRight,
-          title: "KPI",
-          submodules: [
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "KPI Data entry",
-              link: "/admin/soepr/young-professionals",
-            },
-          ],
-        },
-      ];
+  if (user.role == 4 || user.role == 5) {
+    sidebarItems = [
+      {
+        type: "module",
+        icon: ArrowBigRight,
+        title: "Attendance",
+        submodules: [
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "AM Entry Form",
+            link: "/admin/soepr/attendance/amu-upload",
+          },
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "PM Entry Form",
+            link: "/admin/soepr/attendance/pmu-upload",
+          },
+        ],
+      },
+      {
+        type: "module",
+        icon: ArrowBigRight,
+        title: "KPI",
+        submodules: [
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "KPI Data entry",
+            link: "/admin/soepr/young-professionals",
+          },
+        ],
+      },
+    ];
     return sidebarItems;
   }
   // console.log(user.role)
@@ -92,6 +92,12 @@ export const getSidebarItems = user => {
               icon: ArrowBigRight,
               title: "Young Fellow location",
               link: "/admin/users/all/young-fellow",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "View Attendance",
+              link: "/admin/view/attendance",
             },
           ],
         },
@@ -263,6 +269,12 @@ export const getSidebarItems = user => {
               title: "PM Entry",
               link: "/admin/attendance/pmu-upload/list",
             },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "View Attendance",
+              link: "/admin/view/attendance",
+            },
           ],
         },
       ];
@@ -420,7 +432,7 @@ export const getSidebarItems = user => {
         },
       ];
 
-      case 5:
+    case 5:
       sidebarItems = [
         {
           type: "module",
@@ -573,5 +585,7 @@ export const kpiScoringRules = {
   128: { thresholds: [4, 2, 1, 0], scores: [6, 4, 2, 0] },
 };
 
-export const disabledKpis = [16, 17, 18, 19, 20, 21, 22, 23, 29, 39, 40, 41, 45, 48, 49];
+export const disabledKpis = [
+  16, 17, 18, 19, 20, 21, 22, 23, 29, 39, 40, 41, 45, 48, 49,
+];
 // {id:{$in:["16", "17", "18", "19", "20", "21", "22", "23", "29", "39", "40", "41", "45", "48", "49"]}}

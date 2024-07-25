@@ -131,6 +131,8 @@ export const getAllAttendaceData = CatchAsyncError(async (req, res, next) => {
     }
 
     const employeeIds = employees.map((employee) => employee.id);
+
+    // AM Attendance Aggregation
     const amAttendance = await AmModel.aggregate([
       {
         $match: {
@@ -155,8 +157,8 @@ export const getAllAttendaceData = CatchAsyncError(async (req, res, next) => {
         },
       },
     ]);
-    console.log(amAttendance);
 
+    // PM Attendance Aggregation
     const pmAttendance = await PmModel.aggregate([
       {
         $match: {
@@ -176,22 +178,25 @@ export const getAllAttendaceData = CatchAsyncError(async (req, res, next) => {
       {
         $group: {
           _id: "$created_by",
-          state: { $first: "$stateInfo.state_name" },
+          state: { $first: "$stateInfo.name" },
           pmWorkingDays: { $sum: 1 },
         },
       },
     ]);
+    console.log("PM Attendance:", pmAttendance); // Debug log
 
+    // Create maps for AM and PM attendance
     const amAttendanceMap = amAttendance.reduce((acc, record) => {
-      acc[record.id] = record;
+      acc[record._id] = record;
       return acc;
     }, {});
 
     const pmAttendanceMap = pmAttendance.reduce((acc, record) => {
-      acc[record.id] = record;
+      acc[record._id] = record;
       return acc;
     }, {});
 
+    // Combine data
     const attendanceData = employees.map((employee) => {
       const { id, employee_id, name } = employee;
       const amData = amAttendanceMap[id] || { amWorkingDays: 0, state: "" };
@@ -200,7 +205,7 @@ export const getAllAttendaceData = CatchAsyncError(async (req, res, next) => {
         employeeId: employee_id,
         name,
         state: amData.state || pmData.state, // Assuming state will be the same for AM and PM
-        role,
+        role: userRole,
         amWorkingDays: amData.amWorkingDays,
         pmWorkingDays: pmData.pmWorkingDays,
       };
@@ -212,6 +217,6 @@ export const getAllAttendaceData = CatchAsyncError(async (req, res, next) => {
     });
   } catch (error) {
     console.log(error);
-    return next(new Errorhandler("Failed to get Attendance 1 data", 500));
+    return next(new Errorhandler("Failed to get Attendance data", 500));
   }
 });
