@@ -21,28 +21,6 @@ const soeprKpiDataSchema = new mongoose.Schema(
       required: true,
       ref: "SoeprTheme",
     },
-    kpi_id: {
-      type: String,
-      required: true,
-      ref: "SoeprKpi",
-    },
-    max_range: {
-      type: Number,
-      default: 0,
-      // required: true,
-    },
-    input_data: {
-      type: Number,
-      required: true,
-    },
-    score: {
-      type: Number,
-      default: 0,
-    },
-    remarks: {
-      type: String,
-      default: "",
-    },
     status: {
       type: String,
       default: "1",
@@ -64,10 +42,6 @@ const soeprKpiDataSchema = new mongoose.Schema(
       required: true,
       default: "",
     },
-    submitted_id: {
-      type: String,
-      required: true,
-    },
     created_by: {
       type: String,
       required: true,
@@ -75,13 +49,28 @@ const soeprKpiDataSchema = new mongoose.Schema(
     modified_by: {
       type: String,
     },
+    status:{
+      type:String,
+      default:"1"
+    },
+    formData: {
+      input_data: {
+        type: Number,
+        required: true,
+      },
+      remarks: {
+        type: String,
+        required: true,
+      },
+      max_range: {
+        type: Number,
+        required: true,
+      },
+    },
   },
   {
     timestamps: { createdAt: "created_at", updatedAt: "modified_at" },
   }
 );
 
-export const SoeprKpiDataModel = mongoose.model(
-  "SoeprKpiData",
-  soeprKpiDataSchema
-);
+export const SoeprKpiDataModel = mongoose.model("SoeprKpiData", soeprKpiDataSchema);

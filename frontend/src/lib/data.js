@@ -291,7 +291,6 @@ export const getSidebarItems = user => {
               title: "Gp details",
               link: "/admin/action/admin/gp-details",
             },
-          
           ],
         },
         {
@@ -345,6 +344,23 @@ export const getSidebarItems = user => {
         },
       ];
       break;
+
+    case 4:
+      sidebarItems = [
+        {
+          type: "module",
+          icon: ArrowBigRight,
+          title: "KPI",
+          submodules: [
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "KPI Data entry",
+              link: "/admin/soepr/young-professionals",
+            },
+          ],
+        },
+      ];
   }
 
   return sidebarItems;
