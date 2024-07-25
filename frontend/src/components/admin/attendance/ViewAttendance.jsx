@@ -18,6 +18,7 @@ const ViewAttendance = () => {
   const [stateOptions, setStateOptions] = useState([]);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+  const [search, setSearch] = useState("");
 
   const getAllStates = async () => {
     const { data } = await API.get(`/api/v1/state/all`);
@@ -35,6 +36,7 @@ const ViewAttendance = () => {
     } catch (error) {
       console.error("Error fetching AM upload:", error);
     } finally {
+      setAttendance([]);
       setIsLoading(false);
     }
   };
@@ -44,6 +46,7 @@ const ViewAttendance = () => {
     { value: 2, name: "SPC Admin" },
     { value: 3, name: "Young Fellow" },
   ];
+
   useEffect(() => {
     if (state && role && toDate && fromDate) {
       fetchAttendance();
@@ -56,7 +59,17 @@ const ViewAttendance = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    // Implement search logic here
+    const currentDate = new Date().toISOString().split("T")[0];
+    if (new Date(fromDate) > new Date(toDate)) {
+      alert("From Date cannot be greater than To Date");
+    } else if (
+      new Date(fromDate) > new Date(currentDate) ||
+      new Date(toDate) > new Date(currentDate)
+    ) {
+      alert("Dates cannot be greater than the current date");
+    } else {
+      fetchAttendance();
+    }
   };
 
   const handleReset = () => {
@@ -110,6 +123,7 @@ const ViewAttendance = () => {
               type="date"
               className="border text-sm border-gray-200 p-2 rounded-md"
               value={fromDate}
+              max={new Date().toISOString().split("T")[0]}
               onChange={(e) => setFromDate(e.target.value)}
             />
           </div>
@@ -119,6 +133,7 @@ const ViewAttendance = () => {
               type="date"
               className="border text-sm border-gray-200 p-2 rounded-md"
               value={toDate}
+              max={new Date().toISOString().split("T")[0]}
               onChange={(e) => setToDate(e.target.value)}
             />
           </div>
@@ -157,42 +172,49 @@ const ViewAttendance = () => {
           </form>
         </div>
       </div>
-      <Table>
-        <TableRow>
-          <TableCell>
-            <strong>Employee Id</strong>
-          </TableCell>
-          <TableCell>
-            <strong>Name</strong>
-          </TableCell>
-          <TableCell>
-            <strong>State</strong>
-          </TableCell>
-          <TableCell>
-            <strong>Role</strong>
-          </TableCell>
-          <TableCell>
-            <strong>AM Working Days</strong>
-          </TableCell>
-          <TableCell>
-            <strong>PM Working Days</strong>
-          </TableCell>
-        </TableRow>
-        <TableBody>
-          {attendance.map((att, index) => (
-            <TableRow key={index}>
-              <TableCell>{att.employeeId}</TableCell>
-              <TableCell>{att.name}</TableCell>
-              <TableCell>{att.state}</TableCell>
-              <TableCell>
-                {roleOptions.find((r) => r.value == att.role).name}
-              </TableCell>
-              <TableCell>{att.amWorkingDays}</TableCell>
-              <TableCell>{att.pmWorkingDays}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+
+      {!isLoading && attendance.length == 0 ? (
+        <div className="text-center text-xl text-gray-700 py-20">
+          <h3>No attendance data found for the selected criteria.</h3>
+        </div>
+      ) : (
+        <Table>
+          <TableRow>
+            <TableCell>
+              <strong>Employee Id</strong>
+            </TableCell>
+            <TableCell>
+              <strong>Name</strong>
+            </TableCell>
+            <TableCell>
+              <strong>State</strong>
+            </TableCell>
+            <TableCell>
+              <strong>Role</strong>
+            </TableCell>
+            <TableCell>
+              <strong>AM Working Days</strong>
+            </TableCell>
+            <TableCell>
+              <strong>PM Working Days</strong>
+            </TableCell>
+          </TableRow>
+          <TableBody>
+            {attendance.map((att, index) => (
+              <TableRow key={index}>
+                <TableCell>{att.employeeId}</TableCell>
+                <TableCell>{att.name}</TableCell>
+                <TableCell>{att.state}</TableCell>
+                <TableCell>
+                  {roleOptions.find((r) => r.value == att.role).name}
+                </TableCell>
+                <TableCell>{att.amWorkingDays}</TableCell>
+                <TableCell>{att.pmWorkingDays}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
     </div>
   );
 };
