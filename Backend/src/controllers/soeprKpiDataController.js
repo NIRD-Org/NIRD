@@ -25,144 +25,29 @@ const getNewIdKPI = async () => {
   }
 };
 
-const getNewIdApproval = async () => {
-  try {
-    const maxDoc = await KPIApprovalModel.aggregate([
-      {
-        $addFields: {
-          numericId: { $toInt: "$id" },
-        },
-      },
-      {
-        $sort: { numericId: -1 },
-      },
-      {
-        $limit: 1,
-      },
-    ]).exec();
-
-    const maxId = maxDoc.length > 0 ? maxDoc[0].numericId : 0;
-    return maxId + 1;
-  } catch (error) {
-    return next(new Errorhandler("failed to get new id", 500));
-  }
-};
-
-// Generate new submitted id
-
-const getNewSubmittedId = async () => {
-  try {
-    const maxDoc = await SoeprKpiDataModel.aggregate([
-      {
-        $addFields: {
-          numericId: { $toInt: "$submitted_id" },
-        },
-      },
-      {
-        $sort: { numericId: -1 },
-      },
-      {
-        $limit: 1,
-      },
-    ]).exec();
-
-    const maxId = maxDoc.length > 0 ? maxDoc[0].numericId : 0;
-    return maxId + 1;
-  } catch (error) {
-    return next(new Errorhandler("failed to get new id", 500));
-  }
-};
-
-// Submit the kpi data created by the young fellow
 
 export const submitKpiData = CatchAsyncError(async (req, res, next) => {
   try {
-    const {
-      state_id,
-      financial_year,
-      frequency,
-      quarter,
-      month,
-      date,
-      theme_id,
-      user_id,
-      remark,
-      formData,
-    } = req.body;
+    const parsedDate = new Date(req.body.date);
+    // console.log(req.body)
 
-    // Validate if formData is empty
-    if (!formData || formData.length === 0) {
-      return next(new Errorhandler("Form data cannot be empty", 400));
-    }
-
-    // Parse the date from the request body to a Date object
-    const parsedDate = new Date(date);
-
-    // Check for existing data for the same date and theme_id
     const existingData = await SoeprKpiDataModel.findOne({
-      state_id: state_id,
-
+      state_id: req.body.state_id,
       date: parsedDate,
-      theme_id: theme_id,
+      theme_id: req.body.theme_id,
     });
 
     if (existingData) {
-      return next(
-        new Errorhandler("KPI data for this theme and date already exists", 400)
-      );
+      return next(new Errorhandler("KPI data for this theme and date already exists", 400));
     }
 
-    // Generate new submitted_id and currentMaxId
-    const submitted_id = await getNewSubmittedId();
     let currentMaxId = await getNewIdKPI();
+    req.body.id = currentMaxId.toString();
+    req.body.created_by = req.body.user_id;
 
-    // Prepare the soeprKpi documents for insertion
-    const kpiDocuments = await Promise.all(
-      formData.map(async (kpi) => ({
-        id: currentMaxId++,
-        state_id: state_id,
-        date: parsedDate,
-        theme_id: theme_id,
-        kpi_id: kpi.kpi_id,
-        score: kpi.score,
-        financial_year,
-        frequency,
-        quarter: quarter ?? "",
-        month: month ?? "",
-        max_range: kpi.max_range,
-        input_data: kpi.input_data,
-        remarks: kpi.remarks,
-        submitted_id: submitted_id,
-        created_by: user_id,
-      }))
-    );
+    console.log(req.body);
+    await SoeprKpiDataModel.create(req.body);
 
-    // Inserting the KPI documents into the soeprKpi collection
-    await SoeprKpiDataModel.insertMany(kpiDocuments);
-
-    // Generate new approvalId
-    // const approvalId = await getNewIdApproval();
-
-    // // Create the approval request document
-    // const approvalDocument = {
-    //   id: approvalId,
-    //   state_id,
-
-    //   theme_id,
-    //   financial_year,
-    //   frequency,
-    //   quarter: quarter ?? "",
-    //   month: month ?? "",
-    //   remarks: remark,
-    //   submitted_id,
-    //   created_by: user_id,
-    //   date: parsedDate,
-    // };
-
-    // // Insert the approval request into the soeprKpiApproval collection
-    // await KPIApprovalModel.create(approvalDocument);
-
-    // Send success response
     res.status(201).json({
       success: true,
       message: "KPI data submitted and approval request created successfully",
@@ -185,49 +70,15 @@ export const getsoeprKpi = CatchAsyncError(async (req, res, next) => {
     const filter = {};
     if (state) filter.state_id = state;
     if (fy) filter.financial_year = fy;
+    // filter.user_id = req.user.id;
     const pipeline = [
       { $match: filter },
-      {
-        $group: {
-          _id: "$gp_id",
-          doc: { $first: "$$ROOT" },
-        },
-      },
-      {
-        $replaceRoot: { newRoot: "$doc" },
-      },
       {
         $lookup: {
           from: "states",
           localField: "state_id",
           foreignField: "id",
           as: "state",
-        },
-      },
-
-      {
-        $project: {
-          id: 1,
-          state: { $arrayElemAt: ["$state", 0] },
-
-          date: 1,
-          theme_id: 1,
-          kpi_id: 1,
-          financial_year: 1,
-          quarter: 1,
-          month: 1,
-          frequency: 1,
-          question_id: 1,
-          max_range: 1,
-          input_data: 1,
-          score: 1,
-          remarks: 1,
-          status: 1,
-          submitteed_id: 1,
-          created_by: 1,
-          created_at: 1,
-          modified_by: 1,
-          modified_at: 1,
         },
       },
     ];
@@ -288,11 +139,7 @@ export const getsoeprKpiData = CatchAsyncError(async (req, res, next) => {
 export const deletesoeprKpiData = CatchAsyncError(async (req, res, next) => {
   try {
     const { id } = req.params;
-    const soeprKpi = await GpModel.findOneAndUpdate(
-      id,
-      { status: "0" },
-      { new: true }
-    );
+    const soeprKpi = await GpModel.findOneAndUpdate(id, { status: "0" }, { new: true });
     if (!soeprKpi) {
       return next(new Errorhandler("No Gram Panchayat Found", 404));
     }
@@ -306,110 +153,106 @@ export const deletesoeprKpiData = CatchAsyncError(async (req, res, next) => {
 });
 
 // Get the soeprKpi for the approver
-export const getsoeprKpiForApprover = CatchAsyncError(
-  async (req, res, next) => {
-    try {
-      const { submitted_id } = req.query;
+export const getsoeprKpiForApprover = CatchAsyncError(async (req, res, next) => {
+  try {
+    const { submitted_id } = req.query;
 
-      const matchStage = {
-        submitted_id,
-      };
+    const matchStage = {
+      submitted_id,
+    };
 
-      const pipeline = [
-        { $match: matchStage },
-        {
-          $lookup: {
-            from: "soeprkpis",
-            localField: "kpi_id",
-            foreignField: "id",
-            as: "kpiDetails",
-          },
+    const pipeline = [
+      { $match: matchStage },
+      {
+        $lookup: {
+          from: "soeprkpis",
+          localField: "kpi_id",
+          foreignField: "id",
+          as: "kpiDetails",
         },
+      },
 
-        {
-          $unwind: "$kpiDetails",
+      {
+        $unwind: "$kpiDetails",
+      },
+      // {
+      //   $lookup: {
+      //     from: "kpiapprovals",
+      //     localField: "submitted_id",
+      //     foreignField: "submitted_id",
+      //     as: "approvalDetails",
+      //   },
+      // },
+      // {
+      //   $unwind: "$approvalDetails",
+      // },
+      {
+        $lookup: {
+          from: "states",
+          localField: "state_id",
+          foreignField: "id",
+          as: "stateDetails",
         },
-        // {
-        //   $lookup: {
-        //     from: "kpiapprovals",
-        //     localField: "submitted_id",
-        //     foreignField: "submitted_id",
-        //     as: "approvalDetails",
-        //   },
-        // },
-        // {
-        //   $unwind: "$approvalDetails",
-        // },
-        {
-          $lookup: {
-            from: "states",
-            localField: "state_id",
-            foreignField: "id",
-            as: "stateDetails",
-          },
+      },
+      { $unwind: "$stateDetails" },
+
+      {
+        $lookup: {
+          from: "soeprthemes",
+          localField: "theme_id",
+          foreignField: "id",
+          as: "themeDetails",
         },
-        { $unwind: "$stateDetails" },
+      },
+      { $unwind: "$themeDetails" },
 
-        {
-          $lookup: {
-            from: "soeprthemes",
-            localField: "theme_id",
-            foreignField: "id",
-            as: "themeDetails",
-          },
+      {
+        $project: {
+          _id: 0,
+          id: 1,
+          state_id: 1,
+          "stateDetails.name": 1,
+
+          date: 1,
+          theme_id: 1,
+          "themeDetails.theme_name": 1,
+          kpi_id: 1,
+          max_range: 1,
+          input_data: 1,
+          score: 1,
+          remarks: 1,
+          financial_year: 1,
+          quarter: 1,
+          month: 1,
+          frequency: 1,
+          approver_remarks: "$approvalDetails.remarks",
+          status: 1,
+          submitted_id: 1,
+          created_by: 1,
+          modified_by: 1,
+          created_at: 1,
+          modified_at: 1,
+          kpiDetails: 1,
         },
-        { $unwind: "$themeDetails" },
+      },
+    ];
 
-        {
-          $project: {
-            _id: 0,
-            id: 1,
-            state_id: 1,
-            "stateDetails.name": 1,
+    const soeprKpiData = await SoeprKpiDataModel.aggregate(pipeline);
 
-            date: 1,
-            theme_id: 1,
-            "themeDetails.theme_name": 1,
-            kpi_id: 1,
-            max_range: 1,
-            input_data: 1,
-            score: 1,
-            remarks: 1,
-            financial_year: 1,
-            quarter: 1,
-            month: 1,
-            frequency: 1,
-            approver_remarks: "$approvalDetails.remarks",
-            status: 1,
-            submitted_id: 1,
-            created_by: 1,
-            modified_by: 1,
-            created_at: 1,
-            modified_at: 1,
-            kpiDetails: 1,
-          },
-        },
-      ];
-
-      const soeprKpiData = await SoeprKpiDataModel.aggregate(pipeline);
-
-      if (!soeprKpiData) {
-        return next(
-          new Errorhandler("No KPI data found for the specified filters", 404)
-        );
-      }
-
-      res.status(200).json({
-        success: true,
-        message: "KPI data fetched successfully",
-        data: soeprKpiData,
-      });
-    } catch (error) {
-      console.log(error);
-      return next(new Errorhandler("Failed to getSOEPR data", 500));
+    if (!soeprKpiData) {
+      return next(new Errorhandler("No KPI data found for the specified filters", 404));
     }
+
+    res.status(200).json({
+      success: true,
+      message: "KPI data fetched successfully",
+      data: soeprKpiData,
+    });
+  } catch (error) {
+    console.log(error);
+    return next(new Errorhandler("Failed to getSOEPR data", 500));
   }
-);
+});
 
 // Resubmit the kpi data
 
@@ -427,16 +270,11 @@ export const reSubmitKpiData = CatchAsyncError(async (req, res, next) => {
     const existingData = await KPIApprovalModel.findOne({ submitted_id });
 
     if (!existingData) {
-      return next(
-        new Errorhandler(
-          "KPI data with the given submitted_id does not exist",
-          404
-        )
-      );
+      return next(new Errorhandler("KPI data with the given submitted_id does not exist", 404));
     }
 
     // Prepare the updated soeprKpi documents
-    const kpiDocuments = formData.map((kpi) => ({
+    const kpiDocuments = formData.map(kpi => ({
       kpi_id: kpi.kpi_id,
       score: kpi.score,
       max_range: kpi.max_range,
@@ -447,12 +285,10 @@ export const reSubmitKpiData = CatchAsyncError(async (req, res, next) => {
 
     // Update the KPI documents in the soeprKpi collection based on submitted_id and kpi_id
     await Promise.all(
-      kpiDocuments.map((kpiDocument) =>
-        SoeprKpiDataModel.updateOne(
-          { submitted_id, kpi_id: kpiDocument.kpi_id },
-          kpiDocument,
-          { upsert: true }
-        )
+      kpiDocuments.map(kpiDocument =>
+        SoeprKpiDataModel.updateOne({ submitted_id, kpi_id: kpiDocument.kpi_id }, kpiDocument, {
+          upsert: true,
+        })
       )
     );
 

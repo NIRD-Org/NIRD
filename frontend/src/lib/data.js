@@ -1,6 +1,7 @@
 import { ArrowBigRight } from "lucide-react";
 
 export const getSidebarItems = user => {
+  console.log(user)
   let sidebarItems;
 
   if (user.username == "cpr") {
@@ -22,6 +23,44 @@ export const getSidebarItems = user => {
     return sidebarItems;
   }
 
+  if(user.role == 4){
+      sidebarItems = [
+        {
+          type: "module",
+          icon: ArrowBigRight,
+          title: "Attendance",
+          submodules: [
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "AM Entry Form",
+              link: "/admin/soepr/attendance/amu-upload",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "PM Entry Form",
+              link: "/admin/soepr/attendance/pmu-upload",
+            },
+          ],
+        },
+        {
+          type: "module",
+          icon: ArrowBigRight,
+          title: "KPI",
+          submodules: [
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "KPI Data entry",
+              link: "/admin/soepr/young-professionals",
+            },
+          ],
+        },
+      ];
+    return sidebarItems;
+  }
+  // console.log(user.role)
   switch (user.role) {
     case 1:
       sidebarItems = [
@@ -291,7 +330,6 @@ export const getSidebarItems = user => {
               title: "Gp details",
               link: "/admin/action/admin/gp-details",
             },
-          
           ],
         },
         {
@@ -345,6 +383,59 @@ export const getSidebarItems = user => {
         },
       ];
       break;
+
+    case 4:
+      sidebarItems = [
+        {
+          type: "module",
+          icon: ArrowBigRight,
+          title: "Attendance",
+          submodules: [
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "AM Entry Form",
+              link: "/admin/soepr/attendance/amu-upload",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "PM Entry Form",
+              link: "/admin/soepr/attendance/pmu-upload",
+            },
+          ],
+        },
+        {
+          type: "module",
+          icon: ArrowBigRight,
+          title: "KPI",
+          submodules: [
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "KPI Data entry",
+              link: "/admin/soepr/young-professionals",
+            },
+          ],
+        },
+      ];
+
+      case 5:
+      sidebarItems = [
+        {
+          type: "module",
+          icon: ArrowBigRight,
+          title: "KPI",
+          submodules: [
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "KPI Data entry",
+              link: "/admin/soepr-sr/gp-wise-kpi",
+            },
+          ],
+        },
+      ];
   }
 
   return sidebarItems;

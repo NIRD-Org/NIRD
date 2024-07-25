@@ -86,6 +86,12 @@ import PmUploadList from "./components/admin/attendance/PmuList";
 import PmUploadView from "./components/admin/attendance/PmuView";
 import GoodPracticeDetails from "./Pages/GoodPracticeDetails";
 import LcvaDetails from "./Pages/LcvaDetails";
+import SoeprYoungFellowForm from "./components/admin/soepr/kpidata/YoungFellowForm";
+import SoeprGpWiseKpiList from "./components/admin/soepr/kpidata/GpWiseKpiList";
+import SoeprAddGpWiseKpi from "./components/admin/soepr/kpidata/AddGpWiseKpi";
+import SoeprAmUploadForm from "./components/admin/soepr/attendance/AmUpload";
+import SoeprPmUploadForm from "./components/admin/soepr/attendance/PmUpload";
+import SrSoeprGpWiseKpiList from "./components/admin/soepr/kpidata/List";
 import ViewAttendance from "./components/admin/attendance/ViewAttendance";
 import KpiView from "./Pages/kpiView";
 
@@ -126,7 +132,6 @@ function App() {
             <Route index element={<AdminMainPage />} />
             <Route path="view/attendance" element={<ViewAttendance />} />
 
-            <Route path="young-professionals" element={<YoungFellowForm />} />
             <Route path="gp-wise-kpi" element={<GpWiseKpiList />} />
             <Route path="change-password" element={<ChangePassword />} />
             <Route path="users" element={<UserPage />} />
@@ -240,6 +245,7 @@ function App() {
               element={<FellowInsightPage />}
             />
 
+            <Route path="young-professionals" element={<YoungFellowForm />} />
             <Route path="add-gp-wise-kpi" element={<AddGpWiseKpi />} />
             <Route
               path="action/admin/gp-wise-kpi"
@@ -260,6 +266,20 @@ function App() {
             <Route
               path="edit/gp-wise-kpi/:id"
               element={<UpdateGpWiseKpi edit />}
+            />
+
+            <Route
+              path="soepr/young-professionals"
+              element={<SoeprYoungFellowForm />}
+            />
+            <Route
+              path="soepr/add-gp-wise-kpi"
+              element={<SoeprAddGpWiseKpi />}
+            />
+            <Route path="soepr/gp-wise-kpi" element={<SoeprGpWiseKpiList />} />
+            <Route
+              path="soepr-sr/gp-wise-kpi"
+              element={<SrSoeprGpWiseKpiList />}
             />
 
             <Route path="good-practices" element={<GoodPracticeForm />} />
@@ -339,6 +359,15 @@ function App() {
             <Route
               path="edit/indicator/:id"
               element={<IndicatorApprovalResubmit edit />}
+            />
+
+            <Route
+              path="soepr/attendance/amu-upload"
+              element={<SoeprAmUploadForm />}
+            />
+            <Route
+              path="soepr/attendance/pmu-upload"
+              element={<SoeprPmUploadForm />}
             />
           </Route>
         </Route>

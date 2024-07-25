@@ -12,7 +12,6 @@ import {
 
 function Sidebar({ className }) {
   const { user } = useAuthContext();
-
   const sidebarItems = getSidebarItems(user);
   return (
     <aside

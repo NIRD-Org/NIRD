@@ -1,4 +1,4 @@
-﻿import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -15,11 +15,11 @@ import { tst } from "@/lib/utils";
 import API from "@/utils/API";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import YfLayout from "./YfLayout";
+import YfLayout from "../../young-fellow/YfLayout";
 import { kpiScoringRules } from "@/lib/data";
 import { disabledKpis } from "@/lib/data";
 
-function AddGpWiseKpi({ update }) {
+function SoeprAddGpWiseKpi({ update }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const state_id = searchParams.get("state_id") || "";
   const dist_id = searchParams.get("dist_id") || "";
@@ -36,11 +36,13 @@ function AddGpWiseKpi({ update }) {
   const [frequency, setFrequency] = useState("");
   const [month, setMonth] = useState("");
   const [quarter, setQuarter] = useState("");
+  const [state, setState] = useState({});
+  const [theme, setTheme] = useState({});
 
   useEffect(() => {
     const fetchKpis = async () => {
       try {
-        const response = await API.get(`/api/v1/kpi/theme/${theme_id}`);
+        const response = await API.get(`/api/v1/soepr-kpi/theme/${theme_id}`);
         const kpis = response.data.KPI;
         setKpis(kpis);
       } catch (error) {
@@ -55,7 +57,7 @@ function AddGpWiseKpi({ update }) {
     };
 
     run();
-  }, [theme_id, state_id, dist_id, block_id, gp_id]);
+  }, [theme_id, state_id]);
 
   const calculateScore = (percentage, thresholds, scores) => {
     for (let i = 0; i < thresholds.length; i++) {
@@ -74,7 +76,7 @@ function AddGpWiseKpi({ update }) {
 
   const handleChange = (e, index) => {
     const { name, value } = e.target;
-    setFormData((prevData) => {
+    setFormData(prevData => {
       const updatedData = [...prevData];
       updatedData[index] = {
         ...updatedData[index],
@@ -86,17 +88,19 @@ function AddGpWiseKpi({ update }) {
         const inputData = updatedData[index].input_data || 0;
         const percentage = (inputData / maxRange) * 100;
         const kpiId = kpis[index].id;
-        const inputType = kpis[index].input_type
+        const inputType = kpis[index].input_type;
 
         const { thresholds, scores } = kpiScoringRules[kpiId];
 
         if (inputType === "Percentage") {
           const percentage = (inputData / maxRange) * 100;
-          updatedData[index].score =  calculateScore(percentage, thresholds, scores);
+          updatedData[index].score = calculateScore(percentage, thresholds, scores);
         } else if (inputType === "Number") {
-          updatedData[index].score =  calculateScore(inputData, thresholds, scores);
+          updatedData[index].score = calculateScore(inputData, thresholds, scores);
         } else if (inputType === "Boolean") {
-          updatedData[index].score =  inputData ? booleanKpiScoringRules[kpiId].yesScore : booleanKpiScoringRules[kpiId].noScore;
+          updatedData[index].score = inputData
+            ? booleanKpiScoringRules[kpiId].yesScore
+            : booleanKpiScoringRules[kpiId].noScore;
         }
       }
 
@@ -104,7 +108,7 @@ function AddGpWiseKpi({ update }) {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
 
     let updatedFormData = kpis.map((item, index) => {
@@ -116,9 +120,6 @@ function AddGpWiseKpi({ update }) {
 
     const dataToSend = {
       state_id,
-      dist_id,
-      block_id,
-      gp_id,
       financial_year: financialYear,
       frequency,
       month,
@@ -130,26 +131,55 @@ function AddGpWiseKpi({ update }) {
     };
 
     try {
-      const response = await API.post("/api/v1/soepr/soepr-kpi-data/submit", dataToSend);
+      const response = await API.post("/api/v1/soepr-kpi-data/submit", dataToSend);
       console.log("Success:", response.data);
       tst.success("Form submitted successfully");
-      navigate("/admin/young-professionals");
+      navigate("/admin/soepr/young-professionals");
     } catch (error) {
       tst.error(error);
       console.error("Error submitting data:", error);
     }
   };
 
+  const getState = async () => {
+    try {
+      const { data } = await API.get(`/api/v1/state/get-state/${state_id}`);
+      setState(data?.state);
+      console.log(state);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getTheme = async () => {
+    try {
+      const { data } = await API.get(`/api/v1/soepr-theme/get-theme/${theme_id}`);
+      setTheme(data?.theme);
+      console.log(theme);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (state_id && theme_id) {
+      getState();
+      getTheme();
+    }
+  }, [state_id, theme_id]);
 
   return (
     <div className="w-full">
       <div>
         <div className="mb-2 text-center">
           <h2 className="text-xl font-semibold mb-10 bg-slate-100 py-3">
-            Young Fellow - LSG _ Theme wise KPI Entry Form
+          SoEPR -  Theme wise KPI Entry Form
           </h2>
         </div>
-        <YfLayout />
+        <div className="flex justify-around py-6 items-center ">
+          {/* <h1 className="text-2xl font-bold">Gram Panchayat wise KPI</h1> */}
+          <h2>Theme : {theme?.theme_name}</h2>
+        </div>
         <form onSubmit={handleSubmit} className="overflow-x-auto mt-10">
           <div className="mb-4 grid grid-cols-1 md:grid-cols-3 gap-10">
             <div className="mb-4">
@@ -158,7 +188,7 @@ function AddGpWiseKpi({ update }) {
                 id="financialYear"
                 name="financialYear"
                 value={financialYear}
-                onChange={(e) => setFinancialYear(e.target.value)}
+                onChange={e => setFinancialYear(e.target.value)}
                 className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
               >
                 <option value="">Select Financial Year</option>
@@ -180,7 +210,7 @@ function AddGpWiseKpi({ update }) {
                 id="frequency"
                 name="frequency"
                 value={frequency}
-                onChange={(e) => setFrequency(e.target.value)}
+                onChange={e => setFrequency(e.target.value)}
                 className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
               >
                 <option value="">Select Frequency</option>
@@ -196,7 +226,7 @@ function AddGpWiseKpi({ update }) {
                   id="month"
                   name="month"
                   value={month}
-                  onChange={(e) => setMonth(e.target.value)}
+                  onChange={e => setMonth(e.target.value)}
                   className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
                 >
                   <option value="">Select Month</option>
@@ -223,7 +253,7 @@ function AddGpWiseKpi({ update }) {
                   id="quarter"
                   name="quarter"
                   value={quarter}
-                  onChange={(e) => setQuarter(e.target.value)}
+                  onChange={e => setQuarter(e.target.value)}
                   className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
                 >
                   <option value="">Select Quarter</option>
@@ -243,13 +273,8 @@ function AddGpWiseKpi({ update }) {
                   <TableHead className="w-[200px]">KPI Name</TableHead>
                   <TableHead className="w-[200px]">Data point</TableHead>
                   <TableHead className="w-20">Input type</TableHead>
-                  <TableHead className="w-40">
-                    Max Number (Total Number)
-                  </TableHead>
-                  <TableHead className="w-40">
-                    Cumulative Achieved Number
-                  </TableHead>
-                  <TableHead className="w-28">Score</TableHead>
+                  <TableHead className="w-40">Max Number (Total Number)</TableHead>
+                  <TableHead className="w-40">Cumulative Achieved Number</TableHead>
                   <TableHead className="w-40">Remarks</TableHead>
                 </TableRow>
               </TableHeader>
@@ -260,19 +285,15 @@ function AddGpWiseKpi({ update }) {
                     <TableRow key={data.id}>
                       <TableCell>{data.id}</TableCell>
                       <TableCell>{data.name}</TableCell>
-                      <TableCell>
-                        {data.kpi_datapoint || "No question"}
-                      </TableCell>
+                      <TableCell>{data.kpi_datapoint || "No question"}</TableCell>
                       <TableCell>{data?.input_type}</TableCell>
                       <TableCell>
                         <Input
                           disabled={isDisabled}
                           type="number"
                           name="max_range"
-                          value={
-                            isDisabled ? "0" : formData[index]?.max_range || ""
-                          }
-                          onChange={(e) => handleChange(e, index)}
+                          value={isDisabled ? "0" : formData[index]?.max_range || ""}
+                          onChange={e => handleChange(e, index)}
                         />
                       </TableCell>
                       <TableCell>
@@ -283,7 +304,7 @@ function AddGpWiseKpi({ update }) {
                             type="number"
                             name="input_data"
                             value={formData[index]?.input_data || ""}
-                            onChange={(e) => handleChange(e, index)}
+                            onChange={e => handleChange(e, index)}
                           />
                         ) : (
                           <Input
@@ -291,25 +312,17 @@ function AddGpWiseKpi({ update }) {
                             type="number"
                             name="input_data"
                             value={formData[index]?.input_data || ""}
-                            onChange={(e) => handleChange(e, index)}
+                            onChange={e => handleChange(e, index)}
                           />
                         )}
                       </TableCell>
-                      <TableCell>
-                        <Input
-                          disabled
-                          type="number"
-                          name="score"
-                          value={formData[index]?.score || "0"}
-                          onChange={(e) => handleChange(e, index)}
-                        />
-                      </TableCell>
+
                       <TableCell>
                         <Textarea
                           type="text"
                           name="remarks"
                           value={formData[index]?.remarks || ""}
-                          onChange={(e) => handleChange(e, index)}
+                          onChange={e => handleChange(e, index)}
                         />
                       </TableCell>
                     </TableRow>
@@ -326,7 +339,7 @@ function AddGpWiseKpi({ update }) {
               type="date"
               name="date"
               value={date || ""}
-              onChange={(e) => setDate(e.target.value)}
+              onChange={e => setDate(e.target.value)}
               id="date"
               placeholder="Enter date"
               className="px-10"
@@ -339,4 +352,4 @@ function AddGpWiseKpi({ update }) {
   );
 }
 
-export default AddGpWiseKpi;
+export default SoeprAddGpWiseKpi;
