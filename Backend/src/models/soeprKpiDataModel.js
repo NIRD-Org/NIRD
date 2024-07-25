@@ -61,7 +61,6 @@ const soeprKpiDataSchema = new mongoose.Schema(
         },
         remarks: {
           type: String,
-          required: true,
         },
         max_range: {
           type: Number,
