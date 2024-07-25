@@ -108,3 +108,29 @@ export const changePassword = CatchAsyncError(async (req, res, next) => {
     return next(new Errorhandler("Failed to change password", 500));
   }
 });
+
+// Register multiple users
+
+export const registerMultipleUsers = CatchAsyncError(async (req, res, next) => {
+  try {
+    const users = req.body;
+    for (let user of users) {
+      let existingUser = await User.findOne({ username: user.username });
+      if (existingUser) {
+        return next(new Errorhandler("User already exists", 400));
+      }
+      const id = await getNewId();
+      user.id = id.toString();
+      user.createdBy = req?.user?.id ?? "1";
+      const newUser = new User(user);
+      const salt = await bcrypt.genSalt(10);
+      if (!user.password) user.password = "123456";
+      newUser.password = await bcrypt.hash(user.password, salt);
+      await newUser.save();
+    }
+    res.status(201).json({ message: "Users registered successfully" });
+  } catch (err) {
+    console.log("Error: " + err);
+    return next(new Errorhandler("Failed to register multiple users", 500));
+  }
+});

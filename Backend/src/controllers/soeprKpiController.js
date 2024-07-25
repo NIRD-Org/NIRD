@@ -167,6 +167,7 @@ export const insertManyKPI = CatchAsyncError(async (req, res, next) => {
       message: "KPI created successfully",
     });
   } catch (error) {
+    console.log(error);
     return next(new Errorhandler("Failed to create KPI", 500));
   }
 });

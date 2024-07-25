@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   username: { type: String, required: true, unique: true },
   password: { type: String, default: "123456" },
-  role: { type: Number, required: true, enum: [1, 2, 3] },
+  role: { type: Number, required: true, enum: [1, 2, 3, 4] },
   department: { type: String },
   designation: { type: String },
   mobile: { type: String },
@@ -28,7 +28,9 @@ const userSchema = new mongoose.Schema({
   count: { type: Number },
   outer_checkbox: { type: Number },
   status: { type: String, default: 1 },
-
+  dorSIRD: { type: String, default: "" },
+  dojNIRDPR: { type: String, default: "" },
+  gender: { type: String },
   created_at: { type: Date, default: Date.now },
   modified_at: { type: Date, default: Date.now },
 });
