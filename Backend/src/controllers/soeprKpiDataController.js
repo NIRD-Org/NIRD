@@ -70,50 +70,15 @@ export const getsoeprKpi = CatchAsyncError(async (req, res, next) => {
     const filter = {};
     if (state) filter.state_id = state;
     if (fy) filter.financial_year = fy;
-    filter.user_id = req.user.id;
+    // filter.user_id = req.user.id;
     const pipeline = [
       { $match: filter },
-      {
-        $group: {
-          _id: "$gp_id",
-          doc: { $first: "$$ROOT" },
-        },
-      },
-      {
-        $replaceRoot: { newRoot: "$doc" },
-      },
       {
         $lookup: {
           from: "states",
           localField: "state_id",
           foreignField: "id",
           as: "state",
-        },
-      },
-
-      {
-        $project: {
-          id: 1,
-          state: { $arrayElemAt: ["$state", 0] },
-
-          date: 1,
-          theme_id: 1,
-          kpi_id: 1,
-          financial_year: 1,
-          quarter: 1,
-          month: 1,
-          frequency: 1,
-          question_id: 1,
-          max_range: 1,
-          input_data: 1,
-          score: 1,
-          remarks: 1,
-          status: 1,
-          submitteed_id: 1,
-          created_by: 1,
-          created_at: 1,
-          modified_by: 1,
-          modified_at: 1,
         },
       },
     ];

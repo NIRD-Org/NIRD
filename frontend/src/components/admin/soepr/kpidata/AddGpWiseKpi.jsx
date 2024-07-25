@@ -129,8 +129,6 @@ function SoeprAddGpWiseKpi({ update }) {
       theme_id,
       formData: updatedFormData,
     };
-    console.log(dataToSend);
-    // return;
 
     try {
       const response = await API.post("/api/v1/soepr-kpi-data/submit", dataToSend);
