@@ -15,7 +15,7 @@ function SrConsultantProfile() {
     mobile: '',
     qualification: '',
     dateOfJoining: '',
-    allottedState: '',
+    deployedState: '',
     areaOfExpertise: '',
     professionalPhotograph: null,
   });
@@ -35,7 +35,7 @@ function SrConsultantProfile() {
           mobile: userData.mobile || '',
           qualification: userData.qualification || '',
           dateOfJoining: userData.dateOfJoining || '',
-          allottedState: userData.state || '',
+          deployedState: userData.state || '',
           areaOfExpertise: userData.areaOfExpertise || '',
         }));
       } catch (error) {
@@ -72,7 +72,7 @@ function SrConsultantProfile() {
     formData.append('mobile', profileData.mobile);
     formData.append('qualification', profileData.qualification);
     formData.append('dateOfJoining', profileData.dateOfJoining);
-    formData.append('allottedState', profileData.allottedState);
+    formData.append('deployedState', profileData.deployedState);
     formData.append('areaOfExpertise', profileData.areaOfExpertise);
     if (profileData.professionalPhotograph) {
       formData.append('professionalPhotograph', profileData.professionalPhotograph);
@@ -175,11 +175,11 @@ function SrConsultantProfile() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <Label htmlFor="allottedState">Allotted State</Label>
+              <Label htmlFor="deployedState">Deployed State</Label>
               <Input
-                id="allottedState"
-                name="allottedState"
-                value={profileData.allottedState}
+                id="deployedState"
+                name="deployedState"
+                value={profileData.deployedState}
                 onChange={handleChange}
                 className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
                 required
