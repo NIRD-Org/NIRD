@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import API from "@/utils/API";
 import { useAuthContext } from "@/context/AuthContext";
 
-function ViewSrConsultantProfile() {
+function ViewProfile() {
   const { user } = useAuthContext();
   const [profileData, setProfileData] = useState({
     fullName: "",
@@ -49,7 +49,9 @@ function ViewSrConsultantProfile() {
   return (
     <div className="w-full flex justify-center items-center min-h-screen bg-gray-100">
       <div className="w-full max-w-4xl p-6 bg-white rounded-md shadow-md">
-        <h2 className="text-2xl font-semibold mb-6 text-center">VIEW PROFILE</h2>
+        <h2 className="text-2xl font-semibold mb-6 text-center">
+          VIEW PROFILE
+        </h2>
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
@@ -98,14 +100,16 @@ function ViewSrConsultantProfile() {
             </div>
             <div>
               <p>
-                <strong>Area of Expertise:</strong> {profileData.areaOfExpertise}
+                <strong>Area of Expertise:</strong>{" "}
+                {profileData.areaOfExpertise}
               </p>
             </div>
           </div>
 
           <div>
             <p>
-              <strong>Designation:</strong> {profileData.designation} {/* Display designation */}
+              <strong>Designation:</strong> {profileData.designation}{" "}
+              {/* Display designation */}
             </p>
           </div>
 

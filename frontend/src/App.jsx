@@ -95,6 +95,7 @@ import SrSoeprGpWiseKpiList from "./components/admin/soepr/kpidata/List";
 import ViewAttendance from "./components/admin/attendance/ViewAttendance";
 import KpiView from "./Pages/kpiView";
 import SrConsultantProfile from "./components/admin/soepr/Profile/SrConsultantProfileForm";
+import ViewProfile from "./components/admin/soepr/Profile/ViewProfile";
 
 function App() {
   const { login } = useAuthContext();
