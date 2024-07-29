@@ -126,7 +126,7 @@ function ViewSrConsultantProfile() {
 
           <div className="flex justify-center mt-6">
             <Link
-              to="/admin/soepr/profile/srconsultantprofile.jsx"
+              to="/admin/soepr/profile/SrConsultantProfile.jsx"
               className="px-4 py-2 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700"
             >
               Edit Profile
