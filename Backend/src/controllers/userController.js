@@ -31,12 +31,7 @@ export const getUserById = CatchAsyncError(async (req, res, next) => {
 
     const state = await StateModel.findOne({ id: user.state_id });
 
-    if (state) {
-      user.state_name= state.name;
-    }
-    console.log(user.state_name)
-
-    res.status(200).json({ data: user });
+    res.status(200).json({ data: { user, state_name: state.name } });
   } catch (err) {
     console.error(err);
     return next(new Errorhandler("Failed to get user data", 500));
@@ -45,7 +40,11 @@ export const getUserById = CatchAsyncError(async (req, res, next) => {
 
 export const deleteUser = CatchAsyncError(async (req, res, next) => {
   try {
-    const user = await User.findOneAndUpdate({ id: req.params.id }, { status: 0 }, { new: true });
+    const user = await User.findOneAndUpdate(
+      { id: req.params.id },
+      { status: 0 },
+      { new: true }
+    );
     if (!user) {
       return next(new Errorhandler("User not found", 404));
     }

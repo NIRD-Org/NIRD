@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,14 +9,14 @@ import { useAuthContext } from "@/context/AuthContext";
 function SrConsultantProfile() {
   const { user } = useAuthContext();
   const [profileData, setProfileData] = useState({
-    fullName: '',
-    gender: '',
-    email: '',
-    mobile: '',
-    qualification: '',
-    dateOfJoining: '',
-    deployedState: '',
-    areaOfExpertise: '',
+    fullName: "",
+    gender: "",
+    email: "",
+    mobile: "",
+    qualification: "",
+    dateOfJoining: "",
+    deployedState: "",
+    areaOfExpertise: "",
     professionalPhotograph: null,
   });
 
@@ -25,18 +25,19 @@ function SrConsultantProfile() {
     const fetchProfileData = async () => {
       try {
         const response = await API.get(`/api/v1/users/${user.id}`);
-        const userData = response.data.data;
-        console.log(userData)
-        setProfileData(prevData => ({
+        const userData = response.data.data.user;
+        userData.state = response.data.data.state_name;
+        console.log(userData);
+        setProfileData((prevData) => ({
           ...prevData,
-          fullName: userData.fullName || '',
-          gender: userData.gender || '',
-          email: userData.email || '',
-          mobile: userData.mobile || '',
-          qualification: userData.qualification || '',
-          dateOfJoining: userData.dateOfJoining || '',
-          deployedState: userData.state || '',
-          areaOfExpertise: userData.areaOfExpertise || '',
+          fullName: userData.name || "",
+          gender: userData.gender || "",
+          email: userData.email || "",
+          mobile: userData.mobile || "",
+          qualification: userData.qualification || "",
+          dateOfJoining: userData.dateOfJoining || "",
+          deployedState: userData.state || "",
+          areaOfExpertise: userData.areaOfExpertise || "",
         }));
       } catch (error) {
         console.error("Error fetching profile data:", error);
@@ -46,40 +47,43 @@ function SrConsultantProfile() {
     fetchProfileData();
   }, [user.id]);
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setProfileData(prevData => ({
+    setProfileData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
 
-  const handleFileChange = e => {
-    setProfileData(prevData => ({
+  const handleFileChange = (e) => {
+    setProfileData((prevData) => ({
       ...prevData,
       professionalPhotograph: e.target.files[0],
     }));
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Prepare data for submission
     const formData = new FormData();
-    formData.append('fullName', profileData.fullName);
-    formData.append('gender', profileData.gender);
-    formData.append('email', profileData.email);
-    formData.append('mobile', profileData.mobile);
-    formData.append('qualification', profileData.qualification);
-    formData.append('dateOfJoining', profileData.dateOfJoining);
-    formData.append('deployedState', profileData.deployedState);
-    formData.append('areaOfExpertise', profileData.areaOfExpertise);
+    formData.append("fullName", profileData.fullName);
+    formData.append("gender", profileData.gender);
+    formData.append("email", profileData.email);
+    formData.append("mobile", profileData.mobile);
+    formData.append("qualification", profileData.qualification);
+    formData.append("dateOfJoining", profileData.dateOfJoining);
+    formData.append("deployedState", profileData.deployedState);
+    formData.append("areaOfExpertise", profileData.areaOfExpertise);
     if (profileData.professionalPhotograph) {
-      formData.append('professionalPhotograph', profileData.professionalPhotograph);
+      formData.append(
+        "professionalPhotograph",
+        profileData.professionalPhotograph
+      );
     }
 
     try {
-      const response = await API.post('/api/v1/users/update-profile', formData);
+      const response = await API.post("/api/v1/users/update-profile", formData);
       console.log("Profile updated successfully:", response.data);
     } catch (error) {
       console.error("Error updating profile:", error);
@@ -89,7 +93,9 @@ function SrConsultantProfile() {
   return (
     <div className="w-full flex justify-center items-center min-h-screen bg-gray-100">
       <div className="w-full max-w-4xl p-6 bg-white rounded-md shadow-md">
-        <h2 className="text-2xl font-semibold mb-6 text-center">USER PROFILE</h2>
+        <h2 className="text-2xl font-semibold mb-6 text-center">
+          USER PROFILE
+        </h2>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
@@ -199,7 +205,9 @@ function SrConsultantProfile() {
           </div>
 
           <div>
-            <Label htmlFor="professionalPhotograph">Upload Latest Professional Photograph</Label>
+            <Label htmlFor="professionalPhotograph">
+              Upload Latest Professional Photograph
+            </Label>
             <Input
               id="professionalPhotograph"
               name="professionalPhotograph"

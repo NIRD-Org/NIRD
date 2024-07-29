@@ -19,7 +19,6 @@ const userSchema = new mongoose.Schema({
   modifiedBy: { type: String },
   location_assigned: { type: Boolean, default: false },
   state_id: { type: String },
-
   hr_profile_id: { type: Number },
   esop_certified: { type: Boolean },
   esop_no: { type: String },
@@ -32,6 +31,16 @@ const userSchema = new mongoose.Schema({
   dorSIRD: { type: String, default: "" },
   dojNIRDPR: { type: String, default: "" },
   gender: { type: String },
+
+  qualifications: {
+    type: String,
+  },
+  areaOfExpertise: {
+    type: String,
+  },
+  photo: {
+    type: String,
+  },
   created_at: { type: Date, default: Date.now },
   modified_at: { type: Date, default: Date.now },
 });
