@@ -28,6 +28,19 @@ export const getSidebarItems = (user) => {
       {
         type: "module",
         icon: ArrowBigRight,
+        title: "Profile",
+        submodules: [
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "Profile",
+            link: "/admin/soepr/profile",
+          },
+                  ],
+      },
+      {
+        type: "module",
+        icon: ArrowBigRight,
         title: "Attendance",
         submodules: [
           {

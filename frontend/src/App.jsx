@@ -94,6 +94,7 @@ import SoeprPmUploadForm from "./components/admin/soepr/attendance/PmUpload";
 import SrSoeprGpWiseKpiList from "./components/admin/soepr/kpidata/List";
 import ViewAttendance from "./components/admin/attendance/ViewAttendance";
 import KpiView from "./Pages/kpiView";
+import SrConsultantProfile from "./components/admin/soepr/Profile/SrConsultantProfileForm";
 
 function App() {
   const { login } = useAuthContext();
@@ -136,6 +137,7 @@ function App() {
             <Route path="change-password" element={<ChangePassword />} />
             <Route path="users" element={<UserPage />} />
             <Route path="users/view/:id" element={<UserView />} />
+            <Route path="soepr/profile" element={<SrConsultantProfile />} />
             {/* <Route path="data-point/view/:kpiId" element={<KpiViewPage />} /> */}
             <Route path="kpi-approvals-list" element={<KpiApprovalsList />} />
             <Route

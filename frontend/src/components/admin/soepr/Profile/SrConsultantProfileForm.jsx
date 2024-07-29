@@ -1,134 +1,222 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { tst } from "@/lib/utils";
-import AdminHeader from "../../AdminHeader";
-import FormField from "@/components/ui/formfield";
+import { Textarea } from "@/components/ui/textarea";
+import API from "@/utils/API";
+import { useAuthContext } from "@/context/AuthContext";
 
-function SrConsultantProfileForm() {
-  const [pending, setPending] = useState(false);
-  const [formData, setFormData] = useState({
-    fullName: "",
-    gender: "",
-    email: "",
-    mobile: "",
-    qualification: "",
-    dateOfJoining: "",
-    deploymentState: "",
-    areaOfExpertise: "",
-    photograph: null,
+function SrConsultantProfile() {
+  const { user } = useAuthContext();
+  const [profileData, setProfileData] = useState({
+    fullName: '',
+    gender: '',
+    email: '',
+    mobile: '',
+    qualification: '',
+    dateOfJoining: '',
+    allottedState: '',
+    areaOfExpertise: '',
+    professionalPhotograph: null,
   });
 
-  const handleInputChange = e => {
+  useEffect(() => {
+    // Fetch user profile data
+    const fetchProfileData = async () => {
+      try {
+        const response = await API.get(`/api/v1/users/${user.id}`);
+        const userData = response.data.data;
+        console.log(userData)
+        setProfileData(prevData => ({
+          ...prevData,
+          fullName: userData.fullName || '',
+          gender: userData.gender || '',
+          email: userData.email || '',
+          mobile: userData.mobile || '',
+          qualification: userData.qualification || '',
+          dateOfJoining: userData.dateOfJoining || '',
+          allottedState: userData.state || '',
+          areaOfExpertise: userData.areaOfExpertise || '',
+        }));
+      } catch (error) {
+        console.error("Error fetching profile data:", error);
+      }
+    };
+
+    fetchProfileData();
+  }, [user.id]);
+
+  const handleChange = e => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setProfileData(prevData => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   const handleFileChange = e => {
-    const { name, files } = e.target;
-    setFormData(prev => ({ ...prev, [name]: files[0] }));
+    setProfileData(prevData => ({
+      ...prevData,
+      professionalPhotograph: e.target.files[0],
+    }));
   };
 
   const handleSubmit = async e => {
     e.preventDefault();
+
+    // Prepare data for submission
+    const formData = new FormData();
+    formData.append('fullName', profileData.fullName);
+    formData.append('gender', profileData.gender);
+    formData.append('email', profileData.email);
+    formData.append('mobile', profileData.mobile);
+    formData.append('qualification', profileData.qualification);
+    formData.append('dateOfJoining', profileData.dateOfJoining);
+    formData.append('allottedState', profileData.allottedState);
+    formData.append('areaOfExpertise', profileData.areaOfExpertise);
+    if (profileData.professionalPhotograph) {
+      formData.append('professionalPhotograph', profileData.professionalPhotograph);
+    }
+
     try {
-      setPending(true);
-      // Implement the API call here
-      setTimeout(() => {
-        tst.success("Profile upload successful");
-        setPending(false);
-      }, 3000);
+      const response = await API.post('/api/v1/users/update-profile', formData);
+      console.log("Profile updated successfully:", response.data);
     } catch (error) {
-      console.error(error);
-      tst.error(error);
-    } finally {
-      // setPending(false);
+      console.error("Error updating profile:", error);
     }
   };
 
-  const fields = [
-    {
-      label: "Full Name",
-      name: "fullName",
-      type: "text",
-      required: true,
-    },
-    {
-      label: "Gender",
-      name: "gender",
-      type: "select",
-      options: ["Male", "Female", "Other"],
-      required: true,
-    },
-    {
-      label: "Email ID",
-      name: "email",
-      type: "email",
-      required: true,
-    },
-    {
-      label: "Mobile No.",
-      name: "mobile",
-      type: "text",
-      required: true,
-    },
-    {
-      label: "Qualification",
-      name: "qualification",
-      type: "text",
-      required: true,
-    },
-    {
-      label: "Date of Joining",
-      name: "dateOfJoining",
-      type: "date",
-      required: true,
-    },
-    {
-      label: "Deployment State",
-      name: "deploymentState",
-      type: "select",
-      options: ["State 1", "State 2", "State 3", "State 4"],
-      required: true,
-    },
-    {
-      label: "Area of Expertise",
-      name: "areaOfExpertise",
-      type: "textarea",
-      required: true,
-      maxOptions: 4,
-    },
-  ];
-
   return (
-    <div className="container mx-auto p-4">
-      <AdminHeader>Sr. Consultant Profile Form</AdminHeader>
-      <form onSubmit={handleSubmit}>
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-10">
-          {fields.map(field => (
-            <FormField
-              key={field.name}
-              {...field}
-              disabled={pending}
-              value={formData[field.name] || ""}
-              onChange={handleInputChange}
-              onFileChange={handleFileChange}
-            />
-          ))}
-          <div>
-            <Label className="mb-2 inline-block">Upload Latest Professional Photograph</Label>
-            <Input type="file" name="photograph" onChange={handleFileChange} required />
+    <div className="w-full flex justify-center items-center min-h-screen bg-gray-100">
+      <div className="w-full max-w-4xl p-6 bg-white rounded-md shadow-md">
+        <h2 className="text-2xl font-semibold mb-6 text-center">USER PROFILE</h2>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <Label htmlFor="fullName">Full Name</Label>
+              <Input
+                id="fullName"
+                name="fullName"
+                value={profileData.fullName}
+                onChange={handleChange}
+                className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="gender">Gender</Label>
+              <select
+                id="gender"
+                name="gender"
+                value={profileData.gender}
+                onChange={handleChange}
+                className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
+                required
+              >
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
           </div>
-        </div>
-        <div className="grid grid-cols-3 gap-10 mt-10">
-          <Button type="submit" pending={pending}>
-            Submit
-          </Button>
-        </div>
-      </form>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <Label htmlFor="email">Email ID</Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                value={profileData.email}
+                onChange={handleChange}
+                className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="mobile">Mobile No.</Label>
+              <Input
+                id="mobile"
+                name="mobile"
+                value={profileData.mobile}
+                onChange={handleChange}
+                className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <Label htmlFor="qualification">Qualification</Label>
+              <Input
+                id="qualification"
+                name="qualification"
+                value={profileData.qualification}
+                onChange={handleChange}
+                className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="dateOfJoining">Date of Joining</Label>
+              <Input
+                id="dateOfJoining"
+                name="dateOfJoining"
+                type="date"
+                value={profileData.dateOfJoining}
+                onChange={handleChange}
+                className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <Label htmlFor="allottedState">Allotted State</Label>
+              <Input
+                id="allottedState"
+                name="allottedState"
+                value={profileData.allottedState}
+                onChange={handleChange}
+                className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="areaOfExpertise">Area of Expertise</Label>
+              <Textarea
+                id="areaOfExpertise"
+                name="areaOfExpertise"
+                value={profileData.areaOfExpertise}
+                onChange={handleChange}
+                className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
+                required
+              />
+            </div>
+          </div>
+
+          <div>
+            <Label htmlFor="professionalPhotograph">Upload Latest Professional Photograph</Label>
+            <Input
+              id="professionalPhotograph"
+              name="professionalPhotograph"
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
+            />
+          </div>
+
+          <div className="flex justify-center">
+            <Button type="submit">Submit</Button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
 
-export default SrConsultantProfileForm;
+export default SrConsultantProfile;
