@@ -56,10 +56,15 @@ function SrConsultantProfile() {
   };
 
   const handleFileChange = (e) => {
-    setProfileData((prevData) => ({
-      ...prevData,
-      professionalPhotograph: e.target.files[0],
-    }));
+    const file = e.target.files[0];
+    if (file && file.size <= 1048576 && file.type === "image/jpeg") {
+      setProfileData((prevData) => ({
+        ...prevData,
+        professionalPhotograph: file,
+      }));
+    } else {
+      alert("Please upload a JPEG image not exceeding 1 MB.");
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -99,7 +104,7 @@ function SrConsultantProfile() {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <Label htmlFor="fullName">Full Name</Label>
+              <Label htmlFor="fullName">Full Name*</Label>
               <Input
                 id="fullName"
                 name="fullName"
@@ -110,7 +115,7 @@ function SrConsultantProfile() {
               />
             </div>
             <div>
-              <Label htmlFor="gender">Gender</Label>
+              <Label htmlFor="gender">Gender*</Label>
               <select
                 id="gender"
                 name="gender"
@@ -129,7 +134,7 @@ function SrConsultantProfile() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <Label htmlFor="email">Email ID</Label>
+              <Label htmlFor="email">Email ID*</Label>
               <Input
                 id="email"
                 name="email"
@@ -141,7 +146,7 @@ function SrConsultantProfile() {
               />
             </div>
             <div>
-              <Label htmlFor="mobile">Mobile No.</Label>
+              <Label htmlFor="mobile">Mobile No.*</Label>
               <Input
                 id="mobile"
                 name="mobile"
@@ -155,7 +160,7 @@ function SrConsultantProfile() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <Label htmlFor="qualification">Qualification</Label>
+              <Label htmlFor="qualification">Qualification*</Label>
               <Input
                 id="qualification"
                 name="qualification"
@@ -166,7 +171,7 @@ function SrConsultantProfile() {
               />
             </div>
             <div>
-              <Label htmlFor="dateOfJoining">Date of Joining</Label>
+              <Label htmlFor="dateOfJoining">Date of Joining*</Label>
               <Input
                 id="dateOfJoining"
                 name="dateOfJoining"
@@ -181,7 +186,7 @@ function SrConsultantProfile() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <Label htmlFor="deployedState">Deployed State</Label>
+              <Label htmlFor="deployedState">Deployed State*</Label>
               <Input
                 id="deployedState"
                 name="deployedState"
@@ -192,7 +197,7 @@ function SrConsultantProfile() {
               />
             </div>
             <div>
-              <Label htmlFor="areaOfExpertise">Area of Expertise</Label>
+              <Label htmlFor="areaOfExpertise">Area of Expertise*</Label>
               <Textarea
                 id="areaOfExpertise"
                 name="areaOfExpertise"
@@ -206,20 +211,26 @@ function SrConsultantProfile() {
 
           <div>
             <Label htmlFor="professionalPhotograph">
-              Upload Latest Professional Photograph
+              Upload Latest Professional Photograph (JPEG, max 1 MB)
             </Label>
             <Input
               id="professionalPhotograph"
               name="professionalPhotograph"
               type="file"
-              accept="image/*"
+              accept="image/jpeg"
               onChange={handleFileChange}
               className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
+              required
             />
+            <small className="text-red-500">
+              Please upload a JPEG image not exceeding 1 MB.
+            </small>
           </div>
 
           <div className="flex justify-center">
-            <Button type="submit">Submit</Button>
+            <Button type="submit" className="px-4 py-2 text-sm">
+              Submit
+            </Button>
           </div>
         </form>
       </div>
