@@ -204,12 +204,13 @@ function SoeprAddGpWiseKpi({ update }) {
                 className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
               >
                 <option value="">Select Frequency</option>
-                <option value="Monthly">Monthly</option>
+                <option value="Fortnightly">Fortnightly</option>
+               
                 <option value="Quarterly">Quarterly</option>
               </select>
             </div>
 
-            {frequency === "Monthly" && (
+            {frequency === "Fortnightly" &&  (
               <div className="mb-4">
                 <Label htmlFor="month">Month</Label>
                 <select
