@@ -40,7 +40,7 @@ export const getSidebarItems = (user) => {
             type: "sub-module",
             icon: ArrowBigRight,
             title: "Edit Profile",
-            link: "/admin/soepr/profile",
+            link: "/admin/soepr/editprofile",
           },
                   ],
       },

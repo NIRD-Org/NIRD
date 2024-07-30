@@ -130,7 +130,7 @@ function ViewProfile() {
 
           <div className="flex justify-center mt-6">
             <Link
-              to=""
+              to="/admin/soepr/editprofile"
               className="px-4 py-2 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700"
             >
               Edit Profile

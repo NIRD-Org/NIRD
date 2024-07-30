@@ -62,7 +62,7 @@ function SoeprYoungFellowForm({ type, onSubmit, kpiApproval }) {
           <TableHeader>
             <TableRow>
               <TableHead>ID</TableHead>
-              <TableHead>Theme Name</TableHead>
+              <TableHead>Category</TableHead>
               <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>
