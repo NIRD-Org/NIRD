@@ -34,15 +34,15 @@ export const getSidebarItems = (user) => {
             type: "sub-module",
             icon: ArrowBigRight,
             title: "View Profile",
-            link: "/admin/soepr/viewprofile",
+            link: "/admin/soepr/profile",
           },
           {
             type: "sub-module",
             icon: ArrowBigRight,
             title: "Edit Profile",
-            link: "/admin/soepr/profile",
+            link: "/admin/soepr/profile-form",
           },
-                  ],
+        ],
       },
       {
         type: "module",

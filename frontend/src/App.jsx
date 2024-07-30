@@ -138,8 +138,11 @@ function App() {
             <Route path="change-password" element={<ChangePassword />} />
             <Route path="users" element={<UserPage />} />
             <Route path="users/view/:id" element={<UserView />} />
-            <Route path="soepr/profile" element={<SrConsultantProfile />} />
-            <Route path="soepr/viewprofile" element={<ViewProfile />} />
+            <Route
+              path="soepr/profile-form"
+              element={<SrConsultantProfile />}
+            />
+            <Route path="soepr/profile" element={<ViewProfile />} />
             {/* <Route path="data-point/view/:kpiId" element={<KpiViewPage />} /> */}
             <Route path="kpi-approvals-list" element={<KpiApprovalsList />} />
             <Route

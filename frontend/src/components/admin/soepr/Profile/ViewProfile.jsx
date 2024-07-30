@@ -5,19 +5,8 @@ import { useAuthContext } from "@/context/AuthContext";
 
 function ViewProfile() {
   const { user } = useAuthContext();
-  const [profileData, setProfileData] = useState({
-    fullName: "",
-    gender: "",
-    email: "",
-    mobile: "",
-    qualification: "",
-    dateOfJoining: "",
-    deployedState: "",
-    areaOfExpertise: "",
-    professionalPhotograph: "",
-    designation: "", // New field for designation
-  });
-
+  const [profileData, setProfileData] = useState();
+  const [photo, setPhoto] = useState(null);
   useEffect(() => {
     // Fetch user profile data
     const fetchProfileData = async () => {
@@ -26,18 +15,7 @@ function ViewProfile() {
         const userData = response.data.data.user;
         userData.state = response.data.data.state_name;
         console.log(userData);
-        setProfileData({
-          fullName: userData.name || "",
-          gender: userData.gender || "",
-          email: userData.email || "",
-          mobile: userData.mobile || "",
-          qualification: userData.qualification || "",
-          dateOfJoining: userData.dateOfJoining || "",
-          deployedState: userData.state || "",
-          areaOfExpertise: userData.areaOfExpertise || "",
-          professionalPhotograph: userData.professionalPhotograph || "",
-          designation: userData.designation || "", // Set designation
-        });
+        setProfileData(userData);
       } catch (error) {
         console.error("Error fetching profile data:", error);
       }
@@ -56,25 +34,12 @@ function ViewProfile() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <p>
-                <strong>Full Name:</strong> {profileData.fullName}
+                <strong>Full Name:</strong> {profileData?.name}
               </p>
             </div>
             <div>
               <p>
-                <strong>Gender:</strong> {profileData.gender}
-              </p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <p>
-                <strong>Email ID:</strong> {profileData.email}
-              </p>
-            </div>
-            <div>
-              <p>
-                <strong>Mobile No.:</strong> {profileData.mobile}
+                <strong>Gender:</strong> {profileData?.gender}
               </p>
             </div>
           </div>
@@ -82,12 +47,12 @@ function ViewProfile() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <p>
-                <strong>Qualification:</strong> {profileData.qualification}
+                <strong>Email ID:</strong> {profileData?.email}
               </p>
             </div>
             <div>
               <p>
-                <strong>Date of Joining:</strong> {profileData.dateOfJoining}
+                <strong>Mobile No.:</strong> {profileData?.mobile}
               </p>
             </div>
           </div>
@@ -95,20 +60,34 @@ function ViewProfile() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <p>
-                <strong>Deployed State:</strong> {profileData.deployedState}
+                <strong>Qualification:</strong>{" "}
+                {profileData?.qualifications || "No Data Available"}
+              </p>
+            </div>
+            <div>
+              <p>
+                <strong>Date of Joining:</strong> {profileData?.dojNIRDPR}
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <p>
+                <strong>Deployed State:</strong> {profileData?.state}
               </p>
             </div>
             <div>
               <p>
                 <strong>Area of Expertise:</strong>{" "}
-                {profileData.areaOfExpertise}
+                {profileData?.areaOfExpertise || "No Data Available"}
               </p>
             </div>
           </div>
 
           <div>
             <p>
-              <strong>Designation:</strong> {profileData.designation}{" "}
+              <strong>Designation:</strong> {profileData?.designation}{" "}
               {/* Display designation */}
             </p>
           </div>
@@ -117,9 +96,9 @@ function ViewProfile() {
             <p>
               <strong>Professional Photograph:</strong>
             </p>
-            {profileData.professionalPhotograph ? (
+            {profileData?.photo ? (
               <img
-                src={profileData.professionalPhotograph}
+                src={profileData.photo}
                 alt="Professional"
                 className="max-w-xs rounded-md border"
               />
@@ -130,8 +109,8 @@ function ViewProfile() {
 
           <div className="flex justify-center mt-6">
             <Link
-              to=""
-              className="px-4 py-2 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700"
+              to="/admin/soepr/profile-form"
+              className="px-4 py-2 text-sm text-white bg-primary rounded-md hover:bg-sky-950"
             >
               Edit Profile
             </Link>

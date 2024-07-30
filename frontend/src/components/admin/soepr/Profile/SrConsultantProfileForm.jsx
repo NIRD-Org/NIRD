@@ -5,20 +5,26 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import API from "@/utils/API";
 import { useAuthContext } from "@/context/AuthContext";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 function SrConsultantProfile() {
   const { user } = useAuthContext();
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const [profileData, setProfileData] = useState({
-    fullName: "",
+    name: "",
     gender: "",
     email: "",
     mobile: "",
-    qualification: "",
-    dateOfJoining: "",
-    deployedState: "",
+    qualifications: "",
+    dojNIRDPR: "",
+    srlm_state: "",
     areaOfExpertise: "",
-    professionalPhotograph: null,
+    photo: "",
   });
+  const [photoPreview, setPhotoPreview] = useState("");
+  const [photo, setPhoto] = useState(null);
 
   useEffect(() => {
     // Fetch user profile data
@@ -30,15 +36,17 @@ function SrConsultantProfile() {
         console.log(userData);
         setProfileData((prevData) => ({
           ...prevData,
-          fullName: userData.name || "",
+          name: userData.name || "",
           gender: userData.gender || "",
           email: userData.email || "",
           mobile: userData.mobile || "",
-          qualification: userData.qualification || "",
-          dateOfJoining: userData.dateOfJoining || "",
-          deployedState: userData.state || "",
+          qualifications: userData.qualifications || "",
+          dojNIRDPR: userData.dojNIRDPR || "",
+          srlm_state: userData.state || "",
           areaOfExpertise: userData.areaOfExpertise || "",
+          photo: userData.photo || "",
         }));
+        setPhotoPreview(userData.photo ? userData.photo : "");
       } catch (error) {
         console.error("Error fetching profile data:", error);
       }
@@ -57,11 +65,13 @@ function SrConsultantProfile() {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (file && file.size <= 1048576 && file.type === "image/jpeg") {
-      setProfileData((prevData) => ({
-        ...prevData,
-        professionalPhotograph: file,
-      }));
+    if (file && file.size <= 1048576) {
+      setPhoto(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPhotoPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
     } else {
       alert("Please upload a JPEG image not exceeding 1 MB.");
     }
@@ -69,29 +79,31 @@ function SrConsultantProfile() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     // Prepare data for submission
     const formData = new FormData();
-    formData.append("fullName", profileData.fullName);
+    formData.append("name", profileData.name);
     formData.append("gender", profileData.gender);
     formData.append("email", profileData.email);
     formData.append("mobile", profileData.mobile);
-    formData.append("qualification", profileData.qualification);
-    formData.append("dateOfJoining", profileData.dateOfJoining);
-    formData.append("deployedState", profileData.deployedState);
+    formData.append("qualifications", profileData.qualifications);
+    formData.append("dojNIRDPR", profileData.dojNIRDPR);
     formData.append("areaOfExpertise", profileData.areaOfExpertise);
-    if (profileData.professionalPhotograph) {
-      formData.append(
-        "professionalPhotograph",
-        profileData.professionalPhotograph
-      );
+    if (photo) {
+      formData.append("photo", photo);
     }
 
     try {
-      const response = await API.post("/api/v1/users/update-profile", formData);
-      console.log("Profile updated successfully:", response.data);
+      const { data } = await API.put(`/api/v1/users/${user.id}`, formData);
+      console.log("Profile updated successfully:");
+      if (data.status === "success") {
+        toast.success("Profile updated successfully");
+        navigate("/admin/soepr/profile");
+      }
     } catch (error) {
       console.error("Error updating profile:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -104,11 +116,11 @@ function SrConsultantProfile() {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <Label htmlFor="fullName">Full Name*</Label>
+              <Label htmlFor="name">Full Name*</Label>
               <Input
-                id="fullName"
-                name="fullName"
-                value={profileData.fullName}
+                id="name"
+                name="name"
+                value={profileData.name}
                 onChange={handleChange}
                 className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
                 required
@@ -160,23 +172,23 @@ function SrConsultantProfile() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <Label htmlFor="qualification">Qualification*</Label>
+              <Label htmlFor="qualifications">Qualification*</Label>
               <Input
-                id="qualification"
-                name="qualification"
-                value={profileData.qualification}
+                id="qualifications"
+                name="qualifications"
+                value={profileData.qualifications}
                 onChange={handleChange}
                 className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
                 required
               />
             </div>
             <div>
-              <Label htmlFor="dateOfJoining">Date of Joining*</Label>
+              <Label htmlFor="dojNIRDPR">Date of Joining*</Label>
               <Input
-                id="dateOfJoining"
-                name="dateOfJoining"
+                id="dojNIRDPR"
+                name="dojNIRDPR"
                 type="date"
-                value={profileData.dateOfJoining}
+                value={profileData.dojNIRDPR}
                 onChange={handleChange}
                 className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
                 required
@@ -186,11 +198,11 @@ function SrConsultantProfile() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <Label htmlFor="deployedState">Deployed State*</Label>
+              <Label htmlFor="srlm_state">Deployed State*</Label>
               <Input
-                id="deployedState"
-                name="deployedState"
-                value={profileData.deployedState}
+                id="srlm_state"
+                name="srlm_state"
+                value={profileData.srlm_state}
                 onChange={handleChange}
                 className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
                 required
@@ -210,14 +222,23 @@ function SrConsultantProfile() {
           </div>
 
           <div>
-            <Label htmlFor="professionalPhotograph">
+            <Label htmlFor="photo">
               Upload Latest Professional Photograph (JPEG, max 1 MB)
             </Label>
+            {photoPreview && (
+              <div className="mb-4">
+                <img
+                  src={photoPreview}
+                  alt="Profile Preview"
+                  className="w-32 h-32 object-cover rounded-md"
+                />
+              </div>
+            )}
             <Input
-              id="professionalPhotograph"
-              name="professionalPhotograph"
+              id="photo"
+              name="photo"
               type="file"
-              accept="image/jpeg"
+              accept="image/*"
               onChange={handleFileChange}
               className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
               required
@@ -228,8 +249,12 @@ function SrConsultantProfile() {
           </div>
 
           <div className="flex justify-center">
-            <Button type="submit" className="px-4 py-2 text-sm">
-              Submit
+            <Button
+              pending={loading}
+              type="submit"
+              className="px-4 py-2 text-sm"
+            >
+              {loading ? "Submitting..." : "Submit"}
             </Button>
           </div>
         </form>

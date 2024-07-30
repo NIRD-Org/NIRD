@@ -2,6 +2,7 @@ import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
 import { StateModel } from "../models/statesModel.js";
 import { User } from "../models/userModel.js";
 import { Errorhandler } from "../utils/errorHandler.js";
+import { uploadFile } from "../utils/uploadFile.js";
 
 export const getAllUsers = CatchAsyncError(async (req, res, next) => {
   try {
@@ -59,6 +60,11 @@ export const deleteUser = CatchAsyncError(async (req, res, next) => {
 
 export const updateUser = CatchAsyncError(async (req, res, next) => {
   try {
+    const { photo } = req.files;
+    if (photo) {
+      const { url: photo1 } = await uploadFile(photo.data);
+      req.body.photo = photo1;
+    }
     const user = await User.findOneAndUpdate({ id: req.params.id }, req.body, {
       new: true,
     });
@@ -71,6 +77,7 @@ export const updateUser = CatchAsyncError(async (req, res, next) => {
       user,
     });
   } catch (err) {
+    console.log(err);
     return next(new Errorhandler("Failed to update user", 500));
   }
 });
