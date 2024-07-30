@@ -111,7 +111,7 @@ function SrConsultantProfile() {
     <div className="w-full flex justify-center items-center min-h-screen bg-gray-100">
       <div className="w-full max-w-4xl p-6 bg-white rounded-md shadow-md">
         <h2 className="text-2xl font-semibold mb-6 text-center">
-          USER PROFILE
+          UPDATE PROFILE
         </h2>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

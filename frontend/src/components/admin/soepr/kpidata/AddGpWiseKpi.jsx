@@ -162,13 +162,13 @@ function SoeprAddGpWiseKpi({ update }) {
       <div>
         <div className="mb-2 text-center">
           <h2 className="text-xl font-semibold mb-10 bg-slate-100 py-3">
-            SoEPR - Theme wise KPI Entry Form
+            SoEPR - KPI Entry Form
           </h2>
           <h2>State : {state?.name}</h2>
         </div>
         <div className="flex justify-around py-6 items-center ">
           {/* <h1 className="text-2xl font-bold">Gram Panchayat wise KPI</h1> */}
-          <h2>Theme : {theme?.theme_name}</h2>
+          <h2> Category : {theme?.theme_name}</h2>
         </div>
         <form onSubmit={handleSubmit} className="overflow-x-auto mt-10">
           <div className="mb-4 grid grid-cols-1 md:grid-cols-3 gap-10">
@@ -204,12 +204,13 @@ function SoeprAddGpWiseKpi({ update }) {
                 className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
               >
                 <option value="">Select Frequency</option>
-                <option value="Monthly">Monthly</option>
+                <option value="Fortnightly">Fortnightly</option>
+               
                 <option value="Quarterly">Quarterly</option>
               </select>
             </div>
 
-            {frequency === "Monthly" && (
+            {frequency === "Fortnightly" &&  (
               <div className="mb-4">
                 <Label htmlFor="month">Month</Label>
                 <select

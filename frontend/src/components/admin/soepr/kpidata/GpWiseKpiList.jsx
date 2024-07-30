@@ -75,7 +75,7 @@ function SoeprGpWiseKpiList() {
         {/* <YfLayout /> */}
         <div className="flex justify-around py-6 items-center ">
           {/* <h1 className="text-2xl font-bold">Gram Panchayat wise KPI</h1> */}
-          <h2>Theme : {theme?.theme_name}</h2>
+          <h2>Category: {theme?.theme_name}</h2>
         </div>
         <div className="flex justify-center mt-10">
           <Link to={`/admin/soepr/add-gp-wise-kpi?theme_id=${theme_id}`}>
