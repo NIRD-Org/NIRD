@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import API from "@/utils/API";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { NirdViewIcon } from "@/components/admin/Icons";
 import AdminHeader from "../AdminHeader";
 
@@ -49,10 +44,7 @@ const PmUploadView = () => {
     {
       label: "File",
       value: (
-        <a
-          href={pmUpload.file}
-          className="flex gap-3 items-center"
-        >
+        <a href={pmUpload.file} className="flex gap-3 items-center">
           <span>View File</span>
           <NirdViewIcon />
         </a>
@@ -62,19 +54,19 @@ const PmUploadView = () => {
   ];
 
   return (
-   <div>
-    <AdminHeader>PM Upload</AdminHeader>
-     <Table>
-      <TableBody>
-        {fields.map((field, index) => (
-          <TableRow key={index}>
-            <TableCell>{field.label}</TableCell>
-            <TableCell>{field.value}</TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-   </div>
+    <div>
+      <AdminHeader>PM Upload</AdminHeader>
+      <Table>
+        <TableBody>
+          {fields.map((field, index) => (
+            <TableRow key={index}>
+              <TableCell>{field.label}</TableCell>
+              <TableCell>{field.value}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 };
 

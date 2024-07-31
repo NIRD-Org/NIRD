@@ -11,9 +11,9 @@ import FormField from "@/components/ui/formfield";
 function SoeprAmUploadForm() {
   const [pending, setPending] = useState(false);
   const [formData, setFormData] = useState({
-    date: new Date().toISOString().split('T')[0], // ISO format date
-    time: new Date().toTimeString().split(' ')[0], // HH:MM:SS format
-    status: "",
+    date: new Date().toISOString().split("T")[0], // ISO format date
+    time: new Date().toTimeString().split(" ")[0], // HH:MM:SS format
+    amStatus: "",
     remarks: "",
     location: "",
     am_upload_file: null,
@@ -27,17 +27,17 @@ function SoeprAmUploadForm() {
     }
   }, []);
 
-  const handleInputChange = e => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFileChange = e => {
+  const handleFileChange = (e) => {
     const { name, files } = e.target;
-    setFormData(prev => ({ ...prev, [name]: files[0] }));
+    setFormData((prev) => ({ ...prev, [name]: files[0] }));
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isSubmissionAllowed) {
       tst.error("Reporting time completed for morning entry");
@@ -46,18 +46,40 @@ function SoeprAmUploadForm() {
     try {
       setPending(true);
       // Uncomment the following line when API integration is ready
-      // await API.post("/api/v1/am-upload/create", formData, { headers: { "Content-Type": "multipart/form-data" } });
-      setTimeout(() => {
-        tst.success("AM upload successful");
-        setPending(false);
-      }, 3000);
+      await API.post("/api/v1/am-upload/create", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      tst.success("AM upload successful");
     } catch (error) {
       console.error(error);
       tst.error("Error submitting the form");
+    } finally {
+      setPending(false);
     }
   };
 
-  const statusOptions = ["PR", "H", "PH", "AB", "T"];
+  const statusOptions = [
+    {
+      value: "PR",
+      label: "PR",
+    },
+    {
+      value: "H",
+      label: "H",
+    },
+    {
+      value: "PH",
+      label: "PH",
+    },
+    {
+      value: "AB",
+      label: "AB",
+    },
+    {
+      value: "T",
+      label: "T",
+    },
+  ];
 
   return (
     <div className="container mx-auto p-4">
@@ -86,12 +108,12 @@ function SoeprAmUploadForm() {
           </div>
           <FormField
             label="Status"
-            name="status"
+            name="amStatus"
             type="select"
             required
             options={statusOptions}
             disabled={pending}
-            value={formData.status}
+            value={formData.amStatus}
             onChange={handleInputChange}
           />
           <FormField
@@ -134,7 +156,11 @@ function SoeprAmUploadForm() {
           </div>
         </div>
         <div className="flex justify-center mt-6">
-          <Button type="submit" pending={pending} disabled={!isSubmissionAllowed}>
+          <Button
+            type="submit"
+            pending={pending}
+            disabled={!isSubmissionAllowed}
+          >
             Submit
           </Button>
         </div>

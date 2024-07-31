@@ -2,7 +2,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
-const FormField = ({ name, label, type, options, required, disabled, value, onChange, onFileChange }) => {
+const FormField = ({
+  name,
+  label,
+  type,
+  options,
+  required,
+  disabled,
+  value,
+  onChange,
+  onFileChange,
+}) => {
   const renderField = () => {
     switch (type) {
       case "select":
@@ -10,7 +20,7 @@ const FormField = ({ name, label, type, options, required, disabled, value, onCh
           <select
             required={required}
             disabled={disabled}
-            className="w-full col-span-3 px-4 py-2 rounded-md bg-white border text-sm"
+            className="w-full text-primary col-span-3 px-4 py-2 rounded-md bg-white border text-sm"
             value={value}
             name={name}
             onChange={onChange}
@@ -18,8 +28,12 @@ const FormField = ({ name, label, type, options, required, disabled, value, onCh
             <option value="" disabled>
               Select {label}
             </option>
-            {options.map(option => (
-              <option className="text-base " key={option.value} value={option.value}>
+            {options.map((option) => (
+              <option
+                className="text-base "
+                key={option.value}
+                value={option.value}
+              >
                 {option.label}
               </option>
             ))}

@@ -11,8 +11,8 @@ import FormField from "@/components/ui/formfield";
 function SoeprPmUploadForm() {
   const [pending, setPending] = useState(false);
   const [formData, setFormData] = useState({
-    date: new Date().toISOString().split('T')[0], // ISO format date
-    time: new Date().toTimeString().split(' ')[0], // HH:MM:SS format
+    date: new Date().toISOString().split("T")[0], // ISO format date
+    time: new Date().toTimeString().split(" ")[0], // HH:MM:SS format
     status: "",
     remarks: "",
     location: "",
@@ -27,17 +27,17 @@ function SoeprPmUploadForm() {
     }
   }, []);
 
-  const handleInputChange = e => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFileChange = e => {
+  const handleFileChange = (e) => {
     const { name, files } = e.target;
-    setFormData(prev => ({ ...prev, [name]: files[0] }));
+    setFormData((prev) => ({ ...prev, [name]: files[0] }));
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isSubmissionAllowed) {
       tst.error("Reporting time not yet started for afternoon entry");
@@ -134,7 +134,11 @@ function SoeprPmUploadForm() {
           </div>
         </div>
         <div className="flex justify-center mt-6">
-          <Button type="submit" pending={pending} disabled={!isSubmissionAllowed}>
+          <Button
+            type="submit"
+            pending={pending}
+            disabled={!isSubmissionAllowed}
+          >
             Submit
           </Button>
         </div>

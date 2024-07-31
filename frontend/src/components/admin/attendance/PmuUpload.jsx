@@ -31,36 +31,36 @@ function PmUploadForm() {
     dist_id: formData.dist_id,
     block_id: formData.block_id,
   });
-  
 
   useEffect(() => {
-    setFormData(prevData => ({ ...prevData, dist_id: "" }));
+    setFormData((prevData) => ({ ...prevData, dist_id: "" }));
   }, [formData.state_id]);
 
   useEffect(() => {
-    setFormData(prevData => ({ ...prevData, block_id: "" }));
+    setFormData((prevData) => ({ ...prevData, block_id: "" }));
   }, [formData.dist_id]);
 
   useEffect(() => {
-    setFormData(prevData => ({ ...prevData, gp_id: "" }));
+    setFormData((prevData) => ({ ...prevData, gp_id: "" }));
   }, [formData.block_id]);
 
-  const handleInputChange = e => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFileChange = e => {
+  const handleFileChange = (e) => {
     const { name, files } = e.target;
-    setFormData(prev => ({ ...prev, [name]: files[0] }));
+    setFormData((prev) => ({ ...prev, [name]: files[0] }));
   };
 
-
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setPending(true);
-      await API.post("/api/v1/pm-upload/create", formData, { headers: { "Content-Type": "multipart/form-data" } });
+      await API.post("/api/v1/pm-upload/create", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       tst.success("PM upload successful");
     } catch (error) {
       console.error(error);
@@ -75,7 +75,7 @@ function PmUploadForm() {
       label: "State",
       name: "state_id",
       type: "select",
-      options: states.map(state => ({
+      options: states.map((state) => ({
         value: state.id,
         label: state.name,
       })),
@@ -85,7 +85,7 @@ function PmUploadForm() {
       label: "District",
       name: "dist_id",
       type: "select",
-      options: districts.map(district => ({
+      options: districts.map((district) => ({
         value: district.id,
         label: district.name,
       })),
@@ -95,7 +95,7 @@ function PmUploadForm() {
       label: "Block",
       name: "block_id",
       type: "select",
-      options: blocks.map(block => ({
+      options: blocks.map((block) => ({
         value: block.id,
         label: block.name,
       })),
@@ -105,7 +105,7 @@ function PmUploadForm() {
       label: "GP",
       name: "gp_id",
       type: "select",
-      options: gps.map(gp => ({
+      options: gps.map((gp) => ({
         value: gp.id,
         label: gp.name,
       })),
@@ -136,19 +136,24 @@ function PmUploadForm() {
       <AdminHeader>PM Entry Form</AdminHeader>
       <form onSubmit={handleSubmit}>
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-10">
-        {fields.map(field => (
-          <FormField
-            key={field.name}
-            {...field}
-            disabled={pending}
-            value={formData[field.name] || ""}
-            onChange={handleInputChange}
-            onFileChange={handleFileChange}
-          />
-        ))}
+          {fields.map((field) => (
+            <FormField
+              key={field.name}
+              {...field}
+              disabled={pending}
+              value={formData[field.name] || ""}
+              onChange={handleInputChange}
+              onFileChange={handleFileChange}
+            />
+          ))}
           <div>
             <Label className="mb-2 inline-block">PM Upload File</Label>
-            <Input type="file" name="pm_upload_file" onChange={handleFileChange} required />
+            <Input
+              type="file"
+              name="pm_upload_file"
+              onChange={handleFileChange}
+              required
+            />
           </div>
         </div>
         <div className="grid grid-cols-3 gap-10 mt-10">
