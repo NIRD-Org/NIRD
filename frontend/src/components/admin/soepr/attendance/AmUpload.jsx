@@ -13,11 +13,12 @@ function SoeprAmUploadForm() {
   const [formData, setFormData] = useState({
     date: new Date().toISOString().split("T")[0], // ISO format date
     time: new Date().toTimeString().split(" ")[0], // HH:MM:SS format
-    amStatus: "",
+    status: "",
     remarks: "",
     location: "",
     am_upload_file: null,
   });
+  const [weekday, setWeekday] = useState("");
   const [isSubmissionAllowed, setIsSubmissionAllowed] = useState(true);
 
   useEffect(() => {
@@ -25,7 +26,20 @@ function SoeprAmUploadForm() {
     if (currentHour >= 11) {
       setIsSubmissionAllowed(false);
     }
-  }, []);
+
+    const dateObj = new Date(formData.date);
+    const daysOfWeek = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+    const dayName = daysOfWeek[dateObj.getDay()];
+    setWeekday(dayName);
+  }, [formData.date]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -59,26 +73,11 @@ function SoeprAmUploadForm() {
   };
 
   const statusOptions = [
-    {
-      value: "PR",
-      label: "PR",
-    },
-    {
-      value: "H",
-      label: "H",
-    },
-    {
-      value: "PH",
-      label: "PH",
-    },
-    {
-      value: "AB",
-      label: "AB",
-    },
-    {
-      value: "T",
-      label: "T",
-    },
+    { value: "PR", label: "Present" },
+    { value: "H", label: "Holiday" },
+    { value: "PH", label: "Public Holiday" },
+    { value: "AB", label: "Absent" },
+    { value: "T", label: "Tour" },
   ];
 
   return (
@@ -93,8 +92,12 @@ function SoeprAmUploadForm() {
               name="date"
               value={formData.date}
               onChange={handleInputChange}
-              disabled={pending}
+              readOnly
             />
+          </div>
+          <div>
+            <Label>Day</Label>
+            <Input type="text" value={weekday} readOnly />
           </div>
           <div>
             <Label>Time</Label>
@@ -103,7 +106,7 @@ function SoeprAmUploadForm() {
               name="time"
               value={formData.time}
               onChange={handleInputChange}
-              disabled={pending}
+              readOnly
             />
           </div>
           <FormField
@@ -167,7 +170,7 @@ function SoeprAmUploadForm() {
       </form>
       {!isSubmissionAllowed && (
         <p className="text-red-500 mt-4 text-center">
-          Reporting time completed for morning entry
+          Reporting for Morning Entry is closed for the day!
         </p>
       )}
     </div>
