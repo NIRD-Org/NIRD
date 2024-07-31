@@ -96,6 +96,7 @@ import ViewAttendance from "./components/admin/attendance/ViewAttendance";
 import KpiView from "./Pages/kpiView";
 import SrConsultantProfile from "./components/admin/soepr/Profile/SrConsultantProfileForm";
 import ViewProfile from "./components/admin/soepr/Profile/ViewProfile";
+import ConsolidatedViewPage from "./components/admin/soepr/attendance/ConsolidatedViewPage";
 
 function App() {
   const { login } = useAuthContext();
@@ -143,6 +144,8 @@ function App() {
               element={<SrConsultantProfile />}
             />
             <Route path="soepr/profile" element={<ViewProfile />} />
+            <Route path="soepr/attendance/view" element={<ConsolidatedViewPage/>} />
+           
             {/* <Route path="data-point/view/:kpiId" element={<KpiViewPage />} /> */}
             <Route path="kpi-approvals-list" element={<KpiApprovalsList />} />
             <Route
