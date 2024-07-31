@@ -7,6 +7,7 @@ import AdminHeader from "../../AdminHeader";
 import { FaCamera } from "react-icons/fa";
 import API from "@/utils/API";
 import FormField from "@/components/ui/formfield";
+import toast from "react-hot-toast";
 
 function SoeprAmUploadForm() {
   const [pending, setPending] = useState(false);
@@ -53,6 +54,7 @@ function SoeprAmUploadForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    formData.weekday = weekday;
     if (!isSubmissionAllowed) {
       tst.error("Reporting time completed for morning entry");
       return;
@@ -65,8 +67,7 @@ function SoeprAmUploadForm() {
       });
       tst.success("AM upload successful");
     } catch (error) {
-      console.error(error);
-      tst.error("Error submitting the form");
+      toast.error(error?.response?.data?.message);
     } finally {
       setPending(false);
     }

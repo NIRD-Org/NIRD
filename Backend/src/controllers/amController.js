@@ -78,6 +78,20 @@ export const getAMById = CatchAsyncError(async (req, res, next) => {
 });
 
 export const createAM = CatchAsyncError(async (req, res, next) => {
+  // Check if the attendance is already done
+
+  const exisingData = await AmModel.findOne({
+    created_by: req?.user?.id,
+    date: req.body.date,
+  });
+
+  if (exisingData) {
+    return res.status(400).json({
+      status: "fail",
+      message: "Attendance already Uploaded",
+    });
+  }
+
   const { am_upload_file } = req.files;
   const { url: fileUrl } = await uploadFile(am_upload_file.data);
   req.body.file = fileUrl;

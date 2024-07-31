@@ -7,14 +7,15 @@ import AdminHeader from "../../AdminHeader";
 import { FaCamera } from "react-icons/fa";
 import API from "@/utils/API";
 import FormField from "@/components/ui/formfield";
+import toast from "react-hot-toast";
 
 function SoeprPmUploadForm() {
   const [pending, setPending] = useState(false);
   const [formData, setFormData] = useState({
     date: new Date().toISOString().split("T")[0], // ISO format date
-    day: new Date().toLocaleDateString(undefined, { weekday: "long" }), // Day of the week
+    weekday: new Date().toLocaleDateString(undefined, { weekday: "long" }), // Day of the week
     time: new Date().toTimeString().split(" ")[0], // HH:MM:SS format
-    status: "",
+    pmStatus: "",
     remarks: "",
     location: "",
     pm_upload_file: null,
@@ -46,19 +47,16 @@ function SoeprPmUploadForm() {
     }
     try {
       setPending(true);
-      // Uncomment the following line when API integration is ready
-      // await API.post("/api/v1/pm-upload/create", formData, { headers: { "Content-Type": "multipart/form-data" } });
-      setTimeout(() => {
-        tst.success("PM upload successful");
-        setPending(false);
-      }, 3000);
+      await API.post("/api/v1/pm-upload/create", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      tst.success("PM upload successful");
     } catch (error) {
-      console.error(error);
-      tst.error("Error submitting the form");
+      toast.error(error?.response?.data?.message);
+    } finally {
+      setPending(false);
     }
   };
-
-  const statusOptions = ["PR", "H", "PH", "AB", "T"];
 
   return (
     <div className="container mx-auto p-4">
@@ -80,7 +78,7 @@ function SoeprPmUploadForm() {
             <Input
               type="text"
               name="day"
-              value={formData.day}
+              value={formData.weekday}
               onChange={handleInputChange}
               readOnly
             />
@@ -97,7 +95,7 @@ function SoeprPmUploadForm() {
           </div>
           <FormField
             label="Status"
-            name="status"
+            name="pmStatus"
             type="select"
             required
             options={[
@@ -108,7 +106,7 @@ function SoeprPmUploadForm() {
               { value: "T", label: "Tour" },
             ]}
             disabled={pending}
-            value={formData.status}
+            value={formData.pmStatus}
             onChange={handleInputChange}
           />
           <FormField

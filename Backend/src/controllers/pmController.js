@@ -67,6 +67,18 @@ export const getPMById = CatchAsyncError(async (req, res, next) => {
 });
 
 export const createPM = CatchAsyncError(async (req, res, next) => {
+  const exisingData = await PmModel.findOne({
+    created_by: req?.user?.id,
+    date: req.body.date,
+  });
+
+  if (exisingData) {
+    return res.status(400).json({
+      status: "fail",
+      message: "Attendance already Uploaded",
+    });
+  }
+
   const { pm_upload_file } = req.files;
   const { url: fileUrl } = await uploadFile(pm_upload_file.data);
   req.body.file = fileUrl;

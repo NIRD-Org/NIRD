@@ -12,6 +12,7 @@ const amSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
+    weekday: { type: String, required: false },
     amStatus: { type: String, required: false },
     location: { type: String },
     remarks: { type: String, required: true },
