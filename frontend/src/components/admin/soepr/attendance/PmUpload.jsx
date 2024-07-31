@@ -12,6 +12,7 @@ function SoeprPmUploadForm() {
   const [pending, setPending] = useState(false);
   const [formData, setFormData] = useState({
     date: new Date().toISOString().split('T')[0], // ISO format date
+    day: new Date().toLocaleDateString(undefined, { weekday: 'long' }), // Day of the week
     time: new Date().toTimeString().split(' ')[0], // HH:MM:SS format
     status: "",
     remarks: "",
@@ -71,7 +72,17 @@ function SoeprPmUploadForm() {
               name="date"
               value={formData.date}
               onChange={handleInputChange}
-              disabled={pending}
+              readOnly
+            />
+          </div>
+          <div>
+            <Label>Day</Label>
+            <Input
+              type="text"
+              name="day"
+              value={formData.day}
+              onChange={handleInputChange}
+              readOnly
             />
           </div>
           <div>
@@ -81,7 +92,7 @@ function SoeprPmUploadForm() {
               name="time"
               value={formData.time}
               onChange={handleInputChange}
-              disabled={pending}
+              readOnly
             />
           </div>
           <FormField
@@ -89,7 +100,13 @@ function SoeprPmUploadForm() {
             name="status"
             type="select"
             required
-            options={statusOptions}
+            options={[
+              { value: "PR", label: "Present" },
+              { value: "H", label: "Holiday" },
+              { value: "PH", label: "Public Holiday" },
+              { value: "AB", label: "Absent" },
+              { value: "T", label: "Tour" }
+            ]}
             disabled={pending}
             value={formData.status}
             onChange={handleInputChange}
@@ -141,7 +158,7 @@ function SoeprPmUploadForm() {
       </form>
       {!isSubmissionAllowed && (
         <p className="text-red-500 mt-4 text-center">
-          Reporting time not yet started for afternoon entry
+          Reporting time not yet started for afternoon entry.Please try after 12.00 PM!
         </p>
       )}
     </div>
