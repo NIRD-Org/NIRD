@@ -21,6 +21,7 @@ function SoeprAmUploadForm() {
   });
   const [weekday, setWeekday] = useState("");
   const [isSubmissionAllowed, setIsSubmissionAllowed] = useState(true);
+  const [imageUploaded, setImageUploaded] = useState(false);
 
   useEffect(() => {
     const currentHour = new Date().getHours();
@@ -48,8 +49,9 @@ function SoeprAmUploadForm() {
   };
 
   const handleFileChange = (e) => {
-    const { name, files } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: files[0] }));
+    const { files } = e.target;
+    setFormData((prev) => ({ ...prev, am_upload_file: files[0] }));
+    setImageUploaded(!!files.length);
   };
 
   const handleSubmit = async (e) => {
@@ -157,6 +159,10 @@ function SoeprAmUploadForm() {
               required
               className="hidden"
             />
+            <p className="text-red-500">
+             {imageUploaded ? "Image uploaded" : "No image uploaded"}
+            </p>
+
           </div>
         </div>
         <div className="flex justify-center mt-6">
