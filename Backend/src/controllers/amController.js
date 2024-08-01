@@ -247,12 +247,12 @@ export const getAmAttendance = CatchAsyncError(async (req, res, next) => {
     const endDate = new Date(year, month, 0, 23, 59, 59, 999);
 
     console.log(req?.user?.id);
-    console.log(startDate.toISOString().split("T")[0]);
+    console.log(startDate.toString().split("T")[0]);
 
     const attendanceData = await AmModel.find({
       date: {
-        $gt: startDate.toISOString().split("T")[0],
-        $lte: endDate.toISOString().split("T")[0],
+        $gt: startDate.toString().split("T")[0],
+        $lte: endDate.toString().split("T")[0],
       },
       created_by: req?.user?.id,
     });

@@ -14,7 +14,7 @@ function SoeprAmUploadForm() {
   const [pending, setPending] = useState(false);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    date: new Date().toISOString().split("T")[0], // ISO format date
+    date: new Date().toString().split("T")[0], // ISO format date
     time: new Date().toTimeStrsing().split(" ")[0], // HH:MM:SS format
     amStatus: "",
     remarks: "",
