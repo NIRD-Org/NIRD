@@ -398,7 +398,7 @@ function App() {
   return (
     <main className="dark:bg-dark bg-gray-100">
       <RouterProvider router={router} />
-      <Toaster position="bottom-center" />
+      <Toaster position="top-center" />
     </main>
   );
 }

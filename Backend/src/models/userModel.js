@@ -2,11 +2,11 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
   id: { type: String, required: true, unique: true },
-  employee_id: { type: Number, required: true, unique: true },
+  employee_id: { type: Number, required: false, unique: true },
   name: { type: String, required: true },
   username: { type: String, required: true, unique: true },
   password: { type: String, default: "123456" },
-  role: { type: Number, required: true, enum: [1, 2, 3, 4] },
+  role: { type: Number, required: true, enum: [1, 2, 3, 4, 5] },
   department: { type: String },
   designation: { type: String },
   mobile: { type: String },

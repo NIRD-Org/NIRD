@@ -89,7 +89,6 @@ export const changePassword = CatchAsyncError(async (req, res, next) => {
   try {
     const { oldPassword, newPassword } = req.body;
     const user = await User.findOne({ id: req.user.id });
-
     if (!user) {
       return next(new Errorhandler("User not found", 404));
     }
