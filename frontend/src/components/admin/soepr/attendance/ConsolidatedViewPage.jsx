@@ -184,27 +184,43 @@ function ConsolidatedViewPage() {
       <Table>
         <thead>
           <tr>
-            <th>Sl. No.</th>
-            <th>Date</th>
-            <th>Time of AM Entry</th>
-            <th>Status of AM Entry</th>
-            <th>Location of AM Entry</th>
-            <th>Time of PM Entry</th>
-            <th>Status of PM Entry</th>
-            <th>Location of PM Entry</th>
+            <th className="whitespace-nowrap px-3 py-3">Sl. No.</th>
+            <th className="whitespace-nowrap px-3 py-3">Date</th>
+            <th className="whitespace-nowrap px-3 py-3">Time of AM Entry</th>
+            <th className="whitespace-nowrap px-3 py-3">Status of AM Entry</th>
+            <th className="whitespace-nowrap px-3 py-3">
+              Location of AM Entry
+            </th>
+            <th className="whitespace-nowrap px-3 py-3">Time of PM Entry</th>
+            <th className="whitespace-nowrap px-3 py-3">Status of PM Entry</th>
+            <th className="whitespace-nowrap px-3 py-3">
+              Location of PM Entry
+            </th>
           </tr>
         </thead>
         <tbody>
           {entries.map((entry, index) => (
-            <tr key={index} className="text-center">
-              <td>{index + 1}</td>
-              <td>{entry.date}</td>
-              <td>{entry.timeOfAMEntry}</td>
-              <td>{entry.statusOfAMEntry}</td>
-              <td>{entry.locationOfAMEntry}</td>
-              <td>{entry.timeOfPMEntry}</td>
-              <td>{entry.statusOfPMEntry}</td>
-              <td>{entry.locationOfPMEntry}</td>
+            <tr key={index} className="text-center py-3">
+              <td className="whitespace-nowrap px-3 py-2">{index + 1}</td>
+              <td className="whitespace-nowrap px-3 py-2">{entry.date}</td>
+              <td className="whitespace-nowrap px-3 py-2">
+                {entry.timeOfAMEntry}
+              </td>
+              <td className="whitespace-nowrap px-3 py-2">
+                {entry.statusOfAMEntry}
+              </td>
+              <td className="whitespace-nowrap px-3 py-2">
+                {entry.locationOfAMEntry}
+              </td>
+              <td className="whitespace-nowrap px-3 py-2">
+                {entry.timeOfPMEntry}
+              </td>
+              <td className="whitespace-nowrap px-3 py-2">
+                {entry.statusOfPMEntry}
+              </td>
+              <td className="whitespace-nowrap px-3 py-2">
+                {entry.locationOfPMEntry}
+              </td>
             </tr>
           ))}
         </tbody>
