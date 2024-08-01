@@ -245,6 +245,7 @@ export const getAmAttendance = CatchAsyncError(async (req, res, next) => {
 
     const startDate = new Date(year, month - 1, 1);
     const endDate = new Date(year, month, 0, 23, 59, 59, 999);
+
     const attendanceData = await AmModel.find({
       date: {
         $gt: startDate.toISOString().split("T")[0],
@@ -258,6 +259,7 @@ export const getAmAttendance = CatchAsyncError(async (req, res, next) => {
       attendanceData,
     });
   } catch (error) {
+    console.log(error);
     return next(new Errorhandler("Failed to get Attendance data", 500));
   }
 });

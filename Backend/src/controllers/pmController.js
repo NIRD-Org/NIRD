@@ -140,6 +140,7 @@ export const getPmAttendance = CatchAsyncError(async (req, res, next) => {
       attendanceData,
     });
   } catch (error) {
+    console.log(error);
     return next(new Errorhandler("Failed to get Attendance data", 500));
   }
 });
