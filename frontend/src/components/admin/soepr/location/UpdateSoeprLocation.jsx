@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import API from "@/utils/API";
 import { tst } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
+import AdminHeader from "../../AdminHeader";
 
 const UpdateSoeprLocation = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -84,7 +85,8 @@ const UpdateSoeprLocation = () => {
   };
 
   return (
-    <div className="py-10">
+    <div className="py-5">
+      <AdminHeader>Update SOEPR Location</AdminHeader>
       <div className="grid grid-cols-1 md:grid-cols-3 px-4 md;px-20 place-items-center">
         <div className="flex gap-2 items-center">
           <h4 className="font-semibold text-primary">Name: </h4>
