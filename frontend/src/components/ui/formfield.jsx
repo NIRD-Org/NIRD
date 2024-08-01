@@ -87,7 +87,7 @@ const FormField = ({
             onChange={onChange}
             id={name}
             placeholder={`Enter ${label}`}
-            className="col-span-3"
+            className="!w-full"
           />
         );
     }

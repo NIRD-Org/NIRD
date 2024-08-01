@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-const LocationView = ({role}) => {
+const LocationView = ({ role }) => {
   const { userId } = useParams();
   const [userLocations, setUserLocations] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -69,7 +69,7 @@ const LocationView = ({role}) => {
         const response = await API.get(`/api/v1/user-location/${userId}`);
         const data = response.data.data.userLocations;
         console.log(data);
-        setState(prev => (prev = data.state_ids));
+        setState((prev) => (prev = data.state_ids));
       } catch (error) {
         console.log(error);
       }
@@ -102,7 +102,7 @@ const LocationView = ({role}) => {
   }
 
   if (!userLocations || !states || !districts || !blocks || !gps) {
-    return ;
+    return;
   }
 
   return (
@@ -118,14 +118,16 @@ const LocationView = ({role}) => {
             <TableCell>State IDs</TableCell>
             <TableCell>
               {userLocations.state_ids
-                .map(stateId => states.find(state => stateId == state.id).name)
+                .map(
+                  (stateId) => states.find((state) => stateId == state.id).name
+                )
                 .join(", ")}
             </TableCell>
           </TableRow>
           {role == 3 && (
             <>
               {" "}
-             {/*  <TableRow>
+              {/*  <TableRow>
                 <TableCell>District IDs</TableCell>
                 <TableCell>{userLocations.district_ids}</TableCell>
               </TableRow> */}
@@ -134,7 +136,8 @@ const LocationView = ({role}) => {
                 <TableCell>
                   {userLocations.block_ids
                     .map(
-                      blockId => blocks.find(block => blockId == block.id).name
+                      (blockId) =>
+                        blocks.find((block) => blockId == block.id).name
                     )
                     .join(", ")}
                 </TableCell>
@@ -143,7 +146,7 @@ const LocationView = ({role}) => {
                 <TableCell>GP IDs</TableCell>
                 <TableCell>
                   {userLocations.gp_ids
-                    .map(gpid => gps.find(gp => gpid == gp.id).name)
+                    .map((gpid) => gps.find((gp) => gpid == gp.id).name)
                     .join(", ")}
                 </TableCell>
               </TableRow>

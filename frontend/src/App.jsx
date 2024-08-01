@@ -97,6 +97,8 @@ import KpiView from "./Pages/kpiView";
 import SrConsultantProfile from "./components/admin/soepr/Profile/SrConsultantProfileForm";
 import ViewProfile from "./components/admin/soepr/Profile/ViewProfile";
 import ConsolidatedViewPage from "./components/admin/soepr/attendance/ConsolidatedViewPage";
+import SoeprList from "./components/admin/soepr/location/SoeprList";
+import UpdateSoeprLocation from "./components/admin/soepr/location/UpdateSoeprLocation";
 
 function App() {
   const { login } = useAuthContext();
@@ -215,6 +217,10 @@ function App() {
               element={<UpdateUserLocation role={2} />}
             />
             <Route
+              path="user-location/update/soepr/:userId"
+              element={<UpdateSoeprLocation />}
+            />
+            <Route
               path="user-location/update/young-fellow/:userId"
               element={<UpdateUserLocation role={3} />}
             />
@@ -231,6 +237,7 @@ function App() {
               path="users/all/young-fellow"
               element={<UserList role={3} />}
             />
+            <Route path="users/all/soepr" element={<SoeprList />} />
 
             <Route path="attendance/attendance" element={<Attendance />} />
             <Route

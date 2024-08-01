@@ -121,6 +121,12 @@ export const getSidebarItems = (user) => {
             {
               type: "sub-module",
               icon: ArrowBigRight,
+              title: "SOEPR location",
+              link: "/admin/users/all/soepr",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
               title: "View Attendance",
               link: "/admin/view/attendance",
             },
