@@ -24,7 +24,7 @@ function SoeprAmUploadForm() {
 
   useEffect(() => {
     const currentHour = new Date().getHours();
-    if (currentHour >= 11) {
+    if (currentHour >= 12) {
       setIsSubmissionAllowed(false);
     }
 

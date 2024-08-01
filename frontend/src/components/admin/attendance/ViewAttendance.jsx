@@ -42,9 +42,8 @@ const ViewAttendance = () => {
   };
 
   const roleOptions = [
-    { value: 1, name: "PMU Admin" },
-    { value: 2, name: "SPC Admin" },
-    { value: 3, name: "Young Fellow" },
+    
+    { value: 1, name: "Young Fellow" },
   ];
 
   useEffect(() => {
