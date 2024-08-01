@@ -234,3 +234,30 @@ export const getAllAttendaceData = CatchAsyncError(async (req, res, next) => {
     return next(new Errorhandler("Failed to get Attendance data", 500));
   }
 });
+
+export const getAmAttendance = CatchAsyncError(async (req, res, next) => {
+  try {
+    const { month, year } = req.query;
+
+    if (!month || !year) {
+      return next(new Errorhandler("Month and Year are required", 400));
+    }
+
+    const startDate = new Date(year, month - 1, 1);
+    const endDate = new Date(year, month, 0, 23, 59, 59, 999);
+    const attendanceData = await AmModel.find({
+      date: {
+        $gt: startDate.toISOString().split("T")[0],
+        $lte: endDate.toISOString().split("T")[0],
+      },
+      created_by: req?.user?.id,
+    });
+
+    res.status(200).json({
+      success: true,
+      attendanceData,
+    });
+  } catch (error) {
+    return next(new Errorhandler("Failed to get Attendance data", 500));
+  }
+});

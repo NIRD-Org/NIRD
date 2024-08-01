@@ -6,12 +6,15 @@ import {
   deleteAM,
   updateAM,
   getAllAttendaceData,
+  getAmAttendance,
 } from "../controllers/amController.js";
 import { isAuth } from "../middlewares/auth.js";
 
 const router = express.Router();
 
 router.route("/all").get(isAuth, getAllAM);
+router.route("/get-attendance").get(isAuth, getAmAttendance);
+
 router.route("/create").post(isAuth, createAM);
 router.route("/:id").get(getAMById);
 router.route("/:id").delete(deleteAM);

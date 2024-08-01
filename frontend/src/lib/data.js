@@ -324,6 +324,12 @@ export const getSidebarItems = (user) => {
               title: "PM Entry Form",
               link: "/admin/attendance/pmu-upload",
             },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "View Attendance",
+              link: "/admin/attendance/view",
+            },
           ],
         },
         {

@@ -144,8 +144,12 @@ function App() {
               element={<SrConsultantProfile />}
             />
             <Route path="soepr/profile" element={<ViewProfile />} />
-            <Route path="soepr/attendance/view" element={<ConsolidatedViewPage/>} />
-           
+            <Route
+              path="soepr/attendance/view"
+              element={<ConsolidatedViewPage />}
+            />
+            <Route path="attendance/view" element={<ConsolidatedViewPage />} />
+
             {/* <Route path="data-point/view/:kpiId" element={<KpiViewPage />} /> */}
             <Route path="kpi-approvals-list" element={<KpiApprovalsList />} />
             <Route
@@ -229,8 +233,14 @@ function App() {
             />
 
             <Route path="attendance/attendance" element={<Attendance />} />
-            <Route path="attendance/amu-upload" element={<AmUploadForm />} />
-            <Route path="attendance/pmu-upload" element={<PmUploadForm />} />
+            <Route
+              path="attendance/amu-upload"
+              element={<SoeprAmUploadForm />}
+            />
+            <Route
+              path="attendance/pmu-upload"
+              element={<SoeprPmUploadForm />}
+            />
             <Route
               path="attendance/amu-upload/list"
               element={<AmUploadList />}

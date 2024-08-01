@@ -14,7 +14,7 @@ function SoeprAmUploadForm() {
   const [formData, setFormData] = useState({
     date: new Date().toISOString().split("T")[0], // ISO format date
     time: new Date().toTimeString().split(" ")[0], // HH:MM:SS format
-    status: "",
+    amStatus: "",
     remarks: "",
     location: "",
     am_upload_file: null,
