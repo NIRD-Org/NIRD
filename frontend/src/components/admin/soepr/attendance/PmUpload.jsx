@@ -21,6 +21,7 @@ function SoeprPmUploadForm() {
     pm_upload_file: null,
   });
   const [isSubmissionAllowed, setIsSubmissionAllowed] = useState(true);
+  const [imageUploaded, setImageUploaded] = useState(false);
 
   useEffect(() => {
     const currentHour = new Date().getHours();
@@ -37,6 +38,7 @@ function SoeprPmUploadForm() {
   const handleFileChange = (e) => {
     const { name, files } = e.target;
     setFormData((prev) => ({ ...prev, [name]: files[0] }));
+    setImageUploaded(files.length > 0); // Set true if a file is selected
   };
 
   const handleSubmit = async (e) => {
@@ -146,6 +148,9 @@ function SoeprPmUploadForm() {
               required
               className="hidden"
             />
+            <p className="text-red-500 mt-2">
+              {imageUploaded ? "Image uploaded" : "No image uploaded"}
+            </p>
           </div>
         </div>
         <div className="flex justify-center mt-6">
@@ -160,7 +165,7 @@ function SoeprPmUploadForm() {
       </form>
       {!isSubmissionAllowed && (
         <p className="text-red-500 mt-4 text-center">
-          Reporting time not yet started for afternoon entry.Please try after
+          Reporting time not yet started for afternoon entry. Please try after
           12.00 PM!
         </p>
       )}

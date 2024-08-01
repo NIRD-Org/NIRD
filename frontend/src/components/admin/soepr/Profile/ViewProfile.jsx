@@ -58,8 +58,7 @@ function ViewProfile() {
           </div>
           <div className="flex-shrink-0 p-6">
             <div className="flex flex-col items-center">
-              
-              <br/>
+              <br />
               {profileData.photo ? (
                 <img
                   src={profileData.photo}
@@ -69,8 +68,8 @@ function ViewProfile() {
               ) : (
                 <p>No photograph uploaded.</p>
               )}
-              <div>
-                <p>
+              <div className="w-full">
+                <p className="break-words whitespace-pre-wrap">
                   <strong>Area of Expertise:</strong>{" "}
                   {profileData.areaOfExpertise || "No Data Available"}
                 </p>
