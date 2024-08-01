@@ -8,9 +8,11 @@ import { FaCamera } from "react-icons/fa";
 import API from "@/utils/API";
 import FormField from "@/components/ui/formfield";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 function SoeprPmUploadForm() {
   const [pending, setPending] = useState(false);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     date: new Date().toISOString().split("T")[0], // ISO format date
     weekday: new Date().toLocaleDateString(undefined, { weekday: "long" }), // Day of the week
@@ -157,7 +159,7 @@ function SoeprPmUploadForm() {
           <Button
             type="submit"
             pending={pending}
-            disabled={!isSubmissionAllowed}
+            disabled={!isSubmissionAllowed || pending}
           >
             Submit
           </Button>
