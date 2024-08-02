@@ -32,7 +32,7 @@ function SoeprAmUploadForm() {
     setFormData((prev) => ({
       ...prev,
       date: now.toISOString().split("T")[0],
-      time: now.toTimeString().split(" ")[0].slice(0, 5),
+      time: new Date().toTimeString().split(" ")[0], // HH:MM:SS format
     }));
 
     if (currentHour >= 18) {
