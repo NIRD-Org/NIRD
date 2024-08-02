@@ -17,9 +17,9 @@ const amSchema = new mongoose.Schema(
     location: { type: String },
     remarks: { type: String, required: true },
     file: { type: String, required: true },
-    created_by: { type: String, required: true },
+    created_by: { type: Number, required: true }, // Changed to Number
     decision: { type: Number, default: 0 },
-    status: { type: String, default: 1 },
+    status: { type: Number, default: 1 }, // Changed to Number
   },
   { timestamps: { createdAt: "created_at", updatedAt: "modified_at" } }
 );
