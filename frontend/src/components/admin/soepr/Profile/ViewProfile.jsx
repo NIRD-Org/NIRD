@@ -68,8 +68,8 @@ function ViewProfile() {
               ) : (
                 <p>No photograph uploaded.</p>
               )}
-              <div className="w-full">
-                <p className="break-words whitespace-pre-wrap">
+              <div className="w-full max-w-md">
+                <p className="break-words whitespace-normal">
                   <strong>Area of Expertise:</strong>{" "}
                   {profileData.areaOfExpertise || "No Data Available"}
                 </p>
