@@ -14,8 +14,8 @@ function SoeprAmUploadForm() {
   const [pending, setPending] = useState(false);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    date: new Date().toString().split("T")[0], // ISO format date
-    time: new Date().toTimeString().split(" ")[0], // HH:MM:SS format
+    date: "",
+    time: "",
     amStatus: "",
     remarks: "",
     location: "",
@@ -26,12 +26,19 @@ function SoeprAmUploadForm() {
   const [imageUploaded, setImageUploaded] = useState(false);
 
   useEffect(() => {
-    const currentHour = new Date().getHours();
+    const now = new Date();
+    const currentHour = now.getHours();
+
+    setFormData((prev) => ({
+      ...prev,
+      date: now.toISOString().split("T")[0],
+      time: now.toTimeString().split(" ")[0].slice(0, 5),
+    }));
+
     if (currentHour >= 18) {
       setIsSubmissionAllowed(false);
     }
 
-    const dateObj = new Date(formData.date);
     const daysOfWeek = [
       "Sunday",
       "Monday",
@@ -41,9 +48,8 @@ function SoeprAmUploadForm() {
       "Friday",
       "Saturday",
     ];
-    const dayName = daysOfWeek[dateObj.getDay()];
-    setWeekday(dayName);
-  }, [formData.date]);
+    setWeekday(daysOfWeek[now.getDay()]);
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -65,11 +71,11 @@ function SoeprAmUploadForm() {
     }
     try {
       setPending(true);
-      // Uncomment the following line when API integration is ready
       await API.post("/api/v1/am-upload/create", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       tst.success("AM upload successful");
+      navigate("/success"); // Navigate to a success page or another route
     } catch (error) {
       toast.error(error?.response?.data?.message);
     } finally {
