@@ -87,7 +87,7 @@ function SoeprAmUploadForm() {
     { value: "PR", label: "Present" },
     { value: "H", label: "Holiday" },
     { value: "PH", label: "Public Holiday" },
-    { value: "AB", label: "Absent" },
+    { value: "L", label: "Leave" },
     { value: "T", label: "Tour" },
   ];
 
