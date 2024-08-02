@@ -1,7 +1,7 @@
 import { ArrowBigRight } from "lucide-react";
 
 export const getSidebarItems = (user) => {
-  console.log(user);
+  // console.log(user);
   let sidebarItems;
 
   if (user.username == "cpr") {

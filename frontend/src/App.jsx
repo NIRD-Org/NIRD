@@ -404,8 +404,15 @@ function App() {
 
   return (
     <main className="dark:bg-dark bg-gray-100">
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          style: {
+            zIndex: 1000,
+          },
+        }}
+      />
       <RouterProvider router={router} />
-      <Toaster position="top-center" />
     </main>
   );
 }

@@ -130,11 +130,13 @@ const Header = () => {
       {/* Mobile navigation */}
       <div className="lg:hidden h-[10vh] bg-primary flex justify-between items-center">
         <div className="w-[10%]">
-          <img
-            src="/logo/niti-logo-white.svg"
-            alt="Ashoka Logo"
-            className="h-full mt-4 w-[5rem]"
-          />
+          <NavLink to={"/"}>
+            <img
+              src="/logo/niti-logo-white.svg"
+              alt="Ashoka Logo"
+              className="h-full mt-4 w-[5rem]"
+            />
+          </NavLink>
         </div>
 
         <div className="w-[28%] sm:w-[15%] z-50  bg-white">
@@ -222,6 +224,7 @@ const Header = () => {
             {!isAuthenticated ? (
               <NavLink
                 to="/login"
+                onClick={toggleSidebar}
                 className={({ isActive }) =>
                   `block px-3 text-md py-2 font-normal duration-200 ${
                     isActive ? "text-white font-bold" : "text-gray-300"
@@ -233,6 +236,7 @@ const Header = () => {
             ) : (
               <NavLink
                 to="/admin"
+                onClick={toggleSidebar}
                 className={({ isActive }) =>
                   `block px-3 text-md py-2 font-normal duration-200 ${
                     isActive ? "text-white font-bold" : "text-gray-300"

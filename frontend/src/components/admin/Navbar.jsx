@@ -25,7 +25,7 @@ function Navbar() {
     navigate("/");
   };
 
-  console.log(user)
+  // console.log(user)
   const sidebarItems = getSidebarItems(user);
 
   return (

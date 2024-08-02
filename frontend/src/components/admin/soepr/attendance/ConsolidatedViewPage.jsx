@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import API from "@/utils/API";
 import AdminHeader from "../../AdminHeader";
-import { Table } from "@/components/ui/table"; // Assuming you have a Table component
+import { Table } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import FormField from "@/components/ui/formfield";
 
 const months = [
@@ -34,11 +32,14 @@ function ConsolidatedViewPage() {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1); // Default to current month
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear()); // Default to current year
 
+  useEffect(() => {
+    fetchEntries();
+  }, [selectedMonth, selectedYear]);
+
   const fetchEntries = async () => {
     try {
       setLoading(true);
 
-      // Fetch AM and PM entries data
       const [amResponse, pmResponse] = await Promise.all([
         API.get(
           `/api/v1/am-upload/get-attendance?month=${selectedMonth}&year=${selectedYear}`
@@ -51,51 +52,35 @@ function ConsolidatedViewPage() {
       const amEntries = amResponse.data.attendanceData;
       const pmEntries = pmResponse.data.attendanceData;
 
-      // Organize entries by date
       const combinedEntries = {};
 
       amEntries.forEach((entry) => {
-        const {
-          date,
-          time: amTime,
-          amStatus: amStatus,
-          remarks: amRemarks,
-          location: amLocation,
-        } = entry;
+        const { date, time, amStatus, remarks, location } = entry;
         if (!combinedEntries[date]) {
           combinedEntries[date] = {
             date,
             day: new Date(date).toLocaleDateString(undefined, {
               weekday: "long",
             }),
-            timeOfAMEntry: amTime || "N/A",
-            statusOfAMEntry: amStatus || "Absent",
-            remarksOfAMEntry: amRemarks || "Absent",
-            locationOfAMEntry: amLocation || "Absent",
+            timeOfAMEntry: time || "N/A",
+            statusOfAMEntry: amStatus || "N/A",
+            remarksOfAMEntry: remarks || "N/A",
+            locationOfAMEntry: location || "N/A",
             timeOfPMEntry: "N/A",
-            statusOfPMEntry: "Absent",
-            remarksOfPMEntry: "Absent",
-            locationOfPMEntry: "Absent",
+            statusOfPMEntry: "N/A",
+            remarksOfPMEntry: "N/A",
+            locationOfPMEntry: "N/A",
           };
         } else {
-          combinedEntries[date] = {
-            ...combinedEntries[date],
-            timeOfAMEntry: amTime || "N/A",
-            statusOfAMEntry: amStatus || "Absent",
-            remarksOfAMEntry: amRemarks || "Absent",
-            locationOfAMEntry: amLocation || "Absent",
-          };
+          combinedEntries[date].timeOfAMEntry = time || "N/A";
+          combinedEntries[date].statusOfAMEntry = amStatus || "N/A";
+          combinedEntries[date].remarksOfAMEntry = remarks || "N/A";
+          combinedEntries[date].locationOfAMEntry = location || "N/A";
         }
       });
 
       pmEntries.forEach((entry) => {
-        const {
-          date,
-          time: pmTime,
-          pmStatus: pmStatus,
-          remarks: pmRemarks,
-          location: pmLocation,
-        } = entry;
+        const { date, time, pmStatus, remarks, location } = entry;
         if (!combinedEntries[date]) {
           combinedEntries[date] = {
             date,
@@ -103,22 +88,19 @@ function ConsolidatedViewPage() {
               weekday: "long",
             }),
             timeOfAMEntry: "N/A",
-            statusOfAMEntry: "Absent",
-            remarksOfAMEntry: "Absent",
-            locationOfAMEntry: "Absent",
-            timeOfPMEntry: pmTime || "N/A",
-            statusOfPMEntry: pmStatus || "Absent",
-            remarksOfPMEntry: pmRemarks || "Absent",
-            locationOfPMEntry: pmLocation || "Absent",
+            statusOfAMEntry: "N/A",
+            remarksOfAMEntry: "N/A",
+            locationOfAMEntry: "N/A",
+            timeOfPMEntry: time || "N/A",
+            statusOfPMEntry: pmStatus || "N/A",
+            remarksOfPMEntry: remarks || "N/A",
+            locationOfPMEntry: location || "N/A",
           };
         } else {
-          combinedEntries[date] = {
-            ...combinedEntries[date],
-            timeOfPMEntry: pmTime || "N/A",
-            statusOfPMEntry: pmStatus || "Absent",
-            remarksOfPMEntry: pmRemarks || "Absent",
-            locationOfPMEntry: pmLocation || "Absent",
-          };
+          combinedEntries[date].timeOfPMEntry = time || "N/A";
+          combinedEntries[date].statusOfPMEntry = pmStatus || "N/A";
+          combinedEntries[date].remarksOfPMEntry = remarks || "N/A";
+          combinedEntries[date].locationOfPMEntry = location || "N/A";
         }
       });
 
@@ -141,7 +123,7 @@ function ConsolidatedViewPage() {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="">
       <AdminHeader>Consolidated View of AM and PM Entries</AdminHeader>
 
       <div className="mb-5">
@@ -180,6 +162,8 @@ function ConsolidatedViewPage() {
           Load Entries
         </Button>
       </div>
+
+      {error && <div className="text-red-500">{error}</div>}
 
       <Table>
         <thead>
