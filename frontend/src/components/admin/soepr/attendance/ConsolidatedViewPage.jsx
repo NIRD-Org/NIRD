@@ -104,7 +104,9 @@ function ConsolidatedViewPage() {
         }
       });
 
-      setEntries(Object.values(combinedEntries));
+      const sortedEntries = Object.values(combinedEntries).sort((a, b) => new Date(a.date) - new Date(b.date));
+
+      setEntries(sortedEntries);
     } catch (error) {
       setEntries([]);
       setError("Error fetching entries");
