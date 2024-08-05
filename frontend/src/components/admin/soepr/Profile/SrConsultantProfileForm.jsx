@@ -242,7 +242,7 @@ function SrConsultantProfile() {
               />
             </div>
             <div>
-              <Label htmlFor="areaOfInterest">Area of Interest</Label>
+              <Label htmlFor="areaOfInterest">Area of Interest(Areas where you want to work on)</Label>
               <Textarea
                 id="areaOfInterest"
                 name="areaOfInterest"

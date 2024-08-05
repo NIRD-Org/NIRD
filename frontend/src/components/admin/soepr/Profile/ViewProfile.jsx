@@ -3,10 +3,19 @@ import { Link } from "react-router-dom";
 import API from "@/utils/API";
 import { useAuthContext } from "@/context/AuthContext";
 
+// Helper function to format date
+const formatDate = (dateString) => {
+  if (!dateString) return "No Data Available";
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+};
+
 function ViewProfile() {
   const { user } = useAuthContext();
   const [profileData, setProfileData] = useState({});
-  const [photo, setPhoto] = useState(null);
 
   useEffect(() => {
     // Fetch user profile data
@@ -34,6 +43,9 @@ function ViewProfile() {
         <div className="flex flex-col md:flex-row md:items-start space-y-6 md:space-y-0 md:space-x-2">
           <div className="flex-grow space-y-4 p-6">
             <p>
+              <strong>Employee ID:</strong> {profileData.employee_id || "No Data Available"}
+            </p>
+            <p>
               <strong>Full Name:</strong> {profileData.name}
             </p>
             <p>
@@ -44,10 +56,10 @@ function ViewProfile() {
             </p>
             <p>
               <strong>Date of Birth:</strong>{" "}
-              {profileData.dateOfBirth.split("T")[0]}
+              {formatDate(profileData.dateOfBirth)}
             </p>
             <p>
-              <strong>Date of Joining:</strong> {profileData.dojNIRDPR}
+              <strong>Date of Joining:</strong> {formatDate(profileData.dojNIRDPR)}
             </p>
             <p>
               <strong>Gender:</strong> {profileData.gender}
