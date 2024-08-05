@@ -40,6 +40,19 @@ function ConsolidatedViewPage() {
     try {
       setLoading(true);
 
+      // Get the last day of the selected month and year
+      const endOfMonth = new Date(selectedYear, selectedMonth, 0).getDate();
+      const today = new Date().getDate();
+
+      // Get all dates from the start of the month to today
+      const allDates = [];
+      const startOfMonth = new Date(selectedYear, selectedMonth - 1, 1).toISOString().split('T')[0];
+      for (let day = 1; day <= today; day++) {
+        const date = new Date(selectedYear, selectedMonth - 1, day).toISOString().split('T')[0];
+        allDates.push(date);
+      }
+
+      // Fetch AM and PM entries
       const [amResponse, pmResponse] = await Promise.all([
         API.get(
           `/api/v1/am-upload/get-attendance?month=${selectedMonth}&year=${selectedYear}`
@@ -59,9 +72,7 @@ function ConsolidatedViewPage() {
         if (!combinedEntries[date]) {
           combinedEntries[date] = {
             date,
-            day: new Date(date).toLocaleDateString(undefined, {
-              weekday: "long",
-            }),
+            day: new Date(date).toLocaleDateString(undefined, { weekday: "long" }),
             timeOfAMEntry: time || "N/A",
             statusOfAMEntry: amStatus || "N/A",
             remarksOfAMEntry: remarks || "N/A",
@@ -84,9 +95,7 @@ function ConsolidatedViewPage() {
         if (!combinedEntries[date]) {
           combinedEntries[date] = {
             date,
-            day: new Date(date).toLocaleDateString(undefined, {
-              weekday: "long",
-            }),
+            day: new Date(date).toLocaleDateString(undefined, { weekday: "long" }),
             timeOfAMEntry: "N/A",
             statusOfAMEntry: "N/A",
             remarksOfAMEntry: "N/A",
@@ -101,6 +110,26 @@ function ConsolidatedViewPage() {
           combinedEntries[date].statusOfPMEntry = pmStatus || "N/A";
           combinedEntries[date].remarksOfPMEntry = remarks || "N/A";
           combinedEntries[date].locationOfPMEntry = location || "N/A";
+        }
+      });
+
+      // Mark weekends as holidays and missing entries as absent
+      allDates.forEach((date) => {
+        if (!combinedEntries[date]) {
+          const dayOfWeek = new Date(date).getDay();
+          const isWeekend = dayOfWeek === 0 || dayOfWeek === 6; // 0 = Sunday, 6 = Saturday
+          combinedEntries[date] = {
+            date,
+            day: new Date(date).toLocaleDateString(undefined, { weekday: "long" }),
+            timeOfAMEntry: "N/A",
+            statusOfAMEntry: isWeekend ? "H" : "AB",
+            remarksOfAMEntry: "N/A",
+            locationOfAMEntry: "N/A",
+            timeOfPMEntry: "N/A",
+            statusOfPMEntry: isWeekend ? "H" : "AB",
+            remarksOfPMEntry: "N/A",
+            locationOfPMEntry: "N/A",
+          };
         }
       });
 
