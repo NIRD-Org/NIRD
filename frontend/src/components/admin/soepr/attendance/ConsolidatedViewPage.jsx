@@ -25,6 +25,11 @@ const years = Array.from(
   (val, index) => new Date().getFullYear() - index
 ); // Last 50 years
 
+function formatDate(date) {
+  const d = new Date(date);
+  return d.toLocaleDateString("en-GB"); // Format as dd/mm/yyyy
+}
+
 function ConsolidatedViewPage() {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -40,17 +45,9 @@ function ConsolidatedViewPage() {
     try {
       setLoading(true);
 
-      // Get the last day of the selected month and year
-      const endOfMonth = new Date(selectedYear, selectedMonth, 0).getDate();
-      const today = new Date().getDate();
-
-      // Get all dates from the start of the month to today
-      const allDates = [];
-      const startOfMonth = new Date(selectedYear, selectedMonth - 1, 1).toISOString().split('T')[0];
-      for (let day = 1; day <= today; day++) {
-        const date = new Date(selectedYear, selectedMonth - 1, day).toISOString().split('T')[0];
-        allDates.push(date);
-      }
+      // Define the start and end dates
+      const startOfMonth = new Date(selectedYear, selectedMonth - 1, 1);
+      const today = new Date();
 
       // Fetch AM and PM entries
       const [amResponse, pmResponse] = await Promise.all([
@@ -69,71 +66,77 @@ function ConsolidatedViewPage() {
 
       amEntries.forEach((entry) => {
         const { date, time, amStatus, remarks, location } = entry;
-        if (!combinedEntries[date]) {
-          combinedEntries[date] = {
-            date,
-            day: new Date(date).toLocaleDateString(undefined, { weekday: "long" }),
-            timeOfAMEntry: time || "N/A",
-            statusOfAMEntry: amStatus || "N/A",
-            remarksOfAMEntry: remarks || "N/A",
-            locationOfAMEntry: location || "N/A",
-            timeOfPMEntry: "N/A",
-            statusOfPMEntry: "N/A",
-            remarksOfPMEntry: "N/A",
-            locationOfPMEntry: "N/A",
-          };
-        } else {
-          combinedEntries[date].timeOfAMEntry = time || "N/A";
-          combinedEntries[date].statusOfAMEntry = amStatus || "N/A";
-          combinedEntries[date].remarksOfAMEntry = remarks || "N/A";
-          combinedEntries[date].locationOfAMEntry = location || "N/A";
+        const entryDate = new Date(date);
+        if (entryDate >= startOfMonth && entryDate <= today) {
+          const dateStr = formatDate(entryDate);
+          if (!combinedEntries[dateStr]) {
+            combinedEntries[dateStr] = {
+              date: dateStr,
+              day: entryDate.toLocaleDateString(undefined, { weekday: "long" }),
+              timeOfAMEntry: time || "N/A",
+              statusOfAMEntry: amStatus || "N/A",
+              remarksOfAMEntry: remarks || "N/A",
+              locationOfAMEntry: location || "N/A",
+              timeOfPMEntry: "N/A",
+              statusOfPMEntry: "N/A",
+              remarksOfPMEntry: "N/A",
+              locationOfPMEntry: "N/A",
+            };
+          } else {
+            combinedEntries[dateStr].timeOfAMEntry = time || "N/A";
+            combinedEntries[dateStr].statusOfAMEntry = amStatus || "N/A";
+            combinedEntries[dateStr].remarksOfAMEntry = remarks || "N/A";
+            combinedEntries[dateStr].locationOfAMEntry = location || "N/A";
+          }
         }
       });
 
       pmEntries.forEach((entry) => {
         const { date, time, pmStatus, remarks, location } = entry;
-        if (!combinedEntries[date]) {
-          combinedEntries[date] = {
-            date,
-            day: new Date(date).toLocaleDateString(undefined, { weekday: "long" }),
-            timeOfAMEntry: "N/A",
-            statusOfAMEntry: "N/A",
-            remarksOfAMEntry: "N/A",
-            locationOfAMEntry: "N/A",
-            timeOfPMEntry: time || "N/A",
-            statusOfPMEntry: pmStatus || "N/A",
-            remarksOfPMEntry: remarks || "N/A",
-            locationOfPMEntry: location || "N/A",
-          };
-        } else {
-          combinedEntries[date].timeOfPMEntry = time || "N/A";
-          combinedEntries[date].statusOfPMEntry = pmStatus || "N/A";
-          combinedEntries[date].remarksOfPMEntry = remarks || "N/A";
-          combinedEntries[date].locationOfPMEntry = location || "N/A";
+        const entryDate = new Date(date);
+        if (entryDate >= startOfMonth && entryDate <= today) {
+          const dateStr = formatDate(entryDate);
+          if (!combinedEntries[dateStr]) {
+            combinedEntries[dateStr] = {
+              date: dateStr,
+              day: entryDate.toLocaleDateString(undefined, { weekday: "long" }),
+              timeOfAMEntry: "N/A",
+              statusOfAMEntry: "N/A",
+              remarksOfAMEntry: "N/A",
+              locationOfAMEntry: "N/A",
+              timeOfPMEntry: time || "N/A",
+              statusOfPMEntry: pmStatus || "N/A",
+              remarksOfPMEntry: remarks || "N/A",
+              locationOfPMEntry: location || "N/A",
+            };
+          } else {
+            combinedEntries[dateStr].timeOfPMEntry = time || "N/A";
+            combinedEntries[dateStr].statusOfPMEntry = pmStatus || "N/A";
+            combinedEntries[dateStr].remarksOfPMEntry = remarks || "N/A";
+            combinedEntries[dateStr].locationOfPMEntry = location || "N/A";
+          }
         }
       });
 
-      // Mark weekends as holidays and missing entries as absent
-      allDates.forEach((date) => {
-        if (!combinedEntries[date]) {
-          const dayOfWeek = new Date(date).getDay();
-          const isWeekend = dayOfWeek === 0 || dayOfWeek === 6; // 0 = Sunday, 6 = Saturday
-          combinedEntries[date] = {
-            date,
-            day: new Date(date).toLocaleDateString(undefined, { weekday: "long" }),
-            timeOfAMEntry: "N/A",
-            statusOfAMEntry: isWeekend ? "H" : "AB",
-            remarksOfAMEntry: "N/A",
-            locationOfAMEntry: "N/A",
-            timeOfPMEntry: "N/A",
-            statusOfPMEntry: isWeekend ? "H" : "AB",
-            remarksOfPMEntry: "N/A",
-            locationOfPMEntry: "N/A",
-          };
-        }
-      });
+      // Generate a list of dates from the 1st of the month to today
+      const allDates = [];
+      for (let date = new Date(startOfMonth); date <= today; date.setDate(date.getDate() + 1)) {
+        const dateStr = formatDate(date);
+        allDates.push(dateStr);
+      }
 
-      const sortedEntries = Object.values(combinedEntries).sort((a, b) => new Date(a.date) - new Date(b.date));
+      const sortedEntries = allDates.map(date => combinedEntries[date] || {
+        date,
+        day: new Date(date).toLocaleDateString(undefined, { weekday: "long" }),
+        timeOfAMEntry: "N/A",
+        statusOfAMEntry: "AB",
+        remarksOfAMEntry: "N/A",
+        locationOfAMEntry: "N/A",
+        timeOfPMEntry: "N/A",
+        statusOfPMEntry: "AB",
+        remarksOfPMEntry: "N/A",
+        locationOfPMEntry: "N/A",
+      }).sort((a, b) => new Date(a.date.split('-').reverse().join('-')) - new Date(b.date.split('-').reverse().join('-')));
 
       setEntries(sortedEntries);
     } catch (error) {
@@ -215,7 +218,7 @@ function ConsolidatedViewPage() {
         </thead>
         <tbody>
           {entries.map((entry, index) => (
-            <tr key={index} className="text-center py-3">
+            <tr key={entry.date}>
               <td className="whitespace-nowrap px-3 py-2">{index + 1}</td>
               <td className="whitespace-nowrap px-3 py-2">{entry.date}</td>
               <td className="whitespace-nowrap px-3 py-2">
