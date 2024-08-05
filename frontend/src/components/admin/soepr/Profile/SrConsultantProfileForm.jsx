@@ -15,12 +15,14 @@ function SrConsultantProfile() {
   const [profileData, setProfileData] = useState({
     name: "",
     gender: "",
+    dob: "",
     email: "",
     mobile: "",
     qualifications: "",
     dojNIRDPR: "",
     srlm_state: "",
     areaOfExpertise: "",
+    areaOfInterest: "",
     photo: "",
   });
   const [photoPreview, setPhotoPreview] = useState("");
@@ -38,12 +40,14 @@ function SrConsultantProfile() {
           ...prevData,
           name: userData.name || "",
           gender: userData.gender || "",
+          dob: userData.dob || "",
           email: userData.email || "",
           mobile: userData.mobile || "",
           qualifications: userData.qualifications || "",
           dojNIRDPR: userData.dojNIRDPR || "",
           srlm_state: userData.state || "",
           areaOfExpertise: userData.areaOfExpertise || "",
+          areaOfInterest: userData.areaOfInterest || "",
           photo: userData.photo || "",
         }));
         setPhotoPreview(userData.photo ? userData.photo : "");
@@ -84,11 +88,14 @@ function SrConsultantProfile() {
     const formData = new FormData();
     formData.append("name", profileData.name);
     formData.append("gender", profileData.gender);
+    formData.append("dob", profileData.dob);
     formData.append("email", profileData.email);
     formData.append("mobile", profileData.mobile);
     formData.append("qualifications", profileData.qualifications);
     formData.append("dojNIRDPR", profileData.dojNIRDPR);
+    formData.append("srlm_state", profileData.srlm_state);
     formData.append("areaOfExpertise", profileData.areaOfExpertise);
+    formData.append("areaOfInterest", profileData.areaOfInterest);
     if (photo) {
       formData.append("photo", photo);
     }
@@ -146,6 +153,33 @@ function SrConsultantProfile() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
+              <Label htmlFor="dob">Date of Birth*</Label>
+              <Input
+                id="dob"
+                name="dob"
+                type="date"
+                value={profileData.dob}
+                onChange={handleChange}
+                className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="dojNIRDPR">Date of Joining*</Label>
+              <Input
+                id="dojNIRDPR"
+                name="dojNIRDPR"
+                type="date"
+                value={profileData.dojNIRDPR}
+                onChange={handleChange}
+                className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
               <Label htmlFor="email">Email ID*</Label>
               <Input
                 id="email"
@@ -183,21 +217,6 @@ function SrConsultantProfile() {
               />
             </div>
             <div>
-              <Label htmlFor="dojNIRDPR">Date of Joining*</Label>
-              <Input
-                id="dojNIRDPR"
-                name="dojNIRDPR"
-                type="date"
-                value={profileData.dojNIRDPR}
-                onChange={handleChange}
-                className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
-                required
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
               <Label htmlFor="srlm_state">Deployed State*</Label>
               <Input
                 id="srlm_state"
@@ -208,6 +227,9 @@ function SrConsultantProfile() {
                 required
               />
             </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <Label htmlFor="areaOfExpertise">Area of Expertise*</Label>
               <Textarea
@@ -219,44 +241,41 @@ function SrConsultantProfile() {
                 required
               />
             </div>
+            <div>
+              <Label htmlFor="areaOfInterest">Area of Interest</Label>
+              <Textarea
+                id="areaOfInterest"
+                name="areaOfInterest"
+                value={profileData.areaOfInterest}
+                onChange={handleChange}
+                className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
+              />
+            </div>
           </div>
 
           <div>
             <Label htmlFor="photo">
               Upload Latest Professional Photograph (JPEG, max 1 MB)
             </Label>
-            {photoPreview && (
-              <div className="mb-4">
-                <img
-                  src={photoPreview}
-                  alt="Profile Preview"
-                  className="w-32 h-32 object-cover rounded-md"
-                />
-              </div>
-            )}
-            <Input
+            <input
               id="photo"
-              name="photo"
               type="file"
-              accept="image/*"
+              accept="image/jpeg"
               onChange={handleFileChange}
               className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
-              required
             />
-            <small className="text-red-500">
-              Please upload a JPEG image not exceeding 1 MB.
-            </small>
+            {photoPreview && (
+              <img
+                src={photoPreview}
+                alt="Profile Preview"
+                className="mt-2 h-24 w-24 object-cover rounded-full"
+              />
+            )}
           </div>
 
-          <div className="flex justify-center">
-            <Button
-              pending={loading}
-              type="submit"
-              className="px-4 py-2 text-sm"
-            >
-              {loading ? "Submitting..." : "Submit"}
-            </Button>
-          </div>
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? "Updating..." : "Update Profile"}
+          </Button>
         </form>
       </div>
     </div>
