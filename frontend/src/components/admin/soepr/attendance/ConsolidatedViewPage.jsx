@@ -125,18 +125,36 @@ function ConsolidatedViewPage() {
         allDates.push(dateStr);
       }
 
-      const sortedEntries = allDates.map(date => combinedEntries[date] || {
-        date,
-        day: new Date(date).toLocaleDateString(undefined, { weekday: "long" }),
-        timeOfAMEntry: "N/A",
-        statusOfAMEntry: "AB",
-        remarksOfAMEntry: "N/A",
-        locationOfAMEntry: "N/A",
-        timeOfPMEntry: "N/A",
-        statusOfPMEntry: "AB",
-        remarksOfPMEntry: "N/A",
-        locationOfPMEntry: "N/A",
-      }).sort((a, b) => new Date(a.date.split('-').reverse().join('-')) - new Date(b.date.split('-').reverse().join('-')));
+      // Mark weekends and missing entries
+      const sortedEntries = allDates.map(date => {
+        const entry = combinedEntries[date] || {
+          date,
+          day: new Date(date.split('/').reverse().join('-')).toLocaleDateString(undefined, { weekday: "long" }),
+          timeOfAMEntry: "N/A",
+          statusOfAMEntry: "N/A",
+          remarksOfAMEntry: "N/A",
+          locationOfAMEntry: "N/A",
+          timeOfPMEntry: "N/A",
+          statusOfPMEntry: "N/A",
+          remarksOfPMEntry: "N/A",
+          locationOfPMEntry: "N/A",
+        };
+
+        const entryDate = new Date(date.split('/').reverse().join('-'));
+        const dayOfWeek = entryDate.getDay();
+        
+        if (entry.statusOfAMEntry === "N/A" && entry.statusOfPMEntry === "N/A") {
+          if (dayOfWeek === 6 || dayOfWeek === 0) {
+            entry.statusOfAMEntry = "H";
+            entry.statusOfPMEntry = "H";
+          } else {
+            entry.statusOfAMEntry = "AB";
+            entry.statusOfPMEntry = "AB";
+          }
+        }
+
+        return entry;
+      }).sort((a, b) => new Date(a.date.split('/').reverse().join('-')) - new Date(b.date.split('/').reverse().join('-')));
 
       setEntries(sortedEntries);
     } catch (error) {
