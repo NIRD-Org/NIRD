@@ -28,7 +28,9 @@ function ViewProfile() {
   return (
     <div className="w-full flex justify-center items-center min-h-screen bg-gray-100">
       <div className="w-full max-w-4xl px-10 py-8 bg-white rounded-md shadow-md">
-        <h2 className="text-2xl font-semibold mb-6 text-center">SOEPR - EMPLOYEE PROFILE</h2>
+        <h2 className="text-2xl font-semibold mb-6 text-center">
+          SOEPR - EMPLOYEE PROFILE
+        </h2>
         <div className="flex flex-col md:flex-row md:items-start space-y-6 md:space-y-0 md:space-x-2">
           <div className="flex-grow space-y-4 p-6">
             <p>
@@ -39,6 +41,10 @@ function ViewProfile() {
             </p>
             <p>
               <strong>Deployed State:</strong> {profileData.state}
+            </p>
+            <p>
+              <strong>Date of Birth:</strong>{" "}
+              {profileData.dateOfBirth.split("T")[0]}
             </p>
             <p>
               <strong>Date of Joining:</strong> {profileData.dojNIRDPR}
@@ -53,7 +59,8 @@ function ViewProfile() {
               <strong>Mobile No.:</strong> {profileData.mobile}
             </p>
             <p>
-              <strong>Qualification:</strong> {profileData.qualifications || "No Data Available"}
+              <strong>Qualification:</strong>{" "}
+              {profileData.qualifications || "No Data Available"}
             </p>
           </div>
           <div className="flex-shrink-0 p-6">
@@ -72,6 +79,10 @@ function ViewProfile() {
                 <p className="break-words whitespace-normal">
                   <strong>Area of Expertise:</strong>{" "}
                   {profileData.areaOfExpertise || "No Data Available"}
+                </p>
+                <p className="break-words whitespace-normal">
+                  <strong>Area of Interest:</strong>{" "}
+                  {profileData.areaOfInterest || "No Data Available"}
                 </p>
               </div>
             </div>

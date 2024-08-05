@@ -38,6 +38,10 @@ const userSchema = new mongoose.Schema({
   areaOfExpertise: {
     type: String,
   },
+  areaOfInterest: {
+    // newely added
+    type: String,
+  },
   photo: {
     type: String,
   },
@@ -46,3 +50,5 @@ const userSchema = new mongoose.Schema({
 });
 
 export const User = mongoose.model("User", userSchema);
+
+// That's all mam

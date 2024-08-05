@@ -15,7 +15,7 @@ function SrConsultantProfile() {
   const [profileData, setProfileData] = useState({
     name: "",
     gender: "",
-    dob: "",
+    dateOfBirth: "",
     email: "",
     mobile: "",
     qualifications: "",
@@ -40,7 +40,7 @@ function SrConsultantProfile() {
           ...prevData,
           name: userData.name || "",
           gender: userData.gender || "",
-          dob: userData.dob || "",
+          dateOfBirth: userData.dateOfBirth || "",
           email: userData.email || "",
           mobile: userData.mobile || "",
           qualifications: userData.qualifications || "",
@@ -88,7 +88,7 @@ function SrConsultantProfile() {
     const formData = new FormData();
     formData.append("name", profileData.name);
     formData.append("gender", profileData.gender);
-    formData.append("dob", profileData.dob);
+    formData.append("dateOfBirth", profileData.dateOfBirth);
     formData.append("email", profileData.email);
     formData.append("mobile", profileData.mobile);
     formData.append("qualifications", profileData.qualifications);
@@ -153,12 +153,12 @@ function SrConsultantProfile() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <Label htmlFor="dob">Date of Birth*</Label>
+              <Label htmlFor="dateOfBirth">Date of Birth*</Label>
               <Input
-                id="dob"
-                name="dob"
+                id="dateOfBirth"
+                name="dateOfBirth"
                 type="date"
-                value={profileData.dob}
+                value={profileData.dateOfBirth?.split("T")[0]}
                 onChange={handleChange}
                 className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
                 required
