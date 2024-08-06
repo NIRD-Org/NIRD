@@ -24,6 +24,7 @@ function SoeprAmUploadForm() {
   const [weekday, setWeekday] = useState("");
   const [isSubmissionAllowed, setIsSubmissionAllowed] = useState(true);
   const [imageUploaded, setImageUploaded] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState(null); // New state for image preview URL
 
   useEffect(() => {
     const now = new Date();
@@ -58,8 +59,14 @@ function SoeprAmUploadForm() {
 
   const handleFileChange = (e) => {
     const { files } = e.target;
-    setFormData((prev) => ({ ...prev, am_upload_file: files[0] }));
-    setImageUploaded(!!files.length);
+    if (files.length > 0) {
+      setFormData((prev) => ({ ...prev, am_upload_file: files[0] }));
+      setImageUploaded(true);
+      setPreviewUrl(URL.createObjectURL(files[0])); // Set preview URL
+    } else {
+      setImageUploaded(false);
+      setPreviewUrl(null); // Clear preview URL
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -170,6 +177,13 @@ function SoeprAmUploadForm() {
             <p className="text-red-500">
               {imageUploaded ? "Image uploaded" : "No image uploaded"}
             </p>
+            {previewUrl && (
+              <img
+                src={previewUrl}
+                alt="Preview"
+                className="mt-2 max-w-xs border border-gray-300"
+              />
+            )}
           </div>
         </div>
         <div className="flex justify-center mt-6">
