@@ -24,6 +24,7 @@ function SoeprPmUploadForm() {
   });
   const [isSubmissionAllowed, setIsSubmissionAllowed] = useState(true);
   const [imageUploaded, setImageUploaded] = useState(false);
+  const [imagePreview, setImagePreview] = useState(null); // State for image preview
 
   useEffect(() => {
     const currentHour = new Date().getHours();
@@ -39,8 +40,12 @@ function SoeprPmUploadForm() {
 
   const handleFileChange = (e) => {
     const { name, files } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: files[0] }));
-    setImageUploaded(files.length > 0); // Set true if a file is selected
+    if (files && files.length > 0) {
+      const file = files[0];
+      setFormData((prev) => ({ ...prev, [name]: file }));
+      setImageUploaded(true);
+      setImagePreview(URL.createObjectURL(file)); // Set image preview URL
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -55,6 +60,7 @@ function SoeprPmUploadForm() {
         headers: { "Content-Type": "multipart/form-data" },
       });
       tst.success("PM upload successful");
+      navigate("/success"); // Navigate to a success page or another route
     } catch (error) {
       toast.error(error?.response?.data?.message);
     } finally {
@@ -153,6 +159,19 @@ function SoeprPmUploadForm() {
             <p className="text-red-500 mt-2">
               {imageUploaded ? "Image uploaded" : "No image uploaded"}
             </p>
+            {imagePreview && (
+              <img
+                src={imagePreview}
+                alt="Image Preview"
+                className="mt-2"
+                style={{
+                  width: "120px", // Slightly larger than passport size
+                  height: "160px", // Maintain aspect ratio
+                  objectFit: "cover", // Cover the container dimensions
+                  borderRadius: "4px", // Optional: add slight border radius
+                }}
+              />
+            )}
           </div>
         </div>
         <div className="flex justify-center mt-6">

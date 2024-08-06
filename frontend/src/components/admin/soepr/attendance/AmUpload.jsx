@@ -181,7 +181,13 @@ function SoeprAmUploadForm() {
               <img
                 src={previewUrl}
                 alt="Preview"
-                className="mt-2 max-w-xs border border-gray-300"
+                className="mt-2 border border-gray-300"
+                style={{
+                  width: "120px",
+                  height: "160px",
+                  objectFit: "cover",
+                  borderRadius: "4px",
+                }}
               />
             )}
           </div>
