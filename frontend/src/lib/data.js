@@ -70,6 +70,25 @@ export const getSidebarItems = (user) => {
         ],
       },
       {
+      type: "module",
+        icon: ArrowBigRight,
+        title: "Plan Of Action",
+        submodules: [
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "Plan Of Action",
+            link: "/admin/soepr/PlanOfAction",
+          },
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "Edit Profile",
+            link: "/admin/soepr/profile-form",
+          },
+        ],
+      },
+      {
         type: "module",
         icon: ArrowBigRight,
         title: "KPI",
