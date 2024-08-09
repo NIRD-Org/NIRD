@@ -27,7 +27,7 @@ const years = Array.from({ length: 27 }, (_, i) => 2024 + i);
 
 // Plan of the day options with disabled state
 const planOfDayOptions = [
-  { value: "Select from the list", disabled: true },
+  { value: "Select from the list", disabled: false },
   { value: "Functioning of Gram Panchayats/ Gram Sabhas", disabled: true , color: 'bg-blue-900'},
   { value: "Observe Ward Sabhas", disabled: false },
   { value: "Observe Mahila Sabhas", disabled: false },
