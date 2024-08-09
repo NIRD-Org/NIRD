@@ -101,6 +101,7 @@ import SoeprList from "./components/admin/soepr/location/SoeprList";
 import UpdateSoeprLocation from "./components/admin/soepr/location/UpdateSoeprLocation";
 import POA from "./components/admin/soepr/kpidata/PlanOfAction"
 import POA1 from "./components/admin/soepr/kpidata/POA1Form"
+import POA2 from "./components/admin/soepr/kpidata/POA2Form"
 
 function App() {
   const { login } = useAuthContext();
@@ -159,6 +160,10 @@ function App() {
             <Route
               path="soepr/POA1"
               element={<POA1 />}
+            />
+             <Route
+              path="soepr/POA2"
+              element={<POA2 />}
             />
             <Route path="attendance/view" element={<ConsolidatedViewPage />} />
 

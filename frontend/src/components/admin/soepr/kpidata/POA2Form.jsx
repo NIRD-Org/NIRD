@@ -70,7 +70,7 @@ const planOfDayOptions = {
   ]
 };
 
-const POA1Form = () => {
+const POA2Form = () => {
   // Get current month and year
   const currentMonthIndex = new Date().getMonth();
   const currentYear = new Date().getFullYear();
@@ -83,7 +83,7 @@ const POA1Form = () => {
 
   const getDaysInMonth = () => {
     const days = selectedMonth.days;
-    return Array.from({ length: 15 }, (_, i) => i + 1);
+    return Array.from({ length: days - 15 }, (_, i) => i + 16);
   };
 
   const getWeekDay = (day) => {
@@ -113,7 +113,7 @@ const POA1Form = () => {
   return (
     <div style={{ fontSize: '14px', maxWidth: '100%', margin: '0 auto' }}>
       <AdminHeader>
-        First Fortnightly Plan Of Action - Month : {selectedMonth.name} {currentYear}
+        Second Fortnightly Plan Of Action - Month : {selectedMonth.name} {currentYear}
       </AdminHeader>
       <div style={{ marginBottom: '15px', display: 'flex', gap: '10px' }}>
         <div>
@@ -137,7 +137,7 @@ const POA1Form = () => {
             <th>Weekday</th>
             <th>Plan</th>
             <th>Action</th>
-            <th>Planned Event</th>
+            <th>Planned Event Description</th>
             <th>Achievements</th>
             <th>Upload Photo</th>
             <th>Remarks/Reason for Failure</th>
@@ -190,4 +190,4 @@ const POA1Form = () => {
   );
 };
 
-export default POA1Form;
+export default POA2Form;
