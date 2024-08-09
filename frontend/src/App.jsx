@@ -99,11 +99,13 @@ import ViewProfile from "./components/admin/soepr/Profile/ViewProfile";
 import ConsolidatedViewPage from "./components/admin/soepr/attendance/ConsolidatedViewPage";
 import SoeprList from "./components/admin/soepr/location/SoeprList";
 import UpdateSoeprLocation from "./components/admin/soepr/location/UpdateSoeprLocation";
-import PoA from "./components/admin/soepr/kpidata/PlanOfAction";
+import POA from "./components/admin/soepr/kpidata/PlanOfAction";
 import SoeprUserList from "./components/admin/soepr-location/SoeprUserList";
 import UpdateSoeprUserLocation from "./components/admin/soepr-location/UpdateSoeprUserLocation";
 import SoeprUserLocation from "./components/admin/soepr-location/SoeprUserLocation";
 import SoeprLocationView from "./components/admin/soepr-location/SoeprLocationView";
+import POA1 from "./components/admin/soepr/kpidata/POA1Form";
+import POA2 from "./components/admin/soepr/kpidata/POA2Form";
 
 function App() {
   const { login } = useAuthContext();
@@ -155,7 +157,9 @@ function App() {
               path="soepr/attendance/view"
               element={<ConsolidatedViewPage />}
             />
-            <Route path="soepr/PlanOfAction" element={<PoA />} />
+            <Route path="soepr/PlanOfAction" element={<POA />} />
+            <Route path="soepr/POA1" element={<POA1 />} />
+            <Route path="soepr/POA2" element={<POA2 />} />
             <Route path="attendance/view" element={<ConsolidatedViewPage />} />
 
             {/* <Route path="data-point/view/:kpiId" element={<KpiViewPage />} /> */}
