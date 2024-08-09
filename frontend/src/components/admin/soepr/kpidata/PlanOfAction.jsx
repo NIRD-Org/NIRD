@@ -110,7 +110,7 @@ function PlanOfAction() {
     setPending(true);
     try {
       // Add your form submission logic here (e.g., API call)
-      toast.success("KPI entry submitted successfully");
+      toast.success("Plan Of Action submitted successfully");
       navigate("/success"); // Navigate to a success page or another route
     } catch (error) {
       toast.error("Submission failed");
@@ -121,7 +121,7 @@ function PlanOfAction() {
 
   return (
     <div className="container mx-auto p-4">
-      <AdminHeader>KPI Entry Form</AdminHeader>
+      <AdminHeader>Fortnighly Plan Of Action</AdminHeader>
       <form onSubmit={handleSubmit}>
         {/* State, District, GP on One Line */}
         <div className="mb-6 flex flex-wrap gap-4">
