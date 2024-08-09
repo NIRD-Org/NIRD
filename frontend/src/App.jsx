@@ -99,7 +99,11 @@ import ViewProfile from "./components/admin/soepr/Profile/ViewProfile";
 import ConsolidatedViewPage from "./components/admin/soepr/attendance/ConsolidatedViewPage";
 import SoeprList from "./components/admin/soepr/location/SoeprList";
 import UpdateSoeprLocation from "./components/admin/soepr/location/UpdateSoeprLocation";
-import PoA from "./components/admin/soepr/kpidata/PlanOfAction"
+import PoA from "./components/admin/soepr/kpidata/PlanOfAction";
+import SoeprUserList from "./components/admin/soepr-location/SoeprUserList";
+import UpdateSoeprUserLocation from "./components/admin/soepr-location/UpdateSoeprUserLocation";
+import SoeprUserLocation from "./components/admin/soepr-location/SoeprUserLocation";
+import SoeprLocationView from "./components/admin/soepr-location/SoeprLocationView";
 
 function App() {
   const { login } = useAuthContext();
@@ -151,10 +155,7 @@ function App() {
               path="soepr/attendance/view"
               element={<ConsolidatedViewPage />}
             />
-             <Route
-              path="soepr/PlanOfAction"
-              element={<PoA />}
-            />
+            <Route path="soepr/PlanOfAction" element={<PoA />} />
             <Route path="attendance/view" element={<ConsolidatedViewPage />} />
 
             {/* <Route path="data-point/view/:kpiId" element={<KpiViewPage />} /> */}
@@ -218,8 +219,16 @@ function App() {
               element={<UserLocation role={3} />}
             />
             <Route
+              path="user-location/assign/soepr/:userId"
+              element={<SoeprUserLocation />}
+            />
+            <Route
               path="user-location/update/admin/:userId"
               element={<UpdateUserLocation role={2} />}
+            />
+            <Route
+              path="user-location/update/soepr/:userId"
+              element={<UpdateSoeprUserLocation />}
             />
             <Route
               path="user-location/update/soepr/:userId"
@@ -237,12 +246,17 @@ function App() {
               path="user-location/view/young-fellow/:userId"
               element={<LocationView role={3} />}
             />
+            <Route
+              path="user-location/view/soepr/:userId"
+              element={<SoeprLocationView />}
+            />
             <Route path="users/all/admin" element={<UserList role={2} />} />
             <Route
               path="users/all/young-fellow"
               element={<UserList role={3} />}
             />
-            <Route path="users/all/soepr" element={<SoeprList />} />
+            <Route path="users/all/soepr" element={<SoeprUserList />} />
+            <Route path="users/all/soepr/list" element={<SoeprList />} />
 
             <Route path="attendance/attendance" element={<Attendance />} />
             <Route
