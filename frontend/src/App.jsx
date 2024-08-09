@@ -157,7 +157,7 @@ function App() {
               path="soepr/attendance/view"
               element={<ConsolidatedViewPage />}
             />
-            <Route path="soepr/PlanOfAction" element={<POA />} />
+            <Route path="soepr/plan-of-action" element={<POA />} />
             <Route path="soepr/POA1" element={<POA1 />} />
             <Route path="soepr/POA2" element={<POA2 />} />
             <Route path="attendance/view" element={<ConsolidatedViewPage />} />
