@@ -79,7 +79,13 @@ export const getSidebarItems = (user) => {
             icon: ArrowBigRight,
             title: "Plan Of Action",
             link: "/admin/soepr/PlanOfAction",
-          }          
+          },   
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "POA1",
+            link: "/admin/soepr/POA1",
+          }       
         ],
       },
       {
