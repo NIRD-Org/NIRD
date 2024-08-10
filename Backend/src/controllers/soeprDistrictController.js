@@ -144,7 +144,7 @@ export const getAllDistricts = CatchAsyncError(async (req, res, next) => {
       },
       {
         $lookup: {
-          from: "states",
+          from: "soeprstates",
           localField: "state_id",
           foreignField: "id",
           as: "state",

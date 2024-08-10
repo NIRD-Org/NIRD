@@ -107,7 +107,7 @@ export const getUserLocation = CatchAsyncError(async (req, res, next) => {
       { $match: { user_id } },
       {
         $lookup: {
-          from: "states",
+          from: "soeprstates",
           localField: "userLocations.state_ids",
           foreignField: "id",
           as: "states",
@@ -115,7 +115,7 @@ export const getUserLocation = CatchAsyncError(async (req, res, next) => {
       },
       {
         $lookup: {
-          from: "districts",
+          from: "soeprdistricts",
           localField: "userLocations.dist_ids",
           foreignField: "id",
           as: "districts",
