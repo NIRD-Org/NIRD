@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 
 // Sample data for dropdowns
 const states = ["State 1", "State 2", "State 3"];
+const districts = ["District 1", "District 2", "District 3"]; // Simplified list for example
 const months = [
   { name: "January", days: 31 },
   { name: "February", days: 28 }, // Adjust for leap years if needed
@@ -78,6 +79,7 @@ const POA1Form = () => {
   const [selectedState, setSelectedState] = useState(states[0]);
   const [plans, setPlans] = useState({}); // Object to store selected plan for each day
   const [actions, setActions] = useState({}); // Object to store selected action for each day
+  const [selectedDistricts, setSelectedDistricts] = useState({}); // Object to store selected district for each day
 
   const selectedMonth = months[currentMonthIndex];
 
@@ -105,10 +107,17 @@ const POA1Form = () => {
     setActions(prev => ({ ...prev, [day]: selectedAction }));
   };
 
+  const handleDistrictChange = (day, selectedDistrict) => {
+    setSelectedDistricts(prev => ({ ...prev, [day]: selectedDistrict }));
+  };
+
   const handleSubmit = () => {
     // Handle form submission logic here
     toast.success("Form submitted successfully!");
   };
+
+  // Determine the last day of the fortnight
+  const lastDayOfFortnight = Math.min(15, selectedMonth.days);
 
   return (
     <div style={{ fontSize: '14px', maxWidth: '100%', margin: '0 auto' }}>
@@ -135,9 +144,10 @@ const POA1Form = () => {
           <tr>
             <th>Date</th>
             <th>Weekday</th>
-            <th>Plan</th>
-            <th>Action</th>
+            <th>Action Plan (KPI Category)</th>
             <th>Planned Event</th>
+            <th>Tentative Target (Description in 50 words)</th>
+            <th>District</th>
             <th>Achievements</th>
             <th>Upload Photo</th>
             <th>Remarks/Reason for Failure</th>
@@ -177,15 +187,51 @@ const POA1Form = () => {
                 </select>
               </td>
               <td><input type="text" placeholder="Planned Event" style={{ width: '100%', padding: '2px', fontSize: '12px' }} /></td>
-              <td><input type="text" placeholder="Achievements" style={{ width: '100%', padding: '2px', fontSize: '12px' }} /></td>
-              <td><input type="file" accept="image/*" style={{ fontSize: '12px' }} /></td>
-              <td><input type="text" placeholder="Remarks/Reason for Failure" style={{ width: '100%', padding: '2px', fontSize: '12px' }} /></td>
+              <td>
+                <select
+                  value={selectedDistricts[day] || ""}
+                  onChange={(e) => handleDistrictChange(day, e.target.value)}
+                  style={{ width: '100%', padding: '2px', fontSize: '12px' }}
+                >
+                  <option value="" disabled>Select a District</option>
+                  {districts[selectedState]?.map((district, idx) => (
+                    <option key={idx} value={district}>
+                      {district}
+                    </option>
+                  ))}
+                </select>
+              </td>
+              <td>
+                <input
+                  type="text"
+                  placeholder="Achievements"
+                  style={{ width: '100%', padding: '2px', fontSize: '12px' }}
+                  disabled={day !== lastDayOfFortnight}
+                />
+              </td>
+              <td>
+                <input
+                  type="file"
+                  accept="image/*"
+                  disabled={day !== lastDayOfFortnight}
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  placeholder="Remarks/Reason for Failure"
+                  style={{ width: '100%', padding: '2px', fontSize: '12px' }}
+                  disabled={day !== lastDayOfFortnight}
+                />
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <Button onClick={handleSubmit}>Submit</Button>
+      <Button onClick={handleSubmit} style={{ marginTop: '20px', fontSize: '14px' }}>
+        Submit
+      </Button>
     </div>
   );
 };

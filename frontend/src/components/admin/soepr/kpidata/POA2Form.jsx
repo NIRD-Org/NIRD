@@ -5,9 +5,15 @@ import toast from "react-hot-toast";
 
 // Sample data for dropdowns
 const states = ["State 1", "State 2", "State 3"];
+const districts = {
+  "State 1": ["District 1-1", "District 1-2", "District 1-3"],
+  "State 2": ["District 2-1", "District 2-2", "District 2-3"],
+  "State 3": ["District 3-1", "District 3-2", "District 3-3"]
+};
+
 const months = [
   { name: "January", days: 31 },
-  { name: "February", days: 28 }, // Adjust for leap years if needed
+  { name: "February", days: 28 },
   { name: "March", days: 31 },
   { name: "April", days: 30 },
   { name: "May", days: 31 },
@@ -20,7 +26,6 @@ const months = [
   { name: "December", days: 31 },
 ];
 
-// Plan of the day options split into headings and actions
 const planOfDayOptions = {
   "Functioning of Gram Panchayats/ Gram Sabhas": [
     "Observe Ward Sabhas",
@@ -71,13 +76,13 @@ const planOfDayOptions = {
 };
 
 const POA2Form = () => {
-  // Get current month and year
   const currentMonthIndex = new Date().getMonth();
   const currentYear = new Date().getFullYear();
 
   const [selectedState, setSelectedState] = useState(states[0]);
-  const [plans, setPlans] = useState({}); // Object to store selected plan for each day
-  const [actions, setActions] = useState({}); // Object to store selected action for each day
+  const [selectedDistricts, setSelectedDistricts] = useState({});
+  const [plans, setPlans] = useState({});
+  const [actions, setActions] = useState({});
 
   const selectedMonth = months[currentMonthIndex];
 
@@ -105,8 +110,11 @@ const POA2Form = () => {
     setActions(prev => ({ ...prev, [day]: selectedAction }));
   };
 
+  const handleDistrictChange = (day, selectedDistrict) => {
+    setSelectedDistricts(prev => ({ ...prev, [day]: selectedDistrict }));
+  };
+
   const handleSubmit = () => {
-    // Handle form submission logic here
     toast.success("Form submitted successfully!");
   };
 
@@ -135,9 +143,11 @@ const POA2Form = () => {
           <tr>
             <th>Date</th>
             <th>Weekday</th>
-            <th>Plan</th>
-            <th>Action</th>
-            <th>Planned Event Description</th>
+           
+            <th>Action Plan(KPI Category)</th>
+            <th>Planned Event</th>
+            <th>Tentative Target( Description in 50 words)</th>
+            <th>District</th>
             <th>Achievements</th>
             <th>Upload Photo</th>
             <th>Remarks/Reason for Failure</th>
@@ -148,6 +158,7 @@ const POA2Form = () => {
             <tr key={idx}>
               <td>{formatIndianDate(day)}</td>
               <td>{getWeekDay(day)}</td>
+             
               <td>
                 <select
                   value={plans[day] || ""}
@@ -177,7 +188,20 @@ const POA2Form = () => {
                 </select>
               </td>
               <td><input type="text" placeholder="Planned Event" style={{ width: '100%', padding: '2px', fontSize: '12px' }} /></td>
-              <td><input type="text" placeholder="Achievements" style={{ width: '100%', padding: '2px', fontSize: '12px' }} /></td>
+              <td>
+                <select
+                  value={selectedDistricts[day] || ""}
+                  onChange={(e) => handleDistrictChange(day, e.target.value)}
+                  style={{ width: '100%', padding: '2px', fontSize: '12px' }}
+                >
+                  <option value="" disabled>Select a District</option>
+                  {districts[selectedState]?.map((district, idx) => (
+                    <option key={idx} value={district}>
+                      {district}
+                    </option>
+                  ))}
+                </select>
+              </td><td><input type="text" placeholder="Achievements" style={{ width: '100%', padding: '2px', fontSize: '12px' }} /></td>
               <td><input type="file" accept="image/*" style={{ fontSize: '12px' }} /></td>
               <td><input type="text" placeholder="Remarks/Reason for Failure" style={{ width: '100%', padding: '2px', fontSize: '12px' }} /></td>
             </tr>
@@ -185,7 +209,7 @@ const POA2Form = () => {
         </tbody>
       </table>
 
-      <Button onClick={handleSubmit}>Submit</Button>
+      <Button variant="primary" onClick={handleSubmit} style={{ marginTop: '20px' }}>Submit</Button>
     </div>
   );
 };
