@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import AdminHeader from "../../AdminHeader";
 import toast from "react-hot-toast";
@@ -6,6 +6,8 @@ import toast from "react-hot-toast";
 // Sample data for dropdowns
 const states = ["State 1", "State 2", "State 3"];
 const districts = ["District 1", "District 2", "District 3"]; // Simplified list for example
+
+// Months with days
 const months = [
   { name: "January", days: 31 },
   { name: "February", days: 28 }, // Adjust for leap years if needed
@@ -71,18 +73,40 @@ const planOfDayOptions = {
   ]
 };
 
+const formatIndianDate = (date) => {
+  if (!(date instanceof Date) || isNaN(date.getTime())) {
+    return "Invalid Date";
+  }
+  return `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+};
+
 const POA2Form = () => {
+  const [plans, setPlans] = useState({});
+  const [actions, setActions] = useState({});
+  const [selectedDistricts, setSelectedDistricts] = useState({});
+  const [isEditableOn16th, setIsEditableOn16th] = useState(false);
+  const [isEditableOnLastDay, setIsEditableOnLastDay] = useState(false);
+
   // Get current month and year
   const currentMonthIndex = new Date().getMonth();
   const currentYear = new Date().getFullYear();
-
-  const [selectedState, setSelectedState] = useState(states[0]);
-  const [plans, setPlans] = useState({}); // Object to store selected plan for each day
-  const [actions, setActions] = useState({}); // Object to store selected action for each day
-  const [selectedDistricts, setSelectedDistricts] = useState({}); // Object to store selected district for each day
-
   const selectedMonth = months[currentMonthIndex];
 
+  // Determine the start and end date of the second fortnight
+  const startDate = new Date(currentYear, currentMonthIndex, 16);
+  const endDate = new Date(currentYear, currentMonthIndex, selectedMonth.days);
+  const today = new Date();
+
+  useEffect(() => {
+    // Set editability based on today's date
+    const isToday16th = today.getDate() === 16;
+    const isTodayLastDay = today.getDate() === selectedMonth.days;
+
+    setIsEditableOn16th(isToday16th);
+    setIsEditableOnLastDay(isTodayLastDay);
+  }, [today, selectedMonth]);
+
+  // Get days in month for the form
   const getDaysInMonth = () => {
     const startDay = 16;
     const endDay = selectedMonth.days;
@@ -92,11 +116,6 @@ const POA2Form = () => {
   const getWeekDay = (day) => {
     const date = new Date(`${selectedMonth.name} ${day}, ${currentYear}`);
     return date.toLocaleDateString("en-IN", { weekday: 'long' });
-  };
-
-  const formatIndianDate = (day) => {
-    const date = new Date(`${selectedMonth.name} ${day}, ${currentYear}`);
-    return date.toLocaleDateString("en-IN");
   };
 
   const handlePlanChange = (day, selectedPlan) => {
@@ -117,27 +136,16 @@ const POA2Form = () => {
     toast.success("Form submitted successfully!");
   };
 
-  // Determine the last day of the fortnight
-  const lastDayOfFortnight = selectedMonth.days;
-
   return (
     <div style={{ fontSize: '14px', maxWidth: '100%', margin: '0 auto' }}>
       <AdminHeader>
-        Second Fortnightly Plan Of Action - Month : {selectedMonth.name} {currentYear}
+        Second Fortnightly Plan Of Action - Month: {selectedMonth.name} {currentYear}
       </AdminHeader>
-      <div style={{ marginBottom: '15px', display: 'flex', gap: '10px' }}>
-        <div>
-          <label>State: </label>
-          <select
-            value={selectedState}
-            onChange={(e) => setSelectedState(e.target.value)}
-            style={{ padding: '4px', fontSize: '14px' }}
-          >
-            {states.map((state, idx) => (
-              <option key={idx} value={state}>{state}</option>
-            ))}
-          </select>
-        </div>
+
+      <div style={{ margin: '15px 0', textAlign: 'center' }}>
+        <p style={{ color: today < startDate || today > endDate ? 'red' : 'black' }}>
+          Available for Entry: {formatIndianDate(startDate)} - {formatIndianDate(endDate)}
+        </p>
       </div>
 
       <table border="1" cellPadding="3" cellSpacing="0" style={{ width: '100%', marginTop: '20px', fontSize: '12px' }}>
@@ -157,14 +165,14 @@ const POA2Form = () => {
         <tbody>
           {getDaysInMonth().map((day, idx) => (
             <tr key={idx}>
-              <td>{formatIndianDate(day)}</td>
+              <td>{formatIndianDate(new Date(currentYear, currentMonthIndex, day))}</td>
               <td>{getWeekDay(day)}</td>
               <td>
                 <select
                   value={plans[day] || ""}
                   onChange={(e) => handlePlanChange(day, e.target.value)}
                   style={{ width: '100%', padding: '2px', fontSize: '12px' }}
-                  disabled={day !== 16} // Active only on the 16th
+                  disabled={!isEditableOn16th}
                 >
                   <option value="" disabled>Select a Plan</option>
                   {Object.keys(planOfDayOptions).map((plan, idx) => (
@@ -179,7 +187,7 @@ const POA2Form = () => {
                   value={actions[day] || ""}
                   onChange={(e) => handleActionChange(day, e.target.value)}
                   style={{ width: '100%', padding: '2px', fontSize: '12px' }}
-                  disabled={day !== 16} // Active only on the 16th
+                  disabled={!isEditableOn16th}
                 >
                   <option value="" disabled>Select an Action</option>
                   {(plans[day] ? planOfDayOptions[plans[day]] : []).map((action, idx) => (
@@ -189,37 +197,40 @@ const POA2Form = () => {
                   ))}
                 </select>
               </td>
-              <td><input type="text" placeholder="Planned Event" style={{ width: '100%', padding: '2px', fontSize: '12px' }} disabled={day !== 16} /></td>
+              <td><input type="text" placeholder="Planned Event" style={{ width: '100%', padding: '2px', fontSize: '12px' }} disabled={!isEditableOn16th} /></td>
               <td>
                 <select
                   value={selectedDistricts[day] || ""}
                   onChange={(e) => handleDistrictChange(day, e.target.value)}
                   style={{ width: '100%', padding: '2px', fontSize: '12px' }}
-                  disabled={day !== 16} // Active only on the 16th
+                  disabled={!isEditableOn16th}
                 >
-                  <option value="" disabled>Select a District</option>
-                  {districts[selectedState]?.map((district, idx) => (
-                    <option key={idx} value={district}>{district}</option>
+                  <option value="" disabled>Select District</option>
+                  {districts.map((district, idx) => (
+                    <option key={idx} value={district}>
+                      {district}
+                    </option>
                   ))}
                 </select>
               </td>
-              <td><input type="text" placeholder="Achievements" style={{ width: '100%', padding: '2px', fontSize: '12px' }} disabled={day !== lastDayOfFortnight} /></td>
+              <td><input type="text" placeholder="Achievements" style={{ width: '100%', padding: '2px', fontSize: '12px' }} disabled={!isEditableOnLastDay} /></td>
               <td>
                 <input
                   type="file"
                   accept="image/*"
-                  disabled={day !== lastDayOfFortnight} // Active only on the last day
+                  style={{ width: '100%', fontSize: '12px' }}
+                  disabled={!isEditableOnLastDay}
                 />
               </td>
-              <td><input type="text" placeholder="Remarks/Reason for Failure" style={{ width: '100%', padding: '2px', fontSize: '12px' }} disabled={day !== lastDayOfFortnight} /></td>
+              <td><input type="text" placeholder="Remarks" style={{ width: '100%', padding: '2px', fontSize: '12px' }} disabled={!isEditableOnLastDay} /></td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <Button onClick={handleSubmit} style={{ marginTop: '20px', fontSize: '14px' }}>
-        Submit
-      </Button>
+      <div style={{ marginTop: '20px', textAlign: 'center' }}>
+        <Button onClick={handleSubmit} style={{ padding: '10px 20px', fontSize: '14px' }}>Submit</Button>
+      </div>
     </div>
   );
 };
