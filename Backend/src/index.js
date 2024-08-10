@@ -29,6 +29,8 @@ import soeprThemesRoutes from "./routes/soeprThemesRoutes.js";
 import soeprKpiRoutes from "./routes/soeprKpiRoutes.js";
 import soeprKpiDataRoutes from "./routes/soeprKpiDataRoutes.js";
 import soeprLocationRoutes from "./routes/soeprLocationRoutes.js";
+import soeprStateRoutes from "./routes/soeprStateRoutes.js";
+import soeprDistrictRoutes from "./routes/soeprDistrictRoutes.js";
 
 const app = express();
 
@@ -69,6 +71,8 @@ app.use("/api/v1/pm-upload", pmRoutes);
 app.use("/api/v1/soepr-theme", soeprThemesRoutes);
 app.use("/api/v1/soepr-kpi", soeprKpiRoutes);
 app.use("/api/v1/soepr-kpi-data", soeprKpiDataRoutes);
+app.use("/api/v1/soepr-state", soeprStateRoutes);
+app.use("/api/v1/soepr-dist", soeprDistrictRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).json({ message: "Server is running" });

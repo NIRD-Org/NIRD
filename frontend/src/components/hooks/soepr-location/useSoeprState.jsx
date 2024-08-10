@@ -7,7 +7,7 @@ export function useYfState() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const statesResponse = await API.get("/api/v1/state/all");
+        const statesResponse = await API.get("/api/v1/soepr-state/all");
         const states = statesResponse.data.states;
 
         const userLocationsResponse = await API.get("/api/v1/soepr-location");

@@ -39,7 +39,7 @@ const SoeprLocationView = () => {
   useEffect(() => {
     async function fetchStates() {
       try {
-        const response = await API.get("/api/v1/state/all");
+        const response = await API.get("/api/v1/soepr-state/all");
         setStates(response.data?.states || []);
       } catch (error) {
         console.log(error);
@@ -64,7 +64,7 @@ const SoeprLocationView = () => {
     async function fetchDistricts() {
       if (state) {
         try {
-          const response = await API.get(`/api/v1/dist/state/${state}`);
+          const response = await API.get(`/api/v1/soepr-dist/state/${state}`);
           setDistricts(response.data?.districts || []);
         } catch (error) {
           console.log(error);
