@@ -266,3 +266,32 @@ export const getAmAttendance = CatchAsyncError(async (req, res, next) => {
     return next(new Errorhandler("Failed to get Attendance data", 500));
   }
 });
+
+// get monthly reports
+
+export const getMonthlyReport = CatchAsyncError(async (req, res, next) => {
+  try {
+    const { month, year } = req.query;
+
+    if (!month || !year) {
+      return next(new Errorhandler("Month and Year are required", 400));
+    }
+
+    const startDate = new Date(year, month - 1, 1);
+    const endDate = new Date(year, month, 0, 23, 59, 59, 999);
+
+    const totalWorkingDays = (endDate - startDate) / (1000 * 60 * 60 * 24);
+
+    const attendanceData = await AmModel.find({
+      date: {
+        $gt: startDate.toString().split("T")[0],
+        $lte: endDate.toString().split("T")[0],
+      },
+    });
+
+    const totalPresentDays = attendance + total + totalDays;
+  } catch (error) {
+    console.log(error);
+    return next(new Errorhandler("Failed to get Monthly report", 500));
+  }
+});

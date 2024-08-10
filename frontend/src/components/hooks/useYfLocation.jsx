@@ -31,7 +31,9 @@ export function useYfLocation({ state_id, dist_id, block_id }) {
 
     const fetchDistricts = async () => {
       try {
-        const yfDist = userLocation.districts.filter(dist => dist.state_id === state_id);
+        const yfDist = userLocation.districts.filter(
+          (dist) => dist.state_id === state_id
+        );
         setYfDist(yfDist || []);
       } catch (error) {
         console.log(error);
@@ -47,7 +49,9 @@ export function useYfLocation({ state_id, dist_id, block_id }) {
 
     const fetchBlocks = async () => {
       try {
-        const yfBlock = userLocation.blocks.filter(block => block.dist_id === dist_id);
+        const yfBlock = userLocation.blocks.filter(
+          (block) => block.dist_id === dist_id
+        );
         setYfBlock(yfBlock || []);
       } catch (error) {
         console.log(error);
@@ -62,7 +66,9 @@ export function useYfLocation({ state_id, dist_id, block_id }) {
 
     const fetchGps = async () => {
       try {
-        const yfGp = userLocation.gps.filter(gps => gps.block_id === block_id);
+        const yfGp = userLocation.gps.filter(
+          (gps) => gps.block_id === block_id
+        );
         setYfGp(yfGp || []);
       } catch (error) {
         console.log(error);

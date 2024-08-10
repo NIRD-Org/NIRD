@@ -28,6 +28,8 @@ import fileUpload from "express-fileupload";
 import soeprThemesRoutes from "./routes/soeprThemesRoutes.js";
 import soeprKpiRoutes from "./routes/soeprKpiRoutes.js";
 import soeprKpiDataRoutes from "./routes/soeprKpiDataRoutes.js";
+import soeprLocationRoutes from "./routes/soeprLocationRoutes.js";
+
 const app = express();
 
 dotenv.config();
@@ -51,6 +53,8 @@ app.use("/api/v1/kpi-approvals", kpiApprovalRoutes);
 app.use("/api/v1/indicator-approvals", indicatorApprovalRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/user-location", userLocationRoutes);
+app.use("/api/v1/soepr-location", soeprLocationRoutes);
+
 app.use("/api/v1/indicator", indicatorRoutes);
 app.use("/api/v1/gp-details", gpDetailRoutes);
 app.use("/api/v1/users", userRoutes);

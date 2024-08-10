@@ -10,16 +10,16 @@ import {
 import API from "@/utils/API";
 import { Link, useSearchParams } from "react-router-dom";
 import { useAuthContext } from "@/context/AuthContext";
+import AdminHeader from "../AdminHeader";
 import {
   NirdAssignIcon,
   NirdBanIcon,
   NirdDeleteIcon,
   NirdEditIcon,
   NirdViewIcon,
-} from "../../Icons";
-import AdminHeader from "../../AdminHeader";
+} from "../Icons";
 
-const SoeprList = () => {
+const SoeprUserList = () => {
   const { user } = useAuthContext();
 
   const [users, setUsers] = useState([]);
@@ -41,7 +41,7 @@ const SoeprList = () => {
 
   return (
     <div className="container p-4">
-      <AdminHeader>SOEPR State</AdminHeader>
+      <AdminHeader>SOEPR location</AdminHeader>
       <Table>
         <TableHeader>
           <TableRow>
@@ -49,7 +49,6 @@ const SoeprList = () => {
             <TableHead>Employee ID</TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Username</TableHead>
-            <TableHead>Location Assigned</TableHead>
             <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
@@ -57,16 +56,14 @@ const SoeprList = () => {
           {users.map((user) => (
             <TableRow key={user.id}>
               <TableCell>{user.id}</TableCell>
-              <TableCell>{user.employee_id || "N/A"}</TableCell>
+              <TableCell>{user.employee_id || "NA"}</TableCell>
               <TableCell>{user.name}</TableCell>
               <TableCell>{user.username}</TableCell>
-              <TableCell>{user.state.name}</TableCell>
-
               <TableCell className="flex gap-4">
                 <>
                   {!user.location_assigned ? (
                     <Link
-                      to={`/admin/user-location/update/soepr/${user.id}`}
+                      to={`/admin/user-location/assign/soepr/${user.id}`}
                       className="text-blue-600 hover:underline"
                     >
                       <NirdAssignIcon />
@@ -78,6 +75,12 @@ const SoeprList = () => {
                         className="text-blue-600 hover:underline"
                       >
                         <NirdEditIcon />
+                      </Link>
+                      <Link
+                        to={`/admin/user-location/view/soepr/${user.id}`}
+                        className="text-blue-600 hover:underline"
+                      >
+                        <NirdViewIcon />
                       </Link>
                     </>
                   )}
@@ -91,4 +94,4 @@ const SoeprList = () => {
   );
 };
 
-export default SoeprList;
+export default SoeprUserList;

@@ -70,7 +70,7 @@ export const getSidebarItems = (user) => {
         ],
       },
       {
-      type: "module",
+        type: "module",
         icon: ArrowBigRight,
         title: "Plan Of Action",
         submodules: [
@@ -78,20 +78,20 @@ export const getSidebarItems = (user) => {
             type: "sub-module",
             icon: ArrowBigRight,
             title: "Plan Of Action",
-            link: "/admin/soepr/PlanOfAction",
-          },   
+            link: "/admin/soepr/plan-of-action",
+          },
           {
             type: "sub-module",
             icon: ArrowBigRight,
             title: "POA1",
             link: "/admin/soepr/POA1",
-          },   
+          },
           {
             type: "sub-module",
             icon: ArrowBigRight,
             title: "POA2",
             link: "/admin/soepr/POA2",
-          }         
+          },
         ],
       },
       {
@@ -146,8 +146,14 @@ export const getSidebarItems = (user) => {
             {
               type: "sub-module",
               icon: ArrowBigRight,
-              title: "SOEPR location",
+              title: "SOEPR Location",
               link: "/admin/users/all/soepr",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "SOEPR State",
+              link: "/admin/users/all/soepr/list",
             },
             {
               type: "sub-module",
