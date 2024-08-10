@@ -77,7 +77,7 @@ export const getSidebarItems = (user) => {
           {
             type: "sub-module",
             icon: ArrowBigRight,
-            title: "Plan Of Action",
+            title: "KPI-POA(Trial)",
             link: "/admin/soepr/plan-of-action",
           },
           {
