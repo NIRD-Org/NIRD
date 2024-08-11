@@ -88,11 +88,11 @@ const SoeprLocationView = () => {
       <Table>
         <TableBody>
           <TableRow>
-            <TableCell>ID</TableCell>
+            <TableCell>USER ID</TableCell>
             <TableCell>{userId}</TableCell>
           </TableRow>
           <TableRow>
-            <TableCell>State IDs</TableCell>
+            <TableCell>State </TableCell>
             <TableCell>
               {userLocations.state_ids
                 .map(
@@ -102,7 +102,7 @@ const SoeprLocationView = () => {
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell>State IDs</TableCell>
+            <TableCell>Districts </TableCell>
             <TableCell>
               {userLocations.dist_ids
                 .map(

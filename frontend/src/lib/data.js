@@ -83,6 +83,12 @@ export const getSidebarItems = (user) => {
           {
             type: "sub-module",
             icon: ArrowBigRight,
+            title: "View POA",
+            link: "/admin/soepr/POAView",
+          },
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
             title: "POA1",
             link: "/admin/soepr/POA1",
           },
