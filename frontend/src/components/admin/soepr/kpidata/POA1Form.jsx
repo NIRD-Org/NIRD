@@ -31,7 +31,40 @@ const planOfDayOptions = {
     "Observe Gram Sabha",
     "Make aware of Panchayat Nirnay app/Meeting Online App",
   ],
-  // Add more options as per your data...
+  "Training Needs Assessment (TNA) facilitated": [
+    "To Facilitate State Level/ District Level/Block Level TNAs",
+  ],
+  "Training Calendar preparation": [
+    "To facilitate preparation of Training Calendar at State/ District/ Block Level",
+  ],
+  "Development/customization of Learning Materials": [
+    "Develop/customize learning material on LSDGs/GPDP/Panchayat Governance/PESA/OSR",
+  ],
+  "Participation in GPDP": [
+    "Facilitate to update Gram Panchayat Profile (MoPR Portals)",
+    "To ensure inclusion of flagship schemes under planning",
+    "To ensure inclusion of flagship schemes included in resource envelope",
+    "To ensure implementation of activities in Sankalp theme",
+    "To facilitate GP to take up low-cost activities",
+    "To facilitate GP to take up no-cost activities",
+  ],
+  "Augmentation of Own Source Revenue (OSR) by PRIs": [
+    "To ensure preparation of GP OSR rule",
+  ],
+  "Delivery of Services mentioned in the Citizen Charter": [
+    "Percentage of Services delivered by the GP compared to the listed Services mentioned in the Citizen Charter",
+  ],
+  "Partnership on CB&T initiatives": [
+    "To visit the District Magistrate/District Panchayat Officer/line department officers for effective partnership on CB&T initiatives",
+    "To visit NGOs for effective partnership on CB&T initiatives",
+  ],
+  "Monitoring and documentation": [
+    "To Monitor Model GP Clusters",
+    "To Prepare Case Studies",
+    "To make documentation of Good Practices",
+  ],
+  "No work Day": ["Public Holiday", "Weekoff"],
+  "Others(100 words Only)": ["Others"],
 };
 
 const POA1Form = () => {

@@ -49,7 +49,7 @@ const POAview = () => {
         <tbody>
           {poaRecords.map((record, idx) => {
             const { submissionDate, submissionTime } = formatDateTime(
-              record.timestamp
+              record.date
             );
             return (
               <tr key={idx}>
