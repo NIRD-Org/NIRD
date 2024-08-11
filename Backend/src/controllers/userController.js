@@ -99,3 +99,20 @@ export const updateUser = CatchAsyncError(async (req, res, next) => {
     return next(new Errorhandler("Failed to update user", 500));
   }
 });
+
+export const updateMany = CatchAsyncError(async (req, res, next) => {
+  try {
+    const updatedUsers = await User.updateMany(
+      { role: 1 },
+      { $rename: { efDateFrom: "dojNIRDPR" } }
+    );
+
+    res.status(200).json({
+      status: "success",
+      message: "Users Updated successfully",
+    });
+  } catch (err) {
+    console.log(err);
+    return next(new Errorhandler("Failed to delete users", 500));
+  }
+});

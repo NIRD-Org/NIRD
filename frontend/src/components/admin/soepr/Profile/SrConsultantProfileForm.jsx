@@ -77,7 +77,7 @@ function SrConsultantProfile() {
       };
       reader.readAsDataURL(file);
     } else {
-      alert("Please upload a JPEG image not exceeding 1 MB.");
+      alert("Please upload an image not exceeding 1 MB.");
     }
   };
 
@@ -242,7 +242,9 @@ function SrConsultantProfile() {
               />
             </div>
             <div>
-              <Label htmlFor="areaOfInterest">Area of Interest(Areas where you want to work on)</Label>
+              <Label htmlFor="areaOfInterest">
+                Area of Interest(Areas where you want to work on)
+              </Label>
               <Textarea
                 id="areaOfInterest"
                 name="areaOfInterest"

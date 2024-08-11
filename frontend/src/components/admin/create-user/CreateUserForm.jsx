@@ -31,13 +31,15 @@ function CreateUserForm({ update }) {
   }, [update, id]);
 
   const handleChange = ({ target: { name, value } }) => {
-    setFormData(prevData => ({
+    console.log(value);
+
+    setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setPending(true);
@@ -62,6 +64,8 @@ function CreateUserForm({ update }) {
         { value: 1, label: "PMU Admin" },
         { value: 2, label: "SPC Admin" },
         { value: 3, label: "Young Fellow" },
+        { value: 4, label: "Consultant" },
+        { value: 5, label: "Sr. Consultant" },
       ];
     } else {
       return [{ value: 3, label: "Young Fellow" }];
@@ -70,7 +74,12 @@ function CreateUserForm({ update }) {
 
   const fields = [
     { name: "username", label: "Username", required: true },
-    { name: "employee_id", label: "Employee Id", required: true, type: "number" },
+    {
+      name: "employee_id",
+      label: "Employee Id",
+      required: true,
+      type: "number",
+    },
     { name: "name", label: "Name", required: true },
     {
       name: "department",
@@ -90,7 +99,7 @@ function CreateUserForm({ update }) {
       required: !update,
     },
     {
-      name: "efDateFrom",
+      name: "dojNIRDPR",
       label: "Date of Joining",
       type: "date",
       required: !update,
@@ -111,7 +120,7 @@ function CreateUserForm({ update }) {
       <AdminHeader>{update ? "Update User" : "Create User"}</AdminHeader>
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
-          {fields.map(field => (
+          {fields.map((field) => (
             <FormField
               key={field.name}
               {...field}
