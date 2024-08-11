@@ -44,6 +44,8 @@ const ViewAttendance = () => {
   const roleOptions = [
     
     { value: 1, name: "Young Fellow" },
+    { value: 2, name: "Sr. Consultant" },
+    { value: 3, name: "Consultant" }
   ];
 
   useEffect(() => {

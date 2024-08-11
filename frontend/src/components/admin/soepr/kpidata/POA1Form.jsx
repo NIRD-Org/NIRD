@@ -46,7 +46,9 @@ const planOfDayOptions = {
     "To facilitate GP to take up low-cost activities",
     "To facilitate GP to take up no-cost activities",
   ],
-  "Augmentation of Own Source Revenue (OSR) by PRIs": ["To ensure preparation of GP OSR rule"],
+  "Augmentation of Own Source Revenue (OSR) by PRIs": [
+    "To ensure preparation of GP OSR rule",
+  ],
   "Delivery of Services mentioned in the Citizen Charter": [
     "Percentage of Services delivered by the GP compared to the listed Services mentioned in the Citizen Charter",
   ],
