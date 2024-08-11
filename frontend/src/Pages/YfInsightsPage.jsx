@@ -84,41 +84,6 @@ const YfInsightsPage = () => {
     getStateById(state);
   }, [state]);
 
-  //   const handleDownloadPDF = () => {
-  //     const input = document.getElementById("yf-insights-content");
-  //     html2canvas(input, {
-  //       useCORS: true,
-  //       allowTaint: true,
-  //       logging: true,
-  //       letterRendering: true,
-  //       scale: 1,
-  //     }).then((canvas) => {
-  //       const imgData = canvas.toDataURL("image/png", 0.2);
-  //       const pdf = new jsPDF("p", "mm", "a4");
-  //       const imgWidth = 210;
-  //       const imgHeight = (canvas.height * imgWidth) / canvas.width;
-  //       const margin = 10;
-  //       const headingHeight = 20; // height of the heading
-  //       const textSize = 20;
-  //       const text = "GP wise Youngfellow Insights";
-  //       pdf.setFontSize(textSize);
-  //       const textWidth = pdf.getTextWidth(text);
-  //       const textX = (pdf.internal.pageSize.width - textWidth) / 2;
-  //       const textY = margin + textSize;
-
-  //       pdf.text(text, textX, textY);
-  //       pdf.addImage(
-  //         imgData,
-  //         "PNG",
-  //         margin,
-  //         textY + margin,
-  //         imgWidth - 2 * margin,
-  //         imgHeight
-  //       );
-  //       pdf.save("yf_insights.pdf");
-  //     });
-  //   };
-
   return (
     <div className="relative py-10 px-1 lg:px-20">
       <button

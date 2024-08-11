@@ -28,7 +28,6 @@ const getNewId = async () => {
 
 export const createPoa1 = CatchAsyncError(async (req, res, next) => {
   try {
-    console.log(req.body);
     const poaData = Object.keys(req.body)
       .filter((key) => key.startsWith("poaData"))
       .reduce((acc, key) => {
@@ -77,7 +76,7 @@ export const createPoa1 = CatchAsyncError(async (req, res, next) => {
     } else {
       poa1 = new Poa1Model({
         id: (await getNewId()).toString(),
-        // id:"1",
+
         user_id,
         status: "1",
         poaData: Object.values(poaData),
@@ -119,6 +118,81 @@ export const getPoalData = CatchAsyncError(async (req, res, next) => {
   } catch (error) {
     console.error(error);
     next(new Errorhandler("Failed to get POA1 Data", 500));
+  }
+});
+
+// Get the state wise data ---- Admin
+
+export const getPoa1DataByState = CatchAsyncError(async (req, res, next) => {
+  try {
+    const { state_id, dist_id } = req.query;
+
+    const poa1Data = await Poa1Model.aggregate([
+      {
+        $unwind: {
+          path: "$poaData",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $match: {
+          "poaData.state_id": state_id,
+          "poaData.dist_id": dist_id,
+        },
+      },
+      {
+        $lookup: {
+          from: "soeprstates",
+          localField: "poaData.state_id",
+          foreignField: "id",
+          as: "stateDetails",
+        },
+      },
+      {
+        $lookup: {
+          from: "soeprdistricts",
+          localField: "poaData.dist_id",
+          foreignField: "id",
+          as: "districtDetails",
+        },
+      },
+      {
+        $addFields: {
+          "poaData.state": {
+            $arrayElemAt: ["$stateDetails", 0],
+          },
+          "poaData.district": {
+            $arrayElemAt: ["$districtDetails", 0],
+          },
+        },
+      },
+      {
+        $group: {
+          _id: "$_id",
+          user_id: { $first: "$user_id" },
+          poaData: { $push: "$poaData" },
+          created_at: { $first: "$created_at" },
+          modified_at: { $first: "$modified_at" },
+        },
+      },
+      {
+        $project: {
+          stateDetails: 0,
+          districtDetails: 0,
+        },
+      },
+    ]);
+
+    if (!poa1Data || poa1Data.length === 0) {
+      return res
+        .status(404)
+        .json({ success: false, message: "No POA1 Data Found for this State" });
+    }
+
+    res.status(200).json({ success: true, data: poa1Data[0] });
+  } catch (error) {
+    console.error(error);
+    next(new Errorhandler("Failed to Get POA1 Data", 500));
   }
 });
 
