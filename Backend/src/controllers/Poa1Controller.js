@@ -97,7 +97,7 @@ export const createPoa1 = CatchAsyncError(async (req, res, next) => {
 export const getPoa1Data = CatchAsyncError(async (req, res, next) => {
   try {
     const poa1Data = await Poa1Model.aggregate([
-      { $match: { user_id: "155" } },
+      { $match: { user_id: req?.user?.id } },
       {
         $lookup: {
           from: "soeprstates",

@@ -12,8 +12,8 @@ const POAview = () => {
   useEffect(() => {
     const fetchPOARecords = async () => {
       try {
-        const response = await API.get("/api/v1/poa1/getUserPOAs");
-        setPoaRecords(response.data);
+        const { data } = await API.get("/api/v1/poa1/");
+        setPoaRecords(data?.data?.poaData);
       } catch (error) {
         toast.error("Failed to fetch POA records.");
       }
