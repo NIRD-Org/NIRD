@@ -37,7 +37,10 @@ const Poa1DetailPage = () => {
     <div>
       <AdminHeader>
         First Fortnightly Plan Of Action - Month :{" "}
-        {new Date(poa1Data.created_at).toLocaleString("en-IN", { month: "long" })} 2024
+        {new Date(poa1Data.created_at).toLocaleString("en-IN", {
+          month: "long",
+        })}{" "}
+        2024
       </AdminHeader>
       <Table>
         <TableCaption>Details for POA1 ID: {poa1Data.id}</TableCaption>
@@ -58,7 +61,9 @@ const Poa1DetailPage = () => {
         <TableBody>
           {poa1Data.poaData.map((dayData, index) => (
             <TableRow key={index}>
-              <TableCell>{new Date(dayData.date).toLocaleDateString()}</TableCell>
+              <TableCell>
+                {new Date(dayData.date).toLocaleDateString()}
+              </TableCell>
               <TableCell>{dayData.weekday}</TableCell>
               <TableCell>{dayData.plan}</TableCell>
               <TableCell>{dayData.action}</TableCell>
@@ -68,7 +73,11 @@ const Poa1DetailPage = () => {
               <TableCell>{dayData.achievements}</TableCell>
               <TableCell>
                 {dayData.photo ? (
-                  <img src={dayData.photo} alt="Photo" style={{ maxWidth: "100px" }} />
+                  <img
+                    src={dayData.photo}
+                    alt="Photo"
+                    style={{ maxWidth: "100px" }}
+                  />
                 ) : (
                   "No photo"
                 )}
