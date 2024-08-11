@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const POA1DaySchema = new mongoose.Schema(
   {
+   
     date: {
       type: String,
       required: true,
@@ -48,6 +49,11 @@ const POA1DaySchema = new mongoose.Schema(
 
 const POA1Schema = new mongoose.Schema(
   {
+    id: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     user_id: {
       type: String,
       ref: "User",
