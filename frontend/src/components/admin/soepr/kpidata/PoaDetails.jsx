@@ -31,14 +31,45 @@ const Poa1DetailPage = () => {
     fetchData();
   }, [id]);
 
+  const handlePrint = () => {
+    window.print();
+  };
+
   if (!poa1Data) return <div>Loading...</div>;
 
   return (
     <div>
+      <style>
+        {`
+          @media print {
+            .site-header, .site-footer {
+              @apply hidden;
+            }
+            .print-button {
+              @apply hidden;
+            }
+            body {
+              @apply text-base leading-tight;
+            }
+            table {
+              @apply border-collapse;
+            }
+            th, td {
+              @apply p-1;
+            }
+          }
+        `}
+      </style>
       <AdminHeader>
-        First Fortnightly Plan Of Action - Month :{" "}
+        First Fortnightly Plan Of Action - Month:{" "}
         {new Date(poa1Data.created_at).toLocaleString("en-IN", { month: "long" })} 2024
       </AdminHeader>
+      <button
+        onClick={handlePrint}
+        className="print-button bg-blue-900 text-white px-4 py-2 rounded mb-4"
+      >
+        Print
+      </button>
       <Table>
         <TableCaption>Details for POA1 ID: {poa1Data.id}</TableCaption>
         <TableHeader>
@@ -68,7 +99,7 @@ const Poa1DetailPage = () => {
               <TableCell>{dayData.achievements}</TableCell>
               <TableCell>
                 {dayData.photo ? (
-                  <img src={dayData.photo} alt="Photo" style={{ maxWidth: "100px" }} />
+                  <img src={dayData.photo} alt="Photo" className="max-w-xs" />
                 ) : (
                   "No photo"
                 )}
