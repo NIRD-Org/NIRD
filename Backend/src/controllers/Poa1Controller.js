@@ -97,59 +97,22 @@ export const createPoa1 = CatchAsyncError(async (req, res, next) => {
 
 export const getPoa1s = CatchAsyncError(async (req, res, next) => {
   try {
-    const poa1Data = await Poa1Model.aggregate([
-      { $match: { user_id: req?.user?.id } },
-      {
-        $lookup: {
-          from: "soeprstates",
-          localField: "poaData.state_id",
-          foreignField: "id",
-          as: "state",
-        },
-      },
-      {
-        $lookup: {
-          from: "soeprdistricts",
-          localField: "poaData.dist_id",
-          foreignField: "id",
-          as: "district",
-        },
-      },
-      {
-        $unwind: {
-          path: "$poaData",
-          preserveNullAndEmptyArrays: true,
-        },
-      },
-      {
-        $addFields: {
-          "poaData.state": {
-            $arrayElemAt: ["$stateDetails", 0],
-          },
-          "poaData.district": {
-            $arrayElemAt: ["$districtDetails", 0],
-          },
-        },
-      },
-      {
-        $group: {
-          _id: "$_id",
-          user_id: { $first: "$user_id" },
-          status: { $first: "$status" },
-          poaData: { $push: "$poaData" },
-          created_at: { $first: "$created_at" },
-          modified_at: { $first: "$modified_at" },
-        },
-      },
-    ]);
+    const poa1Data = await Poa1Model.find({ user_id: req?.user?.id });
+   
+    res.status(200).json({ success: true, data: poa1Data });
+  } catch (error) {
+    console.error(error);
+    next(new Errorhandler("Failed to get POA1 Data", 500));
+  }
+});
 
-    if (!poa1Data || poa1Data.length === 0) {
-      return res
-        .status(404)
-        .json({ success: false, message: "No POA1 Data Found" });
+export const getPoalData = CatchAsyncError(async (req, res, next) => {
+  try {
+    const poa1Data = await Poa1Model.findOne({ id: req.params.id });
+    if (!poa1Data) {
+      return res.status(404).json({ success: false, message: "No POA1 Data Found" });
     }
-
-    res.status(200).json({ success: true, data: poa1Data[0] });
+    res.status(200).json({ success: true, data: poa1Data });
   } catch (error) {
     console.error(error);
     next(new Errorhandler("Failed to get POA1 Data", 500));
