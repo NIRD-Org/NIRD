@@ -154,3 +154,12 @@ export const getPoa1Data = CatchAsyncError(async (req, res, next) => {
     next(new Errorhandler("Failed to get POA1 Data", 500));
   }
 });
+
+export const updatePoa1Data = CatchAsyncError(async (req, res, next) => {
+  async (req, res, next) => {
+    try {
+    } catch (error) {
+      next(new Errorhandler("Failed to Update POA1 Data", 500));
+    }
+  };
+});
