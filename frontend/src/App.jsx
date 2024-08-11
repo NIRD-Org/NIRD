@@ -107,6 +107,7 @@ import SoeprLocationView from "./components/admin/soepr-location/SoeprLocationVi
 import POA1 from "./components/admin/soepr/kpidata/POA1Form";
 import POA2 from "./components/admin/soepr/kpidata/POA2Form";
 import POAView from "./components/admin/soepr/kpidata/POAView"
+import Poa1DetailPage from "./components/admin/soepr/kpidata/PoaDetails";
 
 function App() {
   const { login } = useAuthContext();
@@ -160,6 +161,8 @@ function App() {
             />
             <Route path="soepr/plan-of-action" element={<POA />} />
             <Route path="soepr/POA1" element={<POA1 />} />
+            <Route path="soepr/POA1/edit/:id" element={<POA1 update />} />
+            <Route path="soepr/POA1/view/:id" element={<Poa1DetailPage update />} />
             <Route path="soepr/POA2" element={<POA2 />} />
             <Route path="soepr/POAView" element={<POAView />} />
             <Route path="attendance/view" element={<ConsolidatedViewPage />} />

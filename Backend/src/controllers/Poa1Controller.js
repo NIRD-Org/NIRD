@@ -28,8 +28,9 @@ const getNewId = async () => {
 
 export const createPoa1 = CatchAsyncError(async (req, res, next) => {
   try {
+    console.log(req.body);
     const poaData = Object.keys(req.body)
-      .filter((key) => key.startsWith("poaData"))
+      .filter(key => key.startsWith("poaData"))
       .reduce((acc, key) => {
         const [, index, field] = key.match(/poaData\[(\d+)\]\[(\w+)\]/);
         acc[index] = acc[index] || {};
@@ -57,16 +58,15 @@ export const createPoa1 = CatchAsyncError(async (req, res, next) => {
     let poa1 = await Poa1Model.findOne({ user_id });
 
     if (poa1) {
-      const existingDates = poa1.poaData.map((item) => item.date.toISOString());
+      const existingDates = poa1.poaData.map(item => item.date.toISOString());
       const newEntries = Object.values(poaData).filter(
-        (entry) => !existingDates.includes(new Date(entry.date).toISOString())
+        entry => !existingDates.includes(new Date(entry.date).toISOString())
       );
 
       if (newEntries.length === 0) {
         return res.status(400).json({
           success: false,
-          message:
-            "No new data to add. Data for the provided dates already exists.",
+          message: "No new data to add. Data for the provided dates already exists.",
         });
       }
 
@@ -76,6 +76,7 @@ export const createPoa1 = CatchAsyncError(async (req, res, next) => {
     } else {
       poa1 = new Poa1Model({
         id: (await getNewId()).toString(),
+        // id:"1",
         user_id,
         status: "1",
         poaData: Object.values(poaData),
@@ -94,13 +95,24 @@ export const createPoa1 = CatchAsyncError(async (req, res, next) => {
   }
 });
 
-export const getPoa1Data = CatchAsyncError(async (req, res, next) => {
+export const getPoa1s = CatchAsyncError(async (req, res, next) => {
   try {
-    const poa1Data = await Poa1Model.findOne({ user_id: req?.user?.id });
+    const poa1Data = await Poa1Model.find({ user_id: req?.user?.id });
     if (!poa1Data) {
-      return res
-        .status(404)
-        .json({ success: false, message: "No POA1 Data Found" });
+      return res.status(404).json({ success: false, message: "No POA1 Data Found" });
+    }
+    res.status(200).json({ success: true, data: poa1Data });
+  } catch (error) {
+    console.error(error);
+    next(new Errorhandler("Failed to get POA1 Data", 500));
+  }
+});
+
+export const getPoalData = CatchAsyncError(async (req, res, next) => {
+  try {
+    const poa1Data = await Poa1Model.findOne({ id: req.params.id });
+    if (!poa1Data) {
+      return res.status(404).json({ success: false, message: "No POA1 Data Found" });
     }
     res.status(200).json({ success: true, data: poa1Data });
   } catch (error) {
