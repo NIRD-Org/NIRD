@@ -61,8 +61,10 @@ const planOfDayOptions = {
     "To Prepare Case Studies",
     "To make documentation of Good Practices",
   ],
-  "No work Day": ["Public Holiday", "Weekoff"],
+  "No work Day": ["Public Holiday", "Weekoff","Casual Leave"],
   "Others(100 words Only)": ["Others"],
+  
+  
 };
 
 const POA1Form = ({ update }) => {
