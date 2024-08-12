@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@progress/kendo-react-pdf": "^8.2.0"
+  }
+}
