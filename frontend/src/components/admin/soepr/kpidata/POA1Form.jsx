@@ -276,10 +276,9 @@ const POA1Form = ({ update }) => {
                      NIRD
                    </option>
                    
-                   <option value="SIRD/SRPC" >
-                     SIRD/SRPC
-                   </option> 
-                    <option value="None" >
+                   <option value="SIRD/SPRC" >
+                     SIRD/SPRC
+                   </option>  <option value="None" >
                      None
                    </option>
                 </select>
