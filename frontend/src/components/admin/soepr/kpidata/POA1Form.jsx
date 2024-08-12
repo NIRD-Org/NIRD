@@ -271,7 +271,15 @@ const POA1Form = ({ update }) => {
                     <option key={district.id} value={district.id}>
                       {district.name}
                     </option>
-                     ))} <option value="none" >
+                     ))}
+                   <option value="NIRD" >
+                     NIRD
+                   </option>
+                   
+                   <option value="SIRD/SRPC" >
+                     SIRD/SRPC
+                   </option> 
+                    <option value="None" >
                      None
                    </option>
                 </select>
