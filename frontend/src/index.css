@@ -64,3 +64,16 @@
     padding-bottom: 10px;
   }
 }
+
+@media print {
+  .site-header,
+  .site-footer {
+    @apply hidden;
+  }
+  .print-button {
+    @apply hidden;
+  }
+  body {
+    @apply text-base leading-tight;
+  }
+}

@@ -21,7 +21,6 @@ const Poa1DetailPage = () => {
     const fetchData = async () => {
       try {
         const response = await API.get(`/api/v1/poa1/get/${id}`);
-        console.log(response);
         setPoa1Data(response.data.data);
       } catch (error) {
         console.error("Error fetching POA1 data:", error);
@@ -74,7 +73,7 @@ const Poa1DetailPage = () => {
         Print
       </button>
       <Table>
-        <TableCaption>Details for POA1 ID: {poa1Data.id}</TableCaption>
+        <TableCaption>Details for POA1 ID: {poa1Data?.id}</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead>Date</TableHead>
@@ -82,36 +81,38 @@ const Poa1DetailPage = () => {
             <TableHead>Plan</TableHead>
             <TableHead>Action</TableHead>
             <TableHead>Planned Event</TableHead>
-            <TableHead>State ID</TableHead>
-            <TableHead>Dist ID</TableHead>
+            <TableHead>State</TableHead>
+            <TableHead>District</TableHead>
             <TableHead>Achievements</TableHead>
             <TableHead>Photo</TableHead>
             <TableHead>Remarks</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {poa1Data.poaData.map((dayData, index) => (
-            <TableRow key={index}>
-              <TableCell>
-                {new Date(dayData.date).toLocaleDateString()}
-              </TableCell>
-              <TableCell>{dayData.weekday}</TableCell>
-              <TableCell>{dayData.plan}</TableCell>
-              <TableCell>{dayData.action}</TableCell>
-              <TableCell>{dayData.plannedEvent}</TableCell>
-              <TableCell>{dayData.state_id}</TableCell>
-              <TableCell>{dayData.dist_id}</TableCell>
-              <TableCell>{dayData.achievements}</TableCell>
-              <TableCell>
-                {dayData.photo ? (
-                  <img src={dayData.photo} alt="Photo" className="max-w-xs" />
-                ) : (
-                  "No photo"
-                )}
-              </TableCell>
-              <TableCell>{dayData.remarks}</TableCell>
-            </TableRow>
-          ))}
+          {poa1Data &&
+            poa1Data?.poaData?.length > 0 &&
+            poa1Data?.poaData?.map((dayData, index) => (
+              <TableRow key={index}>
+                <TableCell>
+                  {new Date(dayData.date).toLocaleDateString()}
+                </TableCell>
+                <TableCell>{dayData.weekday}</TableCell>
+                <TableCell>{dayData.plan}</TableCell>
+                <TableCell>{dayData.action}</TableCell>
+                <TableCell>{dayData.plannedEvent}</TableCell>
+                <TableCell>{dayData.state.name}</TableCell>
+                <TableCell>{dayData.district.name}</TableCell>
+                <TableCell>{dayData.achievements}</TableCell>
+                <TableCell>
+                  {dayData.photo ? (
+                    <img src={dayData.photo} alt="Photo" className="max-w-xs" />
+                  ) : (
+                    "No photo"
+                  )}
+                </TableCell>
+                <TableCell>{dayData.remarks}</TableCell>
+              </TableRow>
+            ))}
         </TableBody>
         <TableFooter>
           <TableRow>

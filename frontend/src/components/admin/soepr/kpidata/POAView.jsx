@@ -56,7 +56,9 @@ const POAview = () => {
             const createdAt = new Date(record.created_at);
             return (
               <TableRow key={idx}>
-                <TableCell>{createdAt.toLocaleString("en-IN", { month: "long" })}</TableCell>
+                <TableCell>
+                  {createdAt.toLocaleString("en-IN", { month: "long" })}
+                </TableCell>
                 <TableCell>{createdAt.toLocaleDateString("en-IN")}</TableCell>
                 <TableCell>{createdAt.toLocaleTimeString("en-IN")}</TableCell>
                 <TableCell className="flex gap-4">
@@ -64,7 +66,7 @@ const POAview = () => {
                     <NirdViewIcon />
                   </Link>
                   {/* <Link to={`/admin/soepr/POA1/edit/${record.id}`}> */}
-                    <NirdEditIcon />
+                  <NirdEditIcon />
                   {/* </Link> */}
                 </TableCell>
               </TableRow>

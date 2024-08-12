@@ -30,7 +30,7 @@ function Navbar() {
 
   return (
     <>
-      <header className="z-[3] w-full gap-4 h-16 rounded-md shadow-md bg-white flex items-center px-6 justify-between">
+      <header className="site-header z-[3] w-full gap-4 h-16 rounded-md shadow-md bg-white flex items-center px-6 justify-between">
         <div></div>
         <div className="flex items-center gap-3">
           <div className="flex gap-2">

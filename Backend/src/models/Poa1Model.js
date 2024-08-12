@@ -58,11 +58,6 @@ const POA1Schema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    state_id: {
-      type: String,
-      ref: "SoeprState",
-      required: true,
-    },
     status: {
       type: String,
       default: "1",

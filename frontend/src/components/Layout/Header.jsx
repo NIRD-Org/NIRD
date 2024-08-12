@@ -13,7 +13,7 @@ const Header = () => {
 
   return (
     <>
-      <div className="hidden lg:flex h-[14vh]  xl:h-[12vh] bg-primary w-full items-center justify-between">
+      <div className="site-header hidden lg:flex h-[14vh]  xl:h-[12vh] bg-primary w-full items-center justify-between">
         {/* Desktop navigation */}
         <div className="flex items-center justify-between w-[45%]">
           <NavLink to={"/"}>
@@ -128,7 +128,7 @@ const Header = () => {
       </div>
 
       {/* Mobile navigation */}
-      <div className="lg:hidden h-[10vh] bg-primary flex justify-between items-center">
+      <div className="site-header lg:hidden h-[10vh] bg-primary flex justify-between items-center">
         <div className="w-[10%]">
           <NavLink to={"/"}>
             <img
