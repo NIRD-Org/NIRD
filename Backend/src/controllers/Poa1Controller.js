@@ -115,6 +115,12 @@ export const getPoalData = CatchAsyncError(async (req, res, next) => {
         },
       },
       {
+        $unwind: {
+          path: "$poaData",
+          preserveNullAndEmptyArrays: true, // Unwind `poaData` first
+        },
+      },
+      {
         $lookup: {
           from: "soeprstates",
           localField: "poaData.state_id",
@@ -131,18 +137,12 @@ export const getPoalData = CatchAsyncError(async (req, res, next) => {
         },
       },
       {
-        $unwind: {
-          path: "$poaData",
-          preserveNullAndEmptyArrays: true,
-        },
-      },
-      {
         $addFields: {
           "poaData.state": {
-            $arrayElemAt: ["$state", 0],
+            $arrayElemAt: ["$state", 0], // Ensure that the correct state is associated
           },
           "poaData.district": {
-            $arrayElemAt: ["$district", 0],
+            $arrayElemAt: ["$district", 0], // Ensure that the correct district is associated
           },
         },
       },
@@ -158,6 +158,7 @@ export const getPoalData = CatchAsyncError(async (req, res, next) => {
         },
       },
     ]);
+    
     if (!poa1Data || poa1Data.length === 0) {
       return res
         .status(404)
