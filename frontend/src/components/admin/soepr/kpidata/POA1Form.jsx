@@ -271,7 +271,9 @@ const POA1Form = ({ update }) => {
                     <option key={district.id} value={district.id}>
                       {district.name}
                     </option>
-                  ))}
+                     ))} <option value="none" >
+                     None
+                   </option>
                 </select>
               </td>
               <td>
