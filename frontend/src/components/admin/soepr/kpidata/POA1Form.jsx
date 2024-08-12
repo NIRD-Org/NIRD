@@ -33,10 +33,10 @@ const planOfDayOptions = {
     "To Facilitate State Level/ District Level/Block Level TNAs",
   ],
   "Training Calendar preparation": [
-    "To facilitate preparation of Training Calendar at State/ District/ Block Level","To design/ facilitate to design Trainings  ","To prepare/Update Training modules"
+    "To facilitate preparation of Training Calendar at State/ District/ Block Level",
   ],
   "Development/customization of Learning Materials": [
-    "Develop/customize learning material on LSDGs/GPDP/Panchayat Governance/PESA/OSR","Conduct Training Session as a Resource Person","Visit to Training Institutions (SPRC/ETC/DPRC/PTC/BPRC/PLC) "
+    "Develop/customize learning material on LSDGs/GPDP/Panchayat Governance/PESA/OSR",
   ],
   "Participation in GPDP": [
     "Facilitate to update Gram Panchayat Profile (MoPR Portals)",
@@ -61,7 +61,7 @@ const planOfDayOptions = {
     "To Prepare Case Studies",
     "To make documentation of Good Practices",
   ],
-  "No work Day": ["Public Holiday", "Weekoff","Casual Leave"],
+  "No work Day": ["Public Holiday", "Weekoff"],
   "Others(100 words Only)": ["Others"],
 };
 
@@ -79,8 +79,6 @@ const POA1Form = ({ update }) => {
   });
 
   const [selectedActions, setSelectedActions] = useState({});
-  const lastDayOfFortnight = 15; // Last day of the first fortnight
-
   useEffect(() => {
     setSelectedState(states?.[0]?.id);
   }, [states]);
@@ -99,36 +97,36 @@ const POA1Form = ({ update }) => {
     }
   }, [poalId]);
 
-  const getDaysInMonth = () => Array.from({ length: lastDayOfFortnight }, (_, i) => i + 1);
+  const getDaysInMonth = () => Array.from({ length: 15 }, (_, i) => i + 1);
 
-  const getWeekDay = (day) => {
+  const getWeekDay = day => {
     const date = new Date(`${selectedMonth.name} ${day}, ${currentYear}`);
     return date.toLocaleDateString("en-IN", { weekday: "long" });
   };
 
-  const formatIndianDate = (day) => {
+  const formatIndianDate = day => {
     const date = new Date(`${selectedMonth.name} ${day}, ${currentYear}`);
     return date.toLocaleDateString("en-IN");
   };
 
   const handlePlanChange = (day, selectedPlan) => {
-    setPlans((prev) => ({ ...prev, [day]: selectedPlan }));
-    setSelectedActions((prev) => ({ ...prev, [day]: "" }));
+    setPlans(prev => ({ ...prev, [day]: selectedPlan }));
+    setSelectedActions(prev => ({ ...prev, [day]: "" }));
   };
 
   const handleActionChange = (day, selectedAction) => {
-    setSelectedActions((prev) => ({
+    setSelectedActions(prev => ({
       ...prev,
       [day]: selectedAction,
     }));
   };
 
   const handleDistrictChange = (day, selectedDistrict) => {
-    setSelectedDistricts((prev) => ({ ...prev, [day]: selectedDistrict }));
+    setSelectedDistricts(prev => ({ ...prev, [day]: selectedDistrict }));
   };
 
   const handleInputChange = (day, key, value) => {
-    setFormData((prev) => ({
+    setFormData(prev => ({
       ...prev,
       [day]: {
         ...prev[day],
@@ -141,32 +139,20 @@ const POA1Form = ({ update }) => {
     try {
       const formData = new FormData();
 
-      Object.keys(plans).forEach((day) => {
+      Object.keys(plans).forEach(day => {
         formData.append(`poaData[${day}][date]`, formatIndianDate(day));
         formData.append(`poaData[${day}][weekday]`, getWeekDay(day));
         formData.append(`poaData[${day}][plan]`, plans[day]);
         formData.append(`poaData[${day}][action]`, selectedActions[day]);
-        formData.append(
-          `poaData[${day}][plannedEvent]`,
-          formDataState[day]?.plannedEvent || ""
-        );
+        formData.append(`poaData[${day}][plannedEvent]`, formDataState[day]?.plannedEvent || "");
         formData.append(`poaData[${day}][state_id]`, selectedState);
-        formData.append(
-          `poaData[${day}][dist_id]`,
-          selectedDistricts[day] || ""
-        );
-        formData.append(
-          `poaData[${day}][achievements]`,
-          formDataState[day]?.achievements || ""
-        );
+        formData.append(`poaData[${day}][dist_id]`, selectedDistricts[day] || "");
+        formData.append(`poaData[${day}][achievements]`, formDataState[day]?.achievements || "");
 
         if (formDataState[day]?.photo) {
           formData.append(`poaData[${day}][photo]`, formDataState[day].photo);
         }
-        formData.append(
-          `poaData[${day}][remarks]`,
-          formDataState[day]?.remarks || ""
-        );
+        formData.append(`poaData[${day}][remarks]`, formDataState[day]?.remarks || "");
       });
 
       await API.post("/api/v1/poa1/create", formData, {
@@ -182,8 +168,7 @@ const POA1Form = ({ update }) => {
   return (
     <div style={{ fontSize: "14px", maxWidth: "100%", margin: "0 auto" }}>
       <AdminHeader>
-        First Fortnightly Plan Of Action - Month : {selectedMonth.name}{" "}
-        {currentYear}
+        First Fortnightly Plan Of Action - Month : {selectedMonth.name} {currentYear}
       </AdminHeader>
       <div style={{ marginBottom: "15px", display: "flex", gap: "10px" }}>
         <div className="flex gap-2 items-center">
@@ -217,13 +202,15 @@ const POA1Form = ({ update }) => {
               <td>{getWeekDay(day)}</td>
               <td>
                 <select
-                  style={{ width: "100%" }}
                   value={plans[day] || ""}
-                  onChange={(e) => handlePlanChange(day, e.target.value)}
+                  onChange={e => handlePlanChange(day, e.target.value)}
+                  style={{ width: "100%", padding: "2px", fontSize: "12px" }}
                 >
-                  <option value="">Select</option>
-                  {Object.keys(planOfDayOptions).map((plan) => (
-                    <option key={plan} value={plan}>
+                  <option value="" disabled>
+                    Select a Plan
+                  </option>
+                  {Object.keys(planOfDayOptions).map((plan, idx) => (
+                    <option key={idx} value={plan}>
                       {plan}
                     </option>
                   ))}
@@ -231,40 +218,41 @@ const POA1Form = ({ update }) => {
               </td>
               <td>
                 <select
-                  style={{ width: "100%" }}
                   value={selectedActions[day] || ""}
-                  onChange={(e) => handleActionChange(day, e.target.value)}
-                  disabled={!plans[day]}
+                  onChange={e => handleActionChange(day, e.target.value)}
+                  style={{ width: "100%", padding: "2px", fontSize: "12px" }}
                 >
-                  <option value="">Select</option>
-                  {plans[day] &&
-                    planOfDayOptions[plans[day]].map((action) => (
-                      <option key={action} value={action}>
-                        {action}
-                      </option>
-                    ))}
+                  <option value="" disabled>
+                    Select an Action
+                  </option>
+                  {(plans[day] ? planOfDayOptions[plans[day]] : []).map((action, idx) => (
+                    <option key={idx} value={action}>
+                      {action}
+                    </option>
+                  ))}
                 </select>
               </td>
               <td>
                 <input
                   type="text"
-                  style={{ width: "100%" }}
-                  onChange={(e) =>
-                    handleInputChange(day, "plannedEvent", e.target.value)
-                  }
+                  placeholder="Planned Event"
                   value={formDataState[day]?.plannedEvent || ""}
+                  onChange={e => handleInputChange(day, "plannedEvent", e.target.value)}
+                  style={{ width: "100%", padding: "2px", fontSize: "12px" }}
                 />
               </td>
               <td>
                 <select
-                  style={{ width: "100%" }}
-                  onChange={(e) => handleDistrictChange(day, e.target.value)}
                   value={selectedDistricts[day] || ""}
+                  onChange={e => handleDistrictChange(day, e.target.value)}
+                  style={{ width: "100%", padding: "2px", fontSize: "12px" }}
                 >
-                  <option value="" disable>Select District</option>
-                  {districts.map((dist) => (
-                    <option key={dist.id} value={dist.id}>
-                      {dist.name}
+                  <option value="" disable disabled>
+                    Select a District
+                   District</option>
+                  {districts?.map((district, idx) => (
+                    <option key={district.id} value={district.id}>
+                      {district.name}
                     </option>
                   ))}<option value="NIRD" >NIRD</option>
                   <option value="SIRD/SPRC" >SIRD/SPRC</option>
@@ -273,41 +261,37 @@ const POA1Form = ({ update }) => {
               </td>
               <td>
                 <input
-                  type="text" disabled
-                  style={{ width: "100%" }}
-                  onChange={(e) =>
-                    handleInputChange(day, "achievements", e.target.value)
-                  }
-                  value={formDataState[day]?.achievements || ""} 
+                  type="text"
+                  placeholder="Achievements"
+                  onChange={e => handleInputChange(day, "achievements", e.target.value)}
+                  style={{ width: "100%", padding: "2px", fontSize: "12px" }}
+                  // disabled={day !== lastDayOfFortnight}
                 />
               </td>
               <td>
                 <input
-                  type="file" disabled
-                  onChange={(e) =>
-                    handleInputChange(day, "photo", e.target.files[0])
-                  }
+                  type="file"
+                  accept="image/*"
+                  onChange={e => handleInputChange(day, "photo", e.target.files[0])}
+                  // disabled={day !== lastDayOfFortnight}
                 />
               </td>
               <td>
                 <input
-                  type="text" disabled
-                  style={{ width: "100%" }}
-                  onChange={(e) =>
-                    handleInputChange(day, "remarks", e.target.value)
-                  }
-                  value={formDataState[day]?.remarks || ""}
+                  type="text"
+                  placeholder="Remarks/Reason for Failure"
+                  onChange={e => handleInputChange(day, "remarks", e.target.value)}
+                  style={{ width: "100%", padding: "2px", fontSize: "12px" }}
+                  // disabled={day !== lastDayOfFortnight}
                 />
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <Button
-        onClick={handleSubmit}
-        className="primary-button float-right mt-4"
-      >
-        Submit
+
+      <Button onClick={handleSubmit} className="mt-4 bg-blue-500 text-white px-4 py-2 rounded">
+        Submit Plan of Action
       </Button>
     </div>
   );
