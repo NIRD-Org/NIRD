@@ -159,14 +159,14 @@ export const getAllAttendaceData = CatchAsyncError(async (req, res, next) => {
           from: "states",
           localField: "state_id",
           foreignField: "id",
-          as: "stateInfo",
+          as: "state",
         },
       },
-      { $unwind: "$stateInfo" },
+      { $unwind: "$state" },
       {
         $group: {
           _id: "$created_by",
-          state: { $first: "$stateInfo.name" },
+          state: { $first: "$state.name" },
           amWorkingDays: { $sum: 1 },
         },
       },

@@ -8,27 +8,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import StateFilter from "@/components/admin/filter/StateFilter";
-import DistrictFilter from "@/components/admin/filter/DistrictFilter";
-import BlockFilter from "@/components/admin/filter/BlockFilter";
 import AdminHeader from "../AdminHeader";
 import { useAuthContext } from "@/context/AuthContext";
 
 const Attendance = () => {
-  const { user } = useAuthContext();
 
   return (
     <div className="container mx-auto p-4">
       <AdminHeader>All Attendance</AdminHeader>
-
-      {/* {user.role == 2 && ( */}
-        <>
-          {" "}
-      {/*     <div className="gap-4 grid grid-cols-4 mb-10">
-            <StateFilter />
-            <DistrictFilter />
-            <BlockFilter />
-          </div> */}
           <Table className="overscroll-x-scroll">
             <TableCaption>List of all Gram Panchayats.</TableCaption>
             <TableHeader>
@@ -49,8 +36,6 @@ const Attendance = () => {
               </TableRow>
             </TableBody>
           </Table>
-        </>
-      {/* )} */}
     </div>
   );
 };
