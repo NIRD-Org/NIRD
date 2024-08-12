@@ -261,12 +261,14 @@ const POA1Form = ({ update }) => {
                   onChange={(e) => handleDistrictChange(day, e.target.value)}
                   value={selectedDistricts[day] || ""}
                 >
-                  <option value="">Select</option>
+                  <option value="" disable>Select District</option>
                   {districts.map((dist) => (
                     <option key={dist.id} value={dist.id}>
                       {dist.name}
                     </option>
-                  ))}
+                  ))}<option value="NIRD" >NIRD</option>
+                  <option value="SIRD/SPRC" >SIRD/SPRC</option>
+                  <option value="None" >None</option>
                 </select>
               </td>
               <td>
