@@ -24,6 +24,7 @@ const Poa1DetailPage = () => {
       try {
         const response = await API.get(`/api/v1/poa1/get/${id}`);
         setPoa1Data(response.data.data);
+        console.log("Fetched POA1 data:", response.data.data); // Log the response data
       } catch (error) {
         console.error("Error fetching POA1 data:", error);
       }
@@ -153,7 +154,7 @@ const Poa1DetailPage = () => {
                   </TableCell>
                   <TableCell className="text-xs">{dayData.state.name}</TableCell>
                   <TableCell className="text-xs">
-                    {dayData.district.name}
+                    {dayData.district?.name || "N/A"}
                   </TableCell>
                   <TableCell className="text-xs">
                     {dayData.achievements}
