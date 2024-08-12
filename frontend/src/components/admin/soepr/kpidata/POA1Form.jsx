@@ -204,7 +204,7 @@ const POA1Form = ({ update }) => {
             <th>Action Plan (KPI Category)</th>
             <th>Planned Event</th>
             <th>Tentative Target (Description in 50 words)</th>
-            <th>District</th>
+            <th>Location</th>
             <th>Achievements</th>
             <th>Upload Photo</th>
             <th>Remarks/Reason for Failure</th>
