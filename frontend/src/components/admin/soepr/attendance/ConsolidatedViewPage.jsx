@@ -47,7 +47,18 @@ function ConsolidatedViewPage() {
 
       // Define the start and end dates
       const startOfMonth = new Date(selectedYear, selectedMonth - 1, 1);
-      const today = new Date();
+      let lastDateOfMonth = new Date(selectedYear, selectedMonth, 0);
+      const currentDate = new Date();
+
+      // If the selected month and year match the current month and year
+      if (
+        selectedYear === currentDate.getFullYear() &&
+        selectedMonth === currentDate.getMonth() + 1
+      ) {
+        lastDateOfMonth = currentDate;
+      }
+
+      const today = lastDateOfMonth;
 
       // Fetch AM and PM entries
       const [amResponse, pmResponse] = await Promise.all([
@@ -120,41 +131,56 @@ function ConsolidatedViewPage() {
 
       // Generate a list of dates from the 1st of the month to today
       const allDates = [];
-      for (let date = new Date(startOfMonth); date <= today; date.setDate(date.getDate() + 1)) {
+      for (
+        let date = new Date(startOfMonth);
+        date <= today;
+        date.setDate(date.getDate() + 1)
+      ) {
         const dateStr = formatDate(date);
         allDates.push(dateStr);
       }
 
       // Mark weekends and missing entries
-      const sortedEntries = allDates.map(date => {
-        const entry = combinedEntries[date] || {
-          date,
-          day: new Date(date.split('/').reverse().join('-')).toLocaleDateString(undefined, { weekday: "long" }),
-          timeOfAMEntry: "N/A",
-          statusOfAMEntry: "N/A",
-          remarksOfAMEntry: "N/A",
-          locationOfAMEntry: "N/A",
-          timeOfPMEntry: "N/A",
-          statusOfPMEntry: "N/A",
-          remarksOfPMEntry: "N/A",
-          locationOfPMEntry: "N/A",
-        };
+      const sortedEntries = allDates
+        .map((date) => {
+          const entry = combinedEntries[date] || {
+            date,
+            day: new Date(
+              date.split("/").reverse().join("-")
+            ).toLocaleDateString(undefined, { weekday: "long" }),
+            timeOfAMEntry: "N/A",
+            statusOfAMEntry: "N/A",
+            remarksOfAMEntry: "N/A",
+            locationOfAMEntry: "N/A",
+            timeOfPMEntry: "N/A",
+            statusOfPMEntry: "N/A",
+            remarksOfPMEntry: "N/A",
+            locationOfPMEntry: "N/A",
+          };
 
-        const entryDate = new Date(date.split('/').reverse().join('-'));
-        const dayOfWeek = entryDate.getDay();
-        
-        if (entry.statusOfAMEntry === "N/A" && entry.statusOfPMEntry === "N/A") {
-          if (dayOfWeek === 6 || dayOfWeek === 0) {
-            entry.statusOfAMEntry = "H";
-            entry.statusOfPMEntry = "H";
-          } else {
-            entry.statusOfAMEntry = "AB";
-            entry.statusOfPMEntry = "AB";
+          const entryDate = new Date(date.split("/").reverse().join("-"));
+          const dayOfWeek = entryDate.getDay();
+
+          if (
+            entry.statusOfAMEntry === "N/A" &&
+            entry.statusOfPMEntry === "N/A"
+          ) {
+            if (dayOfWeek === 6 || dayOfWeek === 0) {
+              entry.statusOfAMEntry = "H";
+              entry.statusOfPMEntry = "H";
+            } else {
+              entry.statusOfAMEntry = "AB";
+              entry.statusOfPMEntry = "AB";
+            }
           }
-        }
 
-        return entry;
-      }).sort((a, b) => new Date(a.date.split('/').reverse().join('-')) - new Date(b.date.split('/').reverse().join('-')));
+          return entry;
+        })
+        .sort(
+          (a, b) =>
+            new Date(a.date.split("/").reverse().join("-")) -
+            new Date(b.date.split("/").reverse().join("-"))
+        );
 
       setEntries(sortedEntries);
     } catch (error) {
@@ -204,15 +230,6 @@ function ConsolidatedViewPage() {
             />
           </div>
         </div>
-        <Button
-          type="button"
-          className="mt-5"
-          onClick={() => {
-            fetchEntries();
-          }}
-        >
-          Load Entries
-        </Button>
       </div>
 
       {error && <div className="text-red-500">{error}</div>}

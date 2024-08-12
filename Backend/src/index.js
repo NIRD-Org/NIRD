@@ -32,6 +32,8 @@ import soeprLocationRoutes from "./routes/soeprLocationRoutes.js";
 import soeprStateRoutes from "./routes/soeprStateRoutes.js";
 import soeprDistrictRoutes from "./routes/soeprDistrictRoutes.js";
 import poa1Routes from "./routes/poa1Routes.js";
+import yfPoa1Routes from "./routes/YfPoa1Routes.js";
+
 const app = express();
 
 dotenv.config();
@@ -74,6 +76,7 @@ app.use("/api/v1/soepr-kpi-data", soeprKpiDataRoutes);
 app.use("/api/v1/soepr-state", soeprStateRoutes);
 app.use("/api/v1/soepr-dist", soeprDistrictRoutes);
 app.use("/api/v1/poa1", poa1Routes);
+app.use("/api/v1/yf-poa1", yfPoa1Routes);
 
 app.get("/", (req, res) => {
   res.status(200).json({ message: "Server is running" });

@@ -82,7 +82,6 @@ function SoeprAmUploadForm() {
         headers: { "Content-Type": "multipart/form-data" },
       });
       tst.success("AM upload successful");
-      navigate("/success"); // Navigate to a success page or another route
     } catch (error) {
       toast.error(error?.response?.data?.message);
     } finally {

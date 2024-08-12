@@ -14,7 +14,7 @@ import {
 import { NirdEditIcon, NirdViewIcon } from "../../Icons";
 import { Link } from "react-router-dom";
 
-const POAview = () => {
+const YFPoa1View = () => {
   const [poaRecords, setPoaRecords] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -22,7 +22,7 @@ const POAview = () => {
     const fetchPOARecords = async () => {
       try {
         setLoading(true);
-        const response = await API.get("/api/v1/poa1/getUserPOAs");
+        const response = await API.get("/api/v1/yf-poa1/getUserPOAs");
         setPoaRecords(response.data.data);
       } catch (error) {
         toast.error("Failed to fetch POA records.");
@@ -78,4 +78,4 @@ const POAview = () => {
   );
 };
 
-export default POAview;
+export default YFPoa1View;

@@ -15,14 +15,14 @@ import AdminHeader from "../../AdminHeader";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
-const Poa1DetailPage = () => {
+const YFPoa1DetailPage = () => {
   const [poa1Data, setPoa1Data] = useState(null);
   const { id } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await API.get(`/api/v1/poa1/get/${id}`);
+        const response = await API.get(`/api/v1/yf-poa1/get/${id}`);
         setPoa1Data(response.data.data);
         console.log("Fetched POA1 data:", response.data.data); // Log the response data
       } catch (error) {
@@ -189,4 +189,4 @@ const Poa1DetailPage = () => {
   );
 };
 
-export default Poa1DetailPage;
+export default YFPoa1DetailPage;

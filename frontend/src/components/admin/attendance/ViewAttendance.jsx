@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import API from "@/utils/API";
-import { Table, TableBody, TableCell, TableRow, TableHead } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  TableHead,
+} from "@/components/ui/table";
 import AdminHeader from "../AdminHeader";
 
 const ViewAttendance = () => {
@@ -29,8 +35,8 @@ const ViewAttendance = () => {
       const { data } = await API.get(
         `api/v1/am-upload/attendance/all?role=${role}&fromDate=${fromDate}&toDate=${toDate}`
       );
-      // const filteredData = data?.data.filter(att => att.state);
-      // setAttendance(filteredData);
+      const filteredData = data?.data.filter((att) => att.state);
+      setAttendance(filteredData);
       setAttendance(data?.data);
     } catch (error) {
       console.error("Error fetching AM upload:", error);
@@ -40,9 +46,9 @@ const ViewAttendance = () => {
   };
 
   const roleOptions = [
-    { value: 1, name: "Young Fellow" },
-    { value: 2, name: "Sr. Consultant" },
-    { value: 3, name: "Consultant" },
+    { value: 3, name: "Young Fellow" },
+    { value: 5, name: "Sr. Consultant" },
+    { value: 4, name: "Consultant" },
   ];
 
   useEffect(() => {
@@ -55,7 +61,7 @@ const ViewAttendance = () => {
     getAllStates();
   }, []);
 
-  const handleSearch = e => {
+  const handleSearch = (e) => {
     e.preventDefault();
     const currentDate = new Date().toISOString().split("T")[0];
     if (new Date(fromDate) > new Date(toDate)) {
@@ -86,12 +92,12 @@ const ViewAttendance = () => {
             <select
               className="border w-full md:max-w-40 text-sm border-gray-200 p-2 rounded-md"
               value={state}
-              onChange={e => {
+              onChange={(e) => {
                 setState(e.target.value);
               }}
             >
               <option>All States</option>
-              {stateOptions.map(item => (
+              {stateOptions.map((item) => (
                 <option key={item.id} value={item.id}>
                   {item.name}
                 </option>
@@ -103,12 +109,12 @@ const ViewAttendance = () => {
             <select
               className="border text-sm border-gray-200 p-2 rounded-md"
               value={role}
-              onChange={e => {
+              onChange={(e) => {
                 setRole(e.target.value);
               }}
             >
               <option>Select Role</option>
-              {roleOptions.map(item => (
+              {roleOptions.map((item) => (
                 <option key={item.value} value={item.value}>
                   {item.name}
                 </option>
@@ -122,7 +128,7 @@ const ViewAttendance = () => {
               className="border text-sm border-gray-200 p-2 rounded-md"
               value={fromDate}
               max={new Date().toISOString().split("T")[0]}
-              onChange={e => setFromDate(e.target.value)}
+              onChange={(e) => setFromDate(e.target.value)}
             />
           </div>
           <div className="flex flex-col">
@@ -132,10 +138,13 @@ const ViewAttendance = () => {
               className="border text-sm border-gray-200 p-2 rounded-md"
               value={toDate}
               max={new Date().toISOString().split("T")[0]}
-              onChange={e => setToDate(e.target.value)}
+              onChange={(e) => setToDate(e.target.value)}
             />
           </div>
-          <button onClick={handleReset} className="bg-primary rounded text-white text-sm p-2 px-2">
+          <button
+            onClick={handleReset}
+            className="bg-primary rounded text-white text-sm p-2 px-2"
+          >
             Reset
           </button>
         </div>
@@ -144,7 +153,7 @@ const ViewAttendance = () => {
           <form onSubmit={handleSearch} className="flex items-center space-x-2">
             <input
               type="text"
-              onChange={e => setSearch(e.target.value)}
+              onChange={(e) => setSearch(e.target.value)}
               placeholder="Search for States, Districts and Blocks"
               className="border border-gray-200 p-2 rounded-md w-full lg:w-40"
             />
@@ -182,7 +191,7 @@ const ViewAttendance = () => {
               <strong>Name</strong>
             </TableCell>
             {/* <TableCell> */}
-              {/* <strong>State</strong> */}
+            {/* <strong>State</strong> */}
             {/* </TableCell> */}
             <TableCell>
               <strong>Role</strong>
@@ -200,7 +209,9 @@ const ViewAttendance = () => {
                 <TableCell>{att.employeeId}</TableCell>
                 <TableCell>{att.name}</TableCell>
                 {/* <TableCell>{att.state}</TableCell> */}
-                <TableCell>{roleOptions.find(r => r.value == att.role).name}</TableCell>
+                <TableCell>
+                  {roleOptions.find((r) => r.value == att.role).name}
+                </TableCell>
                 <TableCell>{att.amWorkingDays}</TableCell>
                 <TableCell>{att.pmWorkingDays}</TableCell>
               </TableRow>

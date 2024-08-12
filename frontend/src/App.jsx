@@ -108,7 +108,12 @@ import POA1 from "./components/admin/soepr/kpidata/POA1Form";
 import POA2 from "./components/admin/soepr/kpidata/POA2Form";
 import POAView from "./components/admin/soepr/kpidata/POAView";
 import Poa1DetailPage from "./components/admin/soepr/kpidata/PoaDetails";
-import Poa1AdminData from "./components/admin/soepr/poa/Poa1AdminData";
+import Poa1AdminData from "./components/admin/poa/Poa1AdminData";
+import YFPoa1Form from "./components/admin/young-fellow/Poa/YFPoa1Form";
+import YFPoa1View from "./components/admin/young-fellow/Poa/YFPoaView";
+import YFPoa1DetailPage from "./components/admin/young-fellow/Poa/YfPoa1DetailPage";
+import Poa1AdminYfData from "./components/admin/poa/Poa1AdminYfData";
+import PoaReport from "./components/admin/poa/PoaReport";
 
 function App() {
   const { login } = useAuthContext();
@@ -168,8 +173,20 @@ function App() {
               element={<Poa1DetailPage update />}
             />
             <Route path="soepr/POA2" element={<POA2 />} />
+
             <Route path="soepr/POAView" element={<POAView />} />
-            <Route path="poa1-data" element={<Poa1AdminData />} />
+            <Route path="soepr/poa1-data" element={<Poa1AdminData />} />
+            <Route path="yf/poa1-data" element={<Poa1AdminYfData />} />
+            <Route path="soepr/poa-report" element={<PoaReport />} />
+            <Route path="yf/POA1" element={<YFPoa1Form />} />
+            <Route path="yf/POA1/edit/:id" element={<YFPoa1Form update />} />
+            <Route path="yf/POAView" element={<YFPoa1View />} />
+
+            <Route
+              path="yf/POA1/view/:id"
+              element={<YFPoa1DetailPage update />}
+            />
+            <Route path="yf/POA2" element={<POA2 />} />
 
             <Route path="attendance/view" element={<ConsolidatedViewPage />} />
 
@@ -274,14 +291,8 @@ function App() {
             <Route path="users/all/soepr/list" element={<SoeprList />} />
 
             <Route path="attendance/attendance" element={<Attendance />} />
-            <Route
-              path="attendance/amu-upload"
-              element={<SoeprAmUploadForm />}
-            />
-            <Route
-              path="attendance/pmu-upload"
-              element={<SoeprPmUploadForm />}
-            />
+            <Route path="attendance/amu-upload" element={<AmUploadForm />} />
+            <Route path="attendance/pmu-upload" element={<PmUploadForm />} />
             <Route
               path="attendance/amu-upload/list"
               element={<AmUploadList />}

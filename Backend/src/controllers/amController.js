@@ -154,19 +154,19 @@ export const getAllAttendaceData = CatchAsyncError(async (req, res, next) => {
           date: { $gte: fromDate, $lte: toDate },
         },
       },
-      {
-        $lookup: {
-          from: "states",
-          localField: "state_id",
-          foreignField: "id",
-          as: "state",
-        },
-      },
-      { $unwind: "$state" },
+      // {
+      //   $lookup: {
+      //     from: "states",
+      //     localField: "state_id",
+      //     foreignField: "id",
+      //     as: "state",
+      //   },
+      // },
+      // { $unwind: "$state" },
       {
         $group: {
           _id: "$created_by",
-          state: { $first: "$state.name" },
+          // state: { $first: "$state.name" },
           amWorkingDays: { $sum: 1 },
         },
       },
@@ -180,19 +180,19 @@ export const getAllAttendaceData = CatchAsyncError(async (req, res, next) => {
           date: { $gte: fromDate, $lte: toDate },
         },
       },
-      {
-        $lookup: {
-          from: "states",
-          localField: "state_id",
-          foreignField: "id",
-          as: "stateInfo",
-        },
-      },
-      { $unwind: "$stateInfo" },
+      // {
+      //   $lookup: {
+      //     from: "states",
+      //     localField: "state_id",
+      //     foreignField: "id",
+      //     as: "stateInfo",
+      //   },
+      // },
+      // { $unwind: "$stateInfo" },
       {
         $group: {
           _id: "$created_by",
-          state: { $first: "$stateInfo.name" },
+          // state: { $first: "$stateInfo.name" },
           pmWorkingDays: { $sum: 1 },
         },
       },

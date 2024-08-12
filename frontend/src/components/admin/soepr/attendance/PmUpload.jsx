@@ -28,7 +28,7 @@ function SoeprPmUploadForm() {
 
   useEffect(() => {
     const currentHour = new Date().getHours();
-    if (currentHour < 12) {
+    if (currentHour >= 18) {
       setIsSubmissionAllowed(false);
     }
   }, []);
@@ -51,7 +51,7 @@ function SoeprPmUploadForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isSubmissionAllowed) {
-      tst.error("Reporting time not yet started for afternoon entry");
+      toast.error("Reporting time not yet started for afternoon entry");
       return;
     }
     try {

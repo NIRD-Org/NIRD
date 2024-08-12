@@ -46,12 +46,14 @@ export function useYfLocation({ state_id, dist_id, block_id }) {
   useEffect(() => {
     setYfBlock([]);
     setYfGp([]);
-
+    console.log(dist_id);
     const fetchBlocks = async () => {
       try {
         const yfBlock = userLocation.blocks.filter(
           (block) => block.dist_id === dist_id
         );
+        console.log(yfBlock);
+
         setYfBlock(yfBlock || []);
       } catch (error) {
         console.log(error);

@@ -6,6 +6,7 @@ import { useSoeprLocation } from "@/components/hooks/useSoeprLocation";
 import API from "@/utils/API";
 import { useParams } from "react-router-dom";
 import { Table } from "@/components/ui/table";
+import { useYfLocation } from "@/components/hooks/useYfLocation";
 
 const months = [
   { name: "January", days: 31 },
@@ -70,17 +71,27 @@ const planOfDayOptions = {
   "Others(100 words Only)": ["Others"],
 };
 
-const POA1Form = ({ update }) => {
+const YFPoa1Form = ({ update }) => {
   const currentMonthIndex = new Date().getMonth();
   const currentYear = new Date().getFullYear();
   const { id: poalId } = useParams();
   const [selectedState, setSelectedState] = useState();
   const [plans, setPlans] = useState({});
   const [selectedDistricts, setSelectedDistricts] = useState({});
+  const [selectedGps, setSelectedGps] = useState({});
+  const [selectedBlocks, setSelectedBlocks] = useState({});
+
   const [formDataState, setFormData] = useState([]);
   const selectedMonth = months[currentMonthIndex];
-  const { soeprState: states, soeprDist: districts } = useSoeprLocation({
+  const {
+    yfState: states,
+    yfDist: districts,
+    yfBlock: blocks,
+    yfGp: gps,
+  } = useYfLocation({
     state_id: selectedState,
+    dist_id: selectedDistricts?.[1],
+    block_id: selectedBlocks?.[1],
   });
 
   const [selectedActions, setSelectedActions] = useState({});
@@ -133,6 +144,13 @@ const POA1Form = ({ update }) => {
     setSelectedDistricts((prev) => ({ ...prev, [day]: selectedDistrict }));
   };
 
+  const handleBlockChange = (day, selectedBlock) => {
+    setSelectedBlocks((prev) => ({ ...prev, [day]: selectedBlock }));
+  };
+  const handleGpChange = (day, selectedGp) => {
+    setSelectedGps((prev) => ({ ...prev, [day]: selectedGp }));
+  };
+
   const handleInputChange = (day, key, value) => {
     setFormData((prev) => ({
       ...prev,
@@ -161,6 +179,8 @@ const POA1Form = ({ update }) => {
           `poaData[${day}][dist_id]`,
           selectedDistricts[day] || ""
         );
+        formData.append(`poaData[${day}][block_id]`, selectedBlocks[day] || "");
+        formData.append(`poaData[${day}][gp_id]`, selectedGps[day] || "");
         formData.append(
           `poaData[${day}][achievements]`,
           formDataState[day]?.achievements || ""
@@ -175,7 +195,7 @@ const POA1Form = ({ update }) => {
         );
       });
 
-      await API.post("/api/v1/poa1/create", formData, {
+      await API.post("/api/v1/yf-poa1/create", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
@@ -192,10 +212,20 @@ const POA1Form = ({ update }) => {
         {currentYear}
       </AdminHeader>
       <div style={{ marginBottom: "15px", display: "flex", gap: "10px" }}>
-        <div className="flex gap-2 items-center">
-          <h4 className="text-primary font-semibold">State: </h4>
-          <p className="font-semibold text-gray-700">{states[0]?.name}</p>
-        </div>
+        <select
+          className="w-fit px-2 py-1 rounded"
+          value={selectedState || ""}
+          onChange={(e) => setSelectedState(e.target.value)}
+          required
+        >
+          <option value="">Select</option>
+          {states &&
+            states.map((state) => (
+              <option key={state.id} value={state.id}>
+                {state.name}
+              </option>
+            ))}
+        </select>
       </div>
       <Table
         border="1"
@@ -211,6 +241,9 @@ const POA1Form = ({ update }) => {
             <th>Planned Event</th>
             <th>Tentative Target (Description in 50 words)</th>
             <th>Location</th>
+            <th>Block</th>
+            <th>Gram Panchayat</th>
+
             <th>Achievements</th>
             <th>Upload Photo</th>
             <th>Remarks/Reason for Failure</th>
@@ -241,7 +274,6 @@ const POA1Form = ({ update }) => {
                   value={selectedActions[day] || ""}
                   onChange={(e) => handleActionChange(day, e.target.value)}
                   disabled={!plans[day]}
-                  required
                 >
                   <option value="">Select</option>
                   {plans[day] &&
@@ -267,12 +299,13 @@ const POA1Form = ({ update }) => {
                   style={{ width: "100%" }}
                   onChange={(e) => handleDistrictChange(day, e.target.value)}
                   value={selectedDistricts[day] || ""}
+                  disabled={!districts}
                   required
                 >
                   <option value="" disable>
                     Select Location
                   </option>
-                  {districts.map((dist) => (
+                  {districts?.map((dist) => (
                     <option key={dist.id} value={dist.id}>
                       {dist.name}
                     </option>
@@ -280,6 +313,40 @@ const POA1Form = ({ update }) => {
                   <option value="NIRD">NIRD</option>
                   <option value="SIRD/SPRC">SIRD/SPRC</option>
                   <option value="None">None</option>
+                </select>
+              </td>
+              <td>
+                <select
+                  style={{ width: "100%" }}
+                  onChange={(e) => handleBlockChange(day, e.target.value)}
+                  value={selectedBlocks[day] || ""}
+                  disabled={!blocks}
+                >
+                  <option value="" disable>
+                    Select Block
+                  </option>
+                  {blocks?.map((block) => (
+                    <option key={block.id} value={block.id}>
+                      {block.name}
+                    </option>
+                  ))}
+                </select>
+              </td>{" "}
+              <td>
+                <select
+                  style={{ width: "100%" }}
+                  onChange={(e) => handleGpChange(day, e.target.value)}
+                  value={selectedGps[day] || ""}
+                  disabled={!gps}
+                >
+                  <option value="" disable>
+                    Select GP
+                  </option>
+                  {gps?.map((gp) => (
+                    <option key={gp.id} value={gp.id}>
+                      {gp.name}
+                    </option>
+                  ))}
                 </select>
               </td>
               <td>
@@ -327,4 +394,4 @@ const POA1Form = ({ update }) => {
   );
 };
 
-export default POA1Form;
+export default YFPoa1Form;

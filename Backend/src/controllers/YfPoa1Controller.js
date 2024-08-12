@@ -1,11 +1,11 @@
 import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
-import { Poa1Model } from "../models/Poa1Model.js";
+import { YfPoa1Model } from "../models/YfPoa1Model.js";
 import { Errorhandler } from "../utils/errorHandler.js";
 import { uploadFile } from "../utils/uploadFile.js";
 
 const getNewId = async () => {
   try {
-    const maxDoc = await Poa1Model.aggregate([
+    const maxDoc = await YfPoa1Model.aggregate([
       {
         $addFields: {
           numericId: { $toInt: "$id" },
@@ -54,7 +54,7 @@ export const createPoa1 = CatchAsyncError(async (req, res, next) => {
       }
     }
 
-    let poa1 = await Poa1Model.findOne({ user_id });
+    let poa1 = await YfPoa1Model.findOne({ user_id });
 
     if (poa1) {
       const existingDates = poa1.poaData.map((item) => item.date.toISOString());
@@ -74,7 +74,7 @@ export const createPoa1 = CatchAsyncError(async (req, res, next) => {
       poa1.status = "1";
       await poa1.save();
     } else {
-      poa1 = new Poa1Model({
+      poa1 = new YfPoa1Model({
         id: (await getNewId()).toString(),
 
         user_id,
@@ -97,7 +97,7 @@ export const createPoa1 = CatchAsyncError(async (req, res, next) => {
 
 export const getPoa1s = CatchAsyncError(async (req, res, next) => {
   try {
-    const poa1Data = await Poa1Model.find({ user_id: req?.user?.id });
+    const poa1Data = await YfPoa1Model.find({ user_id: req?.user?.id });
 
     res.status(200).json({ success: true, data: poa1Data });
   } catch (error) {
@@ -108,7 +108,7 @@ export const getPoa1s = CatchAsyncError(async (req, res, next) => {
 
 export const getPoalData = CatchAsyncError(async (req, res, next) => {
   try {
-    const poa1Data = await Poa1Model.aggregate([
+    const poa1Data = await YfPoa1Model.aggregate([
       {
         $match: {
           id: req.params.id,
@@ -117,7 +117,7 @@ export const getPoalData = CatchAsyncError(async (req, res, next) => {
       {
         $unwind: {
           path: "$poaData",
-          preserveNullAndEmptyArrays: true,
+          preserveNullAndEmptyArrays: true, // Unwind `poaData` first
         },
       },
       {
@@ -137,12 +137,34 @@ export const getPoalData = CatchAsyncError(async (req, res, next) => {
         },
       },
       {
+        $lookup: {
+          from: "blocks",
+          localField: "poaData.block_id",
+          foreignField: "id",
+          as: "block",
+        },
+      },
+      {
+        $lookup: {
+          from: "grampanchayats",
+          localField: "poaData.gp_id",
+          foreignField: "id",
+          as: "gp",
+        },
+      },
+      {
         $addFields: {
           "poaData.state": {
             $arrayElemAt: ["$state", 0], // Ensure that the correct state is associated
           },
           "poaData.district": {
             $arrayElemAt: ["$district", 0], // Ensure that the correct district is associated
+          },
+          "poaData.block": {
+            $arrayElemAt: ["$block", 0],
+          },
+          "poaData.gp": {
+            $arrayElemAt: ["$gp", 0],
           },
         },
       },
@@ -177,7 +199,7 @@ export const getPoa1DataByState = CatchAsyncError(async (req, res, next) => {
   try {
     const { state_id, user_id } = req.query;
 
-    const poa1Data = await Poa1Model.aggregate([
+    const poa1Data = await YfPoa1Model.aggregate([
       {
         $unwind: {
           path: "$poaData",
@@ -192,7 +214,7 @@ export const getPoa1DataByState = CatchAsyncError(async (req, res, next) => {
       },
       {
         $lookup: {
-          from: "soeprstates",
+          from: "states",
           localField: "poaData.state_id",
           foreignField: "id",
           as: "stateDetails",
@@ -200,10 +222,26 @@ export const getPoa1DataByState = CatchAsyncError(async (req, res, next) => {
       },
       {
         $lookup: {
-          from: "soeprdistricts",
+          from: "districts",
           localField: "poaData.dist_id",
           foreignField: "id",
           as: "districtDetails",
+        },
+      },
+      {
+        $lookup: {
+          from: "blocks",
+          localField: "poaData.block_id",
+          foreignField: "id",
+          as: "blockDetails",
+        },
+      },
+      {
+        $lookup: {
+          from: "grampanchayats",
+          localField: "poaData.gp_id",
+          foreignField: "id",
+          as: "gpDetails",
         },
       },
       {
@@ -213,6 +251,12 @@ export const getPoa1DataByState = CatchAsyncError(async (req, res, next) => {
           },
           "poaData.district": {
             $arrayElemAt: ["$districtDetails", 0],
+          },
+          "poaData.block": {
+            $arrayElemAt: ["$blockDetails", 0],
+          },
+          "poaData.gp": {
+            $arrayElemAt: ["$gpDetails", 0],
           },
         },
       },
@@ -229,6 +273,8 @@ export const getPoa1DataByState = CatchAsyncError(async (req, res, next) => {
         $project: {
           stateDetails: 0,
           districtDetails: 0,
+          blockDetails: 0,
+          gpDetails: 0,
         },
       },
     ]);
@@ -246,95 +292,11 @@ export const getPoa1DataByState = CatchAsyncError(async (req, res, next) => {
   }
 });
 
-// Get all poa1 data --- Super admin
-export const getAllPoa1Data = CatchAsyncError(async (req, res, next) => {
-  try {
-    const { month, year } = req.query;
-
-    if (!month || !year) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Month and Year are required" });
-    }
-
-    const poa1Data = await Poa1Model.aggregate([
-      {
-        $unwind: {
-          path: "$poaData",
-          preserveNullAndEmptyArrays: true,
-        },
-      },
-      {
-        $addFields: {
-          poaMonth: {
-            $month: {
-              $dateFromString: {
-                dateString: "$poaData.date",
-                format: "%d/%m/%Y",
-              },
-            },
-          },
-          poaYear: {
-            $year: {
-              $dateFromString: {
-                dateString: "$poaData.date",
-                format: "%d/%m/%Y",
-              },
-            },
-          },
-        },
-      },
-      {
-        $match: {
-          poaMonth: parseInt(month),
-          poaYear: parseInt(year),
-        },
-      },
-      {
-        $lookup: {
-          from: "soeprstates",
-          localField: "poaData.state_id",
-          foreignField: "id",
-          as: "state",
-        },
-      },
-      {
-        $addFields: {
-          "poaData.state": {
-            $arrayElemAt: ["$state", 0], // Ensure that the correct state is associated
-          },
-        },
-      },
-      {
-        $group: {
-          _id: "$_id",
-          id: { $first: "$id" },
-          user_id: { $first: "$user_id" },
-          status: { $first: "$status" },
-          poaData: { $push: "$poaData" },
-          created_at: { $first: "$created_at" },
-          modified_at: { $first: "$modified_at" },
-        },
-      },
-    ]);
-
-    if (!poa1Data || poa1Data.length === 0) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          message: "No POA1 Data Found for the specified month and year",
-        });
-    }
-    res.status(200).json({ success: true, data: poa1Data });
-  } catch (error) {
-    next(new Errorhandler("Failed to Retrieve POA1 Data", 500));
-  }
-});
-
 export const updatePoa1Data = CatchAsyncError(async (req, res, next) => {
-  try {
-  } catch (error) {
-    next(new Errorhandler("Failed to Update POA1 Data", 500));
-  }
+  async (req, res, next) => {
+    try {
+    } catch (error) {
+      next(new Errorhandler("Failed to Update POA1 Data", 500));
+    }
+  };
 });
