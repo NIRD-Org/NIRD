@@ -9,6 +9,7 @@ import { ArrowLeftIcon } from "lucide-react";
 import API from "@/utils/API";
 import PoaDataCard from "./PoaDataCard";
 import { savePDF } from "@progress/kendo-react-pdf";
+import html2pdf from "html2pdf.js";
 
 const Poa1AdminData = () => {
   const printRef = useRef();
@@ -86,15 +87,36 @@ const Poa1AdminData = () => {
   }, [state]);
   const exportPDFWithMethod = () => {
     let element = printRef.current || document.body;
-    console.log(state);
+    element.style.fontSize = "13px !important";
 
     savePDF(element, {
       paperSize: "A4",
 
       margin: 10,
       fileName: `Poa1 ${stateData?.name}`,
-      forcePageBreak: ".page-break", // Add this line
+      // forcePageBreak: ".page-break", // Add this line
+    }).then(() => {
+      // Reset the font size after export
+      element.style.fontSize = "";
     });
+  };
+
+  const handleGeneratePdf = () => {
+    const element = printRef.current;
+
+    const opt = {
+      margin: 10,
+      pagebreak: {
+        mode: ["avoid-all"],
+      },
+      filename: `Poa1 ${stateData?.name}`,
+      image: { type: "jpeg", quality: 1 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: "mm", format: "a3", orientation: "portrait" },
+    };
+
+    // New Promise-based usage:
+    html2pdf().set(opt).from(element).save();
   };
 
   return (
@@ -161,7 +183,8 @@ const Poa1AdminData = () => {
       </div>
 
       <button
-        onClick={exportPDFWithMethod}
+        // onClick={exportPDFWithMethod}
+        onClick={handleGeneratePdf}
         className="mt-4 bg-primary  text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
       >
         Download as PDF

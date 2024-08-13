@@ -10,6 +10,7 @@ import API from "@/utils/API";
 import PoaDataCard from "./PoaDataCard";
 import { savePDF } from "@progress/kendo-react-pdf";
 import PoaYfDataCard from "./PoaYfDataCard";
+import html2pdf from "html2pdf.js";
 
 const Poa1AdminYfData = () => {
   const printRef = useRef();
@@ -95,6 +96,24 @@ const Poa1AdminYfData = () => {
     });
   };
 
+  const handleGeneratePdf = () => {
+    const element = printRef.current;
+
+    const opt = {
+      margin: 10,
+      pagebreak: {
+        mode: ["avoid-all"],
+      },
+      filename: `Poa1 ${stateData?.name}`,
+      image: { type: "jpeg", quality: 1 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: "mm", format: "a3", orientation: "portrait" },
+    };
+
+    // New Promise-based usage:
+    html2pdf().set(opt).from(element).save();
+  };
+
   return (
     <div className="relative py-10 px-1 lg:px-20">
       <button
@@ -159,7 +178,8 @@ const Poa1AdminYfData = () => {
       </div>
 
       <button
-        onClick={exportPDFWithMethod}
+        // onClick={exportPDFWithMethod}
+        onClick={handleGeneratePdf}
         className="mt-4 bg-primary  text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
       >
         Download as PDF
