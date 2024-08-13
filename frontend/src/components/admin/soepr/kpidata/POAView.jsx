@@ -62,7 +62,7 @@ const POAview = () => {
                 <TableCell>{createdAt.toLocaleDateString("en-IN")}</TableCell>
                 <TableCell>{createdAt.toLocaleTimeString("en-IN")}</TableCell>
                 <TableCell className="flex gap-4">
-                  <Link to={`/admin/yf/POA1/view/${record.id}`}>
+                  <Link to={`/admin/soepr/POA1/view/${record.id}`}>
                     <NirdViewIcon />
                   </Link>
                   {/* <Link to={`/admin/soepr/POA1/edit/${record.id}`}> */}
