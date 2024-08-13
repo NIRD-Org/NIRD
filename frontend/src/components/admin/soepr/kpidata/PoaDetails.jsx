@@ -143,9 +143,7 @@ const Poa1DetailPage = () => {
               poa1Data?.poaData?.length > 0 &&
               poa1Data?.poaData?.map((dayData, index) => (
                 <TableRow key={index}>
-                  <TableCell className="text-xs">
-                    {new Date(dayData.date).toLocaleDateString()}
-                  </TableCell>
+                  <TableCell className="text-xs">{dayData.date}</TableCell>
                   <TableCell className="text-xs">{dayData.weekday}</TableCell>
                   <TableCell className="text-xs">{dayData.plan}</TableCell>
                   <TableCell className="text-xs">{dayData.action}</TableCell>
