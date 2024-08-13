@@ -175,7 +175,7 @@ export const getPoalData = CatchAsyncError(async (req, res, next) => {
 
 export const getPoa1DataByState = CatchAsyncError(async (req, res, next) => {
   try {
-    const { state_id, user_id } = req.query;
+    const { state_id, user_id, month, year } = req.query;
 
     const poa1Data = await Poa1Model.aggregate([
       {
@@ -185,7 +185,29 @@ export const getPoa1DataByState = CatchAsyncError(async (req, res, next) => {
         },
       },
       {
+        $addFields: {
+          poaMonth: {
+            $month: {
+              $dateFromString: {
+                dateString: "$poaData.date",
+                format: "%d/%m/%Y",
+              },
+            },
+          },
+          poaYear: {
+            $year: {
+              $dateFromString: {
+                dateString: "$poaData.date",
+                format: "%d/%m/%Y",
+              },
+            },
+          },
+        },
+      },
+      {
         $match: {
+          poaMonth: parseInt(month),
+          poaYear: parseInt(year),
           "poaData.state_id": state_id,
           user_id: user_id,
         },

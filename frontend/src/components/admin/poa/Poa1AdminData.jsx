@@ -5,11 +5,31 @@ import {
   useParams,
   useSearchParams,
 } from "react-router-dom";
-import { ArrowLeftIcon } from "lucide-react";
+import { ArrowLeftIcon, Table } from "lucide-react";
 import API from "@/utils/API";
 import PoaDataCard from "./PoaDataCard";
 import { savePDF } from "@progress/kendo-react-pdf";
 import html2pdf from "html2pdf.js";
+import FormField from "@/components/ui/formfield";
+const months = [
+  { label: "January", value: 1 },
+  { label: "February", value: 2 },
+  { label: "March", value: 3 },
+  { label: "April", value: 4 },
+  { label: "May", value: 5 },
+  { label: "June", value: 6 },
+  { label: "July", value: 7 },
+  { label: "August", value: 8 },
+  { label: "September", value: 9 },
+  { label: "October", value: 10 },
+  { label: "November", value: 11 },
+  { label: "December", value: 12 },
+];
+
+const years = Array.from(
+  new Array(50),
+  (val, index) => new Date().getFullYear() - index
+);
 
 const Poa1AdminData = () => {
   const printRef = useRef();
@@ -22,6 +42,16 @@ const Poa1AdminData = () => {
   const [poa1, setpoa1] = useState([]);
   const state = searchParams.get("state") || "";
   const dist = searchParams.get("dist") || "";
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+
+  const handleMonthChange = (e) => {
+    setSelectedMonth(parseInt(e.target.value));
+  };
+
+  const handleYearChange = (e) => {
+    setSelectedYear(parseInt(e.target.value));
+  };
 
   const navigate = useNavigate();
 
@@ -37,7 +67,7 @@ const Poa1AdminData = () => {
   const getpoa1Data = async () => {
     try {
       const { data } = await API.get(
-        `/api/v1/poa1/get/?state_id=${state}&user_id=${user}`
+        `/api/v1/poa1/get/?state_id=${state}&user_id=${user}&month=${selectedMonth}&year=${selectedYear}}`
       );
       setpoa1(data?.data);
     } catch (error) {
@@ -63,10 +93,10 @@ const Poa1AdminData = () => {
   }, []);
 
   useEffect(() => {
-    if (user && state) {
+    if ((user && state, selectedMonth, selectedYear)) {
       getpoa1Data();
     }
-  }, [user, state]);
+  }, [user, state, selectedMonth, selectedYear]);
 
   useEffect(() => {
     getAllStates();
@@ -120,10 +150,10 @@ const Poa1AdminData = () => {
   };
 
   return (
-    <div className="relative py-10 px-1 lg:px-20">
+    <div className="relative w-full py-10 px-1 lg">
       <button
         onClick={() => navigate("/kpi")}
-        className="absolute flex items-center justify-center bg-primary text-white p-2 rounded top-2 left-4 md:top-10 md:left-20"
+        className="absolute flex items-center justify-center bg-primary text-white p-2 rounded top-2 left-4 md:top-10 "
       >
         <ArrowLeftIcon className="w-7 h-5" />
         <p className="hidden md:block">Back</p>
@@ -171,6 +201,30 @@ const Poa1AdminData = () => {
                 ))}
               </select>
             </div>
+
+            <div>
+              <FormField
+                type="select"
+                label="Select Month"
+                name="month"
+                value={selectedMonth}
+                onChange={handleMonthChange}
+                options={months}
+              />
+            </div>
+            <div>
+              <FormField
+                type="select"
+                label="Select Year"
+                name="year"
+                value={selectedYear}
+                onChange={handleYearChange}
+                options={years.map((year) => ({
+                  value: year,
+                  label: year,
+                }))}
+              />
+            </div>
           </div>
         </div>
         <div className="w-full md:w-1/3 flex justify-center items-center lg:w-1/2 h-full">
@@ -190,16 +244,146 @@ const Poa1AdminData = () => {
         Download as PDF
       </button>
 
-      <div ref={printRef} className="pt-10 grid grid-cols-1 place-items-center">
-        {poa1?.poaData?.length > 0 ? (
-          poa1?.poaData?.map((poa, index) => {
-            return <PoaDataCard key={index} data={poa} />;
-          })
-        ) : (
-          <h1 className="text-center text-4xl text-gray-500 font-semibold">
-            No Data Available
-          </h1>
-        )}
+      <div ref={printRef} className="pt-10 w-full">
+        <div className="text-center flex   justify-evenly items-center gap-4 bg-primary py-2 text-sm md:text-base text-white">
+          <p>
+            State: <span className="text-gray-300">{stateData?.name}</span>
+          </p>{" "}
+          <p>
+            Name:{" "}
+            {(() => {
+              const foundUser = users?.find((u) => u.id === user);
+              return foundUser?.name;
+            })()}
+          </p>
+          <p>
+            Designation:{" "}
+            {(() => {
+              const foundUser = users?.find((u) => u.id === user);
+              if (foundUser?.role === 4) return "Consultant";
+              if (foundUser?.role === 5) return "Sr. Consultant";
+              if (foundUser?.role === 3) return "Young Fellow";
+              return "";
+            })()}
+          </p>
+          <p>
+            Month:{" "}
+            {(() => {
+              const monthData = months?.find((m) => m.value === selectedMonth);
+              return monthData.label;
+            })()}{" "}
+          </p>
+          <p>Year: {selectedYear} </p>
+        </div>
+        <div className="w-full overflow-x-auto">
+          <table className="min-w-full border-collapse overflow-x-auto">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
+                  S.No.
+                </th>
+                <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
+                  Date
+                </th>
+                <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
+                  Weekday
+                </th>
+                <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
+                  Plan
+                </th>
+                <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
+                  Action
+                </th>
+                <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
+                  Planned Event
+                </th>
+                <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
+                  State
+                </th>
+                <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
+                  District
+                </th>
+                <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
+                  Achievements
+                </th>
+                <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
+                  Photo
+                </th>
+                <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
+                  Remarks
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {poa1?.poaData?.length > 0 ? (
+                poa1.poaData.map((dayData, index) => (
+                  <tr key={index} className="even:bg-gray-50">
+                    <td className="border-t p-2 text-center font-semibold text-sm md:text-sm">
+                      {index + 1}.
+                    </td>
+                    <td className="border-t p-2 text-sm md:text-sm">
+                      {dayData.date}
+                    </td>
+                    <td className="border-t p-2 text-sm md:text-sm">
+                      {dayData.weekday}
+                    </td>
+                    <td className="border-t p-2 text-sm md:text-sm">
+                      {dayData.plan}
+                    </td>
+                    <td className="border-t p-2 text-sm md:text-sm">
+                      {dayData.action}
+                    </td>
+                    <td className="border-t p-2 text-sm md:text-sm">
+                      {dayData.plannedEvent}
+                    </td>
+                    <td className="border-t p-2 text-sm md:text-sm">
+                      {dayData.state.name}
+                    </td>
+                    <td className="border-t p-2 text-sm md:text-sm">
+                      {dayData.district?.name || "N/A"}
+                    </td>
+                    <td className="border-t p-2 text-sm md:text-sm">
+                      {dayData.achievements}
+                    </td>
+                    <td className="border-t p-2 text-sm md:text-sm">
+                      {dayData.photo ? (
+                        <img
+                          src={dayData.photo}
+                          alt="Photo"
+                          className="max-w-full h-auto"
+                        />
+                      ) : (
+                        "No photo"
+                      )}
+                    </td>
+                    <td className="border-t p-2 text-sm md:text-sm">
+                      {dayData.remarks}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan="10"
+                    className="p-2 text-center text-xs sm:text-sm md:text-base"
+                  >
+                    No data available
+                  </td>
+                </tr>
+              )}
+            </tbody>
+            <tfoot>
+              <tr>
+                <td
+                  colSpan="10"
+                  className="p-2 text-center text-xs sm:text-sm md:text-base"
+                >
+                  End of POA1 Details
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       </div>
     </div>
   );

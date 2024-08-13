@@ -199,7 +199,13 @@ const PoaReport = () => {
                       {getUserStateName(user.id)}
                     </td>
                     <td className="py-2 px-4 border">
-                      {user.designation || "N/A"}
+                      {user.role == 3
+                        ? "Young Fellow"
+                        : user.role == 4
+                        ? "Consultant"
+                        : user.role == 5
+                        ? "Sr. Consultant"
+                        : "N/A" || "N/A"}
                     </td>
                   </tr>
                 );
