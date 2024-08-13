@@ -23,7 +23,6 @@ import TableSkeleton from "@/components/ui/tableskeleton";
 
 const UserPage = () => {
   const { user } = useAuthContext();
-
   const [users, setUsers] = useState([]);
   const [userLocations, setUserLocations] = useState([]);
   const [roleFilter, setRoleFilter] = useState(user.role === 1 ? null : 3);
@@ -31,10 +30,12 @@ const UserPage = () => {
   const stateId = searchParams.get("state_id") || "";
   const [isLoading, setIsLoading] = useState(false);
 
+  // Fetch users
   const fetchUser = async () => {
     try {
       setIsLoading(true);
       const { data } = await API.get(`/api/v1/users/all`);
+      console.log('Fetched Users:', data.data); // Debugging output
       setUsers(data.data);
     } catch (error) {
       console.log(error);
@@ -43,21 +44,25 @@ const UserPage = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchUserLocations = async () => {
-      try {
-        const { data } = await API.get(`/api/v1/user-location/all`);
-        setUserLocations(data.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  // Fetch user locations
+  const fetchUserLocations = async () => {
+    try {
+      const { data } = await API.get(`/api/v1/user-location/all`);
+      console.log('Fetched User Locations:', data.data); // Debugging output
+      setUserLocations(data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
+  useEffect(() => {
     fetchUser();
     fetchUserLocations();
   }, []);
 
+  // Filter users based on role and state
   const filteredUsers = users?.filter(user => {
+    console.log('Filtering User:', user); // Debugging output
     if (roleFilter && user.role !== roleFilter) {
       return false;
     }
@@ -72,11 +77,14 @@ const UserPage = () => {
     return true;
   });
 
+  // Handle role filter change
   const handleRoleFilterChange = event => {
-    const selectedRole = parseInt(event.target.value);
+    const selectedRole = parseInt(event.target.value, 10);
+    console.log('Selected Role:', selectedRole); // Debugging output
     setRoleFilter(selectedRole);
   };
 
+  // Handle delete user
   const handleDelete = async id => {
     if (window.confirm("Are you sure you want to delete this user?")) {
       try {
@@ -110,6 +118,7 @@ const UserPage = () => {
               <option value="1">Superadmin</option>
               <option value="2">Admin</option>
               <option value="3">Young Fellow</option>
+              <option value="4">Consultant</option>
             </select>
           </div>
         )}
@@ -148,9 +157,15 @@ const UserPage = () => {
                     ? "Superadmin"
                     : user.role === 2
                     ? "Admin"
-                    : "Young Fellow"}
+                    : user.role === 3
+                    ? "Young Fellow"
+                    : user.role === 4
+                    ? "Consultant"
+                    : user.role === 5
+                    ? "Sr.Consultant"
+                    : "Unknown Role"}
                 </TableCell>
-                <TableCell className="flex gap-4 ">
+                <TableCell className="flex gap-4">
                   {user.status == 0 ? (
                     <div>
                       <NirdBanIcon />
