@@ -240,13 +240,13 @@ export const getAllAttendaceData = CatchAsyncError(async (req, res, next) => {
             $and: [
               {
                 $or: [
-                  { $in: [{ $toString: "$created_by" }, employeeIds] },
+                  { $in: [{ $toString: "$created_by" }, employeeIds] }, // Match string type
                   {
                     $in: [
-                      { $toInt: "$created_by" },
-                      employeeIds.map((id) => parseInt(id, 10)),
+                      { $toString: { $toInt: "$created_by" } },
+                      employeeIds,
                     ],
-                  },
+                  }, // Convert to string after ensuring it's an integer
                 ],
               },
               { $gte: ["$date", fromDate] },
@@ -271,13 +271,13 @@ export const getAllAttendaceData = CatchAsyncError(async (req, res, next) => {
             $and: [
               {
                 $or: [
-                  { $in: [{ $toString: "$created_by" }, employeeIds] },
+                  { $in: [{ $toString: "$created_by" }, employeeIds] }, // Match string type
                   {
                     $in: [
-                      { $toInt: "$created_by" },
-                      employeeIds.map((id) => parseInt(id, 10)),
+                      { $toString: { $toInt: "$created_by" } },
+                      employeeIds,
                     ],
-                  },
+                  }, // Convert to string after ensuring it's an integer
                 ],
               },
               { $gte: ["$date", fromDate] },
