@@ -57,7 +57,7 @@ export const createPoa1 = CatchAsyncError(async (req, res, next) => {
     let poa1 = await Poa1Model.findOne({ user_id });
 
     if (poa1) {
-      const existingDates = poa1.poaData.map((item) => item.date.toISOString());
+      const existingDates = poa1.poaData.map((item) => item.date.toString());
       const newEntries = Object.values(poaData).filter(
         (entry) => !existingDates.includes(new Date(entry.date).toISOString())
       );
@@ -319,12 +319,10 @@ export const getAllPoa1Data = CatchAsyncError(async (req, res, next) => {
     ]);
 
     if (!poa1Data || poa1Data.length === 0) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          message: "No POA1 Data Found for the specified month and year",
-        });
+      return res.status(404).json({
+        success: false,
+        message: "No POA1 Data Found for the specified month and year",
+      });
     }
     res.status(200).json({ success: true, data: poa1Data });
   } catch (error) {
