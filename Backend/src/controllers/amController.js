@@ -130,6 +130,92 @@ export const updateAM = CatchAsyncError(async (req, res, next) => {
   });
 });
 
+// export const getAllAttendaceData = CatchAsyncError(async (req, res, next) => {
+//   try {
+//     const { role, fromDate, toDate } = req.query;
+
+//     const userRole = parseInt(role, 10);
+//     const fromDateParsed = new Date(fromDate);
+//     const toDateParsed = new Date(toDate);
+
+//     // Fetch employees with the given role
+//     const employees = await User.find({ role: userRole });
+
+//     if (!employees || employees.length === 0) {
+//       return next(
+//         new Errorhandler("No employees found with the given role", 404)
+//       );
+//     }
+
+//     const employeeIds = employees.map((employee) => employee.id.toString());
+
+//     // AM Attendance Aggregation
+//     const amAttendance = await AmModel.aggregate([
+//       {
+//         $match: {
+//           created_by: { $in: employeeIds.map((id) => id.toString()) },
+//           date: { $gte: fromDateParsed, $lte: toDateParsed },
+//         },
+//       },
+//       {
+//         $group: {
+//           _id: { $toString: "$created_by" },
+//           amWorkingDays: { $sum: 1 },
+//         },
+//       },
+//     ]);
+
+//     // PM Attendance Aggregation
+//     const pmAttendance = await PmModel.aggregate([
+//       {
+//         $match: {
+//           created_by: { $in: employeeIds.map((id) => id.toString()) },
+//           date: { $gte: fromDateParsed, $lte: toDateParsed },
+//         },
+//       },
+//       {
+//         $group: {
+//           _id: { $toString: "$created_by" },
+//           pmWorkingDays: { $sum: 1 },
+//         },
+//       },
+//     ]);
+
+//     // Create maps for AM and PM attendance
+//     const amAttendanceMap = amAttendance.reduce((acc, record) => {
+//       acc[record._id] = record;
+//       return acc;
+//     }, {});
+
+//     const pmAttendanceMap = pmAttendance.reduce((acc, record) => {
+//       acc[record._id] = record;
+//       return acc;
+//     }, {});
+
+//     // Combine data
+//     const attendanceData = employees.map((employee) => {
+//       const { id, employee_id, name } = employee;
+//       const amData = amAttendanceMap[id.toString()] || { amWorkingDays: 0 };
+//       const pmData = pmAttendanceMap[id.toString()] || { pmWorkingDays: 0 };
+//       return {
+//         employeeId: employee_id,
+//         name,
+//         role: userRole,
+//         amWorkingDays: amData.amWorkingDays,
+//         pmWorkingDays: pmData.pmWorkingDays,
+//       };
+//     });
+
+//     res.status(200).json({
+//       success: true,
+//       data: attendanceData,
+//     });
+//   } catch (error) {
+//     console.log(error);
+//     return next(new Errorhandler("Failed to get Attendance data", 500));
+//   }
+// });
+
 export const getAllAttendaceData = CatchAsyncError(async (req, res, next) => {
   try {
     const { role, fromDate, toDate } = req.query;
@@ -150,23 +236,28 @@ export const getAllAttendaceData = CatchAsyncError(async (req, res, next) => {
     const amAttendance = await AmModel.aggregate([
       {
         $match: {
-          created_by: { $in: employeeIds },
-          date: { $gte: fromDate, $lte: toDate },
+          $expr: {
+            $and: [
+              {
+                $or: [
+                  { $in: [{ $toString: "$created_by" }, employeeIds] }, // Match string type
+                  {
+                    $in: [
+                      { $toString: { $toInt: "$created_by" } },
+                      employeeIds,
+                    ],
+                  }, // Convert to string after ensuring it's an integer
+                ],
+              },
+              { $gte: ["$date", fromDate] },
+              { $lte: ["$date", toDate] },
+            ],
+          },
         },
       },
-      // {
-      //   $lookup: {
-      //     from: "states",
-      //     localField: "state_id",
-      //     foreignField: "id",
-      //     as: "state",
-      //   },
-      // },
-      // { $unwind: "$state" },
       {
         $group: {
           _id: "$created_by",
-          // state: { $first: "$state.name" },
           amWorkingDays: { $sum: 1 },
         },
       },
@@ -176,28 +267,32 @@ export const getAllAttendaceData = CatchAsyncError(async (req, res, next) => {
     const pmAttendance = await PmModel.aggregate([
       {
         $match: {
-          created_by: { $in: employeeIds },
-          date: { $gte: fromDate, $lte: toDate },
+          $expr: {
+            $and: [
+              {
+                $or: [
+                  { $in: [{ $toString: "$created_by" }, employeeIds] }, // Match string type
+                  {
+                    $in: [
+                      { $toString: { $toInt: "$created_by" } },
+                      employeeIds,
+                    ],
+                  }, // Convert to string after ensuring it's an integer
+                ],
+              },
+              { $gte: ["$date", fromDate] },
+              { $lte: ["$date", toDate] },
+            ],
+          },
         },
       },
-      // {
-      //   $lookup: {
-      //     from: "states",
-      //     localField: "state_id",
-      //     foreignField: "id",
-      //     as: "stateInfo",
-      //   },
-      // },
-      // { $unwind: "$stateInfo" },
       {
         $group: {
           _id: "$created_by",
-          // state: { $first: "$stateInfo.name" },
           pmWorkingDays: { $sum: 1 },
         },
       },
     ]);
-    console.log("PM Attendance:", pmAttendance); // Debug log
 
     // Create maps for AM and PM attendance
     const amAttendanceMap = amAttendance.reduce((acc, record) => {

@@ -52,7 +52,7 @@ const ViewAttendance = () => {
   ];
 
   useEffect(() => {
-    if (state && role && toDate && fromDate) {
+    if (role && toDate && fromDate) {
       fetchAttendance();
     }
   }, [state, role, toDate, fromDate]);
@@ -92,6 +92,7 @@ const ViewAttendance = () => {
             <select
               className="border w-full md:max-w-40 text-sm border-gray-200 p-2 rounded-md"
               value={state}
+              disabled
               onChange={(e) => {
                 setState(e.target.value);
               }}
