@@ -29,13 +29,14 @@ const UserPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const stateId = searchParams.get("state_id") || "";
   const [isLoading, setIsLoading] = useState(false);
+  const [sortRole, setSortRole] = useState("");
 
   // Fetch users
   const fetchUser = async () => {
     try {
       setIsLoading(true);
       const { data } = await API.get(`/api/v1/users/all`);
-      console.log('Fetched Users:', data.data); // Debugging output
+      console.log("Fetched Users:", data.data); // Debugging output
       setUsers(data.data);
     } catch (error) {
       console.log(error);
@@ -48,7 +49,7 @@ const UserPage = () => {
   const fetchUserLocations = async () => {
     try {
       const { data } = await API.get(`/api/v1/user-location/all`);
-      console.log('Fetched User Locations:', data.data); // Debugging output
+      console.log("Fetched User Locations:", data.data); // Debugging output
       setUserLocations(data.data);
     } catch (error) {
       console.log(error);
@@ -60,14 +61,22 @@ const UserPage = () => {
     fetchUserLocations();
   }, []);
 
+  // Sort users by role
+  const sortedUsers = [...users].sort((a, b) => {
+    if (sortRole) {
+      return a.role === sortRole ? -1 : 1;
+    }
+    return 0;
+  });
+
   // Filter users based on role and state
-  const filteredUsers = users?.filter(user => {
-    console.log('Filtering User:', user); // Debugging output
+  const filteredUsers = sortedUsers?.filter((user) => {
+    console.log("Filtering User:", user); // Debugging output
     if (roleFilter && user.role !== roleFilter) {
       return false;
     }
     if (stateId) {
-      const location = userLocations?.find(loc => loc.user_id === user.id);
+      const location = userLocations?.find((loc) => loc.user_id === user.id);
       if (location && location?.userLocations?.state_ids?.includes(stateId)) {
         return true;
       } else {
@@ -78,18 +87,25 @@ const UserPage = () => {
   });
 
   // Handle role filter change
-  const handleRoleFilterChange = event => {
+  const handleRoleFilterChange = (event) => {
     const selectedRole = parseInt(event.target.value, 10);
-    console.log('Selected Role:', selectedRole); // Debugging output
+    console.log("Selected Role:", selectedRole); // Debugging output
     setRoleFilter(selectedRole);
   };
 
+  // Handle sort role change
+  const handleSortRoleChange = (event) => {
+    const selectedSortRole = parseInt(event.target.value, 10);
+    console.log("Selected Sort Role:", selectedSortRole); // Debugging output
+    setSortRole(selectedSortRole);
+  };
+
   // Handle delete user
-  const handleDelete = async id => {
+  const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this user?")) {
       try {
         await API.delete(`/api/v1/users/${id}`);
-        const updatedUsers = users.map(user =>
+        const updatedUsers = users.map((user) =>
           user.id === id ? { ...user, status: "0" } : user
         );
         setUsers(updatedUsers);
@@ -104,23 +120,43 @@ const UserPage = () => {
       <AdminHeader>Users</AdminHeader>
       <div className="flex gap-10 items-start flex-wrap">
         {user.role === 1 && (
-          <div className="mb-4">
-            <label htmlFor="roleFilter" className="mr-2">
-              Role:
-            </label>
-            <select
-              id="roleFilter"
-              value={roleFilter || ""}
-              onChange={handleRoleFilterChange}
-              className="text-sm px-4 py-2 rounded-md bg-transparent border"
-            >
-              <option value="">All</option>
-              <option value="1">Superadmin</option>
-              <option value="2">Admin</option>
-              <option value="3">Young Fellow</option>
-              <option value="4">Consultant</option>
-            </select>
-          </div>
+          <>
+            <div className="mb-4">
+              <label htmlFor="roleFilter" className="mr-2">
+                Role:
+              </label>
+              <select
+                id="roleFilter"
+                value={roleFilter || ""}
+                onChange={handleRoleFilterChange}
+                className="text-sm px-4 py-2 rounded-md bg-transparent border"
+              >
+                <option value="">All</option>
+                <option value="1">Superadmin</option>
+                <option value="2">Admin</option>
+                <option value="3">Young Fellow</option>
+                <option value="4">Consultant</option>
+              </select>
+            </div>
+            <div className="mb-4">
+              <label htmlFor="sortRole" className="mr-2">
+                Sort by Role:
+              </label>
+              <select
+                id="sortRole"
+                value={sortRole || ""}
+                onChange={handleSortRoleChange}
+                className="text-sm px-4 py-2 rounded-md bg-transparent border"
+              >
+                <option value="">Default</option>
+                <option value="1">Superadmin</option>
+                <option value="2">Admin</option>
+                <option value="3">Young Fellow</option>
+                <option value="4">Consultant</option>
+                <option value="5">Sr. Consultant</option>
+              </select>
+            </div>
+          </>
         )}
         <div className="">
           <label htmlFor="statefilter" className="mr-2">
@@ -146,7 +182,7 @@ const UserPage = () => {
           <TableSkeleton columnCount={4} />
         ) : (
           <TableBody>
-            {filteredUsers.map(user => (
+            {filteredUsers.map((user) => (
               <TableRow key={user.id}>
                 <TableCell>{user.id}</TableCell>
                 <TableCell>{user.employee_id || "N/A"}</TableCell>
@@ -162,11 +198,11 @@ const UserPage = () => {
                     : user.role === 4
                     ? "Consultant"
                     : user.role === 5
-                    ? "Sr.Consultant"
+                    ? "Sr. Consultant"
                     : "Unknown Role"}
                 </TableCell>
                 <TableCell className="flex gap-4">
-                  {user.status == 0 ? (
+                  {user.status === 0 ? (
                     <div>
                       <NirdBanIcon />
                     </div>

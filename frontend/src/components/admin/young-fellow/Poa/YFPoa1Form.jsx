@@ -31,14 +31,7 @@ const planOfDayOptions = {
     "Observe Gram Sabha",
     "Make aware of Panchayat Nirnay app/Meeting Online App",
   ],
-  "Training Needs Assessment (TNA) facilitated": [
-    "To Facilitate State Level/ District Level/Block Level TNAs",
-  ],
-  "Training Calendar preparation": [
-    "To facilitate preparation of Training Calendar at State/ District/ Block Level",
-    "To design/ facilitate to design Trainings  ",
-    "To prepare/Update Training modules",
-  ],
+ 
   "Development/customization of Learning Materials": [
     "Develop/customize learning material on LSDGs/GPDP/Panchayat Governance/PESA/OSR",
     "Conduct Training Session as a Resource Person",
