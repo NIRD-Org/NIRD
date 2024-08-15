@@ -114,6 +114,7 @@ import YFPoa1View from "./components/admin/young-fellow/Poa/YFPoaView";
 import YFPoa1DetailPage from "./components/admin/young-fellow/Poa/YfPoa1DetailPage";
 import Poa1AdminYfData from "./components/admin/poa/Poa1AdminYfData";
 import PoaReport from "./components/admin/poa/PoaReport";
+import UpdatePOA1Form from "./components/admin/soepr/kpidata/UpdatePOA1Form";
 
 function App() {
   const { login } = useAuthContext();
@@ -167,7 +168,7 @@ function App() {
             />
             <Route path="soepr/plan-of-action" element={<POA />} />
             <Route path="soepr/POA1" element={<POA1 />} />
-            <Route path="soepr/POA1/edit/:id" element={<POA1 update />} />
+            <Route path="soepr/POA1/edit/:id" element={<UpdatePOA1Form />} />
             <Route
               path="soepr/POA1/view/:id"
               element={<Poa1DetailPage update />}
