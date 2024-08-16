@@ -12,6 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { tst } from "@/lib/utils";
 
 const months = [
   { name: "January", days: 31 },
@@ -224,7 +225,7 @@ const UpdatePOA1Form = () => {
       toast.success("Form updated successfully!");
       navigate(`/admin/soepr/POA1/view/${poalId}`);
     } catch (error) {
-      toast.error("Failed to update form.");
+      tst.error(error);
     } finally {
       setLoading(false);
     }

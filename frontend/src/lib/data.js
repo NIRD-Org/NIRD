@@ -149,6 +149,33 @@ export const getSidebarItems = (user) => {
               title: "Young Fellow location",
               link: "/admin/users/all/young-fellow",
             },
+
+            //{
+            //type: "sub-module",
+            //icon: ArrowBigRight,
+            //title: "SOEPR State",
+            //link: "/admin/users/all/soepr/list",
+            // },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "View Attendance",
+              link: "/admin/view/attendance",
+            },
+
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "View YF POA Data",
+              link: "/admin/yf/poa1-data",
+            },
+          ],
+        },
+        {
+          type: "module",
+          icon: ArrowBigRight,
+          title: "SOEPR",
+          submodules: [
             {
               type: "sub-module",
               icon: ArrowBigRight,
@@ -164,25 +191,13 @@ export const getSidebarItems = (user) => {
             {
               type: "sub-module",
               icon: ArrowBigRight,
-              title: "View Attendance",
-              link: "/admin/view/attendance",
-            },
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "View SOEPR POA Data",
+              title: "SOEPR POA Reports",
               link: "/admin/soepr/poa1-data",
             },
             {
               type: "sub-module",
               icon: ArrowBigRight,
-              title: "View YF POA Data",
-              link: "/admin/yf/poa1-data",
-            },
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "View SOEPR POA Reports",
+              title: "Report Submission Status ",
               link: "/admin/soepr/poa-report",
             },
           ],

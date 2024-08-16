@@ -13,6 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { tst } from "@/lib/utils";
 
 const months = [
   { name: "January", days: 31 },
@@ -210,7 +211,7 @@ const POA2Form = ({ update }) => {
 
       toast.success("Form submitted successfully!");
     } catch (error) {
-      toast.error("Failed to submit form.");
+      tst.error(error);
     } finally {
       setLoading(false);
     }
