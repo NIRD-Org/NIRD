@@ -5,7 +5,13 @@ import toast from "react-hot-toast";
 import { useSoeprLocation } from "@/components/hooks/useSoeprLocation";
 import API from "@/utils/API";
 import { useNavigate, useParams } from "react-router-dom";
-import { Table } from "@/components/ui/table";
+import {
+  Table,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 const months = [
   { name: "January", days: 31 },
@@ -249,42 +255,60 @@ const UpdatePOA1Form = () => {
           </select>
         </div>
       </div>
-      <Table
-        border="1"
-        cellPadding="3"
-        cellSpacing="0"
-        style={{ width: "100%", marginTop: "20px", fontSize: "12px" }}
-      >
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Weekday</th>
-            <th>Action Plan (KPI Category)</th>
-            <th>Planned Event</th>
-            <th>Tentative Target (Description in 50 words)</th>
-            <th>Location</th>
-            <th>Achievements</th>
-            <th>Upload Photo</th>
-            <th>Remarks/Reason for Failure</th>
-          </tr>
-        </thead>
+      <Table style={{ width: "100%", marginTop: "20px", fontSize: "12px" }}>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="px-2 text-primary font-bold">Date</TableHead>
+            <TableHead className="px-2 text-primary font-bold">
+              Weekday
+            </TableHead>
+            <TableHead className="px-2 text-primary font-bold">
+              Action Plan (KPI Category)
+            </TableHead>
+            <TableHead className="px-2 text-primary font-bold">
+              Planned Event
+            </TableHead>
+            <TableHead className="px-2 text-primary font-bold">
+              Tentative Target (Description in 50 words)
+            </TableHead>
+            <TableHead className="px-2 text-primary font-bold">
+              Location
+            </TableHead>
+            <TableHead className="px-2 text-primary font-bold">
+              Achievements
+            </TableHead>
+            <TableHead className="px-2 text-primary font-bold">
+              Upload Photo
+            </TableHead>
+            <TableHead className="px-2 text-primary font-bold">
+              Remarks/Reason for Failure
+            </TableHead>
+          </TableRow>
+        </TableHeader>
         <tbody>
           {getDaysInMonth().map((day, dayIndex) => (
             <React.Fragment key={dayIndex}>
               {formDataState[day]?.map((entry, index) => (
-                <tr key={index}>
+                <TableRow key={index} className="border-t border-gray-400">
                   {index === 0 && (
                     <>
-                      <td rowSpan={formDataState[day].length}>
+                      <TableCell
+                        className="p-2"
+                        rowSpan={formDataState[day].length}
+                      >
                         {formatIndianDate(day)}
-                      </td>
-                      <td rowSpan={formDataState[day].length}>
+                      </TableCell>
+                      <TableCell
+                        className="p-2"
+                        rowSpan={formDataState[day].length}
+                      >
                         {getWeekDay(day)}
-                      </td>
+                      </TableCell>
                     </>
                   )}
-                  <td>
+                  <TableCell className="p-2">
                     <select
+                      className="px-2 py-1 rounded"
                       style={{ width: "100%" }}
                       value={entry.plan || ""}
                       onChange={(e) =>
@@ -298,9 +322,10 @@ const UpdatePOA1Form = () => {
                         </option>
                       ))}
                     </select>
-                  </td>
-                  <td>
+                  </TableCell>
+                  <TableCell className="p-2">
                     <select
+                      className="px-2 py-1 rounded"
                       style={{ width: "100%" }}
                       value={entry.action || ""}
                       onChange={(e) =>
@@ -316,9 +341,10 @@ const UpdatePOA1Form = () => {
                           </option>
                         ))}
                     </select>
-                  </td>
-                  <td>
+                  </TableCell>
+                  <TableCell className="p-2">
                     <input
+                      className="px-2 py-1 rounded"
                       type="text"
                       style={{ width: "100%" }}
                       value={entry.plannedEvent || ""}
@@ -331,9 +357,10 @@ const UpdatePOA1Form = () => {
                         )
                       }
                     />
-                  </td>
-                  <td>
+                  </TableCell>
+                  <TableCell className="p-2">
                     <select
+                      className="px-2 py-1 rounded"
                       style={{ width: "100%" }}
                       value={entry.dist_id || ""}
                       onChange={(e) =>
@@ -347,10 +374,14 @@ const UpdatePOA1Form = () => {
                           {dist.name}
                         </option>
                       ))}
+                      <option value="NIRD">NIRD</option>
+                      <option value="SIRD/SPRC">SIRD/SPRC</option>
+                      <option value="None">None</option>
                     </select>
-                  </td>
-                  <td>
+                  </TableCell>
+                  <TableCell className="p-2">
                     <input
+                      className="px-2 py-1 rounded"
                       type="text"
                       style={{ width: "100%" }}
                       value={entry.achievements || ""}
@@ -363,9 +394,10 @@ const UpdatePOA1Form = () => {
                         )
                       }
                     />
-                  </td>
-                  <td>
+                  </TableCell>
+                  <TableCell className="p-2">
                     <input
+                      className="px-2 py-1 rounded"
                       type="file"
                       onChange={(e) =>
                         handleInputChange(
@@ -376,9 +408,10 @@ const UpdatePOA1Form = () => {
                         )
                       }
                     />
-                  </td>
-                  <td>
+                  </TableCell>
+                  <TableCell className="p-2">
                     <input
+                      className="px-2 py-1 rounded"
                       type="text"
                       style={{ width: "100%" }}
                       value={entry.remarks || ""}
@@ -386,8 +419,8 @@ const UpdatePOA1Form = () => {
                         handleInputChange(day, index, "remarks", e.target.value)
                       }
                     />
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               ))}
             </React.Fragment>
           ))}

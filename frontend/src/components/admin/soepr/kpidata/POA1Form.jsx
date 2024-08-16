@@ -5,7 +5,14 @@ import toast from "react-hot-toast";
 import { useSoeprLocation } from "@/components/hooks/useSoeprLocation";
 import API from "@/utils/API";
 import { useParams } from "react-router-dom";
-import { Table } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 const months = [
   { name: "January", days: 31 },
@@ -207,26 +214,43 @@ const POA1Form = ({ update }) => {
         cellSpacing="0"
         style={{ width: "100%", marginTop: "20px", fontSize: "12px" }}
       >
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Weekday</th>
-            <th>Action Plan (KPI Category)</th>
-            <th>Planned Event</th>
-            <th>Tentative Target (Description in 50 words)</th>
-            <th>Location</th>
-            <th>Achievements</th>
-            <th>Upload Photo</th>
-            <th>Remarks/Reason for Failure</th>
-          </tr>
-        </thead>
-        <tbody>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="px-2 text-primary font-bold">Date</TableHead>
+            <TableHead className="px-2 text-primary font-bold">
+              Weekday
+            </TableHead>
+            <TableHead className="px-2 text-primary font-bold">
+              Action Plan (KPI Category)
+            </TableHead>
+            <TableHead className="px-2 text-primary font-bold">
+              Planned Event
+            </TableHead>
+            <TableHead className="px-2 text-primary font-bold">
+              Tentative Target (Description in 50 words)
+            </TableHead>
+            <TableHead className="px-2 text-primary font-bold">
+              Location
+            </TableHead>
+            <TableHead className="px-2 text-primary font-bold">
+              Achievements
+            </TableHead>
+            <TableHead className="px-2 text-primary font-bold">
+              Upload Photo
+            </TableHead>
+            <TableHead className="px-2 text-primary font-bold">
+              Remarks/Reason for Failure
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {getDaysInMonth().map((day, idx) => (
-            <tr key={idx}>
-              <td>{formatIndianDate(day)}</td>
-              <td>{getWeekDay(day)}</td>
-              <td>
+            <TableRow key={idx}>
+              <TableCell className="p-2">{formatIndianDate(day)}</TableCell>
+              <TableCell className="p-2">{getWeekDay(day)}</TableCell>
+              <TableCell className="p-2">
                 <select
+                  className="px-2 py-1 rounded"
                   style={{ width: "100%" }}
                   value={plans[day] || ""}
                   onChange={(e) => handlePlanChange(day, e.target.value)}
@@ -238,9 +262,10 @@ const POA1Form = ({ update }) => {
                     </option>
                   ))}
                 </select>
-              </td>
-              <td>
+              </TableCell>
+              <TableCell className="p-2">
                 <select
+                  className="px-2 py-1 rounded"
                   style={{ width: "100%" }}
                   value={selectedActions[day] || ""}
                   onChange={(e) => handleActionChange(day, e.target.value)}
@@ -255,9 +280,10 @@ const POA1Form = ({ update }) => {
                       </option>
                     ))}
                 </select>
-              </td>
-              <td>
+              </TableCell>
+              <TableCell className="p-2">
                 <input
+                  className="px-2 py-1 rounded"
                   type="text"
                   style={{ width: "100%" }}
                   onChange={(e) =>
@@ -265,9 +291,10 @@ const POA1Form = ({ update }) => {
                   }
                   value={formDataState[day]?.plannedEvent || ""}
                 />
-              </td>
-              <td>
+              </TableCell>
+              <TableCell className="p-2">
                 <select
+                  className="px-2 py-1 rounded min-w-20"
                   style={{ width: "100%" }}
                   onChange={(e) => handleDistrictChange(day, e.target.value)}
                   value={selectedDistricts[day] || ""}
@@ -285,9 +312,10 @@ const POA1Form = ({ update }) => {
                   <option value="SIRD/SPRC">SIRD/SPRC</option>
                   <option value="None">None</option>
                 </select>
-              </td>
-              <td>
+              </TableCell>
+              <TableCell className="p-2">
                 <input
+                  className="px-2 py-1 rounded"
                   type="text"
                   disabled
                   style={{ width: "100%" }}
@@ -296,18 +324,20 @@ const POA1Form = ({ update }) => {
                   }
                   value={formDataState[day]?.achievements || ""}
                 />
-              </td>
-              <td>
+              </TableCell>
+              <TableCell className="p-2">
                 <input
+                  className="px-2 py-1 rounded"
                   type="file"
                   disabled
                   onChange={(e) =>
                     handleInputChange(day, "photo", e.target.files[0])
                   }
                 />
-              </td>
-              <td>
+              </TableCell>
+              <TableCell className="p-2">
                 <input
+                  className="px-2 py-1 rounded"
                   type="text"
                   disabled
                   style={{ width: "100%" }}
@@ -316,10 +346,10 @@ const POA1Form = ({ update }) => {
                   }
                   value={formDataState[day]?.remarks || ""}
                 />
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           ))}
-        </tbody>
+        </TableBody>
       </Table>
       <div className="flex justify-end md:px-10">
         <Button pending={loading} onClick={handleSubmit} className="mt-4">

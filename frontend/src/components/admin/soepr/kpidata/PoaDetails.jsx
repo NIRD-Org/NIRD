@@ -144,16 +144,16 @@ const Poa1DetailPage = () => {
           </TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead>Date</TableHead>
-              <TableHead>Weekday</TableHead>
-              <TableHead>Plan</TableHead>
-              <TableHead>Action</TableHead>
-              <TableHead>Planned Event</TableHead>
-              <TableHead>State</TableHead>
-              <TableHead>District</TableHead>
-              <TableHead>Achievements</TableHead>
-              <TableHead>Photo</TableHead>
-              <TableHead>Remarks</TableHead>
+              <TableHead className="px-1">Date</TableHead>
+              <TableHead className="px-1">Weekday</TableHead>
+              <TableHead className="px-1">Plan</TableHead>
+              <TableHead className="px-1">Action</TableHead>
+              <TableHead className="px-1">Planned Event</TableHead>
+              <TableHead className="px-1">State</TableHead>
+              <TableHead className="px-1">District</TableHead>
+              <TableHead className="px-1">Achievements</TableHead>
+              <TableHead className="px-1">Photo</TableHead>
+              <TableHead className="px-1">Remarks</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -161,23 +161,31 @@ const Poa1DetailPage = () => {
               poa1Data?.poaData?.length > 0 &&
               poa1Data?.poaData?.map((dayData, index) => (
                 <TableRow key={index}>
-                  <TableCell className="text-xs">{dayData.date}</TableCell>
-                  <TableCell className="text-xs">{dayData.weekday}</TableCell>
-                  <TableCell className="text-xs">{dayData.plan}</TableCell>
-                  <TableCell className="text-xs">{dayData.action}</TableCell>
-                  <TableCell className="text-xs">
+                  <TableCell className="text-xs p-2.5">
+                    {dayData.date}
+                  </TableCell>
+                  <TableCell className="text-xs p-2.5">
+                    {dayData.weekday}
+                  </TableCell>
+                  <TableCell className="text-xs p-2.5">
+                    {dayData.plan}
+                  </TableCell>
+                  <TableCell className="text-xs p-2.5">
+                    {dayData.action}
+                  </TableCell>
+                  <TableCell className="text-xs p-2.5">
                     {dayData.plannedEvent}
                   </TableCell>
-                  <TableCell className="text-xs">
+                  <TableCell className="text-xs p-2.5">
                     {dayData.state.name}
                   </TableCell>
-                  <TableCell className="text-xs">
-                    {dayData.district?.name || "N/A"}
+                  <TableCell className="text-xs p-2.5">
+                    {dayData.district?.name || dayData?.dist_id || "N/A"}
                   </TableCell>
-                  <TableCell className="text-xs">
+                  <TableCell className="text-xs p-2.5">
                     {dayData.achievements}
                   </TableCell>
-                  <TableCell className="text-xs">
+                  <TableCell className="text-xs p-2.5">
                     {dayData.photo ? (
                       <img
                         src={dayData.photo}
@@ -188,7 +196,9 @@ const Poa1DetailPage = () => {
                       "No photo"
                     )}
                   </TableCell>
-                  <TableCell className="text-xs">{dayData.remarks}</TableCell>
+                  <TableCell className="text-xs p-2.5">
+                    {dayData.remarks}
+                  </TableCell>
                 </TableRow>
               ))}
           </TableBody>
