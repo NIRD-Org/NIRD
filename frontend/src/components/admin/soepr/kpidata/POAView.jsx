@@ -65,9 +65,9 @@ const POAview = () => {
                   <Link to={`/admin/soepr/POA1/view/${record.id}`}>
                     <NirdViewIcon />
                   </Link>
-                  {/* <Link to={`/admin/soepr/POA1/edit/${record.id}`}> */}
-                  <NirdEditIcon />
-                  {/* </Link> */}
+                  <Link to={`/admin/soepr/POA1/edit/${record.id}`}>
+                    <NirdEditIcon />
+                  </Link>
                 </TableCell>
               </TableRow>
             );

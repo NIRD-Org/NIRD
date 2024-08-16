@@ -82,6 +82,7 @@ const POA1Form = ({ update }) => {
   const { soeprState: states, soeprDist: districts } = useSoeprLocation({
     state_id: selectedState,
   });
+  const [loading, setLoading] = useState(false);
 
   const [selectedActions, setSelectedActions] = useState({});
   const lastDayOfFortnight = 15; // Last day of the first fortnight
@@ -144,6 +145,7 @@ const POA1Form = ({ update }) => {
   };
 
   const handleSubmit = async () => {
+    setLoading(true);
     try {
       const formData = new FormData();
 
@@ -182,6 +184,8 @@ const POA1Form = ({ update }) => {
       toast.success("Form submitted successfully!");
     } catch (error) {
       toast.error("Failed to submit form.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -317,12 +321,11 @@ const POA1Form = ({ update }) => {
           ))}
         </tbody>
       </Table>
-      <Button
-        onClick={handleSubmit}
-        className="primary-button float-right mt-4"
-      >
-        Submit
-      </Button>
+      <div className="flex justify-end md:px-10">
+        <Button pending={loading} onClick={handleSubmit} className="mt-4">
+          {loading ? "Submitting ..." : "Submit"}
+        </Button>
+      </div>
     </div>
   );
 };

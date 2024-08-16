@@ -59,7 +59,7 @@ export const createPoa1 = CatchAsyncError(async (req, res, next) => {
     if (poa1) {
       const existingDates = poa1.poaData.map((item) => item.date.toString());
       const newEntries = Object.values(poaData).filter(
-        (entry) => !existingDates.includes(new Date(entry.date).toISOString())
+        (entry) => !existingDates.includes(new Date(entry.date).toString())
       );
 
       if (newEntries.length === 0) {
@@ -118,6 +118,22 @@ export const getPoalData = CatchAsyncError(async (req, res, next) => {
         $unwind: {
           path: "$poaData",
           preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $addFields: {
+          poaDateObj: {
+            $dateFromString: {
+              dateString: "$poaData.date",
+              format: "%d/%m/%Y",
+            },
+          },
+        },
+      },
+
+      {
+        $sort: {
+          poaDateObj: 1,
         },
       },
       {
@@ -202,6 +218,12 @@ export const getPoa1DataByState = CatchAsyncError(async (req, res, next) => {
               },
             },
           },
+          poaDateObj: {
+            $dateFromString: {
+              dateString: "$poaData.date",
+              format: "%d/%m/%Y",
+            },
+          },
         },
       },
       {
@@ -210,6 +232,11 @@ export const getPoa1DataByState = CatchAsyncError(async (req, res, next) => {
           poaYear: parseInt(year),
           "poaData.state_id": state_id,
           user_id: user_id,
+        },
+      },
+      {
+        $sort: {
+          poaDateObj: 1,
         },
       },
       {
@@ -354,7 +381,79 @@ export const getAllPoa1Data = CatchAsyncError(async (req, res, next) => {
 
 export const updatePoa1Data = CatchAsyncError(async (req, res, next) => {
   try {
+    // Extract poaData from the request body
+    const poaData = Object.keys(req.body)
+      .filter((key) => key.startsWith("poaData"))
+      .reduce((acc, key) => {
+        const [, dateIndex, entryIndex, field] = key.match(
+          /poaData\[(\d+)\]\[(\d+)\]\[(\w+)\]/
+        );
+        acc[dateIndex] = acc[dateIndex] || [];
+        acc[dateIndex][entryIndex] = acc[dateIndex][entryIndex] || {};
+        acc[dateIndex][entryIndex][field] = req.body[key];
+        return acc;
+      }, {});
+
+    const user_id = req?.user?.id;
+    let poa1 = await Poa1Model.findOne({ user_id });
+
+    if (!poa1) {
+      return res.status(404).json({
+        success: false,
+        message: "POA1 data not found for the user",
+      });
+    }
+
+    // Loop over the poaData entries
+    for (const [dateIndex, entries] of Object.entries(poaData)) {
+      for (const [entryIndex, entry] of entries.entries()) {
+        const incomingDate = entry.date; // date from the request
+        const incomingStateId = entry.state_id;
+        const incomingDistId = entry.dist_id;
+
+        // Find the existing entry in poaData with matching date, state_id, and dist_id
+        const existingEntryIndex = poa1.poaData.findIndex((item) => {
+          return (
+            item.date === incomingDate &&
+            item.state_id === incomingStateId &&
+            item.dist_id === incomingDistId
+          );
+        });
+
+        const photoKey = `poaData[${dateIndex}][${entryIndex}][photo]`;
+
+        // Handle file uploads if any
+        if (req.files && req.files[photoKey]) {
+          const photoBuffer = req.files[photoKey].data;
+          const result = await uploadFile(photoBuffer);
+          entry.photo = result.secure_url;
+        }
+
+        if (existingEntryIndex !== -1) {
+          // Update existing entry
+          poa1.poaData[existingEntryIndex] = {
+            ...poa1.poaData[existingEntryIndex],
+            ...entry,
+          };
+        } else {
+          // Add new entry
+          poa1.poaData.push({
+            ...entry,
+          });
+        }
+      }
+    }
+
+    poa1.status = "1"; // Update status to active
+    await poa1.save();
+
+    res.status(200).json({
+      success: true,
+      message: "POA1 data successfully updated",
+      data: poa1,
+    });
   } catch (error) {
+    console.error(error);
     next(new Errorhandler("Failed to Update POA1 Data", 500));
   }
 });
