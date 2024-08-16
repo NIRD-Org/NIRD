@@ -29,7 +29,6 @@ const UserPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const stateId = searchParams.get("state_id") || "";
   const [isLoading, setIsLoading] = useState(false);
-  const [sortRole, setSortRole] = useState("");
 
   // Fetch users
   const fetchUser = async () => {
@@ -61,16 +60,8 @@ const UserPage = () => {
     fetchUserLocations();
   }, []);
 
-  // Sort users by role
-  const sortedUsers = [...users].sort((a, b) => {
-    if (sortRole) {
-      return a.role === sortRole ? -1 : 1;
-    }
-    return 0;
-  });
-
   // Filter users based on role and state
-  const filteredUsers = sortedUsers?.filter((user) => {
+  const filteredUsers = users?.filter((user) => {
     console.log("Filtering User:", user); // Debugging output
     if (roleFilter && user.role !== roleFilter) {
       return false;
@@ -91,13 +82,6 @@ const UserPage = () => {
     const selectedRole = parseInt(event.target.value, 10);
     console.log("Selected Role:", selectedRole); // Debugging output
     setRoleFilter(selectedRole);
-  };
-
-  // Handle sort role change
-  const handleSortRoleChange = (event) => {
-    const selectedSortRole = parseInt(event.target.value, 10);
-    console.log("Selected Sort Role:", selectedSortRole); // Debugging output
-    setSortRole(selectedSortRole);
   };
 
   // Handle delete user
@@ -132,23 +116,6 @@ const UserPage = () => {
                 className="text-sm px-4 py-2 rounded-md bg-transparent border"
               >
                 <option value="">All</option>
-                <option value="1">Superadmin</option>
-                <option value="2">Admin</option>
-                <option value="3">Young Fellow</option>
-                <option value="4">Consultant</option>
-              </select>
-            </div>
-            <div className="mb-4">
-              <label htmlFor="sortRole" className="mr-2">
-                Sort by Role:
-              </label>
-              <select
-                id="sortRole"
-                value={sortRole || ""}
-                onChange={handleSortRoleChange}
-                className="text-sm px-4 py-2 rounded-md bg-transparent border"
-              >
-                <option value="">Default</option>
                 <option value="1">Superadmin</option>
                 <option value="2">Admin</option>
                 <option value="3">Young Fellow</option>
