@@ -207,6 +207,12 @@ export const getSidebarItems = (user) => {
             {
               type: "sub-module",
               icon: ArrowBigRight,
+              title: "Soepr Districts",
+              link: "/admin/master-soepr-districts",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
               title: "Blocks",
               link: "/admin/master-blocks",
             },

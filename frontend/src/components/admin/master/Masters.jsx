@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import DataTable from "./DataTable";
 
-const Masters = ({item}) => {
-
+const Masters = ({ item }) => {
   const configurations = {
     state: {
       title: "States",
@@ -20,13 +19,34 @@ const Masters = ({item}) => {
       headers: ["ID", "State ID", "Name", "Special Area", "Actions"],
       columnItems: ["id", "state_id", "name", "special_area"],
     },
+    soeprDistrict: {
+      title: "Soepr-Districts",
+      createLink: "/admin/soepr-district/create",
+      endpoint: "/api/v1/soepr-dist/all",
+      crudpoint: "/api/v1/soepr-dist",
+      headers: ["ID", "State ID", "Name", "Special Area", "Actions"],
+      columnItems: ["id", "state_id", "name", "special_area"],
+    },
     block: {
       title: "Blocks",
       createLink: "/admin/block/create",
       endpoint: "/api/v1/block/all",
       crudpoint: "/api/v1/block",
-      headers: ["ID", "State ID", "District ID", "Name", "Mapped to Another District","Actions"],
-      columnItems: ["id", "state_id", "dist_id", "name", "is_maped_to_another_district"],
+      headers: [
+        "ID",
+        "State ID",
+        "District ID",
+        "Name",
+        "Mapped to Another District",
+        "Actions",
+      ],
+      columnItems: [
+        "id",
+        "state_id",
+        "dist_id",
+        "name",
+        "is_maped_to_another_district",
+      ],
     },
     gp: {
       title: "GPs",
@@ -49,8 +69,23 @@ const Masters = ({item}) => {
       createLink: "/admin/kpi/create",
       endpoint: "/api/v1/kpi/all",
       crudpoint: "/api/v1/kpi",
-      headers: ["ID", "Theme", "KPI Name", "Data Point", "Input Type", "Weightage", "Action"],
-      columnItems: ["id", "theme_name", "name", "kpi_datapoint", "input_type", "weightage"],
+      headers: [
+        "ID",
+        "Theme",
+        "KPI Name",
+        "Data Point",
+        "Input Type",
+        "Weightage",
+        "Action",
+      ],
+      columnItems: [
+        "id",
+        "theme_name",
+        "name",
+        "kpi_datapoint",
+        "input_type",
+        "weightage",
+      ],
     },
   };
 
@@ -62,7 +97,7 @@ const Masters = ({item}) => {
 
   return (
     <div>
-     {/*  <select
+      {/*  <select
         className="text-sm px-4 py-2 rounded-md bg-white border mx-auto block mb-10 w-60 max-sm:w-full"
         name="item"
         id="item"
@@ -91,4 +126,3 @@ const Masters = ({item}) => {
 };
 
 export default Masters;
-

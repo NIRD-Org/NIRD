@@ -305,7 +305,7 @@ export const getPoa1DataByState = CatchAsyncError(async (req, res, next) => {
 // Get all poa1 data --- Super admin
 export const getAllPoa1Data = CatchAsyncError(async (req, res, next) => {
   try {
-    const { month, year } = req.query;
+    const { month, year, poaType = "poa1" } = req.query;
 
     if (!month || !year) {
       return res
@@ -344,6 +344,7 @@ export const getAllPoa1Data = CatchAsyncError(async (req, res, next) => {
         $match: {
           poaMonth: parseInt(month),
           poaYear: parseInt(year),
+          "poaData.poaType": poaType,
         },
       },
       {

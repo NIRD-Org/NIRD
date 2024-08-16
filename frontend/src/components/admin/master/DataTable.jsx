@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Table, TableBody, TableCaption, TableHead, TableHeader, TableRow, TableCell } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TableCell,
+} from "@/components/ui/table";
 import TableSkeleton from "@/components/ui/tableskeleton";
 import { NirdBanIcon, NirdDeleteIcon, NirdEditIcon } from "../Icons";
 import { tst } from "@/lib/utils";
@@ -12,7 +20,15 @@ import DistrictFilter from "../filter/DistrictFilter";
 import ThemeFilter from "../filter/ThemeFilter";
 import BlockFilter from "../filter/BlockFilter";
 
-const DataTable = ({ title, endpoint, headers, columnItems, createLink, master, crudpoint }) => {
+const DataTable = ({
+  title,
+  endpoint,
+  headers,
+  columnItems,
+  createLink,
+  master,
+  crudpoint,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -29,11 +45,20 @@ const DataTable = ({ title, endpoint, headers, columnItems, createLink, master, 
   const fetchData = async () => {
     try {
       setIsLoading(true);
-      const { data } = await API.get(endpoint, { params: { state_id, dist_id, block_id, gp_id, theme_id } });
+      const { data } = await API.get(endpoint, {
+        params: { state_id, dist_id, block_id, gp_id, theme_id },
+      });
       const dataStructure =
-        data.states || data.dist || data.blocks || data.themes || data.KPI || data.data || data.gps || data;
-      setData(prev => (prev = []));
-      setData(prev => (prev = dataStructure));
+        data.states ||
+        data.dist ||
+        data.blocks ||
+        data.themes ||
+        data.KPI ||
+        data.data ||
+        data.gps ||
+        data;
+      setData((prev) => (prev = []));
+      setData((prev) => (prev = dataStructure));
       setTotalPages(Math.ceil(dataStructure.length / itemsPerPage));
     } catch (error) {
       console.log(error);
@@ -46,8 +71,12 @@ const DataTable = ({ title, endpoint, headers, columnItems, createLink, master, 
     fetchData();
   }, [endpoint, state_id, dist_id, block_id, gp_id, theme_id]);
 
-  const handleRestore = async id => {
-    if (window.confirm(`Are you sure you want to delete this ${title.toLowerCase()}?`)) {
+  const handleRestore = async (id) => {
+    if (
+      window.confirm(
+        `Are you sure you want to delete this ${title.toLowerCase()}?`
+      )
+    ) {
       try {
         await API.delete(`${crudpoint}/${id}`);
         tst.success(`${title} deleted successfully`);
@@ -58,8 +87,12 @@ const DataTable = ({ title, endpoint, headers, columnItems, createLink, master, 
     }
   };
 
-  const handleDelete = async id => {
-    if (window.confirm(`Are you sure you want to delete this ${title.toLowerCase()}?`)) {
+  const handleDelete = async (id) => {
+    if (
+      window.confirm(
+        `Are you sure you want to delete this ${title.toLowerCase()}?`
+      )
+    ) {
       try {
         await API.delete(`${crudpoint}/${id}`);
         tst.success(`${title} deleted successfully`);
@@ -78,13 +111,16 @@ const DataTable = ({ title, endpoint, headers, columnItems, createLink, master, 
     setSearchParams({});
   };
 
-  const handlePageChange = page => {
+  const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
     }
   };
 
-  const paginatedData = data?.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const paginatedData = data?.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
     <div className="container mx-auto p-4">
@@ -93,6 +129,7 @@ const DataTable = ({ title, endpoint, headers, columnItems, createLink, master, 
           <div className="flex items-center gap-4 mb-4">
             <h2 className="text-xl font-semibold  w-max">All {title}</h2>
             {title === "Districts" && <StateFilter />}
+            {title === "Soepr-Districts" && <StateFilter type="soepr" />}
             {title === "Blocks" && (
               <>
                 <StateFilter />
@@ -107,7 +144,9 @@ const DataTable = ({ title, endpoint, headers, columnItems, createLink, master, 
               </>
             )}
             {title === "KPIs" && <ThemeFilter />}
-            {title != "States" && title != "Themes" && <Button onClick={handleReset}>Reset</Button>}
+            {title != "States" && title != "Themes" && (
+              <Button onClick={handleReset}>Reset</Button>
+            )}
           </div>
           {createLink && (
             <Link to={createLink}>
@@ -122,7 +161,7 @@ const DataTable = ({ title, endpoint, headers, columnItems, createLink, master, 
         <TableCaption>List of all {title.toLowerCase()}.</TableCaption>
         <TableHeader>
           <TableRow>
-            {headers.map(header => (
+            {headers.map((header) => (
               <TableHead key={header}>{header}</TableHead>
             ))}
           </TableRow>
@@ -138,15 +177,19 @@ const DataTable = ({ title, endpoint, headers, columnItems, createLink, master, 
                 </TableCell>
               </TableRow>
             )}
-            {paginatedData?.map(item => (
+            {paginatedData?.map((item) => (
               <TableRow key={item.id}>
-                {columnItems.map(column => (
+                {columnItems.map((column) => (
                   <TableCell key={column}>{item[column] || ""}</TableCell>
                 ))}
                 <TableCell className="flex gap-2 items-center">
                   {master ? (
                     <>
-                      <Link to={`/admin/${title.toLowerCase().slice(0, -1)}/update/${item.id}`}>
+                      <Link
+                        to={`/admin/${title
+                          .toLowerCase()
+                          .slice(0, -1)}/update/${item.id}`}
+                      >
                         <NirdEditIcon />
                       </Link>
                       <div onClick={() => handleDelete(item.id)}>
@@ -165,13 +208,19 @@ const DataTable = ({ title, endpoint, headers, columnItems, createLink, master, 
         )}
       </Table>
       <div className="flex justify-between mt-4">
-        <Button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+        <Button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
           Previous
         </Button>
         <span>
           Page {currentPage} of {totalPages}
         </span>
-        <Button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+        <Button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        >
           Next
         </Button>
       </div>

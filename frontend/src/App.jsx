@@ -115,6 +115,7 @@ import YFPoa1DetailPage from "./components/admin/young-fellow/Poa/YfPoa1DetailPa
 import Poa1AdminYfData from "./components/admin/poa/Poa1AdminYfData";
 import PoaReport from "./components/admin/poa/PoaReport";
 import UpdatePOA1Form from "./components/admin/soepr/kpidata/UpdatePOA1Form";
+import SoeprDistrictForm from "./components/admin/master/forms/SoeprDistrict";
 
 function App() {
   const { login } = useAuthContext();
@@ -203,6 +204,10 @@ function App() {
               path="master-districts"
               element={<Masters item="district" />}
             />
+            <Route
+              path="master-soepr-districts"
+              element={<Masters item="soeprDistrict" />}
+            />
             <Route path="master-blocks" element={<Masters item="block" />} />
             <Route path="master-gps" element={<Masters item="gp" />} />
             <Route path="master-themes" element={<Masters item="theme" />} />
@@ -211,6 +216,11 @@ function App() {
 
             <Route path="state/create" element={<StateForm />} />
             <Route path="district/create" element={<DistrictForm />} />
+            <Route
+              path="soepr-district/create"
+              element={<SoeprDistrictForm />}
+            />
+
             <Route path="block/create" element={<BlockForm />} />
             <Route path="gp/create" element={<GpForm />} />
             <Route path="theme/create" element={<ThemeForm />} />
@@ -224,6 +234,10 @@ function App() {
             <Route
               path="district/update/:id"
               element={<DistrictForm type="update" />}
+            />
+            <Route
+              path="soepr-district/update/:id"
+              element={<SoeprDistrictForm type="update" />}
             />
             <Route
               path="block/update/:id"

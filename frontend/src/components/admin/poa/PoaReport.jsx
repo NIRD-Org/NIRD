@@ -36,6 +36,8 @@ const PoaReport = () => {
   const [poaData, setPoaData] = useState([]);
   const [userLocation, setUserLocation] = useState({});
   const [soeprStates, setsoeprStates] = useState([]);
+  const [poaType, setPoaType] = useState("poa1");
+
   const handleMonthChange = (e) => {
     setSelectedMonth(parseInt(e.target.value));
   };
@@ -47,7 +49,7 @@ const PoaReport = () => {
   const fetchPoaReports = async () => {
     try {
       const { data } = await API.get(
-        `/api/v1/poa1/all?month=${selectedMonth}&year=${selectedYear}`
+        `/api/v1/poa1/all?month=${selectedMonth}&year=${selectedYear}&poaType=${poaType}`
       );
       setPoaData(data.data);
     } catch (error) {
@@ -77,7 +79,7 @@ const PoaReport = () => {
     if (selectedMonth && selectedYear) {
       fetchPoaReports();
     }
-  }, [selectedMonth, selectedYear]);
+  }, [selectedMonth, selectedYear, poaType]);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -133,7 +135,7 @@ const PoaReport = () => {
       <AdminHeader>POA Reports</AdminHeader>
 
       <div className="mb-5">
-        <div className="flex gap-4 mb-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 items-end py-10 gap-2 sm:gap-5">
           <div>
             <FormField
               type="select"
@@ -169,6 +171,19 @@ const PoaReport = () => {
                 label: ot.label,
               }))}
             />
+          </div>
+          <div className="flex flex-col">
+            <label className="text-sm text-primary text-start py-2 font-semibold">
+              POA Type
+            </label>
+            <select
+              className="border text-sm bg-white p-2 px-4 rounded-md"
+              value={poaType}
+              onChange={(e) => setPoaType(e.target.value)}
+            >
+              <option value="poa1">POA1</option>
+              <option value="poa2">POA2</option>
+            </select>
           </div>
         </div>
       </div>

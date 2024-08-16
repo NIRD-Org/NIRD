@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import API from "@/utils/API";
 import { useYfLocation } from "@/components/hooks/useYfLocation";
-const StateFilter = ({ className, yf, defaultValue }) => {
+const StateFilter = ({ className, yf, defaultValue, type }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const state_id = searchParams.get("state_id") || "";
   const [states, setStates] = useState([]);
@@ -18,8 +18,13 @@ const StateFilter = ({ className, yf, defaultValue }) => {
   }, []);
 
   const getAllStates = async () => {
-    const { data } = await API.get(`/api/v1/state/all`);
-    setStates(data?.states);
+    if (type == "soepr") {
+      const { data } = await API.get(`/api/v1/soepr-state/all`);
+      setStates(data?.states);
+    } else {
+      const { data } = await API.get(`/api/v1/state/all`);
+      setStates(data?.states);
+    }
   };
 
   const handleStateChange = (event) => {
