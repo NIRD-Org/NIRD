@@ -94,7 +94,7 @@ function SoeprDistrictForm({ type = "add", onSubmit, district }) {
       <form onSubmit={handleCreateDistrict}>
         <div className="py-4">
           <AdminHeader>
-            {type === "add" ? "Add District" : "Update District"}
+            {type === "add" ? "Add SOEPR District" : "Update SOEPR District"}
           </AdminHeader>
           <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3">
             {fields.map(({ name, label, options, type }) => (
@@ -135,7 +135,7 @@ function SoeprDistrictForm({ type = "add", onSubmit, district }) {
         </div>
         <div className="mt-6">
           <Button pending={pending} type="submit">
-            {type === "add" ? "Add District" : "Update District"}
+            {type === "add" ? "Add Soepr District" : "Update Soepr District"}
           </Button>
         </div>
       </form>
