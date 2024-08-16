@@ -18,11 +18,13 @@ import html2canvas from "html2canvas";
 const Poa1DetailPage = () => {
   const [poa1Data, setPoa1Data] = useState(null);
   const { id } = useParams();
-
+  const [poaType, setPoaType] = useState("poa1");
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await API.get(`/api/v1/poa1/get/${id}`);
+        const response = await API.get(
+          `/api/v1/poa1/get/${id}?poaType=${poaType}`
+        );
         setPoa1Data(response.data.data);
         console.log("Fetched POA1 data:", response.data.data); // Log the response data
       } catch (error) {
@@ -31,7 +33,7 @@ const Poa1DetailPage = () => {
     };
 
     fetchData();
-  }, [id]);
+  }, [id, poaType]);
 
   const handlePrint = () => {
     window.print();
@@ -98,19 +100,35 @@ const Poa1DetailPage = () => {
           }
         `}
       </style>
-      <div className="flex justify-end mb-4">
-        <button
-          onClick={handlePrint}
-          className="print-button bg-blue-900 text-white px-4 py-2 rounded mr-4"
-        >
-          Print
-        </button>
-        <button
-          onClick={handleDownloadPdf}
-          className="download-button bg-green-900 text-white px-4 py-2 rounded"
-        >
-          Download as PDF
-        </button>
+      <div className="flex justify-between mb-4">
+        <div className="flex flex-col ml-5">
+          <label className="text-sm text-primary text-start py-2 font-semibold">
+            POA Type
+          </label>
+          <select
+            className="border text-sm bg-white p-2 px-4 rounded-md"
+            value={poaType}
+            onChange={(e) => setPoaType(e.target.value)}
+          >
+            <option value="poa1">POA1</option>
+            <option value="poa2">POA2</option>
+          </select>
+        </div>
+
+        <div className="flex items-center">
+          <button
+            onClick={handlePrint}
+            className="print-button bg-blue-900 text-white px-4 py-2 rounded mr-4"
+          >
+            Print
+          </button>
+          <button
+            onClick={handleDownloadPdf}
+            className="download-button bg-green-900 text-white px-4 py-2 rounded"
+          >
+            Download as PDF
+          </button>
+        </div>
       </div>
       <div id="poa1-detail">
         <AdminHeader className="print-header-margin">

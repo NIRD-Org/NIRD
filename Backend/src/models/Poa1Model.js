@@ -42,6 +42,11 @@ const POA1DaySchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    poaType: {
+      type: String,
+      required: true,
+      default: "poa1",
+    },
   },
   { _id: false } // Disable _id field for subdocument
 );

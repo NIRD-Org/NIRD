@@ -44,7 +44,7 @@ const Poa1AdminData = () => {
   const dist = searchParams.get("dist") || "";
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-
+  const [poaType, setPoaType] = useState("poa1");
   const handleMonthChange = (e) => {
     setSelectedMonth(parseInt(e.target.value));
   };
@@ -67,7 +67,7 @@ const Poa1AdminData = () => {
   const getpoa1Data = async () => {
     try {
       const { data } = await API.get(
-        `/api/v1/poa1/get/?state_id=${state}&user_id=${user}&month=${selectedMonth}&year=${selectedYear}}`
+        `/api/v1/poa1/get/?state_id=${state}&user_id=${user}&month=${selectedMonth}&year=${selectedYear}&poaType=${poaType}`
       );
       setpoa1(data?.data);
     } catch (error) {
@@ -96,7 +96,7 @@ const Poa1AdminData = () => {
     if ((user && state, selectedMonth, selectedYear)) {
       getpoa1Data();
     }
-  }, [user, state, selectedMonth, selectedYear]);
+  }, [user, state, selectedMonth, selectedYear, poaType]);
 
   useEffect(() => {
     getAllStates();
@@ -139,7 +139,7 @@ const Poa1AdminData = () => {
       pagebreak: {
         mode: ["avoid-all"],
       },
-      filename: `Poa1 ${stateData?.name}`,
+      filename: `${poaType} ${stateData?.name}`,
       image: { type: "jpeg", quality: 1 },
       html2canvas: { scale: 2 },
       jsPDF: { unit: "mm", format: "a3", orientation: "portrait" },
@@ -163,7 +163,7 @@ const Poa1AdminData = () => {
       </h1>
       <div className="flex flex-col justify-between items-center lg:flex-row text-center text-3xl h-full">
         <div className="w-full h-fit">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 items-end py-10 gap-2 sm:gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 items-end py-10 gap-2 sm:gap-5">
             <div className="flex flex-col">
               <label className="text-sm text-primary text-start px-4 py-2 font-semibold">
                 State
@@ -225,14 +225,20 @@ const Poa1AdminData = () => {
                 }))}
               />
             </div>
+            <div className="flex flex-col">
+              <label className="text-sm text-primary text-start py-2 font-semibold">
+                POA Type
+              </label>
+              <select
+                className="border text-sm bg-white p-2 px-4 rounded-md"
+                value={poaType}
+                onChange={(e) => setPoaType(e.target.value)}
+              >
+                <option value="poa1">POA1</option>
+                <option value="poa2">POA2</option>
+              </select>
+            </div>
           </div>
-        </div>
-        <div className="w-full md:w-1/3 flex justify-center items-center lg:w-1/2 h-full">
-          <img
-            src={stateData?.state_icon}
-            alt=""
-            className="w-full max-h-[40vh] xl:max-h-[30vh]"
-          />
         </div>
       </div>
 
@@ -275,115 +281,121 @@ const Poa1AdminData = () => {
           </p>
           <p>Year: {selectedYear} </p>
         </div>
-        <div className="w-full overflow-x-auto">
-          <table className="min-w-full border-collapse overflow-x-auto">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
-                  S.No.
-                </th>
-                <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
-                  Date
-                </th>
-                <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
-                  Weekday
-                </th>
-                <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
-                  Plan
-                </th>
-                <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
-                  Action
-                </th>
-                <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
-                  Planned Event
-                </th>
-                <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
-                  State
-                </th>
-                <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
-                  District
-                </th>
-                <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
-                  Achievements
-                </th>
-                <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
-                  Photo
-                </th>
-                <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
-                  Remarks
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {poa1?.poaData?.length > 0 ? (
-                poa1.poaData.map((dayData, index) => (
-                  <tr key={index} className="even:bg-gray-50">
-                    <td className="border-t p-2 text-center font-semibold text-sm md:text-sm">
-                      {index + 1}.
-                    </td>
-                    <td className="border-t p-2 text-sm md:text-sm">
-                      {dayData.date}
-                    </td>
-                    <td className="border-t p-2 text-sm md:text-sm">
-                      {dayData.weekday}
-                    </td>
-                    <td className="border-t p-2 text-sm md:text-sm">
-                      {dayData.plan}
-                    </td>
-                    <td className="border-t p-2 text-sm md:text-sm">
-                      {dayData.action}
-                    </td>
-                    <td className="border-t p-2 text-sm md:text-sm">
-                      {dayData.plannedEvent}
-                    </td>
-                    <td className="border-t p-2 text-sm md:text-sm">
-                      {dayData.state.name}
-                    </td>
-                    <td className="border-t p-2 text-sm md:text-sm">
-                      {dayData.district?.name || "N/A"}
-                    </td>
-                    <td className="border-t p-2 text-sm md:text-sm">
-                      {dayData.achievements}
-                    </td>
-                    <td className="border-t p-2 text-sm md:text-sm">
-                      {dayData.photo ? (
-                        <img
-                          src={dayData.photo}
-                          alt="Photo"
-                          className="max-w-full h-auto"
-                        />
-                      ) : (
-                        "No photo"
-                      )}
-                    </td>
-                    <td className="border-t p-2 text-sm md:text-sm">
-                      {dayData.remarks}
+        {poa1 && poa1?.poaData?.length > 0 ? (
+          <div className="w-full overflow-x-auto">
+            <table className="min-w-full border-collapse overflow-x-auto">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
+                    S.No.
+                  </th>
+                  <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
+                    Date
+                  </th>
+                  <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
+                    Weekday
+                  </th>
+                  <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
+                    Plan
+                  </th>
+                  <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
+                    Action
+                  </th>
+                  <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
+                    Planned Event
+                  </th>
+                  <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
+                    State
+                  </th>
+                  <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
+                    District
+                  </th>
+                  <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
+                    Achievements
+                  </th>
+                  <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
+                    Photo
+                  </th>
+                  <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
+                    Remarks
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {poa1?.poaData?.length > 0 ? (
+                  poa1.poaData.map((dayData, index) => (
+                    <tr key={index} className="even:bg-gray-50">
+                      <td className="border-t p-2 text-center font-semibold text-sm md:text-sm">
+                        {index + 1}.
+                      </td>
+                      <td className="border-t p-2 text-sm md:text-sm">
+                        {dayData.date}
+                      </td>
+                      <td className="border-t p-2 text-sm md:text-sm">
+                        {dayData.weekday}
+                      </td>
+                      <td className="border-t p-2 text-sm md:text-sm">
+                        {dayData.plan}
+                      </td>
+                      <td className="border-t p-2 text-sm md:text-sm">
+                        {dayData.action}
+                      </td>
+                      <td className="border-t p-2 text-sm md:text-sm">
+                        {dayData.plannedEvent}
+                      </td>
+                      <td className="border-t p-2 text-sm md:text-sm">
+                        {dayData.state.name}
+                      </td>
+                      <td className="border-t p-2 text-sm md:text-sm">
+                        {dayData.district?.name || "N/A"}
+                      </td>
+                      <td className="border-t p-2 text-sm md:text-sm">
+                        {dayData.achievements}
+                      </td>
+                      <td className="border-t p-2 text-sm md:text-sm">
+                        {dayData.photo ? (
+                          <img
+                            src={dayData.photo}
+                            alt="Photo"
+                            className="max-w-full h-auto"
+                          />
+                        ) : (
+                          "No photo"
+                        )}
+                      </td>
+                      <td className="border-t p-2 text-sm md:text-sm">
+                        {dayData.remarks}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan="10"
+                      className="p-2 text-center text-xs sm:text-sm md:text-base"
+                    >
+                      No data available
                     </td>
                   </tr>
-                ))
-              ) : (
+                )}
+              </tbody>
+              <tfoot>
                 <tr>
                   <td
                     colSpan="10"
                     className="p-2 text-center text-xs sm:text-sm md:text-base"
                   >
-                    No data available
+                    End of POA1 Details
                   </td>
                 </tr>
-              )}
-            </tbody>
-            <tfoot>
-              <tr>
-                <td
-                  colSpan="10"
-                  className="p-2 text-center text-xs sm:text-sm md:text-base"
-                >
-                  End of POA1 Details
-                </td>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
+              </tfoot>
+            </table>
+          </div>
+        ) : (
+          <div className="text-2xl text-center text-gray-700">
+            No Data Found
+          </div>
+        )}
       </div>
     </div>
   );

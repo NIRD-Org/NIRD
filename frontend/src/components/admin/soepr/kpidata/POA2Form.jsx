@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import AdminHeader from "../../AdminHeader";
 import toast from "react-hot-toast";
+import { useSoeprLocation } from "@/components/hooks/useSoeprLocation";
+import API from "@/utils/API";
+import { useParams } from "react-router-dom";
+import { Table } from "@/components/ui/table";
 
-// Sample data for dropdowns
-const states = ["State 1", "State 2", "State 3"];
-const districts = ["District 1", "District 2", "District 3"]; // Simplified list for example
-
-// Months with days
 const months = [
   { name: "January", days: 31 },
   { name: "February", days: 28 }, // Adjust for leap years if needed
@@ -23,7 +22,6 @@ const months = [
   { name: "December", days: 31 },
 ];
 
-// Plan of the day options split into headings and actions
 const planOfDayOptions = {
   "Functioning of Gram Panchayats/ Gram Sabhas": [
     "Observe Ward Sabhas",
@@ -68,26 +66,20 @@ const planOfDayOptions = {
   "Others(100 words Only)": ["Others"],
 };
 
-const formatIndianDate = (date) => {
-  if (!(date instanceof Date) || isNaN(date.getTime())) {
-    return "Invalid Date";
-  }
-  return `${date.getDate().toString().padStart(2, "0")}/${(date.getMonth() + 1)
-    .toString()
-    .padStart(2, "0")}/${date.getFullYear()}`;
-};
-
-const POA2Form = () => {
-  const [plans, setPlans] = useState({});
-  const [actions, setActions] = useState({});
-  const [selectedDistricts, setSelectedDistricts] = useState({});
-  const [isEditableOn16th, setIsEditableOn16th] = useState(false);
-  const [isEditableOnLastDay, setIsEditableOnLastDay] = useState(false);
-
-  // Get current month and year
+const POA2Form = ({ update }) => {
   const currentMonthIndex = new Date().getMonth();
   const currentYear = new Date().getFullYear();
+  const { id: poalId } = useParams();
+  const [selectedState, setSelectedState] = useState();
+  const [plans, setPlans] = useState({});
+  const [selectedDistricts, setSelectedDistricts] = useState({});
+  const [formDataState, setFormData] = useState([]);
   const selectedMonth = months[currentMonthIndex];
+  const { soeprState: states, soeprDist: districts } = useSoeprLocation({
+    state_id: selectedState,
+  });
+  const [isEditableOn16th, setIsEditableOn16th] = useState(false);
+  const [isEditableOnLastDay, setIsEditableOnLastDay] = useState(false);
 
   // Determine the start and end date of the second fortnight
   const startDate = new Date(currentYear, currentMonthIndex, 16);
@@ -103,7 +95,29 @@ const POA2Form = () => {
     setIsEditableOnLastDay(isTodayLastDay);
   }, [today, selectedMonth]);
 
-  // Get days in month for the form
+  const [loading, setLoading] = useState(false);
+
+  const [selectedActions, setSelectedActions] = useState({});
+  const lastDayOfFortnight = 15; // Last day of the first fortnight
+
+  useEffect(() => {
+    setSelectedState(states?.[0]?.id);
+  }, [states]);
+
+  useEffect(() => {
+    if (update) {
+      const fetchPoalData = async () => {
+        try {
+          const response = await API.get(`/api/v1/poa1/get/${poalId}`);
+          setFormData(response.data.data.poaData);
+        } catch (error) {
+          console.error("Error fetching user:", error);
+        }
+      };
+      fetchPoalData();
+    }
+  }, [poalId]);
+
   const getDaysInMonth = () => {
     const startDay = 16;
     const endDay = selectedMonth.days;
@@ -118,34 +132,89 @@ const POA2Form = () => {
     return date.toLocaleDateString("en-IN", { weekday: "long" });
   };
 
+  const formatIndianDate = (day) => {
+    const date = new Date(`${selectedMonth.name} ${day}, ${currentYear}`);
+    return date.toLocaleDateString("en-IN");
+  };
+
   const handlePlanChange = (day, selectedPlan) => {
     setPlans((prev) => ({ ...prev, [day]: selectedPlan }));
-    setActions((prev) => ({
-      ...prev,
-      [day]: planOfDayOptions[selectedPlan] || [],
-    }));
+    setSelectedActions((prev) => ({ ...prev, [day]: "" }));
   };
 
   const handleActionChange = (day, selectedAction) => {
-    setActions((prev) => ({ ...prev, [day]: selectedAction }));
+    setSelectedActions((prev) => ({
+      ...prev,
+      [day]: selectedAction,
+    }));
   };
 
   const handleDistrictChange = (day, selectedDistrict) => {
     setSelectedDistricts((prev) => ({ ...prev, [day]: selectedDistrict }));
   };
 
-  const handleSubmit = () => {
-    // Handle form submission logic here
-    toast.success("Form submitted successfully!");
+  const handleInputChange = (day, key, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      [day]: {
+        ...prev[day],
+        [key]: value,
+      },
+    }));
+  };
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      const formData = new FormData();
+
+      Object.keys(plans).forEach((day) => {
+        formData.append(`poaData[${day}][date]`, formatIndianDate(day));
+        formData.append(`poaData[${day}][weekday]`, getWeekDay(day));
+        formData.append(`poaData[${day}][plan]`, plans[day]);
+        formData.append(`poaData[${day}][action]`, selectedActions[day]);
+        formData.append(
+          `poaData[${day}][plannedEvent]`,
+          formDataState[day]?.plannedEvent || ""
+        );
+        formData.append(`poaData[${day}][state_id]`, selectedState);
+        formData.append(`poaData[${day}][poaType]`, "poa2");
+        formData.append(
+          `poaData[${day}][dist_id]`,
+          selectedDistricts[day] || ""
+        );
+        formData.append(
+          `poaData[${day}][achievements]`,
+          formDataState[day]?.achievements || ""
+        );
+
+        if (formDataState[day]?.photo) {
+          formData.append(`poaData[${day}][photo]`, formDataState[day].photo);
+        }
+        formData.append(
+          `poaData[${day}][remarks]`,
+          formDataState[day]?.remarks || ""
+        );
+      });
+
+      await API.post("/api/v1/poa1/create", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      toast.success("Form submitted successfully!");
+    } catch (error) {
+      toast.error("Failed to submit form.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div style={{ fontSize: "14px", maxWidth: "100%", margin: "0 auto" }}>
       <AdminHeader>
-        Second Fortnightly Plan Of Action - Month: {selectedMonth.name}{" "}
+        Second Fortnightly Plan Of Action - Month : {selectedMonth.name}{" "}
         {currentYear}
       </AdminHeader>
-
       <div style={{ margin: "15px 0", textAlign: "center" }}>
         <p
           style={{
@@ -156,8 +225,13 @@ const POA2Form = () => {
           {formatIndianDate(endDate)}
         </p>
       </div>
-
-      <table
+      <div style={{ marginBottom: "15px", display: "flex", gap: "10px" }}>
+        <div className="flex gap-2 items-center">
+          <h4 className="text-primary font-semibold">State: </h4>
+          <p className="font-semibold text-gray-700">{states[0]?.name}</p>
+        </div>
+      </div>
+      <Table
         border="1"
         cellPadding="3"
         cellSpacing="0"
@@ -170,7 +244,7 @@ const POA2Form = () => {
             <th>Action Plan (KPI Category)</th>
             <th>Planned Event</th>
             <th>Tentative Target (Description in 50 words)</th>
-            <th>District</th>
+            <th>Location</th>
             <th>Achievements</th>
             <th>Upload Photo</th>
             <th>Remarks/Reason for Failure</th>
@@ -179,24 +253,18 @@ const POA2Form = () => {
         <tbody>
           {getDaysInMonth().map((day, idx) => (
             <tr key={idx}>
-              <td>
-                {formatIndianDate(
-                  new Date(currentYear, currentMonthIndex, day)
-                )}
-              </td>
+              <td>{formatIndianDate(day)}</td>
               <td>{getWeekDay(day)}</td>
               <td>
                 <select
+                  style={{ width: "100%" }}
                   value={plans[day] || ""}
                   onChange={(e) => handlePlanChange(day, e.target.value)}
-                  style={{ width: "100%", padding: "2px", fontSize: "12px" }}
                   disabled={!isEditableOn16th}
                 >
-                  <option value="" disabled>
-                    Select a Plan
-                  </option>
-                  {Object.keys(planOfDayOptions).map((plan, idx) => (
-                    <option key={idx} value={plan}>
+                  <option value="">Select</option>
+                  {Object.keys(planOfDayOptions).map((plan) => (
+                    <option key={plan} value={plan}>
                       {plan}
                     </option>
                   ))}
@@ -204,83 +272,91 @@ const POA2Form = () => {
               </td>
               <td>
                 <select
-                  value={actions[day] || ""}
+                  style={{ width: "100%" }}
+                  value={selectedActions[day] || ""}
                   onChange={(e) => handleActionChange(day, e.target.value)}
-                  style={{ width: "100%", padding: "2px", fontSize: "12px" }}
-                  disabled={!isEditableOn16th}
+                  disabled={!plans[day] || !isEditableOn16th}
+                  required
                 >
-                  <option value="" disabled>
-                    Select an Action
-                  </option>
-                  {(plans[day] ? planOfDayOptions[plans[day]] : []).map(
-                    (action, idx) => (
-                      <option key={idx} value={action}>
+                  <option value="">Select</option>
+                  {plans[day] &&
+                    planOfDayOptions[plans[day]].map((action) => (
+                      <option key={action} value={action}>
                         {action}
                       </option>
-                    )
-                  )}
+                    ))}
                 </select>
               </td>
               <td>
                 <input
                   type="text"
-                  placeholder="Planned Event"
-                  style={{ width: "100%", padding: "2px", fontSize: "12px" }}
+                  style={{ width: "100%" }}
+                  onChange={(e) =>
+                    handleInputChange(day, "plannedEvent", e.target.value)
+                  }
+                  value={formDataState[day]?.plannedEvent || ""}
                   disabled={!isEditableOn16th}
                 />
               </td>
               <td>
                 <select
-                  value={selectedDistricts[day] || ""}
+                  style={{ width: "100%" }}
                   onChange={(e) => handleDistrictChange(day, e.target.value)}
-                  style={{ width: "100%", padding: "2px", fontSize: "12px" }}
+                  value={selectedDistricts[day] || ""}
+                  required
                   disabled={!isEditableOn16th}
                 >
-                  <option value="" disabled>
-                    Select District
+                  <option value="" disable>
+                    Select Location
                   </option>
-                  {districts.map((district, idx) => (
-                    <option key={idx} value={district}>
-                      {district}
+                  {districts.map((dist) => (
+                    <option key={dist.id} value={dist.id}>
+                      {dist.name}
                     </option>
                   ))}
+                  <option value="NIRD">NIRD</option>
+                  <option value="SIRD/SPRC">SIRD/SPRC</option>
+                  <option value="None">None</option>
                 </select>
               </td>
               <td>
                 <input
                   type="text"
-                  placeholder="Achievements"
-                  style={{ width: "100%", padding: "2px", fontSize: "12px" }}
+                  style={{ width: "100%" }}
+                  onChange={(e) =>
+                    handleInputChange(day, "achievements", e.target.value)
+                  }
+                  value={formDataState[day]?.achievements || ""}
                   disabled={!isEditableOnLastDay}
                 />
               </td>
               <td>
                 <input
                   type="file"
-                  accept="image/*"
-                  style={{ width: "100%", fontSize: "12px" }}
+                  onChange={(e) =>
+                    handleInputChange(day, "photo", e.target.files[0])
+                  }
                   disabled={!isEditableOnLastDay}
                 />
               </td>
               <td>
                 <input
                   type="text"
-                  placeholder="Remarks"
-                  style={{ width: "100%", padding: "2px", fontSize: "12px" }}
+                  style={{ width: "100%" }}
+                  onChange={(e) =>
+                    handleInputChange(day, "remarks", e.target.value)
+                  }
                   disabled={!isEditableOnLastDay}
+                  value={formDataState[day]?.remarks || ""}
                 />
               </td>
             </tr>
           ))}
         </tbody>
-      </table>
-
-      <div style={{ marginTop: "20px", textAlign: "center" }}>
-        <Button
-          onClick={handleSubmit}
-          style={{ padding: "10px 20px", fontSize: "14px" }}
-        >
-          Submit
+      </Table>
+      <div className="flex justify-end md:px-10">
+        <Button pending={loading} onClick={handleSubmit} className="mt-4">
+          {loading ? "Submitting ..." : "Submit"}
         </Button>
       </div>
     </div>

@@ -108,17 +108,23 @@ export const getPoa1s = CatchAsyncError(async (req, res, next) => {
 
 export const getPoalData = CatchAsyncError(async (req, res, next) => {
   try {
+    const { poaType } = req.query;
+    const filter = {
+      id: req.params.id,
+      "poaData.poaType": "poa1",
+    };
+    if (poaType) {
+      filter["poaData.poaType"] = poaType;
+    }
     const poa1Data = await Poa1Model.aggregate([
-      {
-        $match: {
-          id: req.params.id,
-        },
-      },
       {
         $unwind: {
           path: "$poaData",
           preserveNullAndEmptyArrays: true,
         },
+      },
+      {
+        $match: filter,
       },
       {
         $addFields: {
@@ -191,7 +197,7 @@ export const getPoalData = CatchAsyncError(async (req, res, next) => {
 
 export const getPoa1DataByState = CatchAsyncError(async (req, res, next) => {
   try {
-    const { state_id, user_id, month, year } = req.query;
+    const { state_id, user_id, month, year, poaType = "poa1" } = req.query;
 
     const poa1Data = await Poa1Model.aggregate([
       {
@@ -231,6 +237,7 @@ export const getPoa1DataByState = CatchAsyncError(async (req, res, next) => {
           poaMonth: parseInt(month),
           poaYear: parseInt(year),
           "poaData.state_id": state_id,
+          "poaData.poaType": poaType,
           user_id: user_id,
         },
       },

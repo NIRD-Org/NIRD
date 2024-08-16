@@ -4,7 +4,7 @@ import AdminHeader from "../../AdminHeader";
 import toast from "react-hot-toast";
 import { useSoeprLocation } from "@/components/hooks/useSoeprLocation";
 import API from "@/utils/API";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Table } from "@/components/ui/table";
 
 const months = [
@@ -83,9 +83,9 @@ const UpdatePOA1Form = () => {
     state_id: selectedState,
   });
   const [loading, setLoading] = useState(false);
-
+  const [poaType, setPoaType] = useState("poa1");
   const [selectedActions, setSelectedActions] = useState({});
-
+  const navigate = useNavigate();
   useEffect(() => {
     setSelectedState(states?.[0]?.id);
   }, [states]);
@@ -93,7 +93,9 @@ const UpdatePOA1Form = () => {
   useEffect(() => {
     const fetchPoalData = async () => {
       try {
-        const response = await API.get(`/api/v1/poa1/get/${poalId}`);
+        const response = await API.get(
+          `/api/v1/poa1/get/${poalId}?poaType=${poaType}`
+        );
         const data = response.data.data.poaData;
 
         const groupedData = data.reduce((acc, item) => {
@@ -114,7 +116,7 @@ const UpdatePOA1Form = () => {
       }
     };
     fetchPoalData();
-  }, [poalId]);
+  }, [poalId, poaType]);
 
   const getDaysInMonth = () =>
     Array.from({ length: selectedMonth.days }, (_, i) => i + 1);
@@ -189,6 +191,7 @@ const UpdatePOA1Form = () => {
             item.plannedEvent || ""
           );
           formData.append(`poaData[${day}][${index}][state_id]`, selectedState);
+          formData.append(`poaData[${day}][${index}][poaType]`, poaType);
           formData.append(
             `poaData[${day}][${index}][dist_id]`,
             item.dist_id || ""
@@ -213,6 +216,7 @@ const UpdatePOA1Form = () => {
       });
 
       toast.success("Form updated successfully!");
+      navigate(`/admin/soepr/POA1/view/${poalId}`);
     } catch (error) {
       toast.error("Failed to update form.");
     } finally {
@@ -226,10 +230,23 @@ const UpdatePOA1Form = () => {
         Update Fortnightly Plan Of Action - Month : {selectedMonth.name}{" "}
         {currentYear}
       </AdminHeader>
-      <div style={{ marginBottom: "15px", display: "flex", gap: "10px" }}>
+      <div className="mb-4 flex gap-5 justify-between px-5 md:px-12">
         <div className="flex gap-2 items-center">
           <h4 className="text-primary font-semibold">State: </h4>
           <p className="font-semibold text-gray-700">{states[0]?.name}</p>
+        </div>
+        <div className="flex flex-col ml-5">
+          <label className="text-sm text-primary text-start py-2 font-semibold">
+            POA Type
+          </label>
+          <select
+            className="border text-sm bg-white p-2 px-4 rounded-md"
+            value={poaType}
+            onChange={(e) => setPoaType(e.target.value)}
+          >
+            <option value="poa1">POA1</option>
+            <option value="poa2">POA2</option>
+          </select>
         </div>
       </div>
       <Table
