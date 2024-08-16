@@ -72,7 +72,7 @@ const Poa1DetailPage = () => {
   if (!poa1Data) return <div>Loading...</div>;
 
   return (
-    <div>
+    <div className="w-full md:w-[80vw]">
       <style>
         {`
           @media print {
@@ -161,31 +161,31 @@ const Poa1DetailPage = () => {
               poa1Data?.poaData?.length > 0 &&
               poa1Data?.poaData?.map((dayData, index) => (
                 <TableRow key={index}>
-                  <TableCell className="text-xs p-2.5">
+                  <TableCell className="text-base p-2.5">
                     {dayData.date}
                   </TableCell>
-                  <TableCell className="text-xs p-2.5">
+                  <TableCell className="text-base p-2.5">
                     {dayData.weekday}
                   </TableCell>
-                  <TableCell className="text-xs p-2.5">
+                  <TableCell className="text-base p-2.5">
                     {dayData.plan}
                   </TableCell>
-                  <TableCell className="text-xs p-2.5">
+                  <TableCell className="text-base p-2.5">
                     {dayData.action}
                   </TableCell>
-                  <TableCell className="text-xs p-2.5">
+                  <TableCell className="text-base p-2.5">
                     {dayData.plannedEvent}
                   </TableCell>
-                  <TableCell className="text-xs p-2.5">
+                  <TableCell className="text-base p-2.5">
                     {dayData.state.name}
                   </TableCell>
-                  <TableCell className="text-xs p-2.5">
+                  <TableCell className="text-base p-2.5">
                     {dayData.district?.name || dayData?.dist_id || "N/A"}
                   </TableCell>
-                  <TableCell className="text-xs p-2.5">
+                  <TableCell className="text-base p-2.5">
                     {dayData.achievements}
                   </TableCell>
-                  <TableCell className="text-xs p-2.5">
+                  <TableCell className="text-base p-2.5">
                     {dayData.photo ? (
                       <img
                         src={dayData.photo}
@@ -196,7 +196,7 @@ const Poa1DetailPage = () => {
                       "No photo"
                     )}
                   </TableCell>
-                  <TableCell className="text-xs p-2.5">
+                  <TableCell className="text-base p-2.5">
                     {dayData.remarks}
                   </TableCell>
                 </TableRow>

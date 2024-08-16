@@ -45,6 +45,7 @@ const Poa1AdminData = () => {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [poaType, setPoaType] = useState("poa1");
+  const [role, setRole] = useState("all");
   const handleMonthChange = (e) => {
     setSelectedMonth(parseInt(e.target.value));
   };
@@ -78,19 +79,22 @@ const Poa1AdminData = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const { data } = await API.get(`/api/v1/users/all?role=${4}`);
-        const { data: data2 } = await API.get(`/api/v1/users/all?role=${5}`);
-
-        const mergedData = [...data.data, ...data2.data];
-        console.log(mergedData);
-        setUsers(mergedData);
+        if (role == "all") {
+          const { data } = await API.get(`/api/v1/users/all?role=${4}`);
+          const { data: data2 } = await API.get(`/api/v1/users/all?role=${5}`);
+          const mergedData = [...data.data, ...data2.data];
+          setUsers(mergedData);
+        } else {
+          const { data } = await API.get(`/api/v1/users/all?role=${role}`);
+          setUsers(data?.data);
+        }
       } catch (error) {
         console.log(error);
       }
     };
 
     fetchUser();
-  }, []);
+  }, [role]);
 
   useEffect(() => {
     if ((user && state, selectedMonth, selectedYear)) {
@@ -150,7 +154,7 @@ const Poa1AdminData = () => {
   };
 
   return (
-    <div className="relative w-full py-10 px-1 lg">
+    <div className="relative w-full md:w-[80vw] py-10 px-1 lg">
       <button
         onClick={() => navigate("/kpi")}
         className="absolute flex items-center justify-center bg-primary text-white p-2 rounded top-2 left-4 md:top-10 "
@@ -161,9 +165,9 @@ const Poa1AdminData = () => {
       <h1 className="text-3xl text-primary text-center font-bold">
         Report Fortnightly Plan Of Action
       </h1>
-      <div className="flex flex-col justify-between items-center lg:flex-row text-center text-3xl h-full">
+      <div className="w-fit flex flex-col justify-between items-center lg:flex-row text-center text-3xl h-full">
         <div className="w-full h-fit">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 items-end py-10 gap-2 sm:gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 items-end py-10 gap-2 sm:gap-5">
             <div className="flex flex-col">
               <label className="text-sm text-primary text-start px-4 py-2 font-semibold">
                 State
@@ -181,6 +185,23 @@ const Poa1AdminData = () => {
                     {item.name}
                   </option>
                 ))}
+              </select>
+            </div>
+            <div className="flex flex-col">
+              <label className="text-sm text-primary text-start px-4 py-2 font-semibold">
+                Role:
+              </label>
+              <select
+                value={role || ""}
+                onChange={(e) => setRole(e.target.value)}
+                className="border text-sm bg-white p-2 rounded-md"
+              >
+                <option value="all">All</option>
+                {/* <option value="1">Superadmin</option>
+                <option value="2">Admin</option>
+                <option value="3">Young Fellow</option> */}
+                <option value="4">Consultant</option>
+                <option value="5">Sr. Consultant</option>
               </select>
             </div>
             <div className="flex flex-col">
@@ -347,7 +368,7 @@ const Poa1AdminData = () => {
                         {dayData.state.name}
                       </td>
                       <td className="border-t p-2 text-sm md:text-sm">
-                        {dayData.district?.name || "N/A"}
+                        {dayData.district?.name || dayData?.dist_id || "N/A"}
                       </td>
                       <td className="border-t p-2 text-sm md:text-sm">
                         {dayData.achievements}

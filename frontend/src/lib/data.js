@@ -162,7 +162,6 @@ export const getSidebarItems = (user) => {
               title: "View Attendance",
               link: "/admin/view/attendance",
             },
-
             {
               type: "sub-module",
               icon: ArrowBigRight,
