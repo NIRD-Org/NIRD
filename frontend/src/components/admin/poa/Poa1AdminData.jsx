@@ -159,7 +159,7 @@ const Poa1AdminData = () => {
         <p className="hidden md:block">Back</p>
       </button>
       <h1 className="text-3xl text-primary text-center font-bold">
-        First Fortnightly Plan Of Action
+        Report Fortnightly Plan Of Action
       </h1>
       <div className="flex flex-col justify-between items-center lg:flex-row text-center text-3xl h-full">
         <div className="w-full h-fit">
@@ -175,7 +175,7 @@ const Poa1AdminData = () => {
                   setSearchParams({ state: e.target.value });
                 }}
               >
-                <option>All States</option>
+                <option>Select State</option>
                 {stateOptions.map((item) => (
                   <option key={item.id} value={item.id}>
                     {item.name}
