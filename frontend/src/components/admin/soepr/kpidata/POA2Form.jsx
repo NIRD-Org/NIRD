@@ -96,7 +96,7 @@ const POA2Form = ({ update }) => {
 
   useEffect(() => {
     // Set editability based on today's date
-    const isToday16th = today.getDate() === 16;
+    const isToday16th = today.getDate() >= 16;
     const isTodayLastDay = today.getDate() === selectedMonth.days;
 
     setIsEditableOn16th(isToday16th);
