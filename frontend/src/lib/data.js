@@ -157,24 +157,9 @@ export const getSidebarItems = (user) => {
             {
               type: "sub-module",
               icon: ArrowBigRight,
-              title: "View YF POA Data",
+              title: "View YF POA Reports",
               link: "/admin/yf/poa1-data",
             },
-          ],
-        },
-        {
-          type: "module",
-          icon: ArrowBigRight,
-          title: "Attendance",
-          submodules: [
-           
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "View Attendance",
-              link: "/admin/view/attendance",
-            },
-            
           ],
         },
         {
@@ -211,7 +196,47 @@ export const getSidebarItems = (user) => {
         {
           type: "module",
           icon: ArrowBigRight,
-          title: "Master",
+          title: "Attendance",
+          submodules: [
+           
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "View Attendance",
+              link: "/admin/view/attendance",
+            },
+            
+          ],
+        },
+      
+        {
+          type: "module",
+          title: "Training",
+          submodules: [
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "Training",
+              link: "/admin/training",
+            },
+          ],
+        },
+        {
+          type: "module",
+          title: "Approvals",
+          submodules: [
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "All YF Approvals",
+              link: "/admin/action/superadmin",
+            },
+          ],
+        },
+        {
+          type: "module",
+          icon: ArrowBigRight,
+          title: "Master Tables",
           submodules: [
             {
               type: "sub-module",
@@ -260,30 +285,6 @@ export const getSidebarItems = (user) => {
               icon: ArrowBigRight,
               title: "Deleted",
               link: "/admin/master-deleted",
-            },
-          ],
-        },
-        {
-          type: "module",
-          title: "Training",
-          submodules: [
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "Training",
-              link: "/admin/training",
-            },
-          ],
-        },
-        {
-          type: "module",
-          title: "Action",
-          submodules: [
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "Action",
-              link: "/admin/action/superadmin",
             },
           ],
         },
