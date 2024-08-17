@@ -1,4 +1,5 @@
 import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
+import { SoeprStateModel } from "../models/soeprStateModel.js";
 import { StateModel } from "../models/statesModel.js";
 import { User } from "../models/userModel.js";
 import { Errorhandler } from "../utils/errorHandler.js";
@@ -13,23 +14,7 @@ export const getAllUsers = CatchAsyncError(async (req, res, next) => {
     if (req.query.status) filter.status = req.query.status;
     if (role) filter.role = parseInt(role);
 
-    let users;
-    if (role == 4 || role == 5) {
-      users = await User.aggregate([
-        { $match: filter },
-        {
-          $lookup: {
-            from: "states",
-            localField: "state_id",
-            foreignField: "id",
-            as: "state",
-          },
-        },
-        { $unwind: "$state" },
-      ]);
-    } else {
-      users = await User.find(filter);
-    }
+    const users = await User.find(filter);
 
     res.status(200).json({ data: users });
   } catch (err) {
@@ -45,12 +30,15 @@ export const getUserById = CatchAsyncError(async (req, res, next) => {
     if (!user) {
       return next(new Errorhandler("User not found", 404));
     }
-
-    const state = await StateModel.findOne({ id: user.state_id });
-
+    let state;
+    if (user.role === 4 || user.role === 5) {
+      state = await SoeprStateModel.findOne({ id: user.state_id });
+    } else {
+      state = await StateModel.findOne({ id: user.state_id });
+    }
     res
       .status(200)
-      .json({ data: { user, state_name: state.name, state_id: state.id } });
+      .json({ data: { user, state_name: state?.name, state_id: state?.id } });
   } catch (err) {
     console.error(err);
     return next(new Errorhandler("Failed to get user data", 500));

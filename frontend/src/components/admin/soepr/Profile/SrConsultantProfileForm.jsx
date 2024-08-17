@@ -6,10 +6,13 @@ import { Textarea } from "@/components/ui/textarea";
 import API from "@/utils/API";
 import { useAuthContext } from "@/context/AuthContext";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import StateFilter from "../../filter/StateFilter";
 
 function SrConsultantProfile() {
   const { user } = useAuthContext();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const state = searchParams.get("state_id");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState({
@@ -20,7 +23,6 @@ function SrConsultantProfile() {
     mobile: "",
     qualifications: "",
     dojNIRDPR: "",
-    srlm_state: "",
     areaOfExpertise: "",
     areaOfInterest: "",
     photo: "",
@@ -35,7 +37,7 @@ function SrConsultantProfile() {
         const response = await API.get(`/api/v1/users/${user.id}`);
         const userData = response.data.data.user;
         userData.state = response.data.data.state_name;
-        console.log(userData);
+        setSearchParams({ state_id: userData.state_id });
         setProfileData((prevData) => ({
           ...prevData,
           name: userData.name || "",
@@ -45,7 +47,6 @@ function SrConsultantProfile() {
           mobile: userData.mobile || "",
           qualifications: userData.qualifications || "",
           dojNIRDPR: userData.dojNIRDPR || "",
-          srlm_state: userData.state || "",
           areaOfExpertise: userData.areaOfExpertise || "",
           areaOfInterest: userData.areaOfInterest || "",
           photo: userData.photo || "",
@@ -93,7 +94,7 @@ function SrConsultantProfile() {
     formData.append("mobile", profileData.mobile);
     formData.append("qualifications", profileData.qualifications);
     formData.append("dojNIRDPR", profileData.dojNIRDPR);
-    formData.append("srlm_state", profileData.srlm_state);
+    formData.append("state_id", state);
     formData.append("areaOfExpertise", profileData.areaOfExpertise);
     formData.append("areaOfInterest", profileData.areaOfInterest);
     if (photo) {
@@ -216,16 +217,9 @@ function SrConsultantProfile() {
                 required
               />
             </div>
-            <div>
+            <div className="flex flex-col gap-2.5">
               <Label htmlFor="srlm_state">Deployed State*</Label>
-              <Input
-                id="srlm_state"
-                name="srlm_state"
-                value={profileData.srlm_state}
-                onChange={handleChange}
-                className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
-                required
-              />
+              <StateFilter className={"!w-full"} type={"soepr"} />
             </div>
           </div>
 

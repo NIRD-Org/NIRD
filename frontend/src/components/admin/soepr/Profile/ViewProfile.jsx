@@ -7,8 +7,8 @@ import { useAuthContext } from "@/context/AuthContext";
 const formatDate = (dateString) => {
   if (!dateString) return "No Data Available";
   const date = new Date(dateString);
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
   const year = date.getFullYear();
   return `${day}/${month}/${year}`;
 };
@@ -43,13 +43,21 @@ function ViewProfile() {
         <div className="flex flex-col md:flex-row md:items-start space-y-6 md:space-y-0 md:space-x-2">
           <div className="flex-grow space-y-4 p-6">
             <p>
-              <strong>Employee ID:</strong> {profileData.employee_id || "No Data Available"}
+              <strong>Employee ID:</strong>{" "}
+              {profileData.employee_id || "No Data Available"}
             </p>
             <p>
               <strong>Full Name:</strong> {profileData.name}
             </p>
             <p>
-              <strong>Designation:</strong> {profileData.designation}
+              <strong>Designation:</strong>{" "}
+              {profileData.role == 3
+                ? "Young Fellow"
+                : user.role == 4
+                ? "Consultant"
+                : user.role == 5
+                ? "Sr. Consultant"
+                : "N/A" || "N/A"}
             </p>
             <p>
               <strong>Deployed State:</strong> {profileData.state}
@@ -59,7 +67,8 @@ function ViewProfile() {
               {formatDate(profileData.dateOfBirth)}
             </p>
             <p>
-              <strong>Date of Joining:</strong> {formatDate(profileData.dojNIRDPR)}
+              <strong>Date of Joining:</strong>{" "}
+              {formatDate(profileData.dojNIRDPR)}
             </p>
             <p>
               <strong>Gender:</strong> {profileData.gender}

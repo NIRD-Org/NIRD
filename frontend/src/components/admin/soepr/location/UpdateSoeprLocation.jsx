@@ -49,7 +49,7 @@ const UpdateSoeprLocation = () => {
   }, [stateIdFromUrl, states]);
 
   const getAllStates = async () => {
-    const { data } = await API.get(`/api/v1/state/all`);
+    const { data } = await API.get(`/api/v1/soepr-state/all`);
     setStates(data?.states);
   };
 

@@ -29,7 +29,7 @@ const SoeprUserList = () => {
         const { data } = await API.get(`/api/v1/users/all?role=${4}`);
         const { data: data2 } = await API.get(`/api/v1/users/all?role=${5}`);
         const mergedData = [...data.data, ...data2.data];
-        console.log(mergedData);
+
         setUsers(mergedData);
       } catch (error) {
         console.log(error);
