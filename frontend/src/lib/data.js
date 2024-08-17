@@ -137,12 +137,15 @@ export const getSidebarItems = (user) => {
               title: "All Users",
               link: "/admin/users/",
             },
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "Admin location",
-              link: "/admin/users/all/admin",
-            },
+            
+          ],
+        },
+        {
+          type: "module",
+          icon: ArrowBigRight,
+          title: "Model GP Clusters",
+          submodules: [
+           
             {
               type: "sub-module",
               icon: ArrowBigRight,
@@ -150,24 +153,28 @@ export const getSidebarItems = (user) => {
               link: "/admin/users/all/young-fellow",
             },
 
-            //{
-            //type: "sub-module",
-            //icon: ArrowBigRight,
-            //title: "SOEPR State",
-            //link: "/admin/users/all/soepr/list",
-            // },
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "View Attendance",
-              link: "/admin/view/attendance",
-            },
+           
             {
               type: "sub-module",
               icon: ArrowBigRight,
               title: "View YF POA Data",
               link: "/admin/yf/poa1-data",
             },
+          ],
+        },
+        {
+          type: "module",
+          icon: ArrowBigRight,
+          title: "Attendance",
+          submodules: [
+           
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "View Attendance",
+              link: "/admin/view/attendance",
+            },
+            
           ],
         },
         {
