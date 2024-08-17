@@ -11,10 +11,10 @@ import { isAuth } from "../middlewares/auth.js";
 const router = express.Router();
 
 router.use("/create", isAuth);
-router.route("/all").get(getAllUserLocation);
-router.route("/:user_id").get(getUserLocationById);
+router.route("/all").get(isAuth, getAllUserLocation);
+router.route("/:user_id").get(isAuth, getUserLocationById);
 router.get("/", isAuth, getUserLocation);
-router.route("/:user_id").put(updateUserLocation);
+router.route("/:user_id").put(isAuth, updateUserLocation);
 
 router.route("/create").post(assignUserLocation);
 

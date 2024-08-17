@@ -76,25 +76,77 @@ const Poa1AdminData = () => {
       setpoa1([]);
     }
   };
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        if (role == "all") {
-          const { data } = await API.get(`/api/v1/users/all?role=${4}`);
+        const response = await API.get("/api/v1/soepr-location/all");
+        const data = response.data.data;
+
+        // Filter users based on selected State and state_ids[0]
+        const filteredUsers = data.filter(
+          (user) => user.userLocations.state_ids[0] === state
+        );
+
+        if (role === "all") {
+          const { data: data1 } = await API.get(`/api/v1/users/all?role=${4}`);
           const { data: data2 } = await API.get(`/api/v1/users/all?role=${5}`);
-          const mergedData = [...data.data, ...data2.data];
-          setUsers(mergedData);
+          const mergedData = [...data1.data, ...data2.data];
+
+          // Filter mergedData based on filteredUsers
+          const filteredMergedData = mergedData.filter((user) =>
+            filteredUsers.some(
+              (filteredUser) => filteredUser.user_id === user.id
+            )
+          );
+          setUsers(filteredMergedData);
         } else {
-          const { data } = await API.get(`/api/v1/users/all?role=${role}`);
-          setUsers(data?.data);
+          const { data: roleData } = await API.get(
+            `/api/v1/users/all?role=${role}`
+          );
+
+          // Filter roleData based on filteredUsers
+          const filteredRoleData = roleData.data.filter((user) =>
+            filteredUsers.some(
+              (filteredUser) => filteredUser.user_id === user.id
+            )
+          );
+
+          setUsers(filteredRoleData);
         }
       } catch (error) {
         console.log(error);
+        setUsers([]);
       }
     };
 
     fetchUser();
-  }, [role]);
+  }, [role, state]);
+
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     try {
+  //       const response = await API.get("/api/v1/soepr-location/all");
+  //       const data = response.data.data;
+  //       console.log(data);
+
+  //       if (role == "all") {
+  //         const { data } = await API.get(`/api/v1/users/all?role=${4}`);
+  //         const { data: data2 } = await API.get(`/api/v1/users/all?role=${5}`);
+  //         const mergedData = [...data.data, ...data2.data];
+
+  //         setUsers(mergedData);
+  //       } else {
+  //         const { data } = await API.get(`/api/v1/users/all?role=${role}`);
+  //         setUsers(data?.data);
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+
+  //   fetchUser();
+  // }, [role]);
 
   useEffect(() => {
     if ((user && state, selectedMonth, selectedYear)) {
@@ -119,21 +171,21 @@ const Poa1AdminData = () => {
     getStateById(state);
     getAllDistricts();
   }, [state]);
-  const exportPDFWithMethod = () => {
-    let element = printRef.current || document.body;
-    element.style.fontSize = "13px !important";
+  // const exportPDFWithMethod = () => {
+  //   let element = printRef.current || document.body;
+  //   element.style.fontSize = "13px !important";
 
-    savePDF(element, {
-      paperSize: "A4",
+  //   savePDF(element, {
+  //     paperSize: "auto",
 
-      margin: 10,
-      fileName: `Poa1 ${stateData?.name}`,
-      // forcePageBreak: ".page-break", // Add this line
-    }).then(() => {
-      // Reset the font size after export
-      element.style.fontSize = "";
-    });
-  };
+  //     margin: 10,
+  //     fileName: `${poaType} ${stateData?.name}`,
+  //     // forcePageBreak: ".page-break", // Add this line
+  //   }).then(() => {
+  //     // Reset the font size after export
+  //     element.style.fontSize = "";
+  //   });
+  // };
 
   const handleGeneratePdf = () => {
     const element = printRef.current;
@@ -349,31 +401,31 @@ const Poa1AdminData = () => {
                       <td className="border-t p-2 text-center font-semibold text-sm md:text-sm">
                         {index + 1}.
                       </td>
-                      <td className="border-t p-2 text-sm md:text-sm">
+                      <td className="border-t p-2 text-sm md:text-xs">
                         {dayData.date}
                       </td>
-                      <td className="border-t p-2 text-sm md:text-sm">
+                      <td className="border-t p-2 text-sm md:text-xs">
                         {dayData.weekday}
                       </td>
-                      <td className="border-t p-2 text-sm md:text-sm">
+                      <td className="border-t p-2 text-sm md:text-xs">
                         {dayData.plan}
                       </td>
-                      <td className="border-t p-2 text-sm md:text-sm">
+                      <td className="border-t p-2 text-sm md:text-xs">
                         {dayData.action}
                       </td>
-                      <td className="border-t p-2 text-sm md:text-sm">
+                      <td className="border-t p-2 text-sm md:text-xs">
                         {dayData.plannedEvent}
                       </td>
-                      <td className="border-t p-2 text-sm md:text-sm">
+                      <td className="border-t p-2 text-sm md:text-xs">
                         {dayData.state.name}
                       </td>
-                      <td className="border-t p-2 text-sm md:text-sm">
+                      <td className="border-t p-2 text-sm md:text-xs">
                         {dayData.district?.name || dayData?.dist_id || "N/A"}
                       </td>
-                      <td className="border-t p-2 text-sm md:text-sm">
+                      <td className="border-t p-2 text-sm md:text-xs">
                         {dayData.achievements}
                       </td>
-                      <td className="border-t p-2 text-sm md:text-sm">
+                      <td className="border-t p-2 text-sm md:text-xs">
                         {dayData.photo ? (
                           <img
                             src={dayData.photo}
@@ -384,7 +436,7 @@ const Poa1AdminData = () => {
                           "No photo"
                         )}
                       </td>
-                      <td className="border-t p-2 text-sm md:text-sm">
+                      <td className="border-t p-2 text-sm md:text-xs">
                         {dayData.remarks}
                       </td>
                     </tr>
