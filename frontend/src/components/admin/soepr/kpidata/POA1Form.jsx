@@ -175,7 +175,7 @@ const POA1Form = ({ update }) => {
           `poaData[${day}][achievements]`,
           formDataState[day]?.achievements || ""
         );
-
+        formData.append(`poaData[${day}][poaType]`, "poa1");
         if (formDataState[day]?.photo) {
           formData.append(`poaData[${day}][photo]`, formDataState[day].photo);
         }

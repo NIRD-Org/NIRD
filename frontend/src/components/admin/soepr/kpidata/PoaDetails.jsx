@@ -28,6 +28,7 @@ const Poa1DetailPage = () => {
         setPoa1Data(response.data.data);
         console.log("Fetched POA1 data:", response.data.data); // Log the response data
       } catch (error) {
+        setPoa1Data();
         console.error("Error fetching POA1 data:", error);
       }
     };
@@ -68,8 +69,6 @@ const Poa1DetailPage = () => {
 
     pdf.save(`POA1_Details_${id}.pdf`);
   };
-
-  if (!poa1Data) return <div>Loading...</div>;
 
   return (
     <div className="w-full md:w-[80vw]">
@@ -205,7 +204,7 @@ const Poa1DetailPage = () => {
           <TableFooter>
             <TableRow>
               <TableCell colSpan="10" className="text-center text-xs">
-                End of POA Details
+                End of POA1 Details
               </TableCell>
             </TableRow>
           </TableFooter>

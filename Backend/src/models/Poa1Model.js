@@ -69,6 +69,9 @@ const POA1Schema = new mongoose.Schema(
       required: true,
     },
     poaData: [POA1DaySchema], // Array of day-wise POA1 data
+    poa2_created_at: {
+      type: Date,
+    },
   },
   {
     timestamps: { createdAt: "created_at", updatedAt: "modified_at" },
