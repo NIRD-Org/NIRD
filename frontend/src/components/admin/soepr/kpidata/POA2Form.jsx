@@ -41,11 +41,15 @@ const planOfDayOptions = {
   "Training Needs Assessment (TNA) facilitated": [
     "To Facilitate State Level/ District Level/Block Level TNAs",
   ],
-  "Training Calendar preparation": [
+ "Training Calendar preparation": [
     "To facilitate preparation of Training Calendar at State/ District/ Block Level",
+    "To design/ facilitate to design Trainings  ",
+    "To prepare/Update Training modules",
   ],
   "Development/customization of Learning Materials": [
     "Develop/customize learning material on LSDGs/GPDP/Panchayat Governance/PESA/OSR",
+    "Conduct Training Session as a Resource Person",
+    "Visit to Training Institutions (SPRC/ETC/DPRC/PTC/BPRC/PLC) ",
   ],
   "Participation in GPDP": [
     "Facilitate to update Gram Panchayat Profile (MoPR Portals)",
