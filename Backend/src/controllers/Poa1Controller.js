@@ -28,6 +28,7 @@ const getNewId = async () => {
 
 export const createPoa1 = CatchAsyncError(async (req, res, next) => {
   try {
+    const { poa2_created_at } = req.query;
     const poaData = Object.keys(req.body)
       .filter((key) => key.startsWith("poaData"))
       .reduce((acc, key) => {
@@ -87,6 +88,7 @@ export const createPoa1 = CatchAsyncError(async (req, res, next) => {
     if (poa1) {
       poa1.poaData.push(...filteredEntries);
       poa1.status = "1";
+      poa1.poa2_created_at = poa2_created_at;
       await poa1.save();
     } else {
       poa1 = new Poa1Model({
@@ -94,6 +96,7 @@ export const createPoa1 = CatchAsyncError(async (req, res, next) => {
         user_id,
         status: "1",
         poaData: filteredEntries,
+        poa2_created_at,
       });
       await poa1.save();
     }

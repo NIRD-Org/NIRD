@@ -205,9 +205,13 @@ const POA2Form = ({ update }) => {
         );
       });
 
-      await API.post("/api/v1/poa1/create", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      await API.post(
+        `/api/v1/poa1/create?poa2_created_at=${Date.now()}`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
 
       toast.success("Form submitted successfully!");
     } catch (error) {
