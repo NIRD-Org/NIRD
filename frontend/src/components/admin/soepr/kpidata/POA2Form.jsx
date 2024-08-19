@@ -344,7 +344,8 @@ const POA2Form = ({ update }) => {
                   ))}
                   <option value="NIRD">NIRD</option>
                   <option value="SIRD/SPRC">SIRD/SPRC</option>
-                  <option value="None">None</option>
+                  <option value="ETC">ETC</option>
+                  <option value="NoVal">None</option>
                 </select>
               </TableCell>
               <TableCell className="p-2">
