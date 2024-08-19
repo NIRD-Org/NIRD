@@ -19,16 +19,22 @@ const Poa1DetailPage = () => {
   const [poa1Data, setPoa1Data] = useState(null);
   const { id } = useParams();
   const [poaType, setPoaType] = useState("poa1");
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await API.get(
           `/api/v1/poa1/get/${id}?poaType=${poaType}`
         );
-        setPoa1Data(response.data.data);
-        console.log("Fetched POA1 data:", response.data.data); // Log the response data
+        if (response.data && response.data.data) {
+          setPoa1Data(response.data.data);
+          console.log("Fetched POA1 data:", response.data.data); // Log the response data
+        } else {
+          console.error("No data found in response:", response.data);
+          setPoa1Data(null);
+        }
       } catch (error) {
-        setPoa1Data();
+        setPoa1Data(null);
         console.error("Error fetching POA1 data:", error);
       }
     };
@@ -129,87 +135,98 @@ const Poa1DetailPage = () => {
           </button>
         </div>
       </div>
-      <div id="poa1-detail">
-        <AdminHeader className="print-header-margin">
-          First Fortnightly Plan Of Action - Month:{" "}
-          {new Date(poa1Data.created_at).toLocaleString("en-IN", {
-            month: "long",
-          })}{" "}
-          2024
-        </AdminHeader>
-        <Table>
-          <TableCaption className="text-sm">
-            Details for POA1 ID: {poa1Data?.id}
-          </TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="px-1">Date</TableHead>
-              <TableHead className="px-1">Weekday</TableHead>
-              <TableHead className="px-1">Plan</TableHead>
-              <TableHead className="px-1">Action</TableHead>
-              <TableHead className="px-1">Planned Event</TableHead>
-              <TableHead className="px-1">State</TableHead>
-              <TableHead className="px-1">District</TableHead>
-              <TableHead className="px-1">Achievements</TableHead>
-              <TableHead className="px-1">Photo</TableHead>
-              <TableHead className="px-1">Remarks</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {poa1Data &&
-              poa1Data?.poaData?.length > 0 &&
-              poa1Data?.poaData?.map((dayData, index) => (
-                <TableRow key={index}>
-                  <TableCell className="text-xs p-2.5">
-                    {dayData.date}
-                  </TableCell>
-                  <TableCell className="text-xs p-2.5">
-                    {dayData.weekday}
-                  </TableCell>
-                  <TableCell className="text-xs p-2.5">
-                    {dayData.plan}
-                  </TableCell>
-                  <TableCell className="text-xs p-2.5">
-                    {dayData.action}
-                  </TableCell>
-                  <TableCell className="text-xs p-2.5">
-                    {dayData.plannedEvent}
-                  </TableCell>
-                  <TableCell className="text-xs p-2.5">
-                    {dayData.state.name}
-                  </TableCell>
-                  <TableCell className="text-xs p-2.5">
-                    {dayData.district?.name || dayData?.dist_id || "N/A"}
-                  </TableCell>
-                  <TableCell className="text-xs p-2.5">
-                    {dayData.achievements}
-                  </TableCell>
-                  <TableCell className="text-xs p-2.5">
-                    {dayData.photo ? (
-                      <img
-                        src={dayData.photo}
-                        alt="Photo"
-                        className="max-w-24"
-                      />
-                    ) : (
-                      "No photo"
-                    )}
-                  </TableCell>
-                  <TableCell className="text-xs p-2.5">
-                    {dayData.remarks}
+
+      {!poa1Data ? (
+        <p className="text-center text-red-500">Loading data or no data available...</p>
+      ) : (
+        <div id="poa1-detail">
+          <AdminHeader className="print-header-margin">
+            First Fortnightly Plan Of Action - Month:{" "}
+            {new Date(poa1Data.created_at).toLocaleString("en-IN", {
+              month: "long",
+            })}{" "}
+            2024
+          </AdminHeader>
+          <Table>
+            <TableCaption className="text-sm">
+              Details for POA1 ID: {poa1Data?.id}
+            </TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="px-1">Date</TableHead>
+                <TableHead className="px-1">Weekday</TableHead>
+                <TableHead className="px-1">Plan</TableHead>
+                <TableHead className="px-1">Action</TableHead>
+                <TableHead className="px-1">Planned Event</TableHead>
+                <TableHead className="px-1">State</TableHead>
+                <TableHead className="px-1">District</TableHead>
+                <TableHead className="px-1">Achievements</TableHead>
+                <TableHead className="px-1">Photo</TableHead>
+                <TableHead className="px-1">Remarks</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {poa1Data?.poaData?.length > 0 ? (
+                poa1Data.poaData.map((dayData, index) => (
+                  <TableRow key={index}>
+                    <TableCell className="text-xs p-2.5">
+                      {dayData.date}
+                    </TableCell>
+                    <TableCell className="text-xs p-2.5">
+                      {dayData.weekday}
+                    </TableCell>
+                    <TableCell className="text-xs p-2.5">
+                      {dayData.plan}
+                    </TableCell>
+                    <TableCell className="text-xs p-2.5">
+                      {dayData.action}
+                    </TableCell>
+                    <TableCell className="text-xs p-2.5">
+                      {dayData.plannedEvent}
+                    </TableCell>
+                    <TableCell className="text-xs p-2.5">
+                      {dayData.state.name}
+                    </TableCell>
+                    <TableCell className="text-xs p-2.5">
+                      {dayData.district?.name || dayData?.dist_id || "N/A"}
+                    </TableCell>
+                    <TableCell className="text-xs p-2.5">
+                      {dayData.achievements}
+                    </TableCell>
+                    <TableCell className="text-xs p-2.5">
+                      {dayData.photo ? (
+                        <img
+                          src={dayData.photo}
+                          alt="Photo"
+                          className="max-w-24"
+                        />
+                      ) : (
+                        "No photo"
+                      )}
+                    </TableCell>
+                    <TableCell className="text-xs p-2.5">
+                      {dayData.remarks}
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan="10" className="text-center text-xs">
+                    No POA1 data available
                   </TableCell>
                 </TableRow>
-              ))}
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TableCell colSpan="10" className="text-center text-xs">
-                End of POA1 Details
-              </TableCell>
-            </TableRow>
-          </TableFooter>
-        </Table>
-      </div>
+              )}
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TableCell colSpan="10" className="text-center text-xs">
+                  End of POA1 Details
+                </TableCell>
+              </TableRow>
+            </TableFooter>
+          </Table>
+        </div>
+      )}
     </div>
   );
 };
