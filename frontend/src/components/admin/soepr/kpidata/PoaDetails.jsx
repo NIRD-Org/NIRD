@@ -205,7 +205,7 @@ const Poa1DetailPage = () => {
           <TableFooter>
             <TableRow>
               <TableCell colSpan="10" className="text-center text-xs">
-                End of POA1 Details
+                End of POA Details
               </TableCell>
             </TableRow>
           </TableFooter>
