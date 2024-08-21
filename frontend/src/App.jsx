@@ -277,10 +277,10 @@ function App() {
               path="user-location/update/soepr/:userId"
               element={<UpdateSoeprUserLocation />}
             />
-            <Route
+            {/* <Route
               path="user-location/update/soepr/:userId"
               element={<UpdateSoeprLocation />}
-            />
+            /> */}
             <Route
               path="user-location/update/young-fellow/:userId"
               element={<UpdateUserLocation role={3} />}

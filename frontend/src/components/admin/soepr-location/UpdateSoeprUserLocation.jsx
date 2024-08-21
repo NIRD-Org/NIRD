@@ -29,23 +29,17 @@ const UpdateSoeprUserLocation = ({ view }) => {
   };
 
   const handleDistrictSelect = (selectedList) => {
-    const districtIds = districts
-      .filter((district) => selectedList.includes(district.name))
-      .map((district) => district.id);
-    setSelectedDistricts(districtIds);
+    setSelectedDistricts(selectedList);
   };
 
   const handleDistrictRemove = (selectedList) => {
-    const districtIds = districts
-      .filter((district) => selectedList.includes(district.name))
-      .map((district) => district.id);
-    setSelectedDistricts(districtIds);
+    setSelectedDistricts(selectedList);
   };
 
   const postLocation = async () => {
     const userLocations = {
       state_ids: [state],
-      dist_ids: selectedDistricts,
+      dist_ids: selectedDistricts.map((district) => district.id),
     };
 
     if (selectedDistricts.length === 0 || !state) return;
@@ -76,14 +70,22 @@ const UpdateSoeprUserLocation = ({ view }) => {
         const response = await API.get(`/api/v1/soepr-location/${userId}`);
         const data = response.data.data.userLocations;
         setState(data.state_ids[0] || "");
-        setSelectedDistricts(data.dist_ids || []);
+
+        // Only update selected districts if districts have been fetched
+        if (districts.length > 0) {
+          const userDistricts = data.dist_ids
+            .map((distId) => districts.find((dist) => dist.id === distId))
+            .filter(Boolean); // Filter out undefined values
+          setSelectedDistricts(userDistricts);
+        }
       } catch (error) {
         console.log(error);
       }
     }
 
-    Promise.all([fetchStates(), fetchUserLocation()]);
-  }, [userId]);
+    fetchStates();
+    fetchUserLocation();
+  }, [userId, districts]);
 
   useEffect(() => {
     if (state) {
@@ -92,8 +94,11 @@ const UpdateSoeprUserLocation = ({ view }) => {
   }, [state]);
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="flex gap-4 mt-6 w-full max-w-[800px]">
+    <div className="p-6 max-w-[700px] mx-auto">
+      <div className="mb-4">
+        <label className="block mb-2 text-sm font-medium text-gray-700">
+          Select State
+        </label>
         <select
           className={cn(
             "text-sm px-4 py-2 rounded-md bg-transparent border flex-1"
@@ -108,18 +113,26 @@ const UpdateSoeprUserLocation = ({ view }) => {
             </option>
           ))}
         </select>
-
+      </div>
+      <div className="mb-6">
+        <label className="block mb-2 text-sm font-medium text-gray-700">
+          Select Districts
+        </label>
         <Multiselect
-          disable={view}
-          isObject={false}
+          options={districts}
+          selectedValues={selectedDistricts}
+          displayValue="name"
           onSelect={handleDistrictSelect}
           onRemove={handleDistrictRemove}
-          selectedValues={districts
-            .filter((district) => selectedDistricts.includes(district.id))
-            .map((district) => district.name)}
-          options={districts.map((district) => district.name)}
-          displayValue="name"
-          className="flex-1"
+          placeholder="Select multiple districts"
+          style={{
+            chips: { background: "#2563EB" },
+            searchBox: {
+              padding: "8px",
+              borderRadius: "4px",
+              border: "1px solid #d1d5db",
+            },
+          }}
         />
       </div>
 
