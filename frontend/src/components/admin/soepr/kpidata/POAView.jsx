@@ -62,21 +62,26 @@ const POAview = () => {
   return (
     <div style={{ fontSize: "14px", maxWidth: "100%", margin: "0 auto" }}>
       <AdminHeader>Plan of Action Records</AdminHeader>
-      
+
       <div className="flex gap-4 my-4">
-      Select Month and Year :
+        Select Month and Year :
         <select onChange={handleYearChange} value={selectedYear}>
           <option value="">All Years</option>
-          {[...new Set(poaRecords.map((record) => new Date(record.created_at).getFullYear()))].map((year, idx) => (
+          {[
+            ...new Set(
+              poaRecords.map((record) =>
+                new Date(record.created_at).getFullYear()
+              )
+            ),
+          ].map((year, idx) => (
             <option key={idx} value={year}>
               {year}
             </option>
           ))}
         </select>
-        
         <select onChange={handleMonthChange} value={selectedMonth}>
           <option value="">All Months</option>
-          {[ 
+          {[
             "January",
             "February",
             "March",

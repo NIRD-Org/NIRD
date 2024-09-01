@@ -137,7 +137,6 @@ export const getSidebarItems = (user) => {
               title: "All Users",
               link: "/admin/users/",
             },
-            
           ],
         },
         {
@@ -145,7 +144,6 @@ export const getSidebarItems = (user) => {
           icon: ArrowBigRight,
           title: "Model GP Clusters",
           submodules: [
-           
             {
               type: "sub-module",
               icon: ArrowBigRight,
@@ -153,7 +151,6 @@ export const getSidebarItems = (user) => {
               link: "/admin/users/all/young-fellow",
             },
 
-           
             {
               type: "sub-module",
               icon: ArrowBigRight,
@@ -198,17 +195,15 @@ export const getSidebarItems = (user) => {
           icon: ArrowBigRight,
           title: "Attendance",
           submodules: [
-           
             {
               type: "sub-module",
               icon: ArrowBigRight,
               title: "View Attendance",
               link: "/admin/view/attendance",
             },
-            
           ],
         },
-      
+
         {
           type: "module",
           title: "Training",

@@ -120,6 +120,7 @@ export const submitKpiData = CatchAsyncError(async (req, res, next) => {
     // Generate new submitted_id and currentMaxId
     const submitted_id = await getNewSubmittedId();
     let currentMaxId = await getNewIdKPI();
+    console.log("This is the submitted id: ", submitted_id);
 
     // Prepare the GpWiseKPI documents for insertion
     const kpiDocuments = await Promise.all(
@@ -336,11 +337,11 @@ export const getGpWiseKpiChart = CatchAsyncError(async (req, res, next) => {
     const calculateCumulativeMean = (data) => {
       const monthCount = data.length;
       const totalInputData = data.reduce(
-        (sum, value) => sum + value.totalInputData,
+        (sum, value) => sum + parseFloat(value.totalInputData),
         0
       );
       const totalMaxRange = data.reduce(
-        (sum, value) => sum + value.totalMaxRange,
+        (sum, value) => sum + parseFloat(value.totalMaxRange),
         0
       );
       const mean =
@@ -655,8 +656,8 @@ export const getAchievementsChart = CatchAsyncError(async (req, res, next) => {
             theme_id: "$theme_id",
             kpi_id: "$kpi_id",
           },
-          totalInputData: { $sum: "$input_data" },
-          totalMaxRange: { $sum: "$max_range" },
+          totalInputData: { $sum: { $toInt: "$input_data" } }, // Convert input_data to integer
+          totalMaxRange: { $sum: { $toInt: "$max_range" } }, // Convert max_range to integer
         },
       },
       {
@@ -736,6 +737,99 @@ export const getAchievementsChart = CatchAsyncError(async (req, res, next) => {
         },
       },
     ];
+    // const pipelineYearly = (matchStage) => [
+    //   { $match: matchStage },
+    //   {
+    //     $group: {
+    //       _id: {
+    //         state_id: "$state_id",
+    //         dist_id: "$dist_id",
+    //         block_id: "$block_id",
+    //         gp_id: "$gp_id",
+    //         theme_id: "$theme_id",
+    //         kpi_id: "$kpi_id",
+    //       },
+    //       totalInputData: { $sum: "$input_data" },
+    //       totalMaxRange: { $sum: "$max_range" },
+    //     },
+    //   },
+    //   {
+    //     $lookup: {
+    //       from: "states",
+    //       localField: "_id.state_id",
+    //       foreignField: "id",
+    //       as: "state_info",
+    //     },
+    //   },
+    //   {
+    //     $lookup: {
+    //       from: "districts",
+    //       localField: "_id.dist_id",
+    //       foreignField: "id",
+    //       as: "district_info",
+    //     },
+    //   },
+    //   {
+    //     $lookup: {
+    //       from: "blocks",
+    //       localField: "_id.block_id",
+    //       foreignField: "id",
+    //       as: "block_info",
+    //     },
+    //   },
+    //   {
+    //     $lookup: {
+    //       from: "gps",
+    //       localField: "_id.gp_id",
+    //       foreignField: "id",
+    //       as: "gp_info",
+    //     },
+    //   },
+    //   {
+    //     $lookup: {
+    //       from: "themes",
+    //       localField: "_id.theme_id",
+    //       foreignField: "id",
+    //       as: "theme_info",
+    //     },
+    //   },
+    //   {
+    //     $lookup: {
+    //       from: "kpis",
+    //       localField: "_id.kpi_id",
+    //       foreignField: "id",
+    //       as: "kpi_info",
+    //     },
+    //   },
+    //   {
+    //     $project: {
+    //       _id: 0,
+    //       gp_id: "$_id.gp_id",
+    //       gp_name: { $arrayElemAt: ["$gp_info.name", 0] },
+    //       state_name: { $arrayElemAt: ["$state_info.name", 0] },
+    //       dist_name: { $arrayElemAt: ["$district_info.name", 0] },
+    //       block_name: { $arrayElemAt: ["$block_info.name", 0] },
+    //       theme_id: "$_id.theme_id",
+    //       theme_name: { $arrayElemAt: ["$theme_info.theme_name", 0] },
+    //       kpi_id: "$_id.kpi_id",
+    //       kpi_name: { $arrayElemAt: ["$kpi_info.name", 0] },
+    //       totalInputData: 1,
+    //       totalMaxRange: 1,
+    //       percentage: {
+    //         $cond: [
+    //           { $eq: ["$totalMaxRange", 0] },
+    //           0,
+    //           {
+    //             $multiply: [
+    //               { $divide: ["$totalInputData", "$totalMaxRange"] },
+    //               100,
+    //             ],
+    //           },
+    //         ],
+    //       },
+    //     },
+    //   },
+    // ];
 
     const currentYearData = await GpWiseKpiModel.aggregate(
       pipelineYearly(matchStageYearlyCurrent)
@@ -782,8 +876,6 @@ export const getAchievementsChart = CatchAsyncError(async (req, res, next) => {
           : null,
       });
     });
-
-    console.log(currentFY);
 
     // Sort according to kpi
     Object.values(combinedData).forEach((themeData) => {

@@ -104,6 +104,17 @@ const UpdatePOA1Form = () => {
           `/api/v1/poa1/get/${poalId}?poaType=${poaType}`
         );
         const data = response.data.data.poaData;
+        const monthName = new Date(
+          response.data.data.created_at
+        )?.toLocaleString("en-IN", { month: "long" });
+        const days = new Date(
+          new Date(response.data.data.created_at).getFullYear(),
+          new Date(response.data.data.created_at).getMonth() + 1,
+          0
+        ).getDate();
+
+        selectedMonth.name = monthName;
+        selectedMonth.days = days;
 
         const groupedData = data.reduce((acc, item) => {
           const [day, month, year] = item.date.split("/");
@@ -297,7 +308,8 @@ const UpdatePOA1Form = () => {
                         className="p-2"
                         rowSpan={formDataState[day].length}
                       >
-                        {formatIndianDate(day)}
+                        {/* {formatIndianDate(day)} */}
+                        {entry?.date}
                       </TableCell>
                       <TableCell
                         className="p-2"
