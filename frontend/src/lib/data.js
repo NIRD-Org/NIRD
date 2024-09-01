@@ -98,6 +98,12 @@ export const getSidebarItems = (user) => {
             title: "POA2",
             link: "/admin/soepr/POA2",
           },
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "POA2(August temp)",
+            link: "/admin/soepr/poa2temp",
+          },
         ],
       },
       {
