@@ -29,6 +29,29 @@ const getNewId = async () => {
   }
 };
 
+const getNewPmId = async () => {
+  try {
+    const maxDoc = await PmModel.aggregate([
+      {
+        $addFields: {
+          numericId: { $toInt: "$id" },
+        },
+      },
+      {
+        $sort: { numericId: -1 },
+      },
+      {
+        $limit: 1,
+      },
+    ]).exec();
+
+    const maxId = maxDoc.length > 0 ? maxDoc[0].numericId : 0;
+    return maxId + 1;
+  } catch (error) {
+    return next(new Errorhandler("failed to get new id", 500));
+  }
+};
+
 export const getAllAM = CatchAsyncError(async (req, res, next) => {
   try {
     const filter = {};
@@ -105,6 +128,62 @@ export const createAM = CatchAsyncError(async (req, res, next) => {
       am: newAM,
     },
   });
+});
+
+export const createLeave = CatchAsyncError(async (req, res, next) => {
+  try {
+    const { fromDate, toDate, leaveType: status } = req.body;
+
+    const startDate = new Date(fromDate);
+    const endDate = new Date(toDate);
+    const amData = [];
+    const pmData = [];
+    let amId = await getNewId();
+    let pmId = await getNewPmId();
+    for (
+      let date = startDate;
+      date <= endDate;
+      date.setDate(date.getDate() + 1)
+    ) {
+      await AmModel.deleteOne({
+        date: date.toISOString().split("T")[0],
+        created_by: req?.user?.id,
+      });
+
+      await PmModel.deleteOne({
+        date: date.toISOString().split("T")[0],
+        created_by: req?.user?.id,
+      });
+
+      const amLeaveData = {
+        id: amId,
+        date: date.toISOString().split("T")[0],
+        amStatus: status,
+        created_by: req?.user?.id,
+      };
+
+      const pmLeaveData = {
+        id: pmId,
+        date: date.toISOString().split("T")[0],
+        pmStatus: status,
+        created_by: req?.user?.id,
+      };
+      amData.push(amLeaveData);
+      pmData.push(pmLeaveData);
+      amId++;
+      pmId++;
+    }
+    await AmModel.insertMany(amData);
+    await PmModel.insertMany(pmData);
+    res.status(201).json({
+      status: "success",
+      message: "Leave uploaded successfully",
+    });
+  } catch (error) {
+    console.log(error);
+
+    return next(new Errorhandler("Failed to Update leave", 500));
+  }
 });
 
 export const deleteAM = CatchAsyncError(async (req, res, next) => {

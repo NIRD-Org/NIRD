@@ -16,8 +16,8 @@ const pmSchema = new mongoose.Schema(
 
     pmStatus: { type: String, required: false },
     location: { type: String },
-    remarks: { type: String, required: true },
-    file: { type: String, required: true },
+    remarks: { type: String, required: false },
+    file: { type: String, required: false },
     created_by: { type: String, required: true },
     decision: { type: Number, default: 0 },
     status: { type: String, default: 1 },

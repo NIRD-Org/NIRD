@@ -12,11 +12,12 @@ const amSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
+
     weekday: { type: String, required: false },
     amStatus: { type: String, required: false },
     location: { type: String },
-    remarks: { type: String, required: true },
-    file: { type: String, required: true },
+    remarks: { type: String, required: false },
+    file: { type: String, required: false },
     created_by: { type: Number, required: true }, // Changed to Number
     decision: { type: Number, default: 0 },
     status: { type: Number, default: 1 }, // Changed to Number

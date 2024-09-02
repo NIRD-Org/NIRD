@@ -13,8 +13,6 @@ function SoeprLeaveUpdateForm() {
     fromDate: "",
     toDate: "",
     leaveType: "",
-    remarks: "N/A",
-    location: "N/A",
   });
 
   const [isSubmissionAllowed, setIsSubmissionAllowed] = useState(true);
@@ -23,7 +21,7 @@ function SoeprLeaveUpdateForm() {
     const now = new Date();
     const currentHour = now.getHours();
     if (currentHour >= 18) {
-      setIsSubmissionAllowed(false);
+      setIsSubmissionAllowed(true);
     }
   }, []);
 
@@ -42,7 +40,7 @@ function SoeprLeaveUpdateForm() {
     // You can perform the range update logic here
     try {
       setPending(true);
-      await API.post("/api/v1/leave-update", formData);
+      await API.post("/api/v1/am-upload/create/leave", formData);
       toast.success("Leave updated successfully for the selected range.");
     } catch (error) {
       toast.error(error?.response?.data?.message);
@@ -52,9 +50,9 @@ function SoeprLeaveUpdateForm() {
   };
 
   const leaveOptions = [
-    { value: "Personal", label: "Personal Leave" },
-    { value: "Planned", label: "Planned Leave" },
-    { value: "Emergency", label: "Emergency Leave" },
+    { value: "Personal Leave", label: "Personal Leave" },
+    { value: "Planned Leave", label: "Planned Leave" },
+    { value: "Emergency Leave", label: "Emergency Leave" },
   ];
 
   return (
@@ -91,22 +89,6 @@ function SoeprLeaveUpdateForm() {
             disabled={pending}
             value={formData.leaveType}
             onChange={handleInputChange}
-          />
-          <FormField
-            label="Remarks"
-            name="remarks"
-            type="text"
-            value={formData.remarks}
-            onChange={handleInputChange}
-            disabled
-          />
-          <FormField
-            label="Location"
-            name="location"
-            type="text"
-            value={formData.location}
-            onChange={handleInputChange}
-            disabled
           />
         </div>
         <div className="flex justify-center mt-6">

@@ -74,11 +74,10 @@ function ConsolidatedViewPage() {
       const pmEntries = pmResponse.data.attendanceData;
 
       const combinedEntries = {};
-
       amEntries.forEach((entry) => {
         const { date, time, amStatus, remarks, location } = entry;
         const entryDate = new Date(date);
-        if (entryDate >= startOfMonth && entryDate <= today) {
+        if (entryDate >= startOfMonth) {
           const dateStr = formatDate(entryDate);
           if (!combinedEntries[dateStr]) {
             combinedEntries[dateStr] = {
@@ -104,8 +103,9 @@ function ConsolidatedViewPage() {
 
       pmEntries.forEach((entry) => {
         const { date, time, pmStatus, remarks, location } = entry;
+
         const entryDate = new Date(date);
-        if (entryDate >= startOfMonth && entryDate <= today) {
+        if (entryDate >= startOfMonth) {
           const dateStr = formatDate(entryDate);
           if (!combinedEntries[dateStr]) {
             combinedEntries[dateStr] = {
