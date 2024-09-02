@@ -117,6 +117,7 @@ import PoaReport from "./components/admin/poa/PoaReport";
 import UpdatePOA1Form from "./components/admin/soepr/kpidata/UpdatePOA1Form";
 import SoeprDistrictForm from "./components/admin/master/forms/SoeprDistrict";
 import POA2Formtemp from "./components/admin/soepr/kpidata/POA2Formtemp";
+import SoeprLeaveUpdateForm from "./components/admin/soepr/attendance/Leaveupdate";
 
 function App() {
   const { login } = useAuthContext();
@@ -170,6 +171,7 @@ function App() {
             />
             <Route path="soepr/plan-of-action" element={<POA />} />
             <Route path="soepr/POA1" element={<POA1 />} />
+            <Route path="soepr/leave" element={<SoeprLeaveUpdateForm/>} />
             <Route path="soepr/POA1/edit/:id" element={<UpdatePOA1Form />} />
             <Route
               path="soepr/POA1/view/:id"
