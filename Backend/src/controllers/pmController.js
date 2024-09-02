@@ -126,11 +126,14 @@ export const getPmAttendance = CatchAsyncError(async (req, res, next) => {
     }
 
     const startDate = new Date(year, month - 1, 1);
+    const startDateString = startDate.toISOString().split("T")[0];
     const endDate = new Date(year, month, 0, 23, 59, 59, 999);
+    const endDateString = endDate.toISOString().split("T")[0];
+
     const attendanceData = await PmModel.find({
       date: {
-        $gt: startDate.toString().split("T")[0],
-        $lte: endDate.toString().split("T")[0],
+        $gte: startDateString,
+        $lte: endDateString,
       },
       created_by: req?.user?.id,
     });
