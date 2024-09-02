@@ -12,7 +12,7 @@ import {
 const router = express.Router();
 router.route("/create").post(isAuth, createPoa1);
 router.route("/all").get(getAllPoa1Data);
-router.route("/update").post(isAuth, updatePoa1Data);
+router.route("/update/:poaId").post(isAuth, updatePoa1Data);
 router.route("/getUserPOAs").get(isAuth, getPoa1s);
 router.route("/get/:id").get(isAuth, getPoalData);
 router.route("/get").get(isAuth, getPoa1DataByState);

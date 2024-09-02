@@ -229,7 +229,7 @@ const UpdatePOA1Form = () => {
         });
       });
 
-      await API.post("/api/v1/poa1/update", formData, {
+      await API.post(`/api/v1/poa1/update/${poalId}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
