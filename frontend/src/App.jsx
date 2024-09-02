@@ -116,6 +116,7 @@ import Poa1AdminYfData from "./components/admin/poa/Poa1AdminYfData";
 import PoaReport from "./components/admin/poa/PoaReport";
 import UpdatePOA1Form from "./components/admin/soepr/kpidata/UpdatePOA1Form";
 import SoeprDistrictForm from "./components/admin/master/forms/SoeprDistrict";
+import POA2Formtemp from "./components/admin/soepr/kpidata/POA2Formtemp";
 
 function App() {
   const { login } = useAuthContext();
@@ -175,7 +176,7 @@ function App() {
               element={<Poa1DetailPage update />}
             />
             <Route path="soepr/POA2" element={<POA2 />} />
-
+            <Route path="soepr/POA2temp" element={<POA2Formtemp />} />
             <Route path="soepr/POAView" element={<POAView />} />
             <Route path="soepr/poa1-data" element={<Poa1AdminData />} />
             <Route path="yf/poa1-data" element={<Poa1AdminYfData />} />

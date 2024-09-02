@@ -185,7 +185,7 @@ const Poa1DetailPage = () => {
                       {dayData.plannedEvent}
                     </TableCell>
                     <TableCell className="text-xs p-2.5">
-                      {dayData.state.name}
+                      {dayData.state?.name || "N/A"}
                     </TableCell>
                     <TableCell className="text-xs p-2.5">
                       {dayData.district?.name || dayData?.dist_id || "N/A"}
