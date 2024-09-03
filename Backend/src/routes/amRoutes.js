@@ -8,6 +8,7 @@ import {
   getAllAttendaceData,
   getAmAttendance,
   createLeave,
+  createTour,
 } from "../controllers/amController.js";
 import { isAuth } from "../middlewares/auth.js";
 
@@ -22,5 +23,5 @@ router.route("/:id").delete(deleteAM);
 router.route("/:id").put(updateAM);
 router.route("/attendance/all").get(getAllAttendaceData);
 router.route("/create/leave").post(isAuth, createLeave);
-
+router.route("/create/tour").post(isAuth, createTour);
 export default router;

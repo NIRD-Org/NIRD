@@ -73,6 +73,12 @@ export const getSidebarItems = (user) => {
             title: "Leave Entry Form",
             link: "/admin/soepr/leave",
           },
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "Tour Entry Form",
+            link: "/admin/soepr/Tour",
+          },
         ],
       },
       {

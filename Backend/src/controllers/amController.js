@@ -129,6 +129,71 @@ export const createAM = CatchAsyncError(async (req, res, next) => {
     },
   });
 });
+export const createTour = CatchAsyncError(async (req, res, next) => {
+  try {
+    const { fromDate, toDate, tourType: status ,location } = req.body; // Extract tourType instead of leaveType
+
+    const startDate = new Date(fromDate);
+    const endDate = new Date(toDate);
+    const amData = [];
+    const pmData = [];
+    let amId = await getNewId();  // Get new ID for tour entries
+    let pmId = await getNewPmId();
+
+    for (
+      let date = startDate;
+      date <= endDate;
+      date.setDate(date.getDate() + 1)
+    ) {
+      // Delete existing AM and PM records for the tour
+      await AmModel.deleteOne({
+        date: date.toISOString().split("T")[0],
+        created_by: req?.user?.id,
+      });
+
+      await PmModel.deleteOne({
+        date: date.toISOString().split("T")[0],
+        created_by: req?.user?.id,
+      });
+
+      // Create AM tour data
+      const amTourData = {
+        id: amId,
+        date: date.toISOString().split("T")[0],
+        amStatus: status, 
+        location,
+        created_by: req?.user?.id,
+      };
+
+      // Create PM tour data
+      const pmTourData = {
+        id: pmId,
+        date: date.toISOString().split("T")[0],
+        pmStatus: status,  
+        location,
+        created_by: req?.user?.id,
+      };
+      amData.push(amTourData);  // Push AM tour data to array
+      pmData.push(pmTourData);  // Push PM tour data to array
+      amId++;  // Increment ID for the next record
+      pmId++;
+    }
+
+    // Insert the tour data into the database
+    await AmModel.insertMany(amData);
+    await PmModel.insertMany(pmData);
+
+    // Send success response
+    res.status(201).json({
+      status: "success",
+      message: "Tour created successfully",
+    });
+  } catch (error) {
+    console.log(error);
+
+    return next(new Errorhandler("Failed to create tour", 500));  // Handle errors
+  }
+});
 
 export const createLeave = CatchAsyncError(async (req, res, next) => {
   try {
