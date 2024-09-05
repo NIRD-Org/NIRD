@@ -27,10 +27,19 @@ function SoeprPmUploadForm() {
   const [imagePreview, setImagePreview] = useState(null); // State for image preview
 
   useEffect(() => {
-    const currentHour = new Date().getHours();
-    if (currentHour >= 22) {
-      setIsSubmissionAllowed(false);
-    }
+    const checkSubmissionTime = () => {
+      const currentHour = new Date().getHours();
+      // Allow submission only between 12 PM and 10 PM
+      if (currentHour < 12 || currentHour >= 22) {
+        setIsSubmissionAllowed(false);
+      } else {
+        setIsSubmissionAllowed(true);
+      }
+    };
+    
+    checkSubmissionTime();
+    const intervalId = setInterval(checkSubmissionTime, 60000); // Check every minute
+    return () => clearInterval(intervalId); // Cleanup interval on component unmount
   }, []);
 
   const handleInputChange = (e) => {
@@ -50,10 +59,12 @@ function SoeprPmUploadForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!isSubmissionAllowed) {
-      toast.error("Reporting time not yet started for afternoon entry");
+    const currentHour = new Date().getHours();
+    if (currentHour < 12 || currentHour >= 22) {
+      toast.error("Reporting time not yet started for afternoon entry or reporting time has ended.");
       return;
     }
+
     try {
       setPending(true);
       await API.post("/api/v1/pm-upload/create", formData, {
@@ -186,8 +197,7 @@ function SoeprPmUploadForm() {
       </form>
       {!isSubmissionAllowed && (
         <p className="text-red-500 mt-4 text-center">
-          Reporting time not yet started for afternoon entry. Please try after
-          12.00 PM!
+          Reporting time not yet started for afternoon entry or reporting time has ended. Please submit between 12 PM and 10 PM!
         </p>
       )}
     </div>
