@@ -203,8 +203,14 @@ export const getSidebarItems = (user) => {
             {
               type: "sub-module",
               icon: ArrowBigRight,
-              title: "Report Submission Status ",
+              title: "POA Defaulters List ",
               link: "/admin/soepr/poa-report",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "POA Statewise Submission Status ",
+              link: "/admin/soepr/pOAreport",
             },
           ],
         },
