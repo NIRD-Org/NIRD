@@ -469,6 +469,18 @@ export const getSidebarItems = (user) => {
               title: "POA2",
               link: "/admin/yf/POA2",
             },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "POA3",
+              link: "/admin/yf/POA3",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "POA4",
+              link: "/admin/yf/POA4",
+            },
           ],
         },
         {

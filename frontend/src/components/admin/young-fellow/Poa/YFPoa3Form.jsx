@@ -225,329 +225,334 @@ const kpiThemes = {
     ]
 };
 
-const YFPoa1Form = ({ update }) => {
-  const currentMonthIndex = new Date().getMonth();
-  const currentYear = new Date().getFullYear();
-  const { id: poalId } = useParams();
-  const [selectedState, setSelectedState] = useState("");
-  const [selectedKpiTheme, setSelectedKpiTheme] = useState("");
-  const [selectedActivities, setSelectedActivities] = useState({});
-  const [selectedDistricts, setSelectedDistricts] = useState({});
-  const [selectedGps, setSelectedGps] = useState({});
-  const [selectedBlocks, setSelectedBlocks] = useState({});
-
-  const [formDataState, setFormData] = useState([]);
-  const selectedMonth = months[currentMonthIndex];
-  const {
-    yfState: states,
-    yfDist: districts,
-    yfBlock: blocks,
-    yfGp: gps,
-  } = useYfLocation({
-    state_id: selectedState,
-    dist_id: selectedDistricts?.[1],
-    block_id: selectedBlocks?.[1],
-  });
-
-  const lastDayOfWeek = 7; // Last day of the first week
-
-  useEffect(() => {
-    if (states && states.length > 0) {
-      setSelectedState(states[0].id);
-    }
-  }, [states]);
-
-  useEffect(() => {
-    if (update) {
-      const fetchPoalData = async () => {
-        try {
-          const response = await API.get(`/api/v1/poa1/get/${poalId}`);
-          setFormData(response.data.data.poaData);
-        } catch (error) {
-          console.error("Error fetching POA data:", error);
-          toast.error("Error fetching POA data.");
-        }
-      };
-      fetchPoalData();
-    }
-  }, [poalId, update]);
-
-  const getDaysInMonth = () =>
-    Array.from({ length: lastDayOfWeek }, (_, i) => i + 1);
-
-  const getWeekDay = (day) => {
-    const date = new Date(`${selectedMonth.name} ${day}, ${currentYear}`);
-    return date.toLocaleDateString("en-IN", { weekday: "long" });
-  };
-
-  const formatIndianDate = (day) => {
-    const date = new Date(`${selectedMonth.name} ${day}, ${currentYear}`);
-    return date.toLocaleDateString("en-IN");
-  };
-
-  const handleKpiThemeChange = (day, selectedTheme) => {
-    setSelectedKpiTheme((prev) => ({ ...prev, [day]: selectedTheme }));
-    setSelectedActivities((prev) => ({ ...prev, [day]: "" }));
-  };
-
-  const handleActivityChange = (day, selectedActivity) => {
-    setSelectedActivities((prev) => ({
-      ...prev,
-      [day]: selectedActivity,
-    }));
-  };
-
-  const handleDistrictChange = (day, selectedDistrict) => {
-    setSelectedDistricts((prev) => ({ ...prev, [day]: selectedDistrict }));
-  };
-
-  const handleBlockChange = (day, selectedBlock) => {
-    setSelectedBlocks((prev) => ({ ...prev, [day]: selectedBlock }));
-  };
-
-  const handleGpChange = (day, selectedGp) => {
-    setSelectedGps((prev) => ({ ...prev, [day]: selectedGp }));
-  };
-
-  const handleInputChange = (day, key, value) => {
-    setFormData((prev) => ({
-      ...prev,
-      [day]: {
-        ...prev[day],
-        [key]: value,
-      },
-    }));
-  };
-
-  const handleSubmit = async () => {
-    try {
-      const formDataToSubmit = new FormData();
-
-      Object.keys(selectedKpiTheme).forEach((day) => {
-        formDataToSubmit.append(`poaData[${day}][date]`, formatIndianDate(day));
-        formDataToSubmit.append(`poaData[${day}][weekday]`, getWeekDay(day));
-        formDataToSubmit.append(`poaData[${day}][kpi_theme]`, selectedKpiTheme[day]);
-        formDataToSubmit.append(`poaData[${day}][activity]`, selectedActivities[day]);
-        formDataToSubmit.append(
-          `poaData[${day}][plannedEvent]`,
-          formDataState[day]?.plannedEvent || ""
-        );
-        formDataToSubmit.append(`poaData[${day}][state_id]`, selectedState);
-        formDataToSubmit.append(
-          `poaData[${day}][dist_id]`,
-          selectedDistricts[day] || ""
-        );
-        formDataToSubmit.append(`poaData[${day}][block_id]`, selectedBlocks[day] || "");
-        formDataToSubmit.append(`poaData[${day}][gp_id]`, selectedGps[day] || "");
-        formDataToSubmit.append(
-          `poaData[${day}][achievements]`,
-          formDataState[day]?.achievements || ""
-        );
-
-        if (formDataState[day]?.photo) {
-          formDataToSubmit.append(`poaData[${day}][photo]`, formDataState[day].photo);
-        }
-        formDataToSubmit.append(
-          `poaData[${day}][remarks]`,
-          formDataState[day]?.remarks || ""
-        );
-      });
-
-      await API.post("/api/v1/yf-poa1/create", formDataToSubmit, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-
-      toast.success("Form submitted successfully!");
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      toast.error("Failed to submit form.");
-    }
-  };
-
-  return (
-    <div style={{ fontSize: "14px", maxWidth: "100%", margin: "0 auto" }}>
-      <AdminHeader>
-        First Weekly Plan Of Action - Month : {selectedMonth.name} {currentYear}
-      </AdminHeader>
-      <div style={{ marginBottom: "15px", display: "flex", gap: "10px" }}>
-        <select
-          className="w-fit px-2 py-1 rounded"
-          value={selectedState}
-          onChange={(e) => setSelectedState(e.target.value)}
-          required
+const YFPoa3Form = ({ update }) => {
+    const currentMonthIndex = new Date().getMonth();
+    const currentYear = new Date().getFullYear();
+    const { id: poalId } = useParams();
+    const [selectedState, setSelectedState] = useState("");
+    const [selectedKpiTheme, setSelectedKpiTheme] = useState({});
+    const [selectedActivities, setSelectedActivities] = useState({});
+    const [selectedDistricts, setSelectedDistricts] = useState({});
+    const [selectedBlocks, setSelectedBlocks] = useState({});
+    const [selectedGps, setSelectedGps] = useState({});
+    const [formDataState, setFormData] = useState([]);
+    const selectedMonth = months[currentMonthIndex];
+    
+    const {
+      yfState: states,
+      yfDist: districts,
+      yfBlock: blocks,
+      yfGp: gps,
+    } = useYfLocation({
+      state_id: selectedState,
+      dist_id: selectedDistricts?.[1],
+      block_id: selectedBlocks?.[1],
+    });
+  
+    // Define the start and end of the second week
+    const thirdWeekStart = 15;
+    const thirdWeekEnd = 21;
+  
+    useEffect(() => {
+      if (states && states.length > 0) {
+        setSelectedState(states[0].id);
+      }
+    }, [states]);
+  
+    useEffect(() => {
+      if (update) {
+        const fetchPoalData = async () => {
+          try {
+            const response = await API.get(`/api/v1/poa1/get/${poalId}`);
+            setFormData(response.data.data.poaData);
+          } catch (error) {
+            console.error("Error fetching POA data:", error);
+            toast.error("Error fetching POA data.");
+          }
+        };
+        fetchPoalData();
+      }
+    }, [poalId, update]);
+  
+    const getDaysInWeek = (start, end) =>
+      Array.from({ length: end - start + 1 }, (_, i) => start + i);
+  
+    const getWeekDay = (day) => {
+      const date = new Date(`${selectedMonth.name} ${day}, ${currentYear}`);
+      return date.toLocaleDateString("en-IN", { weekday: "long" });
+    };
+  
+    const formatIndianDate = (day) => {
+      const date = new Date(`${selectedMonth.name} ${day}, ${currentYear}`);
+      return date.toLocaleDateString("en-IN");
+    };
+  
+    const handleKpiThemeChange = (day, selectedTheme) => {
+      setSelectedKpiTheme((prev) => ({ ...prev, [day]: selectedTheme }));
+      setSelectedActivities((prev) => ({ ...prev, [day]: "" }));
+    };
+  
+    const handleActivityChange = (day, selectedActivity) => {
+      setSelectedActivities((prev) => ({
+        ...prev,
+        [day]: selectedActivity,
+      }));
+    };
+  
+    const handleDistrictChange = (day, selectedDistrict) => {
+      setSelectedDistricts((prev) => ({ ...prev, [day]: selectedDistrict }));
+    };
+  
+    const handleBlockChange = (day, selectedBlock) => {
+      setSelectedBlocks((prev) => ({ ...prev, [day]: selectedBlock }));
+    };
+  
+    const handleGpChange = (day, selectedGp) => {
+      setSelectedGps((prev) => ({ ...prev, [day]: selectedGp }));
+    };
+  
+    const handleInputChange = (day, key, value) => {
+      setFormData((prev) => ({
+        ...prev,
+        [day]: {
+          ...prev[day],
+          [key]: value,
+        },
+      }));
+    };
+  
+    const handleSubmit = async () => {
+      try {
+        const formDataToSubmit = new FormData();
+  
+        Object.keys(selectedKpiTheme).forEach((day) => {
+          formDataToSubmit.append(`poaData[${day}][date]`, formatIndianDate(day));
+          formDataToSubmit.append(`poaData[${day}][weekday]`, getWeekDay(day));
+          formDataToSubmit.append(`poaData[${day}][kpi_theme]`, selectedKpiTheme[day]);
+          formDataToSubmit.append(`poaData[${day}][activity]`, selectedActivities[day]);
+          formDataToSubmit.append(
+            `poaData[${day}][plannedEvent]`,
+            formDataState[day]?.plannedEvent || ""
+          );
+          formDataToSubmit.append(`poaData[${day}][state_id]`, selectedState);
+          formDataToSubmit.append(
+            `poaData[${day}][dist_id]`,
+            selectedDistricts[day] || ""
+          );
+          formDataToSubmit.append(`poaData[${day}][block_id]`, selectedBlocks[day] || "");
+          formDataToSubmit.append(`poaData[${day}][gp_id]`, selectedGps[day] || "");
+          formDataToSubmit.append(
+            `poaData[${day}][achievements]`,
+            formDataState[day]?.achievements || ""
+          );
+  
+          if (formDataState[day]?.photo) {
+            formDataToSubmit.append(`poaData[${day}][photo]`, formDataState[day].photo);
+          }
+          formDataToSubmit.append(
+            `poaData[${day}][remarks]`,
+            formDataState[day]?.remarks || ""
+          );
+        });
+  
+        await API.post("/api/v1/yf-poa1/create", formDataToSubmit, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+  
+        toast.success("Form submitted successfully!");
+      } catch (error) {
+        console.error("Error submitting form:", error);
+        toast.error("Failed to submit form.");
+      }
+    };
+  
+    return (
+      <div style={{ fontSize: "14px", maxWidth: "100%", margin: "0 auto" }}>
+        <AdminHeader>
+          Third Weekly Plan Of Action - Month : {selectedMonth.name} {currentYear}
+        </AdminHeader>
+        <div style={{ marginBottom: "15px", display: "flex", gap: "10px" }}>
+          <select
+            className="w-fit px-2 py-1 rounded"
+            value={selectedState}
+            onChange={(e) => setSelectedState(e.target.value)}
+            required
+          >
+            <option value="">Select State</option>
+            {states &&
+              states.map((state) => (
+                <option key={state.id} value={state.id}>
+                  {state.name}
+                </option>
+              ))}
+          </select>
+        </div>
+        <Table
+          border="1"
+          cellPadding="3"
+          cellSpacing="0"
+          style={{ width: "100%", marginTop: "20px", fontSize: "12px" }}
         >
-          <option value="">Select State</option>
-          {states &&
-            states.map((state) => (
-              <option key={state.id} value={state.id}>
-                {state.name}
-              </option>
-            ))}
-        </select>
-      </div>
-      <Table
-        border="1"
-        cellPadding="3"
-        cellSpacing="0"
-        style={{ width: "100%", marginTop: "20px", fontSize: "12px" }}
-      >
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Weekday</th>
-            <th>KPI Theme</th>
-            <th>Activity</th>
-            <th>Planned Event</th>
-            <th>Tentative Target (Description in 50 words)</th>
-            <th>Location</th>
-            <th>Block</th>
-            <th>Gram Panchayat</th>
-            <th>Achievements</th>
-            <th>Upload Photo</th>
-            <th>Remarks/Reason for Failure</th>
-          </tr>
-        </thead>
-        <tbody>
-          {getDaysInMonth().map((day, idx) => (
-            <tr key={idx}>
-              <td>{formatIndianDate(day)}</td>
-              <td>{getWeekDay(day)}</td>
-              <td>
-                <select
-                  style={{ width: "100%" }}
-                  value={selectedKpiTheme[day] || ""}
-                  onChange={(e) => handleKpiThemeChange(day, e.target.value)}
-                >
-                  <option value="">Select KPI Theme</option>
-                  {Object.keys(kpiThemes).map((theme) => (
-                    <option key={theme} value={theme}>
-                      {theme}
-                    </option>
-                  ))}
-                </select>
-              </td>
-              <td>
-                <select
-                  style={{ width: "100%" }}
-                  value={selectedActivities[day] || ""}
-                  onChange={(e) => handleActivityChange(day, e.target.value)}
-                  disabled={!selectedKpiTheme[day]}
-                >
-                  <option value="">Select Activity</option>
-                  {selectedKpiTheme[day] &&
-                    kpiThemes[selectedKpiTheme[day]].map((activity, index) => (
-                      <option key={index} value={activity}>
-                        {activity}
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Weekday</th>
+              <th>KPI Theme</th>
+              <th>Activity</th>
+              <th>Planned Event</th>
+              <th>Tentative Target (Description in 50 words)</th>
+              <th>Location</th>
+              <th>Block</th>
+              <th>Gram Panchayat</th>
+              <th>Achievements</th>
+              <th>Upload Photo</th>
+              <th>Remarks/Reason for Failure</th>
+            </tr>
+          </thead>
+          <tbody>
+            {getDaysInWeek(thirdWeekStart, thirdWeekEnd).map((day, idx) => (
+              <tr key={idx}>
+                <td>{formatIndianDate(day)}</td>
+                <td>{getWeekDay(day)}</td>
+                <td>
+                  <select
+                    style={{ width: "100%" }}
+                    value={selectedKpiTheme[day] || ""}
+                    onChange={(e) => handleKpiThemeChange(day, e.target.value)}
+                  >
+                    <option value="">Select KPI Theme</option>
+                    {Object.keys(kpiThemes).map((theme) => (
+                      <option key={theme} value={theme}>
+                        {theme}
                       </option>
                     ))}
-                </select>
-              </td>
-              <td>
-                <input
-                  type="text"
-                  style={{ width: "100%" }}
-                  onChange={(e) =>
-                    handleInputChange(day, "plannedEvent", e.target.value)
-                  }
-                  value={formDataState[day]?.plannedEvent || ""}
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  style={{ width: "100%" }}
-                  onChange={(e) =>
-                    handleInputChange(day, "tentativeTarget", e.target.value)
-                  }
-                  value={formDataState[day]?.tentativeTarget || ""}
-                />
-              </td>
-              <td>
-                <select
-                  style={{ width: "100%" }}
-                  onChange={(e) => handleDistrictChange(day, e.target.value)}
-                  value={selectedDistricts[day] || ""}
-                  disabled={!districts}
-                  required
-                >
-                  <option value="">Select Location</option>
-                  {districts?.map((dist) => (
-                    <option key={dist.id} value={dist.id}>
-                      {dist.name}
-                    </option>
-                  ))}
-                  <option value="NIRD">NIRD</option>
-                  <option value="SIRD/SPRC">SIRD/SPRC</option>
-                  <option value="None">None</option>
-                </select>
-              </td>
-              <td>
-                <select
-                  style={{ width: "100%" }}
-                  onChange={(e) => handleBlockChange(day, e.target.value)}
-                  value={selectedBlocks[day] || ""}
-                  disabled={!blocks}
-                >
-                  <option value="">Select Block</option>
-                  {blocks?.map((block) => (
-                    <option key={block.id} value={block.id}>
-                      {block.name}
-                    </option>
-                  ))}
-                </select>
-              </td>
-              <td>
-                <select
-                  style={{ width: "100%" }}
-                  onChange={(e) => handleGpChange(day, e.target.value)}
-                  value={selectedGps[day] || ""}
-                  disabled={!gps}
-                >
-                  <option value="">Select GP</option>
-                  {gps?.map((gp) => (
-                    <option key={gp.id} value={gp.id}>
-                      {gp.name}
-                    </option>
-                  ))}
-                </select>
-              </td>
-              <td>
-                <input
-                  type="text"
-                  style={{ width: "100%" }}
-                  onChange={(e) =>
-                    handleInputChange(day, "achievements", e.target.value)
-                  }
-                  value={formDataState[day]?.achievements || ""}
-                />
-              </td>
-              <td>
-                <input
-                  type="file"
-                  onChange={(e) =>
-                    handleInputChange(day, "photo", e.target.files[0])
-                  }
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  style={{ width: "100%" }}
-                  onChange={(e) =>
-                    handleInputChange(day, "remarks", e.target.value)
-                  }
-                  value={formDataState[day]?.remarks || ""}
-                />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-      <Button onClick={handleSubmit} className="primary-button float-right mt-4">
+                  </select>
+                </td>
+                <td>
+                  <select
+                    style={{ width: "100%" }}
+                    value={selectedActivities[day] || ""}
+                    onChange={(e) => handleActivityChange(day, e.target.value)}
+                    disabled={!selectedKpiTheme[day]}
+                  >
+                    <option value="">Select Activity</option>
+                    {selectedKpiTheme[day] &&
+                      kpiThemes[selectedKpiTheme[day]].map((activity, index) => (
+                        <option key={index} value={activity}>
+                          {activity}
+                        </option>
+                      ))}
+                  </select>
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    style={{ width: "100%" }}
+                    onChange={(e) =>
+                      handleInputChange(day, "plannedEvent", e.target.value)
+                    }
+                    value={formDataState[day]?.plannedEvent || ""}
+                  />
+                </td>
+                <td>
+                  <textarea
+                    rows="2"
+                    style={{ width: "100%" }}
+                    onChange={(e) =>
+                      handleInputChange(day, "tentativeTarget", e.target.value)
+                    }
+                    value={formDataState[day]?.tentativeTarget || ""}
+                  />
+                </td>
+                <td>
+                  <select
+                    style={{ width: "100%" }}
+                    value={selectedDistricts[day] || ""}
+                    onChange={(e) => handleDistrictChange(day, e.target.value)}
+                  >
+                    <option value="">Select District</option>
+                    {districts &&
+                      districts.map((district) => (
+                        <option key={district.id} value={district.id}>
+                          {district.name}
+                        </option>
+                      ))}
+                  </select>
+                </td>
+                <td>
+                  <select
+                    style={{ width: "100%" }}
+                    value={selectedBlocks[day] || ""}
+                    onChange={(e) => handleBlockChange(day, e.target.value)}
+                  >
+                    <option value="">Select Block</option>
+                    {blocks &&
+                      blocks.map((block) => (
+                        <option key={block.id} value={block.id}>
+                          {block.name}
+                        </option>
+                      ))}
+                  </select>
+                </td>
+                <td>
+                  <select
+                    style={{ width: "100%" }}
+                    value={selectedGps[day] || ""}
+                    onChange={(e) => handleGpChange(day, e.target.value)}
+                  >
+                    <option value="">Select Gram Panchayat</option>
+                    {gps &&
+                      gps.map((gp) => (
+                        <option key={gp.id} value={gp.id}>
+                          {gp.name}
+                        </option>
+                      ))}
+                  </select>
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    style={{ width: "100%" }}
+                    onChange={(e) =>
+                      handleInputChange(day, "achievements", e.target.value)
+                    }
+                    value={formDataState[day]?.achievements || ""}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="file"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      setFormData((prev) => ({
+                        ...prev,
+                        [day]: { ...prev[day], photo: file },
+                      }));
+                    }}
+                  />
+                </td>
+                <td>
+                  <textarea
+                    rows="2"
+                    style={{ width: "100%" }}
+                    onChange={(e) =>
+                      handleInputChange(day, "remarks", e.target.value)
+                    }
+                    value={formDataState[day]?.remarks || ""}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+        
+        <Button onClick={handleSubmit} className="primary-button float-right mt-4">
         Submit
       </Button>
-    </div>
-  );
-};
+        
+      </div>
+    );
+  };
+  
 
-export default YFPoa1Form;
+export default YFPoa3Form;
