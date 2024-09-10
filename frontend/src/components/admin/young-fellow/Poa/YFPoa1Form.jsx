@@ -23,53 +23,206 @@ const months = [
   { name: "December", days: 31 },
 ];
 
-const planOfDayOptions = {
-  "Functioning of Gram Panchayats/ Gram Sabhas": [
-    "Observe Ward Sabhas",
-    "Observe Mahila Sabhas",
-    "Ensure Agenda of Gram Sabha circulated/ uploaded through Panchayat Nirnay app/Meeting Online App",
-    "Observe Gram Sabha",
-    "Make aware of Panchayat Nirnay app/Meeting Online App",
+// Updated KPI Themes with their respective Activities
+const kpiThemes = {
+  "Poverty Free and Enhanced Livelihoods Village": [
+    "Assessment of the number of Job card holders and out of them how many have demanded wage employment under MGNREGS.",
+    "Assessment of the number of Job card holders having received wage employment under MGNREGS.",
+    "Assisting in registration/enrolment of Job Cards of eligible beneficiaries for wage employment under MGNREGS.",
+    "Assisting GP to identify eligible households for PMAY-G/similar state schemes.",
+    "Assessment of the number of households having received benefit under PMAY-G.",
+    "Assisting GP members to ensure the households under Waiting List can be given benefit under PMAY-G/ similar State Schemes.",
+    "Supporting the GP in registration and preparation of a list of eligible beneficiaries (farmers) under the PM-KISAN scheme.",
+    "Conducting a drive to identify eligible households which do not have ration cards and to facilitate the process of providing ration cards.",
+    "Assessment of the households yet to be covered under National Food Security Act and to assist the GPs to cover them on saturation basis.",
+    "Assisting in preparation of a list of households so far covered under NSAP/ similar State Pension scheme.",
+    "Assisting in the conduct of assessing the gap to plan for covering all the eligible households under NSAP/similar State Pension scheme on saturation basis.",
+    "Assisting in preparation of the list of persons so far covered under PMJDY",
+    "Assisting in assessing the gap to plan for covering all the eligible population under PMJDY on saturation basis.",
+    "Facilitating the conduct of assessment of the number of women belonging to BPL HHs already brought under SHGs.",
+    "Conduct of assessment of the number of women's SHGs belonging to BPL HHs brought under Bank loan.",
+    "Conduct of meeting to orient and guide the GP on how the BPL women's SHGs can be brought under Bank loan.",
+    "Assessment of the number of women's SHGs serving nutritious food or Mid-Day Meal in schools and Anganwadi Centres etc.",
+    "Conduct of meeting to orient and guide the GPs on how women's SHGs can be engaged in income-generating activities including Nutri-Gardens/Kitchen Gardens.",
+    "Assessment of the number of the eligible persons registered for skill development training, how many of them have been trained and certified so far.",
+    "Conduct of meeting to orient and guide the GPs on how all the eligible persons can be brought under skill development training and certification process.",
+    "Guiding the GP on how GP Budget can be allocated for implementing various poverty reduction & livelihood activities other than MGNREGS & NRLM planned under GPDP.",
+    "Guiding the GP on how OSR can be allocated for implementing various poverty reduction & livelihood activities other than MGNREGS & NRLM planned under GPDP.",
   ],
- 
-  "Development/customization of Learning Materials": [
-    "Develop/customize learning material on LSDGs/GPDP/Panchayat Governance/PESA/OSR",
-    "Conduct Training Session as a Resource Person",
-    "Visit to Training Institutions (SPRC/ETC/DPRC/PTC/BPRC/PLC) ",
+  "Healthy Village": [
+    "Data collection on no. of child deaths (0-59 months) occurred in the GP.",
+    "Conduct meetings in the GP to discuss the importance of child health, the risks associated with child deaths and measures to be taken to reduce/prevent child deaths.",
+    "Data collection on no. of anaemic women in the GP.",
+    "Conduct meetings in the GP to discuss the ill-effects of anaemia, the risks associated with it and measures to be taken to reduce/prevent anaemia among women.",
+    "Data collection on the no. of TB patients vis-à-vis the no. of TB patients who have completed the prescribed course of medicine in the GP.",
+    "Conduct meetings in the GP to discuss the ill-effects of TB and measures to be taken for TB-free society.",
+    "Conduct meetings in the GP to discuss the importance of full immunisation of children (0-6 years).",
+    "Identification of partially immunised children (0-6 years).",
+    "Organise immunisation drives to ensure 100% children (0-6 years) with full immunisation.",
+    "Organise meetings with GP & communities to orient/reorient the benefits and necessary measures to cover all eligible women under PMMVY/similar State scheme.",
+    "Organise meetings with GP & communities to orient/reorient the essentiality of institutional births to ensure 100% institutional births.",
+    "Preparing a list of all eligible beneficiaries in the GP under (PMJAY) /similar State scheme for Ayushman Health Cards.",
+    "Facilitating the Registration of eligible beneficiaries in the GP under (PMJAY) /similar State scheme for Ayushman Health Cards.",
+    "Organise meetings to sensitise and guide GP & communities to reduce water-borne diseases.",
+    "Conduct IEC campaigns, distribution of mosquito nets, sanitisation of public places & houses, health check-ups and distribution of preventive medicines to reduce water-borne diseases.",
+    "Facilitate regular meetings of VHSNC.",
+    "Guiding the GP on how GP Budget can be allocated for implementing various health related activities planned under GPDP.",
+    "Conducting a meeting to discuss how GP can make greater financial contribution, through own resources or voluntary, for implementing health related activities in the GP.",
   ],
-  "Participation in GPDP": [
-    "Facilitate to update Gram Panchayat Profile (MoPR Portals)",
-    "To ensure inclusion of flagship schemes under planning",
-    "To ensure inclusion of flagship schemes included in resource envelope",
-    "To ensure implementation of activities in Sankalp theme",
-    "To facilitate GP to take up low-cost activities",
-    "To facilitate GP to take up no-cost activities",
-  ],
-  "Augmentation of Own Source Revenue (OSR) by PRIs": [
-    "To ensure preparation of GP OSR rule",
-  ],
-  "Delivery of Services mentioned in the Citizen Charter": [
-    "Percentage of Services delivered by the GP compared to the listed Services mentioned in the Citizen Charter",
-  ],
-  "Partnership on CB&T initiatives": [
-    "To visit the District Magistrate/District Panchayat Officer/line department officers for effective partnership on CB&T initiatives",
-    "To visit NGOs for effective partnership on CB&T initiatives",
-  ],
-  "Monitoring and documentation": [
-    "To Monitor Model GP Clusters",
-    "To Prepare Case Studies",
-    "To make documentation of Good Practices",
-  ],
-  "No work Day": ["Public Holiday", "Weekoff", "Casual Leave"],
-  "Others(100 words Only)": ["Others"],
+
+    "Child Friendly Village": [
+      "Conduct meetings in the GP to discuss the negative impacts of malnutrition, the risks associated and measures of prevention among children below 5 years of age.",
+      "Data collection on no. of malnourished children below 5 years of age in the GP.",
+      "Organizing community awareness sessions on the importance of ICDS benefits, such as supplementary nutrition, immunization, health check-ups, and early childhood education in the GP.",
+      "Conducting survey in the GP to identify all eligible children (0-6 years), pregnant women, and lactating mothers and ensure they can receive benefits under the ICDS.",
+      "Conduct meetings in the GP to discuss the importance of full immunisation of children (0-6 years).",
+      "Identification of partially immunised children (0-6 years).",
+      "Organise immunisation drives to ensure 100% children (0-6 years) with full immunisation.",
+      "Data collection on number of anaemic children in the GP.",
+      "Conduct meetings in the GP to discuss the ill-effects of anaemia, the risks associated with it and measures to be taken to reduce/prevent anaemia among children.",
+      "Meeting the GP & communities to motivate to develop Nutri-Gardens or Poshan Vatikas.",
+      "Facilitating the set-up of play area with facilities for both indoor and outdoor activities in the GP.",
+      "Facilitating the set-up of e-library or library in the GP.",
+      "Facilitating the set-up of facilities for children with special needs such as wheelchair or ramp or hearing or visual assistance in the GP.",
+      "Facilitating the set-up of separate toilets for boys and girls in schools in the GP.",
+      "Conduct meetings with GP and communities to discuss the necessity of Pre-School or Early Childhood Education for children including special needs in the GP.",
+      "Facilitating the set-up of Pre-School or Early Childhood Education for children including special needs in the GP.",
+      "Facilitating the GPs initiatives for making provision for Pre-School Education kit (Play and Learning material).",
+      "Conduct meetings with the GP and communities to discuss and motivate proactive roles of School Management Committees in the GP.",
+      "Facilitate regular meetings of School Management Committees in the GP.",
+      "Conduct orientation to GP & Communities on benefits of Ayushman Bharat Health Account/Cards under State/UT specific schemes.",
+      "Conduct gap assessment to identify the gaps in coverage among eligible children (0-6 years) and facilitate registration of all eligible children in the GP under Ayushman Bharat Health Account/Cards under State/UT specific schemes.",
+      "Organising Bal Sabha/ Facilitating the Conduct of Bal Sabha Meeting.",
+      "Facilitate the conduct of meeting of the Standing Committee looking after child protection in the GP.",
+      "Guiding the GP on how GP Budget can be allocated for implementing various child-friendly related activities planned under GPDP.",
+      "Conducting a meeting to discuss how GP can make greater financial contribution, through own resources or voluntary, for implementing child development related activities in the GP."
+    ],
+    "Water Sufficient Village": [
+      "Facilitating the meetings conducted by the Village Water & Sanitation Committee (VWSC)/ Paani Samitis or any related Standing Committee as per JJM guidelines in the GP.",
+      "Supporting the preparation of Village Action Plan by the GP & Village Water & Sanitation Committee (VWSC) in the GP.",
+      "Supporting to the GP in providing Tap Water Connection to 100% households as per guidelines of JJM.",
+      "Supporting to the GP in providing Tap Water Connection to schools, Anganwadi centres, GP buildings, Health centres, wellness centres, community buildings etc.",
+      "Facilitating the initiatives for water conservation measures like rooftop rainwater harvesting in the GP.",
+      "Facilitating the initiatives for watershed-based development for conservation of rainwater in the GP.",
+      "Conduct meetings with GP and communities to discuss Water Conservation/Drought Management/related issues in Gram Sabha Meetings of the GP.",
+      "Identifying the houses/public buildings without grey water management.",
+      "Conducting meetings with GP members and community members to orient/reorient the need for grey water management structure.",
+      "Facilitating the establishment of grey water management structure.",
+      "Facilitating the preparation of a broad-based plan to ensure 65 litres of water on per capita per day basis in the GP.",
+      "Facilitating the cleaning/chlorination of Storage Tanks in the GP.",
+      "Facilitating the initiatives on water quality testing using Field Test Kits in the GP.",
+      "Guiding the GP on how GP Budget can be allocated for implementing various water related activities planned under GPDP.",
+      "Conducting a meeting to discuss how GP can make greater financial contribution, through own resources or voluntary, for implementing water related activities in the GP."
+    ],
+    "Clean and Green Village": [
+      "Facilitating the meetings conducted by the Village Water & Sanitation Committee (VWSC)/ Paani Samitis or any related Standing Committee as per JJM guidelines in the GP.",
+      "Facilitating the third-party verification by inter-Block/District Teams after self-declaration as ODF Plus in the GP.",
+      "Facilitating the conduct of Operation and Maintenance of Solid & Liquid Waste Management (SLWM) assets in the GP.",
+      "Facilitating the maintenance of the People’s Biodiversity Register by Biodiversity Management Committee (BMC) in the GP.",
+      "Facilitating the GP in registration of the eligible households under UJALA/Similar State/UT schemes to obtain benefit under the schemes.",
+      "Facilitating the GP in registration of the eligible households under deposit free LPG connections under the PMUY/Similar State/UT schemes to obtain benefit under the schemes.",
+      "Facilitating the conduct of meeting of the Standing Committee/Sub Committee on Environment Preservation/Natural Resource Management in the GP.",
+      "Facilitating the GP to provide support to the communities and citizens for taking benefit of solarized irrigation pumps, solarized streetlights etc.",
+      "Guiding the GP on how GP Budget can be allocated for implementing various clean and green activities planned under GPDP.",
+      "Guiding the GP on how OSR can be allocated for implementing various clean and green activities planned under GPDP.",
+      "Conducting a meeting to discuss how GP can make greater financial contribution, through own resources or voluntary, for implementing ‘clean and green’ activities in the GP."
+    ],
+    "Self-Sufficient Infrastructure in Village": [
+      "Organising meetings in GP to educate the community about the importance of pucca housing and available government schemes like PMAY-G (Pradhan Mantri Awas Yojana - Gramin).",
+      "Assisting the community members to register in PMAY-G.",
+      "Conducting survey in the GP to identify households living in kutcha houses and assess their eligibility for government housing schemes.",
+      "Provide training to GP members on the various housing schemes available, the application process, and their role in facilitating these schemes.",
+      "Organizing meeting for GP members and local leaders to educate them on the importance of having a CSC or similar facility within the GP building.",
+      "Conducting orientation sessions for GP members, local leaders, and community stakeholders to explain the importance of well-equipped GP Bhawans (including computers, internet, and separate toilets for men and women, meeting hall, drinking water, furniture etc.) in enhancing governance and service delivery in the GP.",
+      "Facilitating the set-up of a library, a community centre, Anganwadi Centre, playground, park etc. in the GP.",
+      "Conducting assessment of the current road infrastructure in the GP.",
+      "Facilitating the GP to identify government programs and schemes that support all-weather roads construction.",
+      "Conducting survey of the existing marketplaces in the GP to assess the availability and condition of basic amenities such as electricity, drinking water, and toilets and to identify specific gaps & needs.",
+      "Facilitating the GP to identify and securing government programs and schemes, CSR funds, partnerships with NGOs or private sector entities for the infrastructure improvements such as electricity, drinking water, and toilets.",
+      "Conducting survey of the existing public transport services and infrastructure in the GP, including the availability of bus sheds, drinking water, and toilet facilities at bus stops and to identify specific gaps & needs such as the lack of public transport options, absence of disabled-friendly infrastructure, and inadequate waiting area amenities.",
+      "Conducting a comprehensive assessment in collaboration with local authorities and the community to identify areas vulnerable to floods, cyclones, and other disasters and to identify and acquiring suitable site for the relief center.",
+      "Conduct meetings with GP members to discuss the design, location, and operational plan for the relief center.",
+      "Facilitating the GP to identify and securing government programs and schemes, CSR funds, partnerships with NGOs or private sector entities for the construction of relief centre in the GP.",
+      "Conducting assessment of the community’s water needs, identify potential sites for storage tank.",
+      "Supporting the GP in mobilizing resources, which may include government grants, community contributions, and external funding for the construction of Storage Tank for water storage in the GP.",
+      "Conduct a survey within the GP to assess the healthcare needs of the population, collect data on the nearest health facilities, current access issues, and gaps in service delivery.",
+      "Facilitating meetings between GP representatives and district health officials to discuss the need for establishing or improving access to a Health Sub Centre or Health & Wellness Centre in the GP.",
+      "Facilitating the GP members to ensure construction or renovation of the Health Sub Centre or Health & Wellness Centre in the GP.",
+      "Conducting survey within the GP to assess the livestock population, common health issues, and the current availability of veterinary services.",
+      "Facilitating the GP to mobilize resources to improve or establish the Veterinary Services infrastructure in the GP.",
+      "Conducting survey within the GP to assess the need and availability of adult literacy programs, training facilities and digital literacy infrastructure.",
+      "Facilitating the GP to mobilize resources to improve or establish the Adult Literacy Programs, Skill Development Centres and Digital Literacy infrastructure in the GP.",
+      "Organising meeting with the GP members to educate them on the importance of electricity connections and availability of government schemes like Saubhagya (Pradhan Mantri Sahaj Bijli Har Ghar Yojana).",
+      "Conducting survey within the GP to identify households without electricity connections and their eligibility for the Saubhagya scheme.",
+      "Facilitating the GP to ensure installation of electricity connections in the identified households and availing of the benefits under the Saubhagya scheme.",
+      "Conducting survey within the GP to assess the quality and reliability of the existing public sanitation services and infrastructure, including community toilets, waste management, and drainage systems.",
+      "Facilitating the GP to mobilize resources to improve or establish public sanitation facilities and services in the GP.",
+      "Facilitating meetings with GP members to educate them on the importance of internet connectivity and available government schemes or private sector solutions for enhancing internet infrastructure.",
+      "Conducting survey within the GP to assess the current status of internet connectivity and identifying areas with inadequate or no access.",
+      "Facilitating the GP to mobilize resources to enhance or establish internet connectivity infrastructure in the GP."
+    ],
+     
+    "Socially Just & Socially Secured Village": [
+      "Assisting registration of eligible households for benefits under NSAP of Central Government or similar State/UT Government schemes and to plan for covering as many households as possible under NSAP or even OSR as a means of social security.",
+      "Assisting registration of eligible households for benefits for assistive devices (wheelchairs, crutches, artificial limbs, walking sticks for blind etc.) and to plan for covering as many households as possible under disability supporting schemes and even with OSR.",
+      "Assisting registration of eligible senior citizens (above 60 years) for Physical Aids and Assisted-living Devices under the Rashtriya Vayoshri Yojana/other State-specific scheme and to plan for covering as many eligible persons as possible even with OSR.",
+      "Assisting registration of eligible disabled persons for Unique Disability Identity Card (UDID) and to plan for covering as many differently abled persons as possible under various schemes even with OSR.",
+      "Assisting registration of eligible persons for Ayushman Bharat Card under PMJAY or similar under State specific schemes) and to plan for covering as many eligible persons as possible under similar State schemes.",
+      "Organizing community awareness sessions on the importance of ICDS benefits, such as supplementary nutrition, immunization, health check-ups, and early childhood education in the GP.",
+      "Conducting survey in the GP to identify all eligible children (0-6 years), pregnant women, and lactating mothers and ensure they can receive benefits under the ICDS.",
+      "Guiding the GP on how GP Budget can be allocated for implementing various social assistance to persons (such as old, widow, disabled etc.) activities planned under GPDP.",
+      "Conducting a meeting to discuss how GP can make greater financial contribution, through own resources or voluntary, for implementing various activities for upliftment of marginalized groups [SC/ST/Women/Destitute/Old/Senior Citizen/Divyangjan (People with Special Needs) in the GP."
+    ],
+    "Village with Good Governance": [
+      "Identifying available resources and potential gaps that need to be addressed to equip the GPs with the necessary technology.",
+      "Organizing meeting with GP members to highlight the benefits of having dedicated computers and accessories and emphasize the role of digital tools in improving efficiency, transparency, and service delivery.",
+      "Assisting the GP in identifying funding sources, such as government grants, CSR funds, or local resources, to purchase computers and accessories.",
+      "Organizing training programs for GP members and staff on using computers, data entry, report generation and portals of MoPR.",
+      "Organizing training sessions for GP members on planning and conducting vibrant Gram Sabhas.",
+      "Working with GP members to develop an annual calendar for Gram Sabhas (at least six meetings throughout the year) and to ensure Gram Sabha meetings are inclusive (participation from marginalized groups, women, and youth).",
+      "Assisting the GP in documenting the proceedings of Gram Sabha meetings, including the issues discussed, decisions made, and actions planned.",
+      "Organizing training sessions to GP members and staff to utilize the e-Gram Swaraj portal for various purposes of Panchayat functioning (planning, reporting, geotagging, accounting and online payments).",
+      "Organizing training sessions to GP members and staff to equip them with necessary information including basic profile including LGD, Connectivity details, Election details, Elected Member details, Panchayat Committee details, Panchayat Committee member details etc.",
+      "Conducting assessment of the GP’s existing record-keeping practices related to financial expenditures of the GP.",
+      "Assisting the GP in developing templates and formats for maintaining records of expenditures from various sources, such as CSS, State Schemes, SFC funds, and OSR, financial registers, ledgers, and reports that are easy to use and understand.",
+      "Assisting the GP in creating a key financial activities and deadlines throughout the year, culminating in the closure of accounts by 31st March including audits and submission of reports.",
+      "Supporting the GP in preparing for audits every year.",
+      "Reviewing the current GPDP to identify Critical and Moderate MA Gaps to fix specific target for bridging Critical MA Gaps in GPDP and to fix specific target for bridging Moderate MA Gaps in GPDP.",
+      "Facilitating the GP to upload GPDP online.",
+      "Supporting the GP to get the GP accounts under Central Finance Commission Grant audited through Audit online.",
+      "Supporting the GP to have own website in active condition.",
+      "Facilitating the GP to map all the villages with LGD.",
+      "Facilitating the GP to electronically provide services including regulatory services like trade license, permit for construction of buildings, vehicle registration, income certificate, land valuation certificate etc.; statutory services like issuance of Birth/Death certificate, Senior Citizen Certificate, issuance of passes to Goods Vehicle etc.; development services; consumer utility services like bill payment, Issuance of Migration Certificate, Tracking Beneficiary Pension Detail, Application for Education Loan for Backward Classes etc.",
+      "Conducting a meeting to discuss how GP can make greater financial contribution, through own resources or voluntary, for implementing various activities to promote Good Governance."
+    ],
+    "Women Friendly Village": [
+      "Organizing Mahila Sabha/Facilitating the Conduct of Mahila Sabha Meeting in the GP.",
+      "Conducting awareness campaigns in the community, highlighting the importance of girls’ education.",
+      "Identifying girls who are not enrolled in school or have dropped out and organizing enrolment drives in collaboration with local schools to ensure that all identified out-of-school girls are enrolled in the GP.",
+      "Organizing community-wide campaigns focusing on the importance of proper nutrition for girl children to ensure that no girl child is underweight, stunted, anaemic (including women) in the GP.",
+      "Organizing regular health camps in collaboration with local health centers and Anganwadi centres to monitor the weight and growth of all girl children in the GP.",
+      "Facilitating the enrolment of underweight girls in government nutrition programs such as ICDS, and coordinate with Anganwadi centers to distribute rations to families in need in the GP.",
+      "Supporting the families in the GP to set up kitchen gardens to grow vegetables and fruits, improving access to fresh and nutritious food.",
+      "Facilitating the GP to fully utilize government schemes aimed at improving child nutrition, such as the Mid-Day Meal Scheme, Poshan Abhiyaan, and public distribution systems and assisting families in accessing these resources effectively.",
+      "Conduct orientation to GP members & communities on benefits of Ayushman Bharat/PMJAY/PMMVY/similar State Govt Health scheme/health insurance.",
+      "Conduct gap assessment to identify the gaps in coverage among women and facilitate registration of all eligible women in the GP under Ayushman Bharat/PMJAY/PMMVY/similar State Govt Health scheme/health insurance.",
+      "Conducting awareness campaigns to educate BPL women and their families about the benefits of joining SHGs in the GP.",
+      "Conducting survey within the GP to identify all BPL households, map the women eligible to join SHGs.",
+      "Identifying specific training needs & organizing training to the SHGs in the GP.",
+      "Guiding the GP on how GP Budget can be allocated for implementing various women development-related activities planned under GPDP.",
+      "Conducting a meeting to discuss how GP can make greater financial contribution, through own resources or voluntary, for implementing various women development activities."
+    ],
+  
+  
 };
 
 const YFPoa1Form = ({ update }) => {
   const currentMonthIndex = new Date().getMonth();
   const currentYear = new Date().getFullYear();
   const { id: poalId } = useParams();
-  const [selectedState, setSelectedState] = useState();
-  const [plans, setPlans] = useState({});
+  const [selectedState, setSelectedState] = useState("");
+  const [selectedKpiTheme, setSelectedKpiTheme] = useState("");
+  const [selectedActivities, setSelectedActivities] = useState({});
   const [selectedDistricts, setSelectedDistricts] = useState({});
   const [selectedGps, setSelectedGps] = useState({});
   const [selectedBlocks, setSelectedBlocks] = useState({});
@@ -87,11 +240,12 @@ const YFPoa1Form = ({ update }) => {
     block_id: selectedBlocks?.[1],
   });
 
-  const [selectedActions, setSelectedActions] = useState({});
   const lastDayOfFortnight = 15; // Last day of the first fortnight
 
   useEffect(() => {
-    setSelectedState(states?.[0]?.id);
+    if (states && states.length > 0) {
+      setSelectedState(states[0].id);
+    }
   }, [states]);
 
   useEffect(() => {
@@ -101,12 +255,13 @@ const YFPoa1Form = ({ update }) => {
           const response = await API.get(`/api/v1/poa1/get/${poalId}`);
           setFormData(response.data.data.poaData);
         } catch (error) {
-          console.error("Error fetching user:", error);
+          console.error("Error fetching POA data:", error);
+          toast.error("Error fetching POA data.");
         }
       };
       fetchPoalData();
     }
-  }, [poalId]);
+  }, [poalId, update]);
 
   const getDaysInMonth = () =>
     Array.from({ length: lastDayOfFortnight }, (_, i) => i + 1);
@@ -121,15 +276,15 @@ const YFPoa1Form = ({ update }) => {
     return date.toLocaleDateString("en-IN");
   };
 
-  const handlePlanChange = (day, selectedPlan) => {
-    setPlans((prev) => ({ ...prev, [day]: selectedPlan }));
-    setSelectedActions((prev) => ({ ...prev, [day]: "" }));
+  const handleKpiThemeChange = (day, selectedTheme) => {
+    setSelectedKpiTheme((prev) => ({ ...prev, [day]: selectedTheme }));
+    setSelectedActivities((prev) => ({ ...prev, [day]: "" }));
   };
 
-  const handleActionChange = (day, selectedAction) => {
-    setSelectedActions((prev) => ({
+  const handleActivityChange = (day, selectedActivity) => {
+    setSelectedActivities((prev) => ({
       ...prev,
-      [day]: selectedAction,
+      [day]: selectedActivity,
     }));
   };
 
@@ -140,6 +295,7 @@ const YFPoa1Form = ({ update }) => {
   const handleBlockChange = (day, selectedBlock) => {
     setSelectedBlocks((prev) => ({ ...prev, [day]: selectedBlock }));
   };
+
   const handleGpChange = (day, selectedGp) => {
     setSelectedGps((prev) => ({ ...prev, [day]: selectedGp }));
   };
@@ -156,44 +312,45 @@ const YFPoa1Form = ({ update }) => {
 
   const handleSubmit = async () => {
     try {
-      const formData = new FormData();
+      const formDataToSubmit = new FormData();
 
-      Object.keys(plans).forEach((day) => {
-        formData.append(`poaData[${day}][date]`, formatIndianDate(day));
-        formData.append(`poaData[${day}][weekday]`, getWeekDay(day));
-        formData.append(`poaData[${day}][plan]`, plans[day]);
-        formData.append(`poaData[${day}][action]`, selectedActions[day]);
-        formData.append(
+      Object.keys(selectedKpiTheme).forEach((day) => {
+        formDataToSubmit.append(`poaData[${day}][date]`, formatIndianDate(day));
+        formDataToSubmit.append(`poaData[${day}][weekday]`, getWeekDay(day));
+        formDataToSubmit.append(`poaData[${day}][kpi_theme]`, selectedKpiTheme[day]);
+        formDataToSubmit.append(`poaData[${day}][activity]`, selectedActivities[day]);
+        formDataToSubmit.append(
           `poaData[${day}][plannedEvent]`,
           formDataState[day]?.plannedEvent || ""
         );
-        formData.append(`poaData[${day}][state_id]`, selectedState);
-        formData.append(
+        formDataToSubmit.append(`poaData[${day}][state_id]`, selectedState);
+        formDataToSubmit.append(
           `poaData[${day}][dist_id]`,
           selectedDistricts[day] || ""
         );
-        formData.append(`poaData[${day}][block_id]`, selectedBlocks[day] || "");
-        formData.append(`poaData[${day}][gp_id]`, selectedGps[day] || "");
-        formData.append(
+        formDataToSubmit.append(`poaData[${day}][block_id]`, selectedBlocks[day] || "");
+        formDataToSubmit.append(`poaData[${day}][gp_id]`, selectedGps[day] || "");
+        formDataToSubmit.append(
           `poaData[${day}][achievements]`,
           formDataState[day]?.achievements || ""
         );
 
         if (formDataState[day]?.photo) {
-          formData.append(`poaData[${day}][photo]`, formDataState[day].photo);
+          formDataToSubmit.append(`poaData[${day}][photo]`, formDataState[day].photo);
         }
-        formData.append(
+        formDataToSubmit.append(
           `poaData[${day}][remarks]`,
           formDataState[day]?.remarks || ""
         );
       });
 
-      await API.post("/api/v1/yf-poa1/create", formData, {
+      await API.post("/api/v1/yf-poa1/create", formDataToSubmit, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
       toast.success("Form submitted successfully!");
     } catch (error) {
+      console.error("Error submitting form:", error);
       toast.error("Failed to submit form.");
     }
   };
@@ -201,17 +358,16 @@ const YFPoa1Form = ({ update }) => {
   return (
     <div style={{ fontSize: "14px", maxWidth: "100%", margin: "0 auto" }}>
       <AdminHeader>
-        First Fortnightly Plan Of Action - Month : {selectedMonth.name}{" "}
-        {currentYear}
+        First Fortnightly Plan Of Action - Month : {selectedMonth.name} {currentYear}
       </AdminHeader>
       <div style={{ marginBottom: "15px", display: "flex", gap: "10px" }}>
         <select
           className="w-fit px-2 py-1 rounded"
-          value={selectedState || ""}
+          value={selectedState}
           onChange={(e) => setSelectedState(e.target.value)}
           required
         >
-          <option value="">Select</option>
+          <option value="">Select State</option>
           {states &&
             states.map((state) => (
               <option key={state.id} value={state.id}>
@@ -230,13 +386,13 @@ const YFPoa1Form = ({ update }) => {
           <tr>
             <th>Date</th>
             <th>Weekday</th>
-            <th>Action Plan (KPI Category)</th>
+            <th>KPI Theme</th>
+            <th>Activity</th>
             <th>Planned Event</th>
             <th>Tentative Target (Description in 50 words)</th>
             <th>Location</th>
             <th>Block</th>
             <th>Gram Panchayat</th>
-
             <th>Achievements</th>
             <th>Upload Photo</th>
             <th>Remarks/Reason for Failure</th>
@@ -250,13 +406,13 @@ const YFPoa1Form = ({ update }) => {
               <td>
                 <select
                   style={{ width: "100%" }}
-                  value={plans[day] || ""}
-                  onChange={(e) => handlePlanChange(day, e.target.value)}
+                  value={selectedKpiTheme[day] || ""}
+                  onChange={(e) => handleKpiThemeChange(day, e.target.value)}
                 >
-                  <option value="">Select</option>
-                  {Object.keys(planOfDayOptions).map((plan) => (
-                    <option key={plan} value={plan}>
-                      {plan}
+                  <option value="">Select KPI Theme</option>
+                  {Object.keys(kpiThemes).map((theme) => (
+                    <option key={theme} value={theme}>
+                      {theme}
                     </option>
                   ))}
                 </select>
@@ -264,15 +420,15 @@ const YFPoa1Form = ({ update }) => {
               <td>
                 <select
                   style={{ width: "100%" }}
-                  value={selectedActions[day] || ""}
-                  onChange={(e) => handleActionChange(day, e.target.value)}
-                  disabled={!plans[day]}
+                  value={selectedActivities[day] || ""}
+                  onChange={(e) => handleActivityChange(day, e.target.value)}
+                  disabled={!selectedKpiTheme[day]}
                 >
-                  <option value="">Select</option>
-                  {plans[day] &&
-                    planOfDayOptions[plans[day]].map((action) => (
-                      <option key={action} value={action}>
-                        {action}
+                  <option value="">Select Activity</option>
+                  {selectedKpiTheme[day] &&
+                    kpiThemes[selectedKpiTheme[day]].map((activity, index) => (
+                      <option key={index} value={activity}>
+                        {activity}
                       </option>
                     ))}
                 </select>
@@ -288,6 +444,16 @@ const YFPoa1Form = ({ update }) => {
                 />
               </td>
               <td>
+                <input
+                  type="text"
+                  style={{ width: "100%" }}
+                  onChange={(e) =>
+                    handleInputChange(day, "tentativeTarget", e.target.value)
+                  }
+                  value={formDataState[day]?.tentativeTarget || ""}
+                />
+              </td>
+              <td>
                 <select
                   style={{ width: "100%" }}
                   onChange={(e) => handleDistrictChange(day, e.target.value)}
@@ -295,9 +461,7 @@ const YFPoa1Form = ({ update }) => {
                   disabled={!districts}
                   required
                 >
-                  <option value="" disable>
-                    Select Location
-                  </option>
+                  <option value="">Select Location</option>
                   {districts?.map((dist) => (
                     <option key={dist.id} value={dist.id}>
                       {dist.name}
@@ -315,16 +479,14 @@ const YFPoa1Form = ({ update }) => {
                   value={selectedBlocks[day] || ""}
                   disabled={!blocks}
                 >
-                  <option value="" disable>
-                    Select Block
-                  </option>
+                  <option value="">Select Block</option>
                   {blocks?.map((block) => (
                     <option key={block.id} value={block.id}>
                       {block.name}
                     </option>
                   ))}
                 </select>
-              </td>{" "}
+              </td>
               <td>
                 <select
                   style={{ width: "100%" }}
@@ -332,9 +494,7 @@ const YFPoa1Form = ({ update }) => {
                   value={selectedGps[day] || ""}
                   disabled={!gps}
                 >
-                  <option value="" disable>
-                    Select GP
-                  </option>
+                  <option value="">Select GP</option>
                   {gps?.map((gp) => (
                     <option key={gp.id} value={gp.id}>
                       {gp.name}
@@ -345,7 +505,6 @@ const YFPoa1Form = ({ update }) => {
               <td>
                 <input
                   type="text"
-                  disabled
                   style={{ width: "100%" }}
                   onChange={(e) =>
                     handleInputChange(day, "achievements", e.target.value)
@@ -356,7 +515,6 @@ const YFPoa1Form = ({ update }) => {
               <td>
                 <input
                   type="file"
-                  disabled
                   onChange={(e) =>
                     handleInputChange(day, "photo", e.target.files[0])
                   }
@@ -365,7 +523,6 @@ const YFPoa1Form = ({ update }) => {
               <td>
                 <input
                   type="text"
-                  disabled
                   style={{ width: "100%" }}
                   onChange={(e) =>
                     handleInputChange(day, "remarks", e.target.value)
@@ -377,10 +534,7 @@ const YFPoa1Form = ({ update }) => {
           ))}
         </tbody>
       </Table>
-      <Button
-        onClick={handleSubmit}
-        className="primary-button float-right mt-4"
-      >
+      <Button onClick={handleSubmit} className="primary-button float-right mt-4">
         Submit
       </Button>
     </div>
