@@ -213,7 +213,16 @@ const kpiThemes = {
       "Conducting a meeting to discuss how GP can make greater financial contribution, through own resources or voluntary, for implementing various women development activities."
     ],
   
-  
+    "Institutional Strengthening": [
+      "Visiting GP to understand system of functioning as institutions of self-government – its strengths and limitations, the functioning of Gram Sabha, Ward Sabha, Mahila Sabha, Bal Sabha etc. and check the same with the Registers maintained by the GP.",
+      "Meeting ERs to Motivate for organizing Vibrant Gram Sabhas.",
+      "Meeting line departments to motivate them to actively participate in the Vibrant Gram Sabha meetings.",
+      "Meeting SHGs and their Federations to motivate them to actively participate in the Vibrant Gram Sabha meetings.",
+      "Organizing Vibrant Gram Sabhas/Facilitating the Conduct of Vibrant Gram Sabha Meeting.",
+      "Conducting/Organizing awareness meetings with the community to raise awareness about the significance of Gram Sabha.",
+      "Meeting the ERs to motivate and guide in mobilizing and utilizing OSR.",
+      "Meeting the GP Functionaries to motivate and guide in mobilizing OSR."
+    ]
 };
 
 const YFPoa1Form = ({ update }) => {
