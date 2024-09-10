@@ -12,9 +12,13 @@ const POA1DaySchema = new mongoose.Schema(
     },
     plan: {
       type: String,
-      required: true,
+      required: false,
     },
-    action: {
+    kpi_theme: {
+      type: String,
+      required: false,
+    },
+    activity: {
       type: String,
       required: true,
     },
@@ -43,10 +47,19 @@ const POA1DaySchema = new mongoose.Schema(
       default: "",
     },
     photo: {
-      type: String, // Store photo file path or URL
+      type: String,
       default: "",
     },
     remarks: {
+      type: String,
+      default: "",
+    },
+    poaType: {
+      type: String,
+      required: true,
+      default: "poa1",
+    },
+    tentativeTarget: {
       type: String,
       default: "",
     },
@@ -71,7 +84,10 @@ const YfPOA1Schema = new mongoose.Schema(
       default: "1",
       required: true,
     },
-    poaData: [POA1DaySchema], // Array of day-wise POA1 data
+    poaData: [POA1DaySchema],
+    poa2_created_at: {
+      type: Date,
+    },
   },
   {
     timestamps: { createdAt: "created_at", updatedAt: "modified_at" },

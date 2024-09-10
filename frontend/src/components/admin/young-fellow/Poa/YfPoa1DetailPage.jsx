@@ -15,23 +15,32 @@ import AdminHeader from "../../AdminHeader";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
-const YFPoa1DetailPage = () => {
+const YfPoa1DetailPage = () => {
   const [poa1Data, setPoa1Data] = useState(null);
   const { id } = useParams();
+  const [poaType, setPoaType] = useState("poa1");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await API.get(`/api/v1/yf-poa1/get/${id}`);
-        setPoa1Data(response.data.data);
-        console.log("Fetched POA1 data:", response.data.data); // Log the response data
+        const response = await API.get(
+          `/api/v1/yf-poa1/get/${id}?poaType=${poaType}`
+        );
+        if (response.data && response.data.data) {
+          setPoa1Data(response.data.data);
+          console.log("Fetched POA1 data:", response.data.data); // Log the response data
+        } else {
+          console.error("No data found in response:", response.data);
+          setPoa1Data(null);
+        }
       } catch (error) {
+        setPoa1Data(null);
         console.error("Error fetching POA1 data:", error);
       }
     };
 
     fetchData();
-  }, [id]);
+  }, [id, poaType]);
 
   const handlePrint = () => {
     window.print();
@@ -67,10 +76,14 @@ const YFPoa1DetailPage = () => {
     pdf.save(`POA1_Details_${id}.pdf`);
   };
 
-  if (!poa1Data) return <div>Loading...</div>;
+  const getHeaderText = () => {
+    return poaType === "poa1"
+      ? "First Fortnightly Plan Of Action"
+      : "Second Fortnightly Plan Of Action";
+  };
 
   return (
-    <div>
+    <div className="w-full md:w-[80vw]">
       <style>
         {`
           @media print {
@@ -98,95 +111,134 @@ const YFPoa1DetailPage = () => {
           }
         `}
       </style>
-      <div className="flex justify-end mb-4">
-        <button
-          onClick={handlePrint}
-          className="print-button bg-blue-900 text-white px-4 py-2 rounded mr-4"
-        >
-          Print
-        </button>
-        <button
-          onClick={handleDownloadPdf}
-          className="download-button bg-green-900 text-white px-4 py-2 rounded"
-        >
-          Download as PDF
-        </button>
+      <div className="flex justify-between mb-4">
+        <div className="flex flex-col ml-5">
+          <label className="text-sm text-primary text-start py-2 font-semibold">
+            POA Type
+          </label>
+          <select
+            className="border text-sm bg-white p-2 px-4 rounded-md"
+            value={poaType}
+            onChange={(e) => setPoaType(e.target.value)}
+          >
+            <option value="poa1">POA1</option>
+            <option value="poa2">POA2</option>
+            <option value="poa3">POA3</option>
+            <option value="poa4">POA4</option>
+          </select>
+        </div>
+
+        <div className="flex items-center">
+          <button
+            onClick={handlePrint}
+            className="print-button bg-blue-900 text-white px-4 py-2 rounded mr-4"
+          >
+            Print
+          </button>
+          <button
+            onClick={handleDownloadPdf}
+            className="download-button bg-green-900 text-white px-4 py-2 rounded"
+          >
+            Download as PDF
+          </button>
+        </div>
       </div>
-      <div id="poa1-detail">
-        <AdminHeader className="print-header-margin">
-          First Fortnightly Plan Of Action - Month:{" "}
-          {new Date(poa1Data.created_at).toLocaleString("en-IN", {
-            month: "long",
-          })}{" "}
-          2024
-        </AdminHeader>
-        <Table>
-          <TableCaption className="text-sm">
-            Details for POA1 ID: {poa1Data?.id}
-          </TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Date</TableHead>
-              <TableHead>Weekday</TableHead>
-              <TableHead>Plan</TableHead>
-              <TableHead>Action</TableHead>
-              <TableHead>Planned Event</TableHead>
-              <TableHead>State</TableHead>
-              <TableHead>District</TableHead>
-              <TableHead>Achievements</TableHead>
-              <TableHead>Photo</TableHead>
-              <TableHead>Remarks</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {poa1Data &&
-              poa1Data?.poaData?.length > 0 &&
-              poa1Data?.poaData?.map((dayData, index) => (
-                <TableRow key={index}>
-                  <TableCell className="text-xs">
-                    {new Date(dayData.date).toLocaleDateString()}
+
+      {!poa1Data ? (
+        <p className="text-center text-red-500">
+          Loading data or no data available...
+        </p>
+      ) : (
+        <div id="poa1-detail">
+          <AdminHeader className="print-header-margin">
+            {getHeaderText()} - Month:{" "}
+            {new Date(poa1Data.created_at).toLocaleString("en-IN", {
+              month: "long",
+            })}{" "}
+            2024
+          </AdminHeader>
+          <Table>
+            <TableCaption className="text-sm">
+              Details for {poaType.toLocaleUpperCase} ID: {poa1Data?.id}
+            </TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="px-1">Date</TableHead>
+                <TableHead className="px-1">Weekday</TableHead>
+                <TableHead className="px-1">Plan</TableHead>
+                <TableHead className="px-1">Action</TableHead>
+                <TableHead className="px-1">Planned Event</TableHead>
+                <TableHead className="px-1">State</TableHead>
+                <TableHead className="px-1">District</TableHead>
+                <TableHead className="px-1">Achievements</TableHead>
+                <TableHead className="px-1">Photo</TableHead>
+                <TableHead className="px-1">Remarks</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {poa1Data?.poaData?.length > 0 ? (
+                poa1Data.poaData.map((dayData, index) => (
+                  <TableRow key={index}>
+                    <TableCell className="text-xs p-2.5">
+                      {dayData.date}
+                    </TableCell>
+                    <TableCell className="text-xs p-2.5">
+                      {dayData.weekday}
+                    </TableCell>
+                    <TableCell className="text-xs p-2.5">
+                      {dayData.plan}
+                    </TableCell>
+                    <TableCell className="text-xs p-2.5">
+                      {dayData.action}
+                    </TableCell>
+                    <TableCell className="text-xs p-2.5">
+                      {dayData.plannedEvent}
+                    </TableCell>
+                    <TableCell className="text-xs p-2.5">
+                      {dayData.state?.name || "N/A"}
+                    </TableCell>
+                    <TableCell className="text-xs p-2.5">
+                      {dayData.district?.name || dayData?.dist_id || "N/A"}
+                    </TableCell>
+                    <TableCell className="text-xs p-2.5">
+                      {dayData.achievements}
+                    </TableCell>
+                    <TableCell className="text-xs p-2.5">
+                      {dayData.photo ? (
+                        <img
+                          src={dayData.photo}
+                          alt="Photo"
+                          className="max-w-24"
+                        />
+                      ) : (
+                        "No photo"
+                      )}
+                    </TableCell>
+                    <TableCell className="text-xs p-2.5">
+                      {dayData.remarks}
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan="10" className="text-center text-xs">
+                    No {poaType === "poa1" ? "POA1" : "POA2"} data available
                   </TableCell>
-                  <TableCell className="text-xs">{dayData.weekday}</TableCell>
-                  <TableCell className="text-xs">{dayData.plan}</TableCell>
-                  <TableCell className="text-xs">{dayData.action}</TableCell>
-                  <TableCell className="text-xs">
-                    {dayData.plannedEvent}
-                  </TableCell>
-                  <TableCell className="text-xs">
-                    {dayData.state.name}
-                  </TableCell>
-                  <TableCell className="text-xs">
-                    {dayData.district?.name || "N/A"}
-                  </TableCell>
-                  <TableCell className="text-xs">
-                    {dayData.achievements}
-                  </TableCell>
-                  <TableCell className="text-xs">
-                    {dayData.photo ? (
-                      <img
-                        src={dayData.photo}
-                        alt="Photo"
-                        className="max-w-24"
-                      />
-                    ) : (
-                      "No photo"
-                    )}
-                  </TableCell>
-                  <TableCell className="text-xs">{dayData.remarks}</TableCell>
                 </TableRow>
-              ))}
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TableCell colSpan="10" className="text-center text-xs">
-                End of POA1 Details
-              </TableCell>
-            </TableRow>
-          </TableFooter>
-        </Table>
-      </div>
+              )}
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TableCell colSpan="10" className="text-center text-xs">
+                  End of {poaType} Details
+                </TableCell>
+              </TableRow>
+            </TableFooter>
+          </Table>
+        </div>
+      )}
     </div>
   );
 };
 
-export default YFPoa1DetailPage;
+export default YfPoa1DetailPage;
