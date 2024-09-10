@@ -3,19 +3,18 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import API from "@/utils/API";
 import { tst } from "@/lib/utils";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuthContext } from "@/context/AuthContext";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import toast from "react-hot-toast";
 
-const LoginPage = () => {
+const ResetPassword = () => {
+  const { token } = useParams();
   const [formData, setFormData] = useState({
-    username: "",
+    confirmPassword: "",
     password: "",
   });
-  const { login, isAuthenticated } = useAuthContext();
   const [pending, setPending] = useState(false);
   const navigate = useNavigate();
-  const { user } = useAuthContext();
 
   const handleChange = (e) => {
     setFormData({
@@ -26,26 +25,25 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Password does not match");
+      return;
+    }
     try {
       setPending(true);
-      const response = await API.post("/api/v1/auth/login", formData);
-      tst.success("User login successful");
-      const authHeader = response.headers.get("Authorization");
-      if (authHeader) {
-        const token = authHeader.replace("Bearer ", "");
-        localStorage.setItem("token", token);
-      }
-      await login();
-      navigate("/admin/");
+      const { data } = await API.post(
+        `/api/v1/auth/change-password/${token}`,
+        formData
+      );
+      tst.success("Password reset successful");
+      navigate("/login");
     } catch (error) {
       tst.error(error);
-      console.error("Login failed:", error.message);
+      console.error(error.message);
     } finally {
       setPending(false);
     }
   };
-
-  // if(isAuthenticated)  navigate("/admin");
 
   return (
     <div className="max-w-xl mx-auto py-20 px-4 md:px-16 ">
@@ -53,21 +51,6 @@ const LoginPage = () => {
         Login to your account
       </h1>
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="flex flex-col space-y-2">
-          <Label htmlFor="username" className="mt-2">
-            Username
-          </Label>
-          <Input
-            type="username"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            id="username"
-            placeholder="Enter Username"
-            className="col-span-3"
-            required
-          />
-        </div>
         <div className="flex flex-col space-y-2">
           <Label htmlFor="password" className="mt-2">
             Password
@@ -79,6 +62,21 @@ const LoginPage = () => {
             onChange={handleChange}
             id="password"
             placeholder="Enter Password"
+            className="col-span-3"
+            required
+          />
+        </div>
+        <div className="flex flex-col space-y-2">
+          <Label htmlFor="confirmPassword" className="mt-2">
+            Confirm Password
+          </Label>
+          <Input
+            type="password"
+            name="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            id="confirmPassword"
+            placeholder="Enter Password again"
             className="col-span-3"
             required
           />
@@ -100,4 +98,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default ResetPassword;

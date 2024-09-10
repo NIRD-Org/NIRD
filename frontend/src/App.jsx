@@ -118,6 +118,8 @@ import UpdatePOA1Form from "./components/admin/soepr/kpidata/UpdatePOA1Form";
 import SoeprDistrictForm from "./components/admin/master/forms/SoeprDistrict";
 import POA2Formtemp from "./components/admin/soepr/kpidata/POA2Formtemp";
 import SoeprLeaveUpdateForm from "./components/admin/soepr/attendance/Leaveupdate";
+import ForgotPassword from "./Pages/ForgotPassword";
+import ResetPassword from "./Pages/resetPassword";
 
 function App() {
   const { login } = useAuthContext();
@@ -133,6 +135,9 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/kpi" element={<KPIPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/password/reset/:token" element={<ResetPassword />} />
+
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/gp-profile" element={<KPIDetails />} />
           <Route path="project" element={<ProjectPage />} />
@@ -171,7 +176,7 @@ function App() {
             />
             <Route path="soepr/plan-of-action" element={<POA />} />
             <Route path="soepr/POA1" element={<POA1 />} />
-            <Route path="soepr/leave" element={<SoeprLeaveUpdateForm/>} />
+            <Route path="soepr/leave" element={<SoeprLeaveUpdateForm />} />
             <Route path="soepr/POA1/edit/:id" element={<UpdatePOA1Form />} />
             <Route
               path="soepr/POA1/view/:id"

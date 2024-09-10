@@ -3,6 +3,11 @@ import bcrypt from "bcryptjs";
 import { User } from "../models/userModel.js";
 import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
 import { Errorhandler } from "../utils/errorHandler.js";
+import crypto from "crypto";
+import ejs from "ejs";
+import path from "path";
+import { sendEmail } from "../utils/sendMail.js";
+const __dirname = path.resolve();
 
 const getNewId = async () => {
   try {
@@ -37,7 +42,7 @@ export const register = CatchAsyncError(async (req, res, next) => {
     const id = await getNewId();
     req.body.id = id.toString();
     req.body.createdBy = req.user.id;
-
+    enquiry;
     user = new User(req.body);
 
     const salt = await bcrypt.genSalt(10);
@@ -131,5 +136,96 @@ export const registerMultipleUsers = CatchAsyncError(async (req, res, next) => {
   } catch (err) {
     console.log("Error: " + err);
     return next(new Errorhandler("Failed to register multiple users", 500));
+  }
+});
+
+export const sendResetPassword = CatchAsyncError(async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      return next(new Errorhandler("User Not registered", 400));
+    }
+
+    const resetToken = crypto.randomBytes(20).toString("hex");
+    user.resetPasswordToken = crypto
+      .createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
+    user.resetPasswordExpire = Date.now() + 15 * 60 * 1000;
+
+    const resetUrl = `https://nirdpr.netlify.app/password/reset/${resetToken}`;
+
+    const html = await ejs.renderFile(
+      path.join(__dirname, "/src/emails/resetPassword.ejs"),
+      { user, resetUrl }
+    );
+    await sendEmail({
+      to: user.email,
+      subject: "Password reset",
+      html,
+    });
+    await user.save();
+    res.status(200).json({
+      success: true,
+      message: "Please check your mail",
+    });
+  } catch (error) {
+    console.log(error);
+    return next(new Errorhandler("Failed to change password", 500));
+  }
+});
+
+export const resetPassword = CatchAsyncError(async (req, res, next) => {
+  try {
+    const resetPasswordToken = crypto
+      .createHash("sha256")
+      .update(req.params.token)
+      .digest("hex");
+
+    const user = await User.findOne({
+      resetPasswordToken,
+      resetPasswordExpire: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return next(new Errorhandler("Invalid or expired token", 400));
+    }
+
+    const { password, confirmPassword } = req.body;
+    if (!password || !confirmPassword) {
+      return next(
+        new Errorhandler(
+          "Please provide both password and confirm password",
+          400
+        )
+      );
+    }
+
+    if (password !== confirmPassword) {
+      return next(new Errorhandler("Passwords do not match", 400));
+    }
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(password, salt);
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+    const html = await ejs.renderFile(
+      path.join(__dirname, "/src/emails/passwordSuccessfull.ejs"),
+      { user }
+    );
+    await sendEmail({
+      to: user.email,
+      subject: "Password reset",
+      html,
+    });
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Password has been updated successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    return next(new Errorhandler("Failed to change password", 500));
   }
 });
