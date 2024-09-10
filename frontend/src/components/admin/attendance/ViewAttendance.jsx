@@ -149,7 +149,7 @@ const ViewAttendance = () => {
             Reset
           </button>
         </div>
-
+{/*}
         <div className="w-full md:w-fit flex flex-col md:flex-row gap-5">
           <form onSubmit={handleSearch} className="flex items-center space-x-2">
             <input
@@ -175,7 +175,7 @@ const ViewAttendance = () => {
               </svg>
             </button>
           </form>
-        </div>
+        </div>*/}
       </div>
 
       {!isLoading && attendance.length == 0 ? (

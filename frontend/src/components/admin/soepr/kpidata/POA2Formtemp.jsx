@@ -364,7 +364,7 @@ const POA2Formtemp = ({ update }) => {
                     handleInputChange(day, "achievements", e.target.value)
                   }
                   value={formDataState[day]?.achievements || ""}
-                
+                  disabled={!isEditableOnLastDay}
                 />
               </TableCell>
               <TableCell className="p-2">
@@ -374,7 +374,7 @@ const POA2Formtemp = ({ update }) => {
                   onChange={(e) =>
                     handleInputChange(day, "photo", e.target.files[0])
                   }
-                  
+                  disabled={!isEditableOnLastDay}
                 />
               </TableCell>
               <TableCell className="p-2">
@@ -385,7 +385,7 @@ const POA2Formtemp = ({ update }) => {
                   onChange={(e) =>
                     handleInputChange(day, "remarks", e.target.value)
                   }
-                  
+                  disabled={!isEditableOnLastDay}
                   value={formDataState[day]?.remarks || ""}
                 />
               </TableCell>

@@ -203,12 +203,12 @@ export const createPoa1 = CatchAsyncError(async (req, res, next) => {
 
     res.status(201).json({
       success: true,
-      message: "POA1 data successfully saved",
+      message: "POA2 data successfully saved",
       data: poa1,
     });
   } catch (error) {
     console.error(error);
-    next(new Errorhandler("Failed to submit POA1 Data", 500));
+    next(new Errorhandler("Failed to submit POA Data", 500));
   }
 });
 
@@ -219,7 +219,7 @@ export const getPoa1s = CatchAsyncError(async (req, res, next) => {
     res.status(200).json({ success: true, data: poa1Data });
   } catch (error) {
     console.error(error);
-    next(new Errorhandler("Failed to get POA1 Data", 500));
+    next(new Errorhandler("Failed to get POA Data", 500));
   }
 });
 
@@ -306,7 +306,7 @@ export const getPoalData = CatchAsyncError(async (req, res, next) => {
     res.status(200).json({ success: true, data: poa1Data[0] });
   } catch (error) {
     console.error(error);
-    next(new Errorhandler("Failed to get POA1 Data", 500));
+    next(new Errorhandler("Failed to get POA Data", 500));
   }
 });
 
@@ -415,7 +415,7 @@ export const getPoa1DataByState = CatchAsyncError(async (req, res, next) => {
     res.status(200).json({ success: true, data: poa1Data[0] });
   } catch (error) {
     console.error(error);
-    next(new Errorhandler("Failed to Get POA1 Data", 500));
+    next(new Errorhandler("Failed to Get POA Data", 500));
   }
 });
 
@@ -500,7 +500,7 @@ export const getAllPoa1Data = CatchAsyncError(async (req, res, next) => {
     }
     res.status(200).json({ success: true, data: poa1Data });
   } catch (error) {
-    next(new Errorhandler("Failed to Retrieve POA1 Data", 500));
+    next(new Errorhandler("Failed to Retrieve POA Data", 500));
   }
 });
 
@@ -575,11 +575,11 @@ export const updatePoa1Data = CatchAsyncError(async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      message: "POA1 data successfully updated",
+      message: "POA data successfully updated",
       data: poa1,
     });
   } catch (error) {
     console.error(error);
-    next(new Errorhandler("Failed to Update POA1 Data", 500));
+    next(new Errorhandler("Failed to Update POA Data", 500));
   }
 });

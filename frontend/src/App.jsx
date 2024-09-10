@@ -110,6 +110,9 @@ import POAView from "./components/admin/soepr/kpidata/POAView";
 import Poa1DetailPage from "./components/admin/soepr/kpidata/PoaDetails";
 import Poa1AdminData from "./components/admin/poa/Poa1AdminData";
 import YFPoa1Form from "./components/admin/young-fellow/Poa/YFPoa1Form";
+import YFPoa2Form from "./components/admin/young-fellow/Poa/YFPoa2Form";
+import YFPoa3Form from "./components/admin/young-fellow/Poa/YFPoa3Form";
+import YFPoa4Form from "./components/admin/young-fellow/Poa/YFPoa4Form";
 import YFPoa1View from "./components/admin/young-fellow/Poa/YFPoaView";
 import YFPoa1DetailPage from "./components/admin/young-fellow/Poa/YfPoa1DetailPage";
 import Poa1AdminYfData from "./components/admin/poa/Poa1AdminYfData";
@@ -118,6 +121,8 @@ import UpdatePOA1Form from "./components/admin/soepr/kpidata/UpdatePOA1Form";
 import SoeprDistrictForm from "./components/admin/master/forms/SoeprDistrict";
 import POA2Formtemp from "./components/admin/soepr/kpidata/POA2Formtemp";
 import SoeprLeaveUpdateForm from "./components/admin/soepr/attendance/Leaveupdate";
+import SoeprTourUpdateForm from "./components/admin/soepr/attendance/TourUpdate";
+import PoaReportcount from "./components/admin/poa/PoaReportcount";
 import ForgotPassword from "./Pages/ForgotPassword";
 import ResetPassword from "./Pages/resetPassword";
 
@@ -176,7 +181,10 @@ function App() {
             />
             <Route path="soepr/plan-of-action" element={<POA />} />
             <Route path="soepr/POA1" element={<POA1 />} />
+            <Route path="soepr/POAreport" element={<PoaReportcount />} />
             <Route path="soepr/leave" element={<SoeprLeaveUpdateForm />} />
+            <Route path="soepr/tour" element={<SoeprTourUpdateForm />} />
+
             <Route path="soepr/POA1/edit/:id" element={<UpdatePOA1Form />} />
             <Route
               path="soepr/POA1/view/:id"
@@ -189,6 +197,9 @@ function App() {
             <Route path="yf/poa1-data" element={<Poa1AdminYfData />} />
             <Route path="soepr/poa-report" element={<PoaReport />} />
             <Route path="yf/POA1" element={<YFPoa1Form />} />
+            <Route path="yf/POA2" element={<YFPoa2Form />} />
+            <Route path="yf/POA3" element={<YFPoa3Form />} />
+            <Route path="yf/POA4" element={<YFPoa4Form />} />
             <Route path="yf/POA1/edit/:id" element={<YFPoa1Form update />} />
             <Route path="yf/POAView" element={<YFPoa1View />} />
 
@@ -196,7 +207,6 @@ function App() {
               path="yf/POA1/view/:id"
               element={<YFPoa1DetailPage update />}
             />
-            <Route path="yf/POA2" element={<POA2 />} />
 
             <Route path="attendance/view" element={<ConsolidatedViewPage />} />
 

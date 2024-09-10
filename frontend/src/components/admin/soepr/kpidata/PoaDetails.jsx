@@ -76,6 +76,12 @@ const Poa1DetailPage = () => {
     pdf.save(`POA1_Details_${id}.pdf`);
   };
 
+  const getHeaderText = () => {
+    return poaType === "poa1"
+      ? "First Fortnightly Plan Of Action"
+      : "Second Fortnightly Plan Of Action";
+  };
+
   return (
     <div className="w-full md:w-[80vw]">
       <style>
@@ -141,7 +147,7 @@ const Poa1DetailPage = () => {
       ) : (
         <div id="poa1-detail">
           <AdminHeader className="print-header-margin">
-            First Fortnightly Plan Of Action - Month:{" "}
+            {getHeaderText()} - Month:{" "}
             {new Date(poa1Data.created_at).toLocaleString("en-IN", {
               month: "long",
             })}{" "}
@@ -149,7 +155,7 @@ const Poa1DetailPage = () => {
           </AdminHeader>
           <Table>
             <TableCaption className="text-sm">
-              Details for POA1 ID: {poa1Data?.id}
+              Details for {poaType === "poa1" ? "POA1" : "POA2"} ID: {poa1Data?.id}
             </TableCaption>
             <TableHeader>
               <TableRow>
@@ -212,7 +218,7 @@ const Poa1DetailPage = () => {
               ) : (
                 <TableRow>
                   <TableCell colSpan="10" className="text-center text-xs">
-                    No POA1 data available
+                    No {poaType === "poa1" ? "POA1" : "POA2"} data available
                   </TableCell>
                 </TableRow>
               )}
@@ -220,7 +226,7 @@ const Poa1DetailPage = () => {
             <TableFooter>
               <TableRow>
                 <TableCell colSpan="10" className="text-center text-xs">
-                  End of POA1 Details
+                  End of {poaType === "poa1" ? "POA1" : "POA2"} Details
                 </TableCell>
               </TableRow>
             </TableFooter>

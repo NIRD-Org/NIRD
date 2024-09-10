@@ -73,6 +73,12 @@ export const getSidebarItems = (user) => {
             title: "Leave Entry Form",
             link: "/admin/soepr/leave",
           },
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "Tour Entry Form",
+            link: "/admin/soepr/Tour",
+          },
         ],
       },
       {
@@ -104,12 +110,12 @@ export const getSidebarItems = (user) => {
             title: "POA2",
             link: "/admin/soepr/POA2",
           },
-          {
+         /* {
             type: "sub-module",
             icon: ArrowBigRight,
             title: "POA2(August temp)",
             link: "/admin/soepr/poa2temp",
-          },
+          },*/
         ],
       },
       {
@@ -197,8 +203,14 @@ export const getSidebarItems = (user) => {
             {
               type: "sub-module",
               icon: ArrowBigRight,
-              title: "Report Submission Status ",
+              title: "POA Defaulters List ",
               link: "/admin/soepr/poa-report",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "POA Statewise Submission Status ",
+              link: "/admin/soepr/pOAreport",
             },
           ],
         },
@@ -456,6 +468,18 @@ export const getSidebarItems = (user) => {
               icon: ArrowBigRight,
               title: "POA2",
               link: "/admin/yf/POA2",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "POA3",
+              link: "/admin/yf/POA3",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "POA4",
+              link: "/admin/yf/POA4",
             },
           ],
         },
