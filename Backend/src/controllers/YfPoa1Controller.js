@@ -243,7 +243,7 @@ export const getPoalData = CatchAsyncError(async (req, res, next) => {
       },
       {
         $lookup: {
-          from: "soeprstates",
+          from: "states",
           localField: "poaData.state_id",
           foreignField: "id",
           as: "state",
@@ -251,7 +251,7 @@ export const getPoalData = CatchAsyncError(async (req, res, next) => {
       },
       {
         $lookup: {
-          from: "soeprdistricts",
+          from: "districts",
           localField: "poaData.dist_id",
           foreignField: "id",
           as: "district",
@@ -318,7 +318,7 @@ export const getPoalData = CatchAsyncError(async (req, res, next) => {
 
 export const getPoa1DataByState = CatchAsyncError(async (req, res, next) => {
   try {
-    const { state_id, user_id } = req.query;
+    const { state_id, user_id, month, year, poaType = "poa1" } = req.query;
 
     const poa1Data = await YfPoa1Model.aggregate([
       {
@@ -328,9 +328,43 @@ export const getPoa1DataByState = CatchAsyncError(async (req, res, next) => {
         },
       },
       {
+        $addFields: {
+          poaMonth: {
+            $month: {
+              $dateFromString: {
+                dateString: "$poaData.date",
+                format: "%d/%m/%Y",
+              },
+            },
+          },
+          poaYear: {
+            $year: {
+              $dateFromString: {
+                dateString: "$poaData.date",
+                format: "%d/%m/%Y",
+              },
+            },
+          },
+          poaDateObj: {
+            $dateFromString: {
+              dateString: "$poaData.date",
+              format: "%d/%m/%Y",
+            },
+          },
+        },
+      },
+      {
         $match: {
+          poaMonth: parseInt(month),
+          poaYear: parseInt(year),
           "poaData.state_id": state_id,
+          "poaData.poaType": poaType,
           user_id: user_id,
+        },
+      },
+      {
+        $sort: {
+          poaDateObj: 1,
         },
       },
       {
@@ -394,8 +428,6 @@ export const getPoa1DataByState = CatchAsyncError(async (req, res, next) => {
         $project: {
           stateDetails: 0,
           districtDetails: 0,
-          blockDetails: 0,
-          gpDetails: 0,
         },
       },
     ]);
@@ -409,7 +441,7 @@ export const getPoa1DataByState = CatchAsyncError(async (req, res, next) => {
     res.status(200).json({ success: true, data: poa1Data[0] });
   } catch (error) {
     console.error(error);
-    next(new Errorhandler("Failed to Get POA1 Data", 500));
+    next(new Errorhandler("Failed to Get POA Data", 500));
   }
 });
 
