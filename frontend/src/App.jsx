@@ -125,6 +125,10 @@ import SoeprTourUpdateForm from "./components/admin/soepr/attendance/TourUpdate"
 import PoaReportcount from "./components/admin/poa/PoaReportcount";
 import ForgotPassword from "./Pages/ForgotPassword";
 import ResetPassword from "./Pages/resetPassword";
+import YFPoa1FormAug from "./components/admin/young-fellow/Poa/YFPoa1FormAug";
+import YFPoa2FormAug from "./components/admin/young-fellow/Poa/YFPoa2FormAug";
+import YFPoa3FormAug from "./components/admin/young-fellow/Poa/YFPoa3FormAug";
+import YFPoa4FormAug from "./components/admin/young-fellow/Poa/YFPoa4FormAug";
 
 function App() {
   const { login } = useAuthContext();
@@ -200,6 +204,10 @@ function App() {
             <Route path="yf/POA2" element={<YFPoa2Form />} />
             <Route path="yf/POA3" element={<YFPoa3Form />} />
             <Route path="yf/POA4" element={<YFPoa4Form />} />
+            <Route path="yf/POA1/aug" element={<YFPoa1FormAug />} />
+            <Route path="yf/POA2/aug" element={<YFPoa2FormAug />} />
+            <Route path="yf/POA3/aug" element={<YFPoa3FormAug />} />
+            <Route path="yf/POA4/aug" element={<YFPoa4FormAug />} />
             <Route path="yf/POA1/edit/:id" element={<YFPoa1Form update />} />
             <Route path="yf/POAView" element={<YFPoa1View />} />
 

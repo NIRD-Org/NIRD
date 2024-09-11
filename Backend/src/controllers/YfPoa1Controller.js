@@ -97,7 +97,7 @@ const getNewId = async () => {
 
 export const createPoa1 = CatchAsyncError(async (req, res, next) => {
   try {
-    const { poa2_created_at } = req.query;
+    const { created_at } = req.query;
     const poaData = Object.keys(req.body)
       .filter((key) => key.startsWith("poaData"))
       .reduce((acc, key) => {
@@ -169,7 +169,6 @@ export const createPoa1 = CatchAsyncError(async (req, res, next) => {
       // Append new filtered entries to the existing document
       poa1.poaData.push(...filteredEntries);
       poa1.status = "1";
-      poa1.poa2_created_at = poa2_created_at;
       await poa1.save();
     } else {
       // Create a new document for this month
@@ -178,8 +177,8 @@ export const createPoa1 = CatchAsyncError(async (req, res, next) => {
         user_id,
         status: "1",
         poaData: filteredEntries,
-        poa2_created_at,
-        created_at: new Date(), // Ensure created_at is set correctly
+
+        created_at: created_at ?? new Date(),
       });
       await poa1.save();
     }
@@ -205,93 +204,6 @@ export const getPoa1s = CatchAsyncError(async (req, res, next) => {
     next(new Errorhandler("Failed to get POA1 Data", 500));
   }
 });
-
-// export const getPoalData = CatchAsyncError(async (req, res, next) => {
-//   try {
-//     const poa1Data = await YfPoa1Model.aggregate([
-//       {
-//         $match: {
-//           id: req.params.id,
-//         },
-//       },
-//       {
-//         $unwind: {
-//           path: "$poaData",
-//           preserveNullAndEmptyArrays: true, // Unwind `poaData` first
-//         },
-//       },
-//       {
-//         $lookup: {
-//           from: "soeprstates",
-//           localField: "poaData.state_id",
-//           foreignField: "id",
-//           as: "state",
-//         },
-//       },
-//       {
-//         $lookup: {
-//           from: "soeprdistricts",
-//           localField: "poaData.dist_id",
-//           foreignField: "id",
-//           as: "district",
-//         },
-//       },
-//       {
-//         $lookup: {
-//           from: "blocks",
-//           localField: "poaData.block_id",
-//           foreignField: "id",
-//           as: "block",
-//         },
-//       },
-//       {
-//         $lookup: {
-//           from: "grampanchayats",
-//           localField: "poaData.gp_id",
-//           foreignField: "id",
-//           as: "gp",
-//         },
-//       },
-//       {
-//         $addFields: {
-//           "poaData.state": {
-//             $arrayElemAt: ["$state", 0], // Ensure that the correct state is associated
-//           },
-//           "poaData.district": {
-//             $arrayElemAt: ["$district", 0], // Ensure that the correct district is associated
-//           },
-//           "poaData.block": {
-//             $arrayElemAt: ["$block", 0],
-//           },
-//           "poaData.gp": {
-//             $arrayElemAt: ["$gp", 0],
-//           },
-//         },
-//       },
-//       {
-//         $group: {
-//           _id: "$_id",
-//           id: { $first: "$id" },
-//           user_id: { $first: "$user_id" },
-//           status: { $first: "$status" },
-//           poaData: { $push: "$poaData" },
-//           created_at: { $first: "$created_at" },
-//           modified_at: { $first: "$modified_at" },
-//         },
-//       },
-//     ]);
-
-//     if (!poa1Data || poa1Data.length === 0) {
-//       return res
-//         .status(404)
-//         .json({ success: false, message: "No POA1 Data Found" });
-//     }
-//     res.status(200).json({ success: true, data: poa1Data[0] });
-//   } catch (error) {
-//     console.error(error);
-//     next(new Errorhandler("Failed to get POA1 Data", 500));
-//   }
-// });
 
 export const getPoalData = CatchAsyncError(async (req, res, next) => {
   try {
@@ -502,10 +414,84 @@ export const getPoa1DataByState = CatchAsyncError(async (req, res, next) => {
 });
 
 export const updatePoa1Data = CatchAsyncError(async (req, res, next) => {
-  async (req, res, next) => {
-    try {
-    } catch (error) {
-      next(new Errorhandler("Failed to Update POA1 Data", 500));
+  try {
+    const { poaId } = req.params;
+    // Extract poaData from the request body
+    const poaData = Object.keys(req.body)
+      .filter((key) => key.startsWith("poaData"))
+      .reduce((acc, key) => {
+        const [, dateIndex, entryIndex, field] = key.match(
+          /poaData\[(\d+)\]\[(\d+)\]\[(\w+)\]/
+        );
+        acc[dateIndex] = acc[dateIndex] || [];
+        acc[dateIndex][entryIndex] = acc[dateIndex][entryIndex] || {};
+        acc[dateIndex][entryIndex][field] = req.body[key];
+        return acc;
+      }, {});
+
+    const user_id = req?.user?.id;
+    let poa1 = await YfPoa1Model.findOne({ id: poaId });
+
+    if (!poa1) {
+      return res.status(404).json({
+        success: false,
+        message: "POA1 data not found for the user",
+      });
     }
-  };
+
+    // Loop over the poaData entries
+    for (const [dateIndex, entries] of Object.entries(poaData)) {
+      for (const [entryIndex, entry] of entries.entries()) {
+        const incomingDate = entry.date;
+        const incomingStateId = entry.state_id;
+        const incomingDistId = entry.dist_id;
+        const incomingBlockId = entry.block_id;
+        const incomingGpId = entry.gp_id;
+
+        // Find the existing entry in poaData with matching date, state_id, and dist_id
+        const existingEntryIndex = poa1.poaData.findIndex((item) => {
+          return (
+            item.date === incomingDate &&
+            item.state_id === incomingStateId &&
+            item.dist_id === incomingDistId &&
+            item.block_id === incomingBlockId &&
+            item.gp_id === incomingGpId
+          );
+        });
+
+        const photoKey = `poaData[${dateIndex}][${entryIndex}][photo]`;
+
+        // Handle file uploads if any
+        if (req.files && req.files[photoKey]) {
+          const photoBuffer = req.files[photoKey].data;
+          const result = await uploadFile(photoBuffer);
+          entry.photo = result.secure_url;
+        }
+
+        if (existingEntryIndex !== -1) {
+          // Update existing entry
+          poa1.poaData[existingEntryIndex] = {
+            ...poa1.poaData[existingEntryIndex],
+            ...entry,
+          };
+        } else {
+          // Add new entry
+          poa1.poaData.push({
+            ...entry,
+          });
+        }
+      }
+    }
+
+    poa1.status = "1"; // Update status to active
+    await poa1.save();
+
+    res.status(200).json({
+      success: true,
+      message: "POA data successfully updated",
+    });
+  } catch (error) {
+    console.error(error);
+    next(new Errorhandler("Failed to Update POA Data", 500));
+  }
 });

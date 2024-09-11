@@ -229,39 +229,23 @@ const YFPoa1Form = ({ update }) => {
   const currentMonthIndex = new Date().getMonth();
   const currentYear = new Date().getFullYear();
   const { id: poalId } = useParams();
-  const [selectedState, setSelectedState] = useState("");
+  const [selectedStates, setSelectedStates] = useState({});
   const [selectedKpiTheme, setSelectedKpiTheme] = useState("");
   const [selectedActivities, setSelectedActivities] = useState({});
-  const [selectedDistricts, setSelectedDistricts] = useState();
-  const [selectedGps, setSelectedGps] = useState();
-  const [selectedBlocks, setSelectedBlocks] = useState();
+  const [selectedDistricts, setSelectedDistricts] = useState({});
+  const [selectedGps, setSelectedGps] = useState({});
+  const [selectedBlocks, setSelectedBlocks] = useState({});
 
   const [formDataState, setFormData] = useState([]);
   const selectedMonth = months[currentMonthIndex];
-  const {
-    yfState: states,
-    yfDist: districts,
-    yfBlock: blocks,
-    yfGp: gps,
-  } = useYfLocation({
-    state_id: selectedState,
-    dist_id: selectedDistricts,
-    block_id: selectedBlocks,
-  });
 
-  const lastDayOfWeek = 7; // Last day of the first week
-
-  useEffect(() => {
-    if (states && states.length > 0) {
-      setSelectedState(states[0].id);
-    }
-  }, [states]);
+  const lastDayOfWeek = months[currentMonthIndex].days;
 
   useEffect(() => {
     if (update) {
       const fetchPoalData = async () => {
         try {
-          const response = await API.get(`/api/v1/poa1/get/${poalId}`);
+          const response = await API.get(`/api/v1/yf-poa1/get/${poalId}`);
           setFormData(response.data.data.poaData);
         } catch (error) {
           console.error("Error fetching POA data:", error);
@@ -297,16 +281,26 @@ const YFPoa1Form = ({ update }) => {
     }));
   };
 
-  const handleDistrictChange = (selectedDistrict) => {
-    setSelectedDistricts(selectedDistrict);
+  const handleStateChange = (day, selectedState) => {
+    setSelectedStates((prev) => ({ ...prev, [day]: selectedState }));
+    setSelectedDistricts((prev) => ({ ...prev, [day]: "" }));
+
+    setSelectedBlocks((prev) => ({ ...prev, [day]: "" }));
+    setSelectedGps((prev) => ({ ...prev, [day]: "" }));
+  };
+  const handleDistrictChange = (day, selectedDistrict) => {
+    setSelectedDistricts((prev) => ({ ...prev, [day]: selectedDistrict }));
+    setSelectedBlocks((prev) => ({ ...prev, [day]: "" }));
+    setSelectedGps((prev) => ({ ...prev, [day]: "" }));
   };
 
-  const handleBlockChange = (selectedBlock) => {
-    setSelectedBlocks(selectedBlock);
+  const handleBlockChange = (day, selectedBlock) => {
+    setSelectedBlocks((prev) => ({ ...prev, [day]: selectedBlock }));
+    setSelectedGps((prev) => ({ ...prev, [day]: "" }));
   };
 
-  const handleGpChange = (selectedGp) => {
-    setSelectedGps(selectedGp);
+  const handleGpChange = (day, selectedGp) => {
+    setSelectedGps((prev) => ({ ...prev, [day]: selectedGp }));
   };
 
   const handleInputChange = (day, key, value) => {
@@ -339,16 +333,22 @@ const YFPoa1Form = ({ update }) => {
           formDataState[day]?.plannedEvent || ""
         );
         formDataToSubmit.append(`poaData[${day}][poaType]`, "poa1");
-        formDataToSubmit.append(`poaData[${day}][state_id]`, selectedState);
+        formDataToSubmit.append(
+          `poaData[${day}][state_id]`,
+          selectedStates[day]
+        );
         formDataToSubmit.append(
           `poaData[${day}][dist_id]`,
-          selectedDistricts || ""
+          selectedDistricts[day] || ""
         );
         formDataToSubmit.append(
           `poaData[${day}][block_id]`,
-          selectedBlocks || ""
+          selectedBlocks[day] || ""
         );
-        formDataToSubmit.append(`poaData[${day}][gp_id]`, selectedGps || "");
+        formDataToSubmit.append(
+          `poaData[${day}][gp_id]`,
+          selectedGps[day] || ""
+        );
         formDataToSubmit.append(
           `poaData[${day}][achievements]`,
           formDataState[day]?.achievements || ""
@@ -386,68 +386,7 @@ const YFPoa1Form = ({ update }) => {
       <AdminHeader>
         First Weekly Plan Of Action - Month : {selectedMonth.name} {currentYear}
       </AdminHeader>
-      <div
-        style={{ marginBottom: "15px" }}
-        className="grid grid-cols-2 md:grid-cols-4 gap-5"
-      >
-        <select
-          className="w-fit px-2 py-1 rounded min-w-40"
-          value={selectedState}
-          onChange={(e) => setSelectedState(e.target.value)}
-          required
-        >
-          <option value="">Select State</option>
-          {states &&
-            states.map((state) => (
-              <option key={state.id} value={state.id}>
-                {state.name}
-              </option>
-            ))}
-        </select>
-        <select
-          className="w-fit px-2 py-1 rounded min-w-40"
-          onChange={(e) => handleDistrictChange(e.target.value)}
-          value={selectedDistricts || ""}
-          disabled={!districts}
-          required
-        >
-          <option value="">Select Location</option>
-          {districts?.map((dist) => (
-            <option key={dist.id} value={dist.id}>
-              {dist.name}
-            </option>
-          ))}
-          <option value="NIRD">NIRD</option>
-          <option value="SIRD/SPRC">SIRD/SPRC</option>
-          <option value="None">None</option>
-        </select>
-        <select
-          className="w-fit px-2 py-1 rounded min-w-40"
-          onChange={(e) => handleBlockChange(e.target.value)}
-          value={selectedBlocks || ""}
-          disabled={!blocks}
-        >
-          <option value="">Select Block</option>
-          {blocks?.map((block) => (
-            <option key={block.id} value={block.id}>
-              {block.name}
-            </option>
-          ))}
-        </select>
-        <select
-          className="w-fit px-2 py-1 rounded min-w-40"
-          onChange={(e) => handleGpChange(e.target.value)}
-          value={selectedGps || ""}
-          disabled={!gps}
-        >
-          <option value="">Select GP</option>
-          {gps?.map((gp) => (
-            <option key={gp.id} value={gp.id}>
-              {gp.name}
-            </option>
-          ))}
-        </select>
-      </div>
+
       <Table
         border="1"
         cellPadding="3"
@@ -462,100 +401,179 @@ const YFPoa1Form = ({ update }) => {
             <th>Activity</th>
             <th>Planned Event</th>
             <th>Tentative Target (Description in 50 words)</th>
-            {/* <th>Location</th>
+            <th>State</th>
+            <th>Location</th>
             <th>Block</th>
-            <th>Gram Panchayat</th> */}
+            <th>Gram Panchayat</th>
             <th>Achievements</th>
             <th>Upload Photo</th>
             <th>Remarks/Reason for Failure</th>
           </tr>
         </thead>
         <tbody>
-          {getDaysInMonth().map((day, idx) => (
-            <tr key={idx}>
-              <td>{formatIndianDate(day)}</td>
-              <td>{getWeekDay(day)}</td>
-              <td>
-                <select
-                  style={{ width: "100%" }}
-                  value={selectedKpiTheme[day] || ""}
-                  onChange={(e) => handleKpiThemeChange(day, e.target.value)}
-                >
-                  <option value="">Select KPI Theme</option>
-                  {Object.keys(kpiThemes).map((theme) => (
-                    <option key={theme} value={theme}>
-                      {theme}
-                    </option>
-                  ))}
-                </select>
-              </td>
-              <td>
-                <select
-                  style={{ width: "100%" }}
-                  value={selectedActivities[day] || ""}
-                  onChange={(e) => handleActivityChange(day, e.target.value)}
-                  disabled={!selectedKpiTheme[day]}
-                >
-                  <option value="">Select Activity</option>
-                  {selectedKpiTheme[day] &&
-                    kpiThemes[selectedKpiTheme[day]].map((activity, index) => (
-                      <option key={index} value={activity}>
-                        {activity}
+          {getDaysInMonth().map((day, idx) => {
+            const { yfState: states } = useYfLocation({
+              state_id: selectedStates[day],
+            });
+            const { yfDist: districts } = useYfLocation({
+              state_id: selectedStates[day],
+            });
+            const { yfBlock: blocks } = useYfLocation({
+              state_id: selectedStates[day],
+              dist_id: selectedDistricts[day],
+            });
+            const { yfGp: gps } = useYfLocation({
+              state_id: selectedStates[day],
+              dist_id: selectedDistricts[day],
+              block_id: selectedBlocks[day],
+            });
+
+            return (
+              <tr key={idx}>
+                <td>{formatIndianDate(day)}</td>
+                <td>{getWeekDay(day)}</td>
+                <td>
+                  <select
+                    style={{ width: "100%" }}
+                    value={selectedKpiTheme[day] || ""}
+                    onChange={(e) => handleKpiThemeChange(day, e.target.value)}
+                  >
+                    <option value="">Select KPI Theme</option>
+                    {Object.keys(kpiThemes).map((theme) => (
+                      <option key={theme} value={theme}>
+                        {theme}
                       </option>
                     ))}
-                </select>
-              </td>
-              <td>
-                <input
-                  type="text"
-                  style={{ width: "100%" }}
-                  onChange={(e) =>
-                    handleInputChange(day, "plannedEvent", e.target.value)
-                  }
-                  value={formDataState[day]?.plannedEvent || ""}
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  style={{ width: "100%" }}
-                  onChange={(e) =>
-                    handleInputChange(day, "tentativeTarget", e.target.value)
-                  }
-                  value={formDataState[day]?.tentativeTarget || ""}
-                />
-              </td>
-
-              <td>
-                <input
-                  type="text"
-                  style={{ width: "100%" }}
-                  onChange={(e) =>
-                    handleInputChange(day, "achievements", e.target.value)
-                  }
-                  value={formDataState[day]?.achievements || ""}
-                />
-              </td>
-              <td>
-                <input
-                  type="file"
-                  onChange={(e) =>
-                    handleInputChange(day, "photo", e.target.files[0])
-                  }
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  style={{ width: "100%" }}
-                  onChange={(e) =>
-                    handleInputChange(day, "remarks", e.target.value)
-                  }
-                  value={formDataState[day]?.remarks || ""}
-                />
-              </td>
-            </tr>
-          ))}
+                  </select>
+                </td>
+                <td>
+                  <select
+                    style={{ width: "100%" }}
+                    value={selectedActivities[day] || ""}
+                    onChange={(e) => handleActivityChange(day, e.target.value)}
+                    disabled={!selectedKpiTheme[day]}
+                  >
+                    <option value="">Select Activity</option>
+                    {selectedKpiTheme[day] &&
+                      kpiThemes[selectedKpiTheme[day]].map(
+                        (activity, index) => (
+                          <option key={index} value={activity}>
+                            {activity}
+                          </option>
+                        )
+                      )}
+                  </select>
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    style={{ width: "100%" }}
+                    onChange={(e) =>
+                      handleInputChange(day, "plannedEvent", e.target.value)
+                    }
+                    value={formDataState[day]?.plannedEvent || ""}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    style={{ width: "100%" }}
+                    onChange={(e) =>
+                      handleInputChange(day, "tentativeTarget", e.target.value)
+                    }
+                    value={formDataState[day]?.tentativeTarget || ""}
+                  />
+                </td>
+                <td>
+                  <select
+                    className="w-fit px-2 py-1 rounded min-w-40"
+                    value={selectedStates[day] || ""}
+                    onChange={(e) => handleStateChange(day, e.target.value)}
+                    required
+                  >
+                    <option value="">Select State</option>
+                    {states &&
+                      states.map((state) => (
+                        <option key={state.id} value={state.id}>
+                          {state.name}
+                        </option>
+                      ))}
+                  </select>
+                </td>
+                <td>
+                  <select
+                    onChange={(e) => handleDistrictChange(day, e.target.value)}
+                    value={selectedDistricts[day] || ""}
+                  >
+                    <option value="">Select Location</option>
+                    {districts?.map((dist) => (
+                      <option key={dist.id} value={dist.id}>
+                        {dist.name}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+                {/* Block Selection */}
+                <td>
+                  <select
+                    onChange={(e) => handleBlockChange(day, e.target.value)}
+                    value={selectedBlocks[day] || ""}
+                    disabled={!selectedDistricts[day]}
+                  >
+                    <option value="">Select Block</option>
+                    {blocks?.map((block) => (
+                      <option key={block.id} value={block.id}>
+                        {block.name}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+                {/* GP Selection */}
+                <td>
+                  <select
+                    onChange={(e) => handleGpChange(day, e.target.value)}
+                    value={selectedGps[day] || ""}
+                    disabled={!selectedBlocks[day]}
+                  >
+                    <option value="">Select GP</option>
+                    {gps?.map((gp) => (
+                      <option key={gp.id} value={gp.id}>
+                        {gp.name}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    style={{ width: "100%" }}
+                    onChange={(e) =>
+                      handleInputChange(day, "achievements", e.target.value)
+                    }
+                    value={formDataState[day]?.achievements || ""}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="file"
+                    onChange={(e) =>
+                      handleInputChange(day, "photo", e.target.files[0])
+                    }
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    style={{ width: "100%" }}
+                    onChange={(e) =>
+                      handleInputChange(day, "remarks", e.target.value)
+                    }
+                    value={formDataState[day]?.remarks || ""}
+                  />
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </Table>
       <Button

@@ -225,8 +225,8 @@ const kpiThemes = {
   ],
 };
 
-const YFPoa3Form = ({ update }) => {
-  const currentMonthIndex = new Date().getMonth();
+const YFPoa2FormAug = ({ update }) => {
+  const currentMonthIndex = new Date().getMonth() - 1;
   const currentYear = new Date().getFullYear();
   const { id: poalId } = useParams();
   const [selectedStates, setSelectedStates] = useState({});
@@ -239,8 +239,13 @@ const YFPoa3Form = ({ update }) => {
   const selectedMonth = months[currentMonthIndex];
 
   // Define the start and end of the second week
-  const thirdWeekStart = 15;
-  const thirdWeekEnd = 21;
+  const secondWeekStart = 8;
+  const secondWeekEnd = 14;
+  function getAugustDate(day, year = new Date().getFullYear()) {
+    return new Date(Date.UTC(year, 7, day));
+  }
+
+  const augustDate = getAugustDate(14, 2024);
 
   useEffect(() => {
     if (update) {
@@ -334,14 +339,10 @@ const YFPoa3Form = ({ update }) => {
           `poaData[${day}][plannedEvent]`,
           formDataState[day]?.plannedEvent || ""
         );
-        formDataToSubmit.append(`poaData[${day}][poaType]`, "poa3");
+        formDataToSubmit.append(`poaData[${day}][poaType]`, "poa2");
         formDataToSubmit.append(
           `poaData[${day}][state_id]`,
           selectedStates[day]
-        );
-        formDataToSubmit.append(
-          `poaData[${day}][tentativeTarget]`,
-          formDataState[day]?.tentativeTarget || ""
         );
         formDataToSubmit.append(
           `poaData[${day}][dist_id]`,
@@ -367,14 +368,22 @@ const YFPoa3Form = ({ update }) => {
           );
         }
         formDataToSubmit.append(
+          `poaData[${day}][tentativeTarget]`,
+          formDataState[day]?.tentativeTarget || ""
+        );
+        formDataToSubmit.append(
           `poaData[${day}][remarks]`,
           formDataState[day]?.remarks || ""
         );
       });
 
-      await API.post("/api/v1/yf-poa1/create", formDataToSubmit, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      await API.post(
+        `/api/v1/yf-poa1/create?created_at=${augustDate}`,
+        formDataToSubmit,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
 
       toast.success("Form submitted successfully!");
     } catch (error) {
@@ -386,7 +395,8 @@ const YFPoa3Form = ({ update }) => {
   return (
     <div style={{ fontSize: "14px", maxWidth: "100%", margin: "0 auto" }}>
       <AdminHeader>
-        Third Weekly Plan Of Action - Month : {selectedMonth.name} {currentYear}
+        Second Weekly Plan Of Action - Month : {selectedMonth.name}{" "}
+        {currentYear}
       </AdminHeader>
 
       <Table
@@ -413,7 +423,7 @@ const YFPoa3Form = ({ update }) => {
           </tr>
         </thead>
         <tbody>
-          {getDaysInWeek(thirdWeekStart, thirdWeekEnd).map((day, idx) => {
+          {getDaysInWeek(secondWeekStart, secondWeekEnd).map((day, idx) => {
             const { yfState: states } = useYfLocation({
               state_id: selectedStates[day],
             });
@@ -429,7 +439,6 @@ const YFPoa3Form = ({ update }) => {
               dist_id: selectedDistricts[day],
               block_id: selectedBlocks[day],
             });
-
             return (
               <tr key={idx}>
                 <td>{formatIndianDate(day)}</td>
@@ -585,7 +594,7 @@ const YFPoa3Form = ({ update }) => {
 
       <Button
         onClick={handleSubmit}
-        className="primary-button float-right mt-4"
+        className="primary-button mb-10 float-right mt-4"
       >
         Submit
       </Button>
@@ -593,4 +602,4 @@ const YFPoa3Form = ({ update }) => {
   );
 };
 
-export default YFPoa3Form;
+export default YFPoa2FormAug;

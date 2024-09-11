@@ -225,8 +225,8 @@ const kpiThemes = {
   ],
 };
 
-const YFPoa3Form = ({ update }) => {
-  const currentMonthIndex = new Date().getMonth();
+const YFPoa3FormAug = ({ update }) => {
+  const currentMonthIndex = new Date().getMonth() - 1;
   const currentYear = new Date().getFullYear();
   const { id: poalId } = useParams();
   const [selectedStates, setSelectedStates] = useState({});
@@ -241,6 +241,12 @@ const YFPoa3Form = ({ update }) => {
   // Define the start and end of the second week
   const thirdWeekStart = 15;
   const thirdWeekEnd = 21;
+
+  function getAugustDate(day, year = new Date().getFullYear()) {
+    return new Date(Date.UTC(year, 7, day));
+  }
+
+  const augustDate = getAugustDate(14, 2024);
 
   useEffect(() => {
     if (update) {
@@ -372,9 +378,13 @@ const YFPoa3Form = ({ update }) => {
         );
       });
 
-      await API.post("/api/v1/yf-poa1/create", formDataToSubmit, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      await API.post(
+        `/api/v1/yf-poa1/create?created_at=${augustDate}`,
+        formDataToSubmit,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
 
       toast.success("Form submitted successfully!");
     } catch (error) {
@@ -593,4 +603,4 @@ const YFPoa3Form = ({ update }) => {
   );
 };
 
-export default YFPoa3Form;
+export default YFPoa3FormAug;

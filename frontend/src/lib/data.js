@@ -110,7 +110,7 @@ export const getSidebarItems = (user) => {
             title: "POA2",
             link: "/admin/soepr/POA2",
           },
-         /* {
+          /* {
             type: "sub-module",
             icon: ArrowBigRight,
             title: "POA2(August temp)",
@@ -480,6 +480,37 @@ export const getSidebarItems = (user) => {
               icon: ArrowBigRight,
               title: "POA4",
               link: "/admin/yf/POA4",
+            },
+          ],
+        },
+        {
+          type: "module",
+          icon: ArrowBigRight,
+          title: "August Plan Of Action",
+          submodules: [
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "POA1",
+              link: "/admin/yf/POA1/aug",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "POA2",
+              link: "/admin/yf/POA2/aug",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "POA3",
+              link: "/admin/yf/POA3/aug",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "POA4",
+              link: "/admin/yf/POA4/aug",
             },
           ],
         },
