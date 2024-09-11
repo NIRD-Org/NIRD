@@ -404,7 +404,7 @@ const YFPoa1Form = ({ update }) => {
             <th>State</th>
             <th>Location</th>
             <th>Block</th>
-            <th>Gram Panchayat</th>
+
             <th>Gram Panchayat</th>
             <th>Achievements</th>
             <th>Photo</th>
