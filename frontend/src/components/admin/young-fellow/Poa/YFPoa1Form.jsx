@@ -235,11 +235,11 @@ const YFPoa1Form = ({ update }) => {
   const [selectedDistricts, setSelectedDistricts] = useState({});
   const [selectedGps, setSelectedGps] = useState({});
   const [selectedBlocks, setSelectedBlocks] = useState({});
-
   const [formDataState, setFormData] = useState([]);
+
   const selectedMonth = months[currentMonthIndex];
 
-  const lastDayOfWeek = months[currentMonthIndex].days;
+  const lastDayOfWeek = 7;
 
   useEffect(() => {
     if (update) {
@@ -396,7 +396,7 @@ const YFPoa1Form = ({ update }) => {
         <thead>
           <tr>
             <th>Date</th>
-            <th>Weekday</th>
+            <th>Day</th>
             <th>KPI Theme</th>
             <th>Activity</th>
             <th>Planned Event</th>
@@ -405,9 +405,10 @@ const YFPoa1Form = ({ update }) => {
             <th>Location</th>
             <th>Block</th>
             <th>Gram Panchayat</th>
+            <th>Gram Panchayat</th>
             <th>Achievements</th>
-            <th>Upload Photo</th>
-            <th>Remarks/Reason for Failure</th>
+            <th>Photo</th>
+            <th>Remarks</th>
           </tr>
         </thead>
         <tbody>
@@ -576,12 +577,9 @@ const YFPoa1Form = ({ update }) => {
           })}
         </tbody>
       </Table>
-      <Button
-        onClick={handleSubmit}
-        className="primary-button float-right mt-4"
-      >
-        Submit
-      </Button>
+      <div style={{ marginTop: "20px" }}>
+        <Button onClick={handleSubmit}>Submit</Button>
+      </div>
     </div>
   );
 };

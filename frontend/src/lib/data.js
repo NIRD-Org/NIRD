@@ -168,6 +168,12 @@ export const getSidebarItems = (user) => {
               title: "Young Fellow location",
               link: "/admin/users/all/young-fellow",
             },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "Admin location",
+              link: "/admin/users/all/admin",
+            },
 
             {
               type: "sub-module",
