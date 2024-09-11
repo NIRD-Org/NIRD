@@ -5,12 +5,31 @@ import {
   useParams,
   useSearchParams,
 } from "react-router-dom";
-import { ArrowLeftIcon } from "lucide-react";
+import { ArrowLeftIcon, Table } from "lucide-react";
 import API from "@/utils/API";
 import PoaDataCard from "./PoaDataCard";
 import { savePDF } from "@progress/kendo-react-pdf";
-import PoaYfDataCard from "./PoaYfDataCard";
 import html2pdf from "html2pdf.js";
+import FormField from "@/components/ui/formfield";
+const months = [
+  { label: "January", value: 1 },
+  { label: "February", value: 2 },
+  { label: "March", value: 3 },
+  { label: "April", value: 4 },
+  { label: "May", value: 5 },
+  { label: "June", value: 6 },
+  { label: "July", value: 7 },
+  { label: "August", value: 8 },
+  { label: "September", value: 9 },
+  { label: "October", value: 10 },
+  { label: "November", value: 11 },
+  { label: "December", value: 12 },
+];
+
+const years = Array.from(
+  new Array(50),
+  (val, index) => new Date().getFullYear() - index
+);
 
 const Poa1AdminYfData = () => {
   const printRef = useRef();
@@ -23,6 +42,17 @@ const Poa1AdminYfData = () => {
   const [poa1, setpoa1] = useState([]);
   const state = searchParams.get("state") || "";
   const dist = searchParams.get("dist") || "";
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [poaType, setPoaType] = useState("poa1");
+  const [role, setRole] = useState("all");
+  const handleMonthChange = (e) => {
+    setSelectedMonth(parseInt(e.target.value));
+  };
+
+  const handleYearChange = (e) => {
+    setSelectedYear(parseInt(e.target.value));
+  };
 
   const navigate = useNavigate();
 
@@ -38,7 +68,7 @@ const Poa1AdminYfData = () => {
   const getpoa1Data = async () => {
     try {
       const { data } = await API.get(
-        `/api/v1/yf-poa1/get/?state_id=${state}&user_id=${user}`
+        `/api/v1/yf-poa1/get/?state_id=${state}&user_id=${user}&month=${selectedMonth}&year=${selectedYear}&poaType=${poaType}`
       );
       setpoa1(data?.data);
     } catch (error) {
@@ -46,25 +76,67 @@ const Poa1AdminYfData = () => {
       setpoa1([]);
     }
   };
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const { data } = await API.get(`/api/v1/users/all?role=${3}`);
+        const response = await API.get("/api/v1/user-location/all");
+        const data = response.data.data;
 
-        setUsers(data.data);
+        // Filter users based on selected State and state_ids[0]
+        const filteredUsers = data.filter(
+          (user) => user.userLocations.state_ids[0] === state
+        );
+
+        const { data: roleData } = await API.get(
+          `/api/v1/users/all?role=${role}`
+        );
+
+        // Filter roleData based on filteredUsers
+        const filteredRoleData = roleData.data.filter((user) =>
+          filteredUsers.some((filteredUser) => filteredUser.user_id === user.id)
+        );
+
+        setUsers(filteredRoleData);
       } catch (error) {
         console.log(error);
+        setUsers([]);
       }
     };
 
     fetchUser();
-  }, []);
+  }, [role, state]);
+
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     try {
+  //       const response = await API.get("/api/v1/soepr-location/all");
+  //       const data = response.data.data;
+  //       console.log(data);
+
+  //       if (role == "all") {
+  //         const { data } = await API.get(`/api/v1/users/all?role=${4}`);
+  //         const { data: data2 } = await API.get(`/api/v1/users/all?role=${5}`);
+  //         const mergedData = [...data.data, ...data2.data];
+
+  //         setUsers(mergedData);
+  //       } else {
+  //         const { data } = await API.get(`/api/v1/users/all?role=${role}`);
+  //         setUsers(data?.data);
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+
+  //   fetchUser();
+  // }, [role]);
 
   useEffect(() => {
-    if (user && state) {
+    if (user && state && selectedMonth && selectedYear) {
       getpoa1Data();
     }
-  }, [user, state]);
+  }, [user, state, selectedMonth, selectedYear, poaType]);
 
   useEffect(() => {
     getAllStates();
@@ -83,18 +155,21 @@ const Poa1AdminYfData = () => {
     getStateById(state);
     getAllDistricts();
   }, [state]);
-  const exportPDFWithMethod = () => {
-    let element = printRef.current || document.body;
-    console.log(state);
+  // const exportPDFWithMethod = () => {
+  //   let element = printRef.current || document.body;
+  //   element.style.fontSize = "13px !important";
 
-    savePDF(element, {
-      paperSize: "A4",
+  //   savePDF(element, {
+  //     paperSize: "auto",
 
-      margin: 10,
-      fileName: `Poa1 ${stateData?.name}`,
-      forcePageBreak: ".page-break", // Add this line
-    });
-  };
+  //     margin: 10,
+  //     fileName: `${poaType} ${stateData?.name}`,
+  //     // forcePageBreak: ".page-break", // Add this line
+  //   }).then(() => {
+  //     // Reset the font size after export
+  //     element.style.fontSize = "";
+  //   });
+  // };
 
   const handleGeneratePdf = () => {
     const element = printRef.current;
@@ -104,7 +179,7 @@ const Poa1AdminYfData = () => {
       pagebreak: {
         mode: ["avoid-all"],
       },
-      filename: `Poa1 ${stateData?.name}`,
+      filename: `${poaType} ${stateData?.name}`,
       image: { type: "jpeg", quality: 1 },
       html2canvas: { scale: 2 },
       jsPDF: { unit: "mm", format: "a3", orientation: "portrait" },
@@ -115,20 +190,20 @@ const Poa1AdminYfData = () => {
   };
 
   return (
-    <div className="relative py-10 px-1 lg:px-20">
+    <div className="relative w-full md:w-[80vw] py-10 px-1 lg">
       <button
         onClick={() => navigate("/kpi")}
-        className="absolute flex items-center justify-center bg-primary text-white p-2 rounded top-2 left-4 md:top-10 md:left-20"
+        className="absolute flex items-center justify-center bg-primary text-white p-2 rounded top-2 left-4 md:top-10 "
       >
         <ArrowLeftIcon className="w-7 h-5" />
         <p className="hidden md:block">Back</p>
       </button>
       <h1 className="text-3xl text-primary text-center font-bold">
-        First Fortnightly Plan Of Action
+        Report Fortnightly Plan Of Action
       </h1>
-      <div className="flex flex-col justify-between items-center lg:flex-row text-center text-3xl h-full">
+      <div className="w-fit flex flex-col justify-between items-center lg:flex-row text-center text-3xl h-full">
         <div className="w-full h-fit">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 items-end py-10 gap-2 sm:gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 items-end py-10 gap-2 sm:gap-5">
             <div className="flex flex-col">
               <label className="text-sm text-primary text-start px-4 py-2 font-semibold">
                 State
@@ -140,12 +215,29 @@ const Poa1AdminYfData = () => {
                   setSearchParams({ state: e.target.value });
                 }}
               >
-                <option>All States</option>
+                <option>Select State</option>
                 {stateOptions.map((item) => (
                   <option key={item.id} value={item.id}>
                     {item.name}
                   </option>
                 ))}
+              </select>
+            </div>
+            <div className="flex flex-col">
+              <label className="text-sm text-primary text-start px-4 py-2 font-semibold">
+                Role:
+              </label>
+              <select
+                value={role || ""}
+                onChange={(e) => setRole(e.target.value)}
+                className="border text-sm bg-white p-2 rounded-md"
+              >
+                <option value="all">All</option>
+                {/* <option value="1">Superadmin</option>
+                <option value="2">Admin</option> */}
+                <option value={3}>Young Fellow</option>
+                {/* <option value="4">Consultant</option>
+                <option value="5">Sr. Consultant</option> */}
               </select>
             </div>
             <div className="flex flex-col">
@@ -166,14 +258,46 @@ const Poa1AdminYfData = () => {
                 ))}
               </select>
             </div>
+
+            <div>
+              <FormField
+                type="select"
+                label="Select Month"
+                name="month"
+                value={selectedMonth}
+                onChange={handleMonthChange}
+                options={months}
+              />
+            </div>
+            <div>
+              <FormField
+                type="select"
+                label="Select Year"
+                name="year"
+                value={selectedYear}
+                onChange={handleYearChange}
+                options={years.map((year) => ({
+                  value: year,
+                  label: year,
+                }))}
+              />
+            </div>
+            <div className="flex flex-col">
+              <label className="text-sm text-primary text-start py-2 font-semibold">
+                POA Type
+              </label>
+              <select
+                className="border text-sm bg-white p-2 px-4 rounded-md"
+                value={poaType}
+                onChange={(e) => setPoaType(e.target.value)}
+              >
+                <option value="poa1">POA1</option>
+                <option value="poa2">POA2</option>
+                <option value="poa3">POA3</option>
+                <option value="poa4">POA4</option>
+              </select>
+            </div>
           </div>
-        </div>
-        <div className="w-full md:w-1/3 flex justify-center items-center lg:w-1/2 h-full">
-          <img
-            src={stateData?.state_icon}
-            alt=""
-            className="w-full max-h-[40vh] xl:max-h-[30vh]"
-          />
         </div>
       </div>
 
@@ -185,15 +309,151 @@ const Poa1AdminYfData = () => {
         Download as PDF
       </button>
 
-      <div ref={printRef} className="pt-10 grid grid-cols-1 place-items-center">
-        {poa1?.poaData?.length > 0 ? (
-          poa1?.poaData?.map((poa, index) => {
-            return <PoaYfDataCard key={index} data={poa} />;
-          })
+      <div ref={printRef} className="pt-10 w-full">
+        <div className="text-center flex   justify-evenly items-center gap-4 bg-primary py-2 text-sm md:text-base text-white">
+          <p>
+            State: <span className="text-gray-300">{stateData?.name}</span>
+          </p>{" "}
+          <p>
+            Name:{" "}
+            {(() => {
+              const foundUser = users?.find((u) => u.id === user);
+              return foundUser?.name;
+            })()}
+          </p>
+          <p>
+            Designation:{" "}
+            {(() => {
+              const foundUser = users?.find((u) => u.id === user);
+              if (foundUser?.role === 4) return "Consultant";
+              if (foundUser?.role === 5) return "Sr. Consultant";
+              if (foundUser?.role === 3) return "Young Fellow";
+              return "";
+            })()}
+          </p>
+          <p>
+            Month:{" "}
+            {(() => {
+              const monthData = months?.find((m) => m.value === selectedMonth);
+              return monthData.label;
+            })()}{" "}
+          </p>
+          <p>Year: {selectedYear} </p>
+        </div>
+        {poa1 && poa1?.poaData?.length > 0 ? (
+          <div className="w-full overflow-x-auto">
+            <table className="min-w-full border-collapse overflow-x-auto">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
+                    S.No.
+                  </th>
+                  <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
+                    Date
+                  </th>
+                  <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
+                    Weekday
+                  </th>
+                  <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
+                    Plan
+                  </th>
+                  <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
+                    Action
+                  </th>
+                  <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
+                    Planned Event
+                  </th>
+                  <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
+                    State
+                  </th>
+                  <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
+                    District
+                  </th>
+                  <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
+                    Achievements
+                  </th>
+                  <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
+                    Photo
+                  </th>
+                  <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
+                    Remarks
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {poa1?.poaData?.length > 0 ? (
+                  poa1.poaData.map((dayData, index) => (
+                    <tr key={index} className="even:bg-gray-50">
+                      <td className="border-t p-2 text-center font-semibold text-sm md:text-sm">
+                        {index + 1}.
+                      </td>
+                      <td className="border-t p-2 text-sm md:text-xs">
+                        {dayData.date}
+                      </td>
+                      <td className="border-t p-2 text-sm md:text-xs">
+                        {dayData.weekday}
+                      </td>
+                      <td className="border-t p-2 text-sm md:text-xs">
+                        {dayData.plan}
+                      </td>
+                      <td className="border-t p-2 text-sm md:text-xs">
+                        {dayData.action}
+                      </td>
+                      <td className="border-t p-2 text-sm md:text-xs">
+                        {dayData.plannedEvent}
+                      </td>
+                      <td className="border-t p-2 text-sm md:text-xs">
+                        {dayData.state.name}
+                      </td>
+                      <td className="border-t p-2 text-sm md:text-xs">
+                        {dayData.district?.name || dayData?.dist_id || "N/A"}
+                      </td>
+                      <td className="border-t p-2 text-sm md:text-xs">
+                        {dayData.achievements}
+                      </td>
+                      <td className="border-t p-2 text-sm md:text-xs">
+                        {dayData.photo ? (
+                          <img
+                            src={dayData.photo}
+                            alt="Photo"
+                            className="max-w-full h-auto"
+                          />
+                        ) : (
+                          "No photo"
+                        )}
+                      </td>
+                      <td className="border-t p-2 text-sm md:text-xs">
+                        {dayData.remarks}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan="10"
+                      className="p-2 text-center text-xs sm:text-sm md:text-base"
+                    >
+                      No data available
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td
+                    colSpan="10"
+                    className="p-2 text-center text-xs sm:text-sm md:text-base"
+                  >
+                    End of POA1 Details
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
         ) : (
-          <h1 className="text-center text-4xl text-gray-500 font-semibold">
-            No Data Available
-          </h1>
+          <div className="text-2xl text-center text-gray-700">
+            No Data Found
+          </div>
         )}
       </div>
     </div>
