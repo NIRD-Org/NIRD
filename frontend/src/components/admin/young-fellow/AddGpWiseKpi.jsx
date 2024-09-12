@@ -760,7 +760,7 @@ function AddGpWiseKpi({ update }) {
         const maxRange = parseInt(updatedData[index].max_range) || 0;
         const inputData = parseInt(updatedData[index].input_data) || 0;
         const percentage = (inputData / maxRange) * 100;
-
+        if (theme_id == "10") return updatedData;
         const { thresholds, scores } = kpiScoringRules[kpiId];
 
         if (inputType === "Percentage") {
@@ -1000,14 +1000,22 @@ function AddGpWiseKpi({ update }) {
                           disabled={isDisabled}
                         >
                           <option value="">Select</option>
-                          {booleanKpiScoringRules[kpi.id]?.map((option, i) => {
-                            const optionLabel = option.split("=")[0].trim();
-                            return (
-                              <option key={i} value={optionLabel}>
-                                {optionLabel}
-                              </option>
-                            );
-                          })}
+
+                          {theme_id == "10" ? (
+                            <>
+                              <option value="Yes">Yes</option>
+                              <option value="No">No</option>
+                            </>
+                          ) : (
+                            booleanKpiScoringRules[kpi.id]?.map((option, i) => {
+                              const optionLabel = option.split("=")[0].trim();
+                              return (
+                                <option key={i} value={optionLabel}>
+                                  {optionLabel}
+                                </option>
+                              );
+                            })
+                          )}
                         </select>
                       ) : (
                         <Input

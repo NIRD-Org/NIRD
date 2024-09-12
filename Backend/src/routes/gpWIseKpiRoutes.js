@@ -7,6 +7,7 @@ import {
   getGpWiseKpiChart,
   getGpWiseKpiData,
   getGpWiseKpiForApprover,
+  getGpWiseKpiTable,
   getRankingController,
   reSubmitKpiData,
   submitKpiData,
@@ -16,6 +17,7 @@ const router = express.Router();
 
 router.route("/").get(getGpWiseKpi);
 router.route("/data").get(getGpWiseKpiData);
+router.route("/table").get(getGpWiseKpiTable);
 
 // Submit the data from the YF
 router.route("/submit").post(submitKpiData);

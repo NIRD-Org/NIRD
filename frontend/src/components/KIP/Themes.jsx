@@ -39,7 +39,11 @@ const Themes = () => {
         themeData.length > 0 &&
         themeData.map((d) => (
           <Link
-            to={`/gp-wise-data/theme/${d.id}?state=${state}&dist=${dist}&block=${block}&gp=${gp}`}
+            to={
+              d.id == "10"
+                ? `/gp-wise-data/theme10?state=${state}&dist=${dist}&block=${block}&gp=${gp}`
+                : `/gp-wise-data/theme/${d.id}?state=${state}&dist=${dist}&block=${block}&gp=${gp}`
+            }
           >
             <ThemeCard imgUrl={d.theme_image} theme={d.theme_name} />
           </Link>

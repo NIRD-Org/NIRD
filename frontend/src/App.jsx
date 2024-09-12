@@ -129,6 +129,7 @@ import YFPoa1FormAug from "./components/admin/young-fellow/Poa/YFPoa1FormAug";
 import YFPoa2FormAug from "./components/admin/young-fellow/Poa/YFPoa2FormAug";
 import YFPoa3FormAug from "./components/admin/young-fellow/Poa/YFPoa3FormAug";
 import YFPoa4FormAug from "./components/admin/young-fellow/Poa/YFPoa4FormAug";
+import Theme10DataPage from "./Pages/Theme10DataPage";
 
 function App() {
   const { login } = useAuthContext();
@@ -151,6 +152,8 @@ function App() {
           <Route path="/gp-profile" element={<KPIDetails />} />
           <Route path="project" element={<ProjectPage />} />
           <Route path="/gp-wise-data/theme/:id" element={<ThemeDataPage />} />
+          <Route path="/gp-wise-data/theme10" element={<Theme10DataPage />} />
+
           <Route path="gp-profile/details" element={<GramPanchayatProfile />} />
           <Route path="/yf-insights" element={<YfInsightsPage />} />
           <Route path="good-practices" element={<GoodPractices />} />

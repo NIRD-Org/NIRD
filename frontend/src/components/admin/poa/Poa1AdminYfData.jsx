@@ -355,10 +355,10 @@ const Poa1AdminYfData = () => {
                     Weekday
                   </th>
                   <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
-                    Plan
+                    Activity
                   </th>
                   <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
-                    Action
+                    Tentative Target
                   </th>
                   <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
                     Planned Event
@@ -394,10 +394,10 @@ const Poa1AdminYfData = () => {
                         {dayData.weekday}
                       </td>
                       <td className="border-t p-2 text-sm md:text-xs">
-                        {dayData.plan}
+                        {dayData.activity}
                       </td>
                       <td className="border-t p-2 text-sm md:text-xs">
-                        {dayData.action}
+                        {dayData.tentativeTarget}
                       </td>
                       <td className="border-t p-2 text-sm md:text-xs">
                         {dayData.plannedEvent}
@@ -416,7 +416,7 @@ const Poa1AdminYfData = () => {
                           <img
                             src={dayData.photo}
                             alt="Photo"
-                            className="max-w-full h-auto"
+                            className="max-w-24 h-auto"
                           />
                         ) : (
                           "No photo"

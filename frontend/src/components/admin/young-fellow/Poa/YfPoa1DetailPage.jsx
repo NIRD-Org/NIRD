@@ -80,7 +80,6 @@ const YfPoa1DetailPage = () => {
     return poaType === "poa1"
       ? "First Weekly Plan Of Action"
       : "Weekly Plan Of Action";
-     
   };
 
   return (
@@ -166,8 +165,8 @@ const YfPoa1DetailPage = () => {
               <TableRow>
                 <TableHead className="px-1">Date</TableHead>
                 <TableHead className="px-1">Weekday</TableHead>
-                <TableHead className="px-1">Plan</TableHead>
-                <TableHead className="px-1">Action</TableHead>
+                <TableHead className="px-1">Activity</TableHead>
+                <TableHead className="px-1">Tentative Target</TableHead>
                 <TableHead className="px-1">Planned Event</TableHead>
                 <TableHead className="px-1">State</TableHead>
                 <TableHead className="px-1">District</TableHead>
@@ -187,10 +186,10 @@ const YfPoa1DetailPage = () => {
                       {dayData.weekday}
                     </TableCell>
                     <TableCell className="text-xs p-2.5">
-                      {dayData.plan}
+                      {dayData.activity}
                     </TableCell>
                     <TableCell className="text-xs p-2.5">
-                      {dayData.action}
+                      {dayData.tentativeTarget}
                     </TableCell>
                     <TableCell className="text-xs p-2.5">
                       {dayData.plannedEvent}
