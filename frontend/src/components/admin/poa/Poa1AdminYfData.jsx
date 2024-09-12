@@ -199,7 +199,7 @@ const Poa1AdminYfData = () => {
         <p className="hidden md:block">Back</p>
       </button>
       <h1 className="text-3xl text-primary text-center font-bold">
-        Report Fortnightly Plan Of Action
+        Report Weekly Plan Of Action
       </h1>
       <div className="w-fit flex flex-col justify-between items-center lg:flex-row text-center text-3xl h-full">
         <div className="w-full h-fit">
@@ -444,7 +444,7 @@ const Poa1AdminYfData = () => {
                     colSpan="10"
                     className="p-2 text-center text-xs sm:text-sm md:text-base"
                   >
-                    End of POA1 Details
+                    End of POA Details
                   </td>
                 </tr>
               </tfoot>

@@ -78,8 +78,9 @@ const YfPoa1DetailPage = () => {
 
   const getHeaderText = () => {
     return poaType === "poa1"
-      ? "First Fortnightly Plan Of Action"
-      : "Second Fortnightly Plan Of Action";
+      ? "First Weekly Plan Of Action"
+      : "Weekly Plan Of Action";
+     
   };
 
   return (
