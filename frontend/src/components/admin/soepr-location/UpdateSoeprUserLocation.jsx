@@ -11,13 +11,14 @@ const UpdateSoeprUserLocation = ({ view }) => {
   const [states, setStates] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [selectedDistricts, setSelectedDistricts] = useState([]);
+  const [initialLoad, setInitialLoad] = useState(true); // Track the initial load
   const { user } = useAuthContext();
   const { userId } = useParams();
 
   const handleStateChange = async (e) => {
     const selectedStateId = e.target.value;
     setState(selectedStateId);
-    setSelectedDistricts([]);
+    setSelectedDistricts([]); // Reset selected districts when a new state is chosen
     try {
       const response = await API.get(
         `/api/v1/soepr-dist/state/${selectedStateId}`
@@ -69,7 +70,7 @@ const UpdateSoeprUserLocation = ({ view }) => {
       try {
         const response = await API.get(`/api/v1/soepr-location/${userId}`);
         const data = response.data.data.userLocations;
-        setState(data.state_ids[0] || "");
+        setState(data.state_ids[0] || ""); // Set the state from user location
 
         // Only update selected districts if districts have been fetched
         if (districts.length > 0) {
@@ -78,6 +79,8 @@ const UpdateSoeprUserLocation = ({ view }) => {
             .filter(Boolean); // Filter out undefined values
           setSelectedDistricts(userDistricts);
         }
+
+        setInitialLoad(false); // Mark as no longer initial load
       } catch (error) {
         console.log(error);
       }
@@ -85,13 +88,14 @@ const UpdateSoeprUserLocation = ({ view }) => {
 
     fetchStates();
     fetchUserLocation();
-  }, [userId, districts]);
+  }, [userId]);
 
+  // Refetch districts when the state is set (useEffect dependent on `state`)
   useEffect(() => {
-    if (state) {
+    if (state && !initialLoad) {
       handleStateChange({ target: { value: state } });
     }
-  }, [state]);
+  }, [state, initialLoad]);
 
   return (
     <div className="p-6 max-w-[700px] mx-auto">
