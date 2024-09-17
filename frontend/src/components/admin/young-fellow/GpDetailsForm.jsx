@@ -1095,7 +1095,7 @@ const GpDetailsForm = ({ update }) => {
       onClick={addWard}
       className="bg-blue-900 text-white px-4 py-2 rounded-md"
     >
-      Add Ward
+      Add New Ward
     </Button>
   </div>
 </div>
