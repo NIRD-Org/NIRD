@@ -15,7 +15,7 @@ function Home() {
               <p class="mt-4 lg:pr-40 text-primary text-sm md:text-xl">
                 Join us in enhancing lives through sustainable development and
                 empowering communities across India. Together, we can make a
-                lasting impact..
+                lasting impact.
               </p>
               <Link
                 to={"/project"}
