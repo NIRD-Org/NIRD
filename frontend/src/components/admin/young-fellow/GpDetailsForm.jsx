@@ -92,14 +92,17 @@ const GpDetailsForm = ({ update }) => {
       noOfHouseholds: null,
       noOfAnganwadiCenters: null,
     },
-    wardDetails: {
-      wardName: "",
-      memberName: "",
-      gender: "",
-      casteCategory: "",
-      highestQualification: "",
-      aproxAge: "",
-    },
+    wardDetails: [
+      {
+        wardName: '',
+        memberName: '',
+        gender: '',
+        casteCategory: '',
+        highestQualification: '',
+        aproxAge: '',
+      },
+    ],
+  
     others: {
       noOfHouseholdsConnectedToTapWater: null,
       noOfHouseholdToilets: null,
@@ -323,14 +326,40 @@ const GpDetailsForm = ({ update }) => {
     }));
   };
 
-  const handleWardDetailsChange = e => {
+  const handleWardDetailsChange = (index, e) => {
     const { name, value } = e.target;
-    setFormValues(prevValues => ({
+    const newWardDetails = [...formValues.wardDetails];
+    newWardDetails[index][name] = value;
+    setFormValues((prevValues) => ({
       ...prevValues,
-      wardDetails: {
+      wardDetails: newWardDetails,
+    }));
+  };
+
+  const addWard = () => {
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      wardDetails: [
         ...prevValues.wardDetails,
-        [name]: value,
-      },
+        {
+          wardName: "",
+          memberName: "",
+          gender: "",
+          casteCategory: "",
+          highestQualification: "",
+          aproxAge: "",
+        },
+      ],
+    }));
+  };
+
+  const removeWard = (index) => {
+    const newWardDetails = formValues.wardDetails.filter(
+      (ward, i) => i !== index
+    );
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      wardDetails: newWardDetails,
     }));
   };
 
@@ -988,73 +1017,90 @@ const GpDetailsForm = ({ update }) => {
 
         {/* Ward Details */}
         <div className="mb-6">
-          <h2 className="text-xl font-medium text-primary mb-4">
-            Ward Details
-          </h2>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 pb-10">
-            <Input
-              type="text"
-              name="wardName"
-              required
-              value={formValues.wardDetails.wardName}
-              onChange={handleWardDetailsChange}
-              placeholder="Ward Name"
-            />
-            <Input
-              required
-              type="text"
-              name="memberName"
-              value={formValues.wardDetails.memberName}
-              onChange={handleWardDetailsChange}
-              placeholder="Member Name"
-            />
-            <select
-              required
-              name="gender"
-              value={formValues.wardDetails.gender}
-              onChange={handleWardDetailsChange}
-              className="border rounded-sm p-2 bg-white"
-            >
-              <option value="">Select Gender</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Others">Others</option>
-            </select>
+  <h2 className="text-xl font-medium text-primary mb-4">Ward Details</h2>
+  <div className="space-y-6 pb-10">
+    {formValues.wardDetails.map((ward, index) => (
 
-            <select
-              required
-              name="casteCategory"
-              value={formValues.wardDetails.casteCategory}
-              onChange={handleWardDetailsChange}
-              className="border rounded-md p-2 bg-white"
+      <div key={index} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <Input
+          type="text"
+          name="wardName"
+          value={ward.wardName}
+          onChange={(e) => handleWardDetailsChange(index, e)}
+          placeholder="Ward Name"
+          className="p-2 border border-gray-300 rounded-md"
+        />
+        <Input
+          type="text"
+          name="memberName"
+          value={ward.memberName}
+          onChange={(e) => handleWardDetailsChange(index, e)}
+          placeholder="Member Name"
+          className="p-2 border border-gray-300 rounded-md"
+        />
+        <Input
+          type="text"
+          name="gender"
+          value={ward.gender}
+          onChange={(e) => handleWardDetailsChange(index, e)}
+          placeholder="Gender"
+          className="p-2 border border-gray-300 rounded-md"
+        />
+        <Input
+          type="text"
+          name="casteCategory"
+          value={ward.casteCategory}
+          onChange={(e) => handleWardDetailsChange(index, e)}
+          placeholder="Caste Category"
+          className="p-2 border border-gray-300 rounded-md"
+        />
+        <Input
+          type="text"
+          name="highestQualification"
+          value={ward.highestQualification}
+          onChange={(e) => handleWardDetailsChange(index, e)}
+          placeholder="Highest Qualification"
+          className="p-2 border border-gray-300 rounded-md"
+        />
+        <Input
+          type="number"
+          name="aproxAge"
+          value={ward.aproxAge}
+          onChange={(e) => handleWardDetailsChange(index, e)}
+          placeholder="Approx Age"
+          className="p-2 border border-gray-300 rounded-md"
+        />
+        
+        {/* Remove button for each ward entry */}
+        {index > 0 && (
+          <div className="col-span-full">
+            <Button
+              type="button"
+              onClick={() => removeWard(index)}
+              className="bg-red-900 text-white px-4 py-2 rounded-md"
             >
-              <option value="">Select Category</option>
-              <option value="General">General</option>
-              <option value="SC">SC</option>
-              <option value="ST">ST</option>
-              <option value="OBC">OBC</option>
-              <option value="Others">Others</option>
-            </select>
-
-            <Input
-              type="text"
-              required
-              name="highestQualification"
-              value={formValues.wardDetails.highestQualification}
-              onChange={handleWardDetailsChange}
-              placeholder="Highest Qualification"
-            />
-            <Input
-              type="number"
-              name="aproxAge"
-              required
-              value={formValues.wardDetails.aproxAge}
-              onChange={handleWardDetailsChange}
-              placeholder="Approx Age"
-            />
+              Remove Ward
+            </Button>
           </div>
-        </div>
+        )}
+      </div>
+    ))}
+  </div>
 
+  {/* Button to add new ward */}
+  <div className="mt-4">
+    <Button
+      type="button"
+      onClick={addWard}
+      className="bg-blue-900 text-white px-4 py-2 rounded-md"
+    >
+      Add Ward
+    </Button>
+  </div>
+</div>
+
+   {/* Other Details */}
         <div className="mb-6">
           <h2 className="text-xl font-medium text-primary mb-4">
             Others Details
