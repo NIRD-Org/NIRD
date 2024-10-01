@@ -36,7 +36,7 @@ export const createGoodPractice = CatchAsyncError(async (req, res, next) => {
       uploadFile(image.data),
       uploadPDF(document.data),
       uploadFile(video.data, null),
-    ]).then(([image, document, video]) => [image.url, document.url, video.url]);
+    ]).then(([image, document, video]) => [image, document, video]);
 
     req.body.image = imageUrl;
     req.body.document = docUrl;

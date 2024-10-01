@@ -80,7 +80,7 @@ export const createPM = CatchAsyncError(async (req, res, next) => {
   }
 
   const { pm_upload_file } = req.files;
-  const { url: fileUrl } = await uploadFile(pm_upload_file.data);
+  const fileUrl = await uploadFile(pm_upload_file.data);
   req.body.file = fileUrl;
   req.body.created_by = req?.user?.id;
   req.body.id = await getNewId();

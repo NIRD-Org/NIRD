@@ -33,8 +33,8 @@ export const createTraining = CatchAsyncError(async (req, res, next) => {
     const { trainingPhotos, trainingDesign } = req.files;
     console.log(req.body);
 
-    const { url: trainingPhotosUrl } = await uploadFile(trainingPhotos.data);
-    const { url: trainingDesignUrl } = await uploadPDF(trainingDesign.data);
+    const trainingPhotosUrl = await uploadFile(trainingPhotos.data);
+    const trainingDesignUrl = await uploadPDF(trainingDesign.data);
 
     req.body.trainingPhotos = trainingPhotosUrl;
     req.body.trainingDesign = trainingDesignUrl;

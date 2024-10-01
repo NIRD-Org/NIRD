@@ -33,6 +33,7 @@ import soeprStateRoutes from "./routes/soeprStateRoutes.js";
 import soeprDistrictRoutes from "./routes/soeprDistrictRoutes.js";
 import poa1Routes from "./routes/poa1Routes.js";
 import yfPoa1Routes from "./routes/YfPoa1Routes.js";
+// import { migrateFilesToS3 } from "./awsMigration.js";
 
 const app = express();
 
@@ -81,6 +82,10 @@ app.use("/api/v1/yf-poa1", yfPoa1Routes);
 app.get("/", (req, res) => {
   res.status(200).json({ message: "Server is running" });
 });
+
+// FIles migration from cloudinary to AWS
+
+// app.post("/migrate-files", migrateFilesToS3);
 
 app.use(ErrorMiddleware);
 const port = process.env.PORT || 4000;

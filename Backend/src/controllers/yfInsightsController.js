@@ -43,7 +43,7 @@ export const createYfInsights = CatchAsyncError(async (req, res, next) => {
       );
     }
     const achievementPhoto = req.files.achievementPhoto;
-    const { url } = await uploadFile(achievementPhoto.data);
+    const url = await uploadFile(achievementPhoto.data);
     req.body.achievementPhoto = url;
     const id = await getNewId();
     req.body.id = id.toString();

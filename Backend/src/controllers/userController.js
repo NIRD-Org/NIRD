@@ -68,7 +68,7 @@ export const updateUser = CatchAsyncError(async (req, res, next) => {
   try {
     const { photo } = req?.files || "";
     if (photo) {
-      const { url: photo1 } = await uploadFile(photo.data);
+      const photo1 = await uploadFile(photo.data);
       req.body.photo = photo1;
     }
     const user = await User.findOneAndUpdate({ id: req.params.id }, req.body, {

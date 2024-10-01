@@ -57,12 +57,12 @@ export const createPanchayatDetails = CatchAsyncError(
       const secretaryPhoto = req.body.secretaryPhoto;
       if (sarpanchPhoto || secretaryPhoto) {
         if (sarpanchPhoto) {
-          const { url: sarpanchUrl } = await uploadFile(sarpanchPhoto);
+          const sarpanchUrl = await uploadFile(sarpanchPhoto);
           req.body.sarpanchDetails.sarpanchPhoto = sarpanchUrl;
         }
 
         if (secretaryPhoto) {
-          const { url: secretaryUrl } = await uploadFile(secretaryPhoto);
+          const secretaryUrl = await uploadFile(secretaryPhoto);
           req.body.secretaryDetails.secretaryPhoto = secretaryUrl;
         }
       }

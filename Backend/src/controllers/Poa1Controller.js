@@ -177,7 +177,7 @@ export const createPoa1 = CatchAsyncError(async (req, res, next) => {
       if (req.files && req.files[photoKey]) {
         const photoBuffer = req.files[photoKey].data;
         const result = await uploadFile(photoBuffer);
-        poaData[index].photo = result.secure_url;
+        poaData[index].photo = result;
       }
     }
 
@@ -552,7 +552,7 @@ export const updatePoa1Data = CatchAsyncError(async (req, res, next) => {
         if (req.files && req.files[photoKey]) {
           const photoBuffer = req.files[photoKey].data;
           const result = await uploadFile(photoBuffer);
-          entry.photo = result.secure_url;
+          entry.photo = result;
         }
 
         if (existingEntryIndex !== -1) {

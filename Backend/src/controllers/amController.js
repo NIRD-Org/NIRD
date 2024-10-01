@@ -116,7 +116,7 @@ export const createAM = CatchAsyncError(async (req, res, next) => {
   }
 
   const { am_upload_file } = req.files;
-  const { url: fileUrl } = await uploadFile(am_upload_file.data);
+  const fileUrl = await uploadFile(am_upload_file.data);
   req.body.file = fileUrl;
   req.body.created_by = req?.user?.id;
   req.body.id = await getNewId();
@@ -131,13 +131,13 @@ export const createAM = CatchAsyncError(async (req, res, next) => {
 });
 export const createTour = CatchAsyncError(async (req, res, next) => {
   try {
-    const { fromDate, toDate, tourType: status ,location } = req.body; // Extract tourType instead of leaveType
+    const { fromDate, toDate, tourType: status, location } = req.body; // Extract tourType instead of leaveType
 
     const startDate = new Date(fromDate);
     const endDate = new Date(toDate);
     const amData = [];
     const pmData = [];
-    let amId = await getNewId();  // Get new ID for tour entries
+    let amId = await getNewId(); // Get new ID for tour entries
     let pmId = await getNewPmId();
 
     for (
@@ -160,7 +160,7 @@ export const createTour = CatchAsyncError(async (req, res, next) => {
       const amTourData = {
         id: amId,
         date: date.toISOString().split("T")[0],
-        amStatus: status, 
+        amStatus: status,
         location,
         created_by: req?.user?.id,
       };
@@ -169,13 +169,13 @@ export const createTour = CatchAsyncError(async (req, res, next) => {
       const pmTourData = {
         id: pmId,
         date: date.toISOString().split("T")[0],
-        pmStatus: status,  
+        pmStatus: status,
         location,
         created_by: req?.user?.id,
       };
-      amData.push(amTourData);  // Push AM tour data to array
-      pmData.push(pmTourData);  // Push PM tour data to array
-      amId++;  // Increment ID for the next record
+      amData.push(amTourData); // Push AM tour data to array
+      pmData.push(pmTourData); // Push PM tour data to array
+      amId++; // Increment ID for the next record
       pmId++;
     }
 
@@ -191,7 +191,7 @@ export const createTour = CatchAsyncError(async (req, res, next) => {
   } catch (error) {
     console.log(error);
 
-    return next(new Errorhandler("Failed to create tour", 500));  // Handle errors
+    return next(new Errorhandler("Failed to create tour", 500)); // Handle errors
   }
 });
 
