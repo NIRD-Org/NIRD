@@ -27,26 +27,65 @@ const getNewId = async () => {
   }
 };
 
+// export const createLCVA = CatchAsyncError(async (req, res, next) => {
+//   try {
+//     const { image, document, video } = req.files;
+//     console.log(req.body);
+
+//     const [imageUrl, docUrl, videoUrl] = await Promise.all([
+//       uploadFile(image.data),
+//       uploadPDF(document.data),
+//       uploadFile(video.data, null),
+//     ]).then(([image, document, video]) => [image, document, video]);
+
+//     req.body.image = imageUrl;
+//     req.body.document = docUrl;
+//     req.body.video = videoUrl;
+//     req.body.id = await getNewId();
+//     req.body.created_by = req?.user?.id || "1";
+
+//     const newLCVA = new LCVA(req.body);
+//     await newLCVA.save();
+
+//     res.status(201).json({
+//       success: true,
+//       message: "LCVA created successfully",
+//       data: newLCVA,
+//     });
+//   } catch (error) {
+//     console.log(error);
+//     return next(new Errorhandler("Failed to create LCVA", 500));
+//   }
+// });
+
 export const createLCVA = CatchAsyncError(async (req, res, next) => {
   try {
-    const { image, document, video } = req.files;
-    console.log(req.body);
+    const { document, video } = req.files;
 
-    const [imageUrl, docUrl, videoUrl] = await Promise.all([
-      uploadFile(image.data),
+    // Collect all keys matching 'images[0]', 'images[1]', etc.
+    const imageKeys = Object.keys(req.files).filter((key) =>
+      key.startsWith("images[")
+    );
+    const images = imageKeys.map((key) => req.files[key]);
+
+    // Upload multiple images and other files concurrently
+    const [imageUrls, docUrl, videoUrl] = await Promise.all([
+      Promise.all(images.map((img) => uploadFile(img.data))),
       uploadPDF(document.data),
       uploadFile(video.data, null),
-    ]).then(([image, document, video]) => [image, document, video]);
+    ]);
 
-    req.body.image = imageUrl;
+    req.body.images = imageUrls;
     req.body.document = docUrl;
     req.body.video = videoUrl;
     req.body.id = await getNewId();
     req.body.created_by = req?.user?.id || "1";
 
+    // Create and save new LCVA entry
     const newLCVA = new LCVA(req.body);
     await newLCVA.save();
 
+    // Respond with success
     res.status(201).json({
       success: true,
       message: "LCVA created successfully",

@@ -130,6 +130,10 @@ import YFPoa2FormAug from "./components/admin/young-fellow/Poa/YFPoa2FormAug";
 import YFPoa3FormAug from "./components/admin/young-fellow/Poa/YFPoa3FormAug";
 import YFPoa4FormAug from "./components/admin/young-fellow/Poa/YFPoa4FormAug";
 import Theme10DataPage from "./Pages/Theme10DataPage";
+import YFPoa1FormSep from "./components/admin/young-fellow/Poa/sept/YFPoa1FormSep";
+import YFPoa2FormSep from "./components/admin/young-fellow/Poa/sept/YFPoa2FormSep";
+import YFPoa3FormSep from "./components/admin/young-fellow/Poa/sept/YFPoa3FormSep";
+import YFPoa4FormSep from "./components/admin/young-fellow/Poa/sept/YFPoa4FormSep";
 
 function App() {
   const { login } = useAuthContext();
@@ -211,6 +215,10 @@ function App() {
             <Route path="yf/POA2/aug" element={<YFPoa2FormAug />} />
             <Route path="yf/POA3/aug" element={<YFPoa3FormAug />} />
             <Route path="yf/POA4/aug" element={<YFPoa4FormAug />} />
+            <Route path="yf/POA1/sep" element={<YFPoa1FormSep />} />
+            <Route path="yf/POA2/sep" element={<YFPoa2FormSep />} />
+            <Route path="yf/POA3/sep" element={<YFPoa3FormSep />} />
+            <Route path="yf/POA4/sep" element={<YFPoa4FormSep />} />
             <Route path="yf/POA1/edit/:id" element={<YFPoa1Form update />} />
             <Route path="yf/POAView" element={<YFPoa1View />} />
 

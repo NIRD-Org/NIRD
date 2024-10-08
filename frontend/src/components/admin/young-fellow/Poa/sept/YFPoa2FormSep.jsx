@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import AdminHeader from "../../AdminHeader";
+import AdminHeader from "@/components/admin/AdminHeader";
 import toast from "react-hot-toast";
 import { useSoeprLocation } from "@/components/hooks/useSoeprLocation";
 import API from "@/utils/API";
@@ -128,8 +128,8 @@ const kpiThemes = {
   Tour: ["Tour"],
 };
 
-const YFPoa2FormAug = ({ update }) => {
-  const currentMonthIndex = 7;
+const YFPoa2FormSep = ({ update }) => {
+  const currentMonthIndex = 8;
   const currentYear = new Date().getFullYear();
   const { id: poalId } = useParams();
   const [selectedStates, setSelectedStates] = useState({});
@@ -145,7 +145,7 @@ const YFPoa2FormAug = ({ update }) => {
   const secondWeekStart = 8;
   const secondWeekEnd = 14;
   function getAugustDate(day, year = new Date().getFullYear()) {
-    return new Date(Date.UTC(year, 7, day));
+    return new Date(Date.UTC(year, 8, day));
   }
 
   const augustDate = getAugustDate(14, 2024);
@@ -509,4 +509,4 @@ const YFPoa2FormAug = ({ update }) => {
   );
 };
 
-export default YFPoa2FormAug;
+export default YFPoa2FormSep;

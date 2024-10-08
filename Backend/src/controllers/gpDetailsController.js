@@ -46,15 +46,20 @@ export const createPanchayatDetails = CatchAsyncError(
         education,
         others,
         sports,
-        wardDetails,
+        wardDetails, // Expecting this to be an array
         general,
       } = req.body;
+
+      // Validate wardDetails
+      if (!Array.isArray(wardDetails)) {
+        return next(new Errorhandler("Ward details must be an array", 400));
+      }
+
       const id = await getNewId();
-      //
-      // console.log(req.body.sarpanchPhoto);
 
       const sarpanchPhoto = req.body.sarpanchPhoto;
       const secretaryPhoto = req.body.secretaryPhoto;
+
       if (sarpanchPhoto || secretaryPhoto) {
         if (sarpanchPhoto) {
           const sarpanchUrl = await uploadFile(sarpanchPhoto);
@@ -93,10 +98,11 @@ export const createPanchayatDetails = CatchAsyncError(
         education,
         others,
         sports,
-        wardDetails,
+        wardDetails, // Saving wardDetails as an array
         general,
         created_by: req.user.id,
       });
+
       await panchayat.save();
       res
         .status(201)
@@ -119,7 +125,13 @@ export const updatePanchayatDetails = CatchAsyncError(
         panchayatArea,
         sarpanchDetails,
         secretaryDetails,
+        wardDetails, // Expecting this to be an array
       } = req.body;
+
+      // Validate wardDetails
+      if (wardDetails && !Array.isArray(wardDetails)) {
+        return next(new Errorhandler("Ward details must be an array", 400));
+      }
 
       const panchayat = await GpDetailsModel.findOneAndUpdate(
         { id: req.params.id },
@@ -129,11 +141,13 @@ export const updatePanchayatDetails = CatchAsyncError(
           panchayatArea,
           sarpanchDetails,
           secretaryDetails,
+          wardDetails, // Updating wardDetails as an array
           decision: 0,
         },
         { new: true }
       );
-      res.status(201).json({
+
+      res.status(200).json({
         success: true,
         message: "Panchayat Data updated successfully",
       });

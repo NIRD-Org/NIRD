@@ -27,18 +27,55 @@ const getNewId = async () => {
   }
 };
 
+// export const createGoodPractice = CatchAsyncError(async (req, res, next) => {
+//   try {
+//     const { image, document, video } = req.files;
+//     console.log(req.body);
+
+//     const [imageUrl, docUrl, videoUrl] = await Promise.all([
+//       uploadFile(image.data),
+//       uploadPDF(document.data),
+//       uploadFile(video.data, null),
+//     ]).then(([image, document, video]) => [image, document, video]);
+
+//     req.body.image = imageUrl;
+//     req.body.document = docUrl;
+//     req.body.video = videoUrl;
+//     req.body.id = await getNewId();
+//     req.body.created_by = req?.user?.id;
+
+//     const newGoodPractice = new GoodPractice(req.body);
+//     await newGoodPractice.save();
+
+//     res.status(201).json({
+//       success: true,
+//       message: "Good Practice created successfully",
+//       data: newGoodPractice,
+//     });
+//   } catch (error) {
+//     console.log(error);
+//     return next(new Errorhandler("Failed to create Good Practice", 500));
+//   }
+// });
+
 export const createGoodPractice = CatchAsyncError(async (req, res, next) => {
   try {
-    const { image, document, video } = req.files;
-    console.log(req.body);
+    // Check if images are structured with indexed keys (image[0], image[1], etc.)
+    const imageKeys = Object.keys(req.files).filter((key) =>
+      key.startsWith("images[")
+    );
+    const images = imageKeys.map((key) => req.files[key]);
 
-    const [imageUrl, docUrl, videoUrl] = await Promise.all([
-      uploadFile(image.data),
+    const { document, video } = req.files;
+
+    // Upload images, document, and video concurrently
+    const [imageUrls, docUrl, videoUrl] = await Promise.all([
+      Promise.all(images.map((img) => uploadFile(img.data))),
       uploadPDF(document.data),
       uploadFile(video.data, null),
-    ]).then(([image, document, video]) => [image, document, video]);
+    ]);
 
-    req.body.image = imageUrl;
+    req.body.images = imageUrls;
     req.body.document = docUrl;
     req.body.video = videoUrl;
     req.body.id = await getNewId();

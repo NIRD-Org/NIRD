@@ -17,7 +17,7 @@ const GoodPracticeForm = ({ update = false }) => {
     gp_id: "",
     financial_year: "",
     activityTitle: "",
-    image: null,
+    images: [null],
     document: null,
     video: null,
   });
@@ -51,21 +51,51 @@ const GoodPracticeForm = ({ update = false }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFileChange = (e) => {
+  const handleFilesChange = (e) => {
     const { name, files } = e.target;
     setFormData((prev) => ({ ...prev, [name]: files[0] }));
+  };
+  const handleFileChange = (e, index) => {
+    const { files } = e.target;
+    const updatedImages = [...formData.images]; // Clone the images array
+
+    updatedImages[index] = files[0]; // Set the specific index to the new file
+
+    setFormData((prev) => ({
+      ...prev,
+      images: updatedImages,
+    }));
+  };
+
+  const handleAddImageField = () => {
+    setFormData((prev) => ({
+      ...prev,
+      images: [...prev.images, null],
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const formDataToSend = new FormData();
+      Object.entries(formData).forEach(([key, value]) => {
+        if (key === "images") {
+          value.forEach((image, index) => {
+            if (image) {
+              formDataToSend.append(`images[${index}]`, image); // Append each image to FormData
+            }
+          });
+        } else {
+          formDataToSend.append(key, value);
+        }
+      });
       if (update) {
-        await API.put(`/api/v1/good-practice/${formData.id}`, formData, {
+        await API.put(`/api/v1/good-practice/${formData.id}`, formDataToSend, {
           headers: { "Content-Type": "multipart/form-data" },
         });
       } else {
         setPending(true);
-        await API.post("/api/v1/good-practice/create", formData, {
+        await API.post("/api/v1/good-practice/create", formDataToSend, {
           headers: { "Content-Type": "multipart/form-data" },
         });
       }
@@ -149,12 +179,12 @@ const GoodPracticeForm = ({ update = false }) => {
       type: "text",
       required: true,
     },
-    {
-      label: "Upload Photo for Display",
-      name: "image",
-      type: "file",
-      required: !update,
-    },
+    // {
+    //   label: "Upload Photo for Display",
+    //   name: "image",
+    //   type: "file",
+    //   required: !update,
+    // },
     {
       label: "Upload Document",
       name: "document",
@@ -188,9 +218,28 @@ const GoodPracticeForm = ({ update = false }) => {
             disabled={pending}
             value={formData[field.name] || ""}
             onChange={handleInputChange}
-            onFileChange={handleFileChange}
+            onFileChange={handleFilesChange}
           />
         ))}
+
+        {/* Image Upload Section */}
+        <div className="col-span-1 md:col-span-2 lg:col-span-3">
+          {formData.images.map((_, idx) => (
+            <FormField
+              key={`image-${idx}`}
+              label={`Upload Image ${idx + 1}`}
+              name="images"
+              type="file"
+              accept="image/*"
+              required={idx === 0}
+              disabled={pending}
+              onFileChange={(e) => handleFileChange(e, idx)}
+            />
+          ))}
+          <Button type="button" onClick={handleAddImageField} className="mt-2">
+            Add Another Image
+          </Button>
+        </div>
         <div></div>
         <Button pending={pending} type="submit" className="px-20 self-end">
           {update ? "Update" : "Submit"}

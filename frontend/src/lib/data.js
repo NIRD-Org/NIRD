@@ -351,7 +351,7 @@ export const getSidebarItems = (user) => {
             {
               type: "sub-module",
               icon: ArrowBigRight,
-              title: "Indicator",
+              title: "Institutional Strengthening",
               link: "/admin/action/admin/indicator",
             },
             {
@@ -492,7 +492,7 @@ export const getSidebarItems = (user) => {
         {
           type: "module",
           icon: ArrowBigRight,
-          title: "August Plan Of Action",
+          title: "August POA",
           submodules: [
             {
               type: "sub-module",
@@ -523,6 +523,37 @@ export const getSidebarItems = (user) => {
         {
           type: "module",
           icon: ArrowBigRight,
+          title: "September POA",
+          submodules: [
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "POA1",
+              link: "/admin/yf/POA1/sep",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "POA2",
+              link: "/admin/yf/POA2/sep",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "POA3",
+              link: "/admin/yf/POA3/sep",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "POA4",
+              link: "/admin/yf/POA4/sep",
+            },
+          ],
+        },
+        {
+          type: "module",
+          icon: ArrowBigRight,
           title: "Action",
           submodules: [
             {
@@ -534,7 +565,7 @@ export const getSidebarItems = (user) => {
             {
               type: "sub-module",
               icon: ArrowBigRight,
-              title: "Indicator",
+              title: "Institutional Strengthening",
               link: "/admin/action/admin/indicator",
             },
             {
@@ -577,7 +608,7 @@ export const getSidebarItems = (user) => {
             {
               type: "sub-module",
               icon: ArrowBigRight,
-              title: "Indicator",
+              title: "Institutional Strengthening",
               link: "/admin/indicator",
             },
             {

@@ -14,23 +14,23 @@ const TrainingForm = () => {
 
   const [formData, setFormData] = useState({});
 
-  const handleInputChange = e => {
+  const handleInputChange = (e) => {
     const { name, type, checked, value } = e.target;
     console.log(name, checked);
     if (type === "checkbox") {
-      setFormData(prev => ({ ...prev, [name]: checked }));
+      setFormData((prev) => ({ ...prev, [name]: checked }));
     } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
+      setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
 
-  const handleFileChange = e => {
+  const handleFileChange = (e) => {
     const { name } = e.target;
     const file = e.target.files[0];
-    setFormData(prev => ({ ...prev, [name]: file }));
+    setFormData((prev) => ({ ...prev, [name]: file }));
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
 
@@ -68,6 +68,7 @@ const TrainingForm = () => {
       options: [
         { value: "Online", label: "Online" },
         { value: "Offline", label: "Offline" },
+        { value: "Hybrid", label: "Hybrid" },
       ],
       required: true,
     },
@@ -124,7 +125,12 @@ const TrainingForm = () => {
       required: true,
     },
     { label: "Total", name: "total", type: "number", required: true },
-    { label: "No. of Female", name: "noOfFemale", type: "number", required: true },
+    {
+      label: "No. of Female",
+      name: "noOfFemale",
+      type: "number",
+      required: true,
+    },
     { label: "No. of Male", name: "noOfMale", type: "number", required: true },
     {
       label: "Training Methods",
@@ -175,7 +181,10 @@ const TrainingForm = () => {
       options: Array.from({ length: 30 }, (_, i) => {
         const startYear = 2021 + i;
         const endYear = startYear + 1;
-        return { value: `FY${startYear}-${endYear}`, label: `FY${startYear}-${endYear}` };
+        return {
+          value: `FY${startYear}-${endYear}`,
+          label: `FY${startYear}-${endYear}`,
+        };
       }),
       required: true,
     },
@@ -184,8 +193,11 @@ const TrainingForm = () => {
   return (
     <div className="p-2 md:p-6">
       <AdminHeader>Add Training Details</AdminHeader>
-      <form onSubmit={handleSubmit} className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-        {fields.map(field => (
+      <form
+        onSubmit={handleSubmit}
+        className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"
+      >
+        {fields.map((field) => (
           <FormField
             key={field.name}
             {...field}
@@ -195,7 +207,11 @@ const TrainingForm = () => {
             onFileChange={handleFileChange}
           />
         ))}
-        <Button pending={pending} type="submit" className="col-span-1 px-20 self-end">
+        <Button
+          pending={pending}
+          type="submit"
+          className="col-span-1 px-20 self-end"
+        >
           Submit
         </Button>
       </form>

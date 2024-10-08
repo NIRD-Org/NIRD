@@ -33,10 +33,7 @@ const LCVASchema = new Schema(
       type: String,
       required: true,
     },
-    image: {
-      type: String,
-      default: "",
-    },
+    images: [],
     document: {
       type: String,
       default: "",
@@ -69,9 +66,8 @@ const LCVASchema = new Schema(
       required: true,
     },
   },
-  { 
+  {
     timestamps: { createdAt: "created_at", updatedAt: "modified_at" },
-
   }
 );
 

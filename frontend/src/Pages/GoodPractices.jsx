@@ -256,7 +256,7 @@ const GoodPractices = () => {
               block={data.block_name}
               district={data.dist_name}
               gp={data.gp_name}
-              image={data.image}
+              image={data.image || data.images[0]}
               state={data.state_name}
               theme={data.theme_name}
               key={data.id}

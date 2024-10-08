@@ -94,15 +94,14 @@ const GpDetailsForm = ({ update }) => {
     },
     wardDetails: [
       {
-        wardName: '',
-        memberName: '',
-        gender: '',
-        casteCategory: '',
-        highestQualification: '',
-        aproxAge: '',
+        wardName: "",
+        memberName: "",
+        gender: "",
+        casteCategory: "",
+        highestQualification: "",
+        aproxAge: "",
       },
     ],
-  
     others: {
       noOfHouseholdsConnectedToTapWater: null,
       noOfHouseholdToilets: null,
@@ -123,7 +122,6 @@ const GpDetailsForm = ({ update }) => {
   const [loading, setLoading] = useState(false);
 
   const [sarpanchPhoto, setSarpanchPhoto] = useState("");
-
   const [secretaryPhoto, setSecretaryPhoto] = useState("");
 
   const navigate = useNavigate();
@@ -131,95 +129,110 @@ const GpDetailsForm = ({ update }) => {
   const getStateById = async () => {
     try {
       const { data } = await API.get(`/api/v1/state/${state_id}`);
-
-      setFormValues(prevValues => ({
+      console.log("State data:", data); // Log state data
+      setFormValues((prevValues) => ({
         ...prevValues,
         panchayatDetails: {
           ...prevValues.panchayatDetails,
-          ["state"]: data?.state.name,
+          state: data?.state?.name || "State not found",
         },
       }));
     } catch (error) {
-      console.log(error.message);
+      console.error("Error fetching state:", error.message);
     }
   };
 
   const getDistById = async () => {
     try {
       const { data } = await API.get(`/api/v1/dist/get-dist/${dist_id}`);
-
-      setFormValues(prevValues => ({
+      console.log("District data:", data); // Log district data
+      setFormValues((prevValues) => ({
         ...prevValues,
         panchayatDetails: {
           ...prevValues.panchayatDetails,
-          ["district"]: data?.district.name,
+          district: data?.district?.name || "District not found",
         },
       }));
     } catch (error) {
-      console.log(error.message);
+      console.error("Error fetching district:", error.message);
     }
   };
 
   const getBlockById = async () => {
     try {
       const { data } = await API.get(`/api/v1/block/get-blocks/${block_id}`);
-
-      setFormValues(prevValues => ({
+      console.log("Block data:", data); // Log block data
+      setFormValues((prevValues) => ({
         ...prevValues,
         panchayatDetails: {
           ...prevValues.panchayatDetails,
-          ["block"]: data?.block.name,
+          block: data?.block?.name || "Block not found",
         },
       }));
     } catch (error) {
-      console.log(error.message);
+      console.error("Error fetching block:", error.message);
     }
   };
 
   const getGpById = async () => {
     try {
       const { data } = await API.get(`/api/v1/gram/get-gram/${gp_id}`);
-      setFormValues(prevValues => ({
+      console.log("Gram Panchayat data:", data); // Log GP data
+      setFormValues((prevValues) => ({
         ...prevValues,
         panchayatDetails: {
           ...prevValues.panchayatDetails,
-          ["panchayat"]: data?.gp.name,
+          panchayat: data?.gp?.name || "Gram Panchayat not found",
         },
       }));
     } catch (error) {
-      console.log(error.message);
+      console.error("Error fetching Gram Panchayat:", error.message);
     }
   };
 
   useEffect(() => {
     if (state_id) {
       getStateById();
+    } else {
+      console.warn("No state_id provided");
     }
   }, [state_id]);
 
   useEffect(() => {
-    if (block_id) getBlockById();
-  }, [block_id]);
-
-  useEffect(() => {
-    if (dist_id) getDistById();
+    if (dist_id) {
+      getDistById();
+    } else {
+      console.warn("No dist_id provided");
+    }
   }, [dist_id]);
 
   useEffect(() => {
-    if (gp_id) getGpById();
+    if (block_id) {
+      getBlockById();
+    } else {
+      console.warn("No block_id provided");
+    }
+  }, [block_id]);
+
+  useEffect(() => {
+    if (gp_id) {
+      getGpById();
+    } else {
+      console.warn("No gp_id provided");
+    }
   }, [gp_id]);
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormValues(prevValues => ({
+    setFormValues((prevValues) => ({
       ...prevValues,
       [name]: value,
     }));
   };
 
-  const handlePanchayatDetailsChange = e => {
+  const handlePanchayatDetailsChange = (e) => {
     const { name, value } = e.target;
-    setFormValues(prevValues => ({
+    setFormValues((prevValues) => ({
       ...prevValues,
       panchayatDetails: {
         ...prevValues.panchayatDetails,
@@ -228,9 +241,9 @@ const GpDetailsForm = ({ update }) => {
     }));
   };
 
-  const handleDemographyChange = e => {
+  const handleDemographyChange = (e) => {
     const { name, value } = e.target;
-    setFormValues(prevValues => ({
+    setFormValues((prevValues) => ({
       ...prevValues,
       demography: {
         ...prevValues.demography,
@@ -239,9 +252,9 @@ const GpDetailsForm = ({ update }) => {
     }));
   };
 
-  const handlePanchayatAreaChange = e => {
+  const handlePanchayatAreaChange = (e) => {
     const { name, value } = e.target;
-    setFormValues(prevValues => ({
+    setFormValues((prevValues) => ({
       ...prevValues,
       panchayatArea: {
         ...prevValues.panchayatArea,
@@ -250,13 +263,20 @@ const GpDetailsForm = ({ update }) => {
     }));
   };
 
-  const handleSarpanchDetailsChange = e => {
+  const handleSarpanchDetailsChange = (e) => {
     const { name, value, type, files } = e.target;
 
     if (type === "file" && files[0]) {
-      setSarpanchPhoto(files[0]);
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setSarpanchPhoto(reader.result);
+        }
+      };
+      reader.readAsDataURL(e.target.files[0]);
     } else {
-      setFormValues(prevValues => ({
+      setFormValues((prevValues) => ({
         ...prevValues,
         sarpanchDetails: {
           ...prevValues.sarpanchDetails,
@@ -266,13 +286,20 @@ const GpDetailsForm = ({ update }) => {
     }
   };
 
-  const handleSecretaryDetailsChange = e => {
+  const handleSecretaryDetailsChange = (e) => {
     const { name, value, type, files } = e.target;
 
     if (type === "file" && files[0]) {
-      setSecretaryPhoto(files[0]);
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setSecretaryPhoto(reader.result);
+        }
+      };
+      reader.readAsDataURL(e.target.files[0]);
     } else {
-      setFormValues(prevValues => ({
+      setFormValues((prevValues) => ({
         ...prevValues,
         secretaryDetails: {
           ...prevValues.secretaryDetails,
@@ -282,9 +309,9 @@ const GpDetailsForm = ({ update }) => {
     }
   };
 
-  const handleHealthChange = e => {
+  const handleHealthChange = (e) => {
     const { name, value } = e.target;
-    setFormValues(prevValues => ({
+    setFormValues((prevValues) => ({
       ...prevValues,
       health: {
         ...prevValues.health,
@@ -293,9 +320,9 @@ const GpDetailsForm = ({ update }) => {
     }));
   };
 
-  const handleEducationChange = e => {
+  const handleEducationChange = (e) => {
     const { name, value } = e.target;
-    setFormValues(prevValues => ({
+    setFormValues((prevValues) => ({
       ...prevValues,
       education: {
         ...prevValues.education,
@@ -304,9 +331,9 @@ const GpDetailsForm = ({ update }) => {
     }));
   };
 
-  const handleSportsChange = e => {
+  const handleSportsChange = (e) => {
     const { name, value } = e.target;
-    setFormValues(prevValues => ({
+    setFormValues((prevValues) => ({
       ...prevValues,
       sports: {
         ...prevValues.sports,
@@ -315,9 +342,9 @@ const GpDetailsForm = ({ update }) => {
     }));
   };
 
-  const handleGeneralChange = e => {
+  const handleGeneralChange = (e) => {
     const { name, value } = e.target;
-    setFormValues(prevValues => ({
+    setFormValues((prevValues) => ({
       ...prevValues,
       general: {
         ...prevValues.general,
@@ -363,9 +390,9 @@ const GpDetailsForm = ({ update }) => {
     }));
   };
 
-  const handleOthersDetailsChange = e => {
+  const handleOthersDetailsChange = (e) => {
     const { name, value } = e.target;
-    setFormValues(prevValues => ({
+    setFormValues((prevValues) => ({
       ...prevValues,
       others: {
         ...prevValues.others,
@@ -374,7 +401,7 @@ const GpDetailsForm = ({ update }) => {
     }));
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
@@ -403,6 +430,7 @@ const GpDetailsForm = ({ update }) => {
           headers: { "Content-Type": "application/json" },
         }
       );
+
       if (data?.success) {
         toast.success(data?.message, { position: "bottom-center" });
         // navigate("/admin");
@@ -424,7 +452,7 @@ const GpDetailsForm = ({ update }) => {
       try {
         const { data } = await API.get(`/api/v1/gp-details/${id}`);
         // console.log(data?.data);
-        setFormValues(prevValues => ({
+        setFormValues((prevValues) => ({
           ...prevValues,
           ...data?.data,
         }));
@@ -436,7 +464,7 @@ const GpDetailsForm = ({ update }) => {
   }, []);
 
   const handleUpdate = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
       setLoading(true);
       const { data } = await API.put(
@@ -471,8 +499,8 @@ const GpDetailsForm = ({ update }) => {
       >
         <AdminHeader>Gram Panchayat Details</AdminHeader>
         <div className="grid py-10  grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-10 justify-between">
-          <StateFilter />
-          <DistrictFilter />
+          <StateFilter yf />
+          <DistrictFilter yf />
           <BlockFilter />
           <GramFilter />
         </div>
@@ -1017,90 +1045,93 @@ const GpDetailsForm = ({ update }) => {
 
         {/* Ward Details */}
         <div className="mb-6">
-  <h2 className="text-xl font-medium text-primary mb-4">Ward Details</h2>
-  <div className="space-y-6 pb-10">
-    {formValues.wardDetails.map((ward, index) => (
+          <h2 className="text-xl font-medium text-primary mb-4">
+            Ward Details
+          </h2>
+          <div className="space-y-6 pb-10">
+            {formValues.wardDetails.map((ward, index) => (
+              <div
+                key={index}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
+              >
+                <Input
+                  type="text"
+                  name="wardName"
+                  value={ward.wardName}
+                  onChange={(e) => handleWardDetailsChange(index, e)}
+                  placeholder="Ward Name"
+                  className="p-2 border border-gray-300 rounded-md"
+                />
+                <Input
+                  type="text"
+                  name="memberName"
+                  value={ward.memberName}
+                  onChange={(e) => handleWardDetailsChange(index, e)}
+                  placeholder="Member Name"
+                  className="p-2 border border-gray-300 rounded-md"
+                />
+                <Input
+                  type="text"
+                  name="gender"
+                  value={ward.gender}
+                  onChange={(e) => handleWardDetailsChange(index, e)}
+                  placeholder="Gender"
+                  className="p-2 border border-gray-300 rounded-md"
+                />
+                <Input
+                  type="text"
+                  name="casteCategory"
+                  value={ward.casteCategory}
+                  onChange={(e) => handleWardDetailsChange(index, e)}
+                  placeholder="Caste Category"
+                  className="p-2 border border-gray-300 rounded-md"
+                />
+                <Input
+                  type="text"
+                  name="highestQualification"
+                  value={ward.highestQualification}
+                  onChange={(e) => handleWardDetailsChange(index, e)}
+                  placeholder="Highest Qualification"
+                  className="p-2 border border-gray-300 rounded-md"
+                />
+                <Input
+                  type="number"
+                  name="aproxAge"
+                  value={ward.aproxAge}
+                  onChange={(e) => handleWardDetailsChange(index, e)}
+                  placeholder="Approx Age"
+                  className="p-2 border border-gray-300 rounded-md"
+                />
 
-      <div key={index} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        
-        <Input
-          type="text"
-          name="wardName"
-          value={ward.wardName}
-          onChange={(e) => handleWardDetailsChange(index, e)}
-          placeholder="Ward Name"
-          className="p-2 border border-gray-300 rounded-md"
-        />
-        <Input
-          type="text"
-          name="memberName"
-          value={ward.memberName}
-          onChange={(e) => handleWardDetailsChange(index, e)}
-          placeholder="Member Name"
-          className="p-2 border border-gray-300 rounded-md"
-        />
-        <Input
-          type="text"
-          name="gender"
-          value={ward.gender}
-          onChange={(e) => handleWardDetailsChange(index, e)}
-          placeholder="Gender"
-          className="p-2 border border-gray-300 rounded-md"
-        />
-        <Input
-          type="text"
-          name="casteCategory"
-          value={ward.casteCategory}
-          onChange={(e) => handleWardDetailsChange(index, e)}
-          placeholder="Caste Category"
-          className="p-2 border border-gray-300 rounded-md"
-        />
-        <Input
-          type="text"
-          name="highestQualification"
-          value={ward.highestQualification}
-          onChange={(e) => handleWardDetailsChange(index, e)}
-          placeholder="Highest Qualification"
-          className="p-2 border border-gray-300 rounded-md"
-        />
-        <Input
-          type="number"
-          name="aproxAge"
-          value={ward.aproxAge}
-          onChange={(e) => handleWardDetailsChange(index, e)}
-          placeholder="Approx Age"
-          className="p-2 border border-gray-300 rounded-md"
-        />
-        
-        {/* Remove button for each ward entry */}
-        {index > 0 && (
-          <div className="col-span-full">
+                {/* Remove button for each ward entry */}
+                {index > 0 && (
+                  <div className="col-span-full">
+                    <Button
+                      type="button"
+                      onClick={() => removeWard(index)}
+                      className="bg-red-900 text-white px-4 py-2 rounded-md"
+                    >
+                      Remove Ward
+                    </Button>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Button to add new ward */}
+          <div className="mt-4">
             <Button
               type="button"
-              onClick={() => removeWard(index)}
-              className="bg-red-900 text-white px-4 py-2 rounded-md"
+              onClick={addWard}
+              className="bg-blue-900 text-white px-4 py-2 rounded-md"
             >
-              Remove Ward
+              Add New Ward
             </Button>
           </div>
-        )}
-      </div>
-    ))}
-  </div>
+        </div>
 
-  {/* Button to add new ward */}
-  <div className="mt-4">
-    <Button
-      type="button"
-      onClick={addWard}
-      className="bg-blue-900 text-white px-4 py-2 rounded-md"
-    >
-      Add New Ward
-    </Button>
-  </div>
-</div>
-
-   {/* Other Details */}
+        {/* Other Details */}
         <div className="mb-6">
           <h2 className="text-xl font-medium text-primary mb-4">
             Others Details

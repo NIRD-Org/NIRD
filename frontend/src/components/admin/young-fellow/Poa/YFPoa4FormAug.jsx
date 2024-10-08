@@ -25,7 +25,6 @@ const months = [
 
 // Updated KPI Themes with their respective Activities
 const kpiThemes = {
-  
   "Institutional Strengthening of GPs": [
     "To acquaint with the ERs and functionaries of the GP.",
     "To understand system of functioning as institutions of self-government.",
@@ -45,7 +44,7 @@ const kpiThemes = {
     "Conducting/Organising awareness meetings with the community to raise awareness about the significance of Gram Sabha/ Ward Sabha/Mahila Sabha/Bal Sabha",
     "Conducting Training need-assessment/Identifying training needs of the GP.",
     "Organising trainings for Village Panchayat Leaders, Village Officials, SHGs",
-    "Monthly meeting with BDO/CEO (BP/JP) and DPRO/CEO (ZP)."
+    "Monthly meeting with BDO/CEO (BP/JP) and DPRO/CEO (ZP).",
   ],
   "Poverty Free and Enhanced Livelihoods Villages": [
     "Wage Employment under MGNREGS.",
@@ -56,7 +55,7 @@ const kpiThemes = {
     "Activities to Promote PMJDY",
     "Promoting SHGs",
     "Activities to promote Skill Development Trainings",
-    "Preparation of Sankalp-based GPDP"
+    "Preparation of Sankalp-based GPDP",
   ],
   "Healthy Village": [
     "Activities to reduce child deaths",
@@ -66,7 +65,7 @@ const kpiThemes = {
     "Activities to promote 100% institutional births.",
     "Ayushman Health Cards",
     "Activities to reduce water-borne diseases.",
-    "Preparation of Sankalp-based GPDP"
+    "Preparation of Sankalp-based GPDP",
   ],
   "Child-Friendly Village": [
     "Activities to improve Nutritional status of Children.",
@@ -76,21 +75,21 @@ const kpiThemes = {
     "Activities to improve the enrolment of children and enrolment of drop-out children from school in the GP.",
     "Ayushman Health Cards for all eligible Children",
     "Organising/ Facilitating the Conduct of Bal Sabha.",
-    "Preparation of Sankalp-based GPDP"
+    "Preparation of Sankalp-based GPDP",
   ],
   "Water Sufficient Villages": [
     "Providing Tap water connection to 100% HH in the GP",
     "Activities related to promote Rainwater Harvesting",
     "Activities related to Watershed-based Development",
     "Activities related to Water Quality",
-    "Preparation of Sankalp-based GPDP"
+    "Preparation of Sankalp-based GPDP",
   ],
   "Clean and Green Villages": [
     "Activities related to Solid & Liquid Waste Management",
     "Activities related to UJALA/ Similar State/UT schemes.",
     "Facilitating activities to ensure Standing Committees in the GP Biodiversity and Environment Preservation",
     "Activities to ensure electricity, streetlights etc",
-    "Preparation of Sankalp-based GPDP"
+    "Preparation of Sankalp-based GPDP",
   ],
   "Self-Sufficient Infrastructure in Villages": [
     "Activities related to PMAY-G",
@@ -102,37 +101,35 @@ const kpiThemes = {
     "Activities to improve healthcare infrastructure",
     "Activities to improve veterinary services in the GP",
     "Activities to improve School infrastructure in the GP",
-    "Preparation of Sankalp-based GPDP"
+    "Preparation of Sankalp-based GPDP",
   ],
   "Socially Just & Socially Secured Village": [
     "Activities to Promote NSAP/ similar State Pension scheme.",
     "Activities to support GP to deliver services to persons with disability",
     "Ayushman Health Cards",
-    "Preparation of Sankalp-based GPDP"
+    "Preparation of Sankalp-based GPDP",
   ],
   "Village with Good Governance": [
     "Activities related to Gram Sabha",
     "Activities to improve financial management and record maintenance in the GP",
     "Facilitating the process of GPDP",
     "Activities relate to service delivery",
-    "Preparation of Sankalp-based GPDP"
+    "Preparation of Sankalp-based GPDP",
   ],
   "Women Friendly Villages": [
     "Organising Mahila Sabha/ Facilitating the Conduct of Mahila Sabha Meeting in the GP.",
     "Activities to improve the enrolment of girl children and enrolment of drop-out girl children from school.",
     "Activities to improve the health of girl children and women in the GP",
     "Enrolment of women in Self-help Groups",
-    "Preparation of Sankalp-based GPDP"
+    "Preparation of Sankalp-based GPDP",
   ],
   "No work Day": ["Public Holiday", "Weekoff", "Leave"],
-"Others(100 words Only)": ["Others"],
-"Tour": ["Tour"],
-
-
+  "Others(100 words Only)": ["Others"],
+  Tour: ["Tour"],
 };
 
 const YFPoa4FormAug = ({ update }) => {
-  const currentMonthIndex = new Date().getMonth() - 1;
+  const currentMonthIndex = 7;
   const currentYear = new Date().getFullYear();
   const { id: poalId } = useParams();
   const [selectedStates, setSelectedStates] = useState({});
@@ -431,7 +428,8 @@ const YFPoa4FormAug = ({ update }) => {
                         <option key={state.id} value={state.id}>
                           {state.name}
                         </option>
-                      ))}<option value="None">None</option>
+                      ))}
+                    <option value="None">None</option>
                   </select>
                 </td>
                 <td>
@@ -444,7 +442,8 @@ const YFPoa4FormAug = ({ update }) => {
                       <option key={dist.id} value={dist.id}>
                         {dist.name}
                       </option>
-                    ))}<option value="None">None</option>
+                    ))}
+                    <option value="None">None</option>
                   </select>
                 </td>
                 {/* Block Selection */}
@@ -459,7 +458,8 @@ const YFPoa4FormAug = ({ update }) => {
                       <option key={block.id} value={block.id}>
                         {block.name}
                       </option>
-                    ))}<option value="None">None</option>
+                    ))}
+                    <option value="None">None</option>
                   </select>
                 </td>
                 {/* GP Selection */}
@@ -474,7 +474,8 @@ const YFPoa4FormAug = ({ update }) => {
                       <option key={gp.id} value={gp.id}>
                         {gp.name}
                       </option>
-                    ))}<option value="None">None</option>
+                    ))}
+                    <option value="None">None</option>
                   </select>
                 </td>
                 <td>

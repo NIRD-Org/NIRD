@@ -14,7 +14,7 @@ const GoodPracticesCard = ({
   return (
     <Link
       to={`/good-practice/${activity}/${id}`}
-      className="w-[19rem] h-full md:w-[15rem] relative group  border flex flex-col justify-between cursor-pointer bg-white"
+      className="w-[19rem] h-full md:w-[15rem] relative group  border flex flex-col cursor-pointer bg-white"
     >
       <div className="overflow-hidden">
         <img

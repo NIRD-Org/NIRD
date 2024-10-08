@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import AdminHeader from "../../AdminHeader";
+import AdminHeader from "@/components/admin/AdminHeader";
 import toast from "react-hot-toast";
 import { useSoeprLocation } from "@/components/hooks/useSoeprLocation";
 import API from "@/utils/API";
@@ -128,8 +128,8 @@ const kpiThemes = {
   Tour: ["Tour"],
 };
 
-const YFPoa2FormAug = ({ update }) => {
-  const currentMonthIndex = 7;
+const YFPoa4FormSep = ({ update }) => {
+  const currentMonthIndex = 8;
   const currentYear = new Date().getFullYear();
   const { id: poalId } = useParams();
   const [selectedStates, setSelectedStates] = useState({});
@@ -141,11 +141,27 @@ const YFPoa2FormAug = ({ update }) => {
   const [formDataState, setFormData] = useState([]);
   const selectedMonth = months[currentMonthIndex];
 
-  // Define the start and end of the second week
-  const secondWeekStart = 8;
-  const secondWeekEnd = 14;
+  // Define the current year and month index (zero-indexed)
+  const year = new Date().getFullYear();
+  const currentMonth = new Date().getMonth(); // Current month (0 for January, 11 for December)
+
+  // Function to get the number of days in a month
+  const getDaysInMonth = (month, year) => {
+    // month is zero-indexed (0 for January, 11 for December)
+    return new Date(year, month + 1, 0).getDate();
+  };
+
+  // Get the number of days in the current month
+  const daysInMonth = getDaysInMonth(currentMonth, year);
+
+  // Define the start of the fourth week (22nd day of the month)
+  const fourthWeekStart = 22;
+
+  // Define the end of the month
+  const fourthWeekEnd = daysInMonth;
+
   function getAugustDate(day, year = new Date().getFullYear()) {
-    return new Date(Date.UTC(year, 7, day));
+    return new Date(Date.UTC(year, 8, day));
   }
 
   const augustDate = getAugustDate(14, 2024);
@@ -242,7 +258,11 @@ const YFPoa2FormAug = ({ update }) => {
           `poaData[${day}][plannedEvent]`,
           formDataState[day]?.plannedEvent || ""
         );
-        formDataToSubmit.append(`poaData[${day}][poaType]`, "poa2");
+        formDataToSubmit.append(
+          `poaData[${day}][tentativeTarget]`,
+          formDataState[day]?.tentativeTarget || ""
+        );
+        formDataToSubmit.append(`poaData[${day}][poaType]`, "poa4");
         formDataToSubmit.append(
           `poaData[${day}][state_id]`,
           selectedStates[day]
@@ -271,10 +291,6 @@ const YFPoa2FormAug = ({ update }) => {
           );
         }
         formDataToSubmit.append(
-          `poaData[${day}][tentativeTarget]`,
-          formDataState[day]?.tentativeTarget || ""
-        );
-        formDataToSubmit.append(
           `poaData[${day}][remarks]`,
           formDataState[day]?.remarks || ""
         );
@@ -298,7 +314,7 @@ const YFPoa2FormAug = ({ update }) => {
   return (
     <div style={{ fontSize: "14px", maxWidth: "100%", margin: "0 auto" }}>
       <AdminHeader>
-        Second Weekly Plan Of Action - Month : {selectedMonth.name}{" "}
+        Fourth Weekly Plan Of Action - Month : {selectedMonth.name}{" "}
         {currentYear}
       </AdminHeader>
 
@@ -326,7 +342,7 @@ const YFPoa2FormAug = ({ update }) => {
           </tr>
         </thead>
         <tbody>
-          {getDaysInWeek(secondWeekStart, secondWeekEnd).map((day, idx) => {
+          {getDaysInWeek(fourthWeekStart, fourthWeekEnd).map((day, idx) => {
             const { yfState: states } = useYfLocation({
               state_id: selectedStates[day],
             });
@@ -342,6 +358,7 @@ const YFPoa2FormAug = ({ update }) => {
               dist_id: selectedDistricts[day],
               block_id: selectedBlocks[day],
             });
+
             return (
               <tr key={idx}>
                 <td>{formatIndianDate(day)}</td>
@@ -509,4 +526,4 @@ const YFPoa2FormAug = ({ update }) => {
   );
 };
 
-export default YFPoa2FormAug;
+export default YFPoa4FormSep;

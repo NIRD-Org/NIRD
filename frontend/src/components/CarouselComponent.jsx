@@ -42,25 +42,52 @@ const CarouselComponent = ({ data }) => {
         <CarouselContent className="relative">
           {data &&
             data.map((item, index) => (
-              <CarouselItem key={index}>
-                <Card>
-                  <CardContent className="relative w-full flex items-baseline justify-end p-0 rounded">
-                    <img
-                      src={item.image}
-                      alt={item.activityTitle}
-                      className="w-full h-full max-h-[65vh] rounded  object-cover"
-                    />
-                    <div className="absolute bottom-0 left-0 w-full bg-black bg-opacity-60 text-white py-4 md:px-10 px-4">
-                      <p className="text-xs rounded-lg w-fit text-white bg-primary px-1 md:px-5 py-2 md:py-1 font-medium">
-                        {item.theme_name}
-                      </p>
-                      <p className="text-xs md:text-lg pt-2 px-3 font-semibold">
-                        {item.activityTitle}
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </CarouselItem>
+              <>
+                {item.image ? (
+                  <CarouselItem key={index}>
+                    <Card>
+                      <CardContent className="relative w-full flex items-baseline justify-end p-0 rounded">
+                        <img
+                          src={item.image}
+                          alt={item.activityTitle}
+                          className="w-full h-full max-h-[65vh] rounded  object-cover"
+                        />
+                        <div className="absolute bottom-0 left-0 w-full bg-black bg-opacity-60 text-white py-4 md:px-10 px-4">
+                          <p className="text-xs rounded-lg w-fit text-white bg-primary px-1 md:px-5 py-2 md:py-1 font-medium">
+                            {item.theme_name}
+                          </p>
+                          <p className="text-xs md:text-lg pt-2 px-3 font-semibold">
+                            {item.activityTitle}
+                          </p>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </CarouselItem>
+                ) : (
+                  item.images &&
+                  item.images.map((it) => (
+                    <CarouselItem key={index}>
+                      <Card>
+                        <CardContent className="relative w-full flex items-baseline justify-end p-0 rounded">
+                          <img
+                            src={it}
+                            alt={item.activityTitle}
+                            className="w-full h-full max-h-[65vh] rounded  object-cover"
+                          />
+                          <div className="absolute bottom-0 left-0 w-full bg-black bg-opacity-60 text-white py-4 md:px-10 px-4">
+                            <p className="text-xs rounded-lg w-fit text-white bg-primary px-1 md:px-5 py-2 md:py-1 font-medium">
+                              {item.theme_name}
+                            </p>
+                            <p className="text-xs md:text-lg pt-2 px-3 font-semibold">
+                              {item.activityTitle}
+                            </p>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </CarouselItem>
+                  ))
+                )}
+              </>
             ))}
         </CarouselContent>
         <CarouselPrevious />

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import AdminHeader from "../../AdminHeader";
+import AdminHeader from "@/components/admin/AdminHeader";
 import toast from "react-hot-toast";
 import { useSoeprLocation } from "@/components/hooks/useSoeprLocation";
 import API from "@/utils/API";
@@ -127,25 +127,23 @@ const kpiThemes = {
   "Others(100 words Only)": ["Others"],
   Tour: ["Tour"],
 };
-
-const YFPoa2FormAug = ({ update }) => {
-  const currentMonthIndex = 7;
+const YFPoa1FormSep = ({ update }) => {
+  const currentMonthIndex = 8;
   const currentYear = new Date().getFullYear();
   const { id: poalId } = useParams();
   const [selectedStates, setSelectedStates] = useState({});
-  const [selectedKpiTheme, setSelectedKpiTheme] = useState({});
+  const [selectedKpiTheme, setSelectedKpiTheme] = useState("");
   const [selectedActivities, setSelectedActivities] = useState({});
   const [selectedDistricts, setSelectedDistricts] = useState({});
-  const [selectedBlocks, setSelectedBlocks] = useState({});
   const [selectedGps, setSelectedGps] = useState({});
+  const [selectedBlocks, setSelectedBlocks] = useState({});
+
   const [formDataState, setFormData] = useState([]);
   const selectedMonth = months[currentMonthIndex];
 
-  // Define the start and end of the second week
-  const secondWeekStart = 8;
-  const secondWeekEnd = 14;
+  const lastDayOfWeek = 7;
   function getAugustDate(day, year = new Date().getFullYear()) {
-    return new Date(Date.UTC(year, 7, day));
+    return new Date(Date.UTC(year, 8, day));
   }
 
   const augustDate = getAugustDate(14, 2024);
@@ -165,8 +163,8 @@ const YFPoa2FormAug = ({ update }) => {
     }
   }, [poalId, update]);
 
-  const getDaysInWeek = (start, end) =>
-    Array.from({ length: end - start + 1 }, (_, i) => start + i);
+  const getDaysInMonth = () =>
+    Array.from({ length: lastDayOfWeek }, (_, i) => i + 1);
 
   const getWeekDay = (day) => {
     const date = new Date(`${selectedMonth.name} ${day}, ${currentYear}`);
@@ -197,7 +195,6 @@ const YFPoa2FormAug = ({ update }) => {
     setSelectedBlocks((prev) => ({ ...prev, [day]: "" }));
     setSelectedGps((prev) => ({ ...prev, [day]: "" }));
   };
-
   const handleDistrictChange = (day, selectedDistrict) => {
     setSelectedDistricts((prev) => ({ ...prev, [day]: selectedDistrict }));
     setSelectedBlocks((prev) => ({ ...prev, [day]: "" }));
@@ -242,7 +239,7 @@ const YFPoa2FormAug = ({ update }) => {
           `poaData[${day}][plannedEvent]`,
           formDataState[day]?.plannedEvent || ""
         );
-        formDataToSubmit.append(`poaData[${day}][poaType]`, "poa2");
+        formDataToSubmit.append(`poaData[${day}][poaType]`, "poa1");
         formDataToSubmit.append(
           `poaData[${day}][state_id]`,
           selectedStates[day]
@@ -263,6 +260,10 @@ const YFPoa2FormAug = ({ update }) => {
           `poaData[${day}][achievements]`,
           formDataState[day]?.achievements || ""
         );
+        formDataToSubmit.append(
+          `poaData[${day}][tentativeTarget]`,
+          formDataState[day]?.tentativeTarget || ""
+        );
 
         if (formDataState[day]?.photo) {
           formDataToSubmit.append(
@@ -270,10 +271,6 @@ const YFPoa2FormAug = ({ update }) => {
             formDataState[day].photo
           );
         }
-        formDataToSubmit.append(
-          `poaData[${day}][tentativeTarget]`,
-          formDataState[day]?.tentativeTarget || ""
-        );
         formDataToSubmit.append(
           `poaData[${day}][remarks]`,
           formDataState[day]?.remarks || ""
@@ -296,17 +293,17 @@ const YFPoa2FormAug = ({ update }) => {
   };
 
   return (
-    <div style={{ fontSize: "14px", maxWidth: "100%", margin: "0 auto" }}>
+    <div style={{ fontSize: "14px", margin: "0 auto" }}>
       <AdminHeader>
-        Second Weekly Plan Of Action - Month : {selectedMonth.name}{" "}
-        {currentYear}
+        First Weekly Plan Of Action - Month : {selectedMonth.name} {currentYear}
       </AdminHeader>
 
       <Table
         border="1"
         cellPadding="3"
         cellSpacing="0"
-        style={{ width: "100%", marginTop: "20px", fontSize: "12px" }}
+        className="overflow-x-auto"
+        style={{ marginTop: "20px", fontSize: "12px" }}
       >
         <thead>
           <tr>
@@ -326,7 +323,7 @@ const YFPoa2FormAug = ({ update }) => {
           </tr>
         </thead>
         <tbody>
-          {getDaysInWeek(secondWeekStart, secondWeekEnd).map((day, idx) => {
+          {getDaysInMonth().map((day, idx) => {
             const { yfState: states } = useYfLocation({
               state_id: selectedStates[day],
             });
@@ -342,6 +339,7 @@ const YFPoa2FormAug = ({ update }) => {
               dist_id: selectedDistricts[day],
               block_id: selectedBlocks[day],
             });
+
             return (
               <tr key={idx}>
                 <td>{formatIndianDate(day)}</td>
@@ -389,8 +387,8 @@ const YFPoa2FormAug = ({ update }) => {
                   />
                 </td>
                 <td>
-                  <textarea
-                    rows="2"
+                  <input
+                    type="text"
                     style={{ width: "100%" }}
                     onChange={(e) =>
                       handleInputChange(day, "tentativeTarget", e.target.value)
@@ -474,18 +472,14 @@ const YFPoa2FormAug = ({ update }) => {
                 <td>
                   <input
                     type="file"
-                    onChange={(e) => {
-                      const file = e.target.files[0];
-                      setFormData((prev) => ({
-                        ...prev,
-                        [day]: { ...prev[day], photo: file },
-                      }));
-                    }}
+                    onChange={(e) =>
+                      handleInputChange(day, "photo", e.target.files[0])
+                    }
                   />
                 </td>
                 <td>
-                  <textarea
-                    rows="2"
+                  <input
+                    type="text"
                     style={{ width: "100%" }}
                     onChange={(e) =>
                       handleInputChange(day, "remarks", e.target.value)
@@ -498,10 +492,9 @@ const YFPoa2FormAug = ({ update }) => {
           })}
         </tbody>
       </Table>
-
       <Button
         onClick={handleSubmit}
-        className="primary-button mb-10 float-right mt-4"
+        className="primary-button float-right mt-4"
       >
         Submit
       </Button>
@@ -509,4 +502,4 @@ const YFPoa2FormAug = ({ update }) => {
   );
 };
 
-export default YFPoa2FormAug;
+export default YFPoa1FormSep;

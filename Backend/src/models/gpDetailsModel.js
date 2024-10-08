@@ -27,7 +27,6 @@ const PanchayatSchema = new mongoose.Schema(
       required: true,
       ref: "GramPanchayat",
     },
-
     panchayatDetails: {
       state: { type: String, required: true },
       district: { type: String, required: true },
@@ -76,7 +75,6 @@ const PanchayatSchema = new mongoose.Schema(
       mobile: { type: String, required: true },
       secretaryPhoto: { type: String, required: false },
     },
-
     // Health
     health: {
       primaryHealthCenters: { type: Number },
@@ -85,7 +83,6 @@ const PanchayatSchema = new mongoose.Schema(
       dispensary: { type: Number },
       ayurvedicClinics: { type: Number },
     },
-
     // Education
     education: {
       totalPrimarySchools: { type: Number },
@@ -99,7 +96,6 @@ const PanchayatSchema = new mongoose.Schema(
       noOfFootballCourt: { type: Number },
       noOfBadmintonCourt: { type: Number },
     },
-
     // General
     general: {
       noOfSHG: { type: Number },
@@ -124,14 +120,18 @@ const PanchayatSchema = new mongoose.Schema(
       noOfDisasterRescueCenters: { type: Number },
       noOfCommonServiceCenters: { type: Number },
     },
-    wardDetails: {
-      wardName: { type: String, required: true },
-      memberName: { type: String, required: true },
-      gender: { type: String, required: true },
-      casteCategory: { type: String, required: true },
-      highestQualification: { type: String, required: true },
-      aproxAge: { type: Number, required: true },
-    },
+    // Update the wardDetails to be an array of objects
+    wardDetails: [
+      {
+        wardName: { type: String, required: true },
+        memberName: { type: String, required: true },
+        gender: { type: String, required: true },
+        casteCategory: { type: String, required: true },
+        highestQualification: { type: String, required: true },
+        aproxAge: { type: Number, required: true },
+        _id: false,
+      },
+    ],
     status: { type: String, default: "1" },
     decision: { type: Number, default: 0 },
     remarks: { type: String, default: "" },
