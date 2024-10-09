@@ -9,6 +9,7 @@ import { useYfLocation } from "@/components/hooks/useYfLocation";
 
 const GoodPracticeForm = ({ update = false }) => {
   const [pending, setPending] = useState(false);
+  const [videoSource, setVideoSource] = useState("file");
   const [formData, setFormData] = useState({
     theme_id: "",
     state_id: "",
@@ -82,13 +83,18 @@ const GoodPracticeForm = ({ update = false }) => {
         if (key === "images") {
           value.forEach((image, index) => {
             if (image) {
-              formDataToSend.append(`images[${index}]`, image); // Append each image to FormData
+              formDataToSend.append(`images[${index}]`, image);
             }
           });
+        } else if (key === "video") {
+          if (videoSource === "file") {
+            formDataToSend.append("video", value);
+          }
         } else {
           formDataToSend.append(key, value);
         }
       });
+
       if (update) {
         await API.put(`/api/v1/good-practice/${formData.id}`, formDataToSend, {
           headers: { "Content-Type": "multipart/form-data" },
@@ -192,12 +198,12 @@ const GoodPracticeForm = ({ update = false }) => {
       accept: "application/pdf,.pdf",
       required: !update,
     },
-    {
-      label: "Upload Video",
-      name: "video",
-      type: "file",
-      required: !update,
-    },
+    // {
+    //   label: "Upload Video",
+    //   name: "video",
+    //   type: "file",
+    //   required: !update,
+    // },
   ];
 
   if (!themes) return;
@@ -240,7 +246,55 @@ const GoodPracticeForm = ({ update = false }) => {
             Add Another Image
           </Button>
         </div>
-        <div></div>
+        {/* Video Upload Section */}
+        <div className="col-span-1 md:col-span-2 lg:col-span-3">
+          <div className="flex items-center gap-10">
+            <label>
+              <input
+                className="w-5"
+                type="radio"
+                value="file"
+                checked={videoSource === "file"}
+                onChange={() => setVideoSource("file")}
+              />
+              Upload Video File
+            </label>
+            <label>
+              <input
+                className="w-6"
+                type="radio"
+                value="url"
+                checked={videoSource === "url"}
+                onChange={() => setVideoSource("url")}
+              />
+              Add Video URL
+            </label>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 mt-5">
+            {videoSource === "file" ? (
+              <FormField
+                label="Upload Video"
+                name="video"
+                type="file"
+                accept="video/*"
+                required={!update}
+                disabled={pending}
+                onFileChange={handleFilesChange}
+              />
+            ) : (
+              <FormField
+                label="Video URL"
+                name="videoURL"
+                type="text"
+                value={formData.videoURL}
+                onChange={handleInputChange}
+                disabled={pending}
+                required={!update}
+              />
+            )}
+          </div>
+        </div>
         <Button pending={pending} type="submit" className="px-20 self-end">
           {update ? "Update" : "Submit"}
         </Button>

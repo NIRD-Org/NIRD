@@ -69,11 +69,18 @@ export const createGoodPractice = CatchAsyncError(async (req, res, next) => {
     const { document, video } = req.files;
 
     // Upload images, document, and video concurrently
-    const [imageUrls, docUrl, videoUrl] = await Promise.all([
+    const [imageUrls, docUrl] = await Promise.all([
       Promise.all(images.map((img) => uploadFile(img.data))),
       uploadPDF(document.data),
-      uploadFile(video.data, null),
+      // uploadFile(video.data, null),
     ]);
+
+    let videoUrl;
+    if (req.body.videoURL) {
+      videoUrl = req.body.videoURL;
+    } else if (video) {
+      videoUrl = await uploadFile(video.data);
+    }
 
     req.body.images = imageUrls;
     req.body.document = docUrl;

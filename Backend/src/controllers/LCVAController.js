@@ -69,15 +69,21 @@ export const createLCVA = CatchAsyncError(async (req, res, next) => {
     const images = imageKeys.map((key) => req.files[key]);
 
     // Upload multiple images and other files concurrently
-    const [imageUrls, docUrl, videoUrl] = await Promise.all([
+    const [imageUrls, docUrl] = await Promise.all([
       Promise.all(images.map((img) => uploadFile(img.data))),
       uploadPDF(document.data),
-      uploadFile(video.data, null),
+      // uploadFile(video.data, null),
     ]);
+    let videoUrl;
+    if (req.body.videoURL) {
+      videoUrl = req.body.videoURL;
+    } else if (video) {
+      videoUrl = await uploadFile(video.data);
+    }
 
+    req.body.video = videoUrl;
     req.body.images = imageUrls;
     req.body.document = docUrl;
-    req.body.video = videoUrl;
     req.body.id = await getNewId();
     req.body.created_by = req?.user?.id || "1";
 

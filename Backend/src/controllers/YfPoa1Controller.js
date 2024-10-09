@@ -28,6 +28,7 @@ const getNewId = async () => {
 
 // export const createPoa1 = CatchAsyncError(async (req, res, next) => {
 //   try {
+//     const { created_at } = req.query;
 //     const poaData = Object.keys(req.body)
 //       .filter((key) => key.startsWith("poaData"))
 //       .reduce((acc, key) => {
@@ -39,59 +40,88 @@ const getNewId = async () => {
 
 //     const user_id = req?.user?.id;
 
+//     // Extract the new POA1 data to be checked for duplicates
+//     const newEntries = Object.values(poaData);
+
+//     // Determine the month and year for the new entries (assuming all entries have the same month)
+//     const [entryDay, entryMonth, entryYear] = newEntries[0].date
+//       .split("/")
+//       .map(Number);
+
+//     // Find an existing document for the same user and month
+//     let poa1 = await YfPoa1Model.findOne({
+//       user_id,
+//       $expr: {
+//         $and: [
+//           { $eq: [{ $month: "$created_at" }, entryMonth] },
+//           { $eq: [{ $year: "$created_at" }, entryYear] },
+//         ],
+//       },
+//     });
+
+//     // If a document exists, find any duplicate entries
+//     let existingCombinations = new Set();
+//     if (poa1) {
+//       existingCombinations = new Set(
+//         poa1.poaData.map((item) => `${item.date}-${item.action}-${item.gp_id}`)
+//       );
+//     }
+
+//     // Filter out new entries that match the existing combinations
+//     const filteredEntries = newEntries.filter(
+//       (entry) =>
+//         !existingCombinations.has(
+//           `${entry.date}-${entry.action}-${entry.gp_id}`
+//         )
+//     );
+
+//     if (filteredEntries.length === 0) {
+//       // console.log();
+
+//       return res.status(400).json({
+//         success: false,
+//         message: "No new data to add! Duplicate entries found.",
+//       });
+//     }
+
+//     // Process and upload photos if any
 //     for (const [index, entry] of Object.entries(poaData)) {
 //       const photoKey = `poaData[${index}][photo]`;
 
 //       if (req.files && req.files[photoKey]) {
-//         // Access the buffer data from req.files
 //         const photoBuffer = req.files[photoKey].data;
-
-//         // Upload the photo to Cloudinary
 //         const result = await uploadFile(photoBuffer);
-
-//         // Replace the photo field in poaData with the Cloudinary URL
-//         poaData[index].photo = result.secure_url;
+//         poaData[index].photo = result;
 //       }
 //     }
 
-//     let poa1 = await YfPoa1Model.findOne({ user_id });
-
+//     // Update existing document or create a new one based on the month
 //     if (poa1) {
-//       const existingDates = poa1.poaData.map((item) => item.date.toISOString());
-//       const newEntries = Object.values(poaData).filter(
-//         (entry) => !existingDates.includes(new Date(entry.date).toISOString())
-//       );
-
-//       if (newEntries.length === 0) {
-//         return res.status(400).json({
-//           success: false,
-//           message:
-//             "No new data to add. Data for the provided dates already exists.",
-//         });
-//       }
-
-//       poa1.poaData.push(...newEntries);
+//       // Append new filtered entries to the existing document
+//       poa1.poaData.push(...filteredEntries);
 //       poa1.status = "1";
 //       await poa1.save();
 //     } else {
+//       // Create a new document for this month
 //       poa1 = new YfPoa1Model({
 //         id: (await getNewId()).toString(),
-
 //         user_id,
 //         status: "1",
-//         poaData: Object.values(poaData),
+//         poaData: filteredEntries,
+
+//         created_at: created_at ?? new Date(),
 //       });
 //       await poa1.save();
 //     }
 
 //     res.status(201).json({
 //       success: true,
-//       message: "POA1 data successfully saved",
+//       message: "POA2 data successfully saved",
 //       data: poa1,
 //     });
 //   } catch (error) {
 //     console.error(error);
-//     next(new Errorhandler("Failed to submit POA1 Data", 500));
+//     next(new Errorhandler("Failed to submit POA Data", 500));
 //   }
 // });
 
@@ -103,16 +133,57 @@ export const createPoa1 = CatchAsyncError(async (req, res, next) => {
       .reduce((acc, key) => {
         const [, index, field] = key.match(/poaData\[(\d+)\]\[(\w+)\]/);
         acc[index] = acc[index] || {};
-        acc[index][field] = req.body[key];
+
+        // Ensure fields are treated as arrays, whether there is one entry or multiple
+        const value = Array.isArray(req.body[key])
+          ? req.body[key]
+          : [req.body[key]];
+
+        acc[index][field] = value;
         return acc;
       }, {});
 
     const user_id = req?.user?.id;
 
-    // Extract the new POA1 data to be checked for duplicates
-    const newEntries = Object.values(poaData);
+    const newEntries = [];
 
-    // Determine the month and year for the new entries (assuming all entries have the same month)
+    // Convert each field's array into separate objects per entry
+    Object.values(poaData).forEach((entryGroup) => {
+      const entryCount = entryGroup.date.length;
+
+      for (let i = 0; i < entryCount; i++) {
+        // Extract individual entries
+        const entry = {
+          date: entryGroup.date[i],
+          weekday: entryGroup.weekday[i],
+          kpi_theme: entryGroup.kpi_theme[i],
+          activity: entryGroup.activity[i],
+          plannedEvent: entryGroup.plannedEvent[i],
+          poaType: entryGroup.poaType[i],
+          state_id: entryGroup.state_id[i],
+          dist_id: entryGroup.dist_id[i],
+          block_id: entryGroup.block_id[i],
+          gp_id: entryGroup.gp_id[i],
+          achievements: entryGroup.achievements[i] || "",
+          tentativeTarget: entryGroup.tentativeTarget[i],
+          remarks: entryGroup.remarks[i] || "",
+        };
+
+        // Filter out entries with empty gp_id
+        if (entry.gp_id) {
+          newEntries.push(entry);
+        }
+      }
+    });
+
+    // console.log(newEntries);
+    if (newEntries.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "No valid data to add! Either duplicate or missing GP ID.",
+      });
+    }
+
     const [entryDay, entryMonth, entryYear] = newEntries[0].date
       .split("/")
       .map(Number);
@@ -128,56 +199,65 @@ export const createPoa1 = CatchAsyncError(async (req, res, next) => {
       },
     });
 
-    // If a document exists, find any duplicate entries
     let existingCombinations = new Set();
     if (poa1) {
       existingCombinations = new Set(
-        poa1.poaData.map((item) => `${item.date}-${item.action}-${item.gp_id}`)
+        poa1.poaData.map(
+          (item) => `${item.date}-${item.activity}-${item.gp_id}`
+        )
       );
     }
 
-    // Filter out new entries that match the existing combinations
-    const filteredEntries = newEntries.filter(
-      (entry) =>
-        !existingCombinations.has(
-          `${entry.date}-${entry.action}-${entry.gp_id}`
-        )
-    );
+    // Filter new entries to avoid exact duplicates
+    const filteredEntries = newEntries.filter((entry) => {
+      // Create a unique key for coparision
+      const entryKey = `${entry.date}-${entry.activity}-${entry.gp_id}`;
+
+      // Return entries that don't exist in the current dataset (are not duplicates)
+      return !existingCombinations.has(entryKey);
+    });
 
     if (filteredEntries.length === 0) {
-      // console.log();
-
       return res.status(400).json({
         success: false,
         message: "No new data to add! Duplicate entries found.",
       });
     }
 
-    // Process and upload photos if any
-    for (const [index, entry] of Object.entries(poaData)) {
-      const photoKey = `poaData[${index}][photo]`;
+    if (req.files) {
+      for (const fileKey of Object.keys(req.files)) {
+        const match = fileKey.match(/poaData\[(\d+)\]\[photo\]/);
 
-      if (req.files && req.files[photoKey]) {
-        const photoBuffer = req.files[photoKey].data;
-        const result = await uploadFile(photoBuffer);
-        poaData[index].photo = result;
+        if (match) {
+          const dayIndex = match[1]; // Get the day index from the file key
+
+          // Loop through filteredEntries and find the matching entry by day
+          for (let i = 0; i < filteredEntries.length; i++) {
+            const entryDay = filteredEntries[i].date.split("/")[0];
+
+            // If the entry matches the day index, upload the file and assign the photo
+            if (Number(entryDay) === Number(dayIndex) && req.files[fileKey]) {
+              const photoBuffer = req.files[fileKey].data;
+
+              const result = await uploadFile(photoBuffer);
+              filteredEntries[i].photo = result;
+              break;
+            }
+          }
+        }
       }
     }
-
-    // Update existing document or create a new one based on the month
+    // Update existing document or create a new one
     if (poa1) {
-      // Append new filtered entries to the existing document
       poa1.poaData.push(...filteredEntries);
       poa1.status = "1";
       await poa1.save();
     } else {
-      // Create a new document for this month
       poa1 = new YfPoa1Model({
         id: (await getNewId()).toString(),
         user_id,
         status: "1",
         poaData: filteredEntries,
-
         created_at: created_at ?? new Date(),
       });
       await poa1.save();
@@ -185,7 +265,7 @@ export const createPoa1 = CatchAsyncError(async (req, res, next) => {
 
     res.status(201).json({
       success: true,
-      message: "POA2 data successfully saved",
+      message: "POA1 data successfully saved",
       data: poa1,
     });
   } catch (error) {
