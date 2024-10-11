@@ -134,6 +134,7 @@ import YFPoa1FormSep from "./components/admin/young-fellow/Poa/sept/YFPoa1FormSe
 import YFPoa2FormSep from "./components/admin/young-fellow/Poa/sept/YFPoa2FormSep";
 import YFPoa3FormSep from "./components/admin/young-fellow/Poa/sept/YFPoa3FormSep";
 import YFPoa4FormSep from "./components/admin/young-fellow/Poa/sept/YFPoa4FormSep";
+import UpdateYfPOA1Form from "./components/admin/young-fellow/Poa/UpdateYfPOA1Form";
 
 function App() {
   const { login } = useAuthContext();
@@ -219,7 +220,10 @@ function App() {
             <Route path="yf/POA2/sep" element={<YFPoa2FormSep />} />
             <Route path="yf/POA3/sep" element={<YFPoa3FormSep />} />
             <Route path="yf/POA4/sep" element={<YFPoa4FormSep />} />
-            <Route path="yf/POA1/edit/:id" element={<YFPoa1Form update />} />
+            <Route
+              path="yf/POA1/edit/:id"
+              element={<UpdateYfPOA1Form update />}
+            />
             <Route path="yf/POAView" element={<YFPoa1View />} />
 
             <Route

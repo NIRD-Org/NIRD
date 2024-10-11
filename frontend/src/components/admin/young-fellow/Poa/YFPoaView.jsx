@@ -126,9 +126,9 @@ const YFPoaView = () => {
                   <Link to={`/admin/yf/POA1/view/${record.id}`}>
                     <NirdViewIcon />
                   </Link>
-                  {/* <Link to={`/admin/yf/POA1/edit/${record.id}`}> */}
-                  <NirdEditIcon />
-                  {/* </Link> */}
+                  <Link to={`/admin/yf/POA1/edit/${record.id}`}>
+                    <NirdEditIcon />
+                  </Link>
                 </TableCell>
               </TableRow>
             );

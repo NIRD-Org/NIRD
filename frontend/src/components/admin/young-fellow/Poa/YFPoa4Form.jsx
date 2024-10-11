@@ -197,7 +197,7 @@ const kpiThemes = {
     "Facilitating the GP to electronically provide services including regulatory services like trade license, permit for construction of buildings, vehicle registration, income certificate, land valuation certificate etc.; statutory services like issuance of Birth/Death certificate, Senior Citizen Certificate, issuance of passes to Goods Vehicle etc.; development services; consumer utility services like bill payment, Issuance of Migration Certificate, Tracking Beneficiary Pension Detail, Application for Education Loan for Backward Classes etc.",
     "Conducting a meeting to discuss how GP can make greater financial contribution, through own resources or voluntary, for implementing various activities to promote Good Governance.",
   ],
-  "Women Friendly Village": [
+  "Women Friendly Villages": [
     "Organizing Mahila Sabha/Facilitating the Conduct of Mahila Sabha Meeting in the GP.",
     "Conducting awareness campaigns in the community, highlighting the importance of girls’ education.",
     "Identifying girls who are not enrolled in school or have dropped out and organizing enrolment drives in collaboration with local schools to ensure that all identified out-of-school girls are enrolled in the GP.",

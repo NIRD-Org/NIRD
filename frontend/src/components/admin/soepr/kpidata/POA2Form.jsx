@@ -41,7 +41,7 @@ const planOfDayOptions = {
   "Training Needs Assessment (TNA) facilitated": [
     "To Facilitate State Level/ District Level/Block Level TNAs",
   ],
- "Training Calendar preparation": [
+  "Training Calendar preparation": [
     "To facilitate preparation of Training Calendar at State/ District/ Block Level",
     "To design/ facilitate to design Trainings  ",
     "To prepare/Update Training modules",

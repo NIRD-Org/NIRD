@@ -176,7 +176,6 @@ export const createPoa1 = CatchAsyncError(async (req, res, next) => {
       }
     });
 
-    // console.log(newEntries);
     if (newEntries.length === 0) {
       return res.status(400).json({
         success: false,
@@ -528,20 +527,28 @@ export const getPoa1DataByState = CatchAsyncError(async (req, res, next) => {
 export const updatePoa1Data = CatchAsyncError(async (req, res, next) => {
   try {
     const { poaId } = req.params;
+
     // Extract poaData from the request body
     const poaData = Object.keys(req.body)
       .filter((key) => key.startsWith("poaData"))
       .reduce((acc, key) => {
-        const [, dateIndex, entryIndex, field] = key.match(
-          /poaData\[(\d+)\]\[(\d+)\]\[(\w+)\]/
-        );
-        acc[dateIndex] = acc[dateIndex] || [];
-        acc[dateIndex][entryIndex] = acc[dateIndex][entryIndex] || {};
-        acc[dateIndex][entryIndex][field] = req.body[key];
+        const match = key.match(/poaData\[(\d+)\]\[(\d+)\]\[(\w+)\]/);
+        if (match) {
+          const [, dateIndex, entryIndex, field] = match;
+          acc[dateIndex] = acc[dateIndex] || [];
+          acc[dateIndex][entryIndex] = acc[dateIndex][entryIndex] || {};
+          acc[dateIndex][entryIndex][field] = req.body[key];
+        }
         return acc;
       }, {});
 
-    const user_id = req?.user?.id;
+    if (!poaData || Object.keys(poaData).length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid POA data format",
+      });
+    }
+
     let poa1 = await YfPoa1Model.findOne({ id: poaId });
 
     if (!poa1) {
@@ -551,23 +558,31 @@ export const updatePoa1Data = CatchAsyncError(async (req, res, next) => {
       });
     }
 
+    let dataModified = false;
+
     // Loop over the poaData entries
     for (const [dateIndex, entries] of Object.entries(poaData)) {
-      for (const [entryIndex, entry] of entries.entries()) {
-        const incomingDate = entry.date;
-        const incomingStateId = entry.state_id;
-        const incomingDistId = entry.dist_id;
-        const incomingBlockId = entry.block_id;
-        const incomingGpId = entry.gp_id;
+      if (!Array.isArray(entries)) continue;
 
-        // Find the existing entry in poaData with matching date, state_id, and dist_id
+      for (const [entryIndex, entry] of entries.entries()) {
+        const { date, state_id, dist_id, block_id, gp_id, activity } = entry;
+
+        const incomingDate = date;
+        const incomingStateId = state_id;
+        const incomingDistId = dist_id;
+        const incomingBlockId = block_id;
+        const incomingGpId = gp_id;
+        const incomingActivity = activity;
+
+        // Find the existing entry in poaData with matching fields
         const existingEntryIndex = poa1.poaData.findIndex((item) => {
           return (
             item.date === incomingDate &&
             item.state_id === incomingStateId &&
             item.dist_id === incomingDistId &&
             item.block_id === incomingBlockId &&
-            item.gp_id === incomingGpId
+            item.gp_id === incomingGpId &&
+            item.activity === incomingActivity
           );
         });
 
@@ -581,29 +596,32 @@ export const updatePoa1Data = CatchAsyncError(async (req, res, next) => {
         }
 
         if (existingEntryIndex !== -1) {
-          // Update existing entry
-          poa1.poaData[existingEntryIndex] = {
-            ...poa1.poaData[existingEntryIndex],
-            ...entry,
-          };
+          poa1.poaData[existingEntryIndex] = Object.assign(
+            {},
+            poa1.poaData[existingEntryIndex], // existing data
+            entry // new data
+          );
+          dataModified = true;
         } else {
-          // Add new entry
-          poa1.poaData.push({
-            ...entry,
-          });
+          // Add new entry if no matching entry exists
+          poa1.poaData.push({ ...entry });
+          dataModified = true;
         }
       }
     }
 
-    poa1.status = "1"; // Update status to active
-    await poa1.save();
+    if (dataModified) {
+      poa1.status = "1"; // Update status to active
+      await poa1.save(); // Save the document
+    }
 
     res.status(200).json({
       success: true,
       message: "POA data successfully updated",
+      data: poa1,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Error during POA update:", error);
     next(new Errorhandler("Failed to Update POA Data", 500));
   }
 });

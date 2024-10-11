@@ -508,6 +508,9 @@ export const updatePoa1Data = CatchAsyncError(async (req, res, next) => {
   try {
     const { poaId } = req.params;
     // Extract poaData from the request body
+    console.log(
+      Object.keys(req.body).filter((key) => key.startsWith("poaData"))
+    );
     const poaData = Object.keys(req.body)
       .filter((key) => key.startsWith("poaData"))
       .reduce((acc, key) => {
@@ -530,19 +533,21 @@ export const updatePoa1Data = CatchAsyncError(async (req, res, next) => {
       });
     }
 
-    // Loop over the poaData entries
+    // Go inside the poaData entries
     for (const [dateIndex, entries] of Object.entries(poaData)) {
       for (const [entryIndex, entry] of entries.entries()) {
         const incomingDate = entry.date; // date from the request
         const incomingStateId = entry.state_id;
         const incomingDistId = entry.dist_id;
+        const incomingAction = entry.action;
 
         // Find the existing entry in poaData with matching date, state_id, and dist_id
         const existingEntryIndex = poa1.poaData.findIndex((item) => {
           return (
             item.date === incomingDate &&
             item.state_id === incomingStateId &&
-            item.dist_id === incomingDistId
+            item.dist_id === incomingDistId &&
+            item.action === incomingAction
           );
         });
 
@@ -570,7 +575,7 @@ export const updatePoa1Data = CatchAsyncError(async (req, res, next) => {
       }
     }
 
-    poa1.status = "1"; // Update status to active
+    poa1.status = "1";
     await poa1.save();
 
     res.status(200).json({
