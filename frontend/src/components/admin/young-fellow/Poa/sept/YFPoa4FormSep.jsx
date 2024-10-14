@@ -9,6 +9,7 @@ import { Table } from "@/components/ui/table";
 import { useYfLocation } from "@/components/hooks/useYfLocation";
 import { PlusCircle } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
+import { FaRegTimesCircle } from "react-icons/fa";
 
 const months = [
   { name: "January", days: 31 },
@@ -273,6 +274,19 @@ const YFPoa4FormSep = ({ update }) => {
     });
   };
 
+  // Clear a particular row
+
+  const handleClearRow = (id) => {
+    // Remove the row from the 'rows' state by filtering it out
+    const updatedRows = rows.filter((row) => row.id !== id);
+    setRows(updatedRows);
+
+    // Also remove the corresponding form data for that row
+    const updatedFormDataState = { ...formDataState };
+    delete updatedFormDataState[id];
+    setFormData(updatedFormDataState);
+  };
+
   const handleSubmit = async () => {
     setLoading(true);
     try {
@@ -371,6 +385,7 @@ const YFPoa4FormSep = ({ update }) => {
         <thead>
           <tr>
             <th></th>
+            <th></th>
             <th>Date</th>
             <th>Weekday</th>
             <th>KPI Theme</th>
@@ -406,6 +421,14 @@ const YFPoa4FormSep = ({ update }) => {
 
             return (
               <tr key={idx}>
+                <td>
+                  <button
+                    onClick={() => handleClearRow(day.id)}
+                    className="text-red-500 bg-red-500/30 mr-2 mb-1 p-1 font-semibold rounded-full "
+                  >
+                    <FaRegTimesCircle className="text-lg" />
+                  </button>
+                </td>
                 <td>
                   <button onClick={() => handleAddRow(day.date)}>
                     <PlusCircle className="text-primary text-sm w-[1.1rem] mt-1" />
