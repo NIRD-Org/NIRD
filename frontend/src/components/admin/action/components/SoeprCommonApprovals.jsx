@@ -26,9 +26,6 @@ const SoeprCommonApprovalsList = ({
   normal,
 }) => {
   const [searchParams] = useSearchParams();
-  const dist_id = searchParams.get("dist_id") || "";
-  const block_id = searchParams.get("block_id") || "";
-  const gp_id = searchParams.get("gram_id") || "";
   const navigate = useNavigate();
   const [approvals, setApprovals] = useState([]);
   const [statusFilter, setStatusFilter] = useState("all");
