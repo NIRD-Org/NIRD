@@ -12,11 +12,12 @@ import {
 import { NirdEditIcon, NirdViewIcon } from "@/components/admin/Icons";
 import AdminHeader from "@/components/admin/AdminHeader";
 import { Input } from "@/components/ui/input";
-import { useAdminState } from "@/components/hooks/useAdminState";
 import useStates from "@/components/hooks/location/useStates";
 import { useAuthContext } from "@/context/AuthContext";
+import { useSoeprState } from "@/components/hooks/soepr-location/useSoeprState";
+import { useSoeprAdminStates } from "@/components/hooks/soepr-location/useSoeprAdminState";
 
-const CommonApprovalsList = ({
+const SoeprCommonApprovalsList = ({
   apiEndpoint,
   title,
   columns,
@@ -35,8 +36,8 @@ const CommonApprovalsList = ({
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 50;
   const [state_id, setStateId] = useState(null);
-  const { adminStates } = useAdminState();
-  const { states } = useStates();
+  const { states } = useSoeprAdminStates();
+  const { soeprStates: adminStates } = useSoeprState();
   const { user } = useAuthContext();
 
   useEffect(() => {
@@ -45,9 +46,6 @@ const CommonApprovalsList = ({
         const { data } = await API.get(apiEndpoint, {
           params: {
             state_id,
-            dist_id,
-            block_id,
-            gp_id,
           },
         });
         data?.data?.sort((a, b) => b.id - a.id);
@@ -111,12 +109,12 @@ const CommonApprovalsList = ({
               }
             >
               <option value="all">All</option>
-              <option value="0">Pending</option>
+              {/* <option value="0">Pending</option>
               <option value="1">Approved</option>
-              <option value="2">Sent back for Modification</option>
+              <option value="2">Sent back for Modification</option> */}
             </select>
           )}
-          {user.role != 3 && (
+          {user.role != 5 && (
             <select
               className={
                 "text-sm px-4 py-2 rounded-md bg-white border w-[200px]"
@@ -216,11 +214,7 @@ const CommonApprovalsList = ({
                             )}
                           <span
                             onClick={() =>
-                              navigate(
-                                `/admin/view/${redirect}/${
-                                  master ? approval.submitted_id : approval.id
-                                }`
-                              )
+                              navigate(`/admin/view/${redirect}/${approval.id}`)
                             }
                           >
                             <NirdViewIcon />
@@ -280,4 +274,4 @@ const CommonApprovalsList = ({
   );
 };
 
-export default CommonApprovalsList;
+export default SoeprCommonApprovalsList;

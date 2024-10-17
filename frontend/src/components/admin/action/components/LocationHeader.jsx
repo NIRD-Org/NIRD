@@ -16,9 +16,13 @@ function LocationHeader({
               { label: "Block:", value: block_name },
               { label: "GP:", value: gp_name },
             ].map(({ label, value }) => (
-              <h3 key={label}>
-                <strong className="text-primary">{label}</strong> {value}
-              </h3>
+              <>
+                {value && (
+                  <h3 key={label}>
+                    <strong className="text-primary">{label}</strong> {value}
+                  </h3>
+                )}
+              </>
             ))}
           </div>
           <div className="text-center mt-16">

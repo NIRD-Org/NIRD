@@ -135,6 +135,8 @@ import YFPoa2FormSep from "./components/admin/young-fellow/Poa/sept/YFPoa2FormSe
 import YFPoa3FormSep from "./components/admin/young-fellow/Poa/sept/YFPoa3FormSep";
 import YFPoa4FormSep from "./components/admin/young-fellow/Poa/sept/YFPoa4FormSep";
 import UpdateYfPOA1Form from "./components/admin/young-fellow/Poa/UpdateYfPOA1Form";
+import SoeprWiseKpiApprovalList from "./components/admin/action/admin/soepr-gp-wise-kpi/list";
+import SoeprWiseKpiApprovalView from "./components/admin/action/admin/soepr-gp-wise-kpi/view";
 
 function App() {
   const { login } = useAuthContext();
@@ -235,9 +237,15 @@ function App() {
 
             {/* <Route path="data-point/view/:kpiId" element={<KpiViewPage />} /> */}
             <Route path="kpi-approvals-list" element={<KpiApprovalsList />} />
+            {/* SoeprWiseKpiApprovalList */}
             <Route
               path="action/superadmin"
               element={<SuperadminApprovalList />}
+            />
+
+            <Route
+              path="action/soepr/superadmin"
+              element={<SoeprWiseKpiApprovalList />}
             />
 
             <Route path="master-states" element={<Masters item="state" />} />
@@ -395,7 +403,11 @@ function App() {
               path="edit/gp-wise-kpi/:id"
               element={<UpdateGpWiseKpi edit />}
             />
-
+            {/* Soepr KPI */}
+            <Route
+              path="view/soepr-wise-kpi/:id"
+              element={<SoeprWiseKpiApprovalView />}
+            />
             <Route
               path="soepr/young-professionals"
               element={<SoeprYoungFellowForm />}

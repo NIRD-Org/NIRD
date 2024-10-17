@@ -1,0 +1,118 @@
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import API from "@/utils/API";
+import React, { useEffect, useState } from "react";
+import { useParams, useSearchParams } from "react-router-dom";
+import { Textarea } from "@/components/ui/textarea";
+import LocationHeader from "../../components/LocationHeader";
+
+function SoeprWiseKpiApprovalView() {
+  const [kpiApprovalData, setKpiApprovalData] = useState([]);
+  const { id } = useParams();
+
+  useEffect(() => {
+    const fetchKpiApprovalData = async () => {
+      try {
+        const url = `/api/v1/soepr-kpi-data/approval-data?id=${id}`;
+        const response = await API.get(url);
+        setKpiApprovalData(response.data.data || []);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchKpiApprovalData();
+  }, []);
+
+  return (
+    <div className="w-full">
+      <div>
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">
+            SOEPR - KPI Entry Data
+          </h2>
+        </div>
+        <LocationHeader
+          state_name={kpiApprovalData[0]?.stateDetails?.name}
+          theme_name={kpiApprovalData[0]?.themeDetails?.theme_name}
+        />
+        <form className="overflow-x-auto  mt-6">
+          <div>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-20">ID</TableHead>
+                  <TableHead className="w-[200px]">KPI Name</TableHead>
+                  <TableHead className="w-[200px]">Data point</TableHead>
+                  {/* <TableHead className="w-20"></TableHead> */}
+                  <TableHead className="w-32">Max Number </TableHead>
+                  <TableHead className="w-20">Achieved Number</TableHead>
+                  {/* <TableHead className="w-40">Score</TableHead> */}
+                  <TableHead className="w-40 ">Remarks</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {kpiApprovalData.map((data, index) => (
+                  <TableRow key={data.id}>
+                    <TableCell>{data?.kpiDetails?.id}</TableCell>
+                    <TableCell>{data?.kpiDetails.name}</TableCell>
+                    <TableCell>
+                      {data.kpiDetails.kpi_datapoint || "No question"}
+                    </TableCell>
+                    {/* <TableCell>{data?.kpiDetails.input_type}</TableCell> */}
+                    <TableCell>
+                      <Input value={data?.max_range} disabled />
+                    </TableCell>
+                    <TableCell>
+                      <Input value={data?.input_data} type="number" disabled />
+                    </TableCell>
+                    <TableCell>
+                      <Textarea
+                        disabled
+                        type="text"
+                        name="remarks"
+                        value={data?.remarks}
+                      />
+                    </TableCell>
+                    {/* <TableCell>
+                      <Input disabled type="text" />
+                    </TableCell> */}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+          <div className="w-max my-4">
+            <Label htmlFor="date" className="text-right mt-2">
+              Date
+            </Label>
+            <Input
+              disabled
+              value={
+                kpiApprovalData[0]?.date
+                  ? kpiApprovalData[0]?.date.substring(0, 10)
+                  : ""
+              }
+              type="date"
+              name="date"
+              onChange={(e) => setDate(e.target.value)}
+              id="date"
+              placeholder="Enter date"
+              className="px-10"
+            />
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+export default SoeprWiseKpiApprovalView;

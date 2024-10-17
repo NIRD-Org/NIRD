@@ -69,8 +69,8 @@ app.use("/api/v1/good-practice", goodPracticeRoutes);
 app.use("/api/v1/lcva", LCVARoutes);
 app.use("/api/v1/am-upload", amRoutes);
 app.use("/api/v1/pm-upload", pmRoutes);
-// Soepr
 
+// Soepr
 app.use("/api/v1/soepr-theme", soeprThemesRoutes);
 app.use("/api/v1/soepr-kpi", soeprKpiRoutes);
 app.use("/api/v1/soepr-kpi-data", soeprKpiDataRoutes);

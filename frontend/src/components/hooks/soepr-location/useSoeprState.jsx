@@ -1,7 +1,7 @@
 import API from "@/utils/API";
 import { useEffect, useState } from "react";
 
-export function useYfState() {
+export function useSoeprState() {
   const [soeprStates, setsoeprStates] = useState(null);
 
   useEffect(() => {

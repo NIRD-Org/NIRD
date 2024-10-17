@@ -19,7 +19,8 @@ function SuperadminApprovalList() {
       training: TrainingApprovalsList,
       kpi: KpiApprovalsList,
       "gp-details": GpDetailsApprovalsList,
-    }[approvalItem] || (() => <div className="text-center mt-10">Select an approval item</div>);
+    }[approvalItem] ||
+    (() => <div className="text-center mt-10">Select an approval item</div>);
 
   useEffect(() => {
     if (!approvalItem) {

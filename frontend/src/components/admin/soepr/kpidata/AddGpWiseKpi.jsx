@@ -77,7 +77,7 @@ function SoeprAddGpWiseKpi({ update }) {
 
   const handleChange = (e, index) => {
     const { name, value } = e.target;
-    setFormData(prevData => {
+    setFormData((prevData) => {
       const updatedData = [...prevData];
       updatedData[index] = {
         ...updatedData[index],
@@ -87,7 +87,7 @@ function SoeprAddGpWiseKpi({ update }) {
     });
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     let updatedFormData = kpis.map((item, index) => {
@@ -110,7 +110,10 @@ function SoeprAddGpWiseKpi({ update }) {
     };
 
     try {
-      const response = await API.post("/api/v1/soepr-kpi-data/submit", dataToSend);
+      const response = await API.post(
+        "/api/v1/soepr-kpi-data/submit",
+        dataToSend
+      );
       console.log("Success:", response.data);
       tst.success("Form submitted successfully");
       navigate("/admin/soepr/young-professionals");
@@ -122,7 +125,9 @@ function SoeprAddGpWiseKpi({ update }) {
 
   const getState = async () => {
     try {
-      const { data } = await API.get(`/api/v1/state/get-state/${userData.state_id}`);
+      const { data } = await API.get(
+        `/api/v1/soepr-state/get-state/${userData.state_id}`
+      );
       setState(data?.state);
       console.log(state);
     } catch (error) {
@@ -141,7 +146,9 @@ function SoeprAddGpWiseKpi({ update }) {
 
   const getTheme = async () => {
     try {
-      const { data } = await API.get(`/api/v1/soepr-theme/get-theme/${theme_id}`);
+      const { data } = await API.get(
+        `/api/v1/soepr-theme/get-theme/${theme_id}`
+      );
       setTheme(data?.theme);
       console.log(theme);
     } catch (error) {
@@ -178,7 +185,7 @@ function SoeprAddGpWiseKpi({ update }) {
                 id="financialYear"
                 name="financialYear"
                 value={financialYear}
-                onChange={e => setFinancialYear(e.target.value)}
+                onChange={(e) => setFinancialYear(e.target.value)}
                 className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
               >
                 <option value="">Select Financial Year</option>
@@ -200,24 +207,24 @@ function SoeprAddGpWiseKpi({ update }) {
                 id="frequency"
                 name="frequency"
                 value={frequency}
-                onChange={e => setFrequency(e.target.value)}
+                onChange={(e) => setFrequency(e.target.value)}
                 className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
               >
                 <option value="">Select Frequency</option>
                 <option value="Fortnightly">Fortnightly</option>
-               
+
                 <option value="Quarterly">Quarterly</option>
               </select>
             </div>
 
-            {frequency === "Fortnightly" &&  (
+            {frequency === "Fortnightly" && (
               <div className="mb-4">
                 <Label htmlFor="month">Month</Label>
                 <select
                   id="month"
                   name="month"
                   value={month}
-                  onChange={e => setMonth(e.target.value)}
+                  onChange={(e) => setMonth(e.target.value)}
                   className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
                 >
                   <option value="">Select Month</option>
@@ -244,7 +251,7 @@ function SoeprAddGpWiseKpi({ update }) {
                   id="quarter"
                   name="quarter"
                   value={quarter}
-                  onChange={e => setQuarter(e.target.value)}
+                  onChange={(e) => setQuarter(e.target.value)}
                   className="text-sm px-4 py-2 rounded-md bg-transparent border w-full"
                 >
                   <option value="">Select Quarter</option>
@@ -264,8 +271,12 @@ function SoeprAddGpWiseKpi({ update }) {
                   <TableHead className="w-[200px]">KPI Name</TableHead>
                   <TableHead className="w-[200px]">Data point</TableHead>
                   <TableHead className="w-20">Input type</TableHead>
-                  <TableHead className="w-40">Max Number (Total Number)</TableHead>
-                  <TableHead className="w-40">Cumulative Achieved Number</TableHead>
+                  <TableHead className="w-40">
+                    Max Number (Total Number)
+                  </TableHead>
+                  <TableHead className="w-40">
+                    Cumulative Achieved Number
+                  </TableHead>
                   <TableHead className="w-40">Remarks</TableHead>
                 </TableRow>
               </TableHeader>
@@ -276,14 +287,16 @@ function SoeprAddGpWiseKpi({ update }) {
                     <TableRow key={data.id}>
                       <TableCell>{data.id}</TableCell>
                       <TableCell>{data.name}</TableCell>
-                      <TableCell>{data.kpi_datapoint || "No question"}</TableCell>
+                      <TableCell>
+                        {data.kpi_datapoint || "No question"}
+                      </TableCell>
                       <TableCell>{data?.input_type}</TableCell>
                       <TableCell>
                         <Input
                           type="number"
                           name="max_range"
                           value={formData[index]?.max_range || ""}
-                          onChange={e => handleChange(e, index)}
+                          onChange={(e) => handleChange(e, index)}
                         />
                       </TableCell>
                       <TableCell>
@@ -293,7 +306,7 @@ function SoeprAddGpWiseKpi({ update }) {
                           type="number"
                           name="input_data"
                           value={formData[index]?.input_data || ""}
-                          onChange={e => handleChange(e, index)}
+                          onChange={(e) => handleChange(e, index)}
                         />
                       </TableCell>
                       <TableCell>
@@ -301,7 +314,7 @@ function SoeprAddGpWiseKpi({ update }) {
                           type="text"
                           name="remarks"
                           value={formData[index]?.remarks || ""}
-                          onChange={e => handleChange(e, index)}
+                          onChange={(e) => handleChange(e, index)}
                         />
                       </TableCell>
                     </TableRow>
@@ -318,7 +331,7 @@ function SoeprAddGpWiseKpi({ update }) {
               type="date"
               name="date"
               value={date || ""}
-              onChange={e => setDate(e.target.value)}
+              onChange={(e) => setDate(e.target.value)}
               id="date"
               placeholder="Enter date"
               className="px-10"

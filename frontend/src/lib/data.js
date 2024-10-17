@@ -209,6 +209,12 @@ export const getSidebarItems = (user) => {
             {
               type: "sub-module",
               icon: ArrowBigRight,
+              title: "SOEPR KPI Data",
+              link: "/admin/action/soepr/superadmin",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
               title: "POA Defaulters List ",
               link: "/admin/soepr/poa-report",
             },

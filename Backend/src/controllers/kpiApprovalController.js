@@ -46,7 +46,20 @@ export const getAllKPIApprovals = CatchAsyncError(async (req, res, next) => {
 
 export const getKPIApprovals = CatchAsyncError(async (req, res, next) => {
   try {
-    const { state, dist, block, gp, theme, decision, fy ,state_id,dist_id,block_id,gp_id,theme_id} = req.query;
+    const {
+      state,
+      dist,
+      block,
+      gp,
+      theme,
+      decision,
+      fy,
+      state_id,
+      dist_id,
+      block_id,
+      gp_id,
+      theme_id,
+    } = req.query;
     const match = {};
 
     if (state) match.state_id = state;
@@ -63,9 +76,11 @@ export const getKPIApprovals = CatchAsyncError(async (req, res, next) => {
     if (req.user.role == 3) match.created_by = req.user.id;
     // Financial year
     if (fy) match.financial_year = fy;
-    if (req.user.role == 2  && !req.query.state_id) {
-      const {userLocations} = await UserLocationModel.findOne({ user_id: req.user.id });
-      const stateIds = userLocations.state_ids
+    if (req.user.role == 2 && !req.query.state_id) {
+      const { userLocations } = await UserLocationModel.findOne({
+        user_id: req.user.id,
+      });
+      const stateIds = userLocations.state_ids;
       match.state_id = { $in: stateIds };
     }
     const categorizedKPIApprovals = await KPIApprovalModel.aggregate([
@@ -142,7 +157,9 @@ export const getKPIApprovals = CatchAsyncError(async (req, res, next) => {
       data: categorizedKPIApprovals,
     });
   } catch (error) {
-    return next(new Errorhandler("Failed to get KPI approvals", 500));
+    console.log(error);
+
+    return next(new Errorhandler("Failed to get SOEPR KPI", 500));
   }
 });
 
