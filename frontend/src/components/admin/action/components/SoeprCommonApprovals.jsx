@@ -127,13 +127,13 @@ const SoeprCommonApprovalsList = ({
               ))}
             </select>
           )}
-          <Input
+          {/* <Input
             type="text"
             value={searchQuery}
             onChange={handleSearchQueryChange}
             placeholder="Search by GP"
             className="w-min"
-          />
+          /> */}
         </div>
         <div className="mt-8">
           <Table>
