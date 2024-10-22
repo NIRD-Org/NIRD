@@ -18,13 +18,10 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import YfLayout from "../../young-fellow/YfLayout";
 import { kpiScoringRules } from "@/lib/data";
 import { disabledKpis } from "@/lib/data";
+import { useSoeprState } from "@/components/hooks/soepr-location/useSoeprState";
 
 function SoeprAddGpWiseKpi({ update }) {
   const [searchParams, setSearchParams] = useSearchParams();
-  const state_id = searchParams.get("state_id") || "";
-  const dist_id = searchParams.get("dist_id") || "";
-  const block_id = searchParams.get("block_id") || "";
-  const gp_id = searchParams.get("gram_id") || "";
   const theme_id = searchParams.get("theme_id") || "";
   const navigate = useNavigate();
   const [kpis, setKpis] = useState([]);
@@ -39,7 +36,7 @@ function SoeprAddGpWiseKpi({ update }) {
   const [state, setState] = useState({});
   const [theme, setTheme] = useState({});
   const [userData, setUserData] = useState({});
-
+  const { soeprStates } = useSoeprState();
   useEffect(() => {
     const fetchKpis = async () => {
       try {
@@ -98,7 +95,7 @@ function SoeprAddGpWiseKpi({ update }) {
     });
 
     const dataToSend = {
-      state_id: userData.state_id,
+      state_id: soeprStates?.[0].id,
       financial_year: financialYear,
       frequency,
       month,
@@ -123,17 +120,17 @@ function SoeprAddGpWiseKpi({ update }) {
     }
   };
 
-  const getState = async () => {
-    try {
-      const { data } = await API.get(
-        `/api/v1/soepr-state/get-state/${userData.state_id}`
-      );
-      setState(data?.state);
-      console.log(state);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const getState = async () => {
+  //   try {
+  //     const { data } = await API.get(
+  //       `/api/v1/soepr-state/get-state/${userData.state_id}`
+  //     );
+  //     setState(data?.state);
+  //     console.log(state);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const getUser = async () => {
     try {
@@ -159,10 +156,11 @@ function SoeprAddGpWiseKpi({ update }) {
   useEffect(() => {
     if (theme_id) {
       getUser();
-      getState();
+      // getState();
+      setState(soeprStates);
       getTheme();
     }
-  }, [userData, theme_id]);
+  }, [theme_id]);
 
   return (
     <div className="w-full">
@@ -171,7 +169,7 @@ function SoeprAddGpWiseKpi({ update }) {
           <h2 className="text-xl font-semibold mb-10 bg-slate-100 py-3">
             SoEPR - KPI Entry Form
           </h2>
-          <h2>State : {state?.name}</h2>
+          <h2>State : {soeprStates?.[0]?.name}</h2>
         </div>
         <div className="flex justify-around py-6 items-center ">
           {/* <h1 className="text-2xl font-bold">Gram Panchayat wise KPI</h1> */}
