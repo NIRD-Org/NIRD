@@ -100,8 +100,43 @@ const ProjectPage = () => {
 
   return (
     <div className="p-5 sm:px-10 md:px-20 lg:px-32 md:py-10">
+      <div className="space-y-4">
+        <h1 className="my-8 font-semibold text-[#004B86] text-[2rem]">
+          Rationale for the Project for Creating 250 Model GP Clusters{" "}
+        </h1>
+        <p>
+          In spite of a lot of Capacity Building & Training initiatives in India
+          through various programmes supported by the MoPR, Government of India,
+          for example BRGF (Backward Regions Grant Fund) from 2007-08 to
+          2012-13, RGPSA (Rajiv Gandhi Panchayat Sashaktikaran Abhiyan) from
+          2012-13 and RGSA (Rashtriya Gram Swaraj Abhiyan) from 2018-19,
+          institutional capacity of three-tier Panchayats, particularly Gram
+          Panchayats (GP) still remains weak except in a few cases in a few
+          States.
+        </p>
+        <p>
+          Further, in spite of People’s Plan Campaign for GPDP from 2018 across
+          India under the caption ‘Sabki Yojana Sabka Vikash’, very few GPs in
+          the States were able to prepare quality GPDP.
+        </p>
+        <p>
+          In order to find a solution to the above constraints, in 2020 the MoPR
+          started supporting NIRDPR in implementation of a 2-year Project for
+          Creating 250 Model GP Clusters covering about 1100 GPs across India.
+          Subsequently, MoPR extended the Project for four more years viz.
+          2022-26 i.e. for the tenure of revamped RGSA.
+        </p>
+        <p>
+          The rationale of the Project is to create successful Models of GPs on
+          Cluster basis to achieve institutional capacity of GPs and enablement
+          of quality GPDP - so that the successes achieved by around 1000
+          Project GPs can motivate other GPs to follow them as Models and
+          achieve similar results.
+        </p>
+      </div>
+
       <div>
-        <h1 className="mb-10 font-semibold text-[#004B86] text-[2.5rem]">
+        <h1 className="my-8 font-semibold text-[#004B86] text-[2rem]">
           Overview of the Project{" "}
         </h1>
         <p className="text-justify text-md text-wrap">
