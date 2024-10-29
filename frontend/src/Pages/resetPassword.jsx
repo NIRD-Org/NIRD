@@ -48,7 +48,7 @@ const ResetPassword = () => {
   return (
     <div className="max-w-xl mx-auto py-20 px-4 md:px-16 ">
       <h1 className="text-2xl font-bold mb-8 text-center">
-        Login to your account
+        Create New Password
       </h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="flex flex-col space-y-2">
@@ -81,17 +81,17 @@ const ResetPassword = () => {
             required
           />
         </div>
-        <div className="flex justify-end">
+        {/* <div className="flex justify-end">
           <Link to={"/forgot-password"} className="text-primary">
             Forgot password?
           </Link>
-        </div>
+        </div> */}
         <Button
           pending={pending}
           type="submit"
           className="bg-primary w-full text-white px-4 py-2 mt-4 rounded-md"
         >
-          Login
+          Reset Password
         </Button>
       </form>
     </div>
