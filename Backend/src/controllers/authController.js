@@ -36,7 +36,7 @@ export const register = CatchAsyncError(async (req, res, next) => {
 
   user = new User(req.body);
   if (!req.body.password) req.body.password = "123456";
-  
+
   user.password = await bcrypt.hash(req.body.password, 10);
   await user.save();
 
@@ -87,7 +87,9 @@ export const registerMultipleUsers = CatchAsyncError(async (req, res, next) => {
 
   for (const userData of users) {
     if (await User.findOne({ username: userData.username })) {
-      return next(new Errorhandler(`User ${userData.username} already exists`, 400));
+      return next(
+        new Errorhandler(`User ${userData.username} already exists`, 400)
+      );
     }
 
     const id = await getNewId();
@@ -111,11 +113,17 @@ export const sendResetPassword = CatchAsyncError(async (req, res, next) => {
   if (!user) return next(new Errorhandler("User not registered", 400));
 
   const resetToken = crypto.randomBytes(20).toString("hex");
-  user.resetPasswordToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+  user.resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
   user.resetPasswordExpire = Date.now() + 15 * 60 * 1000;
 
-  const resetUrl = `https://nirdpr.netlify.app/password/reset/${resetToken}`;
-  const html = await ejs.renderFile(path.join(__dirname, "/src/emails/resetPassword.ejs"), { user, resetUrl });
+  const resetUrl = `${process.env.CLIENT_URL}/password/reset/${resetToken}`;
+  const html = await ejs.renderFile(
+    path.join(__dirname, "/src/emails/resetPassword.ejs"),
+    { user, resetUrl }
+  );
 
   await sendEmail({ to: user.email, subject: "Password Reset", html });
   await user.save();
@@ -125,7 +133,10 @@ export const sendResetPassword = CatchAsyncError(async (req, res, next) => {
 
 // Reset password using token
 export const resetPassword = CatchAsyncError(async (req, res, next) => {
-  const resetPasswordToken = crypto.createHash("sha256").update(req.params.token).digest("hex");
+  const resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(req.params.token)
+    .digest("hex");
 
   const user = await User.findOne({
     resetPasswordToken,
@@ -143,7 +154,10 @@ export const resetPassword = CatchAsyncError(async (req, res, next) => {
   user.resetPasswordToken = undefined;
   user.resetPasswordExpire = undefined;
 
-  const html = await ejs.renderFile(path.join(__dirname, "/src/emails/passwordSuccessfull.ejs"), { user });
+  const html = await ejs.renderFile(
+    path.join(__dirname, "/src/emails/passwordSuccessfull.ejs"),
+    { user }
+  );
   await sendEmail({ to: user.email, subject: "Password Reset Success", html });
 
   await user.save();

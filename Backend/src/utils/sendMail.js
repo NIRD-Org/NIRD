@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
 export async function sendEmail(options) {
   try {
     await transporter.sendMail({
-      from: `no.reply@nirdpr.com<${process.env.SMTP_MAIL}>`,
+      from: `NIRDPR<${process.env.SMTP_MAIL}>`,
       to: options.to,
       subject: options.subject,
       html: options.html,
