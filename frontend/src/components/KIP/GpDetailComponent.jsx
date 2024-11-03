@@ -258,68 +258,71 @@ const GpDetailComponent = ({ data }) => {
       )}
 
       {/* Ward Details */}
-      {data &&
-      data?.wardDetails &&
-      Array.isArray(data?.wardDetails) &&
-      data.wardDetails.length > 0 ? (
+      {data?.wardDetails && (
         <>
-          <div className="bg-white overflow-hidden  border-gray-400">
-            <div
-              className="text-white bg-teal-700 text-center p-2"
-              onClick={() => setWardDetailsExpanded(!isWardDetailsExpanded)}
-            >
-              <h2 className="text-2xl font-semibold">Ward Details</h2>
-            </div>
-            {isWardDetailsExpanded && (
-              <div className="p-4 border">
-                {data?.wardDetails?.map((ward) => (
-                  <table className="divide-y divide-gray-200 min-w-full">
-                    <tbody>
-                      {Object.entries(ward).map(([key, value]) => (
-                        <tr key={key} className="hover:bg-gray-200">
-                          <td className="py-0 font-semibold capitalize">
-                            {key
-                              .replace(/([a-z])([A-Z])/g, "$1 $2")
-                              .replace(/([A-Z])([A-Z][a-z])/g, "$1 $2")}
-                          </td>
-                          <td className="">{value ? value : "N/A"}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                ))}
-              </div>
-            )}
-          </div>
-        </>
-      ) : (
-        <>
-          <div className="bg-white overflow-hidden  border-gray-400">
-            <div
-              className="text-white bg-teal-700 text-center p-2"
-              onClick={() => setWardDetailsExpanded(!isWardDetailsExpanded)}
-            >
-              <h2 className="text-2xl font-semibold">Ward Details</h2>
-            </div>
-            {isWardDetailsExpanded && (
-              <div className="p-4 border">
-                <table className="divide-y divide-gray-200 min-w-full">
-                  <tbody>
-                    {Object.entries(data.wardDetails).map(([key, value]) => (
-                      <tr key={key} className="hover:bg-gray-200">
-                        <td className="py-0 font-semibold capitalize">
-                          {key
-                            .replace(/([a-z])([A-Z])/g, "$1 $2")
-                            .replace(/([A-Z])([A-Z][a-z])/g, "$1 $2")}
-                        </td>
-                        <td className="">{value ? value : "N/A"}</td>
-                      </tr>
+          {data && data?.wardDetails && Array.isArray(data?.wardDetails) ? (
+            <>
+              <div className="bg-white overflow-hidden  border-gray-400">
+                <div
+                  className="text-white bg-teal-700 text-center p-2"
+                  onClick={() => setWardDetailsExpanded(!isWardDetailsExpanded)}
+                >
+                  <h2 className="text-2xl font-semibold">Ward Details</h2>
+                </div>
+                {isWardDetailsExpanded && (
+                  <div className="p-4 border">
+                    {data?.wardDetails?.map((ward) => (
+                      <table className="divide-y divide-gray-200 min-w-full">
+                        <tbody>
+                          {Object.entries(ward).map(([key, value]) => (
+                            <tr key={key} className="hover:bg-gray-200">
+                              <td className="py-0 font-semibold capitalize">
+                                {key
+                                  .replace(/([a-z])([A-Z])/g, "$1 $2")
+                                  .replace(/([A-Z])([A-Z][a-z])/g, "$1 $2")}
+                              </td>
+                              <td className="">{value ? value : "N/A"}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                     ))}
-                  </tbody>
-                </table>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+            </>
+          ) : (
+            <>
+              <div className="bg-white overflow-hidden  border-gray-400">
+                <div
+                  className="text-white bg-teal-700 text-center p-2"
+                  onClick={() => setWardDetailsExpanded(!isWardDetailsExpanded)}
+                >
+                  <h2 className="text-2xl font-semibold">Ward Details</h2>
+                </div>
+                {isWardDetailsExpanded && (
+                  <div className="p-4 border">
+                    <table className="divide-y divide-gray-200 min-w-full">
+                      <tbody>
+                        {Object.entries(data.wardDetails).map(
+                          ([key, value]) => (
+                            <tr key={key} className="hover:bg-gray-200">
+                              <td className="py-0 font-semibold capitalize">
+                                {key
+                                  .replace(/([a-z])([A-Z])/g, "$1 $2")
+                                  .replace(/([A-Z])([A-Z][a-z])/g, "$1 $2")}
+                              </td>
+                              <td className="">{value ? value : "N/A"}</td>
+                            </tr>
+                          )
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
         </>
       )}
 
