@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { tst } from "@/lib/utils";
 import API from "@/utils/API";
 import AdminHeader from "../../AdminHeader";
+import { showAlert } from "@/utils/showAlert";
 
 const ApprovalForm = ({ endpoint, headerText, DetailsView }) => {
   const { id } = useParams();
@@ -15,7 +16,7 @@ const ApprovalForm = ({ endpoint, headerText, DetailsView }) => {
     e.preventDefault();
     try {
       await API.put(`${endpoint}/${id}/approve`, formData);
-      tst.success(`${headerText} approved`);
+      showAlert(`${headerText} approved`, "success");
     } catch (error) {
       console.error(`Error approving ${headerText}:`, error);
       tst.error(`Error approving ${headerText}`);

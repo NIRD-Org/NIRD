@@ -495,68 +495,7 @@ export const getSidebarItems = (user) => {
             },
           ],
         },
-        {
-          type: "module",
-          icon: ArrowBigRight,
-          title: "August POA",
-          submodules: [
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "POA1",
-              link: "/admin/yf/POA1/aug",
-            },
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "POA2",
-              link: "/admin/yf/POA2/aug",
-            },
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "POA3",
-              link: "/admin/yf/POA3/aug",
-            },
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "POA4",
-              link: "/admin/yf/POA4/aug",
-            },
-          ],
-        },
-        {
-          type: "module",
-          icon: ArrowBigRight,
-          title: "September POA",
-          submodules: [
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "POA1",
-              link: "/admin/yf/POA1/sep",
-            },
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "POA2",
-              link: "/admin/yf/POA2/sep",
-            },
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "POA3",
-              link: "/admin/yf/POA3/sep",
-            },
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "POA4",
-              link: "/admin/yf/POA4/sep",
-            },
-          ],
-        },
+
         {
           type: "module",
           icon: ArrowBigRight,

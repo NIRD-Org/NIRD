@@ -6,6 +6,7 @@ import { tst } from "@/lib/utils";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
+import { showAlert } from "@/utils/showAlert";
 
 const ResetPassword = () => {
   const { token } = useParams();
@@ -35,7 +36,7 @@ const ResetPassword = () => {
         `/api/v1/auth/change-password/${token}`,
         formData
       );
-      tst.success("Password reset successful");
+      showAlert("Password reset successful", "success");
       navigate("/login");
     } catch (error) {
       tst.error(error);

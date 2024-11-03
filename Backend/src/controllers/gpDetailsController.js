@@ -55,23 +55,20 @@ export const createPanchayatDetails = CatchAsyncError(
         return next(new Errorhandler("Ward details must be an array", 400));
       }
 
-      const id = await getNewId();
-
       const sarpanchPhoto = req.body.sarpanchPhoto;
       const secretaryPhoto = req.body.secretaryPhoto;
 
-      if (sarpanchPhoto || secretaryPhoto) {
-        if (sarpanchPhoto) {
-          const sarpanchUrl = await uploadFile(sarpanchPhoto);
-          req.body.sarpanchDetails.sarpanchPhoto = sarpanchUrl;
-        }
-
-        if (secretaryPhoto) {
-          const secretaryUrl = await uploadFile(secretaryPhoto);
-          req.body.secretaryDetails.secretaryPhoto = secretaryUrl;
-        }
+      if (sarpanchPhoto) {
+        const sarpanchUrl = await uploadFile(sarpanchPhoto);
+        req.body.sarpanchDetails.sarpanchPhoto = sarpanchUrl;
       }
 
+      if (secretaryPhoto) {
+        const secretaryUrl = await uploadFile(secretaryPhoto);
+        req.body.secretaryDetails.secretaryPhoto = secretaryUrl;
+      }
+
+      // Check if data already exists for the given GP identifiers
       const existingData = await GpDetailsModel.findOne({
         state_id,
         dist_id,
@@ -80,41 +77,67 @@ export const createPanchayatDetails = CatchAsyncError(
       });
 
       if (existingData) {
-        return next(new Errorhandler("GP Data already exists!", 400));
+        // Update existing record
+        Object.assign(existingData, {
+          panchayatDetails,
+          demography,
+          panchayatArea,
+          sarpanchDetails,
+          secretaryDetails,
+          health,
+          education,
+          others,
+          sports,
+          wardDetails,
+          general,
+          updated_by: req.user.id, // Track the user who made the update
+        });
+
+        await existingData.save();
+
+        return res.status(200).json({
+          success: true,
+          message: "Panchayat Data updated successfully",
+        });
+      } else {
+        // Create a new record
+        const id = await getNewId();
+
+        const panchayat = new GpDetailsModel({
+          id,
+          state_id,
+          dist_id,
+          block_id,
+          gp_id,
+          panchayatDetails,
+          demography,
+          panchayatArea,
+          sarpanchDetails,
+          secretaryDetails,
+          health,
+          education,
+          others,
+          sports,
+          wardDetails,
+          general,
+          created_by: req.user.id,
+        });
+
+        await panchayat.save();
+
+        return res.status(201).json({
+          success: true,
+          message: "Panchayat Data created successfully",
+        });
       }
-
-      const panchayat = new GpDetailsModel({
-        id,
-        state_id,
-        dist_id,
-        block_id,
-        gp_id,
-        panchayatDetails,
-        demography,
-        panchayatArea,
-        sarpanchDetails,
-        secretaryDetails,
-        health,
-        education,
-        others,
-        sports,
-        wardDetails, // Saving wardDetails as an array
-        general,
-        created_by: req.user.id,
-      });
-
-      await panchayat.save();
-      res
-        .status(201)
-        .json({ success: true, message: "Panchayat Data saved successfully" });
     } catch (error) {
       console.log("Error", error);
-      return next(new Errorhandler("Failed to create panchayat data", 500));
+      return next(
+        new Errorhandler("Failed to create or update panchayat data", 500)
+      );
     }
   }
 );
-
-// update the panchayat data
 
 export const updatePanchayatDetails = CatchAsyncError(
   async (req, res, next) => {

@@ -7,6 +7,7 @@ import AdminHeader from "../../AdminHeader";
 import API from "@/utils/API";
 import { tst } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
+import { showAlert } from "@/utils/showAlert";
 
 function ThemeForm({ type = "add", onSubmit }) {
   const { themeId } = useParams();
@@ -44,10 +45,10 @@ function ThemeForm({ type = "add", onSubmit }) {
     try {
       if (type === "add") {
         await API.post("/api/v1/theme/create", formData);
-        tst.success("Theme created successfully");
+        showAlert("Theme created successfully", "success");
       } else {
         await API.put(`/api/v1/theme/${themeId}`, formData);
-        tst.success("Theme updated successfully");
+        showAlert("Theme updated successfully", "success");
       }
     } catch (error) {
       tst.error("Failed to submit form:", error);
@@ -57,14 +58,21 @@ function ThemeForm({ type = "add", onSubmit }) {
   };
 
   const fields = [
-    { name: "theme_name", label: "Theme Name", type: "textarea", required: true },
+    {
+      name: "theme_name",
+      label: "Theme Name",
+      type: "textarea",
+      required: true,
+    },
   ];
 
   return (
     <div className="container mx-auto p-6">
       <form onSubmit={handleSubmit}>
         <div className="py-4">
-          <AdminHeader>{type === "add" ? "Add Theme" : "Update Theme"}</AdminHeader>
+          <AdminHeader>
+            {type === "add" ? "Add Theme" : "Update Theme"}
+          </AdminHeader>
           <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3">
             {fields.map(({ name, label, type, required }) => (
               <div key={name}>

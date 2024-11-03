@@ -6,6 +6,7 @@ import API from "@/utils/API";
 import { tst } from "@/lib/utils";
 import AdminHeader from "../../AdminHeader";
 import { useParams } from "react-router-dom";
+import { showAlert } from "@/utils/showAlert";
 
 function DistrictForm({ type = "add", onSubmit, district }) {
   const [formData, setFormData] = useState({
@@ -46,23 +47,23 @@ function DistrictForm({ type = "add", onSubmit, district }) {
     if (type == "update") fetchDistData();
   }, []);
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
 
-  const handleCreateDistrict = async e => {
+  const handleCreateDistrict = async (e) => {
     e.preventDefault();
     try {
       if (type == "add") {
         await API.post("/api/v1/dist/create", formData);
-        tst.success("District created successfully");
+        showAlert("District created successfully", "success");
       } else {
         await API.put(`/api/v1/dist/${id}`, formData);
-        tst.success("District updated successfully");
+        showAlert("District updated successfully", "success");
       }
     } catch (error) {
       tst.error(error);
@@ -75,7 +76,7 @@ function DistrictForm({ type = "add", onSubmit, district }) {
       name: "state_id",
       label: "State",
       type: "select",
-      options: states.map(state => ({ value: state.id, label: state.name })),
+      options: states.map((state) => ({ value: state.id, label: state.name })),
     },
     { name: "name", label: "Name", type: "text" },
     {
@@ -93,7 +94,9 @@ function DistrictForm({ type = "add", onSubmit, district }) {
     <div className="container mx-auto p-6">
       <form onSubmit={handleCreateDistrict}>
         <div className="py-4">
-          <AdminHeader>{type === "add" ? "Add District" : "Update District"}</AdminHeader>
+          <AdminHeader>
+            {type === "add" ? "Add District" : "Update District"}
+          </AdminHeader>
           <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3">
             {fields.map(({ name, label, options, type }) => (
               <div key={name}>
@@ -110,7 +113,7 @@ function DistrictForm({ type = "add", onSubmit, district }) {
                     <option value="" disabled>
                       Select a {label}
                     </option>
-                    {options.map(option => (
+                    {options.map((option) => (
                       <option key={option.value} value={option.value}>
                         {option.label}
                       </option>

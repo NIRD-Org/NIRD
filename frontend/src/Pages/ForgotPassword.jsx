@@ -6,6 +6,7 @@ import { tst } from "@/lib/utils";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthContext } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
+import { showAlert } from "@/utils/showAlert";
 
 const ForgotPassword = () => {
   const [formData, setFormData] = useState({
@@ -27,7 +28,7 @@ const ForgotPassword = () => {
     try {
       setPending(true);
       const { data } = await API.post("/api/v1/auth/reset-password", formData);
-      tst.success("Please check your email");
+      showAlert("Please check your email", "success");
     } catch (error) {
       tst.error(error);
       console.error("Login failed:", error.message);

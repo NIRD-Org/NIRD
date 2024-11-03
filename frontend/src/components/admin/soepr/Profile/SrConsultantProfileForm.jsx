@@ -8,6 +8,7 @@ import { useAuthContext } from "@/context/AuthContext";
 import toast from "react-hot-toast";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import StateFilter from "../../filter/StateFilter";
+import { showAlert } from "@/utils/showAlert";
 
 function SrConsultantProfile() {
   const { user } = useAuthContext();
@@ -105,7 +106,7 @@ function SrConsultantProfile() {
       const { data } = await API.put(`/api/v1/users/${user.id}`, formData);
       console.log("Profile updated successfully:");
       if (data.status === "success") {
-        toast.success("Profile updated successfully");
+        showAlert("Profile updated successfully");
         navigate("/admin/soepr/profile");
       }
     } catch (error) {

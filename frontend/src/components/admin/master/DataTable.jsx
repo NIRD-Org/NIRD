@@ -19,6 +19,7 @@ import StateFilter from "../filter/StateFilter";
 import DistrictFilter from "../filter/DistrictFilter";
 import ThemeFilter from "../filter/ThemeFilter";
 import BlockFilter from "../filter/BlockFilter";
+import { showAlert } from "@/utils/showAlert";
 
 const DataTable = ({
   title,
@@ -79,7 +80,7 @@ const DataTable = ({
     ) {
       try {
         await API.delete(`${crudpoint}/${id}`);
-        tst.success(`${title} deleted successfully`);
+        showAlert(`${title} deleted successfully`, "success");
         fetchData();
       } catch (error) {
         tst.error(`Failed to delete ${title.toLowerCase()}:`, error);
@@ -95,7 +96,7 @@ const DataTable = ({
     ) {
       try {
         await API.delete(`${crudpoint}/${id}`);
-        tst.success(`${title} deleted successfully`);
+        showAlert(`${title} deleted successfully`, "success");
         fetchData();
       } catch (error) {
         tst.error(`Failed to delete ${title.toLowerCase()}:`, error);

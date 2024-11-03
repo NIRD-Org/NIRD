@@ -1,7 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import API from "@/utils/API";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -10,6 +17,7 @@ import { tst } from "@/lib/utils";
 import LocationHeader from "../../components/LocationHeader";
 import { kpiScoringRules } from "@/lib/data";
 import { disabledKpis } from "@/lib/data";
+import { showAlert } from "@/utils/showAlert";
 
 function UpdateGpWiseKpi({ edit }) {
   const [kpiApprovalData, setKpiApprovalData] = useState([]);
@@ -24,7 +32,7 @@ function UpdateGpWiseKpi({ edit }) {
         const response = await API.get(url);
         setKpiApprovalData(response.data.data || []);
         const data = response.data.data;
-        const updatedFormData = data.map(item => ({
+        const updatedFormData = data.map((item) => ({
           id: item.id,
           kpi_id: item.kpi_id,
           max_range: item.max_range,
@@ -49,7 +57,7 @@ function UpdateGpWiseKpi({ edit }) {
 
   const handleChange = (e, index) => {
     const { name, value } = e.target;
-    setFormData(prevData => {
+    setFormData((prevData) => {
       const updatedData = [...prevData];
       updatedData[index] = {
         ...updatedData[index],
@@ -67,9 +75,17 @@ function UpdateGpWiseKpi({ edit }) {
 
         if (inputType === "Percentage") {
           const percentage = (inputData / maxRange) * 100;
-          updatedData[index].score = calculateScore(percentage, thresholds, scores);
+          updatedData[index].score = calculateScore(
+            percentage,
+            thresholds,
+            scores
+          );
         } else if (inputType === "Number") {
-          updatedData[index].score = calculateScore(inputData, thresholds, scores);
+          updatedData[index].score = calculateScore(
+            inputData,
+            thresholds,
+            scores
+          );
         } else if (inputType === "Boolean") {
           updatedData[index].score = inputData
             ? booleanKpiScoringRules[kpiId].yesScore
@@ -90,7 +106,7 @@ function UpdateGpWiseKpi({ edit }) {
     return scores[thresholds.length];
   };
   console.log();
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
     try {
@@ -99,7 +115,7 @@ function UpdateGpWiseKpi({ edit }) {
         submitted_id: submitted_id,
       });
       console.log("Success:", response.data);
-      tst.success("Form submitted successfully");
+      showAlert("Form submitted successfully", "success");
     } catch (error) {
       console.error(error);
       tst.error(error);
@@ -110,7 +126,9 @@ function UpdateGpWiseKpi({ edit }) {
     <div className="w-full">
       <div>
         <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">Young Fellow - KPI Entry Form</h2>
+          <h2 className="text-xl font-semibold mb-10 text-center bg-slate-100 py-3">
+            Young Fellow - KPI Entry Form
+          </h2>
         </div>
         <LocationHeader
           state_name={kpiApprovalData[0]?.stateDetails?.name}
@@ -129,29 +147,41 @@ function UpdateGpWiseKpi({ edit }) {
                     <TableHead className="w-[200px]">KPI Name</TableHead>
                     <TableHead className="w-[200px]">Data point</TableHead>
                     <TableHead className="w-20">Input type</TableHead>
-                    <TableHead className="w-32">Max Number (Total Number)</TableHead>
-                    <TableHead className="w-20">Cumulative Achieved Number</TableHead>
+                    <TableHead className="w-32">
+                      Max Number (Total Number)
+                    </TableHead>
+                    <TableHead className="w-20">
+                      Cumulative Achieved Number
+                    </TableHead>
                     <TableHead className="w-40">Score</TableHead>
                     <TableHead className="w-40">Remarks</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {kpiApprovalData.map((data, index) => {
-                    const isDisabled = disabledKpis.includes(parseInt(data?.kpiDetails?.id));
+                    const isDisabled = disabledKpis.includes(
+                      parseInt(data?.kpiDetails?.id)
+                    );
                     return (
                       <>
                         <TableRow key={data.id}>
                           <TableCell>{data?.kpiDetails?.id}</TableCell>
                           <TableCell>{data?.kpiDetails?.name}</TableCell>
-                          <TableCell>{data?.kpiDetails?.kpi_datapoint || "No question"}</TableCell>
+                          <TableCell>
+                            {data?.kpiDetails?.kpi_datapoint || "No question"}
+                          </TableCell>
                           <TableCell>{data?.kpiDetails?.input_type}</TableCell>
                           <TableCell>
                             <Input
                               disabled={isDisabled}
                               type="number"
                               name="max_range"
-                              value={isDisabled ? "0" : formData[index]?.max_range || ""}
-                              onChange={e => handleChange(e, index)}
+                              value={
+                                isDisabled
+                                  ? "0"
+                                  : formData[index]?.max_range || ""
+                              }
+                              onChange={(e) => handleChange(e, index)}
                             />
                           </TableCell>
                           <TableCell>
@@ -162,7 +192,7 @@ function UpdateGpWiseKpi({ edit }) {
                                 type="number"
                                 name="input_data"
                                 value={formData[index]?.input_data || ""}
-                                onChange={e => handleChange(e, index)}
+                                onChange={(e) => handleChange(e, index)}
                               />
                             ) : (
                               <Input
@@ -170,7 +200,7 @@ function UpdateGpWiseKpi({ edit }) {
                                 type="number"
                                 name="input_data"
                                 value={formData[index]?.input_data || ""}
-                                onChange={e => handleChange(e, index)}
+                                onChange={(e) => handleChange(e, index)}
                               />
                             )}{" "}
                           </TableCell>
@@ -181,7 +211,7 @@ function UpdateGpWiseKpi({ edit }) {
                               name="score"
                               value={formData[index]?.score || ""}
                               default={data.score}
-                              onChange={e => handleChange(e, index)}
+                              onChange={(e) => handleChange(e, index)}
                             />
                           </TableCell>
                           <TableCell>
@@ -190,7 +220,7 @@ function UpdateGpWiseKpi({ edit }) {
                               name="remarks"
                               value={formData[index]?.remarks || ""}
                               default={data.remarks}
-                              onChange={e => handleChange(e, index)}
+                              onChange={(e) => handleChange(e, index)}
                             />
                           </TableCell>
                         </TableRow>
@@ -207,10 +237,14 @@ function UpdateGpWiseKpi({ edit }) {
                 </Label>
                 <Input
                   disabled
-                  value={kpiApprovalData[0]?.date ? kpiApprovalData[0]?.date.substring(0, 10) : ""}
+                  value={
+                    kpiApprovalData[0]?.date
+                      ? kpiApprovalData[0]?.date.substring(0, 10)
+                      : ""
+                  }
                   type="date"
                   name="date"
-                  onChange={e => setDate(e.target.value)}
+                  onChange={(e) => setDate(e.target.value)}
                   id="date"
                   placeholder="Enter date"
                   className="px-10"

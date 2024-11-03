@@ -6,6 +6,7 @@ import API from "@/utils/API";
 import { tst } from "@/lib/utils";
 import AdminHeader from "../../AdminHeader";
 import { useParams } from "react-router-dom";
+import { showAlert } from "@/utils/showAlert";
 
 function GpForm({ type = "add", gp }) {
   const [formData, setFormData] = useState({
@@ -19,7 +20,7 @@ function GpForm({ type = "add", gp }) {
   const [districts, setDistricts] = useState([]);
   const [blocks, setBlocks] = useState([]);
   const [pending, setPending] = useState(false);
-  const {id} = useParams()
+  const { id } = useParams();
 
   useEffect(() => {
     async function fetchStates() {
@@ -44,7 +45,7 @@ function GpForm({ type = "add", gp }) {
           is_maped_to_another_district: data.is_maped_to_another_district,
         });
       } catch (error) {
-        console.log(error)
+        console.log(error);
         // tst.error("Failed to fetch GP data.");
       }
     };
@@ -57,7 +58,9 @@ function GpForm({ type = "add", gp }) {
     async function fetchDistricts() {
       if (formData.state_id) {
         try {
-          const response = await API.get(`/api/v1/dist/state/${formData.state_id}`);
+          const response = await API.get(
+            `/api/v1/dist/state/${formData.state_id}`
+          );
           setDistricts(response.data?.districts || []);
         } catch (error) {
           tst.error("Failed to fetch districts.");
@@ -72,7 +75,9 @@ function GpForm({ type = "add", gp }) {
     async function fetchBlocks() {
       if (formData.dist_id) {
         try {
-          const response = await API.get(`/api/v1/block/get?dist=${formData.dist_id}`);
+          const response = await API.get(
+            `/api/v1/block/get?dist=${formData.dist_id}`
+          );
           setBlocks(response.data?.blocks || []);
         } catch (error) {
           tst.error("Failed to fetch blocks.");
@@ -83,24 +88,24 @@ function GpForm({ type = "add", gp }) {
     fetchBlocks();
   }, [formData.dist_id]);
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setPending(true);
     try {
       if (type === "add") {
         await API.post("/api/v1/gram/create", formData);
-        tst.success("Gram Panchayat created successfully");
+        showAlert("Gram Panchayat created successfully", "success");
       } else {
         await API.put(`/api/v1/gram/${id}`, formData);
-        tst.success("Gram Panchayat updated successfully");
+        showAlert("Gram Panchayat updated successfully", "success");
       }
       setPending(false);
     } catch (error) {
@@ -109,27 +114,29 @@ function GpForm({ type = "add", gp }) {
     }
   };
 
-
   const fields = [
     {
       name: "state_id",
       label: "State",
       type: "select",
-      options: states.map(state => ({ value: state.id, label: state.name })),
+      options: states.map((state) => ({ value: state.id, label: state.name })),
       required: true,
     },
     {
       name: "dist_id",
       label: "District",
       type: "select",
-      options: districts.map(district => ({ value: district.id, label: district.name })),
+      options: districts.map((district) => ({
+        value: district.id,
+        label: district.name,
+      })),
       required: true,
     },
     {
       name: "block_id",
       label: "Block",
       type: "select",
-      options: blocks.map(block => ({ value: block.id, label: block.name })),
+      options: blocks.map((block) => ({ value: block.id, label: block.name })),
       required: true,
     },
     { name: "name", label: "Name", type: "text", required: true },
@@ -148,7 +155,9 @@ function GpForm({ type = "add", gp }) {
     <div className="container mx-auto p-6">
       <form onSubmit={handleSubmit}>
         <div className="py-4">
-          <AdminHeader>{type === "add" ? "Add Gram Panchayat" : "Update Gram Panchayat"}</AdminHeader>
+          <AdminHeader>
+            {type === "add" ? "Add Gram Panchayat" : "Update Gram Panchayat"}
+          </AdminHeader>
           <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3">
             {fields.map(({ name, label, type, options, required }) => (
               <div key={name}>
@@ -168,7 +177,7 @@ function GpForm({ type = "add", gp }) {
                     <option value="" disabled>
                       Select {label}
                     </option>
-                    {options.map(option => (
+                    {options.map((option) => (
                       <option key={option.value} value={option.value}>
                         {option.label}
                       </option>

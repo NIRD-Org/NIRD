@@ -5,11 +5,19 @@ import { Button } from "@/components/ui/button";
 import API from "@/utils/API";
 import { tst } from "@/lib/utils";
 import AdminHeader from "@/components/admin/AdminHeader";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 import { useParams, useSearchParams } from "react-router-dom";
+import { showAlert } from "@/utils/showAlert";
 
-function IndicatorApprovalResubmit({ type = "add", edit}) {
+function IndicatorApprovalResubmit({ type = "add", edit }) {
   const [formData, setFormData] = useState({
     state_id: "",
     dist_id: "",
@@ -31,7 +39,7 @@ function IndicatorApprovalResubmit({ type = "add", edit}) {
         const data = response.data.data;
         setIndicatorApprovalData(response.data.data || []);
         setIndicatorFormData(
-          data.map(item => ({
+          data.map((item) => ({
             id: item.id,
             indicator_id: item.indicator_id,
             name: item.indicator.name,
@@ -59,9 +67,9 @@ function IndicatorApprovalResubmit({ type = "add", edit}) {
     fetchIndicators();
   }, []);
 
-  const handleFormChange = e => {
+  const handleFormChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
@@ -69,7 +77,7 @@ function IndicatorApprovalResubmit({ type = "add", edit}) {
 
   const handleChange = (e, index) => {
     const { name, value } = e.target;
-    setIndicatorFormData(prevData => {
+    setIndicatorFormData((prevData) => {
       const updatedData = [...prevData];
       updatedData[index] = {
         ...updatedData[index],
@@ -79,7 +87,7 @@ function IndicatorApprovalResubmit({ type = "add", edit}) {
     });
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     let updatedFormData = indicators.map((item, index) => {
@@ -95,7 +103,7 @@ function IndicatorApprovalResubmit({ type = "add", edit}) {
         submitted_id,
       });
       console.log("Success:", response.data);
-      tst.success("Form submitted successfully");
+      showAlert("Form submitted successfully", "success");
     } catch (error) {
       tst.error(error);
       console.error("Error submitting data:", error);
@@ -106,7 +114,11 @@ function IndicatorApprovalResubmit({ type = "add", edit}) {
     <div className="container mx-auto p-6">
       <div>
         <div className="py-4">
-          <AdminHeader>{type === "add" ? "Young Fellow - Indicators Entry" : "Update Gram Panchayat"}</AdminHeader>
+          <AdminHeader>
+            {type === "add"
+              ? "Young Fellow - Indicators Entry"
+              : "Update Gram Panchayat"}
+          </AdminHeader>
           <div>
             <div className="p-6">
               <div className=" mt-4">
@@ -163,8 +175,11 @@ function IndicatorApprovalResubmit({ type = "add", edit}) {
                           type="number"
                           disabled
                           name="max_range"
-                          value={indicatorFormData[index]?.max_range || data.max_range}
-                          onChange={e => handleChange(e, index)}
+                          value={
+                            indicatorFormData[index]?.max_range ||
+                            data.max_range
+                          }
+                          onChange={(e) => handleChange(e, index)}
                         />
                       </TableCell>
                       <TableCell>
@@ -174,7 +189,7 @@ function IndicatorApprovalResubmit({ type = "add", edit}) {
                           max={data.max_range}
                           name="input_data"
                           value={indicatorFormData[index]?.input_data || ""}
-                          onChange={e => handleChange(e, index)}
+                          onChange={(e) => handleChange(e, index)}
                         />
                       </TableCell>
                       <TableCell>
@@ -182,7 +197,7 @@ function IndicatorApprovalResubmit({ type = "add", edit}) {
                           type="text"
                           name="remarks"
                           value={indicatorFormData[index]?.remarks || ""}
-                          onChange={e => handleChange(e, index)}
+                          onChange={(e) => handleChange(e, index)}
                         />
                       </TableCell>
                     </TableRow>
@@ -196,10 +211,14 @@ function IndicatorApprovalResubmit({ type = "add", edit}) {
                   </Label>
                   <Input
                     disabled
-                    value={indicatorApprovalData[0]?.date ? indicatorApprovalData[0]?.date.substring(0, 10) : ""}
+                    value={
+                      indicatorApprovalData[0]?.date
+                        ? indicatorApprovalData[0]?.date.substring(0, 10)
+                        : ""
+                    }
                     type="date"
                     name="date"
-                    onChange={e => setDate(e.target.value)}
+                    onChange={(e) => setDate(e.target.value)}
                     id="date"
                     placeholder="Enter date"
                     className="px-10"

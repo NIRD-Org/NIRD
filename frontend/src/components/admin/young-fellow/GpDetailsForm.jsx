@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import AdminHeader from "../AdminHeader";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { showAlert } from "@/utils/showAlert";
 
 const GpDetailsForm = ({ update }) => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -125,6 +126,23 @@ const GpDetailsForm = ({ update }) => {
   const [secretaryPhoto, setSecretaryPhoto] = useState("");
 
   const navigate = useNavigate();
+
+  const getgpDetails = async () => {
+    try {
+      const { data } = await API.get(
+        `/api/v1/gp-details/get?state=${state_id}&dist=${dist_id}&block=${block_id}&gp=${gp_id}`
+      );
+      setFormValues(data?.data);
+    } catch (error) {
+      console.log("Errror: " + error.message);
+    }
+  };
+
+  useEffect(() => {
+    if (gp_id && block_id && dist_id && state_id) {
+      getgpDetails();
+    }
+  }, [gp_id]);
 
   const getStateById = async () => {
     try {
@@ -432,7 +450,7 @@ const GpDetailsForm = ({ update }) => {
       );
 
       if (data?.success) {
-        toast.success(data?.message, { position: "bottom-center" });
+        showAlert(data?.message);
         // navigate("/admin");
       }
     } catch (error) {
@@ -477,7 +495,7 @@ const GpDetailsForm = ({ update }) => {
         }
       );
       if (data?.success) {
-        toast.success(data?.message, { position: "bottom-center" });
+        showAlert(data?.message);
       }
     } catch (error) {
       toast.error(

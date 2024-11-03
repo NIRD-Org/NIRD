@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { useAuthContext } from "@/context/AuthContext";
 import { tst } from "@/lib/utils";
 import FormField from "@/components/ui/formfield";
+import { showAlert } from "@/utils/showAlert";
 
 function CreateUserForm({ update }) {
   const { id } = useParams();
@@ -45,10 +46,10 @@ function CreateUserForm({ update }) {
       setPending(true);
       if (update) {
         await API.put(`/api/v1/users/${id}`, formData);
-        tst.success("User updated successfully");
+        showAlert("User updated successfully", "success");
       } else {
         await API.post("/api/v1/auth/register", formData);
-        tst.success("User created successfully");
+        showAlert("User created successfully", "success");
       }
     } catch (error) {
       tst.error(error);

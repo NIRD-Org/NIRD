@@ -9,6 +9,7 @@ import FormField from "@/components/ui/formfield";
 import { useYfLocation } from "@/components/hooks/useYfLocation";
 import { FaCamera } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { showAlert } from "@/utils/showAlert";
 
 function AmUploadForm() {
   const [pending, setPending] = useState(false);
@@ -104,12 +105,17 @@ function AmUploadForm() {
       toast.error("Reporting time completed for morning entry");
       return;
     }
+    if (!formData.am_upload_file) {
+      showAlert("Please upload a geo-tagged image before submitting.", "error");
+      return;
+    }
+
     try {
       setPending(true);
       await API.post("/api/v1/am-upload/create", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      tst.success("AM upload successful");
+      showAlert("AM upload successful", "success");
     } catch (error) {
       tst.error(error?.response?.data?.message);
     } finally {
@@ -251,7 +257,6 @@ function AmUploadForm() {
               accept="image/*"
               capture="environment"
               onChange={handleFileChange}
-              required
               className="hidden"
             />
             <p className="text-red-500">

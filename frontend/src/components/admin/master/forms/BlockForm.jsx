@@ -6,6 +6,7 @@ import API from "@/utils/API";
 import { tst } from "@/lib/utils";
 import AdminHeader from "../../AdminHeader";
 import { useParams } from "react-router-dom";
+import { showAlert } from "@/utils/showAlert";
 
 function BlockForm({ type = "add", block }) {
   const [formData, setFormData] = useState({
@@ -18,7 +19,7 @@ function BlockForm({ type = "add", block }) {
   const [states, setStates] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [pending, setPending] = useState(false);
-  const {id} = useParams();
+  const { id } = useParams();
 
   useEffect(() => {
     async function fetchStates() {
@@ -39,8 +40,7 @@ function BlockForm({ type = "add", block }) {
           state_id: data.state_id,
           dist_id: data.dist_id,
           name: data.name,
-          is_maped_to_another_district:
-            data.is_maped_to_another_district,
+          is_maped_to_another_district: data.is_maped_to_another_district,
         });
       } catch (error) {
         tst.error("Failed to fetch block data:", error);
@@ -48,14 +48,16 @@ function BlockForm({ type = "add", block }) {
     };
 
     fetchStates();
-    if(type=="update") fetchBlockData();
+    if (type == "update") fetchBlockData();
   }, []);
 
   useEffect(() => {
     async function fetchDistricts() {
       if (formData.state_id) {
         try {
-          const response = await API.get(`/api/v1/dist/state/${formData.state_id}`);
+          const response = await API.get(
+            `/api/v1/dist/state/${formData.state_id}`
+          );
           setDistricts(response.data?.districts || []);
         } catch (error) {
           tst.error("Failed to fetch districts.");
@@ -66,30 +68,30 @@ function BlockForm({ type = "add", block }) {
     fetchDistricts();
   }, [formData.state_id]);
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
 
-  const handleCreateBlock = async e => {
+  const handleCreateBlock = async (e) => {
     e.preventDefault();
     try {
       await API.post("/api/v1/block/create", formData);
-      tst.success("block created successfully");
+      showAlert("block created successfully", "success");
     } catch (error) {
       tst.error(error);
       console.log(error);
     }
   };
 
-  const handleUpdateBlock = async e => {
+  const handleUpdateBlock = async (e) => {
     e.preventDefault();
     try {
       await API.put(`/api/v1/block/${id}`, formData);
-      tst.success("Block updated successfully");
+      showAlert("Block updated successfully", "success");
     } catch (error) {
       tst.error("Failed to update block.", error);
     }
@@ -100,14 +102,17 @@ function BlockForm({ type = "add", block }) {
       name: "state_id",
       label: "State",
       type: "select",
-      options: states.map(state => ({ value: state.id, label: state.name })),
+      options: states.map((state) => ({ value: state.id, label: state.name })),
       required: "true",
     },
     {
       name: "dist_id",
       label: "District",
       type: "select",
-      options: districts.map(district => ({ value: district.id, label: district.name })),
+      options: districts.map((district) => ({
+        value: district.id,
+        label: district.name,
+      })),
       required: "true",
     },
     { name: "name", label: "Name", type: "text", required: true },
@@ -126,7 +131,9 @@ function BlockForm({ type = "add", block }) {
     <div className="container mx-auto p-6">
       <form onSubmit={type === "add" ? handleCreateBlock : handleUpdateBlock}>
         <div className="py-4">
-          <AdminHeader>{type === "add" ? "Add Block" : "Update Block"}</AdminHeader>
+          <AdminHeader>
+            {type === "add" ? "Add Block" : "Update Block"}
+          </AdminHeader>
           <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3">
             {fields.map(({ name, label, type, options, required }) => (
               <div key={name}>
@@ -146,7 +153,7 @@ function BlockForm({ type = "add", block }) {
                     <option value="" disabled>
                       Select {label}
                     </option>
-                    {options.map(option => (
+                    {options.map((option) => (
                       <option key={option.value} value={option.value}>
                         {option.label}
                       </option>

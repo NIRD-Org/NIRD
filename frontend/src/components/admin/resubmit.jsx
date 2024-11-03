@@ -7,6 +7,7 @@ import { tst } from "@/lib/utils";
 import AdminHeader from "@/components/admin/AdminHeader";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { showAlert } from "@/utils/showAlert";
 
 const TrainingResubmit = () => {
   const navigate = useNavigate();
@@ -26,24 +27,24 @@ const TrainingResubmit = () => {
     fetchTraining();
   }, [id]);
 
-  const handleInputChange = e => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFileChange = e => {
+  const handleFileChange = (e) => {
     const { name, files } = e.target;
-    setFormData(prev => ({ ...prev, [name]: files[0] }));
+    setFormData((prev) => ({ ...prev, [name]: files[0] }));
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setPending(true);
       await API.put(`/api/v1/training/${formData.id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      tst.success("Data submitted successfully");
+      showAlert("Data submitted successfully", "success");
     } catch (error) {
       tst.error("Failed to submit form");
       console.log(error);

@@ -7,6 +7,7 @@ import AdminHeader from "../../AdminHeader";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useSoeprLocation } from "@/components/hooks/useSoeprLocation";
+import { showAlert } from "@/utils/showAlert";
 
 function PlanOfAction() {
   const [pending, setPending] = useState(false);
@@ -118,7 +119,7 @@ function PlanOfAction() {
     setPending(true);
     try {
       // Add your form submission logic here (e.g., API call)
-      toast.success("Plan Of Action submitted successfully");
+      showAlert("Plan Of Action submitted successfully", "success");
       navigate("/success"); // Navigate to a success page or another route
     } catch (error) {
       toast.error("Submission failed");

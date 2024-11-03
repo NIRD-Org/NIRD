@@ -6,6 +6,7 @@ import AdminHeader from "../../AdminHeader";
 import API from "@/utils/API";
 import FormField from "@/components/ui/formfield";
 import toast from "react-hot-toast";
+import { showAlert } from "@/utils/showAlert";
 
 function SoeprTourUpdateForm() {
   const [pending, setPending] = useState(false);
@@ -42,7 +43,7 @@ function SoeprTourUpdateForm() {
     try {
       setPending(true);
       await API.post("/api/v1/am-upload/create/tour", formData);
-      toast.success("Tour updated successfully for the selected range.");
+      showAlert("Tour updated successfully for the selected range.", "success");
     } catch (error) {
       toast.error(error?.response?.data?.message || "Failed to update tour.");
     } finally {

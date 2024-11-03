@@ -5,6 +5,7 @@ import API from "@/utils/API";
 import { Button } from "@/components/ui/button";
 import { useParams } from "react-router-dom";
 import { useAuthContext } from "@/context/AuthContext";
+import { showAlert } from "@/utils/showAlert";
 
 const UpdateSoeprUserLocation = ({ view }) => {
   const [state, setState] = useState("");
@@ -49,7 +50,7 @@ const UpdateSoeprUserLocation = ({ view }) => {
       await API.put(`/api/v1/soepr-location/${userId}`, {
         userLocations,
       });
-      tst.success("Soepr Location updated successfully");
+      showAlert("Soepr Location updated successfully", "success");
     } catch (error) {
       tst.error(error);
       console.log(error);

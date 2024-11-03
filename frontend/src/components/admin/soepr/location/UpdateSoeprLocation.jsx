@@ -6,6 +6,7 @@ import API from "@/utils/API";
 import { tst } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import AdminHeader from "../../AdminHeader";
+import { showAlert } from "@/utils/showAlert";
 
 const UpdateSoeprLocation = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -103,7 +104,7 @@ const UpdateSoeprLocation = () => {
         employee_id,
       });
       if (data.status === "success") {
-        tst.success("User Location updated successfully");
+        showAlert("User Location updated successfully", "success");
       }
     } catch (error) {
       console.log(error);

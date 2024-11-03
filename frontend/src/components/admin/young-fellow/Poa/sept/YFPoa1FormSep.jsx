@@ -147,7 +147,7 @@ const YFPoa1FormSep = ({ update }) => {
   const lastDayOfWeek = 7;
 
   function getAugustDate(day, year = new Date().getFullYear()) {
-    return new Date(Date.UTC(year, 7, day));
+    return new Date(Date.UTC(year, currentMonthIndex, day));
   }
 
   const augustDate = getAugustDate(14, 2024);

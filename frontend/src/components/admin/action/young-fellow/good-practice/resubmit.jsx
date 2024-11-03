@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { tst } from "@/lib/utils";
 import AdminHeader from "@/components/admin/AdminHeader";
 import { Textarea } from "@/components/ui/textarea";
+import { showAlert } from "@/utils/showAlert";
 
 const GoodPracticeResubmit = ({}) => {
   const navigate = useNavigate();
@@ -46,7 +47,7 @@ const GoodPracticeResubmit = ({}) => {
     async function fetchStates() {
       try {
         const response = await API.get("/api/v1/state/all");
-        setLocationData(prevData => ({
+        setLocationData((prevData) => ({
           ...prevData,
           states: response.data.states || [],
         }));
@@ -65,11 +66,10 @@ const GoodPracticeResubmit = ({}) => {
           const response = await API.get(
             `/api/v1/dist/state/${formData.state_id}`
           );
-          setLocationData(prevData => ({
+          setLocationData((prevData) => ({
             ...prevData,
             districts: response.data.districts || [],
           }));
-         
         } catch (error) {
           console.error("Failed to fetch districts.");
         }
@@ -85,11 +85,10 @@ const GoodPracticeResubmit = ({}) => {
           const response = await API.get(
             `/api/v1/block/get?dist=${formData.dist_id}`
           );
-          setLocationData(prevData => ({
+          setLocationData((prevData) => ({
             ...prevData,
             blocks: response.data.blocks || [],
           }));
-         
         } catch (error) {
           console.error("Failed to fetch blocks.");
         }
@@ -105,7 +104,7 @@ const GoodPracticeResubmit = ({}) => {
           const response = await API.get(
             `/api/v1/gram/get?block=${formData.block_id}`
           );
-          setLocationData(prevData => ({
+          setLocationData((prevData) => ({
             ...prevData,
             gps: response.data.gram || [],
           }));
@@ -117,24 +116,24 @@ const GoodPracticeResubmit = ({}) => {
     fetchGrams();
   }, [formData.block_id]);
 
-  const handleInputChange = e => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFileChange = e => {
+  const handleFileChange = (e) => {
     const { name, files } = e.target;
-    setFormData(prev => ({ ...prev, [name]: files[0] }));
+    setFormData((prev) => ({ ...prev, [name]: files[0] }));
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      setPending(true)
+      setPending(true);
       await API.put(`/api/v1/good-practice/${formData.id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      tst.success("Data submitted successfully");
+      showAlert("Data submitted successfully", "success");
     } catch (error) {
       tst.error("Failed to submit form");
       console.log(error);
@@ -147,7 +146,7 @@ const GoodPracticeResubmit = ({}) => {
     async function fetchThemes() {
       try {
         const response = await API.get("/api/v1/theme/all");
-        setLocationData(prevData => ({
+        setLocationData((prevData) => ({
           ...prevData,
           themes: response.data.themes || [],
         }));
@@ -163,7 +162,7 @@ const GoodPracticeResubmit = ({}) => {
       label: "Theme Name",
       name: "theme_id",
       type: "select",
-      options: locationData?.themes?.map(theme => ({
+      options: locationData?.themes?.map((theme) => ({
         value: theme.id,
         label: theme.theme_name,
       })),
@@ -173,7 +172,7 @@ const GoodPracticeResubmit = ({}) => {
       label: "State",
       name: "state_id",
       type: "select",
-      options: locationData?.states?.map(state => ({
+      options: locationData?.states?.map((state) => ({
         value: state.id,
         label: state.name,
       })),
@@ -183,7 +182,7 @@ const GoodPracticeResubmit = ({}) => {
       label: "District",
       name: "dist_id",
       type: "select",
-      options: locationData?.districts?.map(district => ({
+      options: locationData?.districts?.map((district) => ({
         value: district.id,
         label: district.name,
       })),
@@ -193,7 +192,7 @@ const GoodPracticeResubmit = ({}) => {
       label: "Block",
       name: "block_id",
       type: "select",
-      options: locationData?.blocks?.map(block => ({
+      options: locationData?.blocks?.map((block) => ({
         value: block.id,
         label: block.name,
       })),
@@ -203,7 +202,7 @@ const GoodPracticeResubmit = ({}) => {
       label: "GP",
       name: "gp_id",
       type: "select",
-      options: locationData?.gps?.map(gp => ({
+      options: locationData?.gps?.map((gp) => ({
         value: gp.id,
         label: gp.name,
       })),
@@ -243,7 +242,7 @@ const GoodPracticeResubmit = ({}) => {
                 required={field.required}
               >
                 <option value="">Select {field.label}</option>
-                {field.options.map(option => (
+                {field.options.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
@@ -295,8 +294,8 @@ const GoodPracticeResubmit = ({}) => {
             required
           />
         </div>
-        <div ></div>
-        <div ></div>
+        <div></div>
+        <div></div>
         <Button pending={pending} type="submit" className="px-20 self-end">
           Resubmit
         </Button>

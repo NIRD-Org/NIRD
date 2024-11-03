@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/table";
 import { tst } from "@/lib/utils";
 import { useYfLocation } from "@/components/hooks/useYfLocation";
+import { showAlert } from "@/utils/showAlert";
 
 const months = [
   { name: "January", days: 31 },
@@ -526,7 +527,7 @@ const UpdateYfPOA1Form = () => {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      toast.success("Form updated successfully!");
+      showAlert("Form updated successfully!");
       navigate(`/admin/yf/POA1/view/${poalId}`);
     } catch (error) {
       console.log(error);

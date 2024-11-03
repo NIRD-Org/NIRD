@@ -14,6 +14,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { tst } from "@/lib/utils";
+import { showAlert } from "@/utils/showAlert";
 
 const months = [
   { name: "January", days: 31 },
@@ -41,7 +42,7 @@ const planOfDayOptions = {
   "Training Needs Assessment (TNA) facilitated": [
     "To Facilitate State Level/ District Level/Block Level TNAs",
   ],
- "Training Calendar preparation": [
+  "Training Calendar preparation": [
     "To facilitate preparation of Training Calendar at State/ District/ Block Level",
     "To design/ facilitate to design Trainings  ",
     "To prepare/Update Training modules",
@@ -86,7 +87,7 @@ const POA2Formtemp = ({ update }) => {
   const [plans, setPlans] = useState({});
   const [selectedDistricts, setSelectedDistricts] = useState({});
   const [formDataState, setFormData] = useState([]);
-  const selectedMonth = months[currentMonthIndex -1];
+  const selectedMonth = months[currentMonthIndex - 1];
   const { soeprState: states, soeprDist: districts } = useSoeprLocation({
     state_id: selectedState,
   });
@@ -217,7 +218,7 @@ const POA2Formtemp = ({ update }) => {
         }
       );
 
-      toast.success("Form submitted successfully!");
+      showAlert("Form submitted successfully!");
     } catch (error) {
       tst.error(error);
     } finally {
@@ -292,7 +293,6 @@ const POA2Formtemp = ({ update }) => {
                   style={{ width: "100%" }}
                   value={plans[day] || ""}
                   onChange={(e) => handlePlanChange(day, e.target.value)}
-                  
                 >
                   <option value="">Select</option>
                   {Object.keys(planOfDayOptions).map((plan) => (
@@ -308,7 +308,6 @@ const POA2Formtemp = ({ update }) => {
                   style={{ width: "100%" }}
                   value={selectedActions[day] || ""}
                   onChange={(e) => handleActionChange(day, e.target.value)}
-              
                   required
                 >
                   <option value="">Select</option>
@@ -329,7 +328,6 @@ const POA2Formtemp = ({ update }) => {
                     handleInputChange(day, "plannedEvent", e.target.value)
                   }
                   value={formDataState[day]?.plannedEvent || ""}
-                 
                 />
               </TableCell>
               <TableCell className="p-2">
@@ -339,7 +337,6 @@ const POA2Formtemp = ({ update }) => {
                   onChange={(e) => handleDistrictChange(day, e.target.value)}
                   value={selectedDistricts[day] || ""}
                   required
-                  
                 >
                   <option value="" disable>
                     Select Location

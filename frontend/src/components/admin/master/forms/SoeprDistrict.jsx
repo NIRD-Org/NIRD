@@ -6,6 +6,7 @@ import API from "@/utils/API";
 import { tst } from "@/lib/utils";
 import AdminHeader from "../../AdminHeader";
 import { useParams } from "react-router-dom";
+import { showAlert } from "@/utils/showAlert";
 
 function SoeprDistrictForm({ type = "add", onSubmit, district }) {
   const [formData, setFormData] = useState({
@@ -59,10 +60,10 @@ function SoeprDistrictForm({ type = "add", onSubmit, district }) {
     try {
       if (type == "add") {
         await API.post("/api/v1/soepr-dist/create", formData);
-        tst.success("District created successfully");
+        showAlert("District created successfully", "success");
       } else {
         await API.put(`/api/v1/soepr-dist/${id}`, formData);
-        tst.success("District updated successfully");
+        showAlert("District updated successfully", "success");
       }
     } catch (error) {
       tst.error(error);

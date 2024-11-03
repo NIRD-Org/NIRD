@@ -9,6 +9,7 @@ import FormField from "@/components/ui/formfield";
 import { useYfLocation } from "@/components/hooks/useYfLocation";
 import { FaCamera } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { showAlert } from "@/utils/showAlert";
 
 function PmUploadForm() {
   const [pending, setPending] = useState(false);
@@ -104,12 +105,16 @@ function PmUploadForm() {
     //   toast.error("Afternoon entry not Allowed");
     //   return;
     // }
+    if (!formData.pm_upload_file) {
+      toast.error("Please upload a geo-tagged image before submitting.");
+      return;
+    }
     try {
       setPending(true);
       await API.post("/api/v1/pm-upload/create", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      tst.success("PM upload successful");
+      showAlert("PM upload successful", "success");
     } catch (error) {
       tst.error(error?.response?.data?.message);
     } finally {
@@ -251,7 +256,6 @@ function PmUploadForm() {
               accept="image/*"
               capture="environment"
               onChange={handleFileChange}
-              required
               className="hidden"
             />
             <p className="text-red-500">

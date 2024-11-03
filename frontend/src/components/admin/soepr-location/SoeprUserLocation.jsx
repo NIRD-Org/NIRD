@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { useParams } from "react-router-dom";
 import { useAuthContext } from "@/context/AuthContext";
 import { useAdminState } from "@/components/hooks/useAdminState";
+import { showAlert } from "@/utils/showAlert";
 
 const SoeprUserLocation = () => {
   const [state, setState] = useState(null);
@@ -51,7 +52,7 @@ const SoeprUserLocation = () => {
         user_id: userId,
         userLocations: SoeprUserLocations,
       });
-      tst.success("User has been assigned location successfully");
+      showAlert("User has been assigned location successfully", "success");
     } catch (error) {
       tst.error("Error assigning location. Please try again.");
     }

@@ -13,6 +13,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { tst } from "@/lib/utils";
+import { showAlert } from "@/utils/showAlert";
 
 const months = [
   { name: "January", days: 31 },
@@ -233,7 +234,7 @@ const UpdatePOA1Form = () => {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      toast.success("Form updated successfully!");
+      showAlert("Form updated successfully!", "success");
       navigate(`/admin/soepr/POA1/view/${poalId}`);
     } catch (error) {
       tst.error(error);

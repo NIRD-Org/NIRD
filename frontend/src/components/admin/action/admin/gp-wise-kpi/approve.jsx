@@ -6,13 +6,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Textarea } from "@/components/ui/textarea";
 import { tst } from "@/lib/utils";
 import GpWiseKpiView from "./cview";
+import { showAlert } from "@/utils/showAlert";
 
 function GpWiseKpiApprovalPage() {
   const [formData, setFormData] = useState({ decision: "", remarks: "" });
   const navigate = useNavigate();
   const { id: submitted_id } = useParams();
- 
-  const handleSubmit = async e => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const body = {
@@ -23,7 +24,7 @@ function GpWiseKpiApprovalPage() {
       const url = `/api/v1/kpi-approvals/update/${submitted_id}`;
       const response = await API.put(url, body);
       console.log(response.data);
-      tst.success("Form submitted successfully");
+      showAlert("Form submitted successfully", "success");
     } catch (error) {
       tst.error("Failed to submit form");
       console.log(error);
@@ -33,7 +34,7 @@ function GpWiseKpiApprovalPage() {
   return (
     <div className="w-full">
       <div>
-        <GpWiseKpiView/>
+        <GpWiseKpiView />
         <form onSubmit={handleSubmit}>
           <div className="mt-8 flex  gap-4">
             <div className="w-max my-4">
@@ -46,8 +47,8 @@ function GpWiseKpiApprovalPage() {
                 id="decision"
                 name="decision"
                 value={formData.decision || ""}
-                onChange={e =>
-                  setFormData(prevData => ({
+                onChange={(e) =>
+                  setFormData((prevData) => ({
                     ...prevData,
                     decision: e.target.value,
                   }))
@@ -67,8 +68,8 @@ function GpWiseKpiApprovalPage() {
               <Textarea
                 required={formData.decision === "2"}
                 value={formData.remarks || ""}
-                onChange={e =>
-                  setFormData(prevData => ({
+                onChange={(e) =>
+                  setFormData((prevData) => ({
                     ...prevData,
                     remarks: e.target.value,
                   }))
@@ -101,5 +102,3 @@ function GpWiseKpiApprovalPage() {
 // };
 
 export default GpWiseKpiApprovalPage;
-
-

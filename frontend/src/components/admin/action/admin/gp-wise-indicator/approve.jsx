@@ -7,13 +7,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { tst } from "@/lib/utils";
 import IndicatorView from "./cview";
 import AdminHeader from "@/components/admin/AdminHeader";
+import { showAlert } from "@/utils/showAlert";
 
 function IndicatorApprovalAdminForm() {
   const [formData, setFormData] = useState({ decision: "", remarks: "" });
   const navigate = useNavigate();
   const { id: submitted_id } = useParams();
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const body = {
@@ -22,7 +23,7 @@ function IndicatorApprovalAdminForm() {
       };
       const url = `/api/v1/indicator-approvals/update/${submitted_id}`;
       await API.put(url, body);
-      tst.success("Form submitted successfully");
+      showAlert("Form submitted successfully", "success");
       //   navigate("/admin/admin-action-form");
     } catch (error) {
       tst.error("Failed to submit form");
@@ -46,8 +47,8 @@ function IndicatorApprovalAdminForm() {
               id="decision"
               name="decision"
               value={formData.decision || ""}
-              onChange={e =>
-                setFormData(prevData => ({
+              onChange={(e) =>
+                setFormData((prevData) => ({
                   ...prevData,
                   decision: e.target.value,
                 }))
@@ -67,8 +68,8 @@ function IndicatorApprovalAdminForm() {
             <Textarea
               required={formData.decision === "2"}
               value={formData.remarks || ""}
-              onChange={e =>
-                setFormData(prevData => ({
+              onChange={(e) =>
+                setFormData((prevData) => ({
                   ...prevData,
                   remarks: e.target.value,
                 }))

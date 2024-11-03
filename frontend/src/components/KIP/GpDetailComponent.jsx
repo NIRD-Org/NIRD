@@ -258,7 +258,10 @@ const GpDetailComponent = ({ data }) => {
       )}
 
       {/* Ward Details */}
-      {data && data?.wardDetails && Array.isArray(data?.wardDetails) ? (
+      {data &&
+      data?.wardDetails &&
+      Array.isArray(data?.wardDetails) &&
+      data.wardDetails.length > 0 ? (
         <>
           <div className="bg-white overflow-hidden  border-gray-400">
             <div

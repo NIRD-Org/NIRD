@@ -14,6 +14,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { tst } from "@/lib/utils";
+import { showAlert } from "@/utils/showAlert";
 
 const months = [
   { name: "January", days: 31 },
@@ -189,7 +190,7 @@ const POA1Form = ({ update }) => {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      toast.success("Form submitted successfully!");
+      showAlert("Form submitted successfully!", "success");
     } catch (error) {
       tst.error(error);
     } finally {

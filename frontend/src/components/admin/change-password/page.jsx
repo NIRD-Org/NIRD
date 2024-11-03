@@ -4,6 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import API from "@/utils/API";
 import { tst } from "@/lib/utils";
+import { showAlert } from "@/utils/showAlert";
 
 const ChangePassword = () => {
   const [formData, setFormData] = useState({
@@ -22,7 +23,7 @@ const ChangePassword = () => {
     e.preventDefault();
     try {
       const response = await API.post("/api/v1/auth/change-password", formData);
-      tst.success("Password changed successfully");
+      showAlert("Password changed successfully", "success");
       setFormData({
         oldPassword: "",
         newPassword: "",

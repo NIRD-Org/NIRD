@@ -6,6 +6,7 @@ import { tst } from "@/lib/utils";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthContext } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
+import { showAlert } from "@/utils/showAlert";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -29,7 +30,7 @@ const LoginPage = () => {
     try {
       setPending(true);
       const response = await API.post("/api/v1/auth/login", formData);
-      tst.success("User login successful");
+      showAlert("User login successful", "success");
       const authHeader = response.headers.get("Authorization");
       if (authHeader) {
         const token = authHeader.replace("Bearer ", "");

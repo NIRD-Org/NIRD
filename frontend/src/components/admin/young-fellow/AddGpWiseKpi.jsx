@@ -155,7 +155,7 @@
 //     try {
 //       const response = await API.post("/api/v1/gp-wise-kpi/submit", dataToSend);
 //       console.log("Success:", response.data);
-//       tst.success("Form submitted successfully");
+//       showAlert("Form submitted successfully", "success");
 //       navigate("/admin/young-professionals");
 //     } catch (error) {
 //       tst.error(error);
@@ -383,6 +383,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import YfLayout from "./YfLayout";
 import { kpiScoringRules } from "@/lib/data";
 import { disabledKpis } from "@/lib/data";
+import { showAlert } from "@/utils/showAlert";
 
 const dropdownOptions = {
   59: {
@@ -820,7 +821,7 @@ function AddGpWiseKpi({ update }) {
     try {
       const response = await API.post("/api/v1/gp-wise-kpi/submit", dataToSend);
       console.log("Success:", response.data);
-      tst.success("Form submitted successfully");
+      showAlert("Form submitted successfully", "success");
       navigate("/admin/young-professionals");
     } catch (error) {
       tst.error(error);

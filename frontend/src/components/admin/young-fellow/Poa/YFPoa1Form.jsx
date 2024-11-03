@@ -10,21 +10,7 @@ import { useYfLocation } from "@/components/hooks/useYfLocation";
 import { PlusCircle } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 import { FaRegTimesCircle } from "react-icons/fa";
-
-const months = [
-  { name: "January", days: 31 },
-  { name: "February", days: 28 }, // Adjust for leap years if needed
-  { name: "March", days: 31 },
-  { name: "April", days: 30 },
-  { name: "May", days: 31 },
-  { name: "June", days: 30 },
-  { name: "July", days: 31 },
-  { name: "August", days: 31 },
-  { name: "September", days: 30 },
-  { name: "October", days: 31 },
-  { name: "November", days: 30 },
-  { name: "December", days: 31 },
-];
+import { showAlert } from "@/utils/showAlert";
 
 // Updated KPI Themes with their respective Activities
 const kpiThemes = {
@@ -494,10 +480,26 @@ const kpiThemes = {
 const YFPoa1Form = ({ update }) => {
   const currentMonthIndex = new Date().getMonth();
   const currentYear = new Date().getFullYear();
+
+  const months = [
+    { name: "January", days: 31 },
+    { name: "February", days: currentYear % 4 === 0 ? 29 : 28 }, // Leap year check
+    { name: "March", days: 31 },
+    { name: "April", days: 30 },
+    { name: "May", days: 31 },
+    { name: "June", days: 30 },
+    { name: "July", days: 31 },
+    { name: "August", days: 31 },
+    { name: "September", days: 30 },
+    { name: "October", days: 31 },
+    { name: "November", days: 30 },
+    { name: "December", days: 31 },
+  ];
+
   const { id: poalId } = useParams();
   const [formDataState, setFormData] = useState([]);
   const [rows, setRows] = useState([]);
-  const selectedMonth = months[currentMonthIndex];
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const [loading, setLoading] = useState(false);
 
   const [states, setStates] = useState([]);
@@ -508,7 +510,7 @@ const YFPoa1Form = ({ update }) => {
   const lastDayOfWeek = 7;
 
   function getAugustDate(day, year = new Date().getFullYear()) {
-    return new Date(Date.UTC(year, 7, day));
+    return new Date(Date.UTC(year, selectedMonth, day));
   }
 
   const augustDate = getAugustDate(14, 2024);
@@ -545,18 +547,18 @@ const YFPoa1Form = ({ update }) => {
     fetchUserLocations();
   }, []);
 
-  const getDaysInMonth = () =>
-    Array.from({ length: lastDayOfWeek }, (_, i) => i + 1);
-
   const getWeekDay = (day) => {
-    const date = new Date(`${selectedMonth.name} ${day}, ${currentYear}`);
+    const date = new Date(currentYear, selectedMonth, day);
     return date.toLocaleDateString("en-IN", { weekday: "long" });
   };
 
   const formatIndianDate = (day) => {
-    const date = new Date(`${selectedMonth.name} ${day}, ${currentYear}`);
+    const date = new Date(currentYear, selectedMonth, day);
     return date.toLocaleDateString("en-IN");
   };
+
+  const getDaysInMonth = () =>
+    Array.from({ length: lastDayOfWeek }, (_, i) => i + 1);
 
   // Initialize rows for the table
   useEffect(() => {
@@ -708,11 +710,15 @@ const YFPoa1Form = ({ update }) => {
         );
       });
 
-      await API.post(`/api/v1/yf-poa1/create`, formDataToSubmit, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      await API.post(
+        `/api/v1/yf-poa1/create?created_at=${augustDate}`,
+        formDataToSubmit,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
 
-      toast.success("Form submitted successfully!");
+      showAlert("Form submitted successfully!");
     } catch (error) {
       console.error("Error submitting form:", error);
       toast.error("Failed to submit form.");
@@ -729,7 +735,23 @@ const YFPoa1Form = ({ update }) => {
       <AdminHeader>
         First Weekly Plan Of Action - Month : {selectedMonth.name} {currentYear}
       </AdminHeader>
-
+      <div className="mb-4">
+        <label htmlFor="month-select" className="mr-2">
+          Select Month:
+        </label>
+        <select
+          id="month-select"
+          value={selectedMonth}
+          onChange={(e) => setSelectedMonth(parseInt(e.target.value, 10))}
+          className="p-2 rounded"
+        >
+          {months.map((month, index) => (
+            <option key={index} value={index}>
+              {month.name}
+            </option>
+          ))}
+        </select>
+      </div>
       <Table
         border="1"
         cellPadding="3"

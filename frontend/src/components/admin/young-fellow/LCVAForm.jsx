@@ -9,6 +9,7 @@ import { tst } from "@/lib/utils";
 import useThemes from "@/components/hooks/location/useThemes";
 import FormField from "@/components/ui/formfield";
 import { useYfLocation } from "@/components/hooks/useYfLocation";
+import { showAlert } from "@/utils/showAlert";
 
 const LCVAForm = ({ update = false }) => {
   const [pending, setPending] = useState(false);
@@ -116,7 +117,7 @@ const LCVAForm = ({ update = false }) => {
         });
       }
 
-      tst.success("Data submitted successfully");
+      showAlert("Data submitted successfully", "success");
     } catch (error) {
       tst.error("Failed to submit form");
       console.error(error);

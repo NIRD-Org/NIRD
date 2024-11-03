@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { useParams } from "react-router-dom";
 import { useAuthContext } from "@/context/AuthContext";
 import { Label } from "@/components/ui/label";
+import { showAlert } from "@/utils/showAlert";
 
 const UpdateUserLocation = ({ view, role }) => {
   const [state, setState] = useState(null);
@@ -40,7 +41,9 @@ const UpdateUserLocation = ({ view, role }) => {
 
   const handleBlockChange = (value, dist_id) => {
     const blockIds = blocks
-      .filter((block) => value.includes(block.name) && block.dist_id === dist_id)
+      .filter(
+        (block) => value.includes(block.name) && block.dist_id === dist_id
+      )
       .map((block) => block.id);
 
     setSelectedBlock((prev) => {
@@ -51,7 +54,9 @@ const UpdateUserLocation = ({ view, role }) => {
 
   const handleBlockRemove = (value, dist_id) => {
     const blockIds = blocks
-      .filter((block) => value.includes(block.name) && block.dist_id === dist_id)
+      .filter(
+        (block) => value.includes(block.name) && block.dist_id === dist_id
+      )
       .map((block) => block.id);
 
     setSelectedBlock((prev) => prev.filter((id) => !blockIds.includes(id)));
@@ -67,28 +72,42 @@ const UpdateUserLocation = ({ view, role }) => {
   };
 
   const handleGPRemove = (value) => {
-    const gpIds = gps.filter((gp) => value.includes(gp.name)).map((gp) => gp.id);
+    const gpIds = gps
+      .filter((gp) => value.includes(gp.name))
+      .map((gp) => gp.id);
 
     setSelectedGp((prev) => prev.filter((id) => !gpIds.includes(id)));
   };
 
   const handleStateRemove = (value) => {
-    const stateIds = states.filter((state) => value.includes(state.name)).map((state) => state.id);
+    const stateIds = states
+      .filter((state) => value.includes(state.name))
+      .map((state) => state.id);
 
     setSelectedState((prev) => prev.filter((id) => !stateIds.includes(id)));
   };
 
   const postLocation = async () => {
     const blockIds = Array.from(
-      new Set(gps.filter((gp) => selectedGp.includes(gp.id)).map((gp) => gp.block_id))
+      new Set(
+        gps.filter((gp) => selectedGp.includes(gp.id)).map((gp) => gp.block_id)
+      )
     );
 
     const distIds = Array.from(
-      new Set(blocks.filter((block) => blockIds.includes(block.id)).map((block) => block.dist_id))
+      new Set(
+        blocks
+          .filter((block) => blockIds.includes(block.id))
+          .map((block) => block.dist_id)
+      )
     );
 
     const stateIds = Array.from(
-      new Set(adists.filter((dist) => distIds.includes(dist.id)).map((dist) => dist.state_id))
+      new Set(
+        adists
+          .filter((dist) => distIds.includes(dist.id))
+          .map((dist) => dist.state_id)
+      )
     );
 
     const userLocations = {
@@ -102,7 +121,7 @@ const UpdateUserLocation = ({ view, role }) => {
 
     try {
       await API.put(`/api/v1/user-location/${userId}`, { userLocations });
-      tst.success("User Location updated successfully");
+      showAlert("User Location updated successfully", "success");
     } catch (error) {
       tst.error("Failed to update User Location");
       console.log(error);
@@ -117,8 +136,10 @@ const UpdateUserLocation = ({ view, role }) => {
     if (selectedState.length === 0) return;
 
     try {
-      await API.put(`/api/v1/user-location/${userId}`, { userLocations: updateUserLocations });
-      tst.success("User location updated");
+      await API.put(`/api/v1/user-location/${userId}`, {
+        userLocations: updateUserLocations,
+      });
+      showAlert("User location updated", "success");
     } catch (error) {
       tst.error("Failed to update User Location");
       console.log(error);
@@ -178,7 +199,13 @@ const UpdateUserLocation = ({ view, role }) => {
       }
     };
 
-    Promise.all([fetchStates(), fetchADists(), fetchBlocks(), fetchGPs(), fetchUserLocation()]);
+    Promise.all([
+      fetchStates(),
+      fetchADists(),
+      fetchBlocks(),
+      fetchGPs(),
+      fetchUserLocation(),
+    ]);
   }, [userId]);
 
   useEffect(() => {
@@ -197,10 +224,10 @@ const UpdateUserLocation = ({ view, role }) => {
 
   const dropdownStyle = {
     dropdownMenu: {
-      position: 'absolute',
-      bottom: '100%',
+      position: "absolute",
+      bottom: "100%",
       zIndex: 1000,
-      marginBottom: '4px',
+      marginBottom: "4px",
     },
   };
 
@@ -210,14 +237,19 @@ const UpdateUserLocation = ({ view, role }) => {
         <div>
           <Label className="text-right mb-2 inline-block">Select State</Label>
           <Multiselect
-            selectedValues={states.filter((s) => selectedState.includes(s.id)).map((state) => state.name)}
+            selectedValues={states
+              .filter((s) => selectedState.includes(s.id))
+              .map((state) => state.name)}
             isObject={false}
             onRemove={(_, value) => handleStateRemove(value)}
             onSelect={(_, value) => handleStateChange(value)}
             options={states.map((state) => state.name)}
             style={dropdownStyle}
           />
-          <Button onClick={postAdminLocation} className="mx-auto block px-20 mt-20">
+          <Button
+            onClick={postAdminLocation}
+            className="mx-auto block px-20 mt-20"
+          >
             Submit
           </Button>
         </div>
@@ -229,7 +261,9 @@ const UpdateUserLocation = ({ view, role }) => {
     <div>
       <div>
         <select
-          className={cn("text-sm px-4 py-2 rounded-md bg-transparent border max-w-[500px] mx-auto block")}
+          className={cn(
+            "text-sm px-4 py-2 rounded-md bg-transparent border max-w-[500px] mx-auto block"
+          )}
           value={state || ""}
           onChange={(e) => setState(e.target.value)}
         >
@@ -261,10 +295,18 @@ const UpdateUserLocation = ({ view, role }) => {
                     isObject={false}
                     disable={view}
                     selectedValues={blocks
-                      .filter((block) => selectedBlock.includes(block.id) && block.dist_id === district.id)
+                      .filter(
+                        (block) =>
+                          selectedBlock.includes(block.id) &&
+                          block.dist_id === district.id
+                      )
                       .map((block) => block.name)}
-                    onRemove={(_, value) => handleBlockRemove(value, district.id)}
-                    onSelect={(_, value) => handleBlockChange(value, district.id)}
+                    onRemove={(_, value) =>
+                      handleBlockRemove(value, district.id)
+                    }
+                    onSelect={(_, value) =>
+                      handleBlockChange(value, district.id)
+                    }
                     options={blocks
                       .filter((block) => block.dist_id === district.id)
                       .map((block) => block.name)}
@@ -276,12 +318,20 @@ const UpdateUserLocation = ({ view, role }) => {
                     disable={view}
                     isObject={false}
                     selectedValues={gps
-                      .filter((gp) => selectedGp.includes(gp.id) && gp.dist_id === district.id)
+                      .filter(
+                        (gp) =>
+                          selectedGp.includes(gp.id) &&
+                          gp.dist_id === district.id
+                      )
                       .map((gp) => gp.name)}
                     onRemove={(_, value) => handleGPRemove(value)}
                     onSelect={(_, value) => handleGPChange(value)}
                     options={gps
-                      .filter((gp) => gp.dist_id === district.id && selectedBlock.includes(gp.block_id))
+                      .filter(
+                        (gp) =>
+                          gp.dist_id === district.id &&
+                          selectedBlock.includes(gp.block_id)
+                      )
                       .map((gp) => gp.name)}
                     style={dropdownStyle}
                   />

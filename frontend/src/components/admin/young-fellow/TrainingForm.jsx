@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { tst } from "@/lib/utils";
 import FormField from "@/components/ui/formfield";
+import { showAlert } from "@/utils/showAlert";
 
 const TrainingForm = () => {
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ const TrainingForm = () => {
       await API.post("/api/v1/training/create", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      tst.success("Data uploaded successfully");
+      showAlert("Data uploaded successfully", "success");
     } catch (error) {
       tst.error("Something went wrong");
       console.log(error);

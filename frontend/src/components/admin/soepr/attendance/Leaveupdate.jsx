@@ -6,6 +6,7 @@ import AdminHeader from "../../AdminHeader";
 import API from "@/utils/API";
 import FormField from "@/components/ui/formfield";
 import toast from "react-hot-toast";
+import { showAlert } from "@/utils/showAlert";
 
 function SoeprLeaveUpdateForm() {
   const [pending, setPending] = useState(false);
@@ -41,7 +42,10 @@ function SoeprLeaveUpdateForm() {
     try {
       setPending(true);
       await API.post("/api/v1/am-upload/create/leave", formData);
-      toast.success("Leave updated successfully for the selected range.");
+      showAlert(
+        "Leave updated successfully for the selected range.",
+        "success"
+      );
     } catch (error) {
       toast.error(error?.response?.data?.message);
     } finally {

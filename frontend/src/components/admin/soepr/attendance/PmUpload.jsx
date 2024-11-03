@@ -9,6 +9,7 @@ import API from "@/utils/API";
 import FormField from "@/components/ui/formfield";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { showAlert } from "@/utils/showAlert";
 
 function SoeprPmUploadForm() {
   const [pending, setPending] = useState(false);
@@ -36,7 +37,7 @@ function SoeprPmUploadForm() {
         setIsSubmissionAllowed(true);
       }
     };
-    
+
     checkSubmissionTime();
     const intervalId = setInterval(checkSubmissionTime, 60000); // Check every minute
     return () => clearInterval(intervalId); // Cleanup interval on component unmount
@@ -61,7 +62,9 @@ function SoeprPmUploadForm() {
     e.preventDefault();
     const currentHour = new Date().getHours();
     if (currentHour < 12 || currentHour >= 22) {
-      toast.error("Reporting time not yet started for afternoon entry or reporting time has ended.");
+      toast.error(
+        "Reporting time not yet started for afternoon entry or reporting time has ended."
+      );
       return;
     }
 
@@ -70,7 +73,7 @@ function SoeprPmUploadForm() {
       await API.post("/api/v1/pm-upload/create", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      tst.success("PM upload successful");
+      showAlert("PM upload successful", "success");
       navigate("/success"); // Navigate to a success page or another route
     } catch (error) {
       toast.error(error?.response?.data?.message);
@@ -197,7 +200,8 @@ function SoeprPmUploadForm() {
       </form>
       {!isSubmissionAllowed && (
         <p className="text-red-500 mt-4 text-center">
-          Reporting time not yet started for afternoon entry or reporting time has ended. Please submit between 12 PM and 10 PM!
+          Reporting time not yet started for afternoon entry or reporting time
+          has ended. Please submit between 12 PM and 10 PM!
         </p>
       )}
     </div>

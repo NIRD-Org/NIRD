@@ -9,6 +9,7 @@ import API from "@/utils/API";
 import FormField from "@/components/ui/formfield";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { showAlert } from "@/utils/showAlert";
 
 function SoeprAmUploadForm() {
   const [pending, setPending] = useState(false);
@@ -81,7 +82,7 @@ function SoeprAmUploadForm() {
       await API.post("/api/v1/am-upload/create", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      tst.success("AM upload successful");
+      showAlert("AM upload successful", "success");
     } catch (error) {
       toast.error(error?.response?.data?.message);
     } finally {

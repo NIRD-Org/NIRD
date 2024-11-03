@@ -19,6 +19,7 @@ import YfLayout from "../../young-fellow/YfLayout";
 import { kpiScoringRules } from "@/lib/data";
 import { disabledKpis } from "@/lib/data";
 import { useSoeprState } from "@/components/hooks/soepr-location/useSoeprState";
+import { showAlert } from "@/utils/showAlert";
 
 function SoeprAddGpWiseKpi({ update }) {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -112,7 +113,7 @@ function SoeprAddGpWiseKpi({ update }) {
         dataToSend
       );
       console.log("Success:", response.data);
-      tst.success("Form submitted successfully");
+      showAlert("Form submitted successfully", "success");
       navigate("/admin/soepr/young-professionals");
     } catch (error) {
       tst.error(error);

@@ -7,6 +7,7 @@ import API from "@/utils/API";
 import AdminHeader from "../../AdminHeader";
 import { tst } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
+import { showAlert } from "@/utils/showAlert";
 
 function DataPointForm({ type = "add", onSubmit }) {
   const { kpiId } = useParams();
@@ -38,7 +39,7 @@ function DataPointForm({ type = "add", onSubmit }) {
       const fetchKpiDetails = async () => {
         try {
           const { data } = await API.get(`/api/v1/kpi/${kpiId}`);
-          console.log(data)
+          console.log(data);
           setFormData(data?.kpi || {});
         } catch (error) {
           console.error("Failed to fetch KPI details.", error);
@@ -63,10 +64,10 @@ function DataPointForm({ type = "add", onSubmit }) {
     try {
       if (type === "add") {
         await API.post("/api/v1/kpi/create", formData);
-        tst.success("KPI created successfully");
+        showAlert("KPI created successfully", "success");
       } else {
         await API.put(`/api/v1/kpi/${kpiId}`, formData);
-        tst.success("KPI updated successfully");
+        showAlert("KPI updated successfully", "success");
       }
     } catch (error) {
       tst.error(error);

@@ -6,6 +6,7 @@ import API from "@/utils/API";
 import { tst } from "@/lib/utils";
 import AdminHeader from "../../AdminHeader";
 import { useParams } from "react-router-dom";
+import { showAlert } from "@/utils/showAlert";
 
 function StateForm({ type = "add", onSubmit, state }) {
   const [formData, setFormData] = useState({
@@ -36,24 +37,24 @@ function StateForm({ type = "add", onSubmit, state }) {
     }
   }, [type, id]);
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setPending(true);
     try {
       if (type === "add") {
         await API.post("/api/v1/state/create", formData);
-        tst.success("State created successfully");
+        showAlert("State created successfully", "success");
       } else {
         await API.put(`/api/v1/state/${id}`, formData);
-        tst.success("State updated successfully");
+        showAlert("State updated successfully", "success");
       }
       if (onSubmit) {
         onSubmit();
@@ -91,7 +92,7 @@ function StateForm({ type = "add", onSubmit, state }) {
             {type === "add" ? "Add State" : "Update State"}
           </AdminHeader>
           <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3">
-            {formFields.map(field => (
+            {formFields.map((field) => (
               <div key={field.name}>
                 <Label htmlFor={field.name} className="inline-block mb-2">
                   {field.label}

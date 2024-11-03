@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Textarea } from "@/components/ui/textarea";
 import { tst } from "@/lib/utils";
 import GpWiseKpiView from "./cview";
+import { showAlert } from "@/utils/showAlert";
 
 function GpWiseKpiApprovalPage() {
   const [formData, setFormData] = useState({ decision: "", remarks: "" });
@@ -23,7 +24,7 @@ function GpWiseKpiApprovalPage() {
       const url = `/api/v1/soepr-kpi-approvals/update/${submitted_id}`;
       const response = await API.put(url, body);
       console.log(response.data);
-      tst.success("Form submitted successfully");
+      showAlert("Form submitted successfully", "success");
     } catch (error) {
       tst.error("Failed to submit form");
       console.log(error);
