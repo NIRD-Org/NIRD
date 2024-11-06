@@ -196,7 +196,7 @@ export const createPoa1 = CatchAsyncError(async (req, res, next) => {
         status: "1",
         poaData: filteredEntries,
         poa2_created_at,
-        created_at: new Date(), // Ensure created_at is set correctly
+        created_at: req.query.created_at, // Ensure created_at is set correctly
       });
       await poa1.save();
     }

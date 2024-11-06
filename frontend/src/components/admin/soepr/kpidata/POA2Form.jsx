@@ -16,21 +16,6 @@ import {
 import { tst } from "@/lib/utils";
 import { showAlert } from "@/utils/showAlert";
 
-const months = [
-  { name: "January", days: 31 },
-  { name: "February", days: 28 }, // Adjust for leap years if needed
-  { name: "March", days: 31 },
-  { name: "April", days: 30 },
-  { name: "May", days: 31 },
-  { name: "June", days: 30 },
-  { name: "July", days: 31 },
-  { name: "August", days: 31 },
-  { name: "September", days: 30 },
-  { name: "October", days: 31 },
-  { name: "November", days: 30 },
-  { name: "December", days: 31 },
-];
-
 const planOfDayOptions = {
   "Functioning of Gram Panchayats/ Gram Sabhas": [
     "Observe Ward Sabhas",
@@ -80,23 +65,44 @@ const planOfDayOptions = {
 };
 
 const POA2Form = ({ update }) => {
-  const currentMonthIndex = new Date().getMonth();
   const currentYear = new Date().getFullYear();
+
+  const months = [
+    { name: "January", days: 31 },
+    { name: "February", days: currentYear % 4 === 0 ? 29 : 28 }, // Leap year check
+    { name: "March", days: 31 },
+    { name: "April", days: 30 },
+    { name: "May", days: 31 },
+    { name: "June", days: 30 },
+    { name: "July", days: 31 },
+    { name: "August", days: 31 },
+    { name: "September", days: 30 },
+    { name: "October", days: 31 },
+    { name: "November", days: 30 },
+    { name: "December", days: 31 },
+  ];
+
   const { id: poalId } = useParams();
   const [selectedState, setSelectedState] = useState();
   const [plans, setPlans] = useState({});
   const [selectedDistricts, setSelectedDistricts] = useState({});
   const [formDataState, setFormData] = useState([]);
-  const selectedMonth = months[currentMonthIndex];
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const { soeprState: states, soeprDist: districts } = useSoeprLocation({
     state_id: selectedState,
   });
-  const [isEditableOn16th, setIsEditableOn16th] = useState(false);
-  const [isEditableOnLastDay, setIsEditableOnLastDay] = useState(false);
+  const [isEditableOn16th, setIsEditableOn16th] = useState(true);
+  const [isEditableOnLastDay, setIsEditableOnLastDay] = useState(true);
+
+  function getSubmissionDate(day, year = new Date().getFullYear()) {
+    return new Date(Date.UTC(year, selectedMonth, day));
+  }
+
+  const submissionDate = getSubmissionDate(14, 2024);
 
   // Determine the start and end date of the second fortnight
-  const startDate = new Date(currentYear, currentMonthIndex, 16);
-  const endDate = new Date(currentYear, currentMonthIndex, selectedMonth.days);
+  const startDate = new Date(currentYear, selectedMonth, 16);
+  const endDate = new Date(currentYear, selectedMonth, selectedMonth.days);
   const today = new Date();
 
   useEffect(() => {
@@ -104,8 +110,8 @@ const POA2Form = ({ update }) => {
     const isToday16th = today.getDate() >= 16;
     const isTodayLastDay = today.getDate() === selectedMonth.days;
 
-    setIsEditableOn16th(isToday16th);
-    setIsEditableOnLastDay(isTodayLastDay);
+    setIsEditableOn16th(true);
+    setIsEditableOnLastDay(true);
   }, [today, selectedMonth]);
 
   const [loading, setLoading] = useState(false);
@@ -133,7 +139,7 @@ const POA2Form = ({ update }) => {
 
   const getDaysInMonth = () => {
     const startDay = 16;
-    const endDay = selectedMonth.days;
+    const endDay = months[selectedMonth].days;
     return Array.from(
       { length: endDay - startDay + 1 },
       (_, i) => i + startDay
@@ -141,15 +147,14 @@ const POA2Form = ({ update }) => {
   };
 
   const getWeekDay = (day) => {
-    const date = new Date(`${selectedMonth.name} ${day}, ${currentYear}`);
+    const date = new Date(currentYear, selectedMonth, day);
     return date.toLocaleDateString("en-IN", { weekday: "long" });
   };
 
   const formatIndianDate = (day) => {
-    const date = new Date(`${selectedMonth.name} ${day}, ${currentYear}`);
+    const date = new Date(currentYear, selectedMonth, day);
     return date.toLocaleDateString("en-IN");
   };
-
   const handlePlanChange = (day, selectedPlan) => {
     setPlans((prev) => ({ ...prev, [day]: selectedPlan }));
     setSelectedActions((prev) => ({ ...prev, [day]: "" }));
@@ -211,7 +216,7 @@ const POA2Form = ({ update }) => {
       });
 
       await API.post(
-        `/api/v1/poa1/create?poa2_created_at=${Date.now()}`,
+        `/api/v1/poa1/create?created_at=${submissionDate}`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -232,7 +237,7 @@ const POA2Form = ({ update }) => {
         Second Fortnightly Plan Of Action - Month : {selectedMonth.name}{" "}
         {currentYear}
       </AdminHeader>
-      <div style={{ margin: "15px 0", textAlign: "center" }}>
+      {/* <div style={{ margin: "15px 0", textAlign: "center" }}>
         <p
           style={{
             color: today < startDate || today > endDate ? "red" : "black",
@@ -241,8 +246,25 @@ const POA2Form = ({ update }) => {
           Available for Entry: {formatIndianDate(startDate)} -{" "}
           {formatIndianDate(endDate)}
         </p>
-      </div>
+      </div> */}
       <div style={{ marginBottom: "15px", display: "flex", gap: "10px" }}>
+        <div className="">
+          <label htmlFor="month-select" className="mr-2">
+            Select Month:
+          </label>
+          <select
+            id="month-select"
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(parseInt(e.target.value, 10))}
+            className="p-2 rounded"
+          >
+            {months.map((month, index) => (
+              <option key={index} value={index}>
+                {month.name}
+              </option>
+            ))}
+          </select>
+        </div>
         <div className="flex gap-2 items-center">
           <h4 className="text-primary font-semibold">State: </h4>
           <p className="font-semibold text-gray-700">{states[0]?.name}</p>

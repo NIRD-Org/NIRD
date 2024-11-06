@@ -7,10 +7,14 @@ import useThemes from "@/components/hooks/location/useThemes";
 import FormField from "@/components/ui/formfield";
 import { useYfLocation } from "@/components/hooks/useYfLocation";
 import { showAlert } from "@/utils/showAlert";
+import { useParams } from "react-router-dom";
+import { IoDocumentTextOutline } from "react-icons/io5";
 
 const GoodPracticeForm = ({ update = false }) => {
   const [pending, setPending] = useState(false);
   const [videoSource, setVideoSource] = useState("file");
+  const { id } = useParams();
+
   const [formData, setFormData] = useState({
     theme_id: "",
     state_id: "",
@@ -37,16 +41,50 @@ const GoodPracticeForm = ({ update = false }) => {
   const { themes } = useThemes();
 
   useEffect(() => {
-    setFormData((prevData) => ({ ...prevData, dist_id: "" }));
-  }, [formData.state_id]);
+    const fetchData = async () => {
+      try {
+        const {
+          data: { data },
+        } = await API.get(`/api/v1/good-practice/${id}`);
 
-  useEffect(() => {
-    setFormData((prevData) => ({ ...prevData, block_id: "" }));
-  }, [formData.dist_id]);
+        setFormData({
+          theme_id: data.theme_id || "",
+          state_id: data.state_id || "",
+          dist_id: data.dist_id || "",
+          block_id: data.block_id || "",
+          gp_id: data.gp_id || "",
+          financial_year: data.financial_year || "",
+          activityTitle: data.activityTitle || "",
+          images: data.images || [null],
+          document: data.document || null,
+          video: data.video || null,
+          videoURL: data.video || "",
+        });
 
-  useEffect(() => {
-    setFormData((prevData) => ({ ...prevData, gp_id: "" }));
-  }, [formData.block_id]);
+        // console.log(data);
+
+        setVideoSource("url");
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (update) {
+      fetchData();
+    }
+  }, [id, update]); // Added `update` dependency to ensure it runs when updating
+
+  // useEffect(() => {
+  //   setFormData((prevData) => ({ ...prevData, dist_id: "" }));
+  // }, [formData.state_id]);
+
+  // useEffect(() => {
+  //   setFormData((prevData) => ({ ...prevData, block_id: "" }));
+  // }, [formData.dist_id]);
+
+  // useEffect(() => {
+  //   setFormData((prevData) => ({ ...prevData, gp_id: "" }));
+  // }, [formData.block_id]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -97,7 +135,7 @@ const GoodPracticeForm = ({ update = false }) => {
       });
 
       if (update) {
-        await API.put(`/api/v1/good-practice/${formData.id}`, formDataToSend, {
+        await API.put(`/api/v1/good-practice/${id}`, formDataToSend, {
           headers: { "Content-Type": "multipart/form-data" },
         });
       } else {
@@ -113,6 +151,15 @@ const GoodPracticeForm = ({ update = false }) => {
     } finally {
       setPending(false);
     }
+  };
+
+  const handleRemoveImage = (index) => {
+    if (formData.images.length <= 1) return;
+    const updatedImages = formData.images.filter((_, i) => i !== index);
+    setFormData((prev) => ({
+      ...prev,
+      images: updatedImages,
+    }));
   };
 
   const fields = [
@@ -186,26 +233,18 @@ const GoodPracticeForm = ({ update = false }) => {
       type: "text",
       required: true,
     },
-    // {
-    //   label: "Upload Photo for Display",
-    //   name: "image",
-    //   type: "file",
-    //   required: !update,
-    // },
-    {
+  ];
+
+  if (!update) {
+    const data = {
       label: "Upload Document",
       name: "document",
       type: "file",
       accept: "application/pdf,.pdf",
       required: !update,
-    },
-    // {
-    //   label: "Upload Video",
-    //   name: "video",
-    //   type: "file",
-    //   required: !update,
-    // },
-  ];
+    };
+    fields.push(data);
+  }
 
   if (!themes) return;
 
@@ -218,7 +257,7 @@ const GoodPracticeForm = ({ update = false }) => {
         onSubmit={handleSubmit}
         className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"
       >
-        {fields.map((field) => (
+        {fields?.map((field) => (
           <FormField
             key={field.name}
             {...field}
@@ -230,25 +269,90 @@ const GoodPracticeForm = ({ update = false }) => {
         ))}
 
         {/* Image Upload Section */}
-        <div className="col-span-1 md:col-span-2 lg:col-span-3">
-          {formData.images.map((_, idx) => (
-            <FormField
-              key={`image-${idx}`}
-              label={`Upload Image ${idx + 1}`}
-              name="images"
-              type="file"
-              accept="image/*"
-              required={idx === 0}
-              disabled={pending}
-              onFileChange={(e) => handleFileChange(e, idx)}
-            />
-          ))}
-          <Button type="button" onClick={handleAddImageField} className="mt-2">
-            Add Another Image
-          </Button>
-        </div>
+        {!update ? (
+          <div className="col-span-1 md:col-span-2 lg:col-span-3">
+            {formData?.images?.map((_, idx) => (
+              <div className="flex items-center gap-10">
+                <FormField
+                  key={`image-${idx}`}
+                  label={`Upload Image ${idx + 1}`}
+                  name="images"
+                  type="file"
+                  accept="image/*"
+                  required={idx === 0}
+                  disabled={pending}
+                  onFileChange={(e) => handleFileChange(e, idx)}
+                />
+                <Button
+                  type="button"
+                  onClick={() => handleRemoveImage(idx)}
+                  className="mt-7"
+                >
+                  Remove
+                </Button>
+              </div>
+            ))}
+            <Button
+              type="button"
+              onClick={handleAddImageField}
+              className="mt-2"
+            >
+              Add Another Image
+            </Button>
+          </div>
+        ) : (
+          <div className="col-span-1 md:col-span-2 lg:col-span-3">
+            <h3 className="font-semibold mb-2">Image Previews</h3>
+            {formData.images.map((image, idx) => (
+              <div key={`image-preview-${idx}`} className="mb-4">
+                {image && (
+                  <div className="mb-2">
+                    {typeof image === "string" ? (
+                      <img
+                        src={image}
+                        alt={`Preview ${idx + 1}`}
+                        className="w-fit max-h-40 object-contain"
+                      />
+                    ) : (
+                      <p className="text-sm text-gray-500">
+                        New image selected for upload
+                      </p>
+                    )}
+                  </div>
+                )}
+                <div className="flex items-center gap-10">
+                  <FormField
+                    label={`Replace Image ${idx + 1}`}
+                    name={`image-${idx}`}
+                    type="file"
+                    accept="image/*"
+                    disabled={pending}
+                    onFileChange={(e) => handleFileChange(e, idx)}
+                  />
+                  <Button
+                    type="button"
+                    onClick={() => handleRemoveImage(idx)}
+                    className="mt-7"
+                  >
+                    Remove
+                  </Button>
+                </div>
+              </div>
+            ))}
+            <Button
+              type="button"
+              onClick={handleAddImageField}
+              className="mt-2"
+            >
+              Add Another Image
+            </Button>
+          </div>
+        )}
+
+        {/* Image Preview and Upload Section */}
+
         {/* Video Upload Section */}
-        <div className="col-span-1 md:col-span-2 lg:col-span-3">
+        <div className="col-span-1">
           <div className="flex items-center gap-10">
             <label>
               <input
@@ -272,7 +376,7 @@ const GoodPracticeForm = ({ update = false }) => {
             </label>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 mt-5">
+          <div className="mt-5">
             {videoSource === "file" ? (
               <FormField
                 label="Upload Video"
@@ -296,6 +400,40 @@ const GoodPracticeForm = ({ update = false }) => {
             )}
           </div>
         </div>
+
+        {update && (
+          <div className="col-span-1">
+            {/* <h3 className="font-semibold mb-2">Document Preview</h3> */}
+            {formData.document && (
+              <div className="mb-4">
+                {typeof formData.document === "string" ? (
+                  <a
+                    href={formData.document}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 underline flex gap-2 items-center"
+                  >
+                    <IoDocumentTextOutline className="font-bold text-xl" />{" "}
+                    Document
+                  </a>
+                ) : (
+                  <p className="text-sm text-gray-500">
+                    New document selected for upload
+                  </p>
+                )}
+              </div>
+            )}
+            <FormField
+              label="Document"
+              name="document"
+              type="file"
+              accept="application/pdf"
+              disabled={pending}
+              onFileChange={handleFilesChange}
+            />
+          </div>
+        )}
+        <div></div>
         <Button pending={pending} type="submit" className="px-20 self-end">
           {update ? "Update" : "Submit"}
         </Button>

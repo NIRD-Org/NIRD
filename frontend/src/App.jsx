@@ -137,6 +137,7 @@ import YFPoa4FormSep from "./components/admin/young-fellow/Poa/sept/YFPoa4FormSe
 import UpdateYfPOA1Form from "./components/admin/young-fellow/Poa/UpdateYfPOA1Form";
 import SoeprWiseKpiApprovalList from "./components/admin/action/admin/soepr-gp-wise-kpi/list";
 import SoeprWiseKpiApprovalView from "./components/admin/action/admin/soepr-gp-wise-kpi/view";
+import GoodPracticesList from "./components/admin/young-fellow/goodpractices/GoodPracticesList";
 
 function App() {
   const { login } = useAuthContext();
@@ -164,6 +165,8 @@ function App() {
           <Route path="gp-profile/details" element={<GramPanchayatProfile />} />
           <Route path="/yf-insights" element={<YfInsightsPage />} />
           <Route path="good-practices" element={<GoodPractices />} />
+          <Route path="good-practices/list" element={<GoodPracticesList />} />
+
           <Route path="low-cost-voluntary-activities" element={<LCVAPage />} />
           <Route path="training" element={<TrainingPage />} />
           <Route path="test" element={<AchievementChart />} />
@@ -424,6 +427,10 @@ function App() {
 
             <Route path="good-practices" element={<GoodPracticeForm />} />
             <Route
+              path="edit/good-practice/:id"
+              element={<GoodPracticeForm update={true} />}
+            />
+            <Route
               path="action/admin/good-practice"
               element={<GoodPracticeApprovalsList />}
             />
@@ -441,12 +448,14 @@ function App() {
             />
 
             <Route path="lcvas" element={<LCVAForm />} />
+            <Route path="edit/lcva/:id" element={<LCVAForm update={true} />} />
             <Route path="action/admin/lcva" element={<LCVAApprovalsList />} />
             <Route path="approve/lcva/:id" element={<LCVAApprovalPage />} />
             <Route path="view/lcva/:id" element={<LCVAViewDetails />} />
             <Route path="resubmit/lcva/:id" element={<LCVAResubmit />} />
 
             <Route path="gp-details" element={<GpDetailsForm />} />
+
             <Route
               path="action/admin/gp-details"
               element={<GpDetailsApprovalsList />}

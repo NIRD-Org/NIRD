@@ -16,21 +16,6 @@ import {
 import { tst } from "@/lib/utils";
 import { showAlert } from "@/utils/showAlert";
 
-const months = [
-  { name: "January", days: 31 },
-  { name: "February", days: 28 }, // Adjust for leap years if needed
-  { name: "March", days: 31 },
-  { name: "April", days: 30 },
-  { name: "May", days: 31 },
-  { name: "June", days: 30 },
-  { name: "July", days: 31 },
-  { name: "August", days: 31 },
-  { name: "September", days: 30 },
-  { name: "October", days: 31 },
-  { name: "November", days: 30 },
-  { name: "December", days: 31 },
-];
-
 const planOfDayOptions = {
   "Functioning of Gram Panchayats/ Gram Sabhas": [
     "Observe Ward Sabhas",
@@ -80,21 +65,42 @@ const planOfDayOptions = {
 };
 
 const POA1Form = ({ update }) => {
-  const currentMonthIndex = new Date().getMonth();
   const currentYear = new Date().getFullYear();
+
+  const months = [
+    { name: "January", days: 31 },
+    { name: "February", days: currentYear % 4 === 0 ? 29 : 28 }, // Leap year check
+    { name: "March", days: 31 },
+    { name: "April", days: 30 },
+    { name: "May", days: 31 },
+    { name: "June", days: 30 },
+    { name: "July", days: 31 },
+    { name: "August", days: 31 },
+    { name: "September", days: 30 },
+    { name: "October", days: 31 },
+    { name: "November", days: 30 },
+    { name: "December", days: 31 },
+  ];
+
   const { id: poalId } = useParams();
   const [selectedState, setSelectedState] = useState();
   const [plans, setPlans] = useState({});
   const [selectedDistricts, setSelectedDistricts] = useState({});
   const [formDataState, setFormData] = useState([]);
-  const selectedMonth = months[currentMonthIndex];
   const { soeprState: states, soeprDist: districts } = useSoeprLocation({
     state_id: selectedState,
   });
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const [loading, setLoading] = useState(false);
 
   const [selectedActions, setSelectedActions] = useState({});
   const lastDayOfFortnight = 15; // Last day of the first fortnight
+
+  function getSubmissionDate(day, year = new Date().getFullYear()) {
+    return new Date(Date.UTC(year, selectedMonth, day));
+  }
+
+  const submissionDate = getSubmissionDate(14, 2024);
 
   useEffect(() => {
     setSelectedState(states?.[0]?.id);
@@ -118,12 +124,12 @@ const POA1Form = ({ update }) => {
     Array.from({ length: lastDayOfFortnight }, (_, i) => i + 1);
 
   const getWeekDay = (day) => {
-    const date = new Date(`${selectedMonth.name} ${day}, ${currentYear}`);
+    const date = new Date(currentYear, selectedMonth, day);
     return date.toLocaleDateString("en-IN", { weekday: "long" });
   };
 
   const formatIndianDate = (day) => {
-    const date = new Date(`${selectedMonth.name} ${day}, ${currentYear}`);
+    const date = new Date(currentYear, selectedMonth, day);
     return date.toLocaleDateString("en-IN");
   };
 
@@ -186,9 +192,13 @@ const POA1Form = ({ update }) => {
         );
       });
 
-      await API.post("/api/v1/poa1/create", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      await API.post(
+        `/api/v1/poa1/create?created_at=${submissionDate}`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
 
       showAlert("Form submitted successfully!", "success");
     } catch (error) {
@@ -201,10 +211,34 @@ const POA1Form = ({ update }) => {
   return (
     <div style={{ fontSize: "14px", maxWidth: "100%", margin: "0 auto" }}>
       <AdminHeader>
-        First Fortnightly Plan Of Action - Month : {selectedMonth.name}{" "}
+        First Fortnightly Plan Of Action - Month : {months[selectedMonth].name}{" "}
         {currentYear}
       </AdminHeader>
-      <div style={{ marginBottom: "15px", display: "flex", gap: "10px" }}>
+      <div
+        style={{
+          marginBottom: "15px",
+          display: "flex",
+          gap: "10px",
+          alignItems: "center",
+        }}
+      >
+        <div className="">
+          <label htmlFor="month-select" className="mr-2">
+            Select Month:
+          </label>
+          <select
+            id="month-select"
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(parseInt(e.target.value, 10))}
+            className="p-2 rounded"
+          >
+            {months.map((month, index) => (
+              <option key={index} value={index}>
+                {month.name}
+              </option>
+            ))}
+          </select>
+        </div>
         <div className="flex gap-2 items-center">
           <h4 className="text-primary font-semibold">State: </h4>
           <p className="font-semibold text-gray-700">{states[0]?.name}</p>

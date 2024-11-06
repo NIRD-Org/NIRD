@@ -474,34 +474,95 @@ export const getGoodPracticeById = CatchAsyncError(async (req, res, next) => {
   }
 });
 
+// export const updateGoodPractice = CatchAsyncError(async (req, res, next) => {
+//   try {
+//     const { id } = req.params;
+//     const { goodPracticePhotos, goodPracticeDesign } = req.files || {};
+//     req.body.decision = 0;
+
+//     const updatedGoodPractice = await GoodPractice.findOneAndUpdate(
+//       { id },
+//       req.body,
+//       {
+//         new: true,
+//         runValidators: true,
+//       }
+//     );
+
+//     if (!updatedGoodPractice) {
+//       return next(new Errorhandler("Good Practice not found", 404));
+//     }
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Good Practice updated successfully",
+//       data: updatedGoodPractice,
+//     });
+//   } catch (error) {
+//     console.log(error);
+//     return next(new Errorhandler("Failed to update Good Practice", 500));
+//   }
+// });
+
 export const updateGoodPractice = CatchAsyncError(async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { goodPracticePhotos, goodPracticeDesign } = req.files || {};
-    req.body.decision = 0;
+    const { videoURL } = req.body;
 
-    /*  if (goodPracticePhotos) {
-      const goodPracticePhotosUrl = await uploadFile(goodPracticePhotos.data);
-      req.body.goodPracticePhotos = goodPracticePhotosUrl;
+    // Collect existing image URLs from req.body if they start with "http"
+    const existingImageUrls = Object.keys(req.body)
+      .filter(
+        (key) => key.startsWith("images[") && req.body[key].startsWith("http")
+      )
+      .map((key) => req.body[key]);
+
+    // Collect new binary images from req.files for uploading
+    const newImageKeys = Object.keys(req.files || {}).filter((key) =>
+      key.startsWith("images[")
+    );
+    const newImages = newImageKeys
+      .map((key) => req.files[key])
+      .filter((file) => file.mimetype); // Only keep files with a mimetype (binary)
+
+    const { document, video } = req.files || {};
+
+    // Upload new binary images and document if provided
+    const [newImageUrls, docUrl] = await Promise.all([
+      Promise.all(newImages.map((img) => uploadFile(img.data))),
+      document ? uploadPDF(document.data) : null,
+    ]);
+
+    let videoUrl;
+    if (videoURL) {
+      videoUrl = videoURL;
+    } else if (video) {
+      videoUrl = await uploadFile(video.data);
     }
 
-    if (goodPracticeDesign) {
-      const goodPracticeDesignUrl = await uploadFile(goodPracticeDesign.data);
-      req.body.goodPracticeDesign = goodPracticeDesignUrl;
-    } */
+    // Retrieve existing Good Practice record to get current images if needed
+    const currentGoodPractice = await GoodPractice.findOne({ id });
+    if (!currentGoodPractice) {
+      return next(new Errorhandler("Good Practice not found", 404));
+    }
+
+    // Combine existing URLs, new URLs from frontend, and newly uploaded images
+    const updatedImages = existingImageUrls.concat(newImageUrls);
+
+    const updateData = {
+      ...req.body,
+      images: updatedImages, // Use combined array of old URLs and new uploaded images
+      document: docUrl || currentGoodPractice.document, // Update document if provided
+      video: videoUrl || currentGoodPractice.video, // Update video if provided
+    };
 
     const updatedGoodPractice = await GoodPractice.findOneAndUpdate(
       { id },
-      req.body,
+      updateData,
       {
         new: true,
         runValidators: true,
       }
     );
-
-    if (!updatedGoodPractice) {
-      return next(new Errorhandler("Good Practice not found", 404));
-    }
 
     res.status(200).json({
       success: true,

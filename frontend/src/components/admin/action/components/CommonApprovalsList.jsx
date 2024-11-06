@@ -23,6 +23,7 @@ const CommonApprovalsList = ({
   redirect,
   master,
   normal,
+  edit,
 }) => {
   const [searchParams] = useSearchParams();
   const dist_id = searchParams.get("dist_id") || "";
@@ -168,7 +169,7 @@ const CommonApprovalsList = ({
                           : "Sent back for Modification"}
                       </TableCell>
                     )}
-                    {!normal && (
+                    {(!normal || edit) && (
                       <TableCell>
                         <div className="flex items-center gap-3">
                           {approval.decision == 0 && user.role == 2 && (
@@ -214,6 +215,20 @@ const CommonApprovalsList = ({
                                 <NirdEditIcon />
                               </span>
                             )}
+
+                          {(user.role == 2 || user.role == 3) && edit && (
+                            <span
+                              onClick={() =>
+                                navigate(
+                                  `/admin/edit/${redirect}/${
+                                    master ? approval.submitted_id : approval.id
+                                  }`
+                                )
+                              }
+                            >
+                              <NirdEditIcon />
+                            </span>
+                          )}
                           <span
                             onClick={() =>
                               navigate(
