@@ -23,6 +23,8 @@ export const getSidebarItems = (user) => {
     return sidebarItems;
   }
 
+  
+
   if (user.role == 4 || user.role == 5) {
     sidebarItems = [
       {
@@ -157,6 +159,50 @@ export const getSidebarItems = (user) => {
             },
           ],
         },
+        {
+          type: "module",
+          icon: ArrowBigRight,
+          title: "Plan Of Action",
+          submodules: [
+            // {
+            //   type: "sub-module",
+            //   icon: ArrowBigRight,
+            //   title: "KPI-POA(Trial)",
+            //   link: "/admin/yf/plan-of-action",
+            // },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "View POA",
+              link: "/admin/yf/POAView",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "POA1",
+              link: "/admin/PMU/poa1",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "POA2",
+              link: "/admin/PMU/poa2",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "POA3",
+              link: "/admin/PMU/poa3",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "POA4",
+              link: "/admin/PMU/poa4",
+            },
+          ],
+        },
+
         {
           type: "module",
           icon: ArrowBigRight,
@@ -643,8 +689,139 @@ export const getSidebarItems = (user) => {
           ],
         },
       ];
-  }
+  
+  break;
+  case 6:
+    sidebarItems = [
+      {
+        type: "module",
+        icon: ArrowBigRight,
+        title: "Access Management",
+        submodules: [
+          
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "All Users",
+            link: "/admin/users/",
+          },
+        ],
+      },
+      {
+        type: "module",
+        icon: ArrowBigRight,
+        title: "Model GP Clusters",
+        submodules: [
+         
 
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "View YF POA Reports",
+            link: "/admin/yf/poa1-data",
+          },
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "YF POA Defaulters List ",
+            link: "/admin/soepr/poa-report",
+          },
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "YF POA Submission Status ",
+            link: "/admin/soepr/pOAreport",
+          },
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "View SPC POA Reports",
+            link: "/admin/yf/poa1-data",
+          },
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "SPC POA Defaulters List ",
+            link: "/admin/soepr/poa-report",
+          },
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "SPC POA Submission Status ",
+            link: "/admin/soepr/pOAreport",
+          },
+        ],
+      },
+      {
+        type: "module",
+        icon: ArrowBigRight,
+        title: "SOEPR",
+        submodules: [
+         
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "SOEPR POA Reports",
+            link: "/admin/soepr/poa1-data",
+          },
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "POA Defaulters List ",
+            link: "/admin/soepr/poa-report",
+          },
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "POA Statewise Submission Status ",
+            link: "/admin/soepr/pOAreport",
+          },
+        ],
+      },
+      {
+        type: "module",
+        icon: ArrowBigRight,
+        title: "PMU",
+        submodules: [
+         
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "PMU POA Reports",
+            link: "/admin/soepr/poa1-data",
+          },
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "POA Defaulters List ",
+            link: "/admin/soepr/poa-report",
+          },
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "POA Submission Status ",
+            link: "/admin/soepr/pOAreport",
+          },
+        ],
+      },
+      {
+        type: "module",
+        icon: ArrowBigRight,
+        title: "Attendance",
+        submodules: [
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "View Attendance",
+            link: "/admin/view/attendance",
+          },
+        ],
+      },
+
+  
+      
+    ];
+  }
   return sidebarItems;
 };
 
