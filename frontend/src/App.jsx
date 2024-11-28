@@ -13,6 +13,7 @@ import { Toaster } from "react-hot-toast";
 import LoginPage from "./Pages/LoginPage";
 import RegisterPage from "./Pages/RegisterPage";
 import ProjectPage from "./Pages/ProjectPage";
+import KeyPartners from "./Pages/KeyPartners";
 import Home from "./Pages/Home";
 import KPIPage from "./Pages/KPIPage";
 import CreateUserForm from "./components/admin/create-user/CreateUserForm";
@@ -138,6 +139,16 @@ import UpdateYfPOA1Form from "./components/admin/young-fellow/Poa/UpdateYfPOA1Fo
 import SoeprWiseKpiApprovalList from "./components/admin/action/admin/soepr-gp-wise-kpi/list";
 import SoeprWiseKpiApprovalView from "./components/admin/action/admin/soepr-gp-wise-kpi/view";
 import GoodPracticesList from "./components/admin/young-fellow/goodpractices/GoodPracticesList";
+import YFActivities from "./Pages/YFActivities";
+import OSR from "./Pages/OSR";
+import PMUPOA1 from "./components/admin/poa/pmupoa1";
+import PMUPOA2 from "./components/admin/poa/pmupoa2";
+import PMUPOA3 from "./components/admin/poa/pmupoa3";
+import PMUPOA4 from "./components/admin/poa/pmupoa4";
+import Soeprhome from "./Pages/SoeprHome";
+import PgpHome from "./Pages/PgpHome";
+
+
 
 function App() {
   const { login } = useAuthContext();
@@ -151,6 +162,9 @@ function App() {
       <Route>
         <Route path="/" element={<Layout />}>
           <Route path="/" element={<Home />} />
+          <Route path="/pgp" element={<PgpHome />} />
+
+          <Route path="/soepr" element={<Soeprhome />} />
           <Route path="/kpi" element={<KPIPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -159,6 +173,9 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/gp-profile" element={<KPIDetails />} />
           <Route path="project" element={<ProjectPage />} />
+          <Route path="KeyPartners" element={<KeyPartners />} />
+          <Route path="OSR" element={<OSR />} />
+          <Route path="YFActivities" element={<YFActivities />} />
           <Route path="/gp-wise-data/theme/:id" element={<ThemeDataPage />} />
           <Route path="/gp-wise-data/theme10" element={<Theme10DataPage />} />
 
@@ -179,6 +196,8 @@ function App() {
             path="/low-cost-activities/:activity/:id"
             element={<LcvaDetails />}
           />
+
+          
           <Route path="/admin" element={<AdminPage />}>
             <Route index element={<AdminMainPage />} />
             <Route path="view/attendance" element={<ViewAttendance />} />
@@ -196,6 +215,10 @@ function App() {
               path="soepr/attendance/view"
               element={<ConsolidatedViewPage />}
             />
+            <Route path="PMU/poa1" element={<PMUPOA1/>} />
+            <Route path="PMU/poa2" element={<PMUPOA2/>} />
+            <Route path="PMU/poa3" element={<PMUPOA3/>} />
+            <Route path="PMU/poa4" element={<PMUPOA4/>} />
             <Route path="soepr/plan-of-action" element={<POA />} />
             <Route path="soepr/POA1" element={<POA1 />} />
             <Route path="soepr/POAreport" element={<PoaReportcount />} />

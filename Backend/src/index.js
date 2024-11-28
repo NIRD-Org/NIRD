@@ -33,6 +33,7 @@ import soeprStateRoutes from "./routes/soeprStateRoutes.js";
 import soeprDistrictRoutes from "./routes/soeprDistrictRoutes.js";
 import poa1Routes from "./routes/poa1Routes.js";
 import yfPoa1Routes from "./routes/YfPoa1Routes.js";
+import pmupoaRoutes from "./routes/pmupoaRoutes.js"
 // import { migrateFilesToS3 } from "./awsMigration.js";
 
 const app = express();
@@ -69,6 +70,8 @@ app.use("/api/v1/good-practice", goodPracticeRoutes);
 app.use("/api/v1/lcva", LCVARoutes);
 app.use("/api/v1/am-upload", amRoutes);
 app.use("/api/v1/pm-upload", pmRoutes);
+app.use("/api/v1/pmu-poa", pmupoaRoutes);
+
 
 // Soepr
 app.use("/api/v1/soepr-theme", soeprThemesRoutes);
