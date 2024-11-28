@@ -11,31 +11,43 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout code
       - name: Checkout code
         uses: actions/checkout@v2
 
+      # Step 2: Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "20"
 
-      - name: Install AWS CLI
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y awscli
+      # Step 3: Deploy using SSH
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DNS }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            set -e
+            echo "Starting deployment"
 
-      - name: Configure AWS CLI
-        run: |
-          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws configure set region ap-south-1
+            # Navigate to project directory
+            cd /home/ubuntu/NIRD
 
-      - name: Deploy to EC2
-        run: |
-          aws ssm send-command \
-            --document-name "AWS-RunShellScript" \
-            --targets '[{"Key":"tag:Name","Values":["<EC2_INSTANCE_TAG_NAME>"]}]' \
-            --comment "Deploying website" \
-            --parameters '{"commands":["set -e && cd /home/ubuntu/NIRD && git pull origin main && cd frontend && npm install && npm run build && sudo cp -R dist/ /var/www/vhosts/frontend/ && cd ../Backend && npm install && pm2 restart default"]}' \
-            --timeout-seconds 600 \
-            --output text
+            # Pull latest code
+            git pull origin main
+
+            # Frontend: Install dependencies, build, and copy files
+            cd frontend
+            npm install
+            npm run build
+            sudo cp -R dist/ /var/www/vhosts/frontend/
+
+            # Backend: Install dependencies, build, and restart server
+            cd ../Backend
+            npm install
+            npm run build
+            pm2 restart default
+
+            echo "Deployment completed successfully"
