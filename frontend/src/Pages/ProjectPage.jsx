@@ -78,7 +78,7 @@ const ProjectOverviewPage = () => {
         <p className="text-justify text-md leading-relaxed text-gray-700">
           Spanning a diverse range of geographic and demographic regions, the
           project ensures that selected clusters represent India's rural
-          realities. Gram Panchayats were chosen based on:-
+          realities. Gram Panchayats were chosen based on:
         </p>
         <ul className="list-disc px-10 py-4 text-md leading-relaxed text-gray-700">
           <li>Population size (up to 30,000 individuals per cluster).</li>
@@ -100,7 +100,7 @@ const ProjectOverviewPage = () => {
         </div>
         <p className="text-justify text-md leading-relaxed text-gray-700">
           The project aims to transform governance structures in Gram Panchayats
-          by focusing on:-
+          by focusing on:
         </p>
         <ul className="list-disc px-10 py-4 text-md leading-relaxed text-gray-700">
           <li>
