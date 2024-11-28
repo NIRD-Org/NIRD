@@ -434,6 +434,18 @@ export const getSidebarItems = (user) => {
         },
         {
           type: "module",
+          title: "Plan Of Action",
+          submodules: [
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "POA1",
+              link: "/admin/spc/POA1",
+            },
+          ],
+        },
+        {
+          type: "module",
           title: "Training",
           submodules: [
             {

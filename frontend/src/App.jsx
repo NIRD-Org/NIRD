@@ -147,6 +147,7 @@ import PMUPOA3 from "./components/admin/poa/pmupoa3";
 import PMUPOA4 from "./components/admin/poa/pmupoa4";
 import Soeprhome from "./Pages/SoeprHome";
 import PgpHome from "./Pages/PgpHome";
+import SPCPoa1Form from "./components/admin/young-fellow/Poa/SPCPoa1Form";
 
 
 
@@ -248,6 +249,8 @@ function App() {
             <Route path="yf/POA2/sep" element={<YFPoa2FormSep />} />
             <Route path="yf/POA3/sep" element={<YFPoa3FormSep />} />
             <Route path="yf/POA4/sep" element={<YFPoa4FormSep />} />
+            <Route path="Spc/POA1" element={<SPCPoa1Form />} />
+
             <Route
               path="yf/POA1/edit/:id"
               element={<UpdateYfPOA1Form update />}
