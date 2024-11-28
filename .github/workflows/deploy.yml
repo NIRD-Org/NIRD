@@ -31,6 +31,7 @@ jobs:
           script: |
             set -e
             echo "Starting deployment"
+            export PATH=$PATH:/home/ubuntu/.nvm/versions/node/v20.16.0/bin
 
             # Navigate to project directory
             cd /home/ubuntu/NIRD
@@ -47,7 +48,6 @@ jobs:
             # Backend: Install dependencies, build, and restart server
             cd ../Backend
             npm install
-            npm run build
             pm2 restart default
 
             echo "Deployment completed successfully"
