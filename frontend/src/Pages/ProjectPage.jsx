@@ -1,4 +1,9 @@
-import { FaLightbulb, FaProjectDiagram, FaUsers, FaMapMarkedAlt } from "react-icons/fa";
+import {
+  FaLightbulb,
+  FaProjectDiagram,
+  FaUsers,
+  FaMapMarkedAlt,
+} from "react-icons/fa";
 
 const ProjectOverviewPage = () => {
   return (
@@ -9,7 +14,8 @@ const ProjectOverviewPage = () => {
           Creating 250 Model GP Clusters
         </h1>
         <p className="text-[#4a90e2] text-lg font-medium mt-2">
-          Transforming Gram Panchayats through innovation, governance, and sustainability.
+          Transforming Gram Panchayats through innovation, governance, and
+          sustainability.
         </p>
       </div>
 
@@ -24,18 +30,16 @@ const ProjectOverviewPage = () => {
           long been a challenge despite multiple interventions through programs
           like BRGF, RGPSA, and RGSA. These programs have highlighted the need
           for focused efforts to empower GPs, enabling them to address
-          development challenges effectively. Quality GPDP preparation remains
-          a significant gap, limiting the impact of rural development
-          initiatives.
+          development challenges effectively. Quality GPDP preparation remains a
+          significant gap, limiting the impact of rural development initiatives.
         </p>
         <p className="text-justify text-md leading-relaxed text-gray-700 mt-4">
           The project for <b>"Creating 250 Model GP Clusters"</b> is a response
           to these challenges. By developing models that showcase good
-          governance, sustainability, and innovative practices, the project
-          aims to inspire replication across India's vast network of GPs. The
+          governance, sustainability, and innovative practices, the project aims
+          to inspire replication across India's vast network of GPs. The
           rationale focuses on enhancing institutional capacity while fostering
-          localized solutions aligned with Sustainable Development Goals
-          (SDGs).
+          localized solutions aligned with Sustainable Development Goals (SDGs).
         </p>
       </div>
 
@@ -43,7 +47,9 @@ const ProjectOverviewPage = () => {
       <div className="bg-white shadow-xl rounded-lg p-10 mb-10 transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
         <div className="flex items-center mb-6">
           <FaProjectDiagram className="text-[#004B86] text-5xl mr-4" />
-          <h2 className="text-[#004B86] text-2xl font-semibold">Project Overview</h2>
+          <h2 className="text-[#004B86] text-2xl font-semibold">
+            Project Overview
+          </h2>
         </div>
         <p className="text-justify text-md leading-relaxed text-gray-700">
           The Ministry of Panchayati Raj (MoPR) launched this project under the
@@ -56,8 +62,8 @@ const ProjectOverviewPage = () => {
         <p className="text-justify text-md leading-relaxed text-gray-700 mt-4">
           Initially scheduled for 2020–22, the project's implementation was
           delayed due to COVID-19 and later extended to 2026. This extension
-          allows for continued guidance and refinement of thematic GPDPs, with
-          a focus on holistic development and inclusive governance.
+          allows for continued guidance and refinement of thematic GPDPs, with a
+          focus on holistic development and inclusive governance.
         </p>
       </div>
 
@@ -65,17 +71,21 @@ const ProjectOverviewPage = () => {
       <div className="bg-white shadow-xl rounded-lg p-10 mb-10 transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
         <div className="flex items-center mb-6">
           <FaMapMarkedAlt className="text-[#004B86] text-5xl mr-4" />
-          <h2 className="text-[#004B86] text-2xl font-semibold">Geographic Coverage</h2>
+          <h2 className="text-[#004B86] text-2xl font-semibold">
+            Geographic Coverage
+          </h2>
         </div>
         <p className="text-justify text-md leading-relaxed text-gray-700">
           Spanning a diverse range of geographic and demographic regions, the
           project ensures that selected clusters represent India's rural
-          realities. Gram Panchayats were chosen based on:
+          realities. Gram Panchayats were chosen based on:-
         </p>
         <ul className="list-disc px-10 py-4 text-md leading-relaxed text-gray-700">
           <li>Population size (up to 30,000 individuals per cluster).</li>
           <li>Contiguity to facilitate collective action and governance.</li>
-          <li>Inclusion in Mission Antyodaya clusters for holistic development.</li>
+          <li>
+            Inclusion in Mission Antyodaya clusters for holistic development.
+          </li>
           <li>Alignment with watershed-based planning approaches.</li>
         </ul>
       </div>
@@ -84,11 +94,13 @@ const ProjectOverviewPage = () => {
       <div className="bg-white shadow-xl rounded-lg p-10 mb-10 transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
         <div className="flex items-center mb-6">
           <FaUsers className="text-[#004B86] text-5xl mr-4" />
-          <h2 className="text-[#004B86] text-2xl font-semibold">Goals and Objectives</h2>
+          <h2 className="text-[#004B86] text-2xl font-semibold">
+            Goals and Objectives
+          </h2>
         </div>
         <p className="text-justify text-md leading-relaxed text-gray-700">
-          The project aims to transform governance structures in Gram
-          Panchayats by focusing on:
+          The project aims to transform governance structures in Gram Panchayats
+          by focusing on:
         </p>
         <ul className="list-disc px-10 py-4 text-md leading-relaxed text-gray-700">
           <li>
