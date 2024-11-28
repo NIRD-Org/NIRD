@@ -100,7 +100,7 @@ const ProjectOverviewPage = () => {
         </div>
         <p className="text-justify text-md leading-relaxed text-gray-700">
           The project aims to transform governance structures in Gram Panchayats
-          by focusing on:
+          by focusing on:-
         </p>
         <ul className="list-disc px-10 py-4 text-md leading-relaxed text-gray-700">
           <li>
