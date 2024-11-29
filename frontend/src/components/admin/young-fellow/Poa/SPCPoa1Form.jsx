@@ -62,6 +62,8 @@ const YFPoa1Form = ({ update }) => {
   const [rows, setRows] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const [loading, setLoading] = useState(false);
+  const [dataLoading, setDataLoading] = useState(false);
+
 
   const [states, setStates] = useState([]);
   const [allDistricts, setAllDistricts] = useState([]);
@@ -75,6 +77,119 @@ const YFPoa1Form = ({ update }) => {
   }
 
   const augustDate = getAugustDate(14, 2024);
+
+  const getAllDistricts = async (state) => {
+    try {
+      const { data } = await API.get(`/api/v1/dist/state/${state}`);
+      return data?.districts
+    } catch (error) {
+      console.log("Error gettign district");
+      return []
+    }
+  };
+
+  const getAllBlocks = async (district) => {
+    try {
+      const { data } = await API.get(`/api/v1/block/get?dist=${district}`);
+      return data?.blocks;
+    } catch (error) {
+      console.log("Error getting block");
+      return [];
+    }
+  };
+
+  const getAllGp = async (block) => {
+    try {
+      const { data } = await API.get(`/api/v1/gram/get?block=${block}`);
+      return data?.gram;
+    } catch (error) {
+      return []
+    }
+  };
+
+  
+//  const getAllLocations = async (statesArray) => {
+//    const districts = [];
+//    const blocks = [];
+//    const gps = [];
+//   setDataLoading(true)
+//    for (let state of statesArray) {
+//      // Fetch districts for the current state
+//      const stateDistricts = await getAllDistricts(state.id);
+//      districts.push(...stateDistricts);
+
+//      for (let district of stateDistricts) {
+//        // Fetch blocks for the current district
+//        const districtBlocks = await getAllBlocks(district.id);
+//        blocks.push(...districtBlocks);
+
+//        for (let block of districtBlocks) {
+//          // Fetch GPs for the current block
+//          const blockGps = await getAllGp(block.id);
+//          gps.push(...blockGps);
+//        }
+//      }
+//    }
+
+//    // Update state with collected data
+//    setAllDistricts(districts);
+//    setAllBlocks(blocks);
+//    setAllGps(gps);
+//    setDataLoading(false)
+//  };
+
+ 
+
+const fetchAllDistricts = async (statesArray) => {
+  const districtPromises = statesArray.map((state) =>
+    API.get(`/api/v1/dist/state/${state.id}`).then(
+      (res) => res.data?.districts || []
+    )
+  );
+  const districts = (await Promise.all(districtPromises)).flat();
+  return districts;
+};
+
+const fetchAllBlocks = async (districtsArray) => {
+  const blockPromises = districtsArray.map((district) =>
+    API.get(`/api/v1/block/get?dist=${district.id}`).then(
+      (res) => res.data?.blocks || []
+    )
+  );
+  const blocks = (await Promise.all(blockPromises)).flat();
+  return blocks;
+};
+
+const fetchAllGps = async (blocksArray) => {
+  const gpPromises = blocksArray.map((block) =>
+    API.get(`/api/v1/gram/get?block=${block.id}`).then(
+      (res) => res.data?.gram || []
+    )
+  );
+  const gps = (await Promise.all(gpPromises)).flat();
+  return gps;
+};
+
+const fetchLocations = async (statesArray) => {
+  setDataLoading(true)
+  try {
+    // Fetch all data concurrently at each level
+    const districts = await fetchAllDistricts(statesArray);
+    const blocks = await fetchAllBlocks(districts);
+    const gps = await fetchAllGps(blocks);
+
+    // Update state in batch after all data is fetched
+    setAllDistricts(districts);
+    setAllBlocks(blocks);
+    setAllGps(gps);
+  } catch (error) {
+    console.error("Error fetching locations", error);
+  } finally{
+    setDataLoading(false)
+  }
+};
+
+
 
   useEffect(() => {
     if (update) {
@@ -97,9 +212,7 @@ const YFPoa1Form = ({ update }) => {
       try {
         const response = await API.get("/api/v1/user-location");
         const data = response.data.data;
-        setAllDistricts(data.districts);
-        setAllBlocks(data.blocks);
-        setAllGps(data.gps);
+         fetchLocations(data.states);
         setStates(data.states);
       } catch (error) {
         console.log(error);
@@ -287,6 +400,13 @@ const YFPoa1Form = ({ update }) => {
       setLoading(false);
     }
   };
+
+
+  if(dataLoading) {
+    return <div className="h-screen md:h-[80vh] flex items-center justify-center">
+      <h1 className="text-2xl text-center font-semibold">Loading..</h1>
+    </div>
+  }
 
   return (
     <div

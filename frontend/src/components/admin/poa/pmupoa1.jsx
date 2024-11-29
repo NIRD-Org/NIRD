@@ -37,6 +37,7 @@ const POA1Form = ({ update }) => {
   // Generate a fixed 7-day week
   const getDaysInWeek = () => Array.from({ length: 7 }, (_, i) => i + 1);
 
+
   // Format the date into Indian format (DD/MM/YYYY)
   const formatIndianDate = (day) => {
     const date = new Date(currentYear, selectedMonth, day);

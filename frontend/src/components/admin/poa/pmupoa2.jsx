@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import AdminHeader from "../AdminHeader";
-import toast from "react-hot-toast";
-import { useSoeprLocation } from "@/components/hooks/useSoeprLocation";
 import API from "@/utils/API";
-import { useParams } from "react-router-dom";
 import {
   Table,
   TableBody,
@@ -13,91 +10,49 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { tst } from "@/lib/utils";
 import { showAlert } from "@/utils/showAlert";
 
-
 const POA2Form = ({ update }) => {
+  const poaType = "poa2"; // Fixed poaType for this form
   const currentYear = new Date().getFullYear();
-
   const months = [
-    { name: "January", days: 31 },
-    { name: "February", days: currentYear % 4 === 0 ? 29 : 28 }, // Leap year check
-    { name: "March", days: 31 },
-    { name: "April", days: 30 },
-    { name: "May", days: 31 },
-    { name: "June", days: 30 },
-    { name: "July", days: 31 },
-    { name: "August", days: 31 },
-    { name: "September", days: 30 },
-    { name: "October", days: 31 },
-    { name: "November", days: 30 },
-    { name: "December", days: 31 },
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
 
-  const { id: poalId } = useParams();
-  
-  const [plans, setPlans] = useState({});
-  
-  const [formDataState, setFormData] = useState([]);
- 
+  const [formDataState, setFormDataState] = useState({});
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const [loading, setLoading] = useState(false);
 
-  const [selectedActions, setSelectedActions] = useState({});
-  const lastDayOfWeek = 7; 
-
-  function getSubmissionDate(day, year = new Date().getFullYear()) {
-    return new Date(Date.UTC(year, selectedMonth, day));
-  }
-
-  const submissionDate = getSubmissionDate(14, 2024);
-
- 
-
-  useEffect(() => {
-    if (update) {
-      const fetchPoalData = async () => {
-        try {
-          const response = await API.get(`/api/v1/poa1/get/${poalId}`);
-          setFormData(response.data.data.poaData);
-        } catch (error) {
-          console.error("Error fetching user:", error);
-        }
-      };
-      fetchPoalData();
-    }
-  }, [poalId]);
-
-  const getDaysInMonth = () =>
+  const lastDayOfWeek = 7
+  const getDaysInWeek = () =>
     Array.from({ length: lastDayOfWeek }, (_, i) => i + 8);
 
-  const getWeekDay = (day) => {
-    const date = new Date(currentYear, selectedMonth, day);
-    return date.toLocaleDateString("en-IN", { weekday: "long" });
-  };
-
+  // Format the date into Indian format (DD/MM/YYYY)
   const formatIndianDate = (day) => {
     const date = new Date(currentYear, selectedMonth, day);
     return date.toLocaleDateString("en-IN");
   };
 
-  const handlePlanChange = (day, selectedPlan) => {
-    setPlans((prev) => ({ ...prev, [day]: selectedPlan }));
-    setSelectedActions((prev) => ({ ...prev, [day]: "" }));
+  // Get the weekday of a specific date
+  const getWeekDay = (day) => {
+    const date = new Date(currentYear, selectedMonth, day);
+    return date.toLocaleDateString("en-IN", { weekday: "long" });
   };
 
-  const handleActionChange = (day, selectedAction) => {
-    setSelectedActions((prev) => ({
-      ...prev,
-      [day]: selectedAction,
-    }));
-  };
-
-
-
+  // Handle input changes for each field
   const handleInputChange = (day, key, value) => {
-    setFormData((prev) => ({
+    setFormDataState((prev) => ({
       ...prev,
       [day]: {
         ...prev[day],
@@ -106,56 +61,70 @@ const POA2Form = ({ update }) => {
     }));
   };
 
+  // Submit form data to the backend
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      const formData = new FormData();
+      const poaData = Object.keys(formDataState).map((day) => ({
+        date: formatIndianDate(day),
+        weekday: getWeekDay(day),
+        plannedEvent: formDataState[day]?.plannedEvent || "",
+        target: formDataState[day]?.target || "",
+        achievements: formDataState[day]?.achievements || "",
+        remarks: formDataState[day]?.remarks || "",
+        poaType, // Fixed poaType for this form
+      }));
 
-      Object.keys(plans).forEach((day) => {
-        formData.append(`poaData[${day}][date]`, formatIndianDate(day));
-        formData.append(`poaData[${day}][weekday]`, getWeekDay(day));
-        formData.append(`poaData[${day}][plan]`, plans[day]);
-        formData.append(`poaData[${day}][action]`, selectedActions[day]);
-        formData.append(
-          `poaData[${day}][plannedEvent]`,
-          formDataState[day]?.plannedEvent || ""
-        );
-        
-        formData.append(
-          `poaData[${day}][achievements]`,
-          formDataState[day]?.achievements || ""
-        );
-        formData.append(`poaData[${day}][poaType]`, "poa1");
-        if (formDataState[day]?.photo) {
-          formData.append(`poaData[${day}][photo]`, formDataState[day].photo);
-        }
-        formData.append(
-          `poaData[${day}][remarks]`,
-          formDataState[day]?.remarks || ""
-        );
-      });
-
-      await API.post(
-        `/api/v1/poa1/create?created_at=${submissionDate}`,
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
+      console.log("Submitting payload:", poaData);
+      const response = await API.post("/api/v1/pmu-poa/create", { poaData });
+      console.log("Response:", response);
 
       showAlert("Form submitted successfully!", "success");
+      setFormDataState({}); // Reset form data
     } catch (error) {
-      tst.error(error);
+      console.error("Error submitting form:", error.response || error);
+      showAlert("Failed to submit form. Please try again.", "error");
     } finally {
       setLoading(false);
     }
   };
 
+  // Fetch existing data for updates
+  useEffect(() => {
+    const fetchFormData = async () => {
+      try {
+        if (update) {
+          const response = await API.get(
+            `/api/v1/pmu-poa/getUserPOAs?poaType=${poaType}`
+          );
+          console.log("Fetched data:", response.data);
+          const fetchedData = response.data.data;
+
+          const formattedData = fetchedData.reduce((acc, item) => {
+            const day = new Date(item.date).getDate();
+            acc[day] = {
+              plannedEvent: item.plannedEvent,
+              target: item.target,
+              achievements: item.achievements,
+              remarks: item.remarks,
+            };
+            return acc;
+          }, {});
+
+          setFormDataState(formattedData);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchFormData();
+  }, [update]);
+
   return (
     <div style={{ fontSize: "14px", maxWidth: "100%", margin: "0 auto" }}>
       <AdminHeader>
-        Second Weekly Plan Of Action - Month : {months[selectedMonth].name}{" "}
-        {currentYear}
+        Plan of Action - Second Week of {months[selectedMonth]} {currentYear}
       </AdminHeader>
       <div
         style={{
@@ -165,7 +134,7 @@ const POA2Form = ({ update }) => {
           alignItems: "center",
         }}
       >
-        <div className="">
+        <div>
           <label htmlFor="month-select" className="mr-2">
             Select Month:
           </label>
@@ -177,103 +146,61 @@ const POA2Form = ({ update }) => {
           >
             {months.map((month, index) => (
               <option key={index} value={index}>
-                {month.name}
+                {month}
               </option>
             ))}
           </select>
         </div>
-        
       </div>
-      <Table
-        border="1"
-        cellPadding="3"
-        cellSpacing="0"
-        style={{ width: "100%", marginTop: "20px", fontSize: "12px" }}
-      >
+      <Table style={{ width: "100%", marginTop: "20px", fontSize: "12px" }}>
         <TableHeader>
           <TableRow>
-            <TableHead className="px-2 text-primary font-bold">Date</TableHead>
-            <TableHead className="px-2 text-primary font-bold">
-              Weekday
-            </TableHead>
-            <TableHead className="px-2 text-primary font-bold">
-              Planned Event
-            </TableHead>
-            <TableHead className="px-2 text-primary font-bold">
-              Tentative Target (Description in 50 words)
-            </TableHead>
-           
-            <TableHead className="px-2 text-primary font-bold">
-              Achievements
-            </TableHead>
-            
-            <TableHead className="px-2 text-primary font-bold">
-              Remarks/Reason for Failure
-            </TableHead>
+            <TableHead>Date</TableHead>
+            <TableHead>Weekday</TableHead>
+            <TableHead>Planned Event</TableHead>
+            <TableHead>Target</TableHead>
+            <TableHead>Achievements</TableHead>
+            <TableHead>Remarks</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {getDaysInMonth().map((day, idx) => (
-            <TableRow key={idx}>
-              <TableCell className="p-2">{formatIndianDate(day)}</TableCell>
-              <TableCell className="p-2">{getWeekDay(day)}</TableCell>
-              <TableCell className="p-2">
-              <input
-                  className="px-2 py-1 rounded"
+          {getDaysInWeek().map((day) => (
+            <TableRow key={day}>
+              <TableCell>{formatIndianDate(day)}</TableCell>
+              <TableCell>{getWeekDay(day)}</TableCell>
+              <TableCell>
+                <input
                   type="text"
-                  style={{ width: "100%" }}
+                  className="w-full px-2 py-1 rounded"
+                  value={formDataState[day]?.plannedEvent || ""}
                   onChange={(e) =>
                     handleInputChange(day, "plannedEvent", e.target.value)
                   }
-                  value={formDataState[day]?.plannedEvent || ""}
                 />
               </TableCell>
-              <TableCell className="p-2">
-              <input
-                  className="px-2 py-1 rounded"
-                  type="text"
-                  style={{ width: "100%" }}
-                  onChange={(e) =>
-                    handleInputChange(day, "Target", e.target.value)
-                  }
-                  value={formDataState[day]?.Target || ""}
-                />
-              </TableCell>
-                           
-              <TableCell className="p-2">
+              <TableCell>
                 <input
-                  className="px-2 py-1 rounded"
                   type="text"
-                  disabled
-                  style={{ width: "100%" }}
+                  className="w-full px-2 py-1 rounded"
+                  value={formDataState[day]?.target || ""}
                   onChange={(e) =>
-                    handleInputChange(day, "achievements", e.target.value)
+                    handleInputChange(day, "target", e.target.value)
                   }
+                />
+              </TableCell>
+              <TableCell>
+                <input
+                  type="text"
+                  className="w-full px-2 py-1 rounded"
+                  disabled
                   value={formDataState[day]?.achievements || ""}
                 />
               </TableCell>
-              
-              <TableCell className="p-2">
+              <TableCell>
                 <input
-                  className="px-2 py-1 rounded"
                   type="text"
+                  className="w-full px-2 py-1 rounded"
                   disabled
-                  style={{ width: "100%" }}
-                  onChange={(e) =>
-                    handleInputChange(day, "remarks", e.target.value)
-                  }
-                  value={formDataState[day]?.remarks || ""}
-                />
-              </TableCell>
-              <TableCell className="p-2">
-                <input
-                  className="px-2 py-1 rounded"
-                  type="text"
-                  disabled
-                  style={{ width: "100%" }}
-                  onChange={(e) =>
-                    handleInputChange(day, "remarks", e.target.value)
-                  }
                   value={formDataState[day]?.remarks || ""}
                 />
               </TableCell>
@@ -281,9 +208,13 @@ const POA2Form = ({ update }) => {
           ))}
         </TableBody>
       </Table>
-      <div className="flex justify-end md:px-10">
-        <Button pending={loading} onClick={handleSubmit} className="mt-4">
-          {loading ? "Submitting ..." : "Submit"}
+      <div className="flex justify-end">
+        <Button
+          pending={loading}
+          onClick={handleSubmit}
+          className="primary-button mt-4"
+        >
+          {loading ? "Submitting..." : "Submit"}
         </Button>
       </div>
     </div>
@@ -291,4 +222,3 @@ const POA2Form = ({ update }) => {
 };
 
 export default POA2Form;
-

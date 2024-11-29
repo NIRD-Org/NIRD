@@ -174,7 +174,7 @@ export const getSidebarItems = (user) => {
               type: "sub-module",
               icon: ArrowBigRight,
               title: "View POA",
-              link: "/admin/yf/POAView",
+              link: "/admin/PMU/POAView",
             },
             {
               type: "sub-module",

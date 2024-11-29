@@ -148,6 +148,8 @@ import PMUPOA4 from "./components/admin/poa/pmupoa4";
 import Soeprhome from "./Pages/SoeprHome";
 import PgpHome from "./Pages/PgpHome";
 import SPCPoa1Form from "./components/admin/young-fellow/Poa/SPCPoa1Form";
+import PmuPoaView from "./components/admin/poa/PmuPoaView";
+import PmuPoa1DetailPage from "./components/admin/poa/PmuPoa1DetailPage";
 
 
 
@@ -198,7 +200,6 @@ function App() {
             element={<LcvaDetails />}
           />
 
-          
           <Route path="/admin" element={<AdminPage />}>
             <Route index element={<AdminMainPage />} />
             <Route path="view/attendance" element={<ViewAttendance />} />
@@ -216,10 +217,13 @@ function App() {
               path="soepr/attendance/view"
               element={<ConsolidatedViewPage />}
             />
-            <Route path="PMU/poa1" element={<PMUPOA1/>} />
-            <Route path="PMU/poa2" element={<PMUPOA2/>} />
-            <Route path="PMU/poa3" element={<PMUPOA3/>} />
-            <Route path="PMU/poa4" element={<PMUPOA4/>} />
+            <Route path="PMU/poa1" element={<PMUPOA1 />} />
+            <Route path="PMU/poa2" element={<PMUPOA2 />} />
+            <Route path="PMU/poa3" element={<PMUPOA3 />} />
+            <Route path="PMU/poa4" element={<PMUPOA4 />} />
+            <Route path="PMU/POAView" element={<PmuPoaView />} />
+            <Route path="PMU/POA/view/:id" element={<PmuPoa1DetailPage />} />
+
             <Route path="soepr/plan-of-action" element={<POA />} />
             <Route path="soepr/POA1" element={<POA1 />} />
             <Route path="soepr/POAreport" element={<PoaReportcount />} />

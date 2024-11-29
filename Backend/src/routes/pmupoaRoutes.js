@@ -19,7 +19,9 @@ router.route("/all").get(getAllPmupoaData);
 router.route("/update/:poaId").post(isAuth, updatePmupoaData);
 
 // Get all Pmupoa entries for the logged-in user
-router.route("/getUserPOAs").get(isAuth, getPmupoaData);
+// router.route("/getUserPOAs").get(isAuth, getPmupoaData);
+router.route("/get/:id").get(isAuth, getPmupoaData);
+
 
 
 export default router;

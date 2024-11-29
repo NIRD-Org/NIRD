@@ -33,7 +33,9 @@ import soeprStateRoutes from "./routes/soeprStateRoutes.js";
 import soeprDistrictRoutes from "./routes/soeprDistrictRoutes.js";
 import poa1Routes from "./routes/poa1Routes.js";
 import yfPoa1Routes from "./routes/YfPoa1Routes.js";
-import pmupoaRoutes from "./routes/pmupoaRoutes.js"
+import SpcPoa1Routes from "./routes/SpcPoa1Routes.js";
+import PmupoaRoutes from "./routes/pmupoaRoutes.js"
+
 // import { migrateFilesToS3 } from "./awsMigration.js";
 
 const app = express();
@@ -70,7 +72,7 @@ app.use("/api/v1/good-practice", goodPracticeRoutes);
 app.use("/api/v1/lcva", LCVARoutes);
 app.use("/api/v1/am-upload", amRoutes);
 app.use("/api/v1/pm-upload", pmRoutes);
-app.use("/api/v1/pmu-poa", pmupoaRoutes);
+app.use("/api/v1/pmu-poa", PmupoaRoutes);
 
 
 // Soepr
@@ -81,6 +83,8 @@ app.use("/api/v1/soepr-state", soeprStateRoutes);
 app.use("/api/v1/soepr-dist", soeprDistrictRoutes);
 app.use("/api/v1/poa1", poa1Routes);
 app.use("/api/v1/yf-poa1", yfPoa1Routes);
+app.use("/api/v1/spc-poa1", SpcPoa1Routes);
+
 
 app.get("/", (req, res) => {
   res.status(200).json({ message: "Server is running" });
