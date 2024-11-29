@@ -177,7 +177,7 @@ const Header = () => {
             className="h-12"
           />
           <img
-            src="/logo/mopr.png"
+            src="/logo/moprlogo.png"
             alt="MoPR Logo"
             className="h-12"
           />

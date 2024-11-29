@@ -9,7 +9,7 @@ const HomePage = () => {
         <div className="flex justify-center items-center space-x-8">
           <img src="logo/ashoka.png" alt="Ashoka" className="h-12" />
           <img src="logo/nirdpr.png" alt="NIRDPR" className="h-12" />
-          <img src="logo/mopr.png" alt="MoPR" className="h-12" />
+          <img src="logo/moprlogo.png" alt="MoPR" className="h-12" />
         </div>
       </header>
 
