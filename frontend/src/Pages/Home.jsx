@@ -6,12 +6,25 @@ const HomePage = () => {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Header */}
       <header className="bg-white py-4 shadow-md">
-        <div className="flex justify-center items-center space-x-8">
-          <img src="logo/ashoka.png" alt="Ashoka" className="h-12" />
-          <img src="logo/nirdpr.png" alt="NIRDPR" className="h-12" />
-          <img src="logo/moprlogo.png" alt="MoPR" className="h-12" />
-        </div>
-      </header>
+  <div className="container mx-auto flex flex-wrap justify-center items-center space-x-4 sm:space-x-8">
+    
+    <img
+      src="logo/nirdpr.png"
+      alt="NIRDPR"
+      className="h-10 sm:h-12 w-auto object-contain"
+    />
+    <img
+      src="logo/ashoka.png"
+      alt="Ashoka"
+      className="h-20 sm:h-15 w-auto object-contain"
+    />
+    <img
+      src="logo/moprlogo.png"
+      alt="MoPR"
+      className="h-10 sm:h-12 w-auto object-contain"
+    />
+  </div>
+</header>
 
       {/* Blue Strip */}
       <div className="bg-[#002855] py-4">

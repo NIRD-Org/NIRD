@@ -1,27 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { FaSearch, FaVolumeUp, FaUser, FaSignInAlt, FaSignOutAlt } from "react-icons/fa"; // Using FontAwesome icons
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { NavLink } from "react-router-dom";
 import { useAuthContext } from "@/context/AuthContext"; // Assuming this provides authentication context
-import { Button } from "../ui/button"; // Assuming Button component is available
 
 const MenuItem = ({ label, to, submenus, isProjectMenu }) => {
   const [isOpen, setIsOpen] = useState(false);
   let timeoutId;
 
   const handleMouseEnter = () => {
-    clearTimeout(timeoutId); // Cancel any pending close operation
+    clearTimeout(timeoutId);
     setIsOpen(true);
   };
 
   const handleMouseLeave = () => {
     timeoutId = setTimeout(() => {
       setIsOpen(false);
-    }, 200); // Delay closing to allow time for cursor to move
+    }, 200);
   };
 
   useEffect(() => {
-    return () => clearTimeout(timeoutId); // Cleanup timeout on component unmount
+    return () => clearTimeout(timeoutId);
   }, []);
 
   return (
@@ -37,7 +35,7 @@ const MenuItem = ({ label, to, submenus, isProjectMenu }) => {
         <div
           className={`absolute left-0 mt-2 ${
             isProjectMenu ? "grid grid-cols-2 gap-x-8 w-[400px]" : "flex flex-col"
-          } bg-primary text-white text-sm rounded shadow-md z-20 p-4`} // z-20 ensures it's above everything else
+          } bg-primary text-white text-sm rounded shadow-md z-20 p-4`}
         >
           {submenus.map((submenu, index) => (
             <NavLink
@@ -56,64 +54,19 @@ const MenuItem = ({ label, to, submenus, isProjectMenu }) => {
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { isAuthenticated } = useAuthContext(); // Track authentication state
-  const [selectedLanguage, setSelectedLanguage] = useState("en"); // Default language is English
   const toggleMenu = () => setIsOpen(!isOpen);
-
-  // Google Translate Initialization Function
-  const initializeGoogleTranslate = () => {
-    if (!window.googleTranslateElementInit) {
-      window.googleTranslateElementInit = function () {
-        new window.google.translate.TranslateElement(
-          {
-            pageLanguage: "en", // Default language is English
-            includedLanguages: "hi,bn,ta,te,ml,gu,kn,pa,mar", // Major Indian languages (Hindi, Bengali, Tamil, etc.)
-            layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
-            autoDisplay: false, // Prevent auto-display, we will handle the language selection
-          },
-          "google_translate_element"
-        );
-      };
-
-      const script = document.createElement("script");
-      script.type = "text/javascript";
-      script.src = "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
-      document.body.appendChild(script);
-    }
-  };
-
-  // Trigger language change
-  const handleLanguageChange = (lang) => {
-    setSelectedLanguage(lang);
-
-    if (window.google && window.google.translate) {
-      const translateInstance = new window.google.translate.TranslateElement(
-        {
-          pageLanguage: "en",
-          includedLanguages: "hi,bn,ta,te,ml,gu,kn,pa,mar", // Only Indian languages
-          layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
-        },
-        "google_translate_element"
-      );
-      translateInstance.showBanner(false); // Hide the default Google banner
-    }
-  };
-
-  useEffect(() => {
-    initializeGoogleTranslate(); // Initialize Google Translate when component mounts
-  }, []);
 
   const menuItems = [
     {
-      label: "The Project",
+      label: "The Project",to: "/soepr" ,
       isProjectMenu: true,
       submenus: [
-        { label: "Project Overview", to: "/project" },
-        { label: "Schools of Excellence", to: "/schoolsofExcellence" }, 
-        { label: "Project Execution Team", to: "/ExecutionTeam" },  
+        { label: "Project Overview", to: "/soepr" },
+        { label: "Schools of Excellence", to: "/schoolsofExcellence" },
+        { label: "Project Execution Team", to: "/ExecutionTeam" },
         { label: "Budget and Expenditure", to: "/budget-expenditure" },
         { label: "Key Partners", to: "/KeyPartners" },
-        { label: "KPI List", to: "/kpis" }, 
+        { label: "KPI List", to: "/kpis" },
       ],
     },
     { label: "Project Progress", to: "/kpi?tab=Localised+Sustainable+Goals" },
@@ -125,68 +78,65 @@ const Header = () => {
         {
           label: "Achievements",
           submenus: [
-            { label: "case Studies", to: "/case-studies" },
+            { label: "Case Studies", to: "/case-studies" },
             { label: "Photo Gallery", to: "/photo-gallery" },
-           
           ],
         },
       ],
     },
-    { label: "Performance Evaluation", 
-      
-      
-      submenus: [
-       { label: "Ranking", to: "/quick-links" },
-        
-      ],},
+    {
+      label: "Performance Evaluation",
+      submenus: [{ label: "Ranking", to: "/quick-links" }],
+    },
     { label: "Grievance Cell", to: "/grievance-cell" },
     { label: "Contact Us", to: "/contact-us" },
   ];
 
   return (
     <header>
-     
-
-      {/* Top Section (White background) */}
-      <div className="flex items-center justify-between bg-white px-6 py-4">
-        <div className="flex items-center">
-        <NavLink to={"/soepr"}>
-          <img
-            src="/logo/SoEPR.png"
-            alt="Project Logo"
-            className="h-20 mr-1 mb-0 mt-0"
-          />
+      {/* Top Section */}
+      <div className="flex flex-wrap items-center justify-between bg-white px-6 py-4">
+        {/* Left: Logo and Title */}
+        <div className="flex items-center space-x-4">
+          <NavLink to={"/soepr"}>
+            <img
+              src="/logo/SoEPR.png"
+              alt="Project Logo"
+              className="h-16 sm:h-20 object-contain"
+            />
           </NavLink>
           <div>
-            <h1 className="text-3xl font-bold leading-tight">
-              School of EXCELLENCE<br />
+            <h1 className="text-lg sm:text-2xl md:text-3xl font-bold leading-tight">
+              School of Excellence<br />
               Panchayati Raj (SOEPR)
             </h1>
           </div>
         </div>
 
-        <div className="flex items-center space-x-4">
+        {/* Right: Additional Logos */}
+        <div className="flex items-center justify-center space-x-4">
           <img
             src="/logo/ashoka.png"
             alt="Indian Emblem"
-            className="h-12"
+            className="h-8 sm:h-10 md:h-12 lg:h-16 object-contain"
           />
           <img
             src="/logo/nirdpr.png"
             alt="NIRDPR Logo"
-            className="h-12"
+            className="h-8 sm:h-10 md:h-12 lg:h-16 object-contain"
           />
           <img
             src="/logo/moprlogo.png"
             alt="MoPR Logo"
-            className="h-12"
+            className="h-8 sm:h-10 md:h-12 lg:h-16 object-contain"
           />
         </div>
       </div>
 
-      {/* Menu Bar (Blue background) */}
+      {/* Menu Bar */}
       <nav className="bg-primary text-white">
         <div className="container mx-auto px-6">
+          {/* Desktop Menu */}
           <ul className="hidden lg:flex items-center justify-center space-x-6 py-4">
             {menuItems.map((item, index) => (
               <li key={index}>
@@ -195,6 +145,7 @@ const Header = () => {
             ))}
           </ul>
 
+          {/* Mobile Menu Toggle */}
           <div className="lg:hidden flex justify-between items-center py-4">
             <button
               onClick={toggleMenu}
@@ -204,6 +155,7 @@ const Header = () => {
             </button>
           </div>
 
+          {/* Mobile Dropdown Menu */}
           {isOpen && (
             <div className="lg:hidden bg-primary text-white p-6 space-y-4">
               {menuItems.map((item, index) => (
