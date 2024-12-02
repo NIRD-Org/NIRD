@@ -165,6 +165,8 @@ const SPCPoa1DetailPage = () => {
               <TableRow>
                 <TableHead className="px-1">Date</TableHead>
                 <TableHead className="px-1">Weekday</TableHead>
+                <TableHead className="px-1">Plan</TableHead>
+
                 <TableHead className="px-1">Activity</TableHead>
                 <TableHead className="px-1">Tentative Target</TableHead>
                 <TableHead className="px-1">Planned Event</TableHead>
@@ -184,6 +186,9 @@ const SPCPoa1DetailPage = () => {
                     </TableCell>
                     <TableCell className="text-xs p-2.5">
                       {dayData.weekday}
+                    </TableCell>
+                    <TableCell className="text-xs p-2.5">
+                      {dayData.plan}
                     </TableCell>
                     <TableCell className="text-xs p-2.5">
                       {dayData.activity}
