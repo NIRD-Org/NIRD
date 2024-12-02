@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import AdminHeader from "../../AdminHeader";
+import AdminHeader from "../../../AdminHeader";
 import toast from "react-hot-toast";
 import { useSoeprLocation } from "@/components/hooks/useSoeprLocation";
 import API from "@/utils/API";
@@ -38,7 +38,7 @@ const kpiThemes = {
   "Tour": ["Tour"]
 };
 
-const YFPoa1Form = ({ update }) => {
+const SPCPoa3Form = ({ update }) => {
   const currentMonthIndex = new Date().getMonth();
   const currentYear = new Date().getFullYear();
 
@@ -78,67 +78,6 @@ const YFPoa1Form = ({ update }) => {
 
   const augustDate = getAugustDate(14, 2024);
 
-  const getAllDistricts = async (state) => {
-    try {
-      const { data } = await API.get(`/api/v1/dist/state/${state}`);
-      return data?.districts
-    } catch (error) {
-      console.log("Error gettign district");
-      return []
-    }
-  };
-
-  const getAllBlocks = async (district) => {
-    try {
-      const { data } = await API.get(`/api/v1/block/get?dist=${district}`);
-      return data?.blocks;
-    } catch (error) {
-      console.log("Error getting block");
-      return [];
-    }
-  };
-
-  const getAllGp = async (block) => {
-    try {
-      const { data } = await API.get(`/api/v1/gram/get?block=${block}`);
-      return data?.gram;
-    } catch (error) {
-      return []
-    }
-  };
-
-  
-//  const getAllLocations = async (statesArray) => {
-//    const districts = [];
-//    const blocks = [];
-//    const gps = [];
-//   setDataLoading(true)
-//    for (let state of statesArray) {
-//      // Fetch districts for the current state
-//      const stateDistricts = await getAllDistricts(state.id);
-//      districts.push(...stateDistricts);
-
-//      for (let district of stateDistricts) {
-//        // Fetch blocks for the current district
-//        const districtBlocks = await getAllBlocks(district.id);
-//        blocks.push(...districtBlocks);
-
-//        for (let block of districtBlocks) {
-//          // Fetch GPs for the current block
-//          const blockGps = await getAllGp(block.id);
-//          gps.push(...blockGps);
-//        }
-//      }
-//    }
-
-//    // Update state with collected data
-//    setAllDistricts(districts);
-//    setAllBlocks(blocks);
-//    setAllGps(gps);
-//    setDataLoading(false)
-//  };
-
- 
 
 const fetchAllDistricts = async (statesArray) => {
   const districtPromises = statesArray.map((state) =>
@@ -195,7 +134,7 @@ const fetchLocations = async (statesArray) => {
     if (update) {
       const fetchPoalData = async () => {
         try {
-          const response = await API.get(`/api/v1/poa1/get/${poalId}`);
+          const response = await API.get(`/api/v1/spc-poa1/get/${poalId}`);
           setFormData(response.data.data.poaData);
         } catch (error) {
           console.error("Error fetching POA data:", error);
@@ -231,8 +170,10 @@ const fetchLocations = async (statesArray) => {
     return date.toLocaleDateString("en-IN");
   };
 
+  const start = 15;
+
   const getDaysInMonth = () =>
-    Array.from({ length: lastDayOfWeek }, (_, i) => i + 1);
+    Array.from({ length: 22 - start + 1 }, (_, i) => start + i);
 
   // Initialize rows for the table
   useEffect(() => {
@@ -288,7 +229,7 @@ const fetchLocations = async (statesArray) => {
   const handleKpiThemeChange = (day, selectedTheme) => {
     setFormData((prev) => ({
       ...prev,
-      [day]: { ...prev[day], kpiTheme: selectedTheme, activity: "" },
+      [day]: { ...prev[day], plan: selectedTheme, activity: "" },
     }));
   };
 
@@ -337,8 +278,8 @@ const fetchLocations = async (statesArray) => {
           getWeekDay(row.date)
         );
         formDataToSubmit.append(
-          `poaData[${row.date}][kpi_theme]`,
-          dayData.kpiTheme || ""
+          `poaData[${row.date}][plan]`,
+          dayData.plan || ""
         );
         formDataToSubmit.append(
           `poaData[${row.date}][activity]`,
@@ -348,7 +289,7 @@ const fetchLocations = async (statesArray) => {
           `poaData[${row.date}][plannedEvent]`,
           dayData.plannedEvent || ""
         );
-        formDataToSubmit.append(`poaData[${row.date}][poaType]`, "poa1");
+        formDataToSubmit.append(`poaData[${row.date}][poaType]`, "poa3");
         formDataToSubmit.append(
           `poaData[${row.date}][state_id]`,
           dayData.state || ""
@@ -385,7 +326,7 @@ const fetchLocations = async (statesArray) => {
       });
 
       await API.post(
-        `/api/v1/yf-poa1/create?created_at=${augustDate}`,
+        `/api/v1/spc-poa1/create?created_at=${augustDate}`,
         formDataToSubmit,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -414,7 +355,7 @@ const fetchLocations = async (statesArray) => {
       style={{ fontSize: "14px", margin: "0 auto" }}
     >
       <AdminHeader>
-      First Weekly Plan Of Action - Month : {months[selectedMonth].name} {new Date().getFullYear()}
+      Third Weekly Plan Of Action - Month : {months[selectedMonth].name} {new Date().getFullYear()}
       </AdminHeader>
       <div className="mb-4">
         <label htmlFor="month-select" className="mr-2">
@@ -496,15 +437,15 @@ const fetchLocations = async (statesArray) => {
                 <td>
                   <select
                     style={{ width: "100%" }}
-                    value={dayData.kpiTheme || ""}
+                    value={dayData.plan || ""}
                     onChange={(e) =>
                       handleKpiThemeChange(day.id, e.target.value)
                     }
                   >
                     <option value="">Select Task</option>
-                    {Object.keys(kpiThemes).map((theme) => (
-                      <option key={theme} value={theme}>
-                        {theme}
+                    {Object.keys(kpiThemes).map((plan) => (
+                      <option key={plan} value={plan}>
+                        {plan}
                       </option>
                     ))}
                   </select>
@@ -516,11 +457,11 @@ const fetchLocations = async (statesArray) => {
                     onChange={(e) =>
                       handleActivityChange(day.id, e.target.value)
                     }
-                    disabled={!dayData.kpiTheme}
+                    disabled={!dayData.plan}
                   >
                     <option value="">Select Activity</option>
-                    {dayData.kpiTheme &&
-                      kpiThemes[dayData.kpiTheme].map((activity, index) => (
+                    {dayData.plan &&
+                      kpiThemes[dayData.plan].map((activity, index) => (
                         <option key={index} value={activity}>
                           {activity}
                         </option>
@@ -654,4 +595,4 @@ const fetchLocations = async (statesArray) => {
   );
 };
 
-export default YFPoa1Form;
+export default SPCPoa3Form;

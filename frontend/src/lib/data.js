@@ -439,8 +439,33 @@ export const getSidebarItems = (user) => {
             {
               type: "sub-module",
               icon: ArrowBigRight,
+              title: "View POA",
+              link: "/admin/spc/POAView",
+            },
+          
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
               title: "POA1",
               link: "/admin/spc/POA1",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "POA2",
+              link: "/admin/spc/POA2",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "POA3",
+              link: "/admin/spc/POA3",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "POA4",
+              link: "/admin/spc/POA4",
             },
           ],
         },

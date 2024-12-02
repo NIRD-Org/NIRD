@@ -153,10 +153,11 @@ export const createPoa1 = CatchAsyncError(async (req, res, next) => {
 
       for (let i = 0; i < entryCount; i++) {
         // Extract individual entries
+       
         const entry = {
           date: entryGroup.date[i],
           weekday: entryGroup.weekday[i],
-        
+          plan: entryGroup.plan[i],
           activity: entryGroup.activity[i],
           plannedEvent: entryGroup.plannedEvent[i],
           poaType: entryGroup.poaType[i],
