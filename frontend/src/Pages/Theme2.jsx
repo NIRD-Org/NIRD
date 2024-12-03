@@ -6,40 +6,40 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 // Register chart.js components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const PovertyThemePage = () => {
+const Theme2Page = () => {
   const [isOpen, setIsOpen] = useState([false, false, false, false, false]);
 
   // Data for the graph
   const data = [
     {
-      label: 'Percentage of job cardholders receiving employment under MGNREGA',
-      baseline: 75,
-      current: 80,
-      target: 83,
+      label: 'Percentage of child deaths (in the age group...',
+      baseline: 15,
+      current: 9,
+      target: 2,
     },
     {
-      label: 'Percentage of Households covered under Pradhan Mantri Awas Yojana (PMAY)',
-      baseline: 38,
-      current: 52,
-      target: 55,
+      label: 'Percentage of pregnant women (15-49 yrs)...',
+      baseline: 2,
+      current: 11,
+      target: 9,
     },
     {
-      label: 'Percentage of population covered under National Social Assistance Programme (NSAP)',
-      baseline: 48,
-      current: 58,
-      target: 60,
+      label: 'Percentage of children (0-6 years) fully immunized...',
+      baseline: 82,
+      current: 89,
+      target: 95,
     },
     {
-      label: 'Percentage of population covered under Pradhan Mantri Jan Dhan Yojana (PMJDY)',
-      baseline: 64,
-      current: 78,
-      target: 83,
+      label: 'Percentage of women benefited under...',
+      baseline: 58,
+      current: 72,
+      target: 76,
     },
     {
-      label: 'Percentage of women belonging to BPL families under Self-Help Groups (SHG)',
-      baseline: 37,
-      current: 48,
-      target: 50,
+      label: 'Percentage of households with safe drinking water...',
+      baseline: 83,
+      current: 91,
+      target: 96,
     },
   ];
 
@@ -49,7 +49,7 @@ const PovertyThemePage = () => {
     plugins: {
       title: {
         display: true,
-        text: 'Achievements of Project GPs under Poverty Free and Enhanced Livelihoods in Village',
+        text: 'Achievements of Project GPs under Healthy Village',
         font: {
           size: 18,
           weight: 'bold',
@@ -103,22 +103,19 @@ const PovertyThemePage = () => {
       {/* Section Header */}
       <div className="text-center mb-12">
         <h1 className="text-[#004B86] text-[2.5rem] font-extrabold">
-          Poverty-Free and Enhanced Livelihoods Village
+          Healthy Village
         </h1>
         <p className="text-gray-600 mt-2 text-lg leading-relaxed">
-          A comprehensive initiative aimed at alleviating rural poverty through economic empowerment, employment, and community development.
+          Key interventions driving the health and well-being of rural communities.
         </p>
       </div>
 
-  {/* Detailed Description of the Theme */}
+      {/* Detailed Description of the Theme */}
 <div className="mb-12">
   <p className="text-gray-700 text-md leading-relaxed text-justify">
-    The <strong>Poverty-Free and Enhanced Livelihoods Village</strong> initiative focuses on providing rural communities with resources and opportunities to break the cycle of poverty. It targets marginalized communities to ensure access to <strong>employment</strong>, <strong>safe housing</strong>, and <strong>social welfare programs</strong>. Core components include <strong>employment generation</strong> through <strong>MGNREGA</strong>, affordable housing via <strong>PMAY</strong>, and <strong>financial inclusion</strong> through <strong>PMJDY</strong>. Additionally, the program empowers women through <strong>Self-Help Groups (SHGs)</strong>, promotes <strong>community participation</strong>, and fosters <strong>environmental sustainability</strong>. The initiative also promotes active involvement in <strong>Gram Sabhas</strong>, ensuring that local people contribute to decision-making and planning, especially for the <strong>Gram Panchayat Development Plans (GPDP)</strong>. Ultimately, this program seeks to create a <strong>self-sustaining rural economy</strong> where every individual has the opportunity to succeed, contributing to the achievement of the <strong>Sustainable Development Goals (SDGs)</strong>.
+    The <strong>Healthy Village</strong> initiative focuses on improving the health and well-being of rural communities by addressing crucial health indicators, including <strong>child mortality</strong>, <strong>maternal health</strong>, <strong>immunization coverage</strong>, and access to <strong>safe drinking water</strong>. Key components of the initiative include reducing <strong>child mortality</strong> through better healthcare access, ensuring that <strong>pregnant women</strong> receive adequate care, and expanding the reach of <strong>immunization programs</strong> for children. The initiative also promotes <strong>safe drinking water</strong> initiatives to reduce waterborne diseases and improve overall public health. Furthermore, women’s health is a key focus, with programs aimed at enhancing their health and well-being. Ultimately, the goal is to create a <strong>self-sustaining health infrastructure</strong> in rural villages, where communities have access to essential health services, contributing to the achievement of the <strong>Sustainable Development Goals (SDGs)</strong>, particularly in health and well-being.
   </p>
 </div>
-
-
-
 
       {/* Section Title for Achievements */}
       <div className="text-center mb-8">
@@ -162,17 +159,9 @@ const PovertyThemePage = () => {
         ))}
       </div>
 
-      {/* Link to Detailed Achievements Page */}
-      <div className="text-center mt-10">
-        <a
-          href="/achievements"
-          className="text-[#004B86] text-lg font-semibold hover:underline"
-        >
-          View Detailed Achievements and Interventions
-        </a>
-      </div>
+     
     </div>
   );
 };
 
-export default PovertyThemePage;
+export default Theme2Page;

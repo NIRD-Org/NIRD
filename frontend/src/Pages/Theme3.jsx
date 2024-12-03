@@ -6,40 +6,58 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 // Register chart.js components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const PovertyThemePage = () => {
-  const [isOpen, setIsOpen] = useState([false, false, false, false, false]);
+const Theme3Page = () => {
+  const [isOpen, setIsOpen] = useState([false, false, false, false, false, false, false, false]);
 
   // Data for the graph
   const data = [
     {
-      label: 'Percentage of job cardholders receiving employment under MGNREGA',
-      baseline: 75,
-      current: 80,
-      target: 83,
+      label: 'Percentage of children (0 to 6 years) who received Ayushman Bharat Health Account (ABHA)',
+      baseline: 34,
+      current: 57,
+      target: 59,
     },
     {
-      label: 'Percentage of Households covered under Pradhan Mantri Awas Yojana (PMAY)',
-      baseline: 38,
-      current: 52,
-      target: 55,
+      label: 'Percentage of children (6-18 years) out of school',
+      baseline: 12,
+      current: 9,
+      target: 11,
     },
     {
-      label: 'Percentage of population covered under National Social Assistance Programme (NSAP)',
-      baseline: 48,
-      current: 58,
-      target: 60,
-    },
-    {
-      label: 'Percentage of population covered under Pradhan Mantri Jan Dhan Yojana (PMJDY)',
+      label: 'Percentage of schools where separate toilets for boys and girls were set up',
       baseline: 64,
-      current: 78,
-      target: 83,
+      current: 80,
+      target: 84,
     },
     {
-      label: 'Percentage of women belonging to BPL families under Self-Help Groups (SHG)',
-      baseline: 37,
-      current: 48,
-      target: 50,
+      label: 'Percentage of Halls having Nutri-Gardens or Poshan Vatikas created in the GP',
+      baseline: 19,
+      current: 26,
+      target: 34,
+    },
+    {
+      label: 'Percentage of children (6-59 months) recorded anemic (<11.0 g/dl)',
+      baseline: 5,
+      current: 6,
+      target: 5,
+    },
+    {
+      label: 'Percentage of children (0-6 years) fully vaccinated',
+      baseline: 80,
+      current: 88,
+      target: 95,
+    },
+    {
+      label: 'Percentage of children (below 5 years of age) recorded wasted',
+      baseline: 4,
+      current: 5,
+      target: 4,
+    },
+    {
+      label: 'Percentage of children (below 5 years of age) recorded stunted',
+      baseline: 3,
+      current: 4,
+      target: 3,
     },
   ];
 
@@ -49,7 +67,7 @@ const PovertyThemePage = () => {
     plugins: {
       title: {
         display: true,
-        text: 'Achievements of Project GPs under Poverty Free and Enhanced Livelihoods in Village',
+        text: 'Achievements of Project GPs under Child-Friendly Village',
         font: {
           size: 18,
           weight: 'bold',
@@ -103,21 +121,19 @@ const PovertyThemePage = () => {
       {/* Section Header */}
       <div className="text-center mb-12">
         <h1 className="text-[#004B86] text-[2.5rem] font-extrabold">
-          Poverty-Free and Enhanced Livelihoods Village
+          Child-Friendly Village
         </h1>
         <p className="text-gray-600 mt-2 text-lg leading-relaxed">
-          A comprehensive initiative aimed at alleviating rural poverty through economic empowerment, employment, and community development.
+          Ensuring the well-being and development of children in rural communities.
         </p>
       </div>
 
-  {/* Detailed Description of the Theme */}
+     {/* Detailed Description of the Theme */}
 <div className="mb-12">
   <p className="text-gray-700 text-md leading-relaxed text-justify">
-    The <strong>Poverty-Free and Enhanced Livelihoods Village</strong> initiative focuses on providing rural communities with resources and opportunities to break the cycle of poverty. It targets marginalized communities to ensure access to <strong>employment</strong>, <strong>safe housing</strong>, and <strong>social welfare programs</strong>. Core components include <strong>employment generation</strong> through <strong>MGNREGA</strong>, affordable housing via <strong>PMAY</strong>, and <strong>financial inclusion</strong> through <strong>PMJDY</strong>. Additionally, the program empowers women through <strong>Self-Help Groups (SHGs)</strong>, promotes <strong>community participation</strong>, and fosters <strong>environmental sustainability</strong>. The initiative also promotes active involvement in <strong>Gram Sabhas</strong>, ensuring that local people contribute to decision-making and planning, especially for the <strong>Gram Panchayat Development Plans (GPDP)</strong>. Ultimately, this program seeks to create a <strong>self-sustaining rural economy</strong> where every individual has the opportunity to succeed, contributing to the achievement of the <strong>Sustainable Development Goals (SDGs)</strong>.
+    The <strong>Child-Friendly Village</strong> initiative focuses on improving the health, education, and overall well-being of children in rural areas. This program targets key areas such as access to <strong>Healthcare</strong>, <strong>Education</strong>, <strong>Nutrition</strong>, and <strong>Sanitation</strong>. Key components include providing <strong>Healthcare access</strong> through the Ayushman Bharat Health Account (ABHA) program, reducing <strong>Child drop-out rates</strong> from schools, and setting up <strong>separate sanitation facilities</strong> for boys and girls in schools. The program also promotes the creation of <strong>Nutri-Gardens</strong> and <strong>Poshan Vatikas</strong> for better nutritional outcomes in communities. Immunization programs aim to ensure that children are fully vaccinated, and nutritional health is tracked to prevent issues such as <strong>Malnutrition</strong>, <strong>Stunting</strong>, and <strong>Wasting</strong>. The program seeks to create a <strong>Self-sustaining, Child-friendly Environment</strong> where children grow up with access to essential services that allow them to thrive, contributing to the achievement of the <strong>Sustainable Development Goals (SDGs)</strong>, especially in health and education.
   </p>
 </div>
-
-
 
 
       {/* Section Title for Achievements */}
@@ -162,17 +178,9 @@ const PovertyThemePage = () => {
         ))}
       </div>
 
-      {/* Link to Detailed Achievements Page */}
-      <div className="text-center mt-10">
-        <a
-          href="/achievements"
-          className="text-[#004B86] text-lg font-semibold hover:underline"
-        >
-          View Detailed Achievements and Interventions
-        </a>
-      </div>
+    
     </div>
   );
 };
 
-export default PovertyThemePage;
+export default Theme3Page;

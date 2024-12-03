@@ -6,7 +6,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 // Register chart.js components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const PovertyThemePage = () => {
+const Theme1Page = () => {
   const [isOpen, setIsOpen] = useState([false, false, false, false, false]);
 
   // Data for the graph
@@ -162,17 +162,9 @@ const PovertyThemePage = () => {
         ))}
       </div>
 
-      {/* Link to Detailed Achievements Page */}
-      <div className="text-center mt-10">
-        <a
-          href="/achievements"
-          className="text-[#004B86] text-lg font-semibold hover:underline"
-        >
-          View Detailed Achievements and Interventions
-        </a>
-      </div>
+      
     </div>
   );
 };
 
-export default PovertyThemePage;
+export default Theme1Page;

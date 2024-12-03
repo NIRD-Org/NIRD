@@ -157,10 +157,10 @@ function PgpHome() {
 // Additional Components
 const ThemesCarousel = () => {
   const themes = [
-    { icon: <FaHouseUser size={41} color="#46117C" />, title: "Poverty-free Village", link: "/theme/1" },
-    { icon: <FaHeartbeat size={41} color="#E04811" />, title: "Healthy Village", link: "/theme/2" },
-    { icon: <FaChild size={41} color="#F0BF4C" />, title: "Child-friendly Village", link: "/theme/3" },
-    { icon: <FaTint size={41} color="#3B9AE1" />, title: "Water-sufficient Village", link: "/theme/4" },
+    { icon: <FaHouseUser size={41} color="#46117C" />, title: "Poverty-free Village", link: "/Theme1" },
+    { icon: <FaHeartbeat size={41} color="#E04811" />, title: "Healthy Village", link: "/Theme2" },
+    { icon: <FaChild size={41} color="#F0BF4C" />, title: "Child-friendly Village", link: "/Theme3" },
+    { icon: <FaTint size={41} color="#3B9AE1" />, title: "Water-sufficient Village", link: "/Theme4" },
     { icon: <FaTree size={41} color="#2E7D32" />, title: "Clean and Green Village", link: "/theme/5" },
     { icon: <FaIndustry size={41} color="#7F11E0" />, title: "Infrastructure in Village", link: "/theme/6" },
     { icon: <FaBalanceScale size={41} color="#11DCE0" />, title: "Socially Just Village", link: "/theme/7" },

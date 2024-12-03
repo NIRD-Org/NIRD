@@ -6,40 +6,40 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 // Register chart.js components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const PovertyThemePage = () => {
+const Theme4Page = () => {
   const [isOpen, setIsOpen] = useState([false, false, false, false, false]);
 
   // Data for the graph
   const data = [
     {
-      label: 'Percentage of job cardholders receiving employment under MGNREGA',
-      baseline: 75,
-      current: 80,
-      target: 83,
+      label: 'Percentage of households in the project GPs avail themselves of 65 LPCD (Litres Per Capita Per Day) water',
+      baseline: 74,
+      current: 59,
+      target: 80,
     },
     {
-      label: 'Percentage of Households covered under Pradhan Mantri Awas Yojana (PMAY)',
-      baseline: 38,
-      current: 52,
-      target: 55,
+      label: 'Percentage of Houses/Public Buildings that are facilitated with Grey Water Management Structure',
+      baseline: 23,
+      current: 16,
+      target: 24,
     },
     {
-      label: 'Percentage of population covered under National Social Assistance Programme (NSAP)',
-      baseline: 48,
-      current: 58,
-      target: 60,
+      label: 'Percentage of Houses/Public Buildings that are facilitated with functional rooftop rain water harvesting structure',
+      baseline: 11,
+      current: 15,
+      target: 15,
     },
     {
-      label: 'Percentage of population covered under Pradhan Mantri Jan Dhan Yojana (PMJDY)',
-      baseline: 64,
-      current: 78,
-      target: 83,
+      label: 'Percentage of institutions (Schools, Anganwadi centres, GP buildings, Health centres, wellness centres and community buildings etc.) located in Project GP having access to Tap Water Connection',
+      baseline: 15,
+      current: 15,
+      target: 68,
     },
     {
-      label: 'Percentage of women belonging to BPL families under Self-Help Groups (SHG)',
-      baseline: 37,
-      current: 48,
-      target: 50,
+      label: 'Percentage of HHs having Tap Water Connection (as per Jal Jeevan Mission)',
+      baseline: 9,
+      current: 12,
+      target: 15,
     },
   ];
 
@@ -49,7 +49,7 @@ const PovertyThemePage = () => {
     plugins: {
       title: {
         display: true,
-        text: 'Achievements of Project GPs under Poverty Free and Enhanced Livelihoods in Village',
+        text: 'Achievements of Project GPs under Water Sufficient Village',
         font: {
           size: 18,
           weight: 'bold',
@@ -103,22 +103,19 @@ const PovertyThemePage = () => {
       {/* Section Header */}
       <div className="text-center mb-12">
         <h1 className="text-[#004B86] text-[2.5rem] font-extrabold">
-          Poverty-Free and Enhanced Livelihoods Village
+          Water-Sufficient Village
         </h1>
         <p className="text-gray-600 mt-2 text-lg leading-relaxed">
-          A comprehensive initiative aimed at alleviating rural poverty through economic empowerment, employment, and community development.
+          Ensuring access to water resources and infrastructure for rural communities.
         </p>
       </div>
 
-  {/* Detailed Description of the Theme */}
+     {/* Detailed Description of the Theme */}
 <div className="mb-12">
   <p className="text-gray-700 text-md leading-relaxed text-justify">
-    The <strong>Poverty-Free and Enhanced Livelihoods Village</strong> initiative focuses on providing rural communities with resources and opportunities to break the cycle of poverty. It targets marginalized communities to ensure access to <strong>employment</strong>, <strong>safe housing</strong>, and <strong>social welfare programs</strong>. Core components include <strong>employment generation</strong> through <strong>MGNREGA</strong>, affordable housing via <strong>PMAY</strong>, and <strong>financial inclusion</strong> through <strong>PMJDY</strong>. Additionally, the program empowers women through <strong>Self-Help Groups (SHGs)</strong>, promotes <strong>community participation</strong>, and fosters <strong>environmental sustainability</strong>. The initiative also promotes active involvement in <strong>Gram Sabhas</strong>, ensuring that local people contribute to decision-making and planning, especially for the <strong>Gram Panchayat Development Plans (GPDP)</strong>. Ultimately, this program seeks to create a <strong>self-sustaining rural economy</strong> where every individual has the opportunity to succeed, contributing to the achievement of the <strong>Sustainable Development Goals (SDGs)</strong>.
+    The <strong>Water-Sufficient Village</strong> initiative focuses on ensuring that rural communities have access to clean and sufficient water for daily use. This program addresses key areas such as <strong>Household Access to Water</strong>, <strong>Water Management Structures</strong>, and <strong>Tap Water Connections</strong>. Key components of the initiative include providing households with <strong>65 LPCD</strong> (litres per capita per day) of water, setting up <strong>Grey Water Management Structures</strong>, and implementing <strong>Rooftop Rainwater Harvesting Systems</strong> in both residential and public buildings. Additionally, the program promotes increasing access to <strong>Tap Water Connections</strong> in institutions like schools, health centres, and Anganwadi centres. Ultimately, the goal is to create a <strong>Self-Sustaining Water Infrastructure</strong> in rural villages, ensuring that communities have reliable access to water. This contributes to the achievement of the <strong>Sustainable Development Goals (SDGs)</strong>, particularly in areas of health, sanitation, and sustainable water management.
   </p>
 </div>
-
-
-
 
       {/* Section Title for Achievements */}
       <div className="text-center mb-8">
@@ -175,4 +172,4 @@ const PovertyThemePage = () => {
   );
 };
 
-export default PovertyThemePage;
+export default Theme4Page;

@@ -159,6 +159,11 @@ import UpdateSPCPOA1Form from "./components/admin/young-fellow/Poa/spc/UpdateSPC
 import HumanResourcesPage from "./Pages/HumanResources";
 import MajorProjectInterventions from "./Pages/MajorProjectInterventions";
 import SignificantAchievements from "./Pages/SignificantAchievements";
+import Theme1Page from "./Pages/Theme1";
+import Theme2Page from "./Pages/Theme2";
+import Theme3Page from "./Pages/Theme3";
+import Theme4Page from "./Pages/Theme4";
+import ContactUsPage from "./Pages/ContactPagePGP";
 
 
 
@@ -193,7 +198,7 @@ function App() {
           <Route path="YFActivities" element={<YFActivities />} />
           <Route path="/gp-wise-data/theme/:id" element={<ThemeDataPage />} />
           <Route path="/gp-wise-data/theme10" element={<Theme10DataPage />} />
-
+          <Route path="/contactpgp" element={<ContactUsPage />} />
           <Route path="gp-profile/details" element={<GramPanchayatProfile />} />
           <Route path="/yf-insights" element={<YfInsightsPage />} />
           <Route path="good-practices" element={<GoodPractices />} />
@@ -201,6 +206,10 @@ function App() {
 
           <Route path="low-cost-voluntary-activities" element={<LCVAPage />} />
           <Route path="training" element={<TrainingPage />} />
+          <Route path="/theme1" element={<Theme1Page />} />
+          <Route path="/theme2" element={<Theme2Page />} />
+          <Route path="/theme3" element={<Theme3Page />} />
+          <Route path="/theme4" element={<Theme4Page />} />
           <Route path="test" element={<AchievementChart />} />
           <Route
             path="/good-practice/:activity/:id"

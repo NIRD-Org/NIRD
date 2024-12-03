@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { FaSearch, FaVolumeUp, FaUser, FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { NavLink } from "react-router-dom";
@@ -6,30 +6,14 @@ import { useAuthContext } from "@/context/AuthContext";
 
 const MenuItem = ({ label, to, submenus, isProjectMenu }) => {
   const [isOpen, setIsOpen] = useState(false);
-  let timeoutId;
 
-  const handleMouseEnter = () => {
-    clearTimeout(timeoutId);
-    setIsOpen(true);
+  const toggleMenu = () => {
+    setIsOpen((prev) => !prev);
   };
-
-  const handleMouseLeave = () => {
-    timeoutId = setTimeout(() => {
-      setIsOpen(false);
-    }, 200);
-  };
-
-  useEffect(() => {
-    return () => clearTimeout(timeoutId);
-  }, []);
 
   return (
-    <div
-      className="relative group"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
-      <NavLink to={to} className="block px-4 py-2 hover:text-gray-300">
+    <div className="relative">
+      <NavLink to={to} className="block px-4 py-2 hover:text-gray-300" onClick={toggleMenu}>
         {label}
       </NavLink>
       {submenus && isOpen && (
@@ -72,18 +56,19 @@ const Header = () => {
         { label: "Young Fellows and Activities", to: "/YFActivities" },
         { label: "Indicators and KPIs", to: "/indicators-kpis" },
         { label: "Budget and Expenditure", to: "/budget-expenditure" },
-        { label: "Good Practices", to: "/good-practices" },
-        { label: "Low Cost/No Cost Activities", to: "/low-cost-activities" },
       ],
     },
-    { label: "Project Progress", 
-                submenus: [
-            { label: "Major project Interventions", to: "/MPI" },
-            { label: "Indicators and KPIs", to: "/kpi?tab=Localised+Sustainable+Goals"  },
-            { label: "Achievements", to: "/Achievements" },
-          ],
-        },
-    
+    {
+      label: "Project Progress",
+      submenus: [
+        { label: "Major project Interventions", to: "/MPI" },
+        { label: "Indicators and KPIs", to: "/kpi?tab=Localised+Sustainable+Goals" },
+        { label: "Good Practices", to: "/good-practices" },
+        { label: "Low Cost/No Cost Activities", to: "/low-cost-voluntary-activities" },
+        { label: "Training", to: "/training" },
+        { label: "Achievements", to: "/Achievements" },
+      ],
+    },
     { label: "GP Profile", to: "/gp-profile/details" },
     {
       label: "Notifications and Reports",
@@ -100,12 +85,9 @@ const Header = () => {
         },
       ],
     },
-    {
-      label: "OSR", to: "/OSR" 
-     
-    },
+    { label: "OSR", to: "/OSR" },
     { label: "Grievance Cell", to: "/grievance-cell" },
-    { label: "Contact Us", to: "/contact-us" },
+    { label: "Contact Us", to: "/Contactpgp" },
   ];
 
   return (
@@ -114,7 +96,7 @@ const Header = () => {
       <div className="flex flex-wrap items-center justify-between bg-white px-6 py-4">
         {/* Left Section: Project Title and Logo */}
         <div className="flex items-center space-x-4">
-          <NavLink to={"/"}>
+          <NavLink to={"/pgp"}>
             <img
               src="/logo/ProjectLogo.jpg"
               alt="Project Logo"
@@ -149,7 +131,7 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Menu Bar (Blue background) */}
+      {/* Menu Bar (Primary background color) */}
       <nav className="bg-primary text-white">
         <div className="container mx-auto px-6">
           <ul className="hidden lg:flex items-center justify-center space-x-6 py-4">

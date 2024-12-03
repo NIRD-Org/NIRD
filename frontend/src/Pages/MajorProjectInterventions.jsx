@@ -2,49 +2,49 @@ import React from "react";
 import { FaRegLightbulb, FaUsers, FaTools, FaChartLine, FaHandHoldingHeart, FaClipboardList, FaBuilding, FaFlagCheckered, FaRecycle } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-const MajorProjectInterventions = () => {
+const ThemesPage = () => {
   return (
     <div className="p-6 bg-gray-50">
       {/* Section Header */}
       <div className="text-center mb-12">
         <h1 className="text-[#004B86] text-[2.5rem] font-extrabold">
-          Major Project Interventions
+          Project Themes
         </h1>
         <p className="text-gray-600 mt-2 text-lg leading-relaxed">
-          Key interventions driving the success and sustainability of the project.
+          Key themes that define and drive the success of the project.
         </p>
       </div>
 
-      {/* Key Interventions Section - Grid Layout */}
+      {/* Key Themes Section - Grid Layout */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
         {/* Row 1 */}
         <div className="bg-white shadow-lg rounded-lg p-6 hover:bg-orange-100 transition-all">
           <div className="flex items-center mb-4">
             <FaRegLightbulb className="text-[#004B86] text-4xl mr-4" />
-            <h3 className="text-[#004B86] text-xl font-semibold">Implementation of Weekly Project Activities</h3>
+            <h3 className="text-[#004B86] text-xl font-semibold">Community Empowerment</h3>
           </div>
           <p className="text-gray-700 text-md leading-relaxed">
-            Project activities are based on weekly plans prepared by Young Fellows, supervised by State Programme Coordinators (SPCs).
+            Empowering communities through active participation in decision-making, planning, and implementation of key initiatives.
           </p>
         </div>
 
         <div className="bg-white shadow-lg rounded-lg p-6 hover:bg-orange-100 transition-all">
           <div className="flex items-center mb-4">
             <FaChartLine className="text-[#004B86] text-4xl mr-4" />
-            <h3 className="text-[#004B86] text-xl font-semibold">Stock-taking & Monitoring of Activities</h3>
+            <h3 className="text-[#004B86] text-xl font-semibold">Sustainable Development</h3>
           </div>
           <p className="text-gray-700 text-md leading-relaxed">
-            Stock-taking and monitoring of project activities is done monthly and quarterly by the PMU, based on Key Performance Indicators (KPIs).
+            Fostering sustainable growth through practices that ensure long-term social, environmental, and economic well-being.
           </p>
         </div>
 
         <div className="bg-white shadow-lg rounded-lg p-6 hover:bg-orange-100 transition-all">
           <div className="flex items-center mb-4">
             <FaUsers className="text-[#004B86] text-4xl mr-4" />
-            <h3 className="text-[#004B86] text-xl font-semibold">CB&T for ERs on Institutional Strengthening</h3>
+            <h3 className="text-[#004B86] text-xl font-semibold">Inclusive Governance</h3>
           </div>
           <p className="text-gray-700 text-md leading-relaxed">
-            Capacity Building and Training (CB&T) for ERs of GPs focuses on institutional strengthening for Thematic GPDPs, SDGs, and PDI measurement.
+            Ensuring that all community members, especially marginalized groups, have a voice in governance and policy-making.
           </p>
         </div>
 
@@ -52,30 +52,30 @@ const MajorProjectInterventions = () => {
         <div className="bg-white shadow-lg rounded-lg p-6 hover:bg-orange-100 transition-all">
           <div className="flex items-center mb-4">
             <FaClipboardList className="text-[#004B86] text-4xl mr-4" />
-            <h3 className="text-[#004B86] text-xl font-semibold">At Least 6 Gram Sabhas Every Year</h3>
+            <h3 className="text-[#004B86] text-xl font-semibold">Economic Opportunities</h3>
           </div>
           <p className="text-gray-700 text-md leading-relaxed">
-            Ensuring that at least 6 Gram Sabhas are conducted in every GP annually to enhance community participation in planning and decision-making.
+            Providing sustainable economic opportunities, particularly through self-help groups and local entrepreneurship.
           </p>
         </div>
 
         <div className="bg-white shadow-lg rounded-lg p-6 hover:bg-orange-100 transition-all">
           <div className="flex items-center mb-4">
             <FaBuilding className="text-[#004B86] text-4xl mr-4" />
-            <h3 className="text-[#004B86] text-xl font-semibold">Ward Sabha, Mahila Sabha & Bal Sabha</h3>
+            <h3 className="text-[#004B86] text-xl font-semibold">Infrastructure Development</h3>
           </div>
           <p className="text-gray-700 text-md leading-relaxed">
-            Conducting Ward Sabha, Mahila Sabha, and Bal Sabha before Gram Sabhas to ensure broad-based community engagement in GPDPs.
+            Developing the necessary physical infrastructure to support community growth, including roads, sanitation, and energy.
           </p>
         </div>
 
         <div className="bg-white shadow-lg rounded-lg p-6 hover:bg-orange-100 transition-all">
           <div className="flex items-center mb-4">
             <FaHandHoldingHeart className="text-[#004B86] text-4xl mr-4" />
-            <h3 className="text-[#004B86] text-xl font-semibold">Economic Empowerment Through SHGs</h3>
+            <h3 className="text-[#004B86] text-xl font-semibold">Health and Well-Being</h3>
           </div>
           <p className="text-gray-700 text-md leading-relaxed">
-            Promoting economic empowerment of women through Self-Help Groups (SHGs) as part of the project’s community-driven initiatives.
+            Promoting better health outcomes through improved access to healthcare services, sanitation, and nutrition.
           </p>
         </div>
 
@@ -83,30 +83,30 @@ const MajorProjectInterventions = () => {
         <div className="bg-white shadow-lg rounded-lg p-6 hover:bg-orange-100 transition-all">
           <div className="flex items-center mb-4">
             <FaFlagCheckered className="text-[#004B86] text-4xl mr-4" />
-            <h3 className="text-[#004B86] text-xl font-semibold">GP-SHG Convergence and VPRP Integration</h3>
+            <h3 className="text-[#004B86] text-xl font-semibold">Education and Skill Development</h3>
           </div>
           <p className="text-gray-700 text-md leading-relaxed">
-            Fostering convergence between GP-SHGs and integrating Village Poverty Reduction Plans (VPRP) into GPDPs for better development outcomes.
+            Focusing on education, literacy, and skill development programs to prepare community members for a better future.
           </p>
         </div>
 
         <div className="bg-white shadow-lg rounded-lg p-6 hover:bg-orange-100 transition-all">
           <div className="flex items-center mb-4">
             <FaRecycle className="text-[#004B86] text-4xl mr-4" />
-            <h3 className="text-[#004B86] text-xl font-semibold">Environmental Upgradation</h3>
+            <h3 className="text-[#004B86] text-xl font-semibold">Environmental Sustainability</h3>
           </div>
           <p className="text-gray-700 text-md leading-relaxed">
-            Communities are involved in environmental upgrades, including solid waste management and cleanliness drives as no-cost activities.
+            Encouraging environmentally sustainable practices, including waste management, water conservation, and renewable energy.
           </p>
         </div>
 
         <div className="bg-white shadow-lg rounded-lg p-6 hover:bg-orange-100 transition-all">
           <div className="flex items-center mb-4">
             <FaTools className="text-[#004B86] text-4xl mr-4" />
-            <h3 className="text-[#004B86] text-xl font-semibold">No-Cost Voluntary Activities (NCVAs)</h3>
+            <h3 className="text-[#004B86] text-xl font-semibold">Empowered Local Leadership</h3>
           </div>
           <p className="text-gray-700 text-md leading-relaxed">
-            Encouraging communities to take part in No-Cost Voluntary Activities (NCVAs) to support GPDP implementation and local development.
+            Fostering empowered local leadership to drive positive change and ensure effective community governance and development.
           </p>
         </div>
 
@@ -114,45 +114,45 @@ const MajorProjectInterventions = () => {
         <div className="bg-white shadow-lg rounded-lg p-6 hover:bg-orange-100 transition-all">
           <div className="flex items-center mb-4">
             <FaClipboardList className="text-[#004B86] text-4xl mr-4" />
-            <h3 className="text-[#004B86] text-xl font-semibold">Support for Education, Health & Nutrition</h3>
+            <h3 className="text-[#004B86] text-xl font-semibold">Improved Access to Information</h3>
           </div>
           <p className="text-gray-700 text-md leading-relaxed">
-            Special support is being provided to communities in the areas of Education, Health, and Nutrition to improve overall well-being.
+            Facilitating access to vital information through technology, media, and community-based platforms.
           </p>
         </div>
 
         <div className="bg-white shadow-lg rounded-lg p-6 hover:bg-orange-100 transition-all">
           <div className="flex items-center mb-4">
             <FaFlagCheckered className="text-[#004B86] text-4xl mr-4" />
-            <h3 className="text-[#004B86] text-xl font-semibold">Evidence-based GPDPs</h3>
+            <h3 className="text-[#004B86] text-xl font-semibold">Monitoring and Evaluation</h3>
           </div>
           <p className="text-gray-700 text-md leading-relaxed">
-            Every GP prepares evidence-based, data-driven GPDPs, which are localized to meet the Sustainable Development Goals (SDGs).
+            Regular monitoring and evaluation to ensure that project activities align with goals and deliver the expected outcomes.
           </p>
         </div>
 
         <div className="bg-white shadow-lg rounded-lg p-6 hover:bg-orange-100 transition-all">
           <div className="flex items-center mb-4">
             <FaClipboardList className="text-[#004B86] text-4xl mr-4" />
-            <h3 className="text-[#004B86] text-xl font-semibold">Dashboard for Weekly Updates</h3>
+            <h3 className="text-[#004B86] text-xl font-semibold">Data-Driven Decision Making</h3>
           </div>
           <p className="text-gray-700 text-md leading-relaxed">
-            Young Fellows document good practices and update the project’s achievements on a weekly basis through a centralized dashboard.
+            Using data analytics to inform decision-making and ensure that interventions are responsive to community needs.
           </p>
         </div>
       </div>
 
-      {/* Link to Detailed Achievements Page */}
+      {/* Link to Detailed Themes Page */}
       <div className="text-center mt-10">
         <Link
-          to="/achievements"
+          to="/themes"
           className="text-[#004B86] text-lg font-semibold hover:underline"
         >
-          View Detailed Achievements and Interventions
+          View Detailed Themes and Interventions
         </Link>
       </div>
     </div>
   );
 };
 
-export default MajorProjectInterventions;
+export default ThemesPage;
