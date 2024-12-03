@@ -147,9 +147,15 @@ import PMUPOA3 from "./components/admin/poa/pmupoa3";
 import PMUPOA4 from "./components/admin/poa/pmupoa4";
 import Soeprhome from "./Pages/SoeprHome";
 import PgpHome from "./Pages/PgpHome";
-import SPCPoa1Form from "./components/admin/young-fellow/Poa/SPCPoa1Form";
+import SPCPoa1Form from "./components/admin/young-fellow/Poa/spc/SPCPoa1Form";
 import PmuPoaView from "./components/admin/poa/PmuPoaView";
 import PmuPoa1DetailPage from "./components/admin/poa/PmuPoa1DetailPage";
+import SPCPoa2Form from "./components/admin/young-fellow/Poa/spc/SPCPoa2Form";
+import SPCPoa3Form from "./components/admin/young-fellow/Poa/spc/SPCPoa3Form";
+import SPCPoa4Form from "./components/admin/young-fellow/Poa/spc/SPCPoa4Form";
+import SPCPoaView from "./components/admin/young-fellow/Poa/spc/SPCPoaView";
+import SPCPoa1DetailPage from "./components/admin/young-fellow/Poa/spc/SPCPoa1DetailPage";
+import UpdateSPCPOA1Form from "./components/admin/young-fellow/Poa/spc/UpdateSPCPOA1Form";
 import HumanResourcesPage from "./Pages/HumanResources";
 import MajorProjectInterventions from "./Pages/MajorProjectInterventions";
 import SignificantAchievements from "./Pages/SignificantAchievements";
@@ -259,8 +265,23 @@ function App() {
             <Route path="yf/POA2/sep" element={<YFPoa2FormSep />} />
             <Route path="yf/POA3/sep" element={<YFPoa3FormSep />} />
             <Route path="yf/POA4/sep" element={<YFPoa4FormSep />} />
-            <Route path="Spc/POA1" element={<SPCPoa1Form />} />
 
+            {/* SPC POA */}
+            <Route path="Spc/POA1" element={<SPCPoa1Form />} />
+            <Route path="Spc/POA2" element={<SPCPoa2Form />} />
+            <Route path="Spc/POA3" element={<SPCPoa3Form />} />
+            <Route path="Spc/POA4" element={<SPCPoa4Form />} />
+            <Route path="spc/POAView" element={<SPCPoaView />} />
+            <Route
+              path="spc/POA1/view/:id"
+              element={<SPCPoa1DetailPage update />}
+            />
+            <Route
+              path="spc/POA1/edit/:id"
+              element={<UpdateSPCPOA1Form update />}
+            />
+
+            {/* YF POA */}
             <Route
               path="yf/POA1/edit/:id"
               element={<UpdateYfPOA1Form update />}
