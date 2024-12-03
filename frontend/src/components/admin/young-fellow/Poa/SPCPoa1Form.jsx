@@ -615,12 +615,12 @@ const fetchLocations = async (statesArray) => {
                     style={{ width: "100%" }}
                     onChange={(e) =>
                       handleInputChange(day.id, "achievements", e.target.value)
-                    }
+                    } disabled 
                     value={dayData.achievements || ""}
                   />
                 </td>
                 <td>
-                  <input
+                  <input disabled 
                     type="file"
                     onChange={(e) =>
                       handleInputChange(day.id, "photo", e.target.files[0])
@@ -628,7 +628,7 @@ const fetchLocations = async (statesArray) => {
                   />
                 </td>
                 <td>
-                  <input
+                  <input disabled
                     type="text"
                     className="border rounded border-gray-300"
                     style={{ width: "100%" }}

@@ -150,6 +150,9 @@ import PgpHome from "./Pages/PgpHome";
 import SPCPoa1Form from "./components/admin/young-fellow/Poa/SPCPoa1Form";
 import PmuPoaView from "./components/admin/poa/PmuPoaView";
 import PmuPoa1DetailPage from "./components/admin/poa/PmuPoa1DetailPage";
+import HumanResourcesPage from "./Pages/HumanResources";
+import MajorProjectInterventions from "./Pages/MajorProjectInterventions";
+import SignificantAchievements from "./Pages/SignificantAchievements";
 
 
 
@@ -176,6 +179,9 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/gp-profile" element={<KPIDetails />} />
           <Route path="project" element={<ProjectPage />} />
+          <Route path="projectstaff" element={<HumanResourcesPage />} />
+          <Route path="MPI" element={<MajorProjectInterventions />} />
+          <Route path="Achievements" element={<SignificantAchievements/>} />
           <Route path="KeyPartners" element={<KeyPartners />} />
           <Route path="OSR" element={<OSR />} />
           <Route path="YFActivities" element={<YFActivities />} />

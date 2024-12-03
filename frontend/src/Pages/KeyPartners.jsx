@@ -80,7 +80,6 @@ const KeyPartners = () => {
 
         {/* Explanation */}
         <div className="bg-white shadow-lg rounded-lg p-6 w-full md:w-1/2">
-          
           <p className="text-gray-700 text-md leading-relaxed mb-4">
             The project is financially supported by three key partners, each
             contributing to critical areas of implementation. These partners
@@ -114,21 +113,40 @@ const KeyPartners = () => {
         </div>
       </div>
 
-      {/* Additional Section */}
-      <div className="mt-10 bg-gray-100 rounded-lg shadow p-6">
+      {/* Additional Partners Section */}
+      <div className="mt-10 bg-white shadow-lg rounded-lg p-6">
         <h2 className="text-[#004B86] text-xl font-semibold mb-4">
-          Why These Contributions Matter
+          Other Contributors
         </h2>
-        <p className="text-gray-700 leading-relaxed">
-          The financial contributions of these stakeholders highlight the
-          collaborative nature of the project. Each partner plays a vital role
-          in ensuring that resources, training, and management are optimized to
-          achieve the project's goals of building model Gram Panchayat clusters
-          across India. The division of responsibilities also ensures
-          accountability and strategic focus on specific project areas, leading
-          to holistic and sustainable development.
+        <p className="text-gray-700 leading-relaxed mb-4">
+          In addition to the core partners, the project benefits from contributions
+          from various other stakeholders. These include:
         </p>
+        <ul className="list-disc px-5 text-gray-700 text-md leading-relaxed">
+          <li className="mt-3">
+            <b>Local Government Bodies:</b> Local government bodies play a significant
+            role in coordinating project activities at the grassroots level, ensuring
+            alignment with local needs, and facilitating implementation across districts.
+          </li>
+          <li className="mt-3">
+            <b>Private Sector Partners:</b> Private organizations and businesses provide
+            technical expertise, tools, and infrastructure support, enabling the project
+            to scale efficiently.
+          </li>
+          <li className="mt-3">
+            <b>NGOs and Civil Society Organizations:</b> These organizations contribute
+            to capacity-building efforts, community outreach, and monitoring, ensuring
+            that project benefits reach the most vulnerable populations.
+          </li>
+          <li className="mt-3">
+            <b>Academic Institutions:</b> Universities and research institutions contribute
+            valuable research, data analysis, and training support, helping to strengthen
+            the evidence base for decision-making and project design.
+          </li>
+        </ul>
       </div>
+
+      
     </div>
   );
 };

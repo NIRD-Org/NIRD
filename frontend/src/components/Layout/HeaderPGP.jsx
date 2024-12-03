@@ -65,8 +65,8 @@ const Header = () => {
       isProjectMenu: true,
       submenus: [
         { label: "Project Overview", to: "/project" },
-        { label: "Project Execution Team", to: "/ExecutionTeam" },
-        { label: "Key Partners", to: "/KeyPartners" },
+        { label: "Project Execution Team", to: "/projectstaff" },
+        { label: "Project Partners", to: "/KeyPartners" },
         { label: "Institutional Strengthening", to: "/institutional-strengthening" },
         { label: "Themes", to: "/themes" },
         { label: "Young Fellows and Activities", to: "/YFActivities" },
@@ -76,7 +76,14 @@ const Header = () => {
         { label: "Low Cost/No Cost Activities", to: "/low-cost-activities" },
       ],
     },
-    { label: "Project Progress", to: "/kpi?tab=Localised+Sustainable+Goals" },
+    { label: "Project Progress", 
+                submenus: [
+            { label: "Major project Interventions", to: "/MPI" },
+            { label: "Indicators and KPIs", to: "/kpi?tab=Localised+Sustainable+Goals"  },
+            { label: "Achievements", to: "/Achievements" },
+          ],
+        },
+    
     { label: "GP Profile", to: "/gp-profile/details" },
     {
       label: "Notifications and Reports",
