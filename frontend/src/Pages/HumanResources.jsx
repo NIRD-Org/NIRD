@@ -113,6 +113,20 @@ const HumanResourcesPage = () => {
           )}
         </div>
       </div>
+{/* Link to Detailed Achievements Page */}
+<div className="text-center mt-10">
+        <a
+          href="/staff-details"
+          className="text-[#004B86] text-lg font-semibold hover:underline"
+        >
+           LIST OF YOUNG FELLOWS AND SPCS 
+        </a>
+      </div>
+   
+    
+
+
+
     </div>
   );
 };

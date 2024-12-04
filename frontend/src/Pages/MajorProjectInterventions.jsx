@@ -2,7 +2,7 @@ import React from "react";
 import { FaRegLightbulb, FaUsers, FaTools, FaChartLine, FaHandHoldingHeart, FaClipboardList, FaBuilding, FaFlagCheckered, FaRecycle } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-const ThemesPage = () => {
+const MajorProjectInterventionsPage = () => {
   return (
     <div className="p-6 bg-gray-50">
       {/* Section Header */}
@@ -155,4 +155,4 @@ const ThemesPage = () => {
   );
 };
 
-export default ThemesPage;
+export default MajorProjectInterventionsPage;

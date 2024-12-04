@@ -164,6 +164,15 @@ import Theme2Page from "./Pages/Theme2";
 import Theme3Page from "./Pages/Theme3";
 import Theme4Page from "./Pages/Theme4";
 import ContactUsPage from "./Pages/ContactPagePGP";
+import Theme5Page from "./Pages/Theme5";
+import Theme6Page from "./Pages/Theme6";
+import Theme7Page from "./Pages/Theme7";
+import Theme8Page from "./Pages/Theme8";
+import Theme9Page from "./Pages/Theme9";
+import ThemesPage from "./Pages/ProjectThemes";
+import StaffTablePage from "./Pages/StaffTable";
+
+
 
 
 
@@ -203,13 +212,20 @@ function App() {
           <Route path="/yf-insights" element={<YfInsightsPage />} />
           <Route path="good-practices" element={<GoodPractices />} />
           <Route path="good-practices/list" element={<GoodPracticesList />} />
-
+          <Route path="/project-themes" element={<ThemesPage />} />
           <Route path="low-cost-voluntary-activities" element={<LCVAPage />} />
           <Route path="training" element={<TrainingPage />} />
           <Route path="/theme1" element={<Theme1Page />} />
           <Route path="/theme2" element={<Theme2Page />} />
           <Route path="/theme3" element={<Theme3Page />} />
           <Route path="/theme4" element={<Theme4Page />} />
+          <Route path="/theme5" element={<Theme5Page />} />
+          <Route path="/theme6" element={<Theme6Page />} />
+          <Route path="/theme7" element={<Theme7Page />} />
+          <Route path="/theme8" element={<Theme8Page />} />
+          <Route path="/theme9" element={<Theme9Page />} />
+          <Route path="/staff-details" element={<StaffTablePage />} />
+         
           <Route path="test" element={<AchievementChart />} />
           <Route
             path="/good-practice/:activity/:id"

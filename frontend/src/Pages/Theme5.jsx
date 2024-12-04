@@ -1,45 +1,39 @@
 import React, { useState } from "react";
-import { FaChartLine, FaClipboardList, FaUsers, FaRegLightbulb, FaHandHoldingHeart, FaBuilding, FaFlagCheckered, FaRecycle, FaTools } from "react-icons/fa";
+import { FaChartLine, FaRegLightbulb } from "react-icons/fa";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
 
 // Register chart.js components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const Theme4Page = () => {
+const Theme5Page = () => {
   const [isOpen, setIsOpen] = useState([false, false, false, false, false]);
 
   // Data for the graph
   const data = [
     {
-      label: 'Percentage of households in the project GPs avail themselves of 65 LPCD (Litres Per Capita Per Day) water',
-      baseline: 74,
-      current: 59,
-      target: 80,
+      label: 'Percentage of households reached by solar street lights in project GPs',
+      baseline: 55,
+      current: 65,
+      target: 72,
     },
     {
-      label: 'Percentage of Houses/Public Buildings that are facilitated with Grey Water Management Structure',
-      baseline: 23,
-      current: 16,
-      target: 24,
+      label: 'Percentage of BPL households as per BPL survey availing benefits',
+      baseline: 50,
+      current: 60,
+      target: 65,
     },
     {
-      label: 'Percentage of Houses/Public Buildings that are facilitated with functional rooftop rain water harvesting structure',
-      baseline: 11,
-      current: 15,
-      target: 15,
+      label: 'Percentage of solar-based irrigation pumps created',
+      baseline: 10,
+      current: 24,
+      target: 27,
     },
     {
-      label: 'Percentage of institutions (Schools, Anganwadi centres, GP buildings, Health centres, wellness centres and community buildings etc.) located in Project GP having access to Tap Water Connection',
-      baseline: 15,
-      current: 15,
-      target: 68,
-    },
-    {
-      label: 'Percentage of HHs having Tap Water Connection (as per Jal Jeevan Mission)',
-      baseline: 9,
-      current: 12,
-      target: 15,
+      label: 'Percentage of solar-based street lights created',
+      baseline: 29,
+      current: 41,
+      target: 49,
     },
   ];
 
@@ -49,7 +43,7 @@ const Theme4Page = () => {
     plugins: {
       title: {
         display: true,
-        text: 'Achievements of Project GPs under Water Sufficient Village',
+        text: 'Achievements of Project GPs under Clean and Green Village',
         font: {
           size: 18,
           weight: 'bold',
@@ -103,19 +97,19 @@ const Theme4Page = () => {
       {/* Section Header */}
       <div className="text-center mb-12">
         <h1 className="text-[#004B86] text-[2.5rem] font-extrabold">
-          Water-Sufficient Village
+          Clean and Green Village
         </h1>
         <p className="text-gray-600 mt-2 text-lg leading-relaxed">
-          Ensuring access to water resources and infrastructure for rural communities.
+          Empowering rural communities with sustainable, clean, and eco-friendly infrastructure.
         </p>
       </div>
 
-     {/* Detailed Description of the Theme */}
-<div className="mb-12">
-  <p className="text-gray-700 text-md leading-relaxed text-justify">
-    The <strong>Water-Sufficient Village</strong> initiative focuses on ensuring that rural communities have access to clean and sufficient water for daily use. This program addresses key areas such as <strong>Household Access to Water</strong>, <strong>Water Management Structures</strong>, and <strong>Tap Water Connections</strong>. Key components of the initiative include providing households with <strong>65 LPCD</strong> (litres per capita per day) of water, setting up <strong>Grey Water Management Structures</strong>, and implementing <strong>Rooftop Rainwater Harvesting Systems</strong> in both residential and public buildings. Additionally, the program promotes increasing access to <strong>Tap Water Connections</strong> in institutions like schools, health centres, and Anganwadi centres. Ultimately, the goal is to create a <strong>Self-Sustaining Water Infrastructure</strong> in rural villages, ensuring that communities have reliable access to water. This contributes to the achievement of the <strong>Sustainable Development Goals (SDGs)</strong>, particularly in areas of health, sanitation, and sustainable water management.
-  </p>
-</div>
+      {/* Detailed Description of the Theme */}
+      <div className="mb-12">
+        <p className="text-gray-700 text-md leading-relaxed text-justify">
+          The <strong>Clean and Green Village</strong> initiative focuses on creating eco-friendly infrastructure for rural communities. This includes the installation of <strong>solar street lights</strong>, <strong>solar-based irrigation systems</strong>, and <strong>green energy solutions</strong>. By ensuring sustainable energy practices and empowering communities, this initiative supports the <strong>Sustainable Development Goals (SDGs)</strong>, particularly in environmental sustainability, energy access, and rural infrastructure development.
+        </p>
+      </div>
 
       {/* Section Title for Achievements */}
       <div className="text-center mb-8">
@@ -158,8 +152,10 @@ const Theme4Page = () => {
           </div>
         ))}
       </div>
+
+     
     </div>
   );
 };
 
-export default Theme4Page;
+export default Theme5Page;

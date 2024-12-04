@@ -83,7 +83,7 @@ const Header = () => {
         { label: "Project Execution Team", to: "/projectstaff" },
         { label: "Project Partners", to: "/KeyPartners" },
         { label: "Institutional Strengthening", to: "/institutional-strengthening" },
-        { label: "Themes", to: "/themes" },
+        { label: "Themes", to: "/project-themes" },
         { label: "Young Fellows and Activities", to: "/YFActivities" },
         { label: "Indicators and KPIs", to: "/indicators-kpis" },
         { label: "Budget and Expenditure", to: "/budget-expenditure" },
@@ -136,7 +136,7 @@ const Header = () => {
           <div>
             <h1 className="text-lg sm:text-2xl md:text-3xl font-bold leading-tight">
               Project for Creating<br />
-              250 Model GP Clusters
+              250 Model GP Clusters across India
             </h1>
           </div>
         </div>

@@ -161,11 +161,11 @@ const ThemesCarousel = () => {
     { icon: <FaHeartbeat size={41} color="#E04811" />, title: "Healthy Village", link: "/Theme2" },
     { icon: <FaChild size={41} color="#F0BF4C" />, title: "Child-friendly Village", link: "/Theme3" },
     { icon: <FaTint size={41} color="#3B9AE1" />, title: "Water-sufficient Village", link: "/Theme4" },
-    { icon: <FaTree size={41} color="#2E7D32" />, title: "Clean and Green Village", link: "/theme/5" },
-    { icon: <FaIndustry size={41} color="#7F11E0" />, title: "Infrastructure in Village", link: "/theme/6" },
-    { icon: <FaBalanceScale size={41} color="#11DCE0" />, title: "Socially Just Village", link: "/theme/7" },
-    { icon: <FaHandHoldingHeart size={41} color="#8DE12D" />, title: "Good Governance Village", link: "/theme/8" },
-    { icon: <FaFemale size={41} color="#F06292" />, title: "Women-friendly Village", link: "/theme/9" },
+    { icon: <FaTree size={41} color="#2E7D32" />, title: "Clean and Green Village", link: "/Theme5" },
+    { icon: <FaIndustry size={41} color="#7F11E0" />, title: "Village with self sufficient Infrastructure", link: "/Theme6" },
+    { icon: <FaBalanceScale size={41} color="#11DCE0" />, title: "Socially Just Village", link: "/Theme7" },
+    { icon: <FaHandHoldingHeart size={41} color="#8DE12D" />, title: " Village with Good Governance", link: "/Theme8" },
+    { icon: <FaFemale size={41} color="#F06292" />, title: "Women-friendly Village", link: "/Theme9" },
   ];
 
   const carouselRef = useRef(null);
@@ -263,7 +263,7 @@ const osrLineData = {
   datasets: [
     {
       label: "Own Source Revenue (OSR) in ₹ Cr",
-      data: [13, 15, 19],
+      data: [12.12, 13.72, 15.47],
       borderColor: "rgba(100, 255, 218, 1)",
       backgroundColor: "rgba(100, 255, 218, 0.2)",
       pointBorderColor: "rgba(255, 99, 132, 1)",

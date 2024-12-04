@@ -1,45 +1,45 @@
 import React, { useState } from "react";
-import { FaChartLine, FaClipboardList, FaUsers, FaRegLightbulb, FaHandHoldingHeart, FaBuilding, FaFlagCheckered, FaRecycle, FaTools } from "react-icons/fa";
+import { FaRegLightbulb } from "react-icons/fa";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
 
 // Register chart.js components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const Theme4Page = () => {
+const Theme9Page = () => {
   const [isOpen, setIsOpen] = useState([false, false, false, false, false]);
 
   // Data for the graph
   const data = [
     {
-      label: 'Percentage of households in the project GPs avail themselves of 65 LPCD (Litres Per Capita Per Day) water',
-      baseline: 74,
-      current: 59,
-      target: 80,
-    },
-    {
-      label: 'Percentage of Houses/Public Buildings that are facilitated with Grey Water Management Structure',
-      baseline: 23,
-      current: 16,
-      target: 24,
-    },
-    {
-      label: 'Percentage of Houses/Public Buildings that are facilitated with functional rooftop rain water harvesting structure',
-      baseline: 11,
-      current: 15,
-      target: 15,
-    },
-    {
-      label: 'Percentage of institutions (Schools, Anganwadi centres, GP buildings, Health centres, wellness centres and community buildings etc.) located in Project GP having access to Tap Water Connection',
+      label: 'Percentage of girl children (6-13 years) are out of school',
       baseline: 15,
-      current: 15,
-      target: 68,
+      current: 3,
+      target: 2,
     },
     {
-      label: 'Percentage of HHs having Tap Water Connection (as per Jal Jeevan Mission)',
+      label: 'Percentage of girl children (0-5 years) recorded as malnourished',
       baseline: 9,
-      current: 12,
-      target: 15,
+      current: 1,
+      target: 1,
+    },
+    {
+      label: 'Percentage of all children (0-5 years) recorded as malnourished',
+      baseline: 6,
+      current: 1,
+      target: 1,
+    },
+    {
+      label: 'Percentage of girl children (0-13 years) were immunized',
+      baseline: 11,
+      current: 2,
+      target: 2,
+    },
+    {
+      label: 'Percentage of pregnant/lactating women (15-49 years) receiving nutrition support',
+      baseline: 7,
+      current: 4,
+      target: 2,
     },
   ];
 
@@ -49,7 +49,7 @@ const Theme4Page = () => {
     plugins: {
       title: {
         display: true,
-        text: 'Achievements of Project GPs under Water Sufficient Village',
+        text: 'Achievements of Project GPs under Women-Friendly Village',
         font: {
           size: 18,
           weight: 'bold',
@@ -85,7 +85,7 @@ const Theme4Page = () => {
         },
         beginAtZero: true,
         ticks: {
-          stepSize: 10,
+          stepSize: 2,
         },
       },
     },
@@ -103,19 +103,23 @@ const Theme4Page = () => {
       {/* Section Header */}
       <div className="text-center mb-12">
         <h1 className="text-[#004B86] text-[2.5rem] font-extrabold">
-          Water-Sufficient Village
+          Women-Friendly Village
         </h1>
         <p className="text-gray-600 mt-2 text-lg leading-relaxed">
-          Ensuring access to water resources and infrastructure for rural communities.
+          Creating inclusive environments to empower women and improve their quality of life.
         </p>
       </div>
 
-     {/* Detailed Description of the Theme */}
-<div className="mb-12">
-  <p className="text-gray-700 text-md leading-relaxed text-justify">
-    The <strong>Water-Sufficient Village</strong> initiative focuses on ensuring that rural communities have access to clean and sufficient water for daily use. This program addresses key areas such as <strong>Household Access to Water</strong>, <strong>Water Management Structures</strong>, and <strong>Tap Water Connections</strong>. Key components of the initiative include providing households with <strong>65 LPCD</strong> (litres per capita per day) of water, setting up <strong>Grey Water Management Structures</strong>, and implementing <strong>Rooftop Rainwater Harvesting Systems</strong> in both residential and public buildings. Additionally, the program promotes increasing access to <strong>Tap Water Connections</strong> in institutions like schools, health centres, and Anganwadi centres. Ultimately, the goal is to create a <strong>Self-Sustaining Water Infrastructure</strong> in rural villages, ensuring that communities have reliable access to water. This contributes to the achievement of the <strong>Sustainable Development Goals (SDGs)</strong>, particularly in areas of health, sanitation, and sustainable water management.
-  </p>
-</div>
+      {/* Detailed Description of the Theme */}
+      <div className="mb-12">
+        <p className="text-gray-700 text-md leading-relaxed text-justify">
+          The <strong>Women-Friendly Village</strong> initiative aims to enhance the well-being of women and girl 
+          children in rural areas by focusing on their education, nutrition, and health. This program seeks to 
+          reduce malnutrition among children, increase school enrollment for girl children, and provide adequate 
+          support to pregnant and lactating women. By ensuring access to health and nutrition services, the initiative 
+          empowers women to lead healthier and more secure lives while fostering gender equality in rural communities.
+        </p>
+      </div>
 
       {/* Section Title for Achievements */}
       <div className="text-center mb-8">
@@ -126,7 +130,6 @@ const Theme4Page = () => {
 
       {/* Key Interventions Section - Grid Layout */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-        {/* Row 1 */}
         {data.map((indicator, index) => (
           <div key={index} className="bg-white shadow-lg rounded-lg p-6 hover:bg-white transition-all">
             <div
@@ -158,8 +161,10 @@ const Theme4Page = () => {
           </div>
         ))}
       </div>
+
+     
     </div>
   );
 };
 
-export default Theme4Page;
+export default Theme9Page;
