@@ -1,19 +1,30 @@
-import React, { useState } from "react";
-import { FaSearch, FaVolumeUp, FaUser, FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
+import React, { useState, useEffect, useRef } from "react";
+import { NavLink, useLocation } from "react-router-dom";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
-import { NavLink } from "react-router-dom";
 import { useAuthContext } from "@/context/AuthContext";
 
 const MenuItem = ({ label, to, submenus, isProjectMenu }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const closeTimeout = useRef(null);
 
-  const toggleMenu = () => {
-    setIsOpen((prev) => !prev);
+  const handleMouseEnter = () => {
+    clearTimeout(closeTimeout.current); // Clear any existing timeout
+    setIsOpen(true); // Open the menu
+  };
+
+  const handleMouseLeave = () => {
+    closeTimeout.current = setTimeout(() => {
+      setIsOpen(false); // Close the menu after a delay
+    }, 150); // Adjust the delay time (150ms)
   };
 
   return (
-    <div className="relative">
-      <NavLink to={to} className="block px-4 py-2 hover:text-gray-300" onClick={toggleMenu}>
+    <div
+      className="relative"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave} // Close menu with delay
+    >
+      <NavLink to={to} className="block px-4 py-2 hover:text-gray-300">
         {label}
       </NavLink>
       {submenus && isOpen && (
@@ -40,7 +51,27 @@ const MenuItem = ({ label, to, submenus, isProjectMenu }) => {
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { isAuthenticated } = useAuthContext();
+  const menuRef = useRef(null);
+  const location = useLocation();
+
   const toggleMenu = () => setIsOpen(!isOpen);
+
+  // Close the menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Close the menu when the route changes
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location]);
 
   const menuItems = [
     {
@@ -59,7 +90,7 @@ const Header = () => {
       ],
     },
     {
-      label: "Project Progress",
+      label: "Project Progress",to: "/pgp",
       submenus: [
         { label: "Major project Interventions", to: "/MPI" },
         { label: "Indicators and KPIs", to: "/kpi?tab=Localised+Sustainable+Goals" },
@@ -92,9 +123,8 @@ const Header = () => {
 
   return (
     <header>
-      {/* Top Section (White background) */}
+      {/* Top Section */}
       <div className="flex flex-wrap items-center justify-between bg-white px-6 py-4">
-        {/* Left Section: Project Title and Logo */}
         <div className="flex items-center space-x-4">
           <NavLink to={"/pgp"}>
             <img
@@ -110,9 +140,7 @@ const Header = () => {
             </h1>
           </div>
         </div>
-
-        {/* Right Section: Logos */}
-        <div className="flex items-center justify-center space-x-4">
+        <div className="flex items-center space-x-4">
           <img
             src="/logo/ashoka.png"
             alt="Indian Emblem"
@@ -131,7 +159,7 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Menu Bar (Primary background color) */}
+      {/* Menu Bar */}
       <nav className="bg-primary text-white">
         <div className="container mx-auto px-6">
           <ul className="hidden lg:flex items-center justify-center space-x-6 py-4">
@@ -141,8 +169,6 @@ const Header = () => {
               </li>
             ))}
           </ul>
-
-          {/* Mobile Menu Button */}
           <div className="lg:hidden flex justify-between items-center py-4">
             <button
               onClick={toggleMenu}
@@ -151,10 +177,8 @@ const Header = () => {
               {isOpen ? <AiOutlineClose size={24} /> : <AiOutlineMenu size={24} />}
             </button>
           </div>
-
-          {/* Mobile Dropdown Menu */}
           {isOpen && (
-            <div className="lg:hidden bg-primary text-white p-6 space-y-4">
+            <div ref={menuRef} className="lg:hidden bg-primary text-white p-6 space-y-4">
               {menuItems.map((item, index) => (
                 <div key={index}>
                   <NavLink
