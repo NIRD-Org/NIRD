@@ -98,6 +98,7 @@ const Header = () => {
         { label: "Low Cost/No Cost Activities", to: "/low-cost-voluntary-activities" },
         { label: "Training", to: "/training" },
         { label: "Achievements", to: "/Achievements" },
+        { label: "GramSabhaProgress", to: "/GramSabha" },
       ],
     },
     { label: "GP Profile", to: "/gp-profile/details" },

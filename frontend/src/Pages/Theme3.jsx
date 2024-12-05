@@ -159,7 +159,7 @@ const Theme3Page = () => {
               <div className="overflow-x-auto">
                 <Bar
                   data={{
-                    labels: ['Baseline (31.03.2022)', 'Current (31.03.2024)', 'Target (30.09.2024)'],
+                    labels: ['Baseline (31.03.2022)', '(31.03.2024)', '(30.09.2024)'],
                     datasets: [
                       {
                         label: 'Percentage',

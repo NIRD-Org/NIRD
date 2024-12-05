@@ -171,6 +171,7 @@ import Theme8Page from "./Pages/Theme8";
 import Theme9Page from "./Pages/Theme9";
 import ThemesPage from "./Pages/ProjectThemes";
 import StaffTablePage from "./Pages/StaffTable";
+import GramSabhaPage from "./Pages/GramSabha";
 
 
 
@@ -225,6 +226,7 @@ function App() {
           <Route path="/theme8" element={<Theme8Page />} />
           <Route path="/theme9" element={<Theme9Page />} />
           <Route path="/staff-details" element={<StaffTablePage />} />
+          <Route path="/GramSabha" element={<GramSabhaPage />} />
          
           <Route path="test" element={<AchievementChart />} />
           <Route

@@ -8,10 +8,10 @@ const MajorProjectInterventionsPage = () => {
       {/* Section Header */}
       <div className="text-center mb-12">
         <h1 className="text-[#004B86] text-[2.5rem] font-extrabold">
-          Project Themes
+          Major Project Interventions
         </h1>
         <p className="text-gray-600 mt-2 text-lg leading-relaxed">
-          Key themes that define and drive the success of the project.
+        Strategic Actions Aligned with the Project's Core Objectives
         </p>
       </div>
 
