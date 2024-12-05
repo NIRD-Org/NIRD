@@ -60,9 +60,9 @@ const HumanResourcesPage = () => {
           </button>
           {activeRole === "youngFellows" && (
             <div className="mt-4">
-              <p><strong>Total Members:</strong> 157</p>
+              <p><strong>Total Members:</strong> 250</p>
               <p><strong className="text-green-500">Active Members:</strong> 118</p>
-              <p><strong className="text-red-500">Vacant Positions:</strong> 39</p>
+              <p><strong className="text-red-500">Vacant Positions:</strong> 132</p>
             </div>
           )}
         </div>

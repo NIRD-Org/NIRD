@@ -471,6 +471,18 @@ export const getSidebarItems = (user) => {
         },
         {
           type: "module",
+          title: "Young fellow Plan Of Action",
+          submodules: [
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "View POA",
+              link: "/admin/yf/poa1-data",
+            },
+          ],
+        },
+        {
+          type: "module",
           title: "Training",
           submodules: [
             {

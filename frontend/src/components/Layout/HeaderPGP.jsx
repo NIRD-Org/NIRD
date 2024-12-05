@@ -82,11 +82,11 @@ const Header = () => {
         { label: "Project Overview", to: "/project" },
         { label: "Project Execution Team", to: "/projectstaff" },
         { label: "Project Partners", to: "/KeyPartners" },
-        { label: "Institutional Strengthening", to: "/institutional-strengthening" },
         { label: "Themes", to: "/project-themes" },
         { label: "Young Fellows and Activities", to: "/YFActivities" },
+       {/*} { label: "Institutional Strengthening", to: "/institutional-strengthening" },
         { label: "Indicators and KPIs", to: "/indicators-kpis" },
-        { label: "Budget and Expenditure", to: "/budget-expenditure" },
+        { label: "Budget and Expenditure", to: "/budget-expenditure" },*/}
       ],
     },
     {
@@ -105,20 +105,20 @@ const Header = () => {
     {
       label: "Notifications and Reports",
       submenus: [
-        { label: "Circulars and Orders", to: "/circulars-orders" },
-        { label: "Careers", to: "/careers" },
+        { label: "Circulars and Orders", to: "/pgp" },
+        { label: "Careers", to: "/pgp" },
         {
           label: "Reports and Formats",
           submenus: [
-            { label: "GPDP Models", to: "/gpdp-models" },
-            { label: "Quick Links", to: "/quick-links" },
-            { label: "YF Support Material", to: "/yf-support-material" },
+            { label: "GPDP Models", to: "/pgp" },
+            { label: "Quick Links", to: "/pgp" },
+            { label: "YF Support Material", to: "/pgp" },
           ],
         },
       ],
     },
     { label: "OSR", to: "/OSR" },
-    { label: "Grievance Cell", to: "/grievance-cell" },
+    { label: "Grievance Cell", to: "/pgp" },
     { label: "Contact Us", to: "/Contactpgp" },
   ];
 
