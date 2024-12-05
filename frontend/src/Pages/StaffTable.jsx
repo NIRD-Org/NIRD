@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 
 const StaffTablePage = () => {
+ 
   const tableData = [
     {
     slNo: 1,
@@ -1313,57 +1314,134 @@ const StaffTablePage = () => {
         population: 25052,
         spcDetails: "Arghya Santra",
       },
-  ];
+    ];
+    const [sortedData, setSortedData] = useState([...tableData]);
+    const [sortConfig, setSortConfig] = useState({ key: "", direction: "" });
   
+    const handleSort = (key) => {
+      let direction = "ascending";
+      if (sortConfig.key === key && sortConfig.direction === "ascending") {
+        direction = "descending";
+      }
+  
+      const sortedArray = [...sortedData].sort((a, b) => {
+        if (a[key] < b[key]) {
+          return direction === "ascending" ? -1 : 1;
+        }
+        if (a[key] > b[key]) {
+          return direction === "ascending" ? 1 : -1;
+        }
+        return 0;
+      });
+  
+      setSortedData(sortedArray);
+      setSortConfig({ key, direction });
+    };
 
-  return (
-    <div className="p-6 bg-gray-50">
-      {/* Page Title */}
-      <h1 className="text-center text-[#004B86] text-2xl font-bold mb-6">
-        Young Fellows,State Program Coordinator (SPC) and GPs Details
-      </h1>
-
-      {/* Responsive Table */}
-      <div className="overflow-x-auto bg-white shadow-md rounded-lg">
-        <table className="w-full text-sm text-left text-gray-700 border-collapse">
-          {/* Table Header */}
-          <thead className="bg-[#004B86] text-white">
-            <tr>
-              <th className="py-3 px-4">Sl. No</th>
-              <th className="py-3 px-4">Name of Young Fellow</th>
-              <th className="py-3 px-4">State</th>
-              <th className="py-3 px-4">District</th>
-              <th className="py-3 px-4">Block</th>
-              <th className="py-3 px-4">Names of GPs</th>
-              <th className="py-3 px-4">Population</th>
-              <th className="py-3 px-4">SPC Name </th>
-            </tr>
-          </thead>
-
-          {/* Table Body */}
-          <tbody>
-            {tableData.map((row, index) => (
-              <tr
-                key={index}
-                className={`${
-                  index % 2 === 0 ? "bg-gray-100" : "bg-white"
-                } hover:bg-gray-200`}
-              >
-                <td className="py-3 px-4">{row.slNo}</td>
-                <td className="py-3 px-4">{row.name}</td>
-                <td className="py-3 px-4">{row.state}</td>
-                <td className="py-3 px-4">{row.district}</td>
-                <td className="py-3 px-4">{row.block}</td>
-                <td className="py-3 px-4">{row.gpNames}</td>
-                <td className="py-3 px-4">{row.population}</td>
-                <td className="py-3 px-4">{row.spcDetails}</td>
+    return (
+      <div className="p-6 bg-gray-50">
+        {/* Page Title */}
+        <h1 className="text-center text-[#004B86] text-2xl font-bold mb-6">
+          Young Fellows, State Program Coordinator (SPC), and GPs Details
+        </h1>
+  
+        {/* Responsive Table */}
+        <div className="overflow-x-auto bg-white shadow-md rounded-lg">
+          <table className="w-full text-sm text-left text-gray-700 border-collapse">
+            {/* Table Header */}
+            <thead className="bg-[#004B86] text-white">
+              <tr>
+                <th
+                  className="py-3 px-4 cursor-pointer"
+                  onClick={() => handleSort("slNo")}
+                >
+                  Sl. No{" "}
+                  {sortConfig.key === "slNo" &&
+                    (sortConfig.direction === "ascending" ? "▲" : "▼")}
+                </th>
+                <th
+                  className="py-3 px-4 cursor-pointer"
+                  onClick={() => handleSort("name")}
+                >
+                  Name of Young Fellow{" "}
+                  {sortConfig.key === "name" &&
+                    (sortConfig.direction === "ascending" ? "▲" : "▼")}
+                </th>
+                <th
+                  className="py-3 px-4 cursor-pointer"
+                  onClick={() => handleSort("state")}
+                >
+                  State{" "}
+                  {sortConfig.key === "state" &&
+                    (sortConfig.direction === "ascending" ? "▲" : "▼")}
+                </th>
+                <th
+                  className="py-3 px-4 cursor-pointer"
+                  onClick={() => handleSort("district")}
+                >
+                  District{" "}
+                  {sortConfig.key === "district" &&
+                    (sortConfig.direction === "ascending" ? "▲" : "▼")}
+                </th>
+                <th
+                  className="py-3 px-4 cursor-pointer"
+                  onClick={() => handleSort("block")}
+                >
+                  Block{" "}
+                  {sortConfig.key === "block" &&
+                    (sortConfig.direction === "ascending" ? "▲" : "▼")}
+                </th>
+                <th
+                  className="py-3 px-4 cursor-pointer"
+                  onClick={() => handleSort("gpNames")}
+                >
+                  Names of GPs{" "}
+                  {sortConfig.key === "gpNames" &&
+                    (sortConfig.direction === "ascending" ? "▲" : "▼")}
+                </th>
+                <th
+                  className="py-3 px-4 cursor-pointer"
+                  onClick={() => handleSort("population")}
+                >
+                  Population{" "}
+                  {sortConfig.key === "population" &&
+                    (sortConfig.direction === "ascending" ? "▲" : "▼")}
+                </th>
+                <th
+                  className="py-3 px-4 cursor-pointer"
+                  onClick={() => handleSort("spcDetails")}
+                >
+                  SPC Name{" "}
+                  {sortConfig.key === "spcDetails" &&
+                    (sortConfig.direction === "ascending" ? "▲" : "▼")}
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+  
+            {/* Table Body */}
+            <tbody>
+              {sortedData.map((row, index) => (
+                <tr
+                  key={index}
+                  className={`${
+                    index % 2 === 0 ? "bg-gray-100" : "bg-white"
+                  } hover:bg-gray-200`}
+                >
+                  <td className="py-3 px-4">{row.slNo}</td>
+                  <td className="py-3 px-4">{row.name}</td>
+                  <td className="py-3 px-4">{row.state}</td>
+                  <td className="py-3 px-4">{row.district}</td>
+                  <td className="py-3 px-4">{row.block}</td>
+                  <td className="py-3 px-4">{row.gpNames}</td>
+                  <td className="py-3 px-4">{row.population}</td>
+                  <td className="py-3 px-4">{row.spcDetails}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-  );
-};
-
-export default StaffTablePage;
+    );
+  };
+  
+  export default StaffTablePage;
