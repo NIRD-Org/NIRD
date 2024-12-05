@@ -108,7 +108,7 @@ const Theme10DataPage = () => {
         <p className="hidden md:block"> Back</p>
       </button>
       <div className="flex flex-col px-3 md:flex-row flex-wrap gap-3 pt-10 justify-center items-center">
-        <h1 className="text-xl font-bold text-primary">Theme : </h1>
+        <h1 className="text-xl font-bold text-primary">YOUNG FELLOW PERFORMANCE ANALYSIS</h1>
         <p className="text-lg text-center">{theme}</p>
       </div>
       <div className="px-4 pb-10 pt-5 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 md:px-20 gap-0">
@@ -130,9 +130,9 @@ const Theme10DataPage = () => {
         </div>
         <div className="flex gap-2 items-center w-fit">
           <label className="font-semibold text-lg text-nowrap">
-            Financial Year:
+            Financial Year: 2023-24
           </label>
-          <select
+          {/*<select
             value={financialYear}
             onChange={(e) => setFinancialYear(e.target.value)}
             className="w-full md:w-40 text-center border p-2 rounded-md"
@@ -143,7 +143,7 @@ const Theme10DataPage = () => {
                 {year.label}
               </option>
             ))}
-          </select>
+          </select>*/}
         </div>
       </div>
 
