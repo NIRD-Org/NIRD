@@ -781,24 +781,24 @@ export const getSidebarItems = (user) => {
             title: "YF POA Submission Status ",
             link: "/admin/soepr/pOAreport",
           },
-          {
-            type: "sub-module",
-            icon: ArrowBigRight,
-            title: "View SPC POA Reports",
-            link: "/admin/yf/poa1-data",
-          },
-          {
-            type: "sub-module",
-            icon: ArrowBigRight,
-            title: "SPC POA Defaulters List ",
-            link: "/admin/soepr/poa-report",
-          },
-          {
-            type: "sub-module",
-            icon: ArrowBigRight,
-            title: "SPC POA Submission Status ",
-            link: "/admin/soepr/pOAreport",
-          },
+          // {
+          //   type: "sub-module",
+          //   icon: ArrowBigRight,
+          //   title: "View SPC POA Reports",
+          //   link: "/admin/yf/poa1-data",
+          // },
+          // {
+          //   type: "sub-module",
+          //   icon: ArrowBigRight,
+          //   title: "SPC POA Defaulters List ",
+          //   link: "/admin/soepr/poa-report",
+          // },
+          // {
+          //   type: "sub-module",
+          //   icon: ArrowBigRight,
+          //   title: "SPC POA Submission Status ",
+          //   link: "/admin/soepr/pOAreport",
+          // },
         ],
       },
       {
@@ -827,32 +827,32 @@ export const getSidebarItems = (user) => {
           },
         ],
       },
-      {
-        type: "module",
-        icon: ArrowBigRight,
-        title: "PMU",
-        submodules: [
+      // {
+      //   type: "module",
+      //   icon: ArrowBigRight,
+      //   title: "PMU",
+      //   submodules: [
          
-          {
-            type: "sub-module",
-            icon: ArrowBigRight,
-            title: "PMU POA Reports",
-            link: "/admin/soepr/poa1-data",
-          },
-          {
-            type: "sub-module",
-            icon: ArrowBigRight,
-            title: "POA Defaulters List ",
-            link: "/admin/soepr/poa-report",
-          },
-          {
-            type: "sub-module",
-            icon: ArrowBigRight,
-            title: "POA Submission Status ",
-            link: "/admin/soepr/pOAreport",
-          },
-        ],
-      },
+      //     {
+      //       type: "sub-module",
+      //       icon: ArrowBigRight,
+      //       title: "PMU POA Reports",
+      //       link: "/admin/soepr/poa1-data",
+      //     },
+      //     {
+      //       type: "sub-module",
+      //       icon: ArrowBigRight,
+      //       title: "POA Defaulters List ",
+      //       link: "/admin/soepr/poa-report",
+      //     },
+      //     {
+      //       type: "sub-module",
+      //       icon: ArrowBigRight,
+      //       title: "POA Submission Status ",
+      //       link: "/admin/soepr/pOAreport",
+      //     },
+      //   ],
+      // },
       {
         type: "module",
         icon: ArrowBigRight,
