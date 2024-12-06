@@ -1,16 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  Link,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { ArrowLeftIcon, Table } from "lucide-react";
 import API from "@/utils/API";
 import PoaDataCard from "./PoaDataCard";
 import { savePDF } from "@progress/kendo-react-pdf";
 import html2pdf from "html2pdf.js";
 import FormField from "@/components/ui/formfield";
+
 const months = [
   { label: "January", value: 1 },
   { label: "February", value: 2 },
@@ -46,6 +42,8 @@ const Poa1AdminYfData = () => {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [poaType, setPoaType] = useState("poa1");
   const [role, setRole] = useState("all");
+  const navigate = useNavigate();
+
   const handleMonthChange = (e) => {
     setSelectedMonth(parseInt(e.target.value));
   };
@@ -54,12 +52,11 @@ const Poa1AdminYfData = () => {
     setSelectedYear(parseInt(e.target.value));
   };
 
-  const navigate = useNavigate();
-
   const getAllStates = async () => {
     const { data } = await API.get(`/api/v1/state/all`);
     setStateOptions(data?.states);
   };
+
   const getAllDistricts = async () => {
     const { data } = await API.get(`/api/v1/dist/state/${state}`);
     setDistrictOptions(data?.districts);
@@ -88,9 +85,9 @@ const Poa1AdminYfData = () => {
           (user) => user.userLocations.state_ids[0] === state
         );
 
-        const { data: roleData } = await API.get(
-          `/api/v1/users/all?role=${role}`
-        );
+        // Only include users for the selected role
+        const roleQuery = role !== "all" ? `?role=${Number(role)}` : "";
+        const { data: roleData } = await API.get(`/api/v1/users/all${roleQuery}`);
 
         // Filter roleData based on filteredUsers
         const filteredRoleData = roleData.data.filter((user) =>
@@ -155,21 +152,6 @@ const Poa1AdminYfData = () => {
     getStateById(state);
     getAllDistricts();
   }, [state]);
-  // const exportPDFWithMethod = () => {
-  //   let element = printRef.current || document.body;
-  //   element.style.fontSize = "13px !important";
-
-  //   savePDF(element, {
-  //     paperSize: "auto",
-
-  //     margin: 10,
-  //     fileName: `${poaType} ${stateData?.name}`,
-  //     // forcePageBreak: ".page-break", // Add this line
-  //   }).then(() => {
-  //     // Reset the font size after export
-  //     element.style.fontSize = "";
-  //   });
-  // };
 
   const handleGeneratePdf = () => {
     const element = printRef.current;
@@ -233,11 +215,7 @@ const Poa1AdminYfData = () => {
                 className="border text-sm bg-white p-2 rounded-md"
               >
                 <option value="all">All</option>
-                {/* <option value="1">Superadmin</option>
-                <option value="2">Admin</option> */}
                 <option value={3}>Young Fellow</option>
-                {/* <option value="4">Consultant</option>
-                <option value="5">Sr. Consultant</option> */}
               </select>
             </div>
             <div className="flex flex-col">
@@ -258,7 +236,6 @@ const Poa1AdminYfData = () => {
                 ))}
               </select>
             </div>
-
             <div>
               <FormField
                 type="select"
@@ -302,9 +279,8 @@ const Poa1AdminYfData = () => {
       </div>
 
       <button
-        // onClick={exportPDFWithMethod}
         onClick={handleGeneratePdf}
-        className="mt-4 bg-primary  text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        className="mt-4 bg-primary text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
       >
         Download as PDF
       </button>
