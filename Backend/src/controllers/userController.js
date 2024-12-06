@@ -7,21 +7,23 @@ import { uploadFile } from "../utils/uploadFile.js";
 
 export const getAllUsers = CatchAsyncError(async (req, res, next) => {
   try {
-    const filter = {};
-    filter.status = "1";
+    const filter = {}; // Initialize an empty filter object
+    filter.status = "1"; // Default filter to fetch only active users
+
     const { role, status } = req.query;
 
-    if (req.user.role == 2) filter.createdBy = req.user.id;
-
-    if (req.query.status) filter.status = req.query.status;
+    // Apply optional filters based on query parameters
+    if (status) filter.status = status;
     if (role) filter.role = parseInt(role);
 
+    // Fetch all users matching the filter
     const users = await User.find(filter);
 
+    // Send the response with the list of users
     res.status(200).json({ data: users });
   } catch (err) {
-    console.log(err);
-    return next(new Errorhandler("failed to get users data", 500));
+    console.error(err);
+    return next(new Errorhandler("Failed to get users data", 500));
   }
 });
 
@@ -92,7 +94,7 @@ export const updateUser = CatchAsyncError(async (req, res, next) => {
       user,
     });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return next(new Errorhandler("Failed to update user", 500));
   }
 });
@@ -106,10 +108,10 @@ export const updateMany = CatchAsyncError(async (req, res, next) => {
 
     res.status(200).json({
       status: "success",
-      message: "Users Updated successfully",
+      message: "Users updated successfully",
     });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return next(new Errorhandler("Failed to update users", 500));
   }
 });

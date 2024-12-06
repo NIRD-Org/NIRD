@@ -172,6 +172,7 @@ import Theme9Page from "./Pages/Theme9";
 import ThemesPage from "./Pages/ProjectThemes";
 import StaffTablePage from "./Pages/StaffTable";
 import GramSabhaPage from "./Pages/GramSabha";
+import Poa1SPCYfData from "./components/admin/poa/Poa1SPCYfData";
 
 
 
@@ -242,7 +243,7 @@ function App() {
           <Route path="/admin" element={<AdminPage />}>
             <Route index element={<AdminMainPage />} />
             <Route path="view/attendance" element={<ViewAttendance />} />
-
+            <Route path="spcviewyfpoa" element={<Poa1SPCYfData />} />
             <Route path="gp-wise-kpi" element={<GpWiseKpiList />} />
             <Route path="change-password" element={<ChangePassword />} />
             <Route path="users" element={<UserPage />} />

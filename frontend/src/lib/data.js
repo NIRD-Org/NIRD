@@ -370,29 +370,29 @@ export const getSidebarItems = (user) => {
 
     case 2:
       sidebarItems = [
+   //     {
+  //        type: "module",
+   //       icon: ArrowBigRight,
+   //       title: "Access Management",
+     //     submodules: [
+       //     {
+         //     type: "sub-module",
+           //   icon: ArrowBigRight,
+             // title: "Create User",
+      //        link: "/admin/users/create",
+       //     },
+       //     {
+       //       type: "sub-module",
+       //       icon: ArrowBigRight,
+       //       title: "User location",
+       //       link: "/admin/users/all/young-fellow",
+       //     },
+       //   ],
+       // },
         {
           type: "module",
           icon: ArrowBigRight,
-          title: "Access Management",
-          submodules: [
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "Create User",
-              link: "/admin/users/create",
-            },
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "User location",
-              link: "/admin/users/all/young-fellow",
-            },
-          ],
-        },
-        {
-          type: "module",
-          icon: ArrowBigRight,
-          title: "Action",
+          title: "Approvals",
           submodules: [
             {
               type: "sub-module",
@@ -471,13 +471,13 @@ export const getSidebarItems = (user) => {
         },
         {
           type: "module",
-          title: "Monitor Young fellow Plan Of Action",
+          title: "Monitor Young Fellow Plan Of Action",
           submodules: [
             {
               type: "sub-module",
               icon: ArrowBigRight,
               title: "View YF POA",
-              link: "/admin/yf/poa1-data",
+              link: "/admin/spcviewyfpoa",
             },
           ],
         },
