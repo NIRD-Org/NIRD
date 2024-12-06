@@ -129,7 +129,7 @@ function PgpHome() {
   </div>
 </section>
 
-      {/* Measuring Impact Section */}
+      {/* Measuring Impact Section 
       <section className="py-10 bg-white">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-2xl md:text-4xl font-bold mb-4">Measuring Our Impact and Progress</h2>
@@ -149,7 +149,7 @@ function PgpHome() {
             ))}
           </div>
         </div>
-      </section>
+      </section>*/}
     </div>
   );
 }
@@ -307,13 +307,34 @@ const lineOptions = {
 };
 
 const ngoData = [
-  { name: "NGO 1", description: "Focused on education and capacity building." },
-  { name: "NGO 2", description: "Specializes in health and sanitation projects." },
-  { name: "NGO 3", description: "Promotes environmental sustainability." },
-  { name: "NGO 4", description: "Works on rural infrastructure development." },
+  {
+    name: "Mission Samriddhi (CSR Partner)",
+    description: "Facilitates structured exposure visits for capacity building.",
+  },
+  {
+    name: "Foundation for Ecological Security",
+    description: "Supports capacity building and training (CB&T) on NRM.",
+  },
+  {
+    name: "Anode Lab Foundation",
+    description: "Focuses on GP organization development.",
+  },
+  {
+    name: "Line Departments",
+    description: "Operates at state, district, block, GP, and village levels.",
+  },
+  {
+    name: "Self-Help Groups (SHGs)",
+    description: "Active at the GP level to empower communities.",
+  },
+
+  {
+    name: "CSOs in the Clusters",
+    description: "Community-based organizations contributing to cluster development.",
+  },
 ];
 
-const impactCards = [
+{/*const impactCards = [
   {
     icon: "🏘️",
     title: "Number of GPs Covered",
@@ -362,6 +383,6 @@ const impactCards = [
     value: "500",
     description: "Educational materials distributed to schools.",
   },
-];
+];*/}
 
 export default PgpHome;
