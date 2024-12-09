@@ -380,7 +380,7 @@ const POA2Form = ({ update }) => {
                 </select>
               </TableCell>
               <TableCell className="p-2">
-                <input
+                <input 
                   className="px-2 py-1 rounded"
                   type="text"
                   style={{ width: "100%" }}
@@ -388,7 +388,7 @@ const POA2Form = ({ update }) => {
                     handleInputChange(day, "achievements", e.target.value)
                   }
                   value={formDataState[day]?.achievements || ""}
-                  disabled={!isEditableOnLastDay}
+                  disabled
                 />
               </TableCell>
               <TableCell className="p-2">
@@ -398,7 +398,7 @@ const POA2Form = ({ update }) => {
                   onChange={(e) =>
                     handleInputChange(day, "photo", e.target.files[0])
                   }
-                  disabled={!isEditableOnLastDay}
+                  disabled
                 />
               </TableCell>
               <TableCell className="p-2">
@@ -409,7 +409,7 @@ const POA2Form = ({ update }) => {
                   onChange={(e) =>
                     handleInputChange(day, "remarks", e.target.value)
                   }
-                  disabled={!isEditableOnLastDay}
+                  disabled
                   value={formDataState[day]?.remarks || ""}
                 />
               </TableCell>
