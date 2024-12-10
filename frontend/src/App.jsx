@@ -173,6 +173,7 @@ import ThemesPage from "./Pages/ProjectThemes";
 import StaffTablePage from "./Pages/StaffTable";
 import GramSabhaPage from "./Pages/GramSabha";
 import Poa1SPCYfData from "./components/admin/poa/Poa1SPCYfData";
+import PmuPoaViewPmuAdmin from "./components/admin/poa/PmuPoaAdminData";
 
 
 
@@ -247,6 +248,7 @@ function App() {
             <Route path="gp-wise-kpi" element={<GpWiseKpiList />} />
             <Route path="change-password" element={<ChangePassword />} />
             <Route path="users" element={<UserPage />} />
+            
             <Route path="users/view/:id" element={<UserView />} />
             <Route
               path="soepr/profile-form"
@@ -263,6 +265,7 @@ function App() {
             <Route path="PMU/poa4" element={<PMUPOA4 />} />
             <Route path="PMU/POAView" element={<PmuPoaView />} />
             <Route path="PMU/POA/view/:id" element={<PmuPoa1DetailPage />} />
+            <Route path="POAadminView" element={<PmuPoaViewPmuAdmin />} />
 
             <Route path="soepr/plan-of-action" element={<POA />} />
             <Route path="soepr/POA1" element={<POA1 />} />
