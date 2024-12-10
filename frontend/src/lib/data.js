@@ -227,6 +227,30 @@ export const getSidebarItems = (user) => {
               title: "View YF POA Reports",
               link: "/admin/yf/poa1-data",
             },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "YF POA Defaulters List ",
+              link: "/admin/yf/poa-report",
+            },
+            // {
+            //   type: "sub-module",
+            //   icon: ArrowBigRight,
+            //   title: "YF POA Submission Status ",
+            //   link: "/admin/soepr/pOAreport",
+            // },
+            // {
+            //   type: "sub-module",
+            //   icon: ArrowBigRight,
+            //   title: "View SPC POA Reports",
+            //   link: "/admin/yf/poa1-data",
+            // },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "SPC POA Defaulters List ",
+              link: "/admin/spc/poa-report",
+            },
           ],
         },
         {
@@ -773,7 +797,7 @@ export const getSidebarItems = (user) => {
           //   type: "sub-module",
           //   icon: ArrowBigRight,
           //   title: "YF POA Defaulters List ",
-          //   link: "/admin/soepr/poa-report",
+          //   link: "/admin/yf/poa-report",
           // },
           // {
           //   type: "sub-module",
@@ -791,7 +815,7 @@ export const getSidebarItems = (user) => {
           //   type: "sub-module",
           //   icon: ArrowBigRight,
           //   title: "SPC POA Defaulters List ",
-          //   link: "/admin/soepr/poa-report",
+          //   link: "/admin/spc/poa-report",
           // },
           // {
           //   type: "sub-module",
