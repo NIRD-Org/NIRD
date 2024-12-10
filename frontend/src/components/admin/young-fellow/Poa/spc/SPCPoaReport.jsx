@@ -266,7 +266,7 @@ const YfPoaReport = () => {
                     <td className="py-2 px-4 border">
                       {getUserStateName(user.id) || "N/A"}
                     </td>
-                    <td className="py-2 px-4 border">Young Fellow</td>
+                    <td className="py-2 px-4 border">State Program Coordinator</td>
                   </tr>
                 );
               })}

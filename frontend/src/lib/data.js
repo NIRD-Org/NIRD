@@ -233,6 +233,18 @@ export const getSidebarItems = (user) => {
               title: "YF POA Defaulters List ",
               link: "/admin/yf/poa-report",
             },
+            {
+              type: "sub-module",
+               icon: ArrowBigRight,
+               title: "View PMU POA  ",
+               link: "/admin/POAadminView",
+             },
+             {
+              type: "sub-module",
+               icon: ArrowBigRight,
+               title: "View SPC POA  ",
+               link: "/admin/SPCPOAadminView",
+             },
             // {
             //   type: "sub-module",
             //   icon: ArrowBigRight,
@@ -805,6 +817,30 @@ export const getSidebarItems = (user) => {
              title: "View SPC POA  ",
              link: "/admin/SPCPOAadminView",
            },
+           {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "YF POA Defaulters List ",
+            link: "/admin/yf/poa-report",
+          },
+          // {
+          //   type: "sub-module",
+          //   icon: ArrowBigRight,
+          //   title: "YF POA Submission Status ",
+          //   link: "/admin/soepr/pOAreport",
+          // },
+          // {
+          //   type: "sub-module",
+          //   icon: ArrowBigRight,
+          //   title: "View SPC POA Reports",
+          //   link: "/admin/yf/poa1-data",
+          // },
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "SPC POA Defaulters List ",
+            link: "/admin/spc/poa-report",
+          },
           // {
           //   type: "sub-module",
           //   icon: ArrowBigRight,
