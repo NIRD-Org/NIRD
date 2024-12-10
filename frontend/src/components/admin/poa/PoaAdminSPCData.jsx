@@ -31,7 +31,7 @@ const PoaAdminSPCData = () => {
   const printRef = useRef();
   const [searchParams, setSearchParams] = useSearchParams();
   const [stateOptions, setStateOptions] = useState([]);
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState([]); // Store role=2 users
   const [user, setUser] = useState();
   const [districtOptions, setDistrictOptions] = useState([]);
   const [stateData, setStateData] = useState();
@@ -41,7 +41,6 @@ const PoaAdminSPCData = () => {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [poaType, setPoaType] = useState("poa1");
-  const [role, setRole] = useState("2"); // Default to SPC Admin
   const navigate = useNavigate();
 
   const handleMonthChange = (e) => {
@@ -75,61 +74,18 @@ const PoaAdminSPCData = () => {
   };
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchUsersWithRole2 = async () => {
       try {
-        const response = await API.get("/api/v1/user-location/all");
-        const allUserLocations = response.data.data;
-
-        // Filter users based on selected state
-        const filteredUserLocations = state
-          ? allUserLocations.filter((user) => user.userLocations.state_ids[0] === state)
-          : allUserLocations;
-
-        // Fetch users with role=2 (SPC Admin)
-        const roleResponse = await API.get(`/api/v1/users/all?role=2`);
-        const usersByRole = roleResponse.data.data;
-
-        // Match users with role=2 and state filter
-        const filteredUsers = usersByRole.filter((user) =>
-          filteredUserLocations.some(
-            (userLocation) => userLocation.user_id === user.id
-          )
-        );
-
-        setUsers(filteredUsers);
+        const { data } = await API.get(`/api/v1/users/all?role=2`); // Fetch only users with role=2
+        setUsers(data.data);
       } catch (error) {
-        console.error("Error fetching users:", error);
+        console.error("Error fetching users with role=2:", error);
         setUsers([]);
       }
     };
 
-    fetchUser();
-  }, [role, state]);
-
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     try {
-  //       const response = await API.get("/api/v1/soepr-location/all");
-  //       const data = response.data.data;
-  //       console.log(data);
-
-  //       if (role == "all") {
-  //         const { data } = await API.get(`/api/v1/users/all?role=${4}`);
-  //         const { data: data2 } = await API.get(`/api/v1/users/all?role=${5}`);
-  //         const mergedData = [...data.data, ...data2.data];
-
-  //         setUsers(mergedData);
-  //       } else {
-  //         const { data } = await API.get(`/api/v1/users/all?role=${role}`);
-  //         setUsers(data?.data);
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-
-  //   fetchUser();
-  // }, [role]);
+    fetchUsersWithRole2();
+  }, []); // Fetch users with role=2 only once
 
   useEffect(() => {
     if (user && state && selectedMonth && selectedYear) {
@@ -169,7 +125,6 @@ const PoaAdminSPCData = () => {
       jsPDF: { unit: "mm", format: "a3", orientation: "portrait" },
     };
 
-    // New Promise-based usage:
     html2pdf().set(opt).from(element).save();
   };
 
@@ -205,18 +160,6 @@ const PoaAdminSPCData = () => {
                     {item.name}
                   </option>
                 ))}
-              </select>
-            </div>
-            <div className="flex flex-col">
-              <label className="text-sm text-primary text-start px-4 py-2 font-semibold">
-                Role:
-              </label>
-              <select
-                value={role || ""}
-                onChange={(e) => setRole(e.target.value)}
-                className="border text-sm bg-white p-2 rounded-md"
-              >
-                <option value="2">State Program Coordinator</option>
               </select>
             </div>
             <div className="flex flex-col">
@@ -287,7 +230,7 @@ const PoaAdminSPCData = () => {
       </button>
 
       <div ref={printRef} className="pt-10 w-full">
-        <div className="text-center flex   justify-evenly items-center gap-4 bg-primary py-2 text-sm md:text-base text-white">
+        <div className="text-center flex justify-evenly items-center gap-4 bg-primary py-2 text-sm md:text-base text-white">
           <p>
             State: <span className="text-gray-300">{stateData?.name}</span>
           </p>{" "}
@@ -298,22 +241,7 @@ const PoaAdminSPCData = () => {
               return foundUser?.name;
             })()}
           </p>
-          <p>
-            Designation:{" "}
-            {(() => {
-              const foundUser = users?.find((u) => u.id === user);
-              if (foundUser?.role === 2) return "SPC Admin";
-              return "";
-            })()}
-          </p>
-          <p>
-            Month:{" "}
-            {(() => {
-              const monthData = months?.find((m) => m.value === selectedMonth);
-              return monthData.label;
-            })()}{" "}
-          </p>
-          <p>Year: {selectedYear} </p>
+          <p>Designation: State Program Coordinator</p>
         </div>
         {poa1 && poa1?.poaData?.length > 0 ? (
           <div className="w-full overflow-x-auto">
@@ -348,81 +276,46 @@ const PoaAdminSPCData = () => {
                     Achievements
                   </th>
                   <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
-                    Photo
-                  </th>
-                  <th className="p-2 text-left text-xs sm:text-sm md:text-base text-gray-600">
                     Remarks
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {poa1?.poaData?.length > 0 ? (
-                  poa1.poaData.map((dayData, index) => (
-                    <tr key={index} className="even:bg-gray-50">
-                      <td className="border-t p-2 text-center font-semibold text-sm md:text-sm">
-                        {index + 1}.
-                      </td>
-                      <td className="border-t p-2 text-sm md:text-xs">
-                        {dayData.date}
-                      </td>
-                      <td className="border-t p-2 text-sm md:text-xs">
-                        {dayData.weekday}
-                      </td>
-                      <td className="border-t p-2 text-sm md:text-xs">
-                        {dayData.activity}
-                      </td>
-                      <td className="border-t p-2 text-sm md:text-xs">
-                        {dayData.tentativeTarget}
-                      </td>
-                      <td className="border-t p-2 text-sm md:text-xs">
-                        {dayData.plannedEvent}
-                      </td>
-                      <td className="border-t p-2 text-sm md:text-xs">
-                        {dayData.state.name}
-                      </td>
-                      <td className="border-t p-2 text-sm md:text-xs">
-                        {dayData.district?.name || dayData?.dist_id || "N/A"}
-                      </td>
-                      <td className="border-t p-2 text-sm md:text-xs">
-                        {dayData.achievements}
-                      </td>
-                      <td className="border-t p-2 text-sm md:text-xs">
-                        {dayData.photo ? (
-                          <img
-                            src={dayData.photo}
-                            alt="Photo"
-                            className="max-w-24 h-auto"
-                          />
-                        ) : (
-                          "No photo"
-                        )}
-                      </td>
-                      <td className="border-t p-2 text-sm md:text-xs">
-                        {dayData.remarks}
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td
-                      colSpan="10"
-                      className="p-2 text-center text-xs sm:text-sm md:text-base"
-                    >
-                      No data available
+                {poa1?.poaData?.map((dayData, index) => (
+                  <tr key={index} className="even:bg-gray-50">
+                    <td className="border-t p-2 text-center font-semibold text-sm md:text-sm">
+                      {index + 1}.
+                    </td>
+                    <td className="border-t p-2 text-sm md:text-xs">
+                      {dayData.date}
+                    </td>
+                    <td className="border-t p-2 text-sm md:text-xs">
+                      {dayData.weekday}
+                    </td>
+                    <td className="border-t p-2 text-sm md:text-xs">
+                      {dayData.activity}
+                    </td>
+                    <td className="border-t p-2 text-sm md:text-xs">
+                      {dayData.tentativeTarget}
+                    </td>
+                    <td className="border-t p-2 text-sm md:text-xs">
+                      {dayData.plannedEvent}
+                    </td>
+                    <td className="border-t p-2 text-sm md:text-xs">
+                      {dayData.state.name}
+                    </td>
+                    <td className="border-t p-2 text-sm md:text-xs">
+                      {dayData.district?.name || dayData?.dist_id || "N/A"}
+                    </td>
+                    <td className="border-t p-2 text-sm md:text-xs">
+                      {dayData.achievements}
+                    </td>
+                    <td className="border-t p-2 text-sm md:text-xs">
+                      {dayData.remarks}
                     </td>
                   </tr>
-                )}
+                ))}
               </tbody>
-              <tfoot>
-                <tr>
-                  <td
-                    colSpan="10"
-                    className="p-2 text-center text-xs sm:text-sm md:text-base"
-                  >
-                    End of POA Details
-                  </td>
-                </tr>
-              </tfoot>
             </table>
           </div>
         ) : (

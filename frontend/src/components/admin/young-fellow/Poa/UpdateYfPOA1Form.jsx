@@ -649,7 +649,7 @@ const UpdateYfPOA1Form = () => {
                           onChange={(e) =>
                             handlePlanChange(day, index, e.target.value)
                           }
-                          disabled
+                         // disabled
                         >
                           <option value="">Select</option>
                           {Object.keys(planOfDayOptions).map((planKey) => (
@@ -667,7 +667,7 @@ const UpdateYfPOA1Form = () => {
                           onChange={(e) =>
                             handleActionChange(day, index, e.target.value)
                           }
-                          disabled={!entry.plan}
+                          //disabled={!entry.plan}
                         >
                           <option value="">Select</option>
                           {entry.activity &&
@@ -703,7 +703,7 @@ const UpdateYfPOA1Form = () => {
                           className="px-2 py-1 rounded min-w-24"
                           style={{ width: "100%" }}
                           value={entry.state_id || ""}
-                          disabled
+                          //disabled
                         >
                           <option value="">Select</option>
                           <option value={entry.state.id}>
@@ -719,7 +719,7 @@ const UpdateYfPOA1Form = () => {
                           className="px-2 py-1 rounded min-w-24"
                           style={{ width: "100%" }}
                           value={entry.dist_id || ""}
-                          disabled
+                          // disabled
                         >
                           <option value="">Select</option>
 
@@ -736,7 +736,7 @@ const UpdateYfPOA1Form = () => {
                           className="px-2 py-1 rounded min-w-24"
                           style={{ width: "100%" }}
                           value={entry.block_id || ""}
-                          disabled
+                          //disabled
                         >
                           <option value="">Select</option>
                           <option value={entry?.block?.id}>
@@ -752,7 +752,7 @@ const UpdateYfPOA1Form = () => {
                           className="px-2 py-1 rounded min-w-24"
                           style={{ width: "100%" }}
                           value={entry.gp_id || ""}
-                          disabled
+                          //disabled
                         >
                           <option value={entry?.gp.id}>{entry?.gp.name}</option>
                           <option value="NIRD">NIRD</option>
