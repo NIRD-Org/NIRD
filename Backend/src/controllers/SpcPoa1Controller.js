@@ -626,3 +626,90 @@ export const updatePoa1Data = CatchAsyncError(async (req, res, next) => {
     next(new Errorhandler("Failed to Update POA Data", 500));
   }
 });
+
+
+
+// Get all poa1 data --- Super admin
+export const getAllPoa1Data = CatchAsyncError(async (req, res, next) => {
+  try {
+    const { month, year, poaType = "poa1" } = req.query;
+
+    if (!month || !year) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Month and Year are required" });
+    }
+
+    const poa1Data = await SpcPoa1Model.aggregate([
+      {
+        $unwind: {
+          path: "$poaData",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $addFields: {
+          poaMonth: {
+            $month: {
+              $dateFromString: {
+                dateString: "$poaData.date",
+                format: "%d/%m/%Y",
+              },
+            },
+          },
+          poaYear: {
+            $year: {
+              $dateFromString: {
+                dateString: "$poaData.date",
+                format: "%d/%m/%Y",
+              },
+            },
+          },
+        },
+      },
+      {
+        $match: {
+          poaMonth: parseInt(month),
+          poaYear: parseInt(year),
+          "poaData.poaType": poaType,
+        },
+      },
+      {
+        $lookup: {
+          from: "states",
+          localField: "poaData.state_id",
+          foreignField: "id",
+          as: "state",
+        },
+      },
+      {
+        $addFields: {
+          "poaData.state": {
+            $arrayElemAt: ["$state", 0], // Ensure that the correct state is associated
+          },
+        },
+      },
+      {
+        $group: {
+          _id: "$_id",
+          id: { $first: "$id" },
+          user_id: { $first: "$user_id" },
+          status: { $first: "$status" },
+          poaData: { $push: "$poaData" },
+          created_at: { $first: "$created_at" },
+          modified_at: { $first: "$modified_at" },
+        },
+      },
+    ]);
+
+    if (!poa1Data || poa1Data.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No POA1 Data Found for the specified month and year",
+      });
+    }
+    res.status(200).json({ success: true, data: poa1Data });
+  } catch (error) {
+    next(new Errorhandler("Failed to Retrieve POA Data", 500));
+  }
+});

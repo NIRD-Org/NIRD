@@ -174,6 +174,8 @@ import StaffTablePage from "./Pages/StaffTable";
 import GramSabhaPage from "./Pages/GramSabha";
 import Poa1SPCYfData from "./components/admin/poa/Poa1SPCYfData";
 import PmuPoaViewPmuAdmin from "./components/admin/poa/PmuPoaAdminData";
+import SPCPoaReport from "./components/admin/young-fellow/Poa/spc/SPCPoaReport";
+import YfPoaReport from "./components/admin/young-fellow/Poa/YfPoaReport";
 import PoaAdminSPCData from "./components/admin/poa/PoaAdminSPCData";
 
 
@@ -205,7 +207,7 @@ function App() {
           <Route path="project" element={<ProjectPage />} />
           <Route path="projectstaff" element={<HumanResourcesPage />} />
           <Route path="MPI" element={<MajorProjectInterventions />} />
-          <Route path="Achievements" element={<SignificantAchievements/>} />
+          <Route path="Achievements" element={<SignificantAchievements />} />
           <Route path="KeyPartners" element={<KeyPartners />} />
           <Route path="OSR" element={<OSR />} />
           <Route path="YFActivities" element={<YFActivities />} />
@@ -230,7 +232,7 @@ function App() {
           <Route path="/theme9" element={<Theme9Page />} />
           <Route path="/staff-details" element={<StaffTablePage />} />
           <Route path="/GramSabha" element={<GramSabhaPage />} />
-         
+
           <Route path="test" element={<AchievementChart />} />
           <Route
             path="/good-practice/:activity/:id"
@@ -298,6 +300,7 @@ function App() {
             <Route path="yf/POA2/sep" element={<YFPoa2FormSep />} />
             <Route path="yf/POA3/sep" element={<YFPoa3FormSep />} />
             <Route path="yf/POA4/sep" element={<YFPoa4FormSep />} />
+            <Route path="yf/poa-report" element={<YfPoaReport />} />
 
             {/* SPC POA */}
             <Route path="Spc/POA1" element={<SPCPoa1Form />} />
@@ -313,6 +316,7 @@ function App() {
               path="spc/POA1/edit/:id"
               element={<UpdateSPCPOA1Form update />}
             />
+            <Route path="spc/poa-report" element={<SPCPoaReport />} />
 
             {/* YF POA */}
             <Route
