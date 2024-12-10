@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { ArrowLeftIcon, Table } from "lucide-react";
 import API from "@/utils/API";
 import PoaDataCard from "./PoaDataCard";
@@ -41,7 +41,7 @@ const PoaAdminSPCData = () => {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [poaType, setPoaType] = useState("poa1");
-  const [role, setRole] = useState("all");
+  const [role, setRole] = useState("2"); // Default to SPC Admin
   const navigate = useNavigate();
 
   const handleMonthChange = (e) => {
@@ -78,25 +78,27 @@ const PoaAdminSPCData = () => {
     const fetchUser = async () => {
       try {
         const response = await API.get("/api/v1/user-location/all");
-        const data = response.data.data;
+        const allUserLocations = response.data.data;
 
-        // Filter users based on selected State and state_ids[0]
-        const filteredUsers = data.filter(
-          (user) => user.userLocations.state_ids[0] === state
+        // Filter users based on selected state
+        const filteredUserLocations = state
+          ? allUserLocations.filter((user) => user.userLocations.state_ids[0] === state)
+          : allUserLocations;
+
+        // Fetch users with role=2 (SPC Admin)
+        const roleResponse = await API.get(`/api/v1/users/all?role=2`);
+        const usersByRole = roleResponse.data.data;
+
+        // Match users with role=2 and state filter
+        const filteredUsers = usersByRole.filter((user) =>
+          filteredUserLocations.some(
+            (userLocation) => userLocation.user_id === user.id
+          )
         );
 
-        // Only include users for the selected role
-        const roleQuery = role !== "all" ? `?role=${Number(role)}` : "";
-        const { data: roleData } = await API.get(`/api/v1/users/all${roleQuery}`);
-
-        // Filter roleData based on filteredUsers
-        const filteredRoleData = roleData.data.filter((user) =>
-          filteredUsers.some((filteredUser) => filteredUser.user_id === user.id)
-        );
-
-        setUsers(filteredRoleData);
+        setUsers(filteredUsers);
       } catch (error) {
-        console.log(error);
+        console.error("Error fetching users:", error);
         setUsers([]);
       }
     };
@@ -214,8 +216,7 @@ const PoaAdminSPCData = () => {
                 onChange={(e) => setRole(e.target.value)}
                 className="border text-sm bg-white p-2 rounded-md"
               >
-                <option value="all">All</option>
-                <option value={2}>SPC</option>
+                <option value="2">State Program Coordinator</option>
               </select>
             </div>
             <div className="flex flex-col">
@@ -302,8 +303,6 @@ const PoaAdminSPCData = () => {
             {(() => {
               const foundUser = users?.find((u) => u.id === user);
               if (foundUser?.role === 2) return "SPC Admin";
-            
-              if (foundUser?.role === 3) return "Young Fellow";
               return "";
             })()}
           </p>
