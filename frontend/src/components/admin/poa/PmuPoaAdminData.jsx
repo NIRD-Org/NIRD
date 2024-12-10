@@ -14,7 +14,7 @@ import {
   TableCaption,
 } from "@/components/ui/table";
 
-const PmuPoaView = () => {
+const PmuPoaAdminData = () => {
   const [poaRecords, setPoaRecords] = useState([]);
   const [selectedYear, setSelectedYear] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");
@@ -189,4 +189,4 @@ const PmuPoaView = () => {
   );
 };
 
-export default PmuPoaView;
+export default PmuPoaAdminData;

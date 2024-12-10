@@ -772,8 +772,14 @@ export const getSidebarItems = (user) => {
           {
             type: "sub-module",
              icon: ArrowBigRight,
-             title: "YF POA Defaulters List ",
+             title: "View PMU POA  ",
              link: "/admin/POAadminView",
+           },
+           {
+            type: "sub-module",
+             icon: ArrowBigRight,
+             title: "View SPC POA  ",
+             link: "/admin/SPCPOAadminView",
            },
           // {
           //   type: "sub-module",

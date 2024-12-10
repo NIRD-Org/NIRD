@@ -174,6 +174,7 @@ import StaffTablePage from "./Pages/StaffTable";
 import GramSabhaPage from "./Pages/GramSabha";
 import Poa1SPCYfData from "./components/admin/poa/Poa1SPCYfData";
 import PmuPoaViewPmuAdmin from "./components/admin/poa/PmuPoaAdminData";
+import PoaAdminSPCData from "./components/admin/poa/PoaAdminSPCData";
 
 
 
@@ -266,6 +267,7 @@ function App() {
             <Route path="PMU/POAView" element={<PmuPoaView />} />
             <Route path="PMU/POA/view/:id" element={<PmuPoa1DetailPage />} />
             <Route path="POAadminView" element={<PmuPoaViewPmuAdmin />} />
+            <Route path="SPCPOAadminView" element={<PoaAdminSPCData />} />
 
             <Route path="soepr/plan-of-action" element={<POA />} />
             <Route path="soepr/POA1" element={<POA1 />} />
