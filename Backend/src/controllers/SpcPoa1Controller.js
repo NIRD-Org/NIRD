@@ -399,7 +399,8 @@ export const getPoalData = CatchAsyncError(async (req, res, next) => {
 export const getPoa1DataByState = CatchAsyncError(async (req, res, next) => {
   try {
     const { state_id, user_id, month, year, poaType = "poa1" } = req.query;
-
+    console.log(req.query);
+    
     const poa1Data = await SpcPoa1Model.aggregate([
       {
         $unwind: {

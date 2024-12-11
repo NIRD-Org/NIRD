@@ -177,6 +177,7 @@ import PmuPoaViewPmuAdmin from "./components/admin/poa/PmuPoaAdminData";
 import SPCPoaReport from "./components/admin/young-fellow/Poa/spc/SPCPoaReport";
 import YfPoaReport from "./components/admin/young-fellow/Poa/YfPoaReport";
 import PoaAdminSPCData from "./components/admin/poa/PoaAdminSPCData";
+import UpdatePMUPOA1Form from "./components/admin/poa/UpdatePMUPOA1Form";
 
 
 
@@ -251,7 +252,7 @@ function App() {
             <Route path="gp-wise-kpi" element={<GpWiseKpiList />} />
             <Route path="change-password" element={<ChangePassword />} />
             <Route path="users" element={<UserPage />} />
-            
+
             <Route path="users/view/:id" element={<UserView />} />
             <Route
               path="soepr/profile-form"
@@ -268,6 +269,8 @@ function App() {
             <Route path="PMU/poa4" element={<PMUPOA4 />} />
             <Route path="PMU/POAView" element={<PmuPoaView />} />
             <Route path="PMU/POA/view/:id" element={<PmuPoa1DetailPage />} />
+            <Route path="PMU/POA/edit/:id" element={<UpdatePMUPOA1Form />} />
+
             <Route path="POAadminView" element={<PmuPoaViewPmuAdmin />} />
             <Route path="SPCPOAadminView" element={<PoaAdminSPCData />} />
 

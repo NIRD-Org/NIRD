@@ -75,9 +75,9 @@ const POA1Form = ({ update }) => {
         poaType, // Fixed poaType for this form
       }));
 
-      console.log("Submitting payload:", poaData);
+      // console.log("Submitting payload:", poaData);
       const response = await API.post("/api/v1/pmu-poa/create", { poaData });
-      console.log("Response:", response);
+      // console.log("Response:", response);
 
       showAlert("Form submitted successfully!", "success");
       setFormDataState({}); // Reset form data

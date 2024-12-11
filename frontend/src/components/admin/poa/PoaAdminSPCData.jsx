@@ -76,7 +76,7 @@ const PoaAdminSPCData = () => {
   useEffect(() => {
     const fetchUsersWithRole2 = async () => {
       try {
-        const { data } = await API.get(`/api/v1/users/all?role=2`); // Fetch only users with role=2
+        const { data } = await API.get(`/api/v1/users/all?role=2`);
         setUsers(data.data);
       } catch (error) {
         console.error("Error fetching users with role=2:", error);

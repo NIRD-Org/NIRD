@@ -161,6 +161,7 @@ export const getPmupoaData = CatchAsyncError(async (req, res, next) => {
   }
 });
 
+
 // Update a specific POA entry
 export const updatePmupoaData = CatchAsyncError(async (req, res, next) => {
   try {
@@ -176,14 +177,32 @@ export const updatePmupoaData = CatchAsyncError(async (req, res, next) => {
       return res.status(404).json({ message: "POA entry not found." });
     }
 
-    const filteredEntries = filterDuplicateEntries(poaEntry.poaData, poaData);
-    poaEntry.poaData.push(...filteredEntries);
+    // Update or add entries
+    poaData.forEach((newEntry) => {
+      const existingIndex = poaEntry.poaData.findIndex(
+        (entry) => entry.date === newEntry.date && entry.plannedEvent === newEntry.plannedEvent && entry.target == newEntry.target && entry.poaType === newEntry.poaType
+      );
+
+      if (existingIndex !== -1) {
+        // Update existing entry
+        poaEntry.poaData[existingIndex] = {
+          ...poaEntry.poaData[existingIndex],
+          ...newEntry,
+        };
+      } else {
+        // Add new entry
+        poaEntry.poaData.push(newEntry);
+      }
+    });
+
     await poaEntry.save();
 
     res
       .status(200)
       .json({ success: true, message: "POA entry updated successfully." });
   } catch (error) {
-    next(new Errorhandler("Failed to update POA entry.", 500));
+    console.log(error);
+
+    return next(new Errorhandler("Failed to update POA entry.", 500));
   }
 });
