@@ -178,6 +178,7 @@ import SPCPoaReport from "./components/admin/young-fellow/Poa/spc/SPCPoaReport";
 import YfPoaReport from "./components/admin/young-fellow/Poa/YfPoaReport";
 import PoaAdminSPCData from "./components/admin/poa/PoaAdminSPCData";
 import UpdatePMUPOA1Form from "./components/admin/poa/UpdatePMUPOA1Form";
+import SoeprProjectPage from "./Pages/SoeprProjectPage";
 
 
 
@@ -196,7 +197,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/pgp" element={<PgpHome />} />
-
+          <Route path="/soepr/ProjectOverview" element={<SoeprProjectPage />} />
           <Route path="/soepr" element={<Soeprhome />} />
           <Route path="/kpi" element={<KPIPage />} />
           <Route path="/login" element={<LoginPage />} />

@@ -61,7 +61,7 @@ const Header = () => {
       label: "The Project",to: "/soepr" ,
       isProjectMenu: true,
       submenus: [
-        { label: "Project Overview", to: "/soepr" },
+        { label: "Project Overview", to: "/soepr/ProjectOverview" },
         { label: "Schools of Excellence", to: "/schoolsofExcellence" },
         { label: "Project Execution Team", to: "/ExecutionTeam" },
         { label: "Budget and Expenditure", to: "/budget-expenditure" },

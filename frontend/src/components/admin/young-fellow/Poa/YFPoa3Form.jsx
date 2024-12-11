@@ -1007,7 +1007,8 @@ const YFPoa3Form = ({ update }) => {
                       <option key={state.id} value={state.id}>
                         {state.name}
                       </option>
-                    ))}
+                    ))}  <option> NIRDPR </option>
+                    
                   </select>
                 </td>
                 <td>
@@ -1022,7 +1023,8 @@ const YFPoa3Form = ({ update }) => {
                       <option key={dist.id} value={dist.id}>
                         {dist.name}
                       </option>
-                    ))}
+                    ))}  <option> SIRD </option>
+                    <option> None </option>
                   </select>
                 </td>
                 <td>
@@ -1036,7 +1038,8 @@ const YFPoa3Form = ({ update }) => {
                       <option key={block.id} value={block.id}>
                         {block.name}
                       </option>
-                    ))}
+                    ))}  <option> SIRD </option>
+                    <option> None </option>
                   </select>
                 </td>
                 <td>
@@ -1050,7 +1053,8 @@ const YFPoa3Form = ({ update }) => {
                       <option key={gp.id} value={gp.id}>
                         {gp.name}
                       </option>
-                    ))}
+                    ))}  
+                    <option> None </option>
                   </select>
                 </td>
                 <td>
