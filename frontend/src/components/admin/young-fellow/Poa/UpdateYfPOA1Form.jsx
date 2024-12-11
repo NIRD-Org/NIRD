@@ -538,7 +538,7 @@ const UpdateYfPOA1Form = () => {
     }
   };
 
-  return (
+   return (
     <div
       className="max-w-screen md:max-w-[80vw]"
       style={{ fontSize: "14px", margin: "0 auto" }}
@@ -578,45 +578,19 @@ const UpdateYfPOA1Form = () => {
           <Table style={{ width: "100%", marginTop: "20px", fontSize: "12px" }}>
             <TableHeader>
               <TableRow>
-                <TableHead className="px-2 text-primary font-bold">
-                  Date
-                </TableHead>
-                <TableHead className="px-2 text-primary font-bold">
-                  Weekday
-                </TableHead>
-                <TableHead className="px-2 text-primary font-bold">
-                  KPI Theme
-                </TableHead>
-                <TableHead className="px-2 text-primary font-bold">
-                  Activity
-                </TableHead>
-                <TableHead className="px-2 text-primary font-bold">
-                  Planned Event
-                </TableHead>
-                <TableHead className="px-2 text-primary font-bold">
-                  Tentative Target (Description in 50 words)
-                </TableHead>
-                <TableHead className="px-2 text-primary font-bold">
-                  State
-                </TableHead>
-                <TableHead className="px-2 text-primary font-bold">
-                  District
-                </TableHead>
-                <TableHead className="px-2 text-primary font-bold">
-                  Block
-                </TableHead>
-                <TableHead className="px-2 text-primary font-bold">
-                  Gram Panchayat
-                </TableHead>
-                <TableHead className="px-2 text-primary font-bold">
-                  Achievements
-                </TableHead>
-                <TableHead className="px-2 text-primary font-bold">
-                  Upload Photo
-                </TableHead>
-                <TableHead className="px-2 text-primary font-bold">
-                  Remarks/Reason for Failure
-                </TableHead>
+                <TableHead className="px-2 text-primary font-bold">Date</TableHead>
+                <TableHead className="px-2 text-primary font-bold">Weekday</TableHead>
+                <TableHead className="px-2 text-primary font-bold">KPI Theme</TableHead>
+                <TableHead className="px-2 text-primary font-bold">Activity</TableHead>
+                <TableHead className="px-2 text-primary font-bold">Planned Event</TableHead>
+                <TableHead className="px-2 text-primary font-bold">Tentative Target (Description in 50 words)</TableHead>
+                <TableHead className="px-2 text-primary font-bold">State</TableHead>
+                <TableHead className="px-2 text-primary font-bold">District</TableHead>
+                <TableHead className="px-2 text-primary font-bold">Block</TableHead>
+                <TableHead className="px-2 text-primary font-bold">Gram Panchayat</TableHead>
+                <TableHead className="px-2 text-primary font-bold">Achievements</TableHead>
+                <TableHead className="px-2 text-primary font-bold">Upload Photo</TableHead>
+                <TableHead className="px-2 text-primary font-bold">Remarks/Reason for Failure</TableHead>
               </TableRow>
             </TableHeader>
             <tbody>
@@ -626,185 +600,72 @@ const UpdateYfPOA1Form = () => {
                     <TableRow key={index} className="border-t border-gray-400">
                       {index === 0 && (
                         <>
-                          <TableCell
-                            className="p-2"
-                            rowSpan={formDataState[day].length}
-                          >
-                            {/* {formatIndianDate(day)} */}
-                            {entry?.date}
-                          </TableCell>
-                          <TableCell
-                            className="p-2"
-                            rowSpan={formDataState[day].length}
-                          >
-                            {getWeekDay(day)}
-                          </TableCell>
+                          <TableCell className="p-2" rowSpan={formDataState[day].length}>{entry?.date}</TableCell>
+                          <TableCell className="p-2" rowSpan={formDataState[day].length}>{getWeekDay(day)}</TableCell>
                         </>
                       )}
                       <TableCell className="p-2">
-                        <select
-                          className="px-2 py-1 rounded min-w-24"
-                          style={{ width: "100%" }}
-                          value={entry.kpi_theme || ""}
-                          onChange={(e) =>
-                            handlePlanChange(day, index, e.target.value)
-                          }
-                         // disabled
-                        >
+                        <select className="px-2 py-1 rounded min-w-24" style={{ width: "100%" }} value={entry.kpi_theme || ""} onChange={(e) => handlePlanChange(day, index, e.target.value)}>
                           <option value="">Select</option>
                           {Object.keys(planOfDayOptions).map((planKey) => (
-                            <option key={planKey} value={planKey}>
-                              {planKey}
-                            </option>
+                            <option key={planKey} value={planKey}>{planKey}</option>
                           ))}
                         </select>
                       </TableCell>
                       <TableCell className="p-2">
-                        <select
-                          className="px-2 py-1 rounded min-w-24"
-                          style={{ width: "100%" }}
-                          value={entry.activity || ""}
-                          onChange={(e) =>
-                            handleActionChange(day, index, e.target.value)
-                          }
-                          //disabled={!entry.plan}
-                        >
+                        <select className="px-2 py-1 rounded min-w-24" style={{ width: "100%" }} value={entry.activity || ""} onChange={(e) => handleActionChange(day, index, e.target.value)}>
                           <option value="">Select</option>
-                          {entry.activity &&
-                            planOfDayOptions[entry.kpi_theme]?.map(
-                              (action, idx) => (
-                                <option key={idx} value={action}>
-                                  {action}
-                                </option>
-                              )
-                            )}
+                          {entry.activity && planOfDayOptions[entry.kpi_theme]?.map((action, idx) => (
+                            <option key={idx} value={action}>{action}</option>
+                          ))}
                         </select>
                       </TableCell>
                       <TableCell className="p-2">
-                        <input
-                          className="px-2 py-1 rounded min-w-28"
-                          type="text"
-                          style={{ width: "100%" }}
-                          value={entry.plannedEvent || ""}
-                          readOnly
-                        />
+                        <input className="px-2 py-1 rounded min-w-28" type="text" style={{ width: "100%" }} value={entry.plannedEvent || ""} onChange={(e) => handleInputChange(day, index, 'plannedEvent', e.target.value)} />
                       </TableCell>
                       <TableCell>
-                        <input
-                          className="px-2 py-1 rounded min-w-28"
-                          type="text"
-                          style={{ width: "100%" }}
-                          value={entry.tentativeTarget || ""}
-                          readOnly
-                        />
+                        <input className="px-2 py-1 rounded min-w-28" type="text" style={{ width: "100%" }} value={entry.tentativeTarget || ""} onChange={(e) => handleInputChange(day, index, 'tentativeTarget', e.target.value)} />
                       </TableCell>
                       <TableCell className="p-2">
-                        <select
-                          className="px-2 py-1 rounded min-w-24"
-                          style={{ width: "100%" }}
-                          value={entry.state_id || ""}
-                          //disabled
-                        >
+                        <select className="px-2 py-1 rounded min-w-24" style={{ width: "100%" }} value={entry.state_id || ""} onChange={(e) => handleInputChange(day, index, 'state_id', e.target.value)}>
                           <option value="">Select</option>
-                          <option value={entry.state.id}>
-                            {entry?.state.name}
-                          </option>
-                          <option value="NIRD">NIRD</option>
-                          <option value="SIRD/SPRC">SIRD/SPRC</option>
-                          <option value="None">None</option>
+                          {states.map(state => (
+                            <option key={state.id} value={state.id}>{state.name}</option>
+                          ))}
                         </select>
                       </TableCell>
                       <TableCell className="p-2">
-                        <select
-                          className="px-2 py-1 rounded min-w-24"
-                          style={{ width: "100%" }}
-                          value={entry.dist_id || ""}
-                          // disabled
-                        >
+                        <select className="px-2 py-1 rounded min-w-24" style={{ width: "100%" }} value={entry.dist_id || ""} onChange={(e) => handleInputChange(day, index, 'dist_id', e.target.value)}>
                           <option value="">Select</option>
-
-                          <option value={entry?.district?.id}>
-                            {entry?.district?.name}
-                          </option>
-                          <option value="NIRD">NIRD</option>
-                          <option value="SIRD/SPRC">SIRD/SPRC</option>
-                          <option value="None">None</option>
+                          {districts.map(district => (
+                            <option key={district.id} value={district.id}>{district.name}</option>
+                          ))}
                         </select>
                       </TableCell>
                       <TableCell className="p-2">
-                        <select
-                          className="px-2 py-1 rounded min-w-24"
-                          style={{ width: "100%" }}
-                          value={entry.block_id || ""}
-                          //disabled
-                        >
+                        <select className="px-2 py-1 rounded min-w-24" style={{ width: "100%" }} value={entry.block_id || ""} onChange={(e) => handleInputChange(day, index, 'block_id', e.target.value)}>
                           <option value="">Select</option>
-                          <option value={entry?.block?.id}>
-                            {entry?.block?.name}
-                          </option>
-                          <option value="NIRD">NIRD</option>
-                          <option value="SIRD/SPRC">SIRD/SPRC</option>
-                          <option value="None">None</option>
-                        </select>
-                      </TableCell>{" "}
-                      <TableCell className="p-2">
-                        <select
-                          className="px-2 py-1 rounded min-w-24"
-                          style={{ width: "100%" }}
-                          value={entry.gp_id || ""}
-                          //disabled
-                        >
-                          <option value={entry?.gp.id}>{entry?.gp.name}</option>
-                          <option value="NIRD">NIRD</option>
-                          <option value="SIRD/SPRC">SIRD/SPRC</option>
-                          <option value="None">None</option>
+                          {blocks.map(block => (
+                            <option key={block.id} value={block.id}>{block.name}</option>
+                          ))}
                         </select>
                       </TableCell>
                       <TableCell className="p-2">
-                        <input
-                          className="px-2 py-1 rounded min-w-24"
-                          type="text"
-                          style={{ width: "100%" }}
-                          value={entry.achievements || ""}
-                          onChange={(e) =>
-                            handleInputChange(
-                              day,
-                              index,
-                              "achievements",
-                              e.target.value
-                            )
-                          }
-                        />
+                        <select className="px-2 py-1 rounded min-w-24" style={{ width: "100%" }} value={entry.gp_id || ""} onChange={(e) => handleInputChange(day, index, 'gp_id', e.target.value)}>
+                          <option value="">Select</option>
+                          {gps.map(gp => (
+                            <option key={gp.id} value={gp.id}>{gp.name}</option>
+                          ))}
+                        </select>
                       </TableCell>
                       <TableCell className="p-2">
-                        <input
-                          className="px-2 py-1 rounded min-w-24"
-                          type="file"
-                          onChange={(e) =>
-                            handleInputChange(
-                              day,
-                              index,
-                              "photo",
-                              e.target.files[0]
-                            )
-                          }
-                        />
+                        <input className="px-2 py-1 rounded min-w-24" type="text" style={{ width: "100%" }} value={entry.achievements || ""} onChange={(e) => handleInputChange(day, index, 'achievements', e.target.value)} />
                       </TableCell>
                       <TableCell className="p-2">
-                        <input
-                          className="px-2 py-1 rounded min-w-24"
-                          type="text"
-                          style={{ width: "100%" }}
-                          value={entry.remarks || ""}
-                          onChange={(e) =>
-                            handleInputChange(
-                              day,
-                              index,
-                              "remarks",
-                              e.target.value
-                            )
-                          }
-                        />
+                        <input className="px-2 py-1 rounded min-w-24" type="file" onChange={(e) => handleInputChange(day, index, 'photo', e.target.files[0])} />
+                      </TableCell>
+                      <TableCell className="p-2">
+                        <input className="px-2 py-1 rounded min-w-24" type="text" style={{ width: "100%" }} value={entry.remarks || ""} onChange={(e) => handleInputChange(day, index, 'remarks', e.target.value)} />
                       </TableCell>
                     </TableRow>
                   ))}
