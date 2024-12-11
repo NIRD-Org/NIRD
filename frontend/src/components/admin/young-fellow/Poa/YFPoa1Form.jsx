@@ -929,7 +929,7 @@ const YFPoa1Form = ({ update }) => {
                   </select>
                 </td>
                 <td>
-                  <input
+                  <input disabled
                     type="text"
                     style={{ width: "100%" }}
                     onChange={(e) =>
@@ -939,7 +939,7 @@ const YFPoa1Form = ({ update }) => {
                   />
                 </td>
                 <td>
-                  <input
+                  <input disabled
                     type="file"
                     onChange={(e) =>
                       handleInputChange(day.id, "photo", e.target.files[0])
@@ -947,7 +947,7 @@ const YFPoa1Form = ({ update }) => {
                   />
                 </td>
                 <td>
-                  <input
+                  <input disabled
                     type="text"
                     className="border rounded border-gray-300"
                     style={{ width: "100%" }}
