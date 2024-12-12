@@ -179,6 +179,8 @@ import YfPoaReport from "./components/admin/young-fellow/Poa/YfPoaReport";
 import PoaAdminSPCData from "./components/admin/poa/PoaAdminSPCData";
 import UpdatePMUPOA1Form from "./components/admin/poa/UpdatePMUPOA1Form";
 import SoeprProjectPage from "./Pages/SoeprProjectPage";
+import NGODetailsPage from "./Pages/NGODetailsPage";
+import SchoolsOfExcellencePage from "./Pages/SchoolsOfExcellencePage";
 
 
 
@@ -197,7 +199,9 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/pgp" element={<PgpHome />} />
+          <Route path="/Ngo" element={<NGODetailsPage />} />
           <Route path="/soepr/ProjectOverview" element={<SoeprProjectPage />} />
+          <Route path="/soepr/schools_of_excellence" element={<SchoolsOfExcellencePage />} />
           <Route path="/soepr" element={<Soeprhome />} />
           <Route path="/kpi" element={<KPIPage />} />
           <Route path="/login" element={<LoginPage />} />

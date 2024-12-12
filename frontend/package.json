@@ -50,6 +50,7 @@
     "react-player": "^2.16.0",
     "react-router-dom": "^6.23.1",
     "react-select": "^5.8.0",
+    "react-table": "^7.8.0",
     "react-to-pdf": "^1.0.1",
     "shadcn-ui": "^0.8.0",
     "slick-carousel": "^1.8.1",

@@ -84,6 +84,7 @@ const Header = () => {
         { label: "Project Partners", to: "/KeyPartners" },
         { label: "Themes", to: "/project-themes" },
         { label: "Young Fellows and Activities", to: "/YFActivities" },
+        { label: "NGO's Associated", to: "/Ngo" },
        {/*} { label: "Institutional Strengthening", to: "/institutional-strengthening" },
         { label: "Indicators and KPIs", to: "/indicators-kpis" },
         { label: "Budget and Expenditure", to: "/budget-expenditure" },*/}
@@ -107,14 +108,9 @@ const Header = () => {
       submenus: [
         { label: "Circulars and Orders", to: "/pgp" },
         { label: "Careers", to: "/pgp" },
-        {
-          label: "Reports and Formats",
-          submenus: [
-            { label: "GPDP Models", to: "/pgp" },
-            { label: "Quick Links", to: "/pgp" },
-            { label: "YF Support Material", to: "/pgp" },
-          ],
-        },
+        { label: "GPDP Models", to: "/pgp" },
+          
+       
       ],
     },
     { label: "OSR", to: "/OSR" },
