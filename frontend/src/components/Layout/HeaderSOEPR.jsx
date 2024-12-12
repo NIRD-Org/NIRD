@@ -64,32 +64,33 @@ const Header = () => {
         { label: "Project Overview", to: "/soepr/ProjectOverview" },
         { label: "Schools of Excellence", to: "/soepr/schools_of_excellence" },
         { label: "Project Execution Team", to: "/soepr/staff" },
-        { label: "Budget and Expenditure", to: "/budget-expenditure" },
-        { label: "Key Partners", to: "/KeyPartners" },
-        { label: "KPI List", to: "/kpis" },
+       // { label: "Budget and Expenditure", to: "/budget-expenditure" },
+       // { label: "Key Partners", to: "/KeyPartners" },
+       // { label: "KPI List", to: "/soepr" },
       ],
     },
-    { label: "Project Progress", to: "/kpi?tab=Localised+Sustainable+Goals" },
-    {
-      label: "Notifications and Reports",
+    { label: "Project Progress", to: "/soepr",
       submenus: [
-        { label: "Circulars and Orders", to: "/circulars-orders" },
-        { label: "Careers", to: "/careers" },
-        {
-          label: "Achievements",
-          submenus: [
-            { label: "Case Studies", to: "/case-studies" },
-            { label: "Photo Gallery", to: "/photo-gallery" },
-          ],
-        },
+        { label: "KPIs", to: "/view/kpi"},
+      {
+        label: "Achievements",to: "/soepr"
+        
+      },
+    ], },
+    {
+      label: "Notifications and Reports",to: "/soepr",
+      submenus: [
+       
+        { label: "Training materials", to: "/careers" },
+       
       ],
     },
     {
-      label: "Performance Evaluation",
-      submenus: [{ label: "Ranking", to: "/quick-links" }],
+      label: "Performance Evaluation",to: "/soepr",
+      submenus: [{ label: "Ranking", to: "/soepr" }],
     },
-    { label: "Grievance Cell", to: "/grievance-cell" },
-    { label: "Contact Us", to: "/contact-us" },
+    { label: "Grievance Cell", to: "/soepr" },
+    
   ];
 
   return (
