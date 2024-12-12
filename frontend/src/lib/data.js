@@ -771,7 +771,7 @@ export const getSidebarItems = (user) => {
               type: "sub-module",
               icon: ArrowBigRight,
               title: "SOEPR Achievements Entry Form",
-              link: "/admin/soepr/SOEPR Achievements/create",
+              link: "/admin/soepr/blog/create",
             },
             {
               type: "sub-module",
