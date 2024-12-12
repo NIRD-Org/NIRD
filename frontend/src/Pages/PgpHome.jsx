@@ -128,6 +128,15 @@ function PgpHome() {
     </div>
   </div>
 </section>
+      {/* NGO logo Section */}
+      <section className="py-8 bg-white">
+        <h2 className="text-center text-2xl md:text-4xl font-bold mb-6">
+         Our NGO partners at GP Level
+        </h2>
+        <div className="container mx-auto px-4">
+          <NgosCarousel />
+        </div>
+      </section>
 
       {/* Measuring Impact Section 
       <section className="py-10 bg-white">
@@ -231,6 +240,98 @@ const ThemesCarousel = () => {
   );
 };
 
+const NgosCarousel = () => {
+  const carouselRef = useRef(null);
+
+  // Paths to NGO images
+  const ngoLogos = [
+    "logo/NGO (1).jpeg",
+    "logo/NGO (2).jpeg",
+    "logo/NGO (3).jpeg",
+    "logo/NGO (4).jpeg",
+    "logo/NGO (5).jpeg",
+    "logo/NGO (6).jpeg",
+    "logo/NGO (7).jpeg",
+    "logo/NGO (8).jpeg",
+    "logo/NGO (9).jpeg",
+    "logo/NGO (10).jpeg",
+    "logo/NGO (11).jpeg",
+    "logo/NGO (12).jpeg",
+    "logo/NGO (13).jpeg",
+    "logo/NGO (14).jpeg",
+    "logo/NGO (15).jpeg",
+    "logo/NGO (16).jpeg",
+  ];
+
+  // Duplicate images for seamless scrolling
+  const duplicatedLogos = [...ngoLogos, ...ngoLogos];
+
+  useEffect(() => {
+    const carousel = carouselRef.current;
+
+    if (carousel) {
+      let scrollAmount = 0;
+      const scrollStep = 1; // Pixels to scroll per frame
+      const scrollInterval = 16; // Interval between frames (16ms ≈ 60fps)
+
+      const scroll = () => {
+        scrollAmount += scrollStep;
+        if (scrollAmount >= carousel.scrollWidth / 2) {
+          // Reset to the start for seamless scrolling
+          carousel.scrollLeft = 0;
+          scrollAmount = 0;
+        } else {
+          carousel.scrollLeft = scrollAmount;
+        }
+      };
+
+      const intervalId = setInterval(scroll, scrollInterval);
+
+      return () => clearInterval(intervalId); // Clean up on unmount
+    }
+  }, []);
+
+  return (
+    <div
+      ref={carouselRef}
+      style={{
+        display: "flex",
+        overflowX: "hidden", // Hide horizontal scrollbar
+        whiteSpace: "nowrap",
+        width: "100%",
+        height: "120px", // Set height for consistent image display
+      }}
+    >
+      {duplicatedLogos.map((logoPath, index) => (
+        <div
+          key={index}
+          style={{
+            display: "inline-block",
+            marginRight: "10px",
+            flexShrink: 0,
+            width: "150px", // Consistent width
+            height: "100%", // Fill the container height
+          }}
+        >
+          <img
+            src={logoPath}
+            alt={`NGO ${index + 1}`}
+            style={{
+              width: "100%", // Fill the width of the container
+              height: "100%", // Fill the height of the container
+              objectFit: "contain", // Ensure the full image is visible
+              backgroundColor: "white", // Optional: Background color for empty spaces
+              borderRadius: "8px", // Optional: Rounded corners
+            }}
+          />
+        </div>
+      ))}
+    </div>
+  );
+};
+
+
+
 const GoalCard = ({ icon, title, description }) => (
   <div className="flex flex-col items-center bg-white p-6 rounded-lg shadow-md">
     {icon}
@@ -327,13 +428,9 @@ const ngoData = [
     name: "Self-Help Groups (SHGs)",
     description: "Active at the GP level to empower communities.",
   },
-
-  {
-    name: "CSOs in the Clusters",
-    description: "Community-based organizations contributing to cluster development.",
-  },
 ];
 
+    
 {/*const impactCards = [
   {
     icon: "🏘️",
