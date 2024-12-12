@@ -182,6 +182,7 @@ import SoeprProjectPage from "./Pages/SoeprProjectPage";
 import NGODetailsPage from "./Pages/NGODetailsPage";
 import SchoolsOfExcellencePage from "./Pages/SchoolsOfExcellencePage";
 import SoeprStaffPage from "./Pages/SoeprStaffPage";
+import BlogPost from "./components/admin/soepr/blogs/BlogPost";
 import GPDPModelsPagePage from "./Pages/GPDPModelsPage";
 
 
@@ -203,7 +204,10 @@ function App() {
           <Route path="/pgp" element={<PgpHome />} />
           <Route path="/Ngo" element={<NGODetailsPage />} />
           <Route path="/soepr/ProjectOverview" element={<SoeprProjectPage />} />
-          <Route path="/soepr/schools_of_excellence" element={<SchoolsOfExcellencePage />} />
+          <Route
+            path="/soepr/schools_of_excellence"
+            element={<SchoolsOfExcellencePage />}
+          />
           <Route path="/soepr/staff" element={<SoeprStaffPage/>} />
           <Route path="/soepr" element={<Soeprhome />} />
           <Route path="/soepr_staff" element={<Soeprhome />} />
@@ -289,6 +293,7 @@ function App() {
             <Route path="soepr/POAreport" element={<PoaReportcount />} />
             <Route path="soepr/leave" element={<SoeprLeaveUpdateForm />} />
             <Route path="soepr/tour" element={<SoeprTourUpdateForm />} />
+            <Route path="soepr/blog/create" element={<BlogPost />} />
 
             <Route path="soepr/POA1/edit/:id" element={<UpdatePOA1Form />} />
             <Route

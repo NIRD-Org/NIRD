@@ -49,6 +49,25 @@ export const getSidebarItems = (user) => {
       {
         type: "module",
         icon: ArrowBigRight,
+        title: "Blog",
+        submodules: [
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "Blog Entry Form",
+            link: "/admin/soepr/blog/create",
+          },
+          // {
+          //   type: "sub-module",
+          //   icon: ArrowBigRight,
+          //   title: "View Blog Posts",
+          //   link: "/admin/soepr/attendance/pmu-upload",
+          // },
+        ],
+      },
+      {
+        type: "module",
+        icon: ArrowBigRight,
         title: "Attendance",
         submodules: [
           {
@@ -746,6 +765,25 @@ export const getSidebarItems = (user) => {
         {
           type: "module",
           icon: ArrowBigRight,
+          title: "Blog",
+          submodules: [
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "Blog Entry Form",
+              link: "/admin/soepr/blog/create",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "PM Entry Form",
+              link: "/admin/soepr/attendance/pmu-upload",
+            },
+          ],
+        },
+        {
+          type: "module",
+          icon: ArrowBigRight,
           title: "KPI",
           submodules: [
             {
@@ -760,6 +798,25 @@ export const getSidebarItems = (user) => {
 
     case 5:
       sidebarItems = [
+        {
+          type: "module",
+          icon: ArrowBigRight,
+          title: "Blog",
+          submodules: [
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "Blog Entry Form",
+              link: "/admin/soepr/blog/create",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "PM Entry Form",
+              link: "/admin/soepr/attendance/pmu-upload",
+            },
+          ],
+        },
         {
           type: "module",
           icon: ArrowBigRight,

@@ -32,6 +32,8 @@ import soeprLocationRoutes from "./routes/soeprLocationRoutes.js";
 import soeprStateRoutes from "./routes/soeprStateRoutes.js";
 import soeprDistrictRoutes from "./routes/soeprDistrictRoutes.js";
 import poa1Routes from "./routes/poa1Routes.js";
+import blogRoutes from "./routes/blogRoutes.js";
+
 import yfPoa1Routes from "./routes/YfPoa1Routes.js";
 import SpcPoa1Routes from "./routes/SpcPoa1Routes.js";
 import PmupoaRoutes from "./routes/pmupoaRoutes.js"
@@ -84,6 +86,7 @@ app.use("/api/v1/soepr-dist", soeprDistrictRoutes);
 app.use("/api/v1/poa1", poa1Routes);
 app.use("/api/v1/yf-poa1", yfPoa1Routes);
 app.use("/api/v1/spc-poa1", SpcPoa1Routes);
+app.use("/api/v1/blog",blogRoutes)
 
 
 app.get("/", (req, res) => {
