@@ -49,18 +49,18 @@ export const getSidebarItems = (user) => {
       {
         type: "module",
         icon: ArrowBigRight,
-        title: "Blog",
+        title: "SOEPR Achievements",
         submodules: [
           {
             type: "sub-module",
             icon: ArrowBigRight,
-            title: "Blog Entry Form",
-            link: "/admin/soepr/blog/create",
+            title: "SOEPR Achievements Entry Form",
+            link: "/admin/soepr/SOEPR Achievements/create",
           },
           // {
           //   type: "sub-module",
           //   icon: ArrowBigRight,
-          //   title: "View Blog Posts",
+          //   title: "View SOEPR Achievements Posts",
           //   link: "/admin/soepr/attendance/pmu-upload",
           // },
         ],
@@ -765,13 +765,13 @@ export const getSidebarItems = (user) => {
         {
           type: "module",
           icon: ArrowBigRight,
-          title: "Blog",
+          title: "SOEPR Achievements",
           submodules: [
             {
               type: "sub-module",
               icon: ArrowBigRight,
-              title: "Blog Entry Form",
-              link: "/admin/soepr/blog/create",
+              title: "SOEPR Achievements Entry Form",
+              link: "/admin/soepr/SOEPR Achievements/create",
             },
             {
               type: "sub-module",
@@ -801,13 +801,13 @@ export const getSidebarItems = (user) => {
         {
           type: "module",
           icon: ArrowBigRight,
-          title: "Blog",
+          title: "SOEPR Achievements",
           submodules: [
             {
               type: "sub-module",
               icon: ArrowBigRight,
-              title: "Blog Entry Form",
-              link: "/admin/soepr/blog/create",
+              title: "SOEPR Achievements Entry Form",
+              link: "/admin/soepr/SOEPR Achievements/create",
             },
             {
               type: "sub-module",
