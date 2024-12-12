@@ -181,6 +181,7 @@ import UpdatePMUPOA1Form from "./components/admin/poa/UpdatePMUPOA1Form";
 import SoeprProjectPage from "./Pages/SoeprProjectPage";
 import NGODetailsPage from "./Pages/NGODetailsPage";
 import SchoolsOfExcellencePage from "./Pages/SchoolsOfExcellencePage";
+import SoeprStaffPage from "./Pages/SoeprStaffPage";
 import BlogPost from "./components/admin/soepr/blogs/BlogPost";
 
 
@@ -206,7 +207,9 @@ function App() {
             path="/soepr/schools_of_excellence"
             element={<SchoolsOfExcellencePage />}
           />
+          <Route path="/soepr/staff" element={<SoeprStaffPage/>} />
           <Route path="/soepr" element={<Soeprhome />} />
+          <Route path="/soepr_staff" element={<Soeprhome />} />
           <Route path="/kpi" element={<KPIPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />

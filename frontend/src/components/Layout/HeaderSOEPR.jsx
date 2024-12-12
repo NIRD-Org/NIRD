@@ -63,7 +63,7 @@ const Header = () => {
       submenus: [
         { label: "Project Overview", to: "/soepr/ProjectOverview" },
         { label: "Schools of Excellence", to: "/soepr/schools_of_excellence" },
-        { label: "Project Execution Team", to: "/ExecutionTeam" },
+        { label: "Project Execution Team", to: "/soepr/staff" },
         { label: "Budget and Expenditure", to: "/budget-expenditure" },
         { label: "Key Partners", to: "/KeyPartners" },
         { label: "KPI List", to: "/kpis" },
