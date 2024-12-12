@@ -55,14 +55,9 @@ export const getSidebarItems = (user) => {
             type: "sub-module",
             icon: ArrowBigRight,
             title: "SOEPR Achievements Entry Form",
-            link: "/admin/soepr/SOEPR Achievements/create",
+            link: "/admin/soepr/blog/create",
           },
-          // {
-          //   type: "sub-module",
-          //   icon: ArrowBigRight,
-          //   title: "View SOEPR Achievements Posts",
-          //   link: "/admin/soepr/attendance/pmu-upload",
-          // },
+         
         ],
       },
       {
@@ -762,25 +757,7 @@ export const getSidebarItems = (user) => {
             },
           ],
         },
-        {
-          type: "module",
-          icon: ArrowBigRight,
-          title: "SOEPR Achievements",
-          submodules: [
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "SOEPR Achievements Entry Form",
-              link: "/admin/soepr/blog/create",
-            },
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "PM Entry Form",
-              link: "/admin/soepr/attendance/pmu-upload",
-            },
-          ],
-        },
+       
         {
           type: "module",
           icon: ArrowBigRight,
@@ -798,25 +775,7 @@ export const getSidebarItems = (user) => {
 
     case 5:
       sidebarItems = [
-        {
-          type: "module",
-          icon: ArrowBigRight,
-          title: "SOEPR Achievements",
-          submodules: [
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "SOEPR Achievements Entry Form",
-              link: "/admin/soepr/SOEPR Achievements/create",
-            },
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "PM Entry Form",
-              link: "/admin/soepr/attendance/pmu-upload",
-            },
-          ],
-        },
+        
         {
           type: "module",
           icon: ArrowBigRight,
