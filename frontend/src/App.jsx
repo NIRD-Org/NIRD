@@ -182,6 +182,7 @@ import SoeprProjectPage from "./Pages/SoeprProjectPage";
 import NGODetailsPage from "./Pages/NGODetailsPage";
 import SchoolsOfExcellencePage from "./Pages/SchoolsOfExcellencePage";
 import SoeprStaffPage from "./Pages/SoeprStaffPage";
+import GPDPModelsPagePage from "./Pages/GPDPModelsPage";
 
 
 
@@ -219,6 +220,7 @@ function App() {
           <Route path="Achievements" element={<SignificantAchievements />} />
           <Route path="KeyPartners" element={<KeyPartners />} />
           <Route path="OSR" element={<OSR />} />
+          <Route path="GPDP" element={<GPDPModelsPagePage />} />
           <Route path="YFActivities" element={<YFActivities />} />
           <Route path="/gp-wise-data/theme/:id" element={<ThemeDataPage />} />
           <Route path="/gp-wise-data/theme10" element={<Theme10DataPage />} />

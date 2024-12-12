@@ -108,7 +108,7 @@ const Header = () => {
       submenus: [
         { label: "Circulars and Orders", to: "/pgp" },
         { label: "Careers", to: "/pgp" },
-        { label: "GPDP Models", to: "/pgp" },
+        { label: "GPDP Models", to: "/GPDP" },
           
        
       ],
