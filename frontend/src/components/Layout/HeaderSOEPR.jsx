@@ -73,7 +73,7 @@ const Header = () => {
       submenus: [
         { label: "KPIs", to: "/view/kpi"},
       {
-        label: "Achievements",to: "/soepr"
+        label: "Achievements",to: "/blogs"
         
       },
     ], },
