@@ -187,6 +187,8 @@ import AllBlogPosts from "./components/admin/soepr/blogs/SoeprBlogPosts";
 import BlogDetails from "./components/admin/soepr/blogs/BlogDetails";
 import BlogPosts from "./Pages/Blogs/BlogPosts";
 import GPDPModelsPagePage from "./Pages/GPDPModelsPage";
+import TrainingMaterialForm from "./components/admin/soepr/trainingMaterial/TrainingMaterialForm";
+import TrainingMaterials from "./Pages/TrainingMaterial/TrainingMaterials";
 
 
 
@@ -251,6 +253,8 @@ function App() {
           <Route path="/staff-details" element={<StaffTablePage />} />
           <Route path="/GramSabha" element={<GramSabhaPage />} />
           <Route path="/blogs" element={<BlogPosts />} />
+          <Route path="/training-materials" element={<TrainingMaterials />} />
+
           <Route path="/blog/:id" element={<BlogDetails />} />
 
           <Route path="/GramSabha" element={<GramSabhaPage />} />
@@ -303,6 +307,10 @@ function App() {
             <Route path="soepr/blog/create" element={<BlogPost />} />
             <Route path="soepr/blogs/all" element={<AllBlogPosts />} />
             <Route path="soepr/blog/:id" element={<BlogDetails />} />
+            <Route
+              path="soepr/training-material/create"
+              element={<TrainingMaterialForm />}
+            />
 
             <Route path="soepr/POA1/edit/:id" element={<UpdatePOA1Form />} />
             <Route
