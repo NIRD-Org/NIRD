@@ -57,12 +57,12 @@ export const getSidebarItems = (user) => {
             title: "Blog Entry Form",
             link: "/admin/soepr/blog/create",
           },
-          // {
-          //   type: "sub-module",
-          //   icon: ArrowBigRight,
-          //   title: "View Blog Posts",
-          //   link: "/admin/soepr/attendance/pmu-upload",
-          // },
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "View Blog Posts",
+            link: "/admin/soepr/blogs/all",
+          },
         ],
       },
       {
