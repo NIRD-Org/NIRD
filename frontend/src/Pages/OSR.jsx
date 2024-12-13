@@ -1,20 +1,27 @@
-
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 
 const OSR = () => {
-  const tableHeaders = [
-    { label: "Sl. No.", key: "sl" },
-    { label: "GP", key: "gp" },
-    { label: "Block", key: "block" },
-    { label: "State", key: "state" },
-    { label: "OSR 2021-22 (in Rs.)", key: "osr2021" },
-    { label: "OSR 2022-23 (in Rs.)", key: "osr2022" },
-    { label: "OSR 2023-24 (in Rs.)", key: "osr2023" },
-  ];
 
-  const initialTableData = [ 
+  const calculatePercentageChange = (newVal, oldVal) => {
+    if (oldVal === 0) return "N/A"; // Avoid division by zero
+    const change = ((newVal - oldVal) / oldVal) * 100;
+    return `${change.toFixed(2)}%`;
+  };
+  const tableHeaders = [
+    { label: "Sl. No.", key: "sl", width: "5%" },
+    { label: "GP", key: "gp", width: "10%" },
+    { label: "Block", key: "block", width: "10%" },
+    { label: "State", key: "state", width: "10%" },
+    { label: "OSR 2021-22 (in Rs.)", key: "osr2021", width: "8%" },
+    { label: "OSR 2022-23 (in Rs.)", key: "osr2022", width: "8%" },
+    { label: "OSR 2023-24 (in Rs.)", key: "osr2023", width: "8%" },
+    { label: "% Change 2021-22 to 2022-23", key: "change2021to2022", width: "6%" },
+    { label: "% Change 2022-23 to 2023-24", key: "change2022to2023", width: "6%" },
+    { label: "Graph", key: "Graph", width: "21%" },
+  ];
+  const initialData = [ 
     ["1", "Pusada", "Amravati", "Maharashtra", 24000, 55000, 140000],
     ["2", "Nandura Bk", "Amravati", "Maharashtra", 18000, 48000, 121000],
     ["3", "Tembha", "Amravati", "Maharashtra", 12000, 34000, 108000],
@@ -250,69 +257,52 @@ const OSR = () => {
     ["232", "Naveguda", "Wankidi", "Telangana", 50390, 111290, 91250],
     ["233", "Indhani", "Wankidi", "Telangana", 251254, 217283, 327936]
 
-
-
-
-
-
-    
   ];
 
-  const [tableData, setTableData] = useState(initialTableData);
+  const [tableData, setTableData] = useState(initialData.map(item => ({
+    sl: item[0],
+    gp: item[1],
+    block: item[2],
+    state: item[3],
+    osr2021: item[4],
+    osr2022: item[5],
+    osr2023: item[6],
+    change2021to2022: calculatePercentageChange(item[5], item[4]),
+    change2022to2023: calculatePercentageChange(item[6], item[5])
+  })));
+
   const [sortConfig, setSortConfig] = useState({ key: "", direction: "" });
 
-  const handleSort = (key, index) => {
+  const handleSort = (key) => {
     const direction = sortConfig.key === key && sortConfig.direction === "asc" ? "desc" : "asc";
     const sortedData = [...tableData].sort((a, b) => {
-      if (typeof a[index] === "number") {
-        return direction === "asc" ? a[index] - b[index] : b[index] - a[index];
+      if (key.includes('change')) { // Sort by percentage change, parsing the string
+        const valueA = parseFloat(a[key]) || 0;
+        const valueB = parseFloat(b[key]) || 0;
+        return direction === "asc" ? valueA - valueB : valueB - valueA;
       }
-      return direction === "asc"
-        ? a[index].localeCompare(b[index])
-        : b[index].localeCompare(a[index]);
+      return direction === "asc" ? a[key] - b[key] : b[key] - a[key]; // Numerical sort
     });
     setSortConfig({ key, direction });
     setTableData(sortedData);
   };
 
-  const getArrow = (current, previous) => {
-    if (current > previous) {
-      return <strong className="text-green-500 ml-2">↑</strong>;
-    } else if (current < previous) {
-      return <strong className="text-red-500 ml-2">↓</strong>;
-    }
-    return null;
-  };
-
-  const downloadPDF = () => {
-    const doc = new jsPDF();
-    doc.setFontSize(12);
-    doc.text(
-      "Project for Creating Model GPs Clusters\n" +
-        "(70 Clusters of 307 GPs Being Supported by 70 Phase-1 Young Fellows from October 2021)\n" +
-        "Achievement Reports on OSR as on 31.03.2024 vis-à-vis Baseline Status as on 31.03.2022",
-      105,
-      10,
-      { align: "center" }
+  const renderBarGraph = (values) => {
+    const max = Math.max(...values);
+    return (
+      <div style={{ display: "flex", height: "10px" }}>
+        {values.map((value, index) => (
+          <div
+            key={index}
+            style={{
+              width: `${(value / max) * 100}%`,
+              backgroundColor: index === 0 ? "#0074D9" : index === 1 ? "#2ECC40" : "#FF4136",
+              marginRight: "2px"
+            }}
+          />
+        ))}
+      </div>
     );
-
-    const rows = tableData.map((row) => [
-      row[0],
-      row[1],
-      row[2],
-      row[3],
-      row[4].toLocaleString(),
-      `${row[5].toLocaleString()} ${row[5] > row[4] ? "↑" : row[5] < row[4] ? "↓" : ""}`,
-      `${row[6].toLocaleString()} ${row[6] > row[5] ? "↑" : row[6] < row[5] ? "↓" : ""}`,
-    ]);
-
-    doc.autoTable({
-      head: [tableHeaders.map((header) => header.label)],
-      body: rows,
-      startY: 30,
-    });
-
-    doc.save("GP_OSR_Achievement_Report.pdf");
   };
 
   return (
@@ -324,11 +314,11 @@ const OSR = () => {
         <table className="min-w-full bg-white border border-gray-300 text-center">
           <thead>
             <tr className="bg-gray-200">
-              {tableHeaders.map((header, index) => (
+              {tableHeaders.map((header) => (
                 <th
                   key={header.key}
                   className="py-2 px-4 border cursor-pointer"
-                  onClick={() => handleSort(header.key, index)}
+                  onClick={() => handleSort(header.key)}
                 >
                   {header.label} {sortConfig.key === header.key && (sortConfig.direction === "asc" ? "↑" : "↓")}
                 </th>
@@ -337,36 +327,23 @@ const OSR = () => {
           </thead>
           <tbody>
             {tableData.map((row, index) => (
-              <tr
-                key={index}
-                className={index % 2 === 0 ? "bg-gray-50" : "bg-white"}
-              >
-                <td className="py-2 px-4 border">{row[0]}</td>
-                <td className="py-2 px-4 border">{row[1]}</td>
-                <td className="py-2 px-4 border">{row[2]}</td>
-                <td className="py-2 px-4 border">{row[3]}</td>
-                <td className="py-2 px-4 border">
-                  {row[4].toLocaleString()}
-                </td>
-                <td className="py-2 px-4 border">
-                  {row[5].toLocaleString()}
-                  {getArrow(row[5], row[4])}
-                </td>
-                <td className="py-2 px-4 border">
-                  {row[6].toLocaleString()}
-                  {getArrow(row[6], row[5])}
-                </td>
+              <tr key={index} className={index % 2 === 0 ? "bg-gray-50" : "bg-white"}>
+                <td className="py-2 px-4 border">{row.sl}</td>
+                <td className="py-2 px-4 border">{row.gp}</td>
+                <td className="py-2 px-4 border">{row.block}</td>
+                <td className="py-2 px-4 border">{row.state}</td>
+                <td className="py-2 px-4 border">{row.osr2021.toLocaleString()}</td>
+                <td className="py-2 px-4 border">{row.osr2022.toLocaleString()}</td>
+                <td className="py-2 px-4 border">{row.osr2023.toLocaleString()}</td>
+               
+                <td className="py-2 px-4 border">{row.change2021to2022}</td>
+                <td className="py-2 px-4 border">{row.change2022to2023}</td>
+                <td className="py-2 px-4 border">{renderBarGraph([row.osr2021, row.osr2022, row.osr2023])}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      <button
-        onClick={downloadPDF}
-        className="mt-6 bg-blue-500 text-white px-6 py-2 rounded shadow hover:bg-blue-600 transition"
-      >
-        Download as PDF
-      </button>
     </div>
   );
 };
