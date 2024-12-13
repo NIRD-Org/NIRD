@@ -252,7 +252,7 @@ function App() {
           <Route path="/theme9" element={<Theme9Page />} />
           <Route path="/staff-details" element={<StaffTablePage />} />
           <Route path="/GramSabha" element={<GramSabhaPage />} />
-          <Route path="/soeprachievements" element={<BlogPosts />} />
+          <Route path="/soepr/achievements" element={<BlogPosts />} />
           <Route path="/training-materials" element={<TrainingMaterials />} />
 
           <Route path="/blog/:id" element={<BlogDetails />} />
