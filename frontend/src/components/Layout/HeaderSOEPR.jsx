@@ -81,7 +81,7 @@ const Header = () => {
       label: "Notifications and Reports",to: "/soepr",
       submenus: [
        
-        { label: "Training materials", to: "/training-materials" },
+        { label: "Training materials", to: "/soepr/training-materials" },
        
       ],
     },

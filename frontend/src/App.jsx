@@ -253,7 +253,7 @@ function App() {
           <Route path="/staff-details" element={<StaffTablePage />} />
           <Route path="/GramSabha" element={<GramSabhaPage />} />
           <Route path="/soepr/achievements" element={<BlogPosts />} />
-          <Route path="/training-materials" element={<TrainingMaterials />} />
+          <Route path="/soepr/training-materials" element={<TrainingMaterials />} />
 
           <Route path="/blog/:id" element={<BlogDetails />} />
 
