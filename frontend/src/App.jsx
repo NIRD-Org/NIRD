@@ -182,8 +182,13 @@ import SoeprProjectPage from "./Pages/SoeprProjectPage";
 import NGODetailsPage from "./Pages/NGODetailsPage";
 import SchoolsOfExcellencePage from "./Pages/SchoolsOfExcellencePage";
 import SoeprStaffPage from "./Pages/SoeprStaffPage";
-import BlogPost from "./components/admin/soepr/blogs/BlogPost";
+import BlogPost from "./components/admin/soepr/blogs/SoeprBlogPostForm";
+import AllBlogPosts from "./components/admin/soepr/blogs/SoeprBlogPosts";
+import BlogDetails from "./components/admin/soepr/blogs/BlogDetails";
+import BlogPosts from "./Pages/Blogs/BlogPosts";
 import GPDPModelsPagePage from "./Pages/GPDPModelsPage";
+import TrainingMaterialForm from "./components/admin/soepr/trainingMaterial/TrainingMaterialForm";
+import TrainingMaterials from "./Pages/TrainingMaterial/TrainingMaterials";
 
 
 
@@ -208,7 +213,7 @@ function App() {
             path="/soepr/schools_of_excellence"
             element={<SchoolsOfExcellencePage />}
           />
-          <Route path="/soepr/staff" element={<SoeprStaffPage/>} />
+          <Route path="/soepr/staff" element={<SoeprStaffPage />} />
           <Route path="/soepr" element={<Soeprhome />} />
           <Route path="/soepr_staff" element={<Soeprhome />} />
           <Route path="/kpi" element={<KPIPage />} />
@@ -246,6 +251,12 @@ function App() {
           <Route path="/theme8" element={<Theme8Page />} />
           <Route path="/theme9" element={<Theme9Page />} />
           <Route path="/staff-details" element={<StaffTablePage />} />
+          <Route path="/GramSabha" element={<GramSabhaPage />} />
+          <Route path="/blogs" element={<BlogPosts />} />
+          <Route path="/training-materials" element={<TrainingMaterials />} />
+
+          <Route path="/blog/:id" element={<BlogDetails />} />
+
           <Route path="/GramSabha" element={<GramSabhaPage />} />
 
           <Route path="test" element={<AchievementChart />} />
@@ -294,6 +305,12 @@ function App() {
             <Route path="soepr/leave" element={<SoeprLeaveUpdateForm />} />
             <Route path="soepr/tour" element={<SoeprTourUpdateForm />} />
             <Route path="soepr/blog/create" element={<BlogPost />} />
+            <Route path="soepr/blogs/all" element={<AllBlogPosts />} />
+            <Route path="soepr/blog/:id" element={<BlogDetails />} />
+            <Route
+              path="soepr/training-material/create"
+              element={<TrainingMaterialForm />}
+            />
 
             <Route path="soepr/POA1/edit/:id" element={<UpdatePOA1Form />} />
             <Route

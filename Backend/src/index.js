@@ -37,7 +37,7 @@ import blogRoutes from "./routes/blogRoutes.js";
 import yfPoa1Routes from "./routes/YfPoa1Routes.js";
 import SpcPoa1Routes from "./routes/SpcPoa1Routes.js";
 import PmupoaRoutes from "./routes/pmupoaRoutes.js"
-
+import trainingMaterialRoutes from "./routes/trainingMaterialRoutes.js";
 // import { migrateFilesToS3 } from "./awsMigration.js";
 
 const app = express();
@@ -87,6 +87,8 @@ app.use("/api/v1/poa1", poa1Routes);
 app.use("/api/v1/yf-poa1", yfPoa1Routes);
 app.use("/api/v1/spc-poa1", SpcPoa1Routes);
 app.use("/api/v1/blog",blogRoutes)
+app.use("/api/v1/training-material", trainingMaterialRoutes);
+
 
 
 app.get("/", (req, res) => {

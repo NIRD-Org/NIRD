@@ -57,7 +57,25 @@ export const getSidebarItems = (user) => {
             title: "SOEPR Achievements Entry Form",
             link: "/admin/soepr/blog/create",
           },
-         
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "View Blog Posts",
+            link: "/admin/soepr/blogs/all",
+          },
+        ],
+      },
+      {
+        type: "module",
+        icon: ArrowBigRight,
+        title: "Training Material",
+        submodules: [
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "Training Material Entry Form",
+            link: "/admin/soepr/training-material/create",
+          },
         ],
       },
       {
