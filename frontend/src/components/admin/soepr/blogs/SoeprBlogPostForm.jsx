@@ -74,7 +74,7 @@ const BlogPost = () => {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      showAlert("Blog post created successfully!", "success");
+      showAlert("Achievement post created successfully!", "success");
       setFormData({ title: "", image: "", content: "" });
       window.location.reload()
     } catch (error) {
@@ -89,7 +89,7 @@ const BlogPost = () => {
       className="max-w-xl mx-auto p-6 bg-white border rounded-md"
       onSubmit={handleSubmit}
     >
-      <h1 className="text-2xl font-bold mb-4 text-center text-primary">Create a Blog Post</h1>
+      <h1 className="text-2xl font-bold mb-4 text-center text-primary">Create an Achievement Post</h1>
 
       <div className="mb-4">
         <label htmlFor="title" className="block text-sm font-medium mb-1">
@@ -98,7 +98,7 @@ const BlogPost = () => {
         <Input
           id="title"
           name="title"
-          placeholder="Enter the blog title"
+          placeholder="Enter the Achievement title"
           value={formData.title}
           onChange={handleChange}
           className={cn(errors.title && "border-red-500")}
@@ -132,7 +132,7 @@ const BlogPost = () => {
         <Textarea
           id="content"
           name="content"
-          placeholder="Write your blog content here"
+          placeholder="Write your Achievement content here"
           value={formData.content}
           onChange={handleChange}
           className={cn(errors.content && "border-red-500")}
@@ -144,7 +144,7 @@ const BlogPost = () => {
       </div>
 
       <Button type="submit" pending={isSubmitting} className="w-full">
-        {isSubmitting ? "Submitting..." : "Create Blog Post"}
+        {isSubmitting ? "Submitting..." : "Create Achievement Post"}
       </Button>
     </form>
   );

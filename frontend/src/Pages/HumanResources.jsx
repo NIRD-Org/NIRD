@@ -115,19 +115,30 @@ const HumanResourcesPage = () => {
       </div>
       
 {/* Link to Detailed Achievements Page */}
-<div className="text-center mt-10">
-        <a
-          href="/staff-details"
-          className="text-[#004B86] text-lg font-semibold hover:underline"
-        >
-           LIST OF YOUNG FELLOWS AND SPCS 
-        </a>
-      </div>
+<div className="text-center mt-10 mb-10">
+  <a
+    href="/staff-details"
+    className="bg-[#004B86] text-white py-2 px-6 rounded-lg text-lg font-semibold hover:bg-[#00345d] transition duration-300"
+  >
+    VIEW THE LIST OF YOUNG FELLOWS AND SPCS
+  </a>
+</div>
    
     
+      <div className="bg-white shadow-xl rounded-lg p-10 mb-10 transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
+        <div className="flex items-center mb-6">
+         
+          <h2 className="text-[#004B86] text-2xl font-semibold">Project Monitoring Unit</h2>
+        </div>
+        <ul className="list-disc px-10 py-4 text-md leading-relaxed text-gray-700">
+          <li>Mr.Dilip kumar Pal - <b>Project team leader</b></li>
+          <li>Dr. Anusha Pilli - <b>Sr.consultant-Capacity Building</b></li>
+          <li>Ms. Gouthami Voorugonda - <b> Sr. consultant IT & MIS</b></li>
+          <li>Mr. Satyabratha das-<b> Project Monitoring Coordinator</b></li>
+          
+        </ul>
 
-
-
+        </div>
     </div>
   );
 };

@@ -130,7 +130,7 @@ const Theme10DataPage = () => {
         </div>
         <div className="flex gap-2 items-center w-fit">
           <label className="font-semibold text-lg text-nowrap">
-            Financial Year: 2023-24
+            Financial Year: 2024-25
           </label>
           {/*<select
             value={financialYear}

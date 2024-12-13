@@ -49,12 +49,12 @@ export const getSidebarItems = (user) => {
       {
         type: "module",
         icon: ArrowBigRight,
-        title: "Blog",
+        title: "SOEPR Achievements",
         submodules: [
           {
             type: "sub-module",
             icon: ArrowBigRight,
-            title: "Blog Entry Form",
+            title: "SOEPR Achievements Entry Form",
             link: "/admin/soepr/blog/create",
           },
           {
@@ -762,25 +762,7 @@ export const getSidebarItems = (user) => {
             },
           ],
         },
-        {
-          type: "module",
-          icon: ArrowBigRight,
-          title: "Blog",
-          submodules: [
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "Blog Entry Form",
-              link: "/admin/soepr/blog/create",
-            },
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "PM Entry Form",
-              link: "/admin/soepr/attendance/pmu-upload",
-            },
-          ],
-        },
+       
         {
           type: "module",
           icon: ArrowBigRight,
@@ -798,25 +780,7 @@ export const getSidebarItems = (user) => {
 
     case 5:
       sidebarItems = [
-        {
-          type: "module",
-          icon: ArrowBigRight,
-          title: "Blog",
-          submodules: [
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "Blog Entry Form",
-              link: "/admin/soepr/blog/create",
-            },
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "PM Entry Form",
-              link: "/admin/soepr/attendance/pmu-upload",
-            },
-          ],
-        },
+        
         {
           type: "module",
           icon: ArrowBigRight,

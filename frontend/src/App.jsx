@@ -186,6 +186,7 @@ import BlogPost from "./components/admin/soepr/blogs/SoeprBlogPostForm";
 import AllBlogPosts from "./components/admin/soepr/blogs/SoeprBlogPosts";
 import BlogDetails from "./components/admin/soepr/blogs/BlogDetails";
 import BlogPosts from "./Pages/Blogs/BlogPosts";
+import GPDPModelsPagePage from "./Pages/GPDPModelsPage";
 
 
 
@@ -226,6 +227,7 @@ function App() {
           <Route path="Achievements" element={<SignificantAchievements />} />
           <Route path="KeyPartners" element={<KeyPartners />} />
           <Route path="OSR" element={<OSR />} />
+          <Route path="GPDP" element={<GPDPModelsPagePage />} />
           <Route path="YFActivities" element={<YFActivities />} />
           <Route path="/gp-wise-data/theme/:id" element={<ThemeDataPage />} />
           <Route path="/gp-wise-data/theme10" element={<Theme10DataPage />} />

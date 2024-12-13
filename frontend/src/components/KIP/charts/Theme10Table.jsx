@@ -14,16 +14,24 @@ const Theme10Table = ({ state, dist, block, gp, fy }) => {
 
   // Fetch and sort data from API
   useEffect(() => {
-    if (!state || !dist || !block || !gp || fy) return;
+    // Ensure all parameters are provided
+    if (!state || !dist || !block || !gp || !fy) return;
+
     const fetchData = async () => {
       try {
-        const { data } = await API.get(
+        const response = await API.get(
           `/api/v1/gp-wise-kpi/table?state=${state}&dist=${dist}&block=${block}&gp=${gp}&fy=${fy}`
         );
 
-        // Sort data by KPI ID in ascending order
-        const sortedData = data.data.sort((a, b) => a.kpi.id - b.kpi.id);
-        setData(sortedData);
+        // Check if response data exists and is an array
+        if (response.data && Array.isArray(response.data.data)) {
+          // Sort data by KPI ID in ascending order
+          const sortedData = response.data.data.sort((a, b) => a.kpi.id - b.kpi.id);
+          setData(sortedData);
+        } else {
+          console.error("Unexpected data format:", response.data);
+          setData([]);
+        }
       } catch (error) {
         setData([]);
         console.error("Error fetching data:", error);
@@ -36,7 +44,7 @@ const Theme10Table = ({ state, dist, block, gp, fy }) => {
   return (
     <div className="p-6 w-full bg-gray-50 min-h-screen">
       <h1 className="text-2xl font-semibold text-center text-blue-900 mb-6">
-        Gram Panchayat KPI Progress
+        Gram Panchayat Progress
       </h1>
       <div className="overflow-x-auto bg-white rounded-lg shadow-lg">
         <Table className="w-full border border-gray-300">
@@ -45,15 +53,18 @@ const Theme10Table = ({ state, dist, block, gp, fy }) => {
               <TableHead className="py-3 px-4 text-sm font-semibold text-gray-800 border-r">
                 S.No.
               </TableHead>
-              {/*<TableHead className="py-3 px-4 text-sm font-semibold text-gray-800 border-r">
+              {/* <TableHead className="py-3 px-4 text-sm font-semibold text-gray-800 border-r">
                 KPI ID
-              </TableHead>*/}
+              </TableHead> */}
               <TableHead className="py-3 px-4 text-sm font-semibold text-gray-800 border-r">
                 KPI Name
               </TableHead>
               <TableHead className="py-3 px-4 text-sm font-semibold text-gray-800 border-r">
                 Datapoint
               </TableHead>
+              {/* <TableHead className="py-3 px-4 text-sm font-semibold text-gray-800 border-r">
+                Input Type
+              </TableHead> */}
               <TableHead className="py-3 px-4 text-sm font-semibold text-gray-800">
                 Cumulative Achieved
               </TableHead>
@@ -70,15 +81,18 @@ const Theme10Table = ({ state, dist, block, gp, fy }) => {
                 <TableCell className="py-2 px-4 text-center border-r text-sm text-gray-600">
                   {index + 1}
                 </TableCell>
-               {/*<TableCell className="py-2 px-4 text-center border-r text-sm text-gray-600">
+                {/* <TableCell className="py-2 px-4 text-center border-r text-sm text-gray-600">
                   {item.kpi.id}
-                </TableCell>*/}
+                </TableCell> */}
                 <TableCell className="py-2 px-4 text-left border-r text-sm text-gray-600">
                   {item.kpi.name}
                 </TableCell>
                 <TableCell className="py-2 px-4 text-left border-r text-sm text-gray-600">
                   {item.kpi.kpi_datapoint}
                 </TableCell>
+                {/* <TableCell className="py-2 px-4 text-left border-r text-sm text-gray-600">
+                  {item.kpi.input_type}
+                </TableCell> */}
                 <TableCell className="py-2 px-4 text-left text-sm text-gray-600">
                   {item.input_data}
                 </TableCell>

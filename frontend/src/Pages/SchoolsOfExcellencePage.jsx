@@ -1,52 +1,52 @@
 import React from 'react';
-import { FaBuilding, FaChalkboardTeacher, FaHandshake, FaLeaf, FaGavel, FaMoneyBillWave, FaPeopleArrows, FaBookOpen, FaChartLine } from "react-icons/fa";
+import { FaSeedling, FaGlobe, FaTree, FaUsers, FaChartPie, FaHandsHelping, FaSchool, FaRecycle, FaCity } from "react-icons/fa";
 
 const SchoolsOfExcellencePage = () => {
   const centers = [
     {
-      icon: <FaBuilding className="text-red-500 text-5xl" />,
-      title: "School of Governance",
-      description: "The School of Governance is dedicated to refining the administrative capabilities and accountability mechanisms within Panchayats. It aims to establish robust governance frameworks, encouraging transparent, effective, and responsible administration. Through workshops, seminars, and direct consultancy, this school seeks to elevate the standards of local governance across diverse regions, emphasizing ethical practices, leadership development, and strategic policy implementation. The ultimate goal is to foster governance models that are not only efficient but also adaptable to the changing needs and challenges of rural administration."
+      icon: <FaGlobe className="text-red-500 text-5xl" />, 
+      title: "Centre for Localization of SDGs, Integrated Panchayat Planning and Convergence", 
+      description: "This center is committed to localizing Sustainable Development Goals (SDGs) by integrating them into Panchayat-level planning and governance. It focuses on fostering partnerships and ensuring that developmental initiatives are aligned with global and national objectives, while also addressing the specific needs of local communities." 
     },
     {
-      icon: <FaChalkboardTeacher className="text-green-500 text-5xl" />,
-      title: "School of Capacity Building",
-      description: "This school is a cornerstone for enhancing the professional skills of Panchayat members, offering training programs that cover a wide range of governance aspects from financial management to ethical leadership. The curriculum is designed to empower leaders with robust skills for managing local governance challenges, focusing on sustainable development, community engagement, and conflict resolution. These programs are crafted to be interactive and practical, ensuring that participants can apply their learning directly to their roles, thereby improving the efficacy and responsiveness of local governance systems."
+      icon: <FaTree className="text-green-500 text-5xl" />, 
+      title: "Centre for Biodiversity, Environmental Upgradation and Built Environment through Panchayats", 
+      description: "This center promotes environmental conservation and sustainable development within Panchayat jurisdictions. It advocates for biodiversity preservation, eco-friendly infrastructure development, and the adoption of practices that enhance environmental quality, ensuring a harmonious coexistence with nature." 
     },
     {
-      icon: <FaHandshake className="text-blue-500 text-5xl" />,
-      title: "School of Participatory Governance",
-      description: "The School of Participatory Governance champions the inclusion of community voices in the decision-making processes of Panchayats. By promoting participatory planning, budgeting, and project monitoring, this school ensures that governance becomes more inclusive, transparent, and community-focused. It organizes community outreach programs and builds platforms for citizen engagement, enabling a two-way communication channel between the Panchayats and the communities they serve. This approach not only enhances democratic practices but also improves policy receptiveness and public service delivery."
+      icon: <FaUsers className="text-blue-500 text-5xl" />, 
+      title: "Centre for Social Development (Health, Education, Women & Children) through Panchayats", 
+      description: "Focusing on social welfare, this center aims to improve health, education, and social services, particularly for women and children. It empowers Panchayats to implement inclusive policies and programs that promote equitable social development and enhance the quality of life in rural areas." 
     },
     {
-      icon: <FaLeaf className="text-yellow-500 text-5xl" />,
-      title: "School of Sustainable Development",
-      description: "This school emphasizes environmental stewardship and sustainable resource management within the frameworks of local governance. By integrating sustainability into the core planning and development processes, the School of Sustainable Development guides Panchayats towards adopting eco-friendly policies. It conducts research and offers training on sustainable agricultural practices, waste management, and renewable energy solutions, fostering an ecological consciousness that aims to mitigate environmental impacts while promoting local and global environmental goals."
+      icon: <FaChartPie className="text-yellow-500 text-5xl" />, 
+      title: "Centre for Panchayat Statistics, Panchayat Policy Reforms and Advocacy", 
+      description: "This center specializes in data-driven governance by providing statistical insights and supporting policy reforms for Panchayats. It advocates for evidence-based decision-making and ensures that Panchayat policies are well-informed, effective, and aligned with the broader goals of rural development." 
     },
     {
-      icon: <FaGavel className="text-purple-500 text-5xl" />,
-      title: "School of Panchayat Law",
-      description: "The School of Panchayat Law provides crucial legal education, advisory services, and regulatory support to ensure that governance operations adhere to the law. This school helps Panchayat leaders understand complex legal documents and comply with regulations, reducing legal risks and enhancing governance transparency. It also advocates for policy changes that can empower local governments, facilitating workshops and seminars on legal reforms, rights awareness, and the responsibilities of Panchayat members under the law."
+      icon: <FaHandsHelping className="text-orange-500 text-5xl" />, 
+      title: "Centre for Community Empowerment and Inclusive Development", 
+      description: "Dedicated to building capacities of marginalized communities, this center works to promote inclusivity in governance and development. It facilitates programs to empower vulnerable populations through awareness, skill-building, and active participation in governance processes." 
     },
     {
-      icon: <FaMoneyBillWave className="text-pink-500 text-5xl" />,
-      title: "School of Financial Management",
-      description: "Focusing on fiscal responsibility, the School of Financial Management trains Panchayat members in efficient budget management, financial planning, and auditing. This school aims to improve financial literacy and accountability among local government officials, ensuring that public funds are managed transparently and effectively. It offers specialized courses on fund allocation, revenue generation, and financial oversight, empowering Panchayats to achieve economic sustainability and integrity in financial dealings."
+      icon: <FaSchool className="text-teal-500 text-5xl" />, 
+      title: "Centre for Capacity Building and Knowledge Management", 
+      description: "Focused on enhancing the skills and knowledge base of Panchayat members, this center offers comprehensive training and resources. It aims to strengthen governance through continuous learning and by fostering a culture of knowledge sharing." 
     },
     {
-      icon: <FaPeopleArrows className="text-orange-500 text-5xl" />,
-      title: "School of Social Audit",
-      description: "The School of Social Audit promotes the practice of auditing by the community to oversee local projects and ensure accountability in governance. It trains community members in audit techniques, enabling them to effectively scrutinize government work and expenditure. This school plays a pivotal role in fostering transparency, empowering citizens to become watchdogs who ensure that developmental projects are executed efficiently and ethically."
+      icon: <FaRecycle className="text-purple-500 text-5xl" />, 
+      title: "Centre for Sustainable Resource Management", 
+      description: "This center guides Panchayats on sustainable resource utilization. By promoting renewable energy, efficient water usage, and waste management practices, it ensures ecological balance and resource sustainability at the local level." 
     },
     {
-      icon: <FaBookOpen className="text-teal-500 text-5xl" />,
-      title: "School of Documentation",
-      description: "This school specializes in the systematic documentation and reporting of governance activities, enhancing the transparency and traceability of governmental actions. It teaches Panchayat members how to maintain detailed records of meetings, projects, and financial transactions. Effective documentation practices facilitated by this school help in streamlining processes, aiding in better policy formulation and implementation, and serving as a reference for future governance activities."
+      icon: <FaCity className="text-pink-500 text-5xl" />, 
+      title: "Centre for Urban and Rural Synergy", 
+      description: "Bridging the urban-rural divide, this center fosters collaboration between urban and rural governance models. It focuses on shared growth strategies, infrastructure development, and effective utilization of resources across regions." 
     },
     {
-      icon: <FaChartLine className="text-gray-500 text-5xl" />,
-      title: "School of Planning and Development",
-      description: "The School of Planning and Development assists Panchayats in strategic planning and project execution. It supports the creation of development plans that are both visionary and practical, ensuring that local projects align with broader development objectives. This school offers resources and expertise to effectively translate community needs into actionable plans, promoting sustainable growth and comprehensive community development."
+      icon: <FaSeedling className="text-gray-500 text-5xl" />, 
+      title: "Centre for Innovation in Agricultural Practices", 
+      description: "Promoting sustainable and innovative agricultural methods, this center supports Panchayats in enhancing productivity and ensuring food security. It emphasizes modern techniques, organic farming, and farmer education." 
     }
   ];
 
@@ -54,7 +54,7 @@ const SchoolsOfExcellencePage = () => {
     <div className="p-5 sm:px-10 md:px-20 lg:px-32 md:py-10 bg-gray-50">
       <div className="text-center mb-10">
         <h1 className="text-[#004B86] text-[3rem] font-extrabold leading-tight">
-          Nine Schools of Excellence
+          Centres of Excellence
         </h1>
         <p className="text-[#4a90e2] text-lg font-medium mt-2">
           Specializing in Various Domains of Panchayati Raj Governance
