@@ -256,7 +256,7 @@ const StaffTablePage = () => {
       gpNames: "Bucharwada GP, Zolawadi GP, Saudwadi GP, Vanakbara",
       noOfGps: 4,
       population: 28083,
-      spcDetails: "-",
+      spcDetails: "TAPAS KUMAR MOHANTY",
     },
     {
       slNo: 24,
@@ -278,7 +278,7 @@ const StaffTablePage = () => {
       gpNames: "Nagarala, Gadoi, Vijagadh, Chandavada, Nasirpur",
       noOfGps: 5,
       population: 21358,
-      spcDetails: "-",
+      spcDetails: "TAPAS KUMAR MOHANTY",
     },
     {
       slNo: 26,
@@ -289,7 +289,7 @@ const StaffTablePage = () => {
       gpNames: "Nandesari, Padamala, Karachiya",
       noOfGps: 3,
       population: 21234,
-      spcDetails: "-",
+      spcDetails: "TAPAS KUMAR MOHANTY",
     },
     {
       slNo: 27,
@@ -300,7 +300,7 @@ const StaffTablePage = () => {
       gpNames: "Shuklatirth, Nikora, Tavara, Karjan",
       noOfGps: 4,
       population: 23040,
-      spcDetails: "-",
+      spcDetails: "TAPAS KUMAR MOHANTY",
     },
     {
       slNo: 28,
@@ -311,7 +311,7 @@ const StaffTablePage = () => {
       gpNames: "Chhachera, Kira, Alduka, Chhapera, Kurthla",
       noOfGps: 5,
       population: 10372,
-      spcDetails: "-",
+      spcDetails: "Arghya Santra",
     },
     {
       slNo: 29,
@@ -322,7 +322,7 @@ const StaffTablePage = () => {
       gpNames: "Kharkari, Mohammad Nagar, Nakipur, Singhani",
       noOfGps: 4,
       population: 14627,
-      spcDetails: "-",
+      spcDetails: "Arghya Santra",
     },
     {
       slNo: 30,
@@ -333,7 +333,7 @@ const StaffTablePage = () => {
       gpNames: "Bishoa, Karoli, Lukhi, Gujarwas",
       noOfGps: 4,
       population: 14677,
-      spcDetails: "-",
+      spcDetails: "Arghya Santra",
     },
     {
         slNo: 31,
@@ -476,7 +476,7 @@ const StaffTablePage = () => {
         gpNames: "Ganga Prasad Pashim, Ganga Prasad Middle, Hajipur Purab",
         noOfGps: 3,
         population: 19960,
-        spcDetails: "-",
+        spcDetails: "Vishal Prasad",
       },
       {
         slNo: 44,
@@ -487,7 +487,7 @@ const StaffTablePage = () => {
         gpNames: "Meral Purab, Meral Pashim, Aragi",
         noOfGps: 3,
         population: 19276,
-        spcDetails: "-",
+        spcDetails: "Vishal Prasad",
       },
       {
         slNo: 45,
@@ -498,7 +498,7 @@ const StaffTablePage = () => {
         gpNames: "Peradih, Rupiyama, Lobanda",
         noOfGps: 3,
         population: 20384,
-        spcDetails: "-",
+        spcDetails: "Vishal Prasad",
       },
       {
         slNo: 46,
@@ -509,7 +509,7 @@ const StaffTablePage = () => {
         gpNames: "Pathargama, Machitad, Chikara Gobind",
         noOfGps: 3,
         population: 14095,
-        spcDetails: "-",
+        spcDetails: "Vishal Prasad",
       },
       {
         slNo: 47,
@@ -520,7 +520,7 @@ const StaffTablePage = () => {
         gpNames: "Bandiha, Narainpur, Tontoposi",
         noOfGps: 3,
         population: 17390,
-        spcDetails: "-",
+        spcDetails: "Vishal Prasad",
       },
       {
         slNo: 48,
@@ -531,7 +531,7 @@ const StaffTablePage = () => {
         gpNames: "Dulhadiha, Bewa, Udalbani",
         noOfGps: 3,
         population: 14145,
-        spcDetails: "-",
+        spcDetails: "Vishal Prasad",
       },
       {
         slNo: 49,
@@ -542,7 +542,7 @@ const StaffTablePage = () => {
         gpNames: "Gunjahalli GP, Yeragera GP",
         noOfGps: 2,
         population: 16583,
-        spcDetails: "-",
+        spcDetails: "KAPURAPU MAHENDER",
       },
       {
         slNo: 50,
@@ -553,7 +553,7 @@ const StaffTablePage = () => {
         gpNames: "Chandraki GP, Putpak GP",
         noOfGps: 2,
         population: 17006,
-        spcDetails: "-",
+        spcDetails: "KAPURAPU MAHENDER",
       },
       {
         slNo: 51,
@@ -564,7 +564,7 @@ const StaffTablePage = () => {
         gpNames: "Korekal, Torna",
         noOfGps: 2,
         population: 15565,
-        spcDetails: "-",
+        spcDetails: "KAPURAPU MAHENDER",
       },
       {
         slNo: 52,
@@ -575,7 +575,7 @@ const StaffTablePage = () => {
         gpNames: "Hudgi, Nadgaon",
         noOfGps: 2,
         population: 18286,
-        spcDetails: "-",
+        spcDetails: "KAPURAPU MAHENDER",
       },
       {
         slNo: 53,
@@ -586,7 +586,7 @@ const StaffTablePage = () => {
         gpNames: "Tirunelli",
         noOfGps: 1,
         population: 22713,
-        spcDetails: "-",
+        spcDetails: "KAPURAPU MAHENDER",
       },
       {
         slNo: 54,
@@ -597,7 +597,7 @@ const StaffTablePage = () => {
         gpNames: "Varttavada, Kanthallor",
         noOfGps: 2,
         population: 24024,
-        spcDetails: "-",
+        spcDetails: "KAPURAPU MAHENDER",
       },
       {
         slNo: 55,
@@ -608,7 +608,7 @@ const StaffTablePage = () => {
         gpNames: "Adimali",
         noOfGps: 1,
         population: 31231,
-        spcDetails: "-",
+        spcDetails: "KAPURAPU MAHENDER",
       },
       {
         slNo: 56,
@@ -619,7 +619,7 @@ const StaffTablePage = () => {
         gpNames: "Madikkai",
         noOfGps: 1,
         population: 17000,
-        spcDetails: "-",
+        spcDetails: "KAPURAPU MAHENDER",
       },
       {
         slNo: 57,
@@ -916,7 +916,7 @@ const StaffTablePage = () => {
         gpNames: "Mawkarah Nongkdait, Mawkarah Nongpyndiang, Mawkarah Nongwahre, Mawkarah Mawpni",
         noOfGps: 4,
         population: 3207,
-        spcDetails: "KAPURAPU MAHENDER",
+        spcDetails: "CHITRALEKHA BARUAH",
       },
       {
         slNo: 84,
@@ -927,7 +927,7 @@ const StaffTablePage = () => {
         gpNames: "E. Lungdar, Leng, Sailulak, N. Mualcheng, Chekawn, Khawlailung, Piler",
         noOfGps: 7,
         population: 10950,
-        spcDetails: "KAPURAPU MAHENDER",
+        spcDetails: "CHITRALEKHA BARUAH",
       },
       {
         slNo: 85,
@@ -938,7 +938,7 @@ const StaffTablePage = () => {
         gpNames: "Haulawng, Mausen, Zotuitlang, Sekhum, N. Mualthuam, Ramlaitui, Pukpui",
         noOfGps: 7,
         population: 5822,
-        spcDetails: "-",
+        spcDetails: "CHITRALEKHA BARUAH",
       },
       {
         slNo: 86,
@@ -960,7 +960,7 @@ const StaffTablePage = () => {
         gpNames: "Ansena, Saipala, Darlimunda",
         noOfGps: 3,
         population: 9805,
-        spcDetails: "-",
+        spcDetails: "TAPAS KUMAR MOHANTY",
       },
       {
         slNo: 88,
@@ -971,7 +971,7 @@ const StaffTablePage = () => {
         gpNames: "Sirispal, Dimbo, Padmapur",
         noOfGps: 3,
         population: 22849,
-        spcDetails: "-",
+        spcDetails: "TAPAS KUMAR MOHANTY",
       },
       {
         slNo: 89,
@@ -982,7 +982,7 @@ const StaffTablePage = () => {
         gpNames: "Kinjira, Bhasma",
         noOfGps: 2,
         population: 8181,
-        spcDetails: "-",
+        spcDetails: "TAPAS KUMAR MOHANTY",
       },
       {
         slNo: 90,
@@ -993,7 +993,7 @@ const StaffTablePage = () => {
         gpNames: "Ahmedpur, Alladitta, Kamalpur, Latianwala, Mahablipur, Nasirewal, Sech, Toti",
         noOfGps: 8,
         population: 13873,
-        spcDetails: "-",
+        spcDetails: "Arghya Santra",
       },
       {
         slNo: 91,
@@ -1048,7 +1048,7 @@ const StaffTablePage = () => {
         gpNames: "Palavanatham, Kullorsandhai, Soolakkarai, T.Meenatchipuram",
         noOfGps: 4,
         population: 20806,
-        spcDetails: "-",
+        spcDetails: "KAPURAPU MAHENDER",
       },
       {
         slNo: 96,
@@ -1059,7 +1059,7 @@ const StaffTablePage = () => {
         gpNames: "Peravoor, Chitharkottai, Athiyuthu, Peruvayal",
         noOfGps: 4,
         population: 16697,
-        spcDetails: "-",
+        spcDetails: "KAPURAPU MAHENDER",
       },
       {
         slNo: 97,
@@ -1070,7 +1070,7 @@ const StaffTablePage = () => {
         gpNames: "Vellalur, Poonjuthi, Thiruvathavur",
         noOfGps: 3,
         population: 15064,
-        spcDetails: "-",
+        spcDetails: "KAPURAPU MAHENDER",
       },
       {
         slNo: 98,
@@ -1158,7 +1158,7 @@ const StaffTablePage = () => {
         gpNames: "Adalganj, Aghorikhas, Barganwa, Chatarwar, Gauradeeh, Kargara, Kuracha",
         noOfGps: 7,
         population: 22376,
-        spcDetails: "-",
+        spcDetails: "Vishal Prasad",
       },
       {
         slNo: 106,
@@ -1169,7 +1169,7 @@ const StaffTablePage = () => {
         gpNames: "Belwa Balui, Paigapur, Rowari, Bhagwanpur",
         noOfGps: 4,
         population: 15445,
-        spcDetails: "-",
+        spcDetails: "Vishal Prasad",
       },
       {
         slNo: 107,
@@ -1180,7 +1180,7 @@ const StaffTablePage = () => {
         gpNames: "Gazipur, Chakaitailly, Babara",
         noOfGps: 3,
         population: 4541,
-        spcDetails: "-",
+        spcDetails: "Vishal Prasad",
       },
       {
         slNo: 108,
@@ -1191,7 +1191,7 @@ const StaffTablePage = () => {
         gpNames: "Budhadeeh, Islampur, Hafiznagar, Jamuniya, Rampur Khurd, Rampur Bujurg",
         noOfGps: 6,
         population: 13234,
-        spcDetails: "-",
+        spcDetails: "Vishal Prasad",
       },
       {
         slNo: 109,
@@ -1202,7 +1202,7 @@ const StaffTablePage = () => {
         gpNames: "Baradeeh, Gairaha, Haribhanpur, Bazar kalika, Isarwar, Udraha",
         noOfGps: 6,
         population: 8387,
-        spcDetails: "-",
+        spcDetails: "Vishal Prasad",
       },
       {
         slNo: 110,
@@ -1213,7 +1213,7 @@ const StaffTablePage = () => {
         gpNames: "Muzzafarpur, Bhamura, Raghunathpur, Bhatwara Kala",
         noOfGps: 4,
         population: 10879,
-        spcDetails: "-",
+        spcDetails: "Vishal Prasad",
       },
       {
         slNo: 111,
@@ -1224,7 +1224,7 @@ const StaffTablePage = () => {
         gpNames: "Aminpur Nagaraur, Ashoka, Deeha, Itaunjha, Susrauli",
         noOfGps: 5,
         population: 13211,
-        spcDetails: "-",
+        spcDetails: "Vishal Prasad",
       },
       {
         slNo: 112,
@@ -1235,7 +1235,7 @@ const StaffTablePage = () => {
         gpNames: "Khohi, Chitra Gokulpur, Chapramafi, Bhaganpur, Sangrampur",
         noOfGps: 5,
         population: 13251,
-        spcDetails: "-",
+        spcDetails: "Vishal Prasad",
       },
       {
         slNo: 113,
@@ -1246,7 +1246,7 @@ const StaffTablePage = () => {
         gpNames: "Baunia Raja, Arnahavan, Paneva Panei",
         noOfGps: 3,
         population: 15217,
-        spcDetails: "-",
+        spcDetails: "Vishal Prasad",
       },
       {
         slNo: 114,
@@ -1257,7 +1257,7 @@ const StaffTablePage = () => {
         gpNames: "Ratura, Sumerpur, Shivanindi, Gadora, Maroda, Nagrashu, Beena",
         noOfGps: 7,
         population: 6633,
-        spcDetails: "-",
+        spcDetails: "Vishal Prasad",
       },
       {
         slNo: 115,
@@ -1268,7 +1268,7 @@ const StaffTablePage = () => {
         gpNames: "Gainvla (Bharsali), Baun, Panjiyala, Matli, Khattukhal, Juguldi",
         noOfGps: 6,
         population: 6537,
-        spcDetails: "-",
+        spcDetails: "Vishal Prasad",
       },
       {
         slNo: 116,
