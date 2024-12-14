@@ -21,6 +21,47 @@ const TrainingMaterials = () => {
     fetchTrainingMaterials();
   }, []);
 
+  const renderPreview = (file) => {
+    const fileType = file.split(".").pop().toLowerCase();
+
+    if (["pdf"].includes(fileType)) {
+      // PDF Preview
+      return (
+        <iframe
+          src={file}
+          title="PDF Preview"
+          className="w-full h-64 border border-gray-300 rounded-lg"
+        />
+      );
+    } else if (["jpg", "jpeg", "png", "gif"].includes(fileType)) {
+      // Image Preview
+      return (
+        <img
+          src={file}
+          alt="Document Preview"
+          className="w-full h-64 object-cover rounded-lg"
+        />
+      );
+    } else if (["ppt", "pptx"].includes(fileType)) {
+      // PowerPoint Preview using Google Docs Viewer
+      const googleViewerUrl = `https://docs.google.com/viewer?url=${file}&embedded=true`;
+      return (
+        <iframe
+          src={googleViewerUrl}
+          title="PPT Preview"
+          className="w-full h-64 border border-gray-300 rounded-lg"
+        />
+      );
+    } else {
+      // Unsupported file types
+      return (
+        <p className="text-sm text-gray-600 italic">
+          Preview not available for this file type.
+        </p>
+      );
+    }
+  };
+
   if (loading) return <p className="text-center text-gray-600">Loading...</p>;
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
@@ -31,7 +72,8 @@ const TrainingMaterials = () => {
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {trainingMaterials &&
-          trainingMaterials.length > 0 && trainingMaterials?.map((material) => (
+          trainingMaterials.length > 0 &&
+          trainingMaterials.map((material) => (
             <div
               key={material._id}
               className="border border-gray-300 rounded-lg p-4 bg-white hover:shadow-lg transition-shadow"
@@ -45,10 +87,12 @@ const TrainingMaterials = () => {
               <p className="text-sm text-gray-600 mb-4">
                 Date: {new Date(material.created_at).toLocaleDateString()}
               </p>
+              <div className="mb-4">{renderPreview(material.file)}</div>
               <a
                 href={material.file}
                 download
                 target="_blank"
+                rel="noopener noreferrer"
                 className="inline-block px-4 py-2 text-sm font-medium text-white bg-primary rounded-md hover:bg-primary-dark"
               >
                 Download File
