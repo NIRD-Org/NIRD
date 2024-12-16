@@ -509,7 +509,7 @@ const start = 23;
                       <option key={state.id} value={state.id}>
                         {state.name}
                       </option>
-                    ))}
+                    ))}<option value="NIRD">NIRD</option>
                   </select>
                 </td>
                 <td>
@@ -524,7 +524,9 @@ const start = 23;
                       <option key={dist.id} value={dist.id}>
                         {dist.name}
                       </option>
-                    ))}
+                    ))}<option value="SIRD">SIRD</option>
+                    <option value="None">None</option>
+
                   </select>
                 </td>
                 <td>
@@ -538,7 +540,7 @@ const start = 23;
                       <option key={block.id} value={block.id}>
                         {block.name}
                       </option>
-                    ))}
+                    ))}  <option value="None">None</option>
                   </select>
                 </td>
                 <td>
@@ -552,21 +554,21 @@ const start = 23;
                       <option key={gp.id} value={gp.id}>
                         {gp.name}
                       </option>
-                    ))}
+                    ))}   <option value="None">None</option>
                   </select>
                 </td>
                 <td>
-                  <input
+                  <input disabled
                     type="text"
                     style={{ width: "100%" }}
                     onChange={(e) =>
                       handleInputChange(day.id, "achievements", e.target.value)
-                    }
+                    } 
                     value={dayData.achievements || ""}
                   />
                 </td>
                 <td>
-                  <input
+                  <input disabled 
                     type="file"
                     onChange={(e) =>
                       handleInputChange(day.id, "photo", e.target.files[0])
@@ -574,7 +576,7 @@ const start = 23;
                   />
                 </td>
                 <td>
-                  <input
+                  <input disabled
                     type="text"
                     className="border rounded border-gray-300"
                     style={{ width: "100%" }}

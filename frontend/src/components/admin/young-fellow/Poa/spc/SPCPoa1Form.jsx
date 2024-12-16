@@ -502,7 +502,7 @@ const fetchLocations = async (statesArray) => {
                       <option key={state.id} value={state.id}>
                         {state.name}
                       </option>
-                    ))}
+                    ))}<option value="NIRD">NIRD</option>
                   </select>
                 </td>
                 <td>
@@ -517,7 +517,9 @@ const fetchLocations = async (statesArray) => {
                       <option key={dist.id} value={dist.id}>
                         {dist.name}
                       </option>
-                    ))}
+                    ))}<option value="SIRD">SIRD</option>
+                    <option value="None">None</option>
+
                   </select>
                 </td>
                 <td>
@@ -531,7 +533,7 @@ const fetchLocations = async (statesArray) => {
                       <option key={block.id} value={block.id}>
                         {block.name}
                       </option>
-                    ))}
+                    ))}  <option value="None">None</option>
                   </select>
                 </td>
                 <td>
@@ -545,16 +547,16 @@ const fetchLocations = async (statesArray) => {
                       <option key={gp.id} value={gp.id}>
                         {gp.name}
                       </option>
-                    ))}
+                    ))}   <option value="None">None</option>
                   </select>
                 </td>
                 <td>
-                  <input
+                  <input disabled
                     type="text"
                     style={{ width: "100%" }}
                     onChange={(e) =>
                       handleInputChange(day.id, "achievements", e.target.value)
-                    } disabled 
+                    } 
                     value={dayData.achievements || ""}
                   />
                 </td>
