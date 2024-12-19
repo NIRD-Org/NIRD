@@ -3,6 +3,14 @@ import React from 'react';
 const GPDPModelsPage = () => {
     const gpdpFiles = [
         {
+            name: "GPDP Planning Process ",
+            url: "https://nirdprbucket.s3.ap-south-1.amazonaws.com/GPDP+SAMPLES/GPDP+planing+Process.pdf"
+        },
+        {
+            name: "GPDP PRI convergence, Process of Uploading on Egram Swraj Portal and special GS ",
+            url: "https://nirdprbucket.s3.ap-south-1.amazonaws.com/GPDP+SAMPLES/GPDP+PRI+convergence%2C+Process+of+Uploading+on+Egram+Swraj+Portal+and+special+GS.pdf"
+        },
+        {
             name: "Model 1: Amsole GPDP 2023-24 ",
             url: "https://nirdprbucket.s3.ap-south-1.amazonaws.com/GPDP+SAMPLES/Amsole+GPDP+23-24+-+Latest.pdf"
         },
