@@ -104,9 +104,9 @@ const Header = () => {
     },
     { label: "GP Profile", to: "/gp-profile/details" },
     {
-      label: "Notifications and Reports",
+      label: "Reports",
       submenus: [
-        { label: "Circulars and Orders", to: "/pgp" },
+        { label: "Important Downloads", to: "/DownloadsPGP" },
         { label: "Careers", to: "/pgp" },
         { label: "GPDP Models", to: "/GPDP" },
           

@@ -78,12 +78,7 @@ const Header = () => {
       },
     ], },
     {
-      label: "Notifications and Reports",to: "/soepr",
-      submenus: [
-       
-        { label: "Training materials", to: "/soepr/training-materials" },
-       
-      ],
+     label: "Training materials", to: "/soepr/training-materials" 
     },
     {
       label: "Performance Evaluation",to: "/soepr",
