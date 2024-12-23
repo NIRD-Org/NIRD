@@ -76,20 +76,7 @@ export const getSidebarItems = (user) => {
           },
         ],
       },
-      {
-        type: "module",
-        icon: ArrowBigRight,
-        title: "Approvals",
-        submodules: [
-          {
-            type: "sub-module",
-            icon: ArrowBigRight,
-            title: "Themewise Kpi",
-            link: "/admin/action/admin/gp-wise-kpi",
-          },
-         
-        ],
-      },
+      
       {
         type: "module",
         icon: ArrowBigRight,
@@ -269,6 +256,20 @@ export const getSidebarItems = (user) => {
             title: "Tour Entry Form",
             link: "/admin/soepr/Tour",
           },
+        ],
+      },
+      {
+        type: "module",
+        icon: ArrowBigRight,
+        title: "Approvals",
+        submodules: [
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "Consultant POA",
+            link: "/admin/action/admin/gp-wise-kpi",
+          },
+         
         ],
       },
       {
