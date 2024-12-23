@@ -367,22 +367,46 @@ const UpdateYfPOA1Form = () => {
   const [plans, setPlans] = useState({});
   const [selectedDistricts, setSelectedDistricts] = useState({});
   const [formDataState, setFormData] = useState({});
+   const [states, setStates] = useState([]);
+    const [allDistricts, setAllDistricts] = useState([]);
+    const [allBlocks, setAllBlocks] = useState([]);
+    const [allGps, setAllGps] = useState([]);
+  
   const selectedMonth = months[currentMonthIndex];
-  const {
-    yfState: states,
-    yfDist: districts,
-    yfBlock: blocks,
-    yfGp: gps,
-  } = useYfLocation({
-    state_id: selectedState,
-  });
+  // const {
+  //   yfState: states,
+  //   yfDist: districts,
+  //   yfBlock: blocks,
+  //   yfGp: gps,
+  // } = useYfLocation({
+  //   state_id: selectedState,
+  // });
   const [loading, setLoading] = useState(false);
   const [poaType, setPoaType] = useState("poa1");
   const [selectedActions, setSelectedActions] = useState({});
   const navigate = useNavigate();
-  useEffect(() => {
-    setSelectedState(states?.[0]?.id);
-  }, [states]);
+
+
+  // useEffect(() => {
+  //   setSelectedState(states?.[0]?.id);
+  // }, [states]);
+
+
+    useEffect(() => {
+      const fetchUserLocations = async () => {
+        try {
+          const response = await API.get("/api/v1/user-location");
+          const data = response.data.data;
+          setAllDistricts(data.districts);
+          setAllBlocks(data.blocks);
+          setAllGps(data.gps);
+          setStates(data.states);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      fetchUserLocations();
+    }, []);
 
   useEffect(() => {
     const fetchPoalData = async () => {
@@ -414,7 +438,7 @@ const UpdateYfPOA1Form = () => {
           acc[dayOfMonth].push(item);
           return acc;
         }, {});
-
+          
         setFormData(groupedData);
       } catch (error) {
         setFormData({});
@@ -596,7 +620,29 @@ const UpdateYfPOA1Form = () => {
             <tbody>
               {getDaysInMonth().map((day, dayIndex) => (
                 <React.Fragment key={dayIndex}>
-                  {formDataState[day]?.map((entry, index) => (
+                  {formDataState[day]?.map((entry, index) =>{ 
+                    
+                    
+                    
+                    const districts = allDistricts
+                    ?.filter(
+                      (dist) => dist.state_id === entry.state_id
+                    );
+                    const blocks = allBlocks
+                    ?.filter(
+                      (block) =>
+                        block.state_id === entry.state_id &&
+                        block.dist_id === entry.dist_id
+                    );
+                    const gps = allGps
+                    ?.filter(
+                      (gp) =>
+                        gp.state_id === entry.state_id &&
+                        gp.dist_id === entry.dist_id &&
+                        gp.block_id === entry.block_id
+                    );
+                    
+                    return (
                     <TableRow key={index} className="border-t border-gray-400">
                       {index === 0 && (
                         <>
@@ -627,7 +673,7 @@ const UpdateYfPOA1Form = () => {
                         <input className="px-2 py-1 rounded min-w-28" type="text" style={{ width: "100%" }} value={entry.tentativeTarget || ""} onChange={(e) => handleInputChange(day, index, 'tentativeTarget', e.target.value)} />
                       </TableCell>
                       <TableCell className="p-2">
-                        <select className="px-2 py-1 rounded min-w-24" style={{ width: "100%" }} value={entry.state_id || ""} onChange={(e) => handleInputChange(day, index, 'state_id', e.target.value)}>
+                        <select disabled className="px-2 py-1 rounded min-w-24" style={{ width: "100%" }} value={entry.state_id || ""} onChange={(e) => handleInputChange(day, index, 'state_id', e.target.value)}>
                           <option value="">Select</option>
                           {states.map(state => (
                             <option key={state.id} value={state.id}>{state.name}</option>
@@ -635,7 +681,7 @@ const UpdateYfPOA1Form = () => {
                         </select>
                       </TableCell>
                       <TableCell className="p-2">
-                        <select className="px-2 py-1 rounded min-w-24" style={{ width: "100%" }} value={entry.dist_id || ""} onChange={(e) => handleInputChange(day, index, 'dist_id', e.target.value)}>
+                        <select disabled className="px-2 py-1 rounded min-w-24" style={{ width: "100%" }} value={entry.dist_id || ""} onChange={(e) => handleInputChange(day, index, 'dist_id', e.target.value)}>
                           <option value="">Select</option>
                           {districts.map(district => (
                             <option key={district.id} value={district.id}>{district.name}</option>
@@ -643,7 +689,7 @@ const UpdateYfPOA1Form = () => {
                         </select>
                       </TableCell>
                       <TableCell className="p-2">
-                        <select className="px-2 py-1 rounded min-w-24" style={{ width: "100%" }} value={entry.block_id || ""} onChange={(e) => handleInputChange(day, index, 'block_id', e.target.value)}>
+                        <select disabled className="px-2 py-1 rounded min-w-24" style={{ width: "100%" }} value={entry.block_id || ""} onChange={(e) => handleInputChange(day, index, 'block_id', e.target.value)}>
                           <option value="">Select</option>
                           {blocks.map(block => (
                             <option key={block.id} value={block.id}>{block.name}</option>
@@ -651,7 +697,7 @@ const UpdateYfPOA1Form = () => {
                         </select>
                       </TableCell>
                       <TableCell className="p-2">
-                        <select className="px-2 py-1 rounded min-w-24" style={{ width: "100%" }} value={entry.gp_id || ""} onChange={(e) => handleInputChange(day, index, 'gp_id', e.target.value)}>
+                        <select disabled className="px-2 py-1 rounded min-w-24" style={{ width: "100%" }} value={entry.gp_id || ""} onChange={(e) => handleInputChange(day, index, 'gp_id', e.target.value)}>
                           <option value="">Select</option>
                           {gps.map(gp => (
                             <option key={gp.id} value={gp.id}>{gp.name}</option>
@@ -668,7 +714,7 @@ const UpdateYfPOA1Form = () => {
                         <input className="px-2 py-1 rounded min-w-24" type="text" style={{ width: "100%" }} value={entry.remarks || ""} onChange={(e) => handleInputChange(day, index, 'remarks', e.target.value)} />
                       </TableCell>
                     </TableRow>
-                  ))}
+                  )})}
                 </React.Fragment>
               ))}
             </tbody>
