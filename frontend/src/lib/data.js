@@ -23,9 +23,165 @@ export const getSidebarItems = (user) => {
     return sidebarItems;
   }
 
-  
+  if (user.role == 4 ) {
+    sidebarItems = [
+      {
+        type: "module",
+        icon: ArrowBigRight,
+        title: "Profile",
+        submodules: [
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "View Profile",
+            link: "/admin/soepr/profile",
+          },
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "Edit Profile",
+            link: "/admin/soepr/profile-form",
+          },
+        ],
+      },
+      {
+        type: "module",
+        icon: ArrowBigRight,
+        title: "SOEPR Achievements",
+        submodules: [
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "SOEPR Achievements Entry Form",
+            link: "/admin/soepr/blog/create",
+          },
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "View Blog Posts",
+            link: "/admin/soepr/blogs/all",
+          },
+        ],
+      },
+      {
+        type: "module",
+        icon: ArrowBigRight,
+        title: "Training Material",
+        submodules: [
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "Training Material Entry Form",
+            link: "/admin/soepr/training-material/create",
+          },
+        ],
+      },
+      {
+        type: "module",
+        icon: ArrowBigRight,
+        title: "Approvals",
+        submodules: [
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "Themewise Kpi",
+            link: "/admin/action/admin/gp-wise-kpi",
+          },
+         
+        ],
+      },
+      {
+        type: "module",
+        icon: ArrowBigRight,
+        title: "Attendance",
+        submodules: [
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "AM Entry Form",
+            link: "/admin/soepr/attendance/amu-upload",
+          },
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "PM Entry Form",
+            link: "/admin/soepr/attendance/pmu-upload",
+          },
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "View Attendance",
+            link: "/admin/soepr/attendance/view",
+          },
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "Leave Entry Form",
+            link: "/admin/soepr/leave",
+          },
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "Tour Entry Form",
+            link: "/admin/soepr/Tour",
+          },
+        ],
+      },
+      {
+        type: "module",
+        icon: ArrowBigRight,
+        title: "Plan Of Action",
+        submodules: [
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "KPI-POA(Trial)",
+            link: "/admin/soepr/plan-of-action",
+          },
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "View POA",
+            link: "/admin/soepr/POAView",
+          },
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "POA1",
+            link: "/admin/soepr/POA1",
+          },
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "POA2",
+            link: "/admin/soepr/POA2",
+          },
+          /* {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "POA2(August temp)",
+            link: "/admin/soepr/poa2temp",
+          },*/
+        ],
+      },
+      {
+        type: "module",
+        icon: ArrowBigRight,
+        title: "KPI",
+        submodules: [
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "KPI Data entry",
+            link: "/admin/soepr/young-professionals",
+          },
+        ],
+      },
+    ];
+    return sidebarItems;
+  }
 
-  if (user.role == 4 || user.role == 5) {
+  if ( user.role == 5) {
     sidebarItems = [
       {
         type: "module",

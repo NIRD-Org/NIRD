@@ -993,7 +993,7 @@ const GpDetailsForm = ({ update }) => {
               name="noOfVolleyballCourt"
               value={formValues.sports.noOfVolleyballCourt}
               onChange={handleSportsChange}
-              placeholder="No of Volleyball Courts"
+              placeholder="Number of Volleyball Courts"
             />
             <Input
               required
@@ -1001,7 +1001,7 @@ const GpDetailsForm = ({ update }) => {
               name="noOfFootballCourt"
               value={formValues.sports.noOfFootballCourt}
               onChange={handleSportsChange}
-              placeholder="No of Football Courts"
+              placeholder="Number of Football Courts"
             />
             <Input
               required
@@ -1009,7 +1009,7 @@ const GpDetailsForm = ({ update }) => {
               name="noOfBadmintonCourt"
               value={formValues.sports.noOfBadmintonCourt}
               onChange={handleSportsChange}
-              placeholder="No of Badminton Courts"
+              placeholder="Number of Badminton Courts"
             />
           </div>
         </div>
@@ -1024,7 +1024,7 @@ const GpDetailsForm = ({ update }) => {
               name="noOfSHG"
               value={formValues.general.noOfSHG}
               onChange={handleGeneralChange}
-              placeholder="No of SHG"
+              placeholder="Number of SHG"
             />
             <Input
               required
@@ -1032,7 +1032,7 @@ const GpDetailsForm = ({ update }) => {
               name="noOfDestituteHomesOldAgeHomes"
               value={formValues.general.noOfDestituteHomesOldAgeHomes}
               onChange={handleGeneralChange}
-              placeholder="No of Destitute Homes/Old Age Homes"
+              placeholder="Number of Destitute Homes/Old Age Homes"
             />
             <Input
               required
@@ -1040,7 +1040,7 @@ const GpDetailsForm = ({ update }) => {
               name="noOfJobCardHolders"
               value={formValues.general.noOfJobCardHolders}
               onChange={handleGeneralChange}
-              placeholder="No of Job Card Holders"
+              placeholder="Number of Job Card Holders"
             />
             <Input
               required
@@ -1048,7 +1048,7 @@ const GpDetailsForm = ({ update }) => {
               name="noOfHouseholds"
               value={formValues.general.noOfHouseholds}
               onChange={handleGeneralChange}
-              placeholder="No of Households"
+              placeholder="Number of Households"
             />
             <Input
               required
@@ -1056,7 +1056,7 @@ const GpDetailsForm = ({ update }) => {
               name="noOfAnganwadiCenters"
               value={formValues.general.noOfAnganwadiCenters}
               onChange={handleGeneralChange}
-              placeholder="No of Anganwadi Centers"
+              placeholder="Number of Anganwadi Centers"
             />
           </div>
         </div>
@@ -1161,7 +1161,7 @@ const GpDetailsForm = ({ update }) => {
               value={formValues.others.noOfHouseholdsConnectedToTapWater}
               required
               onChange={handleOthersDetailsChange}
-              placeholder="No. of Households Connected to Tap Water"
+              placeholder="Number of Households Connected to Tap Water"
             />
             <Input
               type="number"
@@ -1169,7 +1169,7 @@ const GpDetailsForm = ({ update }) => {
               value={formValues.others.noOfHouseholdToilets}
               required
               onChange={handleOthersDetailsChange}
-              placeholder="No. of Household Toilets"
+              placeholder="Number of Household Toilets"
             />
             <Input
               type="number"
@@ -1177,7 +1177,7 @@ const GpDetailsForm = ({ update }) => {
               value={formValues.others.noOfDrinkingWaterSources}
               required
               onChange={handleOthersDetailsChange}
-              placeholder="No. of Drinking Water Sources"
+              placeholder="Number of Drinking Water Sources"
             />
             <Input
               type="number"
@@ -1185,7 +1185,7 @@ const GpDetailsForm = ({ update }) => {
               value={formValues.others.noOfSeedCenters}
               required
               onChange={handleOthersDetailsChange}
-              placeholder="No. of Seed Centers"
+              placeholder="Number of Seed Centers"
             />
             <Input
               type="number"
@@ -1193,7 +1193,7 @@ const GpDetailsForm = ({ update }) => {
               value={formValues.others.noOfChildrenParks}
               required
               onChange={handleOthersDetailsChange}
-              placeholder="No. of Children Parks"
+              placeholder="Number of Children Parks"
             />
             <Input
               type="number"
@@ -1201,7 +1201,7 @@ const GpDetailsForm = ({ update }) => {
               value={formValues.others.noOfBusStandWithWaterSources}
               required
               onChange={handleOthersDetailsChange}
-              placeholder="No. of Bus Stands with Water Sources"
+              placeholder="Number of Bus Stands with Water Sources"
             />
             <Input
               type="number"
@@ -1209,7 +1209,7 @@ const GpDetailsForm = ({ update }) => {
               value={formValues.others.noOfRuralLibrary}
               required
               onChange={handleOthersDetailsChange}
-              placeholder="No. of Rural Libraries"
+              placeholder="Number of Rural Libraries"
             />
             <Input
               type="number"
@@ -1217,7 +1217,7 @@ const GpDetailsForm = ({ update }) => {
               value={formValues.others.noOfSolidWasteManagementCenters}
               required
               onChange={handleOthersDetailsChange}
-              placeholder="No. of Solid Waste Management Centers"
+              placeholder="Number of Solid Waste Management Centers"
             />
             <Input
               type="number"
@@ -1225,7 +1225,7 @@ const GpDetailsForm = ({ update }) => {
               value={formValues.others.noOfBanks}
               required
               onChange={handleOthersDetailsChange}
-              placeholder="No. of Banks"
+              placeholder="Number of Banks"
             />
             <Input
               type="number"
@@ -1233,7 +1233,7 @@ const GpDetailsForm = ({ update }) => {
               value={formValues.others.noOfATMs}
               required
               onChange={handleOthersDetailsChange}
-              placeholder="No. of ATMs"
+              placeholder="Number of ATMs"
             />
             <Input
               type="number"
@@ -1241,7 +1241,7 @@ const GpDetailsForm = ({ update }) => {
               value={formValues.others.noOfCommunitySanitaryComplexes}
               required
               onChange={handleOthersDetailsChange}
-              placeholder="No. of Community Sanitary Complexes"
+              placeholder="Number of Community Sanitary Complexes"
             />
             <Input
               type="number"
@@ -1249,7 +1249,7 @@ const GpDetailsForm = ({ update }) => {
               value={formValues.others.noOfDisasterRescueCenters}
               required
               onChange={handleOthersDetailsChange}
-              placeholder="No. of Disaster Rescue Centers"
+              placeholder="Number of Disaster Rescue Centers"
             />
             <Input
               type="number"
@@ -1257,7 +1257,7 @@ const GpDetailsForm = ({ update }) => {
               value={formValues.others.noOfCommonServiceCenters}
               required
               onChange={handleOthersDetailsChange}
-              placeholder="No. of Common Service Centers"
+              placeholder="Number of Common Service Centers"
             />
           </div>
         </div>
