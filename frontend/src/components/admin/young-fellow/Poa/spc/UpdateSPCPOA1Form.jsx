@@ -30,7 +30,6 @@ const months = [
   { name: "December", days: 31 },
 ];
 
-
 const planOfDayOptions = {
   "Training and Capacity Building": [
     "Conducting training sessions for Gram Panchayats on participatory planning.",
@@ -76,6 +75,7 @@ const UpdateSPCPOA1Form = () => {
   const [poaType, setPoaType] = useState("poa1");
   const [selectedActions, setSelectedActions] = useState({});
   const navigate = useNavigate();
+  
   useEffect(() => {
     setSelectedState(states?.[0]?.id);
   }, [states]);
@@ -228,7 +228,6 @@ const UpdateSPCPOA1Form = () => {
       navigate(`/admin/spc/POA1/view/${poalId}`);
     } catch (error) {
       console.log(error);
-
       tst.error(error);
     } finally {
       setLoading(false);
@@ -327,7 +326,6 @@ const UpdateSPCPOA1Form = () => {
                             className="p-2"
                             rowSpan={formDataState[day].length}
                           >
-                            {/* {formatIndianDate(day)} */}
                             {entry?.date}
                           </TableCell>
                           <TableCell
@@ -403,9 +401,11 @@ const UpdateSPCPOA1Form = () => {
                           disabled
                         >
                           <option value="">Select</option>
-                          <option value={entry.state.id}>
-                            {entry?.state.name}
-                          </option>
+                          {entry?.state && (
+                            <option value={entry.state.id}>
+                              {entry.state.name}
+                            </option>
+                          )}
                           <option value="NIRD">NIRD</option>
                           <option value="SIRD/SPRC">SIRD/SPRC</option>
                           <option value="None">None</option>
@@ -419,10 +419,11 @@ const UpdateSPCPOA1Form = () => {
                           disabled
                         >
                           <option value="">Select</option>
-
-                          <option value={entry?.district?.id}>
-                            {entry?.district?.name}
-                          </option>
+                          {entry?.district && (
+                            <option value={entry.district.id}>
+                              {entry.district.name}
+                            </option>
+                          )}
                           <option value="NIRD">NIRD</option>
                           <option value="SIRD/SPRC">SIRD/SPRC</option>
                           <option value="None">None</option>
@@ -436,9 +437,11 @@ const UpdateSPCPOA1Form = () => {
                           disabled
                         >
                           <option value="">Select</option>
-                          <option value={entry?.block?.id}>
-                            {entry?.block?.name}
-                          </option>
+                          {entry?.block && (
+                            <option value={entry.block.id}>
+                              {entry.block.name}
+                            </option>
+                          )}
                           <option value="NIRD">NIRD</option>
                           <option value="SIRD/SPRC">SIRD/SPRC</option>
                           <option value="None">None</option>
@@ -451,7 +454,9 @@ const UpdateSPCPOA1Form = () => {
                           value={entry.gp_id || ""}
                           disabled
                         >
-                          <option value={entry?.gp.id}>{entry?.gp.name}</option>
+                          {entry?.gp && (
+                            <option value={entry.gp.id}>{entry.gp.name}</option>
+                          )}
                           <option value="NIRD">NIRD</option>
                           <option value="SIRD/SPRC">SIRD/SPRC</option>
                           <option value="None">None</option>
