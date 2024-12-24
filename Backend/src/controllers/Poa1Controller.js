@@ -3,6 +3,7 @@ import { Poa1Model } from "../models/Poa1Model.js";
 import { Errorhandler } from "../utils/errorHandler.js";
 import { uploadFile } from "../utils/uploadFile.js";
 
+// Function to get the next available ID for the new POA
 const getNewId = async () => {
   try {
     const maxDoc = await Poa1Model.aggregate([
@@ -25,92 +26,6 @@ const getNewId = async () => {
     return next(new Errorhandler("failed to get new id", 500));
   }
 };
-
-// export const createPoa1 = CatchAsyncError(async (req, res, next) => {
-//   try {
-//     const { poa2_created_at } = req.query;
-//     const poaData = Object.keys(req.body)
-//       .filter((key) => key.startsWith("poaData"))
-//       .reduce((acc, key) => {
-//         const [, index, field] = key.match(/poaData\[(\d+)\]\[(\w+)\]/);
-//         acc[index] = acc[index] || {};
-//         acc[index][field] = req.body[key];
-//         return acc;
-//       }, {});
-
-//     const user_id = req?.user?.id;
-
-//     // Extract the new POA1 data to be checked for duplicates
-//     const newEntries = Object.values(poaData);
-
-//     // Find existing entries across all documents for the same user
-//     const existingEntries = await Poa1Model.find({
-//       user_id,
-//       "poaData.date": { $in: newEntries.map((entry) => entry.date) },
-//     });
-
-//     // Create a set of unique combinations of (date, plan, action, dist_id) from existing entries
-//     const existingCombinations = new Set(
-//       existingEntries.flatMap((doc) =>
-//         doc.poaData.map(
-//           (item) => `${item.date}-${item.plan}-${item.action}-${item.dist_id}`
-//         )
-//       )
-//     );
-
-//     // Filter out new entries that match the existing combinations
-//     const filteredEntries = newEntries.filter(
-//       (entry) =>
-//         !existingCombinations.has(
-//           `${entry.date}-${entry.plan}-${entry.action}-${entry.dist_id}`
-//         )
-//     );
-
-//     if (filteredEntries.length === 0) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "No new data to add! Duplicate entries found.",
-//       });
-//     }
-
-//     for (const [index, entry] of Object.entries(poaData)) {
-//       const photoKey = `poaData[${index}][photo]`;
-
-//       if (req.files && req.files[photoKey]) {
-//         const photoBuffer = req.files[photoKey].data;
-//         const result = await uploadFile(photoBuffer);
-//         poaData[index].photo = result.secure_url;
-//       }
-//     }
-
-//     let poa1 = await Poa1Model.findOne({ user_id });
-
-//     if (poa1) {
-//       poa1.poaData.push(...filteredEntries);
-//       poa1.status = "1";
-//       poa1.poa2_created_at = poa2_created_at;
-//       await poa1.save();
-//     } else {
-//       poa1 = new Poa1Model({
-//         id: (await getNewId()).toString(),
-//         user_id,
-//         status: "1",
-//         poaData: filteredEntries,
-//         poa2_created_at,
-//       });
-//       await poa1.save();
-//     }
-
-//     res.status(201).json({
-//       success: true,
-//       message: "POA1 data successfully saved",
-//       data: poa1,
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     next(new Errorhandler("Failed to submit POA1 Data", 500));
-//   }
-// });
 
 export const createPoa1 = CatchAsyncError(async (req, res, next) => {
   try {
@@ -310,8 +225,7 @@ export const getPoalData = CatchAsyncError(async (req, res, next) => {
   }
 });
 
-// Get the state wise data ---- Admin
-
+// Fetch state-wise POA data for Admin
 export const getPoa1DataByState = CatchAsyncError(async (req, res, next) => {
   try {
     const { state_id, user_id, month, year, poaType = "poa1" } = req.query;
@@ -419,7 +333,7 @@ export const getPoa1DataByState = CatchAsyncError(async (req, res, next) => {
   }
 });
 
-// Get all poa1 data --- Super admin
+// Fetch all POA1 data for Super Admin
 export const getAllPoa1Data = CatchAsyncError(async (req, res, next) => {
   try {
     const { month, year, poaType = "poa1" } = req.query;
@@ -504,6 +418,7 @@ export const getAllPoa1Data = CatchAsyncError(async (req, res, next) => {
   }
 });
 
+// Update POA1 data
 export const updatePoa1Data = CatchAsyncError(async (req, res, next) => {
   try {
     const { poaId } = req.params;
@@ -575,7 +490,29 @@ export const updatePoa1Data = CatchAsyncError(async (req, res, next) => {
       }
     }
 
-    poa1.status = "1";
+    // Approvals Logic
+    if (poa1.user_id !== user_id) {
+      return res.status(403).json({
+        success: false,
+        message: "You do not have permission to approve this POA.",
+      });
+    }
+
+    if (approval_status) {
+      poa1.approval_status = approval_status; // 1 for approved, 2 for sent for modification, 0 for pending
+      poa1.remarks = remarks || ""; // Save feedback or suggestions
+      poa1.approval_date = new Date(); // Automatically set the approval date
+      poa1.approved_by = user_id; // The Senior Consultant who approves the POA
+    }
+
+    if (approval_status === "1") {
+      poa1.status = "1"; // Approved
+    } else if (approval_status === "2") {
+      poa1.status = "2"; // Sent for modification
+    } else {
+      poa1.status = "0"; // Pending
+    }
+
     await poa1.save();
 
     res.status(200).json({

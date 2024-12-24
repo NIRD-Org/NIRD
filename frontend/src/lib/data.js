@@ -267,7 +267,7 @@ export const getSidebarItems = (user) => {
             type: "sub-module",
             icon: ArrowBigRight,
             title: "Consultant POA",
-            link: "/admin/action/admin/gp-wise-kpi",
+            link: "/admin/soepr/srcapprovals",
           },
          
         ],

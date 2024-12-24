@@ -65,12 +65,30 @@ const POA1Schema = new mongoose.Schema(
     },
     status: {
       type: String,
-      default: "1",
+      default: "1", // 1: Active, 0: Inactive, etc.
       required: true,
     },
     poaData: [POA1DaySchema], // Array of day-wise POA1 data
     poa2_created_at: {
       type: Date,
+    },
+    approval_status: {
+      type: String,
+      enum: ['0', '1', '2'], // 0: Pending, 1: Approved, 2: Sent for Modification
+      default: '0', // Default status is pending
+    },
+    approval_date: {
+      type: Date,
+      default: null,
+    },
+    approved_by: {
+      type: String,
+      ref: "User", // Reference to the Senior Consultant who approved the POA
+      default: null,
+    },
+    remarks: {
+      type: String,
+      default: "", // Remarks or suggestions from Senior Consultant
     },
   },
   {

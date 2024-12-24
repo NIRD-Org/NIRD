@@ -189,6 +189,7 @@ import BlogPosts from "./Pages/Blogs/BlogPosts";
 import GPDPModelsPagePage from "./Pages/GPDPModelsPage";
 import TrainingMaterialForm from "./components/admin/soepr/trainingMaterial/TrainingMaterialForm";
 import TrainingMaterials from "./Pages/TrainingMaterial/TrainingMaterials";
+import Soeprpoaview from "./components/admin/soepr/approvals/soeprpoaview";
 
 
 
@@ -254,7 +255,7 @@ function App() {
           <Route path="/GramSabha" element={<GramSabhaPage />} />
           <Route path="/soepr/achievements" element={<BlogPosts />} />
           <Route path="/soepr/training-materials" element={<TrainingMaterials />} />
-
+          
           <Route path="/blog/:id" element={<BlogDetails />} />
 
           <Route path="/GramSabha" element={<GramSabhaPage />} />
@@ -301,6 +302,7 @@ function App() {
 
             <Route path="soepr/plan-of-action" element={<POA />} />
             <Route path="soepr/POA1" element={<POA1 />} />
+            <Route path="soepr/srcapprovals" element={<Soeprpoaview />} />
             <Route path="soepr/POAreport" element={<PoaReportcount />} />
             <Route path="soepr/leave" element={<SoeprLeaveUpdateForm />} />
             <Route path="soepr/tour" element={<SoeprTourUpdateForm />} />
@@ -327,14 +329,14 @@ function App() {
             <Route path="yf/POA2" element={<YFPoa2Form />} />
             <Route path="yf/POA3" element={<YFPoa3Form />} />
             <Route path="yf/POA4" element={<YFPoa4Form />} />
-            <Route path="yf/POA1/aug" element={<YFPoa1FormAug />} />
+            {/* <Route path="yf/POA1/aug" element={<YFPoa1FormAug />} />
             <Route path="yf/POA2/aug" element={<YFPoa2FormAug />} />
             <Route path="yf/POA3/aug" element={<YFPoa3FormAug />} />
             <Route path="yf/POA4/aug" element={<YFPoa4FormAug />} />
             <Route path="yf/POA1/sep" element={<YFPoa1FormSep />} />
             <Route path="yf/POA2/sep" element={<YFPoa2FormSep />} />
             <Route path="yf/POA3/sep" element={<YFPoa3FormSep />} />
-            <Route path="yf/POA4/sep" element={<YFPoa4FormSep />} />
+            <Route path="yf/POA4/sep" element={<YFPoa4FormSep />} /> */}
             <Route path="yf/poa-report" element={<YfPoaReport />} />
 
             {/* SPC POA */}
