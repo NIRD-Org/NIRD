@@ -192,6 +192,38 @@ export const getSidebarItems = (user) => {
       {
         type: "module",
         icon: ArrowBigRight,
+        title: "Plan Of Action",
+        submodules: [
+          
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "View POA",
+            link: "/admin/soepr/POAView",
+          },
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "POA1",
+            link: "/admin/soepr/POA1",
+          },
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "POA2",
+            link: "/admin/soepr/POA2",
+          },
+          /* {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "POA2(August temp)",
+            link: "/admin/soepr/poa2temp",
+          },*/
+        ],
+      },
+      {
+        type: "module",
+        icon: ArrowBigRight,
         title: "SOEPR Achievements",
         submodules: [
           {
@@ -272,10 +304,11 @@ export const getSidebarItems = (user) => {
          
         ],
       },
+     
       {
         type: "module",
         icon: ArrowBigRight,
-        title: "Plan Of Action",
+        title: "KPI",
         submodules: [
           {
             type: "sub-module",
@@ -283,37 +316,6 @@ export const getSidebarItems = (user) => {
             title: "KPI-POA(Trial)",
             link: "/admin/soepr/plan-of-action",
           },
-          {
-            type: "sub-module",
-            icon: ArrowBigRight,
-            title: "View POA",
-            link: "/admin/soepr/POAView",
-          },
-          {
-            type: "sub-module",
-            icon: ArrowBigRight,
-            title: "POA1",
-            link: "/admin/soepr/POA1",
-          },
-          {
-            type: "sub-module",
-            icon: ArrowBigRight,
-            title: "POA2",
-            link: "/admin/soepr/POA2",
-          },
-          /* {
-            type: "sub-module",
-            icon: ArrowBigRight,
-            title: "POA2(August temp)",
-            link: "/admin/soepr/poa2temp",
-          },*/
-        ],
-      },
-      {
-        type: "module",
-        icon: ArrowBigRight,
-        title: "KPI",
-        submodules: [
           {
             type: "sub-module",
             icon: ArrowBigRight,
