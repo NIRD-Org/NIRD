@@ -84,7 +84,7 @@ app.use("/api/v1/soepr-kpi-data", soeprKpiDataRoutes);
 app.use("/api/v1/soepr-state", soeprStateRoutes);
 app.use("/api/v1/soepr-dist", soeprDistrictRoutes);
 app.use("/api/v1/poa1", poa1Routes);
-app.use("/api/v1/poa1", poa1ApprovalRoutes);
+
 app.use("/api/v1/yf-poa1", yfPoa1Routes);
 app.use("/api/v1/spc-poa1", SpcPoa1Routes);
 app.use("/api/v1/blog",blogRoutes)
