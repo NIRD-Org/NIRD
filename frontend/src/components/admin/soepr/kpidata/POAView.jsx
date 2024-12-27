@@ -25,9 +25,14 @@ const POAview = () => {
       try {
         setLoading(true);
         const response = await API.get("/api/v1/poa1/getUserPOAs");
-        setPoaRecords(response.data.data);
+        if (response.data && response.data.data) {
+          setPoaRecords(response.data.data);
+        } else {
+          toast.error("Unexpected response format from server.");
+        }
       } catch (error) {
-        toast.error("Failed to fetch POA records.");
+        console.error("Error fetching POA records:", error);
+        toast.error("Failed to fetch POA records. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -45,14 +50,19 @@ const POAview = () => {
   };
 
   const filteredRecords = poaRecords.filter((record) => {
-    const createdAt = new Date(record.created_at);
-    const recordYear = createdAt.getFullYear();
-    const recordMonth = createdAt.toLocaleString("en-IN", { month: "long" });
+    try {
+      const createdAt = new Date(record.created_at);
+      const recordYear = createdAt.getFullYear();
+      const recordMonth = createdAt.toLocaleString("en-IN", { month: "long" });
 
-    return (
-      (!selectedYear || recordYear.toString() === selectedYear) &&
-      (!selectedMonth || recordMonth === selectedMonth)
-    );
+      return (
+        (!selectedYear || recordYear.toString() === selectedYear) &&
+        (!selectedMonth || recordMonth === selectedMonth)
+      );
+    } catch (error) {
+      console.error("Error parsing date:", error);
+      return false;
+    }
   });
 
   if (loading) {
@@ -67,13 +77,13 @@ const POAview = () => {
         Select Month and Year :
         <select onChange={handleYearChange} value={selectedYear}>
           <option value="">All Years</option>
-          {[
-            ...new Set(
-              poaRecords.map((record) =>
-                new Date(record.created_at).getFullYear()
-              )
-            ),
-          ].map((year, idx) => (
+          {[...new Set(poaRecords.map((record) => {
+            try {
+              return new Date(record.created_at).getFullYear();
+            } catch {
+              return null;
+            }
+          }).filter(Boolean))].map((year, idx) => (
             <option key={idx} value={year}>
               {year}
             </option>
@@ -114,24 +124,29 @@ const POAview = () => {
         </TableHeader>
         <TableBody>
           {filteredRecords.map((record, idx) => {
-            const createdAt = new Date(record.created_at);
-            return (
-              <TableRow key={idx}>
-                <TableCell>{idx + 1}</TableCell> {/* Serial number */}
-                <TableCell>
-                  {createdAt.toLocaleString("en-IN", { month: "long" })}
-                </TableCell>
-                <TableCell>{createdAt.getFullYear()}</TableCell>
-                <TableCell className="flex gap-4">
-                  <Link to={`/admin/soepr/POA1/view/${record.id}`}>
-                    <NirdViewIcon />
-                  </Link>
-                  <Link to={`/admin/soepr/POA1/edit/${record.id}`}>
-                    <NirdEditIcon />
-                  </Link>
-                </TableCell>
-              </TableRow>
-            );
+            try {
+              const createdAt = new Date(record.created_at);
+              return (
+                <TableRow key={idx}>
+                  <TableCell>{idx + 1}</TableCell> {/* Serial number */}
+                  <TableCell>
+                    {createdAt.toLocaleString("en-IN", { month: "long" })}
+                  </TableCell>
+                  <TableCell>{createdAt.getFullYear()}</TableCell>
+                  <TableCell className="flex gap-4">
+                    <Link to={`/admin/soepr/POA1/view/${record.id}`}>
+                      <NirdViewIcon />
+                    </Link>
+                    <Link to={`/admin/soepr/POA1/edit/${record.id}`}>
+                      <NirdEditIcon />
+                    </Link>
+                  </TableCell>
+                </TableRow>
+              );
+            } catch (error) {
+              console.error("Error rendering record:", error);
+              return null;
+            }
           })}
         </TableBody>
       </Table>
