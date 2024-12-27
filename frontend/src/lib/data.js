@@ -77,43 +77,43 @@ export const getSidebarItems = (user) => {
         ],
       },
       
-      {
-        type: "module",
-        icon: ArrowBigRight,
-        title: "Attendance",
-        submodules: [
-          {
-            type: "sub-module",
-            icon: ArrowBigRight,
-            title: "AM Entry Form",
-            link: "/admin/soepr/attendance/amu-upload",
-          },
-          {
-            type: "sub-module",
-            icon: ArrowBigRight,
-            title: "PM Entry Form",
-            link: "/admin/soepr/attendance/pmu-upload",
-          },
-          {
-            type: "sub-module",
-            icon: ArrowBigRight,
-            title: "View Attendance",
-            link: "/admin/soepr/attendance/view",
-          },
-          {
-            type: "sub-module",
-            icon: ArrowBigRight,
-            title: "Leave Entry Form",
-            link: "/admin/soepr/leave",
-          },
-          {
-            type: "sub-module",
-            icon: ArrowBigRight,
-            title: "Tour Entry Form",
-            link: "/admin/soepr/Tour",
-          },
-        ],
-      },
+      // {
+      //   type: "module",
+      //   icon: ArrowBigRight,
+      //   title: "Attendance",
+      //   submodules: [
+      //     {
+      //       type: "sub-module",
+      //       icon: ArrowBigRight,
+      //       title: "AM Entry Form",
+      //       link: "/admin/soepr/attendance/amu-upload",
+      //     },
+      //     {
+      //       type: "sub-module",
+      //       icon: ArrowBigRight,
+      //       title: "PM Entry Form",
+      //       link: "/admin/soepr/attendance/pmu-upload",
+      //     },
+      //     {
+      //       type: "sub-module",
+      //       icon: ArrowBigRight,
+      //       title: "View Attendance",
+      //       link: "/admin/soepr/attendance/view",
+      //     },
+      //     {
+      //       type: "sub-module",
+      //       icon: ArrowBigRight,
+      //       title: "Leave Entry Form",
+      //       link: "/admin/soepr/leave",
+      //     },
+      //     {
+      //       type: "sub-module",
+      //       icon: ArrowBigRight,
+      //       title: "Tour Entry Form",
+      //       link: "/admin/soepr/Tour",
+      //     },
+      //   ],
+      // },
       {
         type: "module",
         icon: ArrowBigRight,
@@ -253,43 +253,43 @@ export const getSidebarItems = (user) => {
           },
         ],
       },
-      {
-        type: "module",
-        icon: ArrowBigRight,
-        title: "Attendance",
-        submodules: [
-          {
-            type: "sub-module",
-            icon: ArrowBigRight,
-            title: "AM Entry Form",
-            link: "/admin/soepr/attendance/amu-upload",
-          },
-          {
-            type: "sub-module",
-            icon: ArrowBigRight,
-            title: "PM Entry Form",
-            link: "/admin/soepr/attendance/pmu-upload",
-          },
-          {
-            type: "sub-module",
-            icon: ArrowBigRight,
-            title: "View Attendance",
-            link: "/admin/soepr/attendance/view",
-          },
-          {
-            type: "sub-module",
-            icon: ArrowBigRight,
-            title: "Leave Entry Form",
-            link: "/admin/soepr/leave",
-          },
-          {
-            type: "sub-module",
-            icon: ArrowBigRight,
-            title: "Tour Entry Form",
-            link: "/admin/soepr/Tour",
-          },
-        ],
-      },
+      // {
+      //   type: "module",
+      //   icon: ArrowBigRight,
+      //   title: "Attendance",
+      //   submodules: [
+      //     {
+      //       type: "sub-module",
+      //       icon: ArrowBigRight,
+      //       title: "AM Entry Form",
+      //       link: "/admin/soepr/attendance/amu-upload",
+      //     },
+      //     {
+      //       type: "sub-module",
+      //       icon: ArrowBigRight,
+      //       title: "PM Entry Form",
+      //       link: "/admin/soepr/attendance/pmu-upload",
+      //     },
+      //     {
+      //       type: "sub-module",
+      //       icon: ArrowBigRight,
+      //       title: "View Attendance",
+      //       link: "/admin/soepr/attendance/view",
+      //     },
+      //     {
+      //       type: "sub-module",
+      //       icon: ArrowBigRight,
+      //       title: "Leave Entry Form",
+      //       link: "/admin/soepr/leave",
+      //     },
+      //     {
+      //       type: "sub-module",
+      //       icon: ArrowBigRight,
+      //       title: "Tour Entry Form",
+      //       link: "/admin/soepr/Tour",
+      //     },
+      //   ],
+      // },
       {
         type: "module",
         icon: ArrowBigRight,
@@ -499,19 +499,19 @@ export const getSidebarItems = (user) => {
             },
           ],
         },
-        {
-          type: "module",
-          icon: ArrowBigRight,
-          title: "Attendance",
-          submodules: [
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "View Attendance",
-              link: "/admin/view/attendance",
-            },
-          ],
-        },
+        // {
+        //   type: "module",
+        //   icon: ArrowBigRight,
+        //   title: "Attendance",
+        //   submodules: [
+        //     {
+        //       type: "sub-module",
+        //       icon: ArrowBigRight,
+        //       title: "View Attendance",
+        //       link: "/admin/view/attendance",
+        //     },
+        //   ],
+        // },
 
         {
           type: "module",
@@ -720,60 +720,60 @@ export const getSidebarItems = (user) => {
             },
           ],
         },
-        {
-          type: "module",
-          title: "Attendance",
-          submodules: [
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "AM Entry",
-              link: "/admin/attendance/amu-upload/list",
-            },
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "PM Entry",
-              link: "/admin/attendance/pmu-upload/list",
-            },
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "View Attendance",
-              link: "/admin/view/attendance",
-            },
-          ],
-        },
+        // {
+        //   type: "module",
+        //   title: "Attendance",
+        //   submodules: [
+        //     {
+        //       type: "sub-module",
+        //       icon: ArrowBigRight,
+        //       title: "AM Entry",
+        //       link: "/admin/attendance/amu-upload/list",
+        //     },
+        //     {
+        //       type: "sub-module",
+        //       icon: ArrowBigRight,
+        //       title: "PM Entry",
+        //       link: "/admin/attendance/pmu-upload/list",
+        //     },
+        //     {
+        //       type: "sub-module",
+        //       icon: ArrowBigRight,
+        //       title: "View Attendance",
+        //       link: "/admin/view/attendance",
+        //     },
+        //   ],
+        // },
       ];
       break;
 
     case 3:
       sidebarItems = [
-        {
-          type: "module",
-          icon: ArrowBigRight,
-          title: "Attendance",
-          submodules: [
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "AM Entry Form",
-              link: "/admin/attendance/amu-upload",
-            },
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "PM Entry Form",
-              link: "/admin/attendance/pmu-upload",
-            },
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "View Attendance",
-              link: "/admin/attendance/view",
-            },
-          ],
-        },
+        // {
+        //   type: "module",
+        //   icon: ArrowBigRight,
+        //   title: "Attendance",
+        //   submodules: [
+        //     {
+        //       type: "sub-module",
+        //       icon: ArrowBigRight,
+        //       title: "AM Entry Form",
+        //       link: "/admin/attendance/amu-upload",
+        //     },
+        //     {
+        //       type: "sub-module",
+        //       icon: ArrowBigRight,
+        //       title: "PM Entry Form",
+        //       link: "/admin/attendance/pmu-upload",
+        //     },
+        //     {
+        //       type: "sub-module",
+        //       icon: ArrowBigRight,
+        //       title: "View Attendance",
+        //       link: "/admin/attendance/view",
+        //     },
+        //   ],
+        // },
         {
           type: "module",
           icon: ArrowBigRight,
@@ -915,25 +915,25 @@ export const getSidebarItems = (user) => {
 
     case 4:
       sidebarItems = [
-        {
-          type: "module",
-          icon: ArrowBigRight,
-          title: "Attendance",
-          submodules: [
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "AM Entry Form",
-              link: "/admin/soepr/attendance/amu-upload",
-            },
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "PM Entry Form",
-              link: "/admin/soepr/attendance/pmu-upload",
-            },
-          ],
-        },
+        // {
+        //   type: "module",
+        //   icon: ArrowBigRight,
+        //   title: "Attendance",
+        //   submodules: [
+        //     {
+        //       type: "sub-module",
+        //       icon: ArrowBigRight,
+        //       title: "AM Entry Form",
+        //       link: "/admin/soepr/attendance/amu-upload",
+        //     },
+        //     {
+        //       type: "sub-module",
+        //       icon: ArrowBigRight,
+        //       title: "PM Entry Form",
+        //       link: "/admin/soepr/attendance/pmu-upload",
+        //     },
+        //   ],
+        // },
        
         {
           type: "module",
