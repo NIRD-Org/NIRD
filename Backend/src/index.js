@@ -38,6 +38,7 @@ import yfPoa1Routes from "./routes/YfPoa1Routes.js";
 import SpcPoa1Routes from "./routes/SpcPoa1Routes.js";
 import PmupoaRoutes from "./routes/pmupoaRoutes.js"
 import trainingMaterialRoutes from "./routes/trainingMaterialRoutes.js";
+import poaApprovalRoutes from "./routes/poaApprovalRoutes.js";
 // import { migrateFilesToS3 } from "./awsMigration.js";
 
 const app = express();
@@ -84,7 +85,7 @@ app.use("/api/v1/soepr-kpi-data", soeprKpiDataRoutes);
 app.use("/api/v1/soepr-state", soeprStateRoutes);
 app.use("/api/v1/soepr-dist", soeprDistrictRoutes);
 app.use("/api/v1/poa1", poa1Routes);
-
+app.use("/api/v1/poa", poaApprovalRoutes)
 app.use("/api/v1/yf-poa1", yfPoa1Routes);
 app.use("/api/v1/spc-poa1", SpcPoa1Routes);
 app.use("/api/v1/blog",blogRoutes)

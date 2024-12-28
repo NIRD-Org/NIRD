@@ -82,7 +82,7 @@ const getAllDistricts = async () => {
 const getPoa1Data = async () => {
   try {
     const { data } = await API.get(
-      `/api/v1/poa1/get/?state_id=${state}&user_id=${user}&month=${selectedMonth}&year=${selectedYear}&poaType=${poaType}`
+      `/api/v1/poa/get/?state_id=${state}&user_id=${user}&month=${selectedMonth}&year=${selectedYear}&poaType=${poaType}`
     );
 
     let fetched = data?.data || {};
@@ -208,7 +208,7 @@ const handleApprovalSubmit = async () => {
       remarks,
     };
 
-    await API.patch(`/api/v1/poa1/update/${poa1.id}`, payload);
+    await API.patch(`/api/v1/poa/update/${poa1.id}`, payload);
     alert("Approval status updated successfully!");
 
     // Refresh data
