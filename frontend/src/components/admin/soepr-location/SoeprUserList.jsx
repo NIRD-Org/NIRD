@@ -24,19 +24,21 @@ const SoeprUserList = () => {
 
   const [users, setUsers] = useState([]);
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchUsers = async () => {
       try {
-        const { data } = await API.get(`/api/v1/users/all?role=${4}`);
-        const { data: data2 } = await API.get(`/api/v1/users/all?role=${5}`);
-        const mergedData = [...data.data, ...data2.data];
-
+        const responses = await Promise.all([
+          API.get('/api/v1/users/all?role=4'),
+          API.get('/api/v1/users/all?role=5'),
+          API.get('/api/v1/users/all?role=7') // New API call for role 7
+        ]);
+        const mergedData = responses.flatMap(response => response.data.data);
         setUsers(mergedData);
       } catch (error) {
         console.log(error);
       }
     };
 
-    fetchUser();
+    fetchUsers();
   }, []);
 
   return (

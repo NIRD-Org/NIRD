@@ -36,7 +36,7 @@ export const getUserById = CatchAsyncError(async (req, res, next) => {
     }
 
     let state;
-    if (user.role === 4 || user.role === 5) {
+    if (user.role === 4 || user.role === 5 ||user.role === 7) {
       state = await SoeprStateModel.findOne({ id: user.state_id });
     } else {
       state = await StateModel.findOne({ id: user.state_id });
@@ -102,7 +102,7 @@ export const updateUser = CatchAsyncError(async (req, res, next) => {
 export const updateMany = CatchAsyncError(async (req, res, next) => {
   try {
     const updatedUsers = await User.updateMany(
-      { role: { $in: [1, 6] } }, // Include role 6 along with role 1
+      { role: { $in: [1, 7] } }, // Include role 7 along with role 1
       { $rename: { efDateFrom: "dojNIRDPR" } }
     );
 

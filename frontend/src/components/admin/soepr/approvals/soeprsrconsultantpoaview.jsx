@@ -120,9 +120,9 @@ useEffect(() => {
       );
 
       if (role === "all") {
-        const { data: data1 } = await API.get(`/api/v1/users/all?role=4`);
+        // const { data: data1 } = await API.get(`/api/v1/users/all?role=4`);
         const { data: data2 } = await API.get(`/api/v1/users/all?role=5`);
-        const mergedData = [...data1.data, ...data2.data];
+        const mergedData = [ ...data2.data];
 
         setUsers(
           mergedData.filter((usr) =>
@@ -268,8 +268,7 @@ const handleYearChange = (e) => setSelectedYear(parseInt(e.target.value));
                 onChange={(e) => setRole(e.target.value)}
                 className="border text-sm bg-white p-2 rounded-md"
               >
-                 <option value="5">Sr.Consultant</option>
-                {/* <option value="4">Consultant</option> */}
+                <option value="5"> Sr.Consultant</option>
               </select>
             </div>
 
@@ -283,7 +282,7 @@ const handleYearChange = (e) => setSelectedYear(parseInt(e.target.value));
                 disabled={!users.length || !state}
                 onChange={(e) => setUser(e.target.value)}
               >
-                <option>All </option>
+                <option>All Sr.Consultants</option>
                 {users?.map((item) => (
                   <option key={item.id} value={item.id}>
                     {item.name}
@@ -530,5 +529,4 @@ const handleYearChange = (e) => setSelectedYear(parseInt(e.target.value));
     </div>
   );
 };
-
 export default Poa1srcApprovalData;

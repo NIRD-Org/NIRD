@@ -463,7 +463,7 @@ export const updatePoa1Data = CatchAsyncError(async (req, res, next) => {
 
     // PERMISSION CHECK: either the POA owner or a Senior Consultant (role=5).
     // If you also want Admin (role=2) to approve, add req.user.role !== 2 check.
-    if (poa1.user_id !== user_id && req.user.role !== 5) {
+    if (poa1.user_id !== user_id && (req.user.role !== 5 && req.user.role !== 7))  {
       return res.status(403).json({
         success: false,
         message: "You do not have permission to approve this POA.",

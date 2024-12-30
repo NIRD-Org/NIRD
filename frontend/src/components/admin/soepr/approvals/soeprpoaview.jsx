@@ -121,8 +121,8 @@ useEffect(() => {
 
       if (role === "all") {
         const { data: data1 } = await API.get(`/api/v1/users/all?role=4`);
-        const { data: data2 } = await API.get(`/api/v1/users/all?role=5`);
-        const mergedData = [...data1.data, ...data2.data];
+        // const { data: data2 } = await API.get(`/api/v1/users/all?role=5`);
+        const mergedData = [...data1.data, ];
 
         setUsers(
           mergedData.filter((usr) =>
