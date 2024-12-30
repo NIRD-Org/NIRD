@@ -23,6 +23,25 @@ export const getSidebarItems = (user) => {
     return sidebarItems;
   }
 
+  if (user.role == 7 ) {
+    sidebarItems = [
+      {
+        type: "module",
+        icon: ArrowBigRight,
+        title: "POA Approvals",
+        submodules: [
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "Sr.Consultant POA Approvals",
+            link: "/admin/soepr/SirdPRDapprovals",
+          },
+        ],
+      },
+    ];
+    return sidebarItems;
+  }
+
   if (user.role == 4 ) {
     sidebarItems = [
       {
@@ -58,7 +77,7 @@ export const getSidebarItems = (user) => {
           {
             type: "sub-module",
             icon: ArrowBigRight,
-            title: "View Blog Posts",
+            title: "View Achievement Posts",
             link: "/admin/soepr/blogs/all",
           },
         ],
@@ -224,6 +243,20 @@ export const getSidebarItems = (user) => {
       {
         type: "module",
         icon: ArrowBigRight,
+        title: "Consultant POA Approvals",
+        submodules: [
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "Consultant POA",
+            link: "/admin/soepr/srcapprovals",
+          },
+         
+        ],
+      },
+      {
+        type: "module",
+        icon: ArrowBigRight,
         title: "SOEPR Achievements",
         submodules: [
           {
@@ -235,7 +268,7 @@ export const getSidebarItems = (user) => {
           {
             type: "sub-module",
             icon: ArrowBigRight,
-            title: "View Blog Posts",
+            title: "View Achievement Posts",
             link: "/admin/soepr/blogs/all",
           },
         ],
@@ -290,20 +323,7 @@ export const getSidebarItems = (user) => {
       //     },
       //   ],
       // },
-      {
-        type: "module",
-        icon: ArrowBigRight,
-        title: "Approvals",
-        submodules: [
-          {
-            type: "sub-module",
-            icon: ArrowBigRight,
-            title: "Consultant POA",
-            link: "/admin/soepr/srcapprovals",
-          },
-         
-        ],
-      },
+     
      
       {
         type: "module",

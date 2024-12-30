@@ -190,6 +190,7 @@ import GPDPModelsPagePage from "./Pages/GPDPModelsPage";
 import TrainingMaterialForm from "./components/admin/soepr/trainingMaterial/TrainingMaterialForm";
 import TrainingMaterials from "./Pages/TrainingMaterial/TrainingMaterials";
 import Soeprpoaview from "./components/admin/soepr/approvals/soeprpoaview";
+import Poa1srcApprovalData from "./components/admin/soepr/approvals/soeprsrconsultantpoaview";
 
 
 
@@ -303,6 +304,7 @@ function App() {
             <Route path="soepr/plan-of-action" element={<POA />} />
             <Route path="soepr/POA1" element={<POA1 />} />
             <Route path="soepr/srcapprovals" element={<Soeprpoaview />} />
+            <Route path="soepr/SirdPRDapprovals" element={<Poa1srcApprovalData />} />
             <Route path="soepr/POAreport" element={<PoaReportcount />} />
             <Route path="soepr/leave" element={<SoeprLeaveUpdateForm />} />
             <Route path="soepr/tour" element={<SoeprTourUpdateForm />} />

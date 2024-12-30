@@ -67,7 +67,8 @@ function CreateUserForm({ update }) {
         { value: 3, label: "Young Fellow" },
         { value: 4, label: "Consultant" },
         { value: 5, label: "Sr. Consultant" },
-        { value: 6, label: "CPRDP&MOPR"}
+        { value: 6, label: "CPRDP&MOPR"},
+        { value: 7, label: "SIRD/SPRC"}
       ];
     } else {
       return [{ value: 3, label: "Young Fellow" }];
