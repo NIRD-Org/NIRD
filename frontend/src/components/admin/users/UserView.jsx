@@ -20,7 +20,7 @@ const UserView = () => {
       try {
         setIsLoading(true);
         const { data } = await API.get(`/api/v1/users/${id}`);
-        setUser(data.data);
+        setUser(data.data.user);
       } catch (error) {
         console.log("Error fetching user:", error);
       } finally {

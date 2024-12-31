@@ -21,7 +21,7 @@ function CreateUserForm({ update }) {
       const fetchUser = async () => {
         try {
           const { data } = await API.get(`/api/v1/users/${id}`);
-          setFormData(data.data);
+          setFormData(data.data.user);
         } catch (error) {
           console.error("Error fetching user:", error);
         }
@@ -128,7 +128,11 @@ function CreateUserForm({ update }) {
               key={field.name}
               {...field}
               disabled={pending}
-              value={formData[field.name] || ""}
+              value={
+                (field.name == "dateOfBirth" && (formData.role == 4 || formData.role == 5)
+                  ? formData[field.name].split('T')[0]
+                  : formData[field.name]) || ""
+              }
               onChange={handleChange}
             />
           ))}
