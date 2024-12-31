@@ -32,7 +32,7 @@ const years = Array.from(
   (val, index) => new Date().getFullYear() - index
 );
 
-const Poa1srcApprovalData = () => {
+const Poa1AdminData = () => {
   const printRef = useRef();
   const [searchParams, setSearchParams] = useSearchParams();
   const [stateOptions, setStateOptions] = useState([]);
@@ -141,9 +141,9 @@ useEffect(() => {
       );
 
       if (role === "all") {
-        //const { data: data1 } = await API.get(`/api/v1/users/all?role=4`);
-        const { data: data2 } = await API.get(`/api/v1/users/all?role=5`);
-        const mergedData = [...data2.data, ];
+        const { data: data1 } = await API.get(`/api/v1/users/all?role=4`);
+        // const { data: data2 } = await API.get(`/api/v1/users/all?role=5`);
+        const mergedData = [...data1.data, ];
 
         setUsers(
           mergedData.filter((usr) =>
@@ -307,7 +307,7 @@ const handleYearChange = (e) => setSelectedYear(parseInt(e.target.value));
                 onChange={(e) => setRole(e.target.value)}
                 className="border text-sm bg-white p-2 rounded-md"
               >
-                <option value="5">Sr. Consultant</option>
+                <option value="4">Consultant</option>
               </select>
             </div>
 
@@ -321,7 +321,7 @@ const handleYearChange = (e) => setSelectedYear(parseInt(e.target.value));
                 disabled={!users.length || !state}
                 onChange={(e) => setUser(e.target.value)}
               >
-                <option>All Sr. Consultants</option>
+                <option>All Consultants</option>
                 {users?.map((item) => (
                   <option key={item.id} value={item.id}>
                     {item.name}
@@ -592,4 +592,4 @@ const handleYearChange = (e) => setSelectedYear(parseInt(e.target.value));
   );
 };
 
-export default Poa1srcApprovalData;
+export default Poa1AdminData;
