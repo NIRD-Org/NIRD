@@ -206,8 +206,12 @@ export const getPoalData = CatchAsyncError(async (req, res, next) => {
           _id: "$_id",
           id: { $first: "$id" },
           user_id: { $first: "$user_id" },
-          approval_status: { $first: "$approval_status" },
-          remarks: { $first: "$remarks" },
+          poa1_approval_status: { $first: "$poa1_approval_status" }, // Added
+          poa1_remarks: { $first: "$poa1_remarks" }, // Added
+          poa1_approval_date: { $first: "$poa1_approval_date" }, // Added
+          poa2_approval_status: { $first: "$poa2_approval_status" }, // Added
+          poa2_remarks: { $first: "$poa2_remarks" }, // Added
+          poa2_approval_date: { $first: "$poa2_approval_date" }, // Added
           poaData: { $push: "$poaData" },
           created_at: { $first: "$created_at" },
           modified_at: { $first: "$modified_at" },
@@ -306,13 +310,16 @@ export const getPoa1DataByState = CatchAsyncError(async (req, res, next) => {
         },
       },
       {
-        // ADDED: ensure "id" and (optionally "status") get included in grouping
         $group: {
           _id: "$_id",
-          id: { $first: "$id" },       // <-- This ensures the "id" field is returned
-          status: { $first: "$status" }, // optional if you want "status"
+          id: { $first: "$id" },
           user_id: { $first: "$user_id" },
-          approval_status: { $first: "$approval_status" },
+          poa1_approval_status: { $first: "$poa1_approval_status" }, // Added
+          poa1_remarks: { $first: "$poa1_remarks" }, // Added
+          poa1_approval_date: { $first: "$poa1_approval_date" }, // Added
+          poa2_approval_status: { $first: "$poa2_approval_status" }, // Added
+          poa2_remarks: { $first: "$poa2_remarks" }, // Added
+          poa2_approval_date: { $first: "$poa2_approval_date" }, // Added
           poaData: { $push: "$poaData" },
           created_at: { $first: "$created_at" },
           modified_at: { $first: "$modified_at" },
@@ -404,8 +411,12 @@ export const getAllPoa1Data = CatchAsyncError(async (req, res, next) => {
           _id: "$_id",
           id: { $first: "$id" },
           user_id: { $first: "$user_id" },
-          status: { $first: "$status" },
-          approval_status: { $first: "$approval_status" },
+          poa1_approval_status: { $first: "$poa1_approval_status" }, // Added
+          poa1_remarks: { $first: "$poa1_remarks" }, // Added
+          poa1_approval_date: { $first: "$poa1_approval_date" }, // Added
+          poa2_approval_status: { $first: "$poa2_approval_status" }, // Added
+          poa2_remarks: { $first: "$poa2_remarks" }, // Added
+          poa2_approval_date: { $first: "$poa2_approval_date" }, // Added
           poaData: { $push: "$poaData" },
           created_at: { $first: "$created_at" },
           modified_at: { $first: "$modified_at" },
@@ -430,14 +441,13 @@ export const updatePoa1Data = CatchAsyncError(async (req, res, next) => {
   try {
     const { poaId } = req.params;
     // EXTRACT approval_status and remarks from request body
-    const { approval_status, remarks } = req.body;
+    const {
+      poa1_approval_status,
+      poa1_remarks,
+      poa2_approval_status,
+      poa2_remarks,
+    } = req.body;
 
-    console.log(
-      "Keys starting with 'poaData' => ",
-      Object.keys(req.body).filter((key) => key.startsWith("poaData"))
-    );
-
-    // Extract day-wise data if any
     const poaData = Object.keys(req.body)
       .filter((key) => key.startsWith("poaData"))
       .reduce((acc, key) => {
@@ -452,7 +462,6 @@ export const updatePoa1Data = CatchAsyncError(async (req, res, next) => {
 
     const user_id = req?.user?.id;
     let poa1 = await Poa1Model.findOne({ id: poaId });
-    // or findById(poaId) if you prefer MongoDB _id
 
     if (!poa1) {
       return res.status(404).json({
@@ -463,7 +472,11 @@ export const updatePoa1Data = CatchAsyncError(async (req, res, next) => {
 
     // PERMISSION CHECK: either the POA owner or a Senior Consultant (role=5).
     // If you also want Admin (role=2) to approve, add req.user.role !== 2 check.
-    if (poa1.user_id !== user_id && (req.user.role !== 5 && req.user.role !== 7))  {
+    if (
+      poa1.user_id !== user_id &&
+      req.user.role !== 5 &&
+      req.user.role !== 7
+    ) {
       return res.status(403).json({
         success: false,
         message: "You do not have permission to approve this POA.",
@@ -509,18 +522,29 @@ export const updatePoa1Data = CatchAsyncError(async (req, res, next) => {
       }
     }
 
-    // APPROVAL LOGIC
-    if (approval_status) {
-      poa1.approval_status = approval_status; // '1'=Approved, '2'=Mod, '0'=Pending
-      poa1.remarks = remarks || "";
-      poa1.approval_date = new Date();
-      poa1.approved_by = user_id; // Store the ID of the user who approved/modified
+    // Handle POA1-specific approval logic
+    if (poa1_approval_status) {
+      poa1.poa1_approval_status = poa1_approval_status;
+      poa1.poa1_remarks = poa1_remarks || "";
+      poa1.poa1_approval_date = new Date();
+      poa1.approved_by = user_id; // Store the ID of the approver
     }
 
-    // Reflect the overall 'status' from approval_status
-    if (approval_status === "1") {
-      poa1.status = "1"; // Approved
-    } else if (approval_status === "2") {
+    // Handle POA2-specific approval logic
+    if (poa2_approval_status) {
+      poa1.poa2_approval_status = poa2_approval_status;
+      poa1.poa2_remarks = poa2_remarks || "";
+      poa1.poa2_approval_date = new Date();
+      poa1.approved_by = user_id; // Store the ID of the approver
+    }
+
+    // Update overall status based on approval statuses
+    if (poa1_approval_status === "1" && poa2_approval_status === "1") {
+      poa1.status = "1"; // Fully Approved
+    } else if (
+      poa1_approval_status === "2" ||
+      poa2_approval_status === "2"
+    ) {
       poa1.status = "2"; // Sent for modification
     } else {
       poa1.status = "0"; // Pending

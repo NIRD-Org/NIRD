@@ -72,23 +72,40 @@ const POA1Schema = new mongoose.Schema(
     poa2_created_at: {
       type: Date,
     },
-    approval_status: {
+    poa1_approval_status: {
       type: String,
       enum: ['0', '1', '2'], // 0: Pending, 1: Approved, 2: Sent for Modification
       default: '0', // Default status is pending
     },
-    approval_date: {
+    poa1_approval_date: {
       type: Date,
-      default: null,
+      default: null, // Approval timestamp for POA1
+    },
+    poa1_remarks: {
+      type: String,
+      default: "", // POA1-specific remarks
+    },
+    poa2_approval_status: {
+      type: String,
+      enum: ['0', '1', '2'], // 0: Pending, 1: Approved, 2: Sent for Modification
+      default: '0', // Default status is pending
+    },
+    poa2_approval_date: {
+      type: Date,
+      default: null, // Approval timestamp for POA2
+    },
+    poa2_remarks: {
+      type: String,
+      default: "", // POA2-specific remarks
     },
     approved_by: {
       type: String,
       ref: "User", // Reference to the Senior Consultant who approved the POA
       default: null,
     },
-    remarks: {
+    status_remarks: {
       type: String,
-      default: "", // Remarks or suggestions from Senior Consultant
+      default: "", // General remarks or suggestions
     },
   },
   {
