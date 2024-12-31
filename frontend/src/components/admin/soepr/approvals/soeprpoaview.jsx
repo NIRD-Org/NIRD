@@ -51,6 +51,7 @@ const Poa1AdminData = () => {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [poaType, setPoaType] = useState("poa1");
   const [role, setRole] = useState("all");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Approval state for both POA1 and POA2
   const [poa1Approval, setPoa1Approval] = useState({
@@ -218,6 +219,7 @@ const handleGeneratePdf = () => {
 // Approval Submission
 const handleApprovalSubmit = async () => {
   try {
+    // Check if there's valid POA data
     if (!poa1 || (!poa1._id && !poa1.id)) {
       alert("No POA data to approve or modify!");
       return;
@@ -235,14 +237,23 @@ const handleApprovalSubmit = async () => {
             poa2_remarks: poa2Approval.remarks,
           };
 
+    // Make the API call
     await API.patch(`/api/v1/poa/update/${poa1.id}`, payload);
+
+    // Show success alert
     alert(`Approval status updated successfully for ${poaType.toUpperCase()}!`);
 
     // Refresh data
     getPoa1Data();
+
+    // Reset isSubmitting to false after successful submission
+    setIsSubmitting(false);
   } catch (error) {
     console.error("Failed to update approval status:", error);
     alert(`Failed to update approval status for ${poaType.toUpperCase()}!`);
+
+    // Reset isSubmitting to false if there's an error
+    setIsSubmitting(false);
   }
 };
 
@@ -362,106 +373,85 @@ const handleYearChange = (e) => setSelectedYear(parseInt(e.target.value));
 
       {/* approvals logic final */}
       <div className="mt-4 flex items-center gap-4">
-  <button
-    onClick={handleGeneratePdf}
-    className="bg-primary text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-  >
-    Download as PDF
-  </button>
-  {poa1 && poa1.id && (
-    <span className="text-sm text-gray-700">
-      <strong>POA ID:</strong> {poa1.id}
-    </span>
-  )}
-  {poaType === "poa1" && poa1Approval.status === "1" && (
-    <p className="text-green-600 font-semibold">POA1 Approved</p>
-  )}
-  {poaType === "poa1" && poa1Approval.status === "2" && (
-    <p className="text-yellow-600 font-semibold">POA1 Sent for Modification</p>
-  )}
-  {poaType === "poa1" && poa1Approval.status === "0" && (
-    <p className="text-red-600 font-semibold">POA1 Pending</p>
-  )}
-  {poaType === "poa2" && poa2Approval.status === "1" && (
-    <p className="text-green-600 font-semibold">POA2 Approved</p>
-  )}
-  {poaType === "poa2" && poa2Approval.status === "2" && (
-    <p className="text-yellow-600 font-semibold">POA2 Sent for Modification</p>
-  )}
-  {poaType === "poa2" && poa2Approval.status === "0" && (
-    <p className="text-red-600 font-semibold">POA2 Pending</p>
-  )}
-</div>
+        <button
+          onClick={handleGeneratePdf}
+          className="bg-primary text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        >
+          Download as PDF
+        </button>
+        {poa1 && poa1.id && (
+          <span className="text-sm text-gray-700">
+            <strong>POA ID:</strong> {poa1.id}
+          </span>
+        )}
+        {poaType === "poa1" && poa1Approval.status === "1" && (
+          <p className="text-green-600 font-semibold">POA1 Approved</p>
+        )}
+        {poaType === "poa1" && poa1Approval.status === "2" && (
+          <p className="text-yellow-600 font-semibold">POA1 Sent for Modification</p>
+        )}
+        {poaType === "poa1" && poa1Approval.status === "0" && (
+          <p className="text-red-600 font-semibold">POA1 Pending</p>
+        )}
+        {poaType === "poa2" && poa2Approval.status === "1" && (
+          <p className="text-green-600 font-semibold">POA2 Approved</p>
+        )}
+        {poaType === "poa2" && poa2Approval.status === "2" && (
+          <p className="text-yellow-600 font-semibold">POA2 Sent for Modification</p>
+        )}
+        {poaType === "poa2" && poa2Approval.status === "0" && (
+          <p className="text-red-600 font-semibold">POA2 Pending</p>
+        )}
+      </div>
 
-{/* Approval dropdowns and remarks */}
-<div className="mt-4 flex flex-col sm:flex-row items-start sm:items-center gap-2">
-  <div className="flex flex-col">
-    <label className="text-sm text-primary font-semibold">
-      Approval Status for {poaType.toUpperCase()}
-    </label>
-    <select
-      value={
-        poaType === "poa1" ? poa1Approval.localStatus : poa2Approval.localStatus
-      } // Local dropdown value
-      onChange={(e) =>
-        poaType === "poa1"
-          ? setPoa1Approval({
-              ...poa1Approval,
-              localStatus: e.target.value, // Update local status
-            })
-          : setPoa2Approval({
-              ...poa2Approval,
-              localStatus: e.target.value, // Update local status
-            })
-      }
-      disabled={
-        (poaType === "poa1" && poa1Approval.status === "1") || // Disable only if DB status is Approved
-        (poaType === "poa2" && poa2Approval.status === "1")
-      }
-      className="border text-sm bg-white p-2 rounded-md"
-    >
-      <option value="0">Pending</option>
-      <option value="1">Approved</option>
-      <option value="2">Sent for Modification</option>
-    </select>
-  </div>
+      {/* Show the approval section only if the database status is not 1 or if in submission mode */}
+      {((poaType === "poa1" && poa1Approval.status !== "1") ||
+        (poaType === "poa2" && poa2Approval.status !== "1") ||
+        isSubmitting) && (
+        <div className="mt-4 flex flex-col sm:flex-row items-start sm:items-center gap-2">
+          <div className="flex flex-col">
+            <label className="text-sm text-primary font-semibold">
+              Approval Status for {poaType.toUpperCase()}
+            </label>
+            <select
+              value={poaType === "poa1" ? poa1Approval.status : poa2Approval.status}
+              onChange={(e) => {
+                poaType === "poa1"
+                  ? setPoa1Approval({ ...poa1Approval, status: e.target.value })
+                  : setPoa2Approval({ ...poa2Approval, status: e.target.value });
+                setIsSubmitting(true); // Enable submission mode when the dropdown changes
+              }}
+              className="border text-sm bg-white p-2 rounded-md"
+            >
+              <option value="0">Pending</option>
+              <option value="1">Approved</option>
+              <option value="2">Sent for Modification</option>
+            </select>
+          </div>
 
-  <div className="flex flex-col sm:mx-2">
-    <label className="text-sm text-primary font-semibold">Remarks</label>
-    <input
-      type="text"
-      value={poaType === "poa1" ? poa1Approval.remarks : poa2Approval.remarks}
-      onChange={(e) =>
-        poaType === "poa1"
-          ? setPoa1Approval({
-              ...poa1Approval,
-              remarks: e.target.value,
-            })
-          : setPoa2Approval({
-              ...poa2Approval,
-              remarks: e.target.value,
-            })
-      }
-      disabled={
-        (poaType === "poa1" && poa1Approval.status === "1") || // Disable only if DB status is Approved
-        (poaType === "poa2" && poa2Approval.status === "1")
-      }
-      className="border text-sm bg-white p-2 rounded-md"
-      placeholder="Enter remarks if any"
-    />
-  </div>
+          <div className="flex flex-col sm:mx-2">
+            <label className="text-sm text-primary font-semibold">Remarks</label>
+            <input
+              type="text"
+              value={poaType === "poa1" ? poa1Approval.remarks : poa2Approval.remarks}
+              onChange={(e) =>
+                poaType === "poa1"
+                  ? setPoa1Approval({ ...poa1Approval, remarks: e.target.value })
+                  : setPoa2Approval({ ...poa2Approval, remarks: e.target.value })
+              }
+              className="border text-sm bg-white p-2 rounded-md"
+              placeholder="Enter remarks if any"
+            />
+          </div>
 
-  <button
-    onClick={handleApprovalSubmit}
-    disabled={
-      (poaType === "poa1" && poa1Approval.status === "1") || // Disable button only if DB status is Approved
-      (poaType === "poa2" && poa2Approval.status === "1")
-    }
-    className="bg-green-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline disabled:opacity-50"
-  >
-    Update {poaType.toUpperCase()} Approval
-  </button>
-</div>
+          <button
+            onClick={handleApprovalSubmit}
+            className="bg-green-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          >
+            Update {poaType.toUpperCase()} Approval
+          </button>
+        </div>
+      )}
 
 
       <div ref={printRef} className="pt-10 w-full">
