@@ -16,21 +16,6 @@ import {
 import { tst } from "@/lib/utils";
 import { showAlert } from "@/utils/showAlert";
 
-const months = [
-  { name: "January", days: 31 },
-  { name: "February", days: 28 }, // Adjust for leap years if needed
-  { name: "March", days: 31 },
-  { name: "April", days: 30 },
-  { name: "May", days: 31 },
-  { name: "June", days: 30 },
-  { name: "July", days: 31 },
-  { name: "August", days: 31 },
-  { name: "September", days: 30 },
-  { name: "October", days: 31 },
-  { name: "November", days: 30 },
-  { name: "December", days: 31 },
-];
-
 const planOfDayOptions = {
   "Functioning of Gram Panchayats/ Gram Sabhas": [
     "Observe Ward Sabhas",
@@ -79,24 +64,45 @@ const planOfDayOptions = {
   "Others(100 words Only)": ["Others"],
 };
 
-const POA2Formtemp = ({ update }) => {
-  const currentMonthIndex = new Date().getMonth();
-  const currentYear = new Date().getFullYear();
+const POA2Form = ({ update }) => {
+  const currentYear = new Date().getFullYear() -1 ;
+
+  const months = [
+    { name: "January", days: 31 },
+    { name: "February", days: currentYear % 4 === 0 ? 29 : 28 }, // Leap year check
+    { name: "March", days: 31 },
+    { name: "April", days: 30 },
+    { name: "May", days: 31 },
+    { name: "June", days: 30 },
+    { name: "July", days: 31 },
+    { name: "August", days: 31 },
+    { name: "September", days: 30 },
+    { name: "October", days: 31 },
+    { name: "November", days: 30 },
+    { name: "December", days: 31 },
+  ];
+
   const { id: poalId } = useParams();
   const [selectedState, setSelectedState] = useState();
   const [plans, setPlans] = useState({});
   const [selectedDistricts, setSelectedDistricts] = useState({});
   const [formDataState, setFormData] = useState([]);
-  const selectedMonth = months[currentMonthIndex - 1];
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const { soeprState: states, soeprDist: districts } = useSoeprLocation({
     state_id: selectedState,
   });
-  const [isEditableOn16th, setIsEditableOn16th] = useState(false);
-  const [isEditableOnLastDay, setIsEditableOnLastDay] = useState(false);
+  const [isEditableOn16th, setIsEditableOn16th] = useState(true);
+  const [isEditableOnLastDay, setIsEditableOnLastDay] = useState(true);
+
+  function getSubmissionDate(day, year = new Date().getFullYear()) {
+    return new Date(Date.UTC(year, selectedMonth, day));
+  }
+
+  const submissionDate = getSubmissionDate(14, 2024);
 
   // Determine the start and end date of the second fortnight
-  const startDate = new Date(currentYear, currentMonthIndex, 16);
-  const endDate = new Date(currentYear, currentMonthIndex, selectedMonth.days);
+  const startDate = new Date(currentYear, selectedMonth, 16);
+  const endDate = new Date(currentYear, selectedMonth, selectedMonth.days);
   const today = new Date();
 
   useEffect(() => {
@@ -104,8 +110,8 @@ const POA2Formtemp = ({ update }) => {
     const isToday16th = today.getDate() >= 16;
     const isTodayLastDay = today.getDate() === selectedMonth.days;
 
-    setIsEditableOn16th(isToday16th);
-    setIsEditableOnLastDay(isTodayLastDay);
+    setIsEditableOn16th(true);
+    setIsEditableOnLastDay(true);
   }, [today, selectedMonth]);
 
   const [loading, setLoading] = useState(false);
@@ -133,7 +139,7 @@ const POA2Formtemp = ({ update }) => {
 
   const getDaysInMonth = () => {
     const startDay = 16;
-    const endDay = selectedMonth.days;
+    const endDay = months[selectedMonth].days;
     return Array.from(
       { length: endDay - startDay + 1 },
       (_, i) => i + startDay
@@ -141,15 +147,14 @@ const POA2Formtemp = ({ update }) => {
   };
 
   const getWeekDay = (day) => {
-    const date = new Date(`${selectedMonth.name} ${day}, ${currentYear}`);
+    const date = new Date(currentYear, selectedMonth, day);
     return date.toLocaleDateString("en-IN", { weekday: "long" });
   };
 
   const formatIndianDate = (day) => {
-    const date = new Date(`${selectedMonth.name} ${day}, ${currentYear}`);
+    const date = new Date(currentYear, selectedMonth, day);
     return date.toLocaleDateString("en-IN");
   };
-
   const handlePlanChange = (day, selectedPlan) => {
     setPlans((prev) => ({ ...prev, [day]: selectedPlan }));
     setSelectedActions((prev) => ({ ...prev, [day]: "" }));
@@ -211,14 +216,14 @@ const POA2Formtemp = ({ update }) => {
       });
 
       await API.post(
-        `/api/v1/poa1/create?poa2_created_at=${Date.now()}`,
+        `/api/v1/poa1/create?poa2_created_at=${submissionDate}`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
 
-      showAlert("Form submitted successfully!");
+      showAlert("Form submitted successfully!", "success");
     } catch (error) {
       tst.error(error);
     } finally {
@@ -232,16 +237,34 @@ const POA2Formtemp = ({ update }) => {
         Second Fortnightly Plan Of Action - Month : {selectedMonth.name}{" "}
         {currentYear}
       </AdminHeader>
-      <div style={{ margin: "15px 0", textAlign: "center" }}>
+      {/* <div style={{ margin: "15px 0", textAlign: "center" }}>
         <p
           style={{
             color: today < startDate || today > endDate ? "red" : "black",
           }}
         >
-          Available for Entry till 03/09/2024
+          Available for Entry: {formatIndianDate(startDate)} -{" "}
+          {formatIndianDate(endDate)}
         </p>
-      </div>
+      </div> */}
       <div style={{ marginBottom: "15px", display: "flex", gap: "10px" }}>
+        <div className="">
+          <label htmlFor="month-select" className="mr-2">
+            Select Month:
+          </label>
+          <select
+            id="month-select"
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(parseInt(e.target.value, 10))}
+            className="p-2 rounded"
+          >
+            {months.map((month, index) => (
+              <option key={index} value={index}>
+                {month.name}
+              </option>
+            ))}
+          </select>
+        </div>
         <div className="flex gap-2 items-center">
           <h4 className="text-primary font-semibold">State: </h4>
           <p className="font-semibold text-gray-700">{states[0]?.name}</p>
@@ -293,6 +316,7 @@ const POA2Formtemp = ({ update }) => {
                   style={{ width: "100%" }}
                   value={plans[day] || ""}
                   onChange={(e) => handlePlanChange(day, e.target.value)}
+                  disabled={!isEditableOn16th}
                 >
                   <option value="">Select</option>
                   {Object.keys(planOfDayOptions).map((plan) => (
@@ -308,6 +332,7 @@ const POA2Formtemp = ({ update }) => {
                   style={{ width: "100%" }}
                   value={selectedActions[day] || ""}
                   onChange={(e) => handleActionChange(day, e.target.value)}
+                  disabled={!plans[day] || !isEditableOn16th}
                   required
                 >
                   <option value="">Select</option>
@@ -328,6 +353,7 @@ const POA2Formtemp = ({ update }) => {
                     handleInputChange(day, "plannedEvent", e.target.value)
                   }
                   value={formDataState[day]?.plannedEvent || ""}
+                  disabled={!isEditableOn16th}
                 />
               </TableCell>
               <TableCell className="p-2">
@@ -337,6 +363,7 @@ const POA2Formtemp = ({ update }) => {
                   onChange={(e) => handleDistrictChange(day, e.target.value)}
                   value={selectedDistricts[day] || ""}
                   required
+                  disabled={!isEditableOn16th}
                 >
                   <option value="" disable>
                     Select Location
@@ -353,7 +380,7 @@ const POA2Formtemp = ({ update }) => {
                 </select>
               </TableCell>
               <TableCell className="p-2">
-                <input
+                <input 
                   className="px-2 py-1 rounded"
                   type="text"
                   style={{ width: "100%" }}
@@ -361,7 +388,7 @@ const POA2Formtemp = ({ update }) => {
                     handleInputChange(day, "achievements", e.target.value)
                   }
                   value={formDataState[day]?.achievements || ""}
-                  disabled={!isEditableOnLastDay}
+                  disabled
                 />
               </TableCell>
               <TableCell className="p-2">
@@ -371,7 +398,7 @@ const POA2Formtemp = ({ update }) => {
                   onChange={(e) =>
                     handleInputChange(day, "photo", e.target.files[0])
                   }
-                  disabled={!isEditableOnLastDay}
+                  disabled
                 />
               </TableCell>
               <TableCell className="p-2">
@@ -382,7 +409,7 @@ const POA2Formtemp = ({ update }) => {
                   onChange={(e) =>
                     handleInputChange(day, "remarks", e.target.value)
                   }
-                  disabled={!isEditableOnLastDay}
+                  disabled
                   value={formDataState[day]?.remarks || ""}
                 />
               </TableCell>
@@ -399,4 +426,4 @@ const POA2Formtemp = ({ update }) => {
   );
 };
 
-export default POA2Formtemp;
+export default POA2Form;
