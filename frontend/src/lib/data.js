@@ -162,12 +162,12 @@ export const getSidebarItems = (user) => {
             title: "POA2",
             link: "/admin/soepr/POA2",
           },
-          /* {
+        {
             type: "sub-module",
             icon: ArrowBigRight,
-            title: "POA2(August temp)",
+            title: "POA2(Decembertemp)",
             link: "/admin/soepr/poa2temp",
-          },*/
+          },
         ],
       },
       {
@@ -232,12 +232,12 @@ export const getSidebarItems = (user) => {
             title: "POA2",
             link: "/admin/soepr/POA2",
           },
-          /* {
+           {
             type: "sub-module",
             icon: ArrowBigRight,
-            title: "POA2(August temp)",
+            title: "POA2(December temp)",
             link: "/admin/soepr/poa2temp",
-          },*/
+          },
         ],
       },
       {
