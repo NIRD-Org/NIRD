@@ -4,7 +4,7 @@ import AdminHeader from "../../AdminHeader";
 import toast from "react-hot-toast";
 import { useSoeprLocation } from "@/components/hooks/useSoeprLocation";
 import API from "@/utils/API";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import {
   Table,
   TableCell,
@@ -79,6 +79,7 @@ const planOfDayOptions = {
 };
 
 const UpdatePOA1Form = () => {
+    const [searchParams, setSearchParams] = useSearchParams();
   const currentMonthIndex = new Date().getMonth();
   const currentYear = new Date().getFullYear();
   const { id: poalId } = useParams();
@@ -91,7 +92,14 @@ const UpdatePOA1Form = () => {
     state_id: selectedState,
   });
   const [loading, setLoading] = useState(false);
-  const [poaType, setPoaType] = useState("poa1");
+
+   const poaType = searchParams.get("poaType")  || 'poa1';
+  
+    useEffect(() => {
+      if (!poaType || poaType == 'poa1') {
+        setSearchParams({ poaType: "poa1" });
+      }
+    }, []);
   const [selectedActions, setSelectedActions] = useState({});
   const navigate = useNavigate();
   useEffect(() => {
@@ -261,7 +269,7 @@ const UpdatePOA1Form = () => {
           <select
             className="border text-sm bg-white p-2 px-4 rounded-md"
             value={poaType}
-            onChange={(e) => setPoaType(e.target.value)}
+            onChange={(e) => setSearchParams({poaType:e.target.value})}
           >
             <option value="poa1">POA1</option>
             <option value="poa2">POA2</option>
