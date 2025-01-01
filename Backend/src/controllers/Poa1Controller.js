@@ -212,16 +212,45 @@ export const createPoa1 = CatchAsyncError(async (req, res, next) => {
   }
 });
 
+// export const getPoa1s = CatchAsyncError(async (req, res, next) => {
+//   try {
+//     const poa1Data = await Poa1Model.find({ user_id: req?.user?.id });
+
+//     res.status(200).json({ success: true, data: poa1Data });
+//   } catch (error) {
+//     console.error(error);
+//     next(new Errorhandler("Failed to get POA Data", 500));
+//   }
+// });
+
 export const getPoa1s = CatchAsyncError(async (req, res, next) => {
   try {
     const poa1Data = await Poa1Model.find({ user_id: req?.user?.id });
 
-    res.status(200).json({ success: true, data: poa1Data });
+    // Add poaSubmitted field to each object in poa1Data
+    const updatedPoa1Data = poa1Data.map((item) => {
+      const types = { poa1: false, poa2: false };
+
+      if (item.poaData.some((poa) => poa.poaType === "poa1")) {
+        types.poa1 = true;
+      }
+      if (item.poaData.some((poa) => poa.poaType === "poa2")) {
+        types.poa2 = true;
+      }
+
+      return {
+        ...item._doc,
+        poaSubmitted: types,
+      };
+    });
+
+    res.status(200).json({ success: true, data: updatedPoa1Data });
   } catch (error) {
     console.error(error);
     next(new Errorhandler("Failed to get POA Data", 500));
   }
 });
+
 
 export const getPoalData = CatchAsyncError(async (req, res, next) => {
   try {
@@ -507,10 +536,7 @@ export const getAllPoa1Data = CatchAsyncError(async (req, res, next) => {
 export const updatePoa1Data = CatchAsyncError(async (req, res, next) => {
   try {
     const { poaId } = req.params;
-    // Extract poaData from the request body
-    console.log(
-      Object.keys(req.body).filter((key) => key.startsWith("poaData"))
-    );
+    
     const poaData = Object.keys(req.body)
       .filter((key) => key.startsWith("poaData"))
       .reduce((acc, key) => {

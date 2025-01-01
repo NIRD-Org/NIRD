@@ -74,12 +74,20 @@ const POA1Schema = new mongoose.Schema(
     },
     poa1_approval_status: {
       type: String,
-      enum: ['0', '1', '2'], // 0: Pending, 1: Approved, 2: Sent for Modification
-      default: '0', // Default status is pending
+      enum: ["0", "1", "2"], // 0: Pending, 1: Approved, 2: Sent for Modification
+      default: "0", // Default status is pending
     },
     poa1_approval_date: {
       type: Date,
       default: null, // Approval timestamp for POA1
+    },
+    poa1_revert_date: {
+      type: Date,
+      default: null,
+    },
+    poa2_revert_date: {
+      type: Date,
+      default: null,
     },
     poa1_remarks: {
       type: String,
@@ -87,8 +95,8 @@ const POA1Schema = new mongoose.Schema(
     },
     poa2_approval_status: {
       type: String,
-      enum: ['0', '1', '2'], // 0: Pending, 1: Approved, 2: Sent for Modification
-      default: '0', // Default status is pending
+      enum: ["0", "1", "2"], // 0: Pending, 1: Approved, 2: Sent for Modification
+      default: "0", // Default status is pending
     },
     poa2_approval_date: {
       type: Date,

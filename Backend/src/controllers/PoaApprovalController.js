@@ -526,7 +526,11 @@ export const updatePoa1Data = CatchAsyncError(async (req, res, next) => {
     if (poa1_approval_status) {
       poa1.poa1_approval_status = poa1_approval_status;
       poa1.poa1_remarks = poa1_remarks || "";
-      poa1.poa1_approval_date = new Date();
+      if (poa1_approval_status == "2") {
+        poa1.poa1_revert_date = new Date();
+      } else if (poa1_approval_status == "1") {
+        poa1.poa1_approval_date = new Date();
+      }
       poa1.approved_by = user_id; // Store the ID of the approver
     }
 
@@ -534,20 +538,21 @@ export const updatePoa1Data = CatchAsyncError(async (req, res, next) => {
     if (poa2_approval_status) {
       poa1.poa2_approval_status = poa2_approval_status;
       poa1.poa2_remarks = poa2_remarks || "";
-      poa1.poa2_approval_date = new Date();
+     if (poa2_approval_status == "2") {
+       poa1.poa2_revert_date = new Date();
+     } else if (poa2_approval_status == "1") {
+       poa1.poa2_approval_date = new Date();
+     }
       poa1.approved_by = user_id; // Store the ID of the approver
     }
 
     // Update overall status based on approval statuses
     if (poa1_approval_status === "1" && poa2_approval_status === "1") {
-      poa1.status = "1"; // Fully Approved
-    } else if (
-      poa1_approval_status === "2" ||
-      poa2_approval_status === "2"
-    ) {
-      poa1.status = "2"; // Sent for modification
+      poa1.status = "1"; 
+    } else if (poa1_approval_status === "2" || poa2_approval_status === "2") {
+      poa1.status = "2";
     } else {
-      poa1.status = "0"; // Pending
+      poa1.status = "0";
     }
 
     await poa1.save();

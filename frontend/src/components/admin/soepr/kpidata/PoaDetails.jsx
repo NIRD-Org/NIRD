@@ -10,15 +10,22 @@ import {
   TableCaption,
 } from "@/components/ui/table";
 import API from "@/utils/API";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import AdminHeader from "../../AdminHeader";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
 const Poa1DetailPage = () => {
   const [poa1Data, setPoa1Data] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
   const { id } = useParams();
-  const [poaType, setPoaType] = useState("poa1");
+  const poaType = searchParams.get("poaType")  || 'poa1';
+
+  useEffect(() => {
+    if (!poaType || poaType == 'poa1') {
+      setSearchParams({ poaType: "poa1" });
+    }
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -119,7 +126,7 @@ const Poa1DetailPage = () => {
           <select
             className="border text-sm bg-white p-2 px-4 rounded-md"
             value={poaType}
-            onChange={(e) => setPoaType(e.target.value)}
+            onChange={(e) => setSearchParams({poaType:e.target.value})}
           >
             <option value="poa1">POA1</option>
             <option value="poa2">POA2</option>
@@ -143,7 +150,9 @@ const Poa1DetailPage = () => {
       </div>
 
       {!poa1Data ? (
-        <p className="text-center text-red-500">Loading data or no data available...</p>
+        <p className="text-center text-red-500">
+          Loading data or no data available...
+        </p>
       ) : (
         <div id="poa1-detail">
           <AdminHeader className="print-header-margin">
@@ -155,7 +164,8 @@ const Poa1DetailPage = () => {
           </AdminHeader>
           <Table>
             <TableCaption className="text-sm">
-              Details for {poaType === "poa1" ? "POA1" : "POA2"} ID: {poa1Data?.id}
+              Details for {poaType === "poa1" ? "POA1" : "POA2"} ID:{" "}
+              {poa1Data?.id}
             </TableCaption>
             <TableHeader>
               <TableRow>

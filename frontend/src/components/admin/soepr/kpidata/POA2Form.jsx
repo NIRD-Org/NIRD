@@ -216,7 +216,7 @@ const POA2Form = ({ update }) => {
       });
 
       await API.post(
-        `/api/v1/poa1/create?created_at=${submissionDate}`,
+        `/api/v1/poa1/create?poa2_created_at=${submissionDate}`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
