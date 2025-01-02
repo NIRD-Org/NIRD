@@ -81,7 +81,8 @@ const planOfDayOptions = {
 const UpdatePOA1Form = () => {
     const [searchParams, setSearchParams] = useSearchParams();
   const currentMonthIndex = new Date().getMonth();
-  const currentYear = new Date().getFullYear();
+
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear())
   const { id: poalId } = useParams();
   const [selectedState, setSelectedState] = useState();
   const [plans, setPlans] = useState({});
@@ -113,6 +114,7 @@ const UpdatePOA1Form = () => {
           `/api/v1/poa1/get/${poalId}?poaType=${poaType}`
         );
         const data = response.data.data.poaData;
+        setCurrentYear(new Date(response.data.data.poaData[0].date).getFullYear());
         const monthName = new Date(
           response.data.data.created_at
         )?.toLocaleString("en-IN", { month: "long" });
@@ -269,7 +271,7 @@ const UpdatePOA1Form = () => {
           <select
             className="border text-sm bg-white p-2 px-4 rounded-md"
             value={poaType}
-            onChange={(e) => setSearchParams({poaType:e.target.value})}
+            onChange={(e) => setSearchParams({ poaType: e.target.value })}
           >
             <option value="poa1">POA1</option>
             <option value="poa2">POA2</option>
@@ -324,7 +326,8 @@ const UpdatePOA1Form = () => {
                         className="p-2"
                         rowSpan={formDataState[day].length}
                       >
-                        {getWeekDay(day)}
+                        {/* {getWeekDay(day)} */}
+                        {entry.weekday}
                       </TableCell>
                     </>
                   )}

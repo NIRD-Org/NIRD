@@ -138,6 +138,7 @@ const POAview = () => {
             <TableHead>Poa Type</TableHead>
             <TableHead>Poa Status</TableHead>
             <TableHead>Approval/Revert Date</TableHead>
+            <TableHead>Remarks</TableHead>
 
             <TableHead>Actions</TableHead>
           </TableRow>
@@ -154,7 +155,10 @@ const POAview = () => {
                       <TableCell>
                         {createdAt.toLocaleString("en-IN", { month: "long" })}
                       </TableCell>
-                      <TableCell>{createdAt.getFullYear()}</TableCell>
+                      {/* <TableCell>{createdAt.getFullYear("en-IN")}</TableCell> */}
+                      <TableCell>
+                        {(new Date(record.poaData[0].date).getFullYear())}
+                      </TableCell>
                       <TableCell>Poa1</TableCell>
                       <TableCell>
                         {record.poa1_approval_status == "0"
@@ -172,6 +176,7 @@ const POAview = () => {
                           ? formatDate(record.poa1_revert_date)
                           : "N/A"}
                       </TableCell>
+                      <TableCell>{record.poa1_remarks || "N/A"}</TableCell>
                       <TableCell className="flex gap-4">
                         <Link
                           to={`/admin/soepr/POA1/view/${record.id}?poaType=poa1`}
@@ -211,6 +216,7 @@ const POAview = () => {
                           ? formatDate(record.poa2_revert_date)
                           : "N/A"}
                       </TableCell>
+                      <TableCell>{record.poa2_remarks || "N/A"}</TableCell>
                       <TableCell className="flex gap-4">
                         <Link
                           to={`/admin/soepr/POA1/view/${record.id}?poaType=poa2`}

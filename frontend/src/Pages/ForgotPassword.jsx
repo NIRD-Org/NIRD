@@ -28,7 +28,7 @@ const ForgotPassword = () => {
     try {
       setPending(true);
       const { data } = await API.post("/api/v1/auth/reset-password", formData);
-      showAlert("Please check your email", "success");
+      showAlert("Please check your email for password reset link", "success", 10000, false);
     } catch (error) {
       tst.error(error);
       console.error("Login failed:", error.message);
