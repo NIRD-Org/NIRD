@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import API from "@/utils/API";
 
-const BlogDetails = () => {
+const SuperBlogDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -23,7 +23,7 @@ const BlogDetails = () => {
   const deleteBlogPost = async () => {
     try {
       await API.delete(`/api/v1/blog/${id}`);
-      navigate("/admin/soepr/blogs/all");
+      navigate("/admin/superadmin/blogs");
     } catch (error) {
       console.error("Failed to delete blog post:", error);
     }
@@ -62,4 +62,4 @@ const BlogDetails = () => {
   );
 };
 
-export default BlogDetails;
+export default SuperBlogDetails;

@@ -2,14 +2,14 @@ import API from "@/utils/API";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-const SoeprBlogPosts = () => {
+const AllBlogs = () => {
   const [blogs, setBlogs] = useState([]);
   const navigate = useNavigate();
 
   // Fetch all blog posts
-  const getSoeprBlogPosts = async () => {
+  const getAllBlogs = async () => {
     try {
-      const { data } = await API.get("/api/v1/blog/soepr");
+      const { data } = await API.get("/api/v1/blog/all");
       setBlogs(data.data);
     } catch (error) {
       console.error("Failed to fetch blog posts:", error);
@@ -27,7 +27,7 @@ const SoeprBlogPosts = () => {
   };
 
   useEffect(() => {
-    getSoeprBlogPosts();
+    getAllBlogs();
   }, []);
 
   return (
@@ -57,9 +57,7 @@ const SoeprBlogPosts = () => {
                 </p>
                 <div className="flex justify-between items-center mt-4">
                   <button
-                    onClick={() =>
-                      navigate(`/admin/soepr/blog/${blog._id}`)
-                    }
+                    onClick={() => navigate(`/admin/superadmin/blog/${blog._id}`)}
                     className="text-orange-500 font-medium hover:underline"
                   >
                     Read More
@@ -79,4 +77,4 @@ const SoeprBlogPosts = () => {
   );
 };
 
-export default SoeprBlogPosts;
+export default AllBlogs;

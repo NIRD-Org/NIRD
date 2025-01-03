@@ -94,3 +94,22 @@ export const getBlogById = CatchAsyncError(async (req, res, next) => {
     return next(new Errorhandler("Failed to get Blog Post", 500));
   }
 });
+
+export const deleteBlog = CatchAsyncError(async (req, res, next) => {
+  try {
+    const blog = await BlogPost.findOneAndDelete(req.params.id);
+
+    if (!blog) {
+      return next(new Errorhandler("No Blog Post Found", 404));
+    }
+
+    res.status(201).json({
+      success: true,
+      message: "Blog post deleted successfully",
+      
+    });
+  } catch (error) {
+    console.error(error);
+    return next(new Errorhandler("Failed to get Blog Post", 500));
+  }
+});

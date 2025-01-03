@@ -446,16 +446,16 @@ export const getSidebarItems = (user) => {
             },
             {
               type: "sub-module",
-               icon: ArrowBigRight,
-               title: "View PMU POA  ",
-               link: "/admin/POAadminView",
-             },
-             {
+              icon: ArrowBigRight,
+              title: "View PMU POA  ",
+              link: "/admin/POAadminView",
+            },
+            {
               type: "sub-module",
-               icon: ArrowBigRight,
-               title: "View SPC POA  ",
-               link: "/admin/SPCPOAadminView",
-             },
+              icon: ArrowBigRight,
+              title: "View SPC POA  ",
+              link: "/admin/SPCPOAadminView",
+            },
             // {
             //   type: "sub-module",
             //   icon: ArrowBigRight,
@@ -545,6 +545,23 @@ export const getSidebarItems = (user) => {
             },
           ],
         },
+
+        // Blogs
+
+        {
+          type: "module",
+          title: "Blogs",
+          submodules: [
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "All blogs",
+              link: "/admin/superadmin/blogs",
+            },
+            
+          ],
+        },
+
         {
           type: "module",
           title: "Approvals",

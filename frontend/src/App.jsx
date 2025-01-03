@@ -191,6 +191,8 @@ import TrainingMaterialForm from "./components/admin/soepr/trainingMaterial/Trai
 import TrainingMaterials from "./Pages/TrainingMaterial/TrainingMaterials";
 import Soeprpoaview from "./components/admin/soepr/approvals/soeprpoaview";
 import Poa1srcApprovalData from "./components/admin/soepr/approvals/soeprsrconsultantpoaview";
+import AllBlogs from "./components/admin/blogs/AllBlogs";
+import SuperBlogDetails from "./components/admin/blogs/SuperBlogDetails";
 
 
 
@@ -255,8 +257,11 @@ function App() {
           <Route path="/staff-details" element={<StaffTablePage />} />
           <Route path="/GramSabha" element={<GramSabhaPage />} />
           <Route path="/soepr/achievements" element={<BlogPosts />} />
-          <Route path="/soepr/training-materials" element={<TrainingMaterials />} />
-          
+          <Route
+            path="/soepr/training-materials"
+            element={<TrainingMaterials />}
+          />
+
           <Route path="/blog/:id" element={<BlogDetails />} />
 
           <Route path="/GramSabha" element={<GramSabhaPage />} />
@@ -304,7 +309,10 @@ function App() {
             <Route path="soepr/plan-of-action" element={<POA />} />
             <Route path="soepr/POA1" element={<POA1 />} />
             <Route path="soepr/srcapprovals" element={<Soeprpoaview />} />
-            <Route path="soepr/SirdPRDapprovals" element={<Poa1srcApprovalData />} />
+            <Route
+              path="soepr/SirdPRDapprovals"
+              element={<Poa1srcApprovalData />}
+            />
             <Route path="soepr/POAreport" element={<PoaReportcount />} />
             <Route path="soepr/leave" element={<SoeprLeaveUpdateForm />} />
             <Route path="soepr/tour" element={<SoeprTourUpdateForm />} />
@@ -383,6 +391,9 @@ function App() {
               path="action/soepr/superadmin"
               element={<SoeprWiseKpiApprovalList />}
             />
+
+            <Route path="superadmin/blogs" element={<AllBlogs />} />
+            <Route path="superadmin/blog/:id" element={<SuperBlogDetails />} />
 
             <Route path="master-states" element={<Masters item="state" />} />
             <Route
