@@ -162,12 +162,12 @@ export const getSidebarItems = (user) => {
             title: "POA2",
             link: "/admin/soepr/POA2",
           },
-        {
-            type: "sub-module",
-            icon: ArrowBigRight,
-            title: "POA2(Decembertemp)",
-            link: "/admin/soepr/poa2temp",
-          },
+        // {
+        //     type: "sub-module",
+        //     icon: ArrowBigRight,
+        //     title: "POA2(Decembertemp)",
+        //     link: "/admin/soepr/poa2temp",
+        //   },
         ],
       },
       {
@@ -232,12 +232,12 @@ export const getSidebarItems = (user) => {
             title: "POA2",
             link: "/admin/soepr/POA2",
           },
-           {
-            type: "sub-module",
-            icon: ArrowBigRight,
-            title: "POA2(December temp)",
-            link: "/admin/soepr/poa2temp",
-          },
+          //  {
+          //   type: "sub-module",
+          //   icon: ArrowBigRight,
+          //   title: "POA2(December temp)",
+          //   link: "/admin/soepr/poa2temp",
+          // },
         ],
       },
       {
@@ -854,11 +854,44 @@ export const getSidebarItems = (user) => {
             },
           ],
         },
+        {
+          type: "module",
+          icon: ArrowBigRight,
+          title: "temp",
+          submodules: [
+           
+           
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "POA1",
+              link: "/admin/yf/POA1temp",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "POA2",
+              link: "/admin/yf/POA2temp",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "POA3",
+              link: "/admin/yf/POA3/aug",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "POA4",
+              link: "/admin/yf/POA4/aug",
+            },
+          ],
+        },
 
         {
           type: "module",
           icon: ArrowBigRight,
-          title: "Action",
+          title: "Approval Status",
           submodules: [
             {
               type: "sub-module",
@@ -901,7 +934,7 @@ export const getSidebarItems = (user) => {
         {
           type: "module",
           icon: ArrowBigRight,
-          title: "Young Fellow",
+          title: "KPIs & Uploads",
           submodules: [
             {
               type: "sub-module",

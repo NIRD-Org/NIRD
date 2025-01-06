@@ -193,6 +193,8 @@ import Soeprpoaview from "./components/admin/soepr/approvals/soeprpoaview";
 import Poa1srcApprovalData from "./components/admin/soepr/approvals/soeprsrconsultantpoaview";
 import AllBlogs from "./components/admin/blogs/AllBlogs";
 import SuperBlogDetails from "./components/admin/blogs/SuperBlogDetails";
+import YFPoa1Formtemp from "./components/admin/young-fellow/Poa/YFPoa1FormAug";
+import YFPoa2Formtemp from "./components/admin/young-fellow/Poa/YFPoa2FormAug";
 
 
 
@@ -339,14 +341,12 @@ function App() {
             <Route path="yf/POA2" element={<YFPoa2Form />} />
             <Route path="yf/POA3" element={<YFPoa3Form />} />
             <Route path="yf/POA4" element={<YFPoa4Form />} />
-            {/* <Route path="yf/POA1/aug" element={<YFPoa1FormAug />} />
-            <Route path="yf/POA2/aug" element={<YFPoa2FormAug />} />
+            <Route path="yf/POA1temp" element={<YFPoa1Formtemp />} />
+            <Route path="yf/POA2temp" element={<YFPoa2Formtemp />} />
             <Route path="yf/POA3/aug" element={<YFPoa3FormAug />} />
             <Route path="yf/POA4/aug" element={<YFPoa4FormAug />} />
-            <Route path="yf/POA1/sep" element={<YFPoa1FormSep />} />
-            <Route path="yf/POA2/sep" element={<YFPoa2FormSep />} />
-            <Route path="yf/POA3/sep" element={<YFPoa3FormSep />} />
-            <Route path="yf/POA4/sep" element={<YFPoa4FormSep />} /> */}
+           
+          
             <Route path="yf/poa-report" element={<YfPoaReport />} />
 
             {/* SPC POA */}

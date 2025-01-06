@@ -10,21 +10,7 @@ import { useYfLocation } from "@/components/hooks/useYfLocation";
 import { PlusCircle } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 import { FaRegTimesCircle } from "react-icons/fa";
-
-const months = [
-  { name: "January", days: 31 },
-  { name: "February", days: 28 }, // Adjust for leap years if needed
-  { name: "March", days: 31 },
-  { name: "April", days: 30 },
-  { name: "May", days: 31 },
-  { name: "June", days: 30 },
-  { name: "July", days: 31 },
-  { name: "August", days: 31 },
-  { name: "September", days: 30 },
-  { name: "October", days: 31 },
-  { name: "November", days: 30 },
-  { name: "December", days: 31 },
-];
+import { showAlert } from "@/utils/showAlert";
 
 // Updated KPI Themes with their respective Activities
 const kpiThemes = {
@@ -130,8 +116,9 @@ const kpiThemes = {
   "Others(100 words Only)": ["Others"],
   Tour: ["Tour"],
 };
-// const YFPoa1FormAug = ({ update }) => {
-//   const currentMonthIndex = 7;
+
+// const YFPoa1Form = ({ update }) => {
+//   const currentMonthIndex = new Date().getMonth();
 //   const currentYear = new Date().getFullYear();
 //   const { id: poalId } = useParams();
 //   const [selectedStates, setSelectedStates] = useState({});
@@ -141,25 +128,16 @@ const kpiThemes = {
 //   const [selectedGps, setSelectedGps] = useState({});
 //   const [selectedBlocks, setSelectedBlocks] = useState({});
 //   const [formDataState, setFormData] = useState([]);
+
 //   const selectedMonth = months[currentMonthIndex];
 
-//   const [states, setStates] = useState();
-//   const [allDistricts, setAllDistricts] = useState();
-//   const [allBlocks, setAllBlocks] = useState();
-//   const [allGps, setAllGps] = useState();
-
 //   const lastDayOfWeek = 7;
-//   function getAugustDate(day, year = new Date().getFullYear()) {
-//     return new Date(Date.UTC(year, 7, day));
-//   }
-
-//   const augustDate = getAugustDate(14, 2024);
 
 //   useEffect(() => {
 //     if (update) {
 //       const fetchPoalData = async () => {
 //         try {
-//           const response = await API.get(`/api/v1/poa1/get/${poalId}`);
+//           const response = await API.get(`/api/v1/yf-poa1/get/${poalId}`);
 //           setFormData(response.data.data.poaData);
 //         } catch (error) {
 //           console.error("Error fetching POA data:", error);
@@ -170,25 +148,6 @@ const kpiThemes = {
 //     }
 //   }, [poalId, update]);
 
-//   // Get the yf locations
-
-//   useEffect(() => {
-//     const fetchUserLocations = async () => {
-//       try {
-//         const response = await API.get("/api/v1/user-location");
-//         const data = response.data.data;
-//         setAllDistricts(data.districts);
-//         setAllBlocks(data.blocks);
-//         setAllGps(data.gps);
-//         setStates(data.states);
-//       } catch (error) {
-//         console.log(error);
-//       }
-//     };
-
-//     fetchUserLocations();
-//   }, []);
-
 //   const getDaysInMonth = () =>
 //     Array.from({ length: lastDayOfWeek }, (_, i) => i + 1);
 
@@ -196,14 +155,6 @@ const kpiThemes = {
 //     const date = new Date(`${selectedMonth.name} ${day}, ${currentYear}`);
 //     return date.toLocaleDateString("en-IN", { weekday: "long" });
 //   };
-
-//   // FOr adding new rows (Multiple rows)
-//   const [rows, setRows] = useState(() => {
-//     return getDaysInMonth().map((day) => ({
-//       id: uuidv4(),
-//       date: day,
-//     }));
-//   });
 
 //   const formatIndianDate = (day) => {
 //     const date = new Date(`${selectedMonth.name} ${day}, ${currentYear}`);
@@ -254,163 +205,66 @@ const kpiThemes = {
 //     }));
 //   };
 
-//   const handleAddRow = (clickedDay) => {
-//     setFormRows((prevRows) => {
-//       // Find the index of the clicked row
-//       const index = prevRows.findIndex((row) => row.date === clickedDay);
-
-//       // Create a new row with the same date but a unique ID
-//       const newRow = { id: uuidv4(), date: clickedDay };
-
-//       // Insert the new row immediately after the clicked row
-//       const newRows = [...prevRows];
-//       newRows.splice(index + 1, 0, newRow);
-
-//       return newRows;
-//     });
-//   };
-
-//   // const handleSubmit = async () => {
-//   //   try {
-//   //     const formDataToSubmit = new FormData();
-
-//   //     Object.keys(selectedKpiTheme).forEach((day) => {
-//   //       formDataToSubmit.append(`poaData[${day}][date]`, formatIndianDate(day));
-//   //       formDataToSubmit.append(`poaData[${day}][weekday]`, getWeekDay(day));
-//   //       formDataToSubmit.append(
-//   //         `poaData[${day}][kpi_theme]`,
-//   //         selectedKpiTheme[day]
-//   //       );
-//   //       formDataToSubmit.append(
-//   //         `poaData[${day}][activity]`,
-//   //         selectedActivities[day]
-//   //       );
-//   //       formDataToSubmit.append(
-//   //         `poaData[${day}][plannedEvent]`,
-//   //         formDataState[day]?.plannedEvent || ""
-//   //       );
-//   //       formDataToSubmit.append(`poaData[${day}][poaType]`, "poa1");
-//   //       formDataToSubmit.append(
-//   //         `poaData[${day}][state_id]`,
-//   //         selectedStates[day]
-//   //       );
-//   //       formDataToSubmit.append(
-//   //         `poaData[${day}][dist_id]`,
-//   //         selectedDistricts[day] || ""
-//   //       );
-//   //       formDataToSubmit.append(
-//   //         `poaData[${day}][block_id]`,
-//   //         selectedBlocks[day] || ""
-//   //       );
-//   //       formDataToSubmit.append(
-//   //         `poaData[${day}][gp_id]`,
-//   //         selectedGps[day] || ""
-//   //       );
-//   //       formDataToSubmit.append(
-//   //         `poaData[${day}][achievements]`,
-//   //         formDataState[day]?.achievements || ""
-//   //       );
-//   //       formDataToSubmit.append(
-//   //         `poaData[${day}][tentativeTarget]`,
-//   //         formDataState[day]?.tentativeTarget || ""
-//   //       );
-
-//   //       if (formDataState[day]?.photo) {
-//   //         formDataToSubmit.append(
-//   //           `poaData[${day}][photo]`,
-//   //           formDataState[day].photo
-//   //         );
-//   //       }
-//   //       formDataToSubmit.append(
-//   //         `poaData[${day}][remarks]`,
-//   //         formDataState[day]?.remarks || ""
-//   //       );
-//   //     });
-
-//   //     await API.post(
-//   //       `/api/v1/yf-poa1/create?created_at=${augustDate}`,
-//   //       formDataToSubmit,
-//   //       {
-//   //         headers: { "Content-Type": "multipart/form-data" },
-//   //       }
-//   //     );
-
-//   //     toast.success("Form submitted successfully!");
-//   //   } catch (error) {
-//   //     console.error("Error submitting form:", error);
-//   //     toast.error("Failed to submit form.");
-//   //   }
-//   // };
-
 //   const handleSubmit = async () => {
 //     try {
 //       const formDataToSubmit = new FormData();
 
-//       formRows.forEach((row) => {
-//         const dayData = formDataState[row.id] || {};
+//       Object.keys(selectedKpiTheme).forEach((day) => {
+//         formDataToSubmit.append(`poaData[${day}][date]`, formatIndianDate(day));
+//         formDataToSubmit.append(`poaData[${day}][weekday]`, getWeekDay(day));
 //         formDataToSubmit.append(
-//           `poaData[${row.date}][date]`,
-//           formatIndianDate(row.date)
+//           `poaData[${day}][kpi_theme]`,
+//           selectedKpiTheme[day]
 //         );
 //         formDataToSubmit.append(
-//           `poaData[${row.date}][weekday]`,
-//           getWeekDay(row.date)
+//           `poaData[${day}][activity]`,
+//           selectedActivities[day]
 //         );
 //         formDataToSubmit.append(
-//           `poaData[${row.date}][kpi_theme]`,
-//           dayData.kpiTheme || ""
+//           `poaData[${day}][plannedEvent]`,
+//           formDataState[day]?.plannedEvent || ""
+//         );
+//         formDataToSubmit.append(`poaData[${day}][poaType]`, "poa1");
+//         formDataToSubmit.append(
+//           `poaData[${day}][state_id]`,
+//           selectedStates[day]
 //         );
 //         formDataToSubmit.append(
-//           `poaData[${row.date}][activity]`,
-//           dayData.activity || ""
+//           `poaData[${day}][dist_id]`,
+//           selectedDistricts[day] || ""
 //         );
 //         formDataToSubmit.append(
-//           `poaData[${row.date}][plannedEvent]`,
-//           dayData.plannedEvent || ""
-//         );
-//         formDataToSubmit.append(`poaData[${row.date}][poaType]`, "poa1");
-//         formDataToSubmit.append(
-//           `poaData[${row.date}][state_id]`,
-//           dayData.state || ""
+//           `poaData[${day}][block_id]`,
+//           selectedBlocks[day] || ""
 //         );
 //         formDataToSubmit.append(
-//           `poaData[${row.date}][dist_id]`,
-//           dayData.district || ""
+//           `poaData[${day}][gp_id]`,
+//           selectedGps[day] || ""
 //         );
 //         formDataToSubmit.append(
-//           `poaData[${row.date}][block_id]`,
-//           dayData.block || ""
+//           `poaData[${day}][achievements]`,
+//           formDataState[day]?.achievements || ""
 //         );
 //         formDataToSubmit.append(
-//           `poaData[${row.date}][gp_id]`,
-//           dayData.gp || ""
-//         );
-//         formDataToSubmit.append(
-//           `poaData[${row.date}][achievements]`,
-//           dayData.achievements || ""
-//         );
-//         formDataToSubmit.append(
-//           `poaData[${row.date}][tentativeTarget]`,
-//           dayData.tentativeTarget || ""
+//           `poaData[${day}][tentativeTarget]`,
+//           formDataState[day]?.tentativeTarget || ""
 //         );
 
-//         if (dayData.photo) {
-//           formDataToSubmit.append(`poaData[${row.date}][photo]`, dayData.photo);
+//         if (formDataState[day]?.photo) {
+//           formDataToSubmit.append(
+//             `poaData[${day}][photo]`,
+//             formDataState[day].photo
+//           );
 //         }
-
 //         formDataToSubmit.append(
-//           `poaData[${row.date}][remarks]`,
-//           dayData.remarks || ""
+//           `poaData[${day}][remarks]`,
+//           formDataState[day]?.remarks || ""
 //         );
 //       });
 
-//       await API.post(
-//         `/api/v1/yf-poa1/create?created_at=${augustDate}`,
-//         formDataToSubmit,
-//         {
-//           headers: { "Content-Type": "multipart/form-data" },
-//         }
-//       );
+//       await API.post("/api/v1/yf-poa1/create", formDataToSubmit, {
+//         headers: { "Content-Type": "multipart/form-data" },
+//       });
 
 //       toast.success("Form submitted successfully!");
 //     } catch (error) {
@@ -433,9 +287,8 @@ const kpiThemes = {
 //       >
 //         <thead>
 //           <tr>
-//             <th></th>
 //             <th>Date</th>
-//             <th>Weekday</th>
+//             <th>Day</th>
 //             <th>KPI Theme</th>
 //             <th>Activity</th>
 //             <th>Planned Event</th>
@@ -443,44 +296,40 @@ const kpiThemes = {
 //             <th>State</th>
 //             <th>District</th>
 //             <th>Block</th>
+
 //             <th>Gram Panchayat</th>
 //             <th>Achievements</th>
-//             <th>Upload Photo</th>
-//             <th>Remarks/Reason for Failure</th>
+//             <th>Photo</th>
+//             <th>Remarks</th>
 //           </tr>
 //         </thead>
 //         <tbody>
-//           {rows.map((day, idx) => {
-//             const dayData = formDataState[day.id] || {};
-//             const districts = allDistricts?.filter(
-//               (dist) => dist.state_id === dayData.state
-//             );
-//             const blocks = allBlocks?.filter(
-//               (block) =>
-//                 block.state_id === dayData.state &&
-//                 block.dist_id === dayData.district
-//             );
-//             const gps = allGps?.filter(
-//               (gp) =>
-//                 gp.state_id === dayData.state &&
-//                 gp.dist_id === dayData.district &&
-//                 gp.block_id === dayData.block
-//             );
+//           {getDaysInMonth().map((day, idx) => {
+//             const { yfState: states } = useYfLocation({
+//               state_id: selectedStates[day],
+//             });
+//             const { yfDist: districts } = useYfLocation({
+//               state_id: selectedStates[day],
+//             });
+//             const { yfBlock: blocks } = useYfLocation({
+//               state_id: selectedStates[day],
+//               dist_id: selectedDistricts[day],
+//             });
+//             const { yfGp: gps } = useYfLocation({
+//               state_id: selectedStates[day],
+//               dist_id: selectedDistricts[day],
+//               block_id: selectedBlocks[day],
+//             });
 
 //             return (
 //               <tr key={idx}>
-//                 <td>
-//                   <button onClick={() => handleAddRow(day.date)}>
-//                     <PlusCircle className="text-primary text-lg" />
-//                   </button>
-//                 </td>
-//                 <td>{formatIndianDate(day.date)}</td>
-//                 <td>{getWeekDay(day.date)}</td>
+//                 <td>{formatIndianDate(day)}</td>
+//                 <td>{getWeekDay(day)}</td>
 //                 <td>
 //                   <select
 //                     style={{ width: "100%" }}
-//                     value={dayData.kpiTheme}
-//                     onChange={(e) => handleKpiThemeChange(day.id, e.target.value)}
+//                     value={selectedKpiTheme[day] || ""}
+//                     onChange={(e) => handleKpiThemeChange(day, e.target.value)}
 //                   >
 //                     <option value="">Select KPI Theme</option>
 //                     {Object.keys(kpiThemes).map((theme) => (
@@ -493,8 +342,8 @@ const kpiThemes = {
 //                 <td>
 //                   <select
 //                     style={{ width: "100%" }}
-//                     value={dayData.activity}
-//                     onChange={(e) => handleActivityChange(day.id, e.target.value)}
+//                     value={selectedActivities[day] || ""}
+//                     onChange={(e) => handleActivityChange(day, e.target.value)}
 //                     disabled={!selectedKpiTheme[day]}
 //                   >
 //                     <option value="">Select Activity</option>
@@ -513,9 +362,9 @@ const kpiThemes = {
 //                     type="text"
 //                     style={{ width: "100%" }}
 //                     onChange={(e) =>
-//                       handleInputChange(day.id, "plannedEvent", e.target.value)
+//                       handleInputChange(day, "plannedEvent", e.target.value)
 //                     }
-//                     value={dayData.plannedEvent || ""}
+//                     value={formDataState[day]?.plannedEvent || ""}
 //                   />
 //                 </td>
 //                 <td>
@@ -523,16 +372,16 @@ const kpiThemes = {
 //                     type="text"
 //                     style={{ width: "100%" }}
 //                     onChange={(e) =>
-//                       handleInputChange(day.id, "tentativeTarget", e.target.value)
+//                       handleInputChange(day, "tentativeTarget", e.target.value)
 //                     }
-//                     value={dayData.tentativeTarget || ""}
+//                     value={formDataState[day]?.tentativeTarget || ""}
 //                   />
 //                 </td>
 //                 <td>
 //                   <select
 //                     className="w-fit px-2 py-1 rounded min-w-40"
 //                     value={selectedStates[day] || ""}
-//                     onChange={(e) => handleStateChange(day.id, e.target.value)}
+//                     onChange={(e) => handleStateChange(day, e.target.value)}
 //                     required
 //                   >
 //                     <option value="">Select State</option>
@@ -541,8 +390,7 @@ const kpiThemes = {
 //                         <option key={state.id} value={state.id}>
 //                           {state.name}
 //                         </option>
-//                       ))}
-//                     <option value="None">None</option>
+//                       ))}<option value="None">None</option>
 //                   </select>
 //                 </td>
 //                 <td>
@@ -571,8 +419,7 @@ const kpiThemes = {
 //                       <option key={block.id} value={block.id}>
 //                         {block.name}
 //                       </option>
-//                     ))}
-//                     <option value="None">None</option>
+//                     ))}<option value="None">None</option>
 //                   </select>
 //                 </td>
 //                 {/* GP Selection */}
@@ -587,8 +434,7 @@ const kpiThemes = {
 //                       <option key={gp.id} value={gp.id}>
 //                         {gp.name}
 //                       </option>
-//                     ))}
-//                     <option value="None">None</option>
+//                     ))}<option value="None">None</option>
 //                   </select>
 //                 </td>
 //                 <td>
@@ -624,23 +470,36 @@ const kpiThemes = {
 //           })}
 //         </tbody>
 //       </Table>
-//       <Button
-//         onClick={handleSubmit}
-//         className="primary-button float-right mt-4"
-//       >
-//         Submit
-//       </Button>
+//       <div style={{ marginTop: "20px" }}>
+//         <Button onClick={handleSubmit}>Submit</Button>
+//       </div>
 //     </div>
 //   );
 // };
 
-const YFPoa1FormAug = ({ update }) => {
-  const currentMonthIndex = 7; // August
-  const currentYear = new Date().getFullYear();
+const YFPoa1Formtemp = ({ update }) => {
+  const currentMonthIndex = new Date().getMonth();
+  const currentYear = 2024;
+
+  const months = [
+    { name: "January", days: 31 },
+    { name: "February", days: currentYear % 4 === 0 ? 29 : 28 }, // Leap year check
+    { name: "March", days: 31 },
+    { name: "April", days: 30 },
+    { name: "May", days: 31 },
+    { name: "June", days: 30 },
+    { name: "July", days: 31 },
+    { name: "August", days: 31 },
+    { name: "September", days: 30 },
+    { name: "October", days: 31 },
+    { name: "November", days: 30 },
+    { name: "December", days: 31 },
+  ];
+
   const { id: poalId } = useParams();
   const [formDataState, setFormData] = useState([]);
   const [rows, setRows] = useState([]);
-  const selectedMonth = months[currentMonthIndex];
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const [loading, setLoading] = useState(false);
 
   const [states, setStates] = useState([]);
@@ -651,7 +510,7 @@ const YFPoa1FormAug = ({ update }) => {
   const lastDayOfWeek = 7;
 
   function getAugustDate(day, year = new Date().getFullYear()) {
-    return new Date(Date.UTC(year, 7, day));
+    return new Date(Date.UTC(year, selectedMonth, day));
   }
 
   const augustDate = getAugustDate(14, 2024);
@@ -688,18 +547,18 @@ const YFPoa1FormAug = ({ update }) => {
     fetchUserLocations();
   }, []);
 
-  const getDaysInMonth = () =>
-    Array.from({ length: lastDayOfWeek }, (_, i) => i + 1);
-
   const getWeekDay = (day) => {
-    const date = new Date(`${selectedMonth.name} ${day}, ${currentYear}`);
+    const date = new Date(currentYear, selectedMonth, day);
     return date.toLocaleDateString("en-IN", { weekday: "long" });
   };
 
   const formatIndianDate = (day) => {
-    const date = new Date(`${selectedMonth.name} ${day}, ${currentYear}`);
+    const date = new Date(currentYear, selectedMonth, day);
     return date.toLocaleDateString("en-IN");
   };
+
+  const getDaysInMonth = () =>
+    Array.from({ length: lastDayOfWeek }, (_, i) => i + 1);
 
   // Initialize rows for the table
   useEffect(() => {
@@ -859,7 +718,7 @@ const YFPoa1FormAug = ({ update }) => {
         }
       );
 
-      toast.success("Form submitted successfully!");
+      showAlert("Form submitted successfully!");
     } catch (error) {
       console.error("Error submitting form:", error);
       toast.error("Failed to submit form.");
@@ -876,7 +735,23 @@ const YFPoa1FormAug = ({ update }) => {
       <AdminHeader>
         First Weekly Plan Of Action - Month : {selectedMonth.name} {currentYear}
       </AdminHeader>
-
+      <div className="mb-4">
+        <label htmlFor="month-select" className="mr-2">
+          Select Month:
+        </label>
+        <select
+          id="month-select"
+          value={selectedMonth}
+          onChange={(e) => setSelectedMonth(parseInt(e.target.value, 10))}
+          className="p-2 rounded"
+        >
+          {months.map((month, index) => (
+            <option key={index} value={index}>
+              {month.name}
+            </option>
+          ))}
+        </select>
+      </div>
       <Table
         border="1"
         cellPadding="3"
@@ -1007,7 +882,7 @@ const YFPoa1FormAug = ({ update }) => {
                       <option key={state.id} value={state.id}>
                         {state.name}
                       </option>
-                    ))}
+                    ))}<option> NIRDPR </option>
                   </select>
                 </td>
                 <td>
@@ -1022,7 +897,9 @@ const YFPoa1FormAug = ({ update }) => {
                       <option key={dist.id} value={dist.id}>
                         {dist.name}
                       </option>
-                    ))}
+                    ))} 
+                    <option> SIRD </option>
+                    <option> None </option>
                   </select>
                 </td>
                 <td>
@@ -1037,6 +914,8 @@ const YFPoa1FormAug = ({ update }) => {
                         {block.name}
                       </option>
                     ))}
+                   <option> SIRD </option>
+                    <option> None </option>
                   </select>
                 </td>
                 <td>
@@ -1050,11 +929,12 @@ const YFPoa1FormAug = ({ update }) => {
                       <option key={gp.id} value={gp.id}>
                         {gp.name}
                       </option>
-                    ))}
+                      
+                    ))}<option> None </option>
                   </select>
                 </td>
                 <td>
-                  <input
+                  <input disabled
                     type="text"
                     style={{ width: "100%" }}
                     onChange={(e) =>
@@ -1064,7 +944,7 @@ const YFPoa1FormAug = ({ update }) => {
                   />
                 </td>
                 <td>
-                  <input
+                  <input disabled
                     type="file"
                     onChange={(e) =>
                       handleInputChange(day.id, "photo", e.target.files[0])
@@ -1072,7 +952,7 @@ const YFPoa1FormAug = ({ update }) => {
                   />
                 </td>
                 <td>
-                  <input
+                  <input disabled
                     type="text"
                     className="border rounded border-gray-300"
                     style={{ width: "100%" }}
@@ -1098,4 +978,4 @@ const YFPoa1FormAug = ({ update }) => {
   );
 };
 
-export default YFPoa1FormAug;
+export default YFPoa1Formtemp;

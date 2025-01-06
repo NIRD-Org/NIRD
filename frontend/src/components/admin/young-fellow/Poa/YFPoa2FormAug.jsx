@@ -10,21 +10,7 @@ import { useYfLocation } from "@/components/hooks/useYfLocation";
 import { PlusCircle } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 import { FaRegTimesCircle } from "react-icons/fa";
-
-const months = [
-  { name: "January", days: 31 },
-  { name: "February", days: 28 }, // Adjust for leap years if needed
-  { name: "March", days: 31 },
-  { name: "April", days: 30 },
-  { name: "May", days: 31 },
-  { name: "June", days: 30 },
-  { name: "July", days: 31 },
-  { name: "August", days: 31 },
-  { name: "September", days: 30 },
-  { name: "October", days: 31 },
-  { name: "November", days: 30 },
-  { name: "December", days: 31 },
-];
+import { showAlert } from "@/utils/showAlert";
 
 // Updated KPI Themes with their respective Activities
 const kpiThemes = {
@@ -131,8 +117,8 @@ const kpiThemes = {
   Tour: ["Tour"],
 };
 
-// const YFPoa2FormAug = ({ update }) => {
-//   const currentMonthIndex = 7;
+// const YFPoa2Formtemp = ({ update }) => {
+//   const currentMonthIndex = new Date().getMonth();
 //   const currentYear = new Date().getFullYear();
 //   const { id: poalId } = useParams();
 //   const [selectedStates, setSelectedStates] = useState({});
@@ -147,11 +133,6 @@ const kpiThemes = {
 //   // Define the start and end of the second week
 //   const secondWeekStart = 8;
 //   const secondWeekEnd = 14;
-//   function getAugustDate(day, year = new Date().getFullYear()) {
-//     return new Date(Date.UTC(year, 7, day));
-//   }
-
-//   const augustDate = getAugustDate(14, 2024);
 
 //   useEffect(() => {
 //     if (update) {
@@ -283,13 +264,9 @@ const kpiThemes = {
 //         );
 //       });
 
-//       await API.post(
-//         `/api/v1/yf-poa1/create?created_at=${augustDate}`,
-//         formDataToSubmit,
-//         {
-//           headers: { "Content-Type": "multipart/form-data" },
-//         }
-//       );
+//       await API.post("/api/v1/yf-poa1/create", formDataToSubmit, {
+//         headers: { "Content-Type": "multipart/form-data" },
+//       });
 
 //       toast.success("Form submitted successfully!");
 //     } catch (error) {
@@ -414,8 +391,7 @@ const kpiThemes = {
 //                         <option key={state.id} value={state.id}>
 //                           {state.name}
 //                         </option>
-//                       ))}
-//                     <option value="None">None</option>
+//                       ))}<option value="None">None</option>
 //                   </select>
 //                 </td>
 //                 <td>
@@ -428,8 +404,7 @@ const kpiThemes = {
 //                       <option key={dist.id} value={dist.id}>
 //                         {dist.name}
 //                       </option>
-//                     ))}
-//                     <option value="None">None</option>
+//                     ))}<option value="None">None</option>
 //                   </select>
 //                 </td>
 //                 {/* Block Selection */}
@@ -444,8 +419,7 @@ const kpiThemes = {
 //                       <option key={block.id} value={block.id}>
 //                         {block.name}
 //                       </option>
-//                     ))}
-//                     <option value="None">None</option>
+//                     ))}<option value="None">None</option>
 //                   </select>
 //                 </td>
 //                 {/* GP Selection */}
@@ -460,11 +434,10 @@ const kpiThemes = {
 //                       <option key={gp.id} value={gp.id}>
 //                         {gp.name}
 //                       </option>
-//                     ))}
-//                     <option value="None">None</option>
+//                     ))}<option value="None">None</option>
 //                   </select>
 //                 </td>
-//                 <td>
+//                 {/*<td>
 //                   <input
 //                     type="text"
 //                     style={{ width: "100%" }}
@@ -495,7 +468,7 @@ const kpiThemes = {
 //                     }
 //                     value={formDataState[day]?.remarks || ""}
 //                   />
-//                 </td>
+//                 </td>*/}
 //               </tr>
 //             );
 //           })}
@@ -512,13 +485,28 @@ const kpiThemes = {
 //   );
 // };
 
-const YFPoa2FormAug = ({ update }) => {
-  const currentMonthIndex = 7; // August
-  const currentYear = new Date().getFullYear();
+const YFPoa2Formtemp = ({ update }) => {
+  const currentYear = 2024;
+
+  const months = [
+    { name: "January", days: 31 },
+    { name: "February", days: currentYear % 4 === 0 ? 29 : 28 }, // Leap year check
+    { name: "March", days: 31 },
+    { name: "April", days: 30 },
+    { name: "May", days: 31 },
+    { name: "June", days: 30 },
+    { name: "July", days: 31 },
+    { name: "August", days: 31 },
+    { name: "September", days: 30 },
+    { name: "October", days: 31 },
+    { name: "November", days: 30 },
+    { name: "December", days: 31 },
+  ];
+
   const { id: poalId } = useParams();
   const [formDataState, setFormData] = useState([]);
   const [rows, setRows] = useState([]);
-  const selectedMonth = months[currentMonthIndex];
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const [loading, setLoading] = useState(false);
 
   const [states, setStates] = useState([]);
@@ -530,7 +518,7 @@ const YFPoa2FormAug = ({ update }) => {
   const weekEnd = 14;
 
   function getAugustDate(day, year = new Date().getFullYear()) {
-    return new Date(Date.UTC(year, 7, day));
+    return new Date(Date.UTC(year, selectedMonth, day));
   }
 
   const augustDate = getAugustDate(14, 2024);
@@ -571,12 +559,12 @@ const YFPoa2FormAug = ({ update }) => {
     Array.from({ length: end - start + 1 }, (_, i) => start + i);
 
   const getWeekDay = (day) => {
-    const date = new Date(`${selectedMonth.name} ${day}, ${currentYear}`);
+    const date = new Date(currentYear, selectedMonth, day);
     return date.toLocaleDateString("en-IN", { weekday: "long" });
   };
 
   const formatIndianDate = (day) => {
-    const date = new Date(`${selectedMonth.name} ${day}, ${currentYear}`);
+    const date = new Date(currentYear, selectedMonth, day);
     return date.toLocaleDateString("en-IN");
   };
 
@@ -656,6 +644,7 @@ const YFPoa2FormAug = ({ update }) => {
   };
 
   // Clear a particular row
+
   const handleClearRow = (id) => {
     // Remove the row from the 'rows' state by filtering it out
     const updatedRows = rows.filter((row) => row.id !== id);
@@ -737,7 +726,7 @@ const YFPoa2FormAug = ({ update }) => {
         }
       );
 
-      toast.success("Form submitted successfully!");
+      showAlert("Form submitted successfully!");
     } catch (error) {
       console.error("Error submitting form:", error);
       toast.error("Failed to submit form.");
@@ -755,6 +744,24 @@ const YFPoa2FormAug = ({ update }) => {
         Second Weekly Plan Of Action - Month : {selectedMonth.name}{" "}
         {currentYear}
       </AdminHeader>
+
+      <div className="mb-4">
+        <label htmlFor="month-select" className="mr-2">
+          Select Month:
+        </label>
+        <select
+          id="month-select"
+          value={selectedMonth}
+          onChange={(e) => setSelectedMonth(parseInt(e.target.value, 10))}
+          className="p-2 rounded"
+        >
+          {months.map((month, index) => (
+            <option key={index} value={index}>
+              {month.name}
+            </option>
+          ))}
+        </select>
+      </div>
 
       <Table
         border="1"
@@ -886,7 +893,7 @@ const YFPoa2FormAug = ({ update }) => {
                       <option key={state.id} value={state.id}>
                         {state.name}
                       </option>
-                    ))}
+                    ))}<option> NIRDPR </option>
                   </select>
                 </td>
                 <td>
@@ -901,7 +908,8 @@ const YFPoa2FormAug = ({ update }) => {
                       <option key={dist.id} value={dist.id}>
                         {dist.name}
                       </option>
-                    ))}
+                    ))}  <option> SIRD </option>
+                    <option> None </option>
                   </select>
                 </td>
                 <td>
@@ -915,7 +923,8 @@ const YFPoa2FormAug = ({ update }) => {
                       <option key={block.id} value={block.id}>
                         {block.name}
                       </option>
-                    ))}
+                    ))}  <option> SIRD </option>
+                    <option> None </option>
                   </select>
                 </td>
                 <td>
@@ -929,11 +938,12 @@ const YFPoa2FormAug = ({ update }) => {
                       <option key={gp.id} value={gp.id}>
                         {gp.name}
                       </option>
-                    ))}
+                    ))}  
+                    <option> None </option>
                   </select>
                 </td>
                 <td>
-                  <input
+                  <input disabled
                     type="text"
                     style={{ width: "100%" }}
                     onChange={(e) =>
@@ -943,7 +953,7 @@ const YFPoa2FormAug = ({ update }) => {
                   />
                 </td>
                 <td>
-                  <input
+                  <input disabled
                     type="file"
                     onChange={(e) =>
                       handleInputChange(day.id, "photo", e.target.files[0])
@@ -951,7 +961,7 @@ const YFPoa2FormAug = ({ update }) => {
                   />
                 </td>
                 <td>
-                  <input
+                  <input disabled
                     type="text"
                     className="border rounded border-gray-300"
                     style={{ width: "100%" }}
@@ -977,4 +987,4 @@ const YFPoa2FormAug = ({ update }) => {
   );
 };
 
-export default YFPoa2FormAug;
+export default YFPoa2Formtemp;
