@@ -83,7 +83,7 @@ const Header = () => {
         { label: "Project Execution Team", to: "/projectstaff" },
         { label: "Project Partners", to: "/KeyPartners" },
         { label: "Themes", to: "/project-themes" },
-        { label: "Young Fellows and Activities", to: "/YFActivities" },
+        { label: "Panchayat Raj Associates and Activities", to: "/YFActivities" },
         { label: "NGO's Associated", to: "/Ngo" },
        {/*} { label: "Institutional Strengthening", to: "/institutional-strengthening" },
         { label: "Indicators and KPIs", to: "/indicators-kpis" },

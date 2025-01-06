@@ -2,22 +2,22 @@ import React, { useState } from "react";
 
 
   const points = [
-    "Young Fellows serve as vital links between Gram Panchayats (GPs) and communities, building trust and encouraging active participation in development initiatives.",
+    "Panchayat Raj Associates (PRA's) serve as vital links between Gram Panchayats (GPs) and communities, building trust and encouraging active participation in development initiatives.",
     "They provide essential training to elected representatives and functionaries, equipping them with skills to strengthen institutional governance.",
-    "Young Fellows gather baseline data, identify gaps, and help GPs make evidence-based decisions to prioritize development needs.",
+    "Panchayat Raj Associates (PRA's) gather baseline data, identify gaps, and help GPs make evidence-based decisions to prioritize development needs.",
     "They guide GPs on adopting transparent practices, ensuring accountability in governance and effective implementation of projects.",
-    "Young Fellows actively facilitate the preparation of Gram Panchayat Development Plans (GPDP) and ensure alignment with Sustainable Development Goals (SDGs).",
+    "Panchayat Raj Associates (PRA's) actively facilitate the preparation of Gram Panchayat Development Plans (GPDP) and ensure alignment with Sustainable Development Goals (SDGs).",
     "They mentor and motivate Panchayat members to organize and conduct vibrant Gram Sabha meetings, fostering inclusive participation.",
-    "Young Fellows support capacity building of Self-Help Groups (SHGs), enhancing livelihoods and reducing poverty in rural areas.",
+    "Panchayat Raj Associates (PRA's) support capacity building of Self-Help Groups (SHGs), enhancing livelihoods and reducing poverty in rural areas.",
     "They act as change agents, introducing modern tools, technologies, and methods to enhance efficiency in governance.",
-    "Young Fellows assist GPs in mobilizing resources, such as government schemes and CSR funding, for infrastructure and welfare projects.",
+    "Panchayat Raj Associates (PRA's) assist GPs in mobilizing resources, such as government schemes and CSR funding, for infrastructure and welfare projects.",
     "Their proactive approach ensures a collaborative environment between various stakeholders, driving sustainable and impactful development."
   ];
 
 
 const sections = [
   {
-    title: "Activities of YF for Institutional Strengthening of GPs",
+    title: "Activities of Panchayat Raj Associates (PRA's) for Institutional Strengthening of GPs",
     activities: [
       "Visiting GP to understand the socio-cultural-economic-political status of the GP areas, acquaint with the ERs and functionaries of the GPs, and to convince them about the purpose of the Project for Creating 250 Model GP Clusters across India.",
       "Visiting GP to understand system of functioning as institutions of self-government – its strengths and limitations, the functioning of Gram Sabha, Ward Sabha, Mahila Sabha, Bal Sabha etc. and check the same with the Registers maintained by the GP.",
@@ -76,7 +76,7 @@ const sections = [
     ],
   },
   {
-    title: "Activities of YF for Poverty Free and Enhanced Livelihoods Villages",
+    title: "Activities of Panchayat Raj Associates (PRA's) for Poverty Free and Enhanced Livelihoods Villages",
     activities: [
       "Assessment of the number of Job card holders and out of them how many have demanded wage employment under MGNREGS.",
       "Assessment of the number of Job card holders having received wage employment under MGNREGS.",
@@ -99,7 +99,7 @@ const sections = [
     ],
   },
   {
-    title: "Activities of YF for Healthy Village",
+    title: "Activities of Panchayat Raj Associates (PRA's) for Healthy Village",
     activities: [
       "Data collection on no. of child deaths (0-59 months) occurred in the GP.",
       "Conduct meetings in the GP to discuss the importance of child health, the risks associated with child deaths and measures to be taken to reduce/prevent child deaths.",
@@ -119,7 +119,7 @@ const sections = [
     ]
   },
   {
-    title: "Activities of YF for Child Friendly Village",
+    title: "Activities of Panchayat Raj Associates (PRA's) for Child Friendly Village",
     activities: [
       "Conduct meetings in the GP to discuss the negative impacts of malnutrition, the risks associated and measures of prevention among children below 5 years of age.",
       "Data collection on no. of malnourished children below 5 years of age in the GP.",
@@ -147,7 +147,7 @@ const sections = [
     
   },
   {
-    title: "Activities of YF for Water Sufficient Village",
+    title: "Activities of Panchayat Raj Associates (PRA's) for Water Sufficient Village",
     activities: [
       "Facilitating the meetings conducted by the Village Water & Sanitation Committee (VWSC)/ Paani Samitis or any related Standing Committee as per JJM guidelines in the GP.",
       "Supporting the preparation of Village Action Plan by the GP & Village Water & Sanitation Committee (VWSC) in the GP.",
@@ -164,7 +164,7 @@ const sections = [
     
     
   }, {
-    title: "Activities of YF for Clean and Green Village",
+    title: "Activities of Panchayat Raj Associates (PRA's) for Clean and Green Village",
     activities: [
       "Facilitating the meetings conducted by the Village Water & Sanitation Committee (VWSC)/ Paani Samitis or any related Standing Committee as per JJM guidelines in the GP.",
       "Facilitating the third-party verification by inter-Block/District Teams after self-declaration as ODF Plus in the GP.",
@@ -182,7 +182,7 @@ const sections = [
   },
 
   {
-    title: "Activities of YF for Self-Sufficient Infrastructure in Villages",
+    title: "Activities of Panchayat Raj Associates (PRA's) for Self-Sufficient Infrastructure in Villages",
     activities: [
       "Organising meetings in GP to educate the community about the importance of pucca housing and available government schemes like PMAY-G (Pradhan Mantri Awas Yojana - Gramin).",
       "Assisting the community members to register in PMAY-G.",
@@ -219,7 +219,7 @@ const sections = [
   },
 
   {
-    title: "Activities of YF for Socially Just & Socially Secured Village",
+    title: "Activities of Panchayat Raj Associates (PRA's) for Socially Just & Socially Secured Village",
     activities: [
       "Assisting registration of eligible households for benefits under NSAP of Central Government or similar State/UT Government schemes and to plan for covering as many households as possible under NSAP or even OSR as a means of social security.",
       "Assisting registration of eligible households for benefits for assistive devices (wheelchairs, crutches, artificial limbs, walking sticks for blind etc.) and to plan for covering as many households as possible under disability supporting schemes and even with OSR.",
@@ -236,7 +236,7 @@ const sections = [
   },
 
   {
-    title: "Activities of YF for Village with Good Governance",
+    title: "Activities of Panchayat Raj Associates (PRA's) for Village with Good Governance",
     activities: [
       "Identifying available resources and potential gaps that need to be addressed to equip the GPs with the necessary technology.",
       "Organising meeting with GP members to highlight the benefits of having dedicated computers and accessories and emphasize the role of digital tools in improving efficiency, transparency, and service delivery.",
@@ -264,7 +264,7 @@ const sections = [
   },
 
   {
-    title: "Activities of YF for Women Friendly Villages",
+    title: "Activities of Panchayat Raj Associates (PRA's) for Women Friendly Villages",
     activities: [
       "Organising Mahila Sabha/ Facilitating the Conduct of Mahila Sabha Meeting in the GP.",
       "Conducting awareness campaigns in the community, highlighting the importance of girls’ education.",
@@ -310,7 +310,7 @@ const YFActivities = () => {
     const blob = new Blob([allActivities], { type: "text/plain" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = "YF_Activities.txt";
+    link.download = "Panchayat Raj Associates (PRA's)_Activities.txt";
     link.click();
   };
 
@@ -319,7 +319,7 @@ const YFActivities = () => {
       {/* Importance Section */}
       <div className="p-6 bg-white mb-20">
         <h1 className="text-2xl font-bold text-center text-[#004B86] mb-6">
-          Importance of Young Fellows in the Project
+          Importance of Panchayat Raj Associates (PRA's) in the Project
         </h1>
         <ul className="list-disc space-y-4 px-8 text-gray-700 text-md">
           {points.map((point, index) => (
@@ -330,10 +330,10 @@ const YFActivities = () => {
 
       {/* Activities Section */}
       <h1 className="text-2xl font-bold text-center text-[#004B86] mb-6">
-        Young Fellows Activities
+        Panchayat Raj Associates (PRA's) Activities
       </h1>
       <p className="text-center text-gray-700 mb-6">
-        Explore the detailed activities undertaken by Young Fellows to empower
+        Explore the detailed activities undertaken by Panchayat Raj Associates (PRA's) to empower
         Gram Panchayats and foster sustainable development. You can expand each
         section for details or download the full list.
       </p>

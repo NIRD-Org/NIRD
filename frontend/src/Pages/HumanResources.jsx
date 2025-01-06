@@ -34,7 +34,7 @@ const HumanResourcesPage = () => {
       <div className="mb-10">
         <p className="text-justify text-md leading-relaxed text-gray-700">
           The project for "Creating 250 Model GP Clusters" has a structured Human
-          Resources (HR) team, which includes Young Fellows, State Programme
+          Resources (HR) team, which includes Panchayat Raj Associates (PRA's), State Programme
           Coordinators (SPCs), and Project Monitoring Unit (PMU). The HR team plays a crucial role in
           implementing the project by providing mentoring, capacity-building, and
           technical guidance across the Gram Panchayats (GPs). The HR structure is designed
@@ -44,12 +44,12 @@ const HumanResourcesPage = () => {
 
       {/* HR Data Section */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-        {/* Young Fellows */}
+        {/* Panchayat Raj Associates (PRA's) */}
         <div className="bg-white shadow-lg rounded-lg p-6 transition-all hover:scale-105 hover:shadow-2xl">
-          <h3 className="text-[#004B86] text-xl font-semibold mb-4">Young Fellows</h3>
+          <h3 className="text-[#004B86] text-xl font-semibold mb-4">Panchayat Raj Associates (PRA's)</h3>
           <div className="mb-4">
             <p>
-              <strong>Role Description:</strong> The Young Fellows (YFs) are selected professionals who serve as mentors and provide technical guidance to the Gram Panchayats (GPs). They assist in the preparation and implementation of high-quality Gram Panchayat Development Plans (GPDPs) aligned with the SDGs.
+              <strong>Role Description:</strong> The Panchayat Raj Associates (PRA's) (YFs) are selected professionals who serve as mentors and provide technical guidance to the Gram Panchayats (GPs). They assist in the preparation and implementation of high-quality Gram Panchayat Development Plans (GPDPs) aligned with the SDGs.
             </p>
           </div>
           <button
@@ -72,7 +72,7 @@ const HumanResourcesPage = () => {
           <h3 className="text-[#004B86] text-xl font-semibold mb-4">State Programme Coordinators (SPCs)</h3>
           <div className="mb-4">
             <p>
-              <strong>Role Description:</strong> State Programme Coordinators (SPCs) oversee the project at the state level, coordinating with Young Fellows, departments, and local stakeholders to ensure the successful implementation of the project.
+              <strong>Role Description:</strong> State Programme Coordinators (SPCs) oversee the project at the state level, coordinating with Panchayat Raj Associates (PRA's), departments, and local stakeholders to ensure the successful implementation of the project.
             </p>
           </div>
           <button
@@ -120,7 +120,7 @@ const HumanResourcesPage = () => {
     href="/staff-details"
     className="bg-[#004B86] text-white py-2 px-6 rounded-lg text-lg font-semibold hover:bg-[#00345d] transition duration-300"
   >
-    VIEW THE LIST OF YOUNG FELLOWS AND SPCS
+    VIEW THE LIST OF Panchayat Raj Associates (PRA's) AND SPCS
   </a>
 </div>
    

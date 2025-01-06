@@ -1342,7 +1342,7 @@ const StaffTablePage = () => {
       <div className="p-6 bg-gray-50">
         {/* Page Title */}
         <h1 className="text-center text-[#004B86] text-2xl font-bold mb-6">
-          Young Fellows, State Program Coordinator (SPC), and GPs Details
+          Panchayat Raj Associates (PRA's), State Program Coordinator (SPC), and GPs Details
         </h1>
   
         {/* Responsive Table */}
@@ -1363,7 +1363,7 @@ const StaffTablePage = () => {
                   className="py-3 px-4 cursor-pointer"
                   onClick={() => handleSort("name")}
                 >
-                  Name of Young Fellow{" "}
+                  Name of Panchayat Raj Associate (PRA){" "}
                   {sortConfig.key === "name" &&
                     (sortConfig.direction === "ascending" ? "▲" : "▼")}
                 </th>
