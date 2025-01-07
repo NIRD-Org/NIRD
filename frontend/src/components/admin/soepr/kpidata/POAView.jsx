@@ -16,10 +16,42 @@ import { Link } from "react-router-dom";
 
 const POAview = () => {
   const [poaRecords, setPoaRecords] = useState([]);
+  const [tableRows, setTableRows] = useState([]);
+
   const [loading, setLoading] = useState(false);
+
+  // For filter dropdowns
   const [selectedYear, setSelectedYear] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");
 
+  // --- Static Years and Months ---
+  const years = [2024, 2025, 2026, 2027, 2028, 2029, 2030];
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  // Format a date to DD/MM/YYYY or "N/A"
+  const formatDate = (date) => {
+    if (!date) return "N/A";
+    return new Date(date).toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  };
+
+  // 1. Fetch data
   useEffect(() => {
     const fetchPOARecords = async () => {
       try {
@@ -41,86 +73,101 @@ const POAview = () => {
     fetchPOARecords();
   }, []);
 
-  const handleYearChange = (e) => {
-    setSelectedYear(e.target.value);
-  };
+  // 2. Build a flat array of rows from poaRecords
+  useEffect(() => {
+    const newRows = [];
+    let rowCounter = 1; // For Sl. No across all rows
 
-  const handleMonthChange = (e) => {
-    setSelectedMonth(e.target.value);
-  };
+    poaRecords.forEach((record) => {
+      try {
+        // The "main" month for the record we show in the table
+        const createdAt = new Date(record.created_at);
+        const displayMonth = createdAt.toLocaleString("en-IN", {
+          month: "long",
+        });
+        // We'll also get a "createdAtYear" for POA2 usage
+        const createdAtYear = createdAt.getFullYear();
 
-  const filteredRecords = poaRecords.filter((record) => {
-    try {
-      const createdAt = new Date(record.created_at);
-      const recordYear = createdAt.getFullYear();
-      const recordMonth = createdAt.toLocaleString("en-IN", { month: "long" });
+        // ---------- POA1 Row ----------
+        if (record?.poaSubmitted?.poa1) {
+          // For POA1, the "Year" displayed in the table was taken from `record.poaData[0].date`
+          const poa1Year = new Date(record.poaData[0].date).getFullYear();
 
-      return (
-        (!selectedYear || recordYear.toString() === selectedYear) &&
-        (!selectedMonth || recordMonth === selectedMonth)
-      );
-    } catch (error) {
-      console.error("Error parsing date:", error);
-      return false;
-    }
+          newRows.push({
+            key: record.id + "-poa1",
+            slNo: rowCounter,
+            month: displayMonth, // The same month we show in the table
+            year: poa1Year.toString(), // Convert to string for filtering
+            poaType: "Poa1",
+            approvalStatus: record.poa1_approval_status,
+            approvalDate: record.poa1_approval_date,
+            revertDate: record.poa1_revert_date,
+            remarks: record.poa1_remarks,
+            recordId: record.id,
+          });
+          rowCounter++;
+        }
+
+        // ---------- POA2 Row ----------
+        if (record?.poaSubmitted?.poa2) {
+          // For POA2, the "Year" displayed was from `createdAt.getFullYear()`
+          newRows.push({
+            key: record.id + "-poa2",
+            slNo: rowCounter,
+            month: displayMonth, // same month in the table
+            year: createdAtYear.toString(),
+            poaType: "Poa2",
+            approvalStatus: record.poa2_approval_status,
+            approvalDate: record.poa2_approval_date,
+            revertDate: record.poa2_revert_date,
+            remarks: record.poa2_remarks,
+            recordId: record.id,
+          });
+          rowCounter++;
+        }
+      } catch (err) {
+        console.error("Error building row data:", err);
+      }
+    });
+
+    setTableRows(newRows);
+  }, [poaRecords]);
+
+  // 3. Filter the flattened rows
+  const filteredRows = tableRows.filter((row) => {
+    const matchesYear = !selectedYear || row.year === selectedYear;
+    const matchesMonth = !selectedMonth || row.month === selectedMonth;
+    return matchesYear && matchesMonth;
   });
 
+  // 4. Render
   if (loading) {
     return <div>Loading...</div>;
-  }
-
-  const formatDate = (date)=>{
-    if(!date) return;
-    return new Date(date).toLocaleDateString("en-IN", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    });
   }
 
   return (
     <div style={{ fontSize: "14px", maxWidth: "100%", margin: "0 auto" }}>
       <AdminHeader>Plan of Action Records</AdminHeader>
 
+      {/* Month & Year Filter */}
       <div className="flex gap-4 my-4">
-        Select Month and Year :
-        <select onChange={handleYearChange} value={selectedYear}>
+        <span>Select Month and Year:</span>
+
+        {/* Year Dropdown */}
+        <select onChange={(e) => setSelectedYear(e.target.value)} value={selectedYear}>
           <option value="">All Years</option>
-          {[
-            ...new Set(
-              poaRecords
-                .map((record) => {
-                  try {
-                    return new Date(record.created_at).getFullYear();
-                  } catch {
-                    return null;
-                  }
-                })
-                .filter(Boolean)
-            ),
-          ].map((year, idx) => (
-            <option key={idx} value={year}>
+          {years.map((year) => (
+            <option key={year} value={year.toString()}>
               {year}
             </option>
           ))}
         </select>
-        <select onChange={handleMonthChange} value={selectedMonth}>
+
+        {/* Month Dropdown */}
+        <select onChange={(e) => setSelectedMonth(e.target.value)} value={selectedMonth}>
           <option value="">All Months</option>
-          {[
-            "January",
-            "February",
-            "March",
-            "April",
-            "May",
-            "June",
-            "July",
-            "August",
-            "September",
-            "October",
-            "November",
-            "December",
-          ].map((month, idx) => (
-            <option key={idx} value={month}>
+          {months.map((month) => (
+            <option key={month} value={month}>
               {month}
             </option>
           ))}
@@ -134,112 +181,57 @@ const POAview = () => {
             <TableHead>Sl. No</TableHead>
             <TableHead>Month</TableHead>
             <TableHead>Year</TableHead>
-
             <TableHead>Poa Type</TableHead>
             <TableHead>Poa Status</TableHead>
             <TableHead>Approval/Revert Date</TableHead>
             <TableHead>Remarks</TableHead>
-
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {filteredRecords.map((record, idx) => {
-            try {
-              const createdAt = new Date(record.created_at);
-              return (
-                <>
-                  {record?.poaSubmitted.poa1 && (
-                    <TableRow key={idx}>
-                      <TableCell>{idx + 1}</TableCell> {/* Serial number */}
-                      <TableCell>
-                        {createdAt.toLocaleString("en-IN", { month: "long" })}
-                      </TableCell>
-                      {/* <TableCell>{createdAt.getFullYear("en-IN")}</TableCell> */}
-                      <TableCell>
-                        {(new Date(record.poaData[0].date).getFullYear())}
-                      </TableCell>
-                      <TableCell>Poa1</TableCell>
-                      <TableCell>
-                        {record.poa1_approval_status == "0"
-                          ? "Approval Pending"
-                          : record.poa1_approval_status == "1"
-                          ? "Approved"
-                          : record.poa1_approval_status == "2" &&
-                            "Reverted Back"}
-                      </TableCell>
-                      <TableCell>
-                        {" "}
-                        {record.poa1_approval_status == "1"
-                          ? formatDate(record.poa1_approval_date)
-                          : record.poa1_approval_status == "2"
-                          ? formatDate(record.poa1_revert_date)
-                          : "N/A"}
-                      </TableCell>
-                      <TableCell>{record.poa1_remarks || "N/A"}</TableCell>
-                      <TableCell className="flex gap-4">
-                        <Link
-                          to={`/admin/soepr/POA1/view/${record.id}?poaType=poa1`}
-                        >
-                          <NirdViewIcon />
-                        </Link>
-                        {record.poa1_approval_status != "1" && (
-                          <Link
-                            to={`/admin/soepr/POA1/edit/${record.id}?poaType=poa1`}
-                          >
-                            <NirdEditIcon />
-                          </Link>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  )}
-                  {record?.poaSubmitted.poa2 && (
-                    <TableRow key={idx}>
-                      <TableCell>{idx + 1}</TableCell> {/* Serial number */}
-                      <TableCell>
-                        {createdAt.toLocaleString("en-IN", { month: "long" })}
-                      </TableCell>
-                      <TableCell>{createdAt.getFullYear()}</TableCell>
-                      <TableCell>Poa2</TableCell>
-                      <TableCell>
-                        {record.poa2_approval_status == "0"
-                          ? "Approval Pending"
-                          : record.poa2_approval_status == "1"
-                          ? "Approved"
-                          : record.poa2_approval_status == "2" &&
-                            "Reverted Back"}
-                      </TableCell>
-                      <TableCell>
-                        {record.poa2_approval_status == "1"
-                          ? formatDate(record.poa2_approval_date)
-                          : record.poa2_approval_status == "2"
-                          ? formatDate(record.poa2_revert_date)
-                          : "N/A"}
-                      </TableCell>
-                      <TableCell>{record.poa2_remarks || "N/A"}</TableCell>
-                      <TableCell className="flex gap-4">
-                        <Link
-                          to={`/admin/soepr/POA1/view/${record.id}?poaType=poa2`}
-                        >
-                          <NirdViewIcon />
-                        </Link>
-                        {record.poa2_approval_status != "1" && (
-                          <Link
-                            aria-disabled={record.poa2_approval_status == "1"}
-                            to={`/admin/soepr/POA1/edit/${record.id}?poaType=poa2`}
-                          >
-                            <NirdEditIcon />
-                          </Link>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </>
-              );
-            } catch (error) {
-              console.error("Error rendering record:", error);
-              return null;
+          {filteredRows.map((row) => {
+            // Derive status text from approval status
+            let statusText = "N/A";
+            if (row.approvalStatus === "0") statusText = "Approval Pending";
+            if (row.approvalStatus === "1") statusText = "Approved";
+            if (row.approvalStatus === "2") statusText = "Reverted Back";
+
+            // Approval/Revert date
+            let finalDate = "N/A";
+            if (row.approvalStatus === "1") {
+              finalDate = formatDate(row.approvalDate);
+            } else if (row.approvalStatus === "2") {
+              finalDate = formatDate(row.revertDate);
             }
+
+            return (
+              <TableRow key={row.key}>
+                <TableCell>{row.slNo}</TableCell>
+                <TableCell>{row.month}</TableCell>
+                <TableCell>{row.year}</TableCell>
+                <TableCell>{row.poaType}</TableCell>
+                <TableCell>{statusText}</TableCell>
+                <TableCell>{finalDate}</TableCell>
+                <TableCell>{row.remarks || "N/A"}</TableCell>
+                <TableCell className="flex gap-4">
+                  {/* View link */}
+                  <Link
+                    to={`/admin/soepr/POA1/view/${row.recordId}?poaType=${row.poaType.toLowerCase()}`}
+                  >
+                    <NirdViewIcon />
+                  </Link>
+
+                  {/* Edit link if not approved */}
+                  {row.approvalStatus !== "1" && (
+                    <Link
+                      to={`/admin/soepr/POA1/edit/${row.recordId}?poaType=${row.poaType.toLowerCase()}`}
+                    >
+                      <NirdEditIcon />
+                    </Link>
+                  )}
+                </TableCell>
+              </TableRow>
+            );
           })}
         </TableBody>
       </Table>
