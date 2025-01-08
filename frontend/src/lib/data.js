@@ -517,6 +517,12 @@ export const getSidebarItems = (user) => {
               title: "POA Statewise Submission Status ",
               link: "/admin/soepr/pOAreport",
             },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "POA Approval Status ",
+              link: "/admin/soepr/pOa-Approvalreport",
+            },
           ],
         },
         // {

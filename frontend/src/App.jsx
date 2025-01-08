@@ -195,6 +195,7 @@ import AllBlogs from "./components/admin/blogs/AllBlogs";
 import SuperBlogDetails from "./components/admin/blogs/SuperBlogDetails";
 import YFPoa1Formtemp from "./components/admin/young-fellow/Poa/YFPoa1FormAug";
 import YFPoa2Formtemp from "./components/admin/young-fellow/Poa/YFPoa2FormAug";
+import PoaReportApprovals from "./components/admin/poa/PoaReportApprovals";
 
 
 
@@ -337,6 +338,7 @@ function App() {
             <Route path="soepr/poa1-data" element={<Poa1AdminData />} />
             <Route path="yf/poa1-data" element={<Poa1AdminYfData />} />
             <Route path="soepr/poa-report" element={<PoaReport />} />
+            <Route path="soepr/poa-approvalreport" element={<PoaReportApprovals />} />
             <Route path="yf/POA1" element={<YFPoa1Form />} />
             <Route path="yf/POA2" element={<YFPoa2Form />} />
             <Route path="yf/POA3" element={<YFPoa3Form />} />
