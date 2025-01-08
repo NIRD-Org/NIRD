@@ -28,13 +28,19 @@ export const getSidebarItems = (user) => {
       {
         type: "module",
         icon: ArrowBigRight,
-        title: "POA Approvals",
+        title: "Plan Of Actions",
         submodules: [
           {
             type: "sub-module",
             icon: ArrowBigRight,
             title: "Sr.Consultant POA Approvals",
             link: "/admin/soepr/SirdPRDapprovals",
+          },
+          {
+            type: "sub-module",
+            icon: ArrowBigRight,
+            title: "Consultant POA View",
+            link: "/admin/soepr/viewconsultants",
           },
         ],
       },

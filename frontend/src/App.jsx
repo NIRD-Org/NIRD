@@ -196,6 +196,7 @@ import SuperBlogDetails from "./components/admin/blogs/SuperBlogDetails";
 import YFPoa1Formtemp from "./components/admin/young-fellow/Poa/YFPoa1FormAug";
 import YFPoa2Formtemp from "./components/admin/young-fellow/Poa/YFPoa2FormAug";
 import PoaReportApprovals from "./components/admin/poa/PoaReportApprovals";
+import SIRDConsultantsView from "./components/admin/soepr/approvals/SIRDConsultantview";
 
 
 
@@ -312,6 +313,7 @@ function App() {
             <Route path="soepr/plan-of-action" element={<POA />} />
             <Route path="soepr/POA1" element={<POA1 />} />
             <Route path="soepr/srcapprovals" element={<Soeprpoaview />} />
+            <Route path="soepr/viewconsultants" element={<SIRDConsultantsView />} />
             <Route
               path="soepr/SirdPRDapprovals"
               element={<Poa1srcApprovalData />}

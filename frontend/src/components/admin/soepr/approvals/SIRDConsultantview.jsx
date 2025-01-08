@@ -32,7 +32,7 @@ const years = Array.from(
   (val, index) => new Date().getFullYear() - index
 );
 
-const Poa1AdminData = () => {
+const SIRDConsultantsView = () => {
   const printRef = useRef();
   const [searchParams, setSearchParams] = useSearchParams();
   const [stateOptions, setStateOptions] = useState([]);
@@ -381,7 +381,7 @@ const handleYearChange = (e) => setSelectedYear(parseInt(e.target.value));
         </button>
         {poa1 && poa1.id && (
           <span className="text-sm text-gray-700">
-            <strong>POA ID:</strong> {poa1.id}
+            {/* <strong>POA ID:</strong> {poa1.id} */}
           </span>
         )}
         {poaType === "poa1" && poa1Approval.status === "1" && (
@@ -405,7 +405,7 @@ const handleYearChange = (e) => setSelectedYear(parseInt(e.target.value));
       </div>
 
       {/* Show the approval section only if the database status is not 1 or if in submission mode */}
-      {((poaType === "poa1" && poa1Approval.status !== "1") ||
+      {/* {((poaType === "poa1" && poa1Approval.status !== "1") ||
         (poaType === "poa2" && poa2Approval.status !== "1") ||
         isSubmitting) && (
         <div className="mt-4 flex flex-col sm:flex-row items-start sm:items-center gap-2">
@@ -451,7 +451,7 @@ const handleYearChange = (e) => setSelectedYear(parseInt(e.target.value));
             Update {poaType.toUpperCase()} Approval
           </button>
         </div>
-      )}
+      )} */}
 
 
       <div ref={printRef} className="pt-10 w-full">
@@ -592,4 +592,4 @@ const handleYearChange = (e) => setSelectedYear(parseInt(e.target.value));
   );
 };
 
-export default Poa1AdminData;
+export default SIRDConsultantsView;
