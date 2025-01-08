@@ -23,9 +23,9 @@ const other = [
   // { label: "Defaulters", value: 0 },
 ];
 
-// Example: 50-year range
+// Example: 10-year range
 const years = Array.from(
-  new Array(50),
+  new Array(10),
   (val, index) => new Date().getFullYear() - index
 );
 
@@ -283,10 +283,10 @@ const PoaReportApprovals = () => {
               <th className="py-2 px-4 border">Designation</th>
               <th className="py-2 px-4 border">POA1 Status</th>
               <th className="py-2 px-4 border">POA1 Remarks</th>
-              <th className="py-2 px-4 border">POA1 Approved At</th>
+              <th className="py-2 px-4 border">POA1 Approved / Reverted At</th>
               <th className="py-2 px-4 border">POA2 Status</th>
               <th className="py-2 px-4 border">POA2 Remarks</th>
-              <th className="py-2 px-4 border">POA2 Approved At</th>
+              <th className="py-2 px-4 border">POA2 Approved / Reverted At</th>
             </tr>
           </thead>
           <tbody>
@@ -340,7 +340,16 @@ const PoaReportApprovals = () => {
                   </td>
                   {/* POA1 Approved At */}
                   <td className="py-2 px-4 border">
-                    {userPoaData?.poa1_approval_date ?? ""}
+                  {userPoaData?.poa1_approval_date
+    ? new Date(userPoaData.poa1_approval_date).toLocaleString("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      })
+    : ""}
                   </td>
                   {/* POA2 STATUS Cell */}
                   <td
@@ -356,7 +365,16 @@ const PoaReportApprovals = () => {
                   </td>
                   {/* POA2 Approved At */}
                   <td className="py-2 px-4 border">
-                    {userPoaData?.poa2_approval_date ?? ""}
+                  {userPoaData?.poa2_approval_date
+    ? new Date(userPoaData.poa2_approval_date).toLocaleString("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      })
+    : ""}
                   </td>
                 </tr>
               );

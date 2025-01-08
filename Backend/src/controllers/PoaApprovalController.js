@@ -523,28 +523,42 @@ export const updatePoa1Data = CatchAsyncError(async (req, res, next) => {
     }
 
     // Handle POA1-specific approval logic
-    if (poa1_approval_status) {
-      poa1.poa1_approval_status = poa1_approval_status;
-      poa1.poa1_remarks = poa1_remarks || "";
-      if (poa1_approval_status == "2") {
-        poa1.poa1_revert_date = new Date();
-      } else if (poa1_approval_status == "1") {
-        poa1.poa1_approval_date = new Date();
-      }
-      poa1.approved_by = user_id; // Store the ID of the approver
-    }
+if (poa1_approval_status) {
+  poa1.poa1_approval_status = poa1_approval_status;
+  poa1.poa1_remarks = poa1_remarks || "";
 
-    // Handle POA2-specific approval logic
-    if (poa2_approval_status) {
-      poa1.poa2_approval_status = poa2_approval_status;
-      poa1.poa2_remarks = poa2_remarks || "";
-     if (poa2_approval_status == "2") {
-       poa1.poa2_revert_date = new Date();
-     } else if (poa2_approval_status == "1") {
-       poa1.poa2_approval_date = new Date();
-     }
-      poa1.approved_by = user_id; // Store the ID of the approver
-    }
+  // Whenever status is 1 or 2, set the same approval_date
+  if (poa1_approval_status === "1" || poa1_approval_status === "2") {
+    poa1.poa1_approval_date = new Date();
+  }
+
+  // If you also want a separate "revert date" for status=2, uncomment below
+  // if (poa1_approval_status === "2") {
+  //   poa1.poa1_revert_date = new Date();
+  // }
+
+  // Keep track of who approved
+  poa1.approved_by = user_id;
+}
+
+// Handle POA2-specific approval logic
+if (poa2_approval_status) {
+  poa1.poa2_approval_status = poa2_approval_status;
+  poa1.poa2_remarks = poa2_remarks || "";
+
+  // Whenever status is 1 or 2, set the same approval_date
+  if (poa2_approval_status === "1" || poa2_approval_status === "2") {
+    poa1.poa2_approval_date = new Date();
+  }
+
+  // If you also want a separate "revert date" for status=2, uncomment below
+  // if (poa2_approval_status === "2") {
+  //   poa1.poa2_revert_date = new Date();
+  // }
+
+  // Keep track of who approved
+  poa1.approved_by = user_id;
+}
 
     // Update overall status based on approval statuses
     if (poa1_approval_status === "1" && poa2_approval_status === "1") {
