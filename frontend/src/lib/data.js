@@ -379,6 +379,31 @@ export const getSidebarItems = (user) => {
         {
           type: "module",
           icon: ArrowBigRight,
+          title: "User Location Management",
+          submodules: [
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "Young Fellow Location",
+              link: "/admin/users/all/young-fellow",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "SPC Location",
+              link: "/admin/users/all/admin",
+            },
+            {
+              type: "sub-module",
+              icon: ArrowBigRight,
+              title: "SOEPR Location",
+              link: "/admin/users/all/soepr",
+            },
+          ],
+        },
+        {
+          type: "module",
+          icon: ArrowBigRight,
           title: "Plan Of Action",
           submodules: [
             // {
@@ -425,18 +450,7 @@ export const getSidebarItems = (user) => {
           icon: ArrowBigRight,
           title: "Model GP Clusters",
           submodules: [
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "Young Fellow location",
-              link: "/admin/users/all/young-fellow",
-            },
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "Admin location",
-              link: "/admin/users/all/admin",
-            },
+          
 
             {
               type: "sub-module",
@@ -487,12 +501,7 @@ export const getSidebarItems = (user) => {
           icon: ArrowBigRight,
           title: "SOEPR",
           submodules: [
-            {
-              type: "sub-module",
-              icon: ArrowBigRight,
-              title: "SOEPR Location",
-              link: "/admin/users/all/soepr",
-            },
+            
             //{
             //type: "sub-module",
             //icon: ArrowBigRight,

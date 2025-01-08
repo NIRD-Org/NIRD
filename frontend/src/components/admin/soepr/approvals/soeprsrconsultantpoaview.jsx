@@ -218,13 +218,21 @@ const handleGeneratePdf = () => {
 
 // Approval Submission
 const handleApprovalSubmit = async () => {
-  try {
+  
     // Check if there's valid POA data
     if (!poa1 || (!poa1._id && !poa1.id)) {
       alert("No POA data to approve or modify!");
       return;
     }
+// 2) Check if Remarks is empty (MANUAL VALIDATION)
+const remarks =
+poaType === "poa1" ? poa1Approval.remarks : poa2Approval.remarks;
 
+if (!remarks.trim()) {
+alert("Remarks are required.");
+return; // Stop here if no remarks
+}
+try {
     // Dynamically create the payload based on the selected POA type
     const payload =
       poaType === "poa1"
