@@ -156,11 +156,11 @@ export default function GoodPractices() {
       {/* Main Container */}
       <div
         id="good-practices"
-        className="bg-gray-100 px-5 py-16 md:px-20 md:py-10"
+        className=" px-5 py-16 md:px-20 md:py-10"
       >
         {/* Intro */}
         <div className="pb-10">
-          <p className="text-gray-500 text-xl">
+          <p className="text-black-500 text-xl">
             Explore innovative projects across a diverse range of sectors,
             categories, and regions. Uncover how these good practices initiatives
             are driving social and economic progress, fostering inclusive and
@@ -169,17 +169,18 @@ export default function GoodPractices() {
         </div>
 
         {/* Top Filters: Year + location + reset + search */}
-<div className="flex flex-nowrap items-end gap-2 sm:gap-3 overflow-x-auto mb-4">
+<div className="flex flex-nowrap items-end gap-2 sm:gap-3  bg-yellow-30 overflow-x-auto mb-6">
+
   {/* Financial Year Dropdown */}
   <div className="flex items-center gap-1">
-    <label className="text-sm font-semibold text-gray-700">Financial Year:</label>
-    <select
+    <label className="text-sm font-semibold text-black">Financial Year:</label>
+    <select  className="border-gray-300 bg-white-100 rounded px-2 py-1"
       value={fy}
       onChange={(e) => {
         searchParams.set("financial_year", e.target.value);
         setSearchParams(searchParams);
       }}
-      className="rounded px-2 py-1 bg-gray-100 text-gray-800 focus:outline-none"
+     
     >
       <option value="">All Years</option>
       {financialYears.map((yearObj, i) => (
@@ -192,31 +193,31 @@ export default function GoodPractices() {
 
   {/* State Filter */}
   <div className="flex items-center gap-1">
-    <label className="text-sm font-semibold text-gray-700">State:</label>
+    <label className="text-sm font-semibold text-black-700">State:</label>
     <StateFilter className="focus:outline-none bg-gray-100 rounded px-2 py-1" />
   </div>
 
   {/* District Filter */}
   <div className="flex items-center gap-1">
-    <label className="text-sm font-semibold text-gray-700">District:</label>
+    <label className="text-sm font-semibold text-black-700">District:</label>
     <DistrictFilter className="focus:outline-none bg-gray-100 rounded px-2 py-1" />
   </div>
 
   {/* Block Filter */}
   <div className="flex items-center gap-1">
-    <label className="text-sm font-semibold text-gray-700">Block:</label>
+    <label className="text-sm font-semibold text-black-700">Block:</label>
     <BlockFilter className="focus:outline-none bg-gray-100 rounded px-2 py-1" />
   </div>
 
   {/* Gram Filter */}
   <div className="flex items-center gap-1">
-    <label className="text-sm font-semibold text-gray-700">Gram:</label>
+    <label className="text-sm font-semibold text-black-700">Gram:</label>
     <GramFilter className="focus:outline-none bg-gray-100 rounded px-2 py-1" />
   </div>
 
   {/* Reset Button */}
   <Button
-    className="bg-gray-400 hover:bg-gray-500 text-white font-semibold"
+    className="bg-primary hover:bg-gray-500 text-white font-semibold"
     onClick={handleReset}
   >
     Reset
@@ -227,35 +228,36 @@ export default function GoodPractices() {
     onSubmit={handleSearchSubmit}
     className="flex items-center gap-1 ml-auto" // pushes search to the right if desired
   >
-    <label className="text-sm font-semibold text-gray-700 hidden md:block">
+    <label className="text-sm font-semibold text-black-700 hidden md:block">
       Search:
     </label>
     <input
       type="text"
       onChange={(e) => setSearch(e.target.value)}
       placeholder="States, Districts, Blocks..."
-      className="focus:outline-none rounded px-2 py-1 bg-gray-100 text-gray-800"
+      className="focus:outline-none rounded px-2 py-1 bg-white-100 text-white-800"
     />
     <button
       type="submit"
       className="bg-primary text-white font-semibold rounded px-3 py-1"
     >
       Search
-    </button>
+    </button> 
+    <br/>
   </form>
 </div>
 
         {/* 2-column layout: Themes on left, GP results on right */}
-        <div className="flex flex-col lg:flex-row gap-5">
+        <div className=" flex flex-col lg:flex-row gap-5">
           {/* Left Pane: List of Themes as color-coded buttons */}
-          <div className="lg:w-1/4 w-full bg-white p-5 rounded shadow-sm">
+          <div className=" bg-yellow-50 lg:w-1/4 w-full bg-white p-5 rounded shadow-sm">
             <h2 className="font-bold text-lg mb-4">Themes</h2>
 
             <div className="flex flex-col gap-2">
               {/* "All Themes" button */}
               <button
                 onClick={() => handleThemeSelect("")}
-                className="px-4 py-2 rounded-md bg-gray-500 text-white font-semibold"
+                className="px-4 py-2 rounded-md bg-yellow-500 text-white font-semibold"
               >
                 All Themes
               </button>
