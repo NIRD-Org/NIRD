@@ -28,7 +28,7 @@ const months = [
 ];
 
 const years = Array.from(
-  new Array(50),
+  new Array(10),
   (val, index) => new Date().getFullYear() - index
 );
 
@@ -266,7 +266,7 @@ const handleYearChange = (e) => setSelectedYear(parseInt(e.target.value));
   return (
     <div className="relative w-full md:w-[80vw] py-10 px-1 lg">
       <h1 className="text-3xl text-primary text-center font-bold">
-        Approve Fortnightly Plan Of Action
+         Fortnightly Plan Of Actions - Consultants
       </h1>
 
       <div className="w-fit flex flex-col justify-between items-center lg:flex-row text-center text-3xl h-full">
@@ -576,7 +576,7 @@ const handleYearChange = (e) => setSelectedYear(parseInt(e.target.value));
                     colSpan="11"
                     className="p-2 text-center text-xs sm:text-sm md:text-base"
                   >
-                    End of POA1 Details
+                    End of POA Details
                   </td>
                 </tr>
               </tfoot>

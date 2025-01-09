@@ -28,7 +28,7 @@ const months = [
 ];
 
 const years = Array.from(
-  new Array(50),
+  new Array(10),
   (val, index) => new Date().getFullYear() - index
 );
 
@@ -584,7 +584,7 @@ const handleYearChange = (e) => setSelectedYear(parseInt(e.target.value));
                     colSpan="11"
                     className="p-2 text-center text-xs sm:text-sm md:text-base"
                   >
-                    End of POA1 Details
+                    End of POA Details
                   </td>
                 </tr>
               </tfoot>

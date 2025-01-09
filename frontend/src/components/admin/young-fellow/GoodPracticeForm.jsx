@@ -354,7 +354,7 @@ const GoodPracticeForm = ({ update = false }) => {
         {/* Video Upload Section */}
         <div className="col-span-1">
           <div className="flex items-center gap-10">
-            <label>
+            {/* <label>
               <input
                 className="w-5"
                 type="radio"
@@ -363,7 +363,7 @@ const GoodPracticeForm = ({ update = false }) => {
                 onChange={() => setVideoSource("file")}
               />
               Upload Video File
-            </label>
+            </label> */}
             <label>
               <input
                 className="w-6"

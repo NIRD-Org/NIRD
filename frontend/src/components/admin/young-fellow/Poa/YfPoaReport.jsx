@@ -249,7 +249,7 @@ const YfPoaReport = () => {
             <tr>
               <th className="py-2 px-4 border">S.No.</th>
               <th className="py-2 px-4 border">User Id</th>
-
+              <th className="py-2 px-4 border">Employee Id</th>
               <th className="py-2 px-4 border">Employee Name</th>
               <th className="py-2 px-4 border">State Name</th>
               <th className="py-2 px-4 border">Designation</th>
@@ -262,6 +262,7 @@ const YfPoaReport = () => {
                   <tr key={index}>
                     <td className="py-2 px-4 border">{index + 1}</td>
                     <td className="py-2 px-4 border">{user.id || "N/A"}</td>
+                    <td className="py-2 px-4 border">{user.employee_id || "N/A"}</td>
                     <td className="py-2 px-4 border">{user.name || "N/A"}</td>
 
                     <td className="py-2 px-4 border">
