@@ -150,13 +150,13 @@ const YfPoa1DetailPage = () => {
         </p>
       ) : (
         <div id="poa1-detail">
-          <AdminHeader className="print-header-margin">
-            {getHeaderText()} - Month:{" "}
-            {new Date(poa1Data.created_at).toLocaleString("en-IN", {
-              month: "long",
-            })}{" "}
-            2024
-          </AdminHeader>
+         <AdminHeader className="print-header-margin">
+  {getHeaderText()} - Month:{" "}
+  {new Date(poa1Data.created_at).toLocaleString("en-IN", {
+    month: "long",
+  })}{" "}
+  {new Date(poa1Data.created_at).getFullYear()} {/* Extracts the year dynamically */}
+</AdminHeader>
           <Table>
             <TableCaption className="text-sm">
               Details for {poaType.toLocaleUpperCase} ID: {poa1Data?.id}

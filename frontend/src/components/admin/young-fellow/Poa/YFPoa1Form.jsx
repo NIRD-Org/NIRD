@@ -509,26 +509,29 @@ const YFPoa1Form = ({ update }) => {
 
   const lastDayOfWeek = 7;
 
-  function getAugustDate(day, year = new Date().getFullYear()) {
-    return new Date(Date.UTC(year, selectedMonth, day));
+  function getPOADate(day, month, year = new Date().getFullYear()) {
+    // Use the current year if not passed
+    return new Date(Date.UTC(year, month, day));
+}
+
+// Example usage with dynamic year (current year) and dynamic month (selectedMonth)
+const POADate = getPOADate(14, selectedMonth);  // Pass selectedMonth here
+
+useEffect(() => {
+  if (update) {
+    const fetchPoalData = async () => {
+      try {
+        const response = await API.get(`/api/v1/poa1/get/${poalId}`);
+        setFormData(response.data.data.poaData);
+      } catch (error) {
+        console.error("Error fetching POA data:", error);
+        toast.error("Error fetching POA data.");
+      }
+    };
+    fetchPoalData();
   }
+}, [poalId, update]);
 
-  const augustDate = getAugustDate(14, 2024);
-
-  useEffect(() => {
-    if (update) {
-      const fetchPoalData = async () => {
-        try {
-          const response = await API.get(`/api/v1/poa1/get/${poalId}`);
-          setFormData(response.data.data.poaData);
-        } catch (error) {
-          console.error("Error fetching POA data:", error);
-          toast.error("Error fetching POA data.");
-        }
-      };
-      fetchPoalData();
-    }
-  }, [poalId, update]);
 
   // Get the YF locations
   useEffect(() => {
@@ -711,7 +714,7 @@ const YFPoa1Form = ({ update }) => {
       });
 
       await API.post(
-        `/api/v1/yf-poa1/create?created_at=${augustDate}`,
+        `/api/v1/yf-poa1/create?created_at=${POADate}`,
         formDataToSubmit,
         {
           headers: { "Content-Type": "multipart/form-data" },
