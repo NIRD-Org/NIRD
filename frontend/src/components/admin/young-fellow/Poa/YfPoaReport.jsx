@@ -104,39 +104,10 @@ const YfPoaReport = () => {
       return users.filter((user) =>
         poaData.some((poaItem) => poaItem.user_id === user.id)
       );
-    } else
-      return users.filter((user) => {
-        // Find the user's location data
-        const userLoc =
-          userLocation &&
-          userLocation.length > 0 &&
-          userLocation.find((loc) => loc.user_id == user.id);
-
-        // Get state IDs for the user from location data
-        const yfStateIds = userLoc?.userLocations?.state_ids || [];
-
-        // Get user's POA data
-        const userPoaData = poaData.filter(
-          (poaItem) => poaItem.user_id == user.id
-        );
-
-        // Extract state IDs from POA data
-        const poaStateIds =
-          userPoaData.length > 0
-            ? userPoaData.flatMap((poaItem) =>
-                poaItem.poaData?.map((entry) => entry.state_id)
-              )
-            : [];
-
-        const hasSubmittedStates = yfStateIds.every((stateId) =>
-          poaStateIds.includes(stateId)
-        );
-        // Check if there are any states not covered in the POA
-        const hasUnsubmittedStates = yfStateIds.some(
-          (stateId) => !poaStateIds.includes(stateId)
-        );
-        return hasUnsubmittedStates;
-      });
+    } else {
+      // Users who are defaulters (no POA data)
+      return users.filter((user) => !poaData.some((poaItem) => poaItem.user_id === user.id));
+    }
   };
 
   const filteredUsers = getFilteredUsers();
@@ -145,39 +116,25 @@ const YfPoaReport = () => {
     (userId) => {
       try {
         const userLoc = userLocation.find((loc) => loc.user_id === userId);
-        const yfStateIds = userLoc?.userLocations
-          ? userLoc.userLocations.state_ids
-          : [];
+        if (!userLoc) return "N/A";  // No location data for this user
 
-        const userPoadata = poaData.filter((item) => item.user_id == userId);
-        const poaStateIds =
-          userPoadata[0]?.poaData?.map((entry) => entry.state_id) || [];
+        const yfStateIds = userLoc?.userLocations?.state_ids || [];
 
-        // Filter user-specific states
-        const yfStates =
-          states.length > 0 &&
-          states?.filter((state) => yfStateIds?.includes(state.id));
+        // Fetch the names of the states based on state_ids
+        const userStates = yfStateIds.length > 0
+          ? yfStateIds.map((stateId) => {
+              const state = states?.find((s) => s.id === stateId);
+              return state ? state.name : "N/A";
+            })
+          : ["N/A"];
 
-        // Split into states in POA and not in POA
-        const statesInPoa = yfStates?.filter((state) =>
-          poaStateIds.includes(state.id)
-        );
-        const statesNotInPoa = yfStates.filter(
-          (state) => !poaStateIds.includes(state.id)
-        );
-
-        const selectedStates =
-          filter == 1 ? statesInPoa || [] : statesNotInPoa || [];
-
-        return selectedStates.length > 0
-          ? selectedStates.map((state) => state.name).join(", ")
-          : "N/A";
+        return userStates.join(", ");
       } catch (error) {
         console.error("Error filtering user states:", error);
-        return "";
+        return "N/A";
       }
     },
-    [userLocation, poaData, states, filter]
+    [userLocation, states]
   );
 
   return (
