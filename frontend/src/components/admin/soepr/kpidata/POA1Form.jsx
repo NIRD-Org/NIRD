@@ -60,7 +60,7 @@ const planOfDayOptions = {
     "To Prepare Case Studies",
     "To make documentation of Good Practices",
   ],
-  "No work Day": ["Public Holiday", "Weekoff", "Casual Leave"],
+  "No work Day": ["Public Holiday", "Weekoff", "Casual Leave","Sick Leave","LOP"],
   "Others(100 words Only)": ["Others"],
 };
 
