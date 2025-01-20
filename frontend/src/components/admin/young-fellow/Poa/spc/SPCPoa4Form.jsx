@@ -334,7 +334,7 @@ const start = 23;
       });
 
       await API.post(
-        `/api/v1/spc-poa1/create?created_at=${POA.Date}`,
+        `/api/v1/spc-poa1/create?created_at=${POADate}`,
         formDataToSubmit,
         {
           headers: { "Content-Type": "multipart/form-data" },
