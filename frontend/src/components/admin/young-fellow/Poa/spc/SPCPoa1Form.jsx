@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+ import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import AdminHeader from "../../../AdminHeader";
 import toast from "react-hot-toast";
@@ -72,11 +72,14 @@ const YFPoa1Form = ({ update }) => {
 
   const lastDayOfWeek = 7;
 
-  function getAugustDate(day, year = new Date().getFullYear()) {
-    return new Date(Date.UTC(year, selectedMonth, day));
-  }
+  function getPOADate(day, month, year = new Date().getFullYear()) {
+    // Use the current year if not passed
+    return new Date(Date.UTC(year, month, day));
+}
 
-  const augustDate = getAugustDate(14, 2024);
+// Example usage with dynamic year (current year) and dynamic month (selectedMonth)
+const POADate = getPOADate(14, selectedMonth);  // Pass selectedMonth here
+
 
 
 const fetchAllDistricts = async (statesArray) => {
@@ -324,7 +327,7 @@ const fetchLocations = async (statesArray) => {
       });
 
       await API.post(
-        `/api/v1/spc-poa1/create?created_at=${augustDate}`,
+        `/api/v1/spc-poa1/create?created_at=${POADate}`,
         formDataToSubmit,
         {
           headers: { "Content-Type": "multipart/form-data" },

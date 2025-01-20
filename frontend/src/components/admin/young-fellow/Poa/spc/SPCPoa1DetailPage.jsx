@@ -155,7 +155,7 @@ const SPCPoa1DetailPage = () => {
             {new Date(poa1Data.created_at).toLocaleString("en-IN", {
               month: "long",
             })}{" "}
-            2024
+            {new Date(poa1Data.created_at).getFullYear()} 
           </AdminHeader>
           <Table>
             <TableCaption className="text-sm">
