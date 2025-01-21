@@ -88,7 +88,7 @@ export const createPmupoa = CatchAsyncError(async (req, res, next) => {
 // Fetch all POA data for admin access
 export const getAllPmupoaData = CatchAsyncError(async (req, res, next) => {
   try {
-    const poas = await PmupoaModel.find();
+    const poas = await PmupoaModel.find({ user_id:req?.user?.id});
     res.status(200).json({ success: true, data: poas });
   } catch (error) {
     console.log(error);

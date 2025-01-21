@@ -13,7 +13,7 @@ const router = express.Router();
 router.route("/create").post(isAuth, createPmupoa);
 
 // Get all Pmupoa data (e.g., for Admin access)
-router.route("/all").get(getAllPmupoaData);
+router.route("/all").get(isAuth, getAllPmupoaData);
 
 // Update a specific Pmupoa entry by ID
 router.route("/update/:poaId").post(isAuth, updatePmupoaData);
