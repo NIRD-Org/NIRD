@@ -406,12 +406,7 @@ export const getSidebarItems = (user) => {
           icon: ArrowBigRight,
           title: "Plan Of Action",
           submodules: [
-            // {
-            //   type: "sub-module",
-            //   icon: ArrowBigRight,
-            //   title: "KPI-POA(Trial)",
-            //   link: "/admin/yf/plan-of-action",
-            // },
+          
             {
               type: "sub-module",
               icon: ArrowBigRight,
@@ -455,13 +450,13 @@ export const getSidebarItems = (user) => {
             {
               type: "sub-module",
               icon: ArrowBigRight,
-              title: "View YF POA Reports",
+              title: "View PRA POA Reports",
               link: "/admin/yf/poa1-data",
             },
             {
               type: "sub-module",
               icon: ArrowBigRight,
-              title: "YF POA Defaulters List ",
+              title: " PRA POA Defaulters List ",
               link: "/admin/yf/poa-report",
             },
             {
@@ -476,18 +471,7 @@ export const getSidebarItems = (user) => {
               title: "View SPC POA  ",
               link: "/admin/SPCPOAadminView",
             },
-            // {
-            //   type: "sub-module",
-            //   icon: ArrowBigRight,
-            //   title: "YF POA Submission Status ",
-            //   link: "/admin/soepr/pOAreport",
-            // },
-            // {
-            //   type: "sub-module",
-            //   icon: ArrowBigRight,
-            //   title: "View SPC POA Reports",
-            //   link: "/admin/yf/poa1-data",
-            // },
+          
             {
               type: "sub-module",
               icon: ArrowBigRight,
@@ -590,7 +574,7 @@ export const getSidebarItems = (user) => {
             {
               type: "sub-module",
               icon: ArrowBigRight,
-              title: "All YF Approvals",
+              title: "All  Approvals",
               link: "/admin/action/superadmin",
             },
           ],
@@ -756,12 +740,12 @@ export const getSidebarItems = (user) => {
         },
         {
           type: "module",
-          title: "Monitor Young Fellow Plan Of Action",
+          title: "Monitor PRA Plan Of Action",
           submodules: [
             {
               type: "sub-module",
               icon: ArrowBigRight,
-              title: "View YF POA",
+              title: "View PRA POA",
               link: "/admin/spcviewyfpoa",
             },
           ],
@@ -778,71 +762,19 @@ export const getSidebarItems = (user) => {
             },
           ],
         },
-        // {
-        //   type: "module",
-        //   title: "Attendance",
-        //   submodules: [
-        //     {
-        //       type: "sub-module",
-        //       icon: ArrowBigRight,
-        //       title: "AM Entry",
-        //       link: "/admin/attendance/amu-upload/list",
-        //     },
-        //     {
-        //       type: "sub-module",
-        //       icon: ArrowBigRight,
-        //       title: "PM Entry",
-        //       link: "/admin/attendance/pmu-upload/list",
-        //     },
-        //     {
-        //       type: "sub-module",
-        //       icon: ArrowBigRight,
-        //       title: "View Attendance",
-        //       link: "/admin/view/attendance",
-        //     },
-        //   ],
-        // },
+      
       ];
       break;
 
     case 3:
       sidebarItems = [
-        // {
-        //   type: "module",
-        //   icon: ArrowBigRight,
-        //   title: "Attendance",
-        //   submodules: [
-        //     {
-        //       type: "sub-module",
-        //       icon: ArrowBigRight,
-        //       title: "AM Entry Form",
-        //       link: "/admin/attendance/amu-upload",
-        //     },
-        //     {
-        //       type: "sub-module",
-        //       icon: ArrowBigRight,
-        //       title: "PM Entry Form",
-        //       link: "/admin/attendance/pmu-upload",
-        //     },
-        //     {
-        //       type: "sub-module",
-        //       icon: ArrowBigRight,
-        //       title: "View Attendance",
-        //       link: "/admin/attendance/view",
-        //     },
-        //   ],
-        // },
+       
         {
           type: "module",
           icon: ArrowBigRight,
           title: "Plan Of Action",
           submodules: [
-            // {
-            //   type: "sub-module",
-            //   icon: ArrowBigRight,
-            //   title: "KPI-POA(Trial)",
-            //   link: "/admin/yf/plan-of-action",
-            // },
+         
             {
               type: "sub-module",
               icon: ArrowBigRight,
@@ -964,7 +896,7 @@ export const getSidebarItems = (user) => {
             {
               type: "sub-module",
               icon: ArrowBigRight,
-              title: "YF Insight",
+              title: " Insight",
               link: "/admin/young-fellow-insight",
             },
           ],
@@ -1054,7 +986,7 @@ export const getSidebarItems = (user) => {
           {
             type: "sub-module",
             icon: ArrowBigRight,
-            title: "View YF POA Reports",
+            title: "View PRA POA Reports",
             link: "/admin/yf/poa1-data",
           },
           {
@@ -1072,51 +1004,17 @@ export const getSidebarItems = (user) => {
            {
             type: "sub-module",
             icon: ArrowBigRight,
-            title: "YF POA Defaulters List ",
+            title: " PRA POA Defaulters List ",
             link: "/admin/yf/poa-report",
           },
-          // {
-          //   type: "sub-module",
-          //   icon: ArrowBigRight,
-          //   title: "YF POA Submission Status ",
-          //   link: "/admin/soepr/pOAreport",
-          // },
-          // {
-          //   type: "sub-module",
-          //   icon: ArrowBigRight,
-          //   title: "View SPC POA Reports",
-          //   link: "/admin/yf/poa1-data",
-          // },
+        
           {
             type: "sub-module",
             icon: ArrowBigRight,
             title: "SPC POA Defaulters List ",
             link: "/admin/spc/poa-report",
           },
-          // {
-          //   type: "sub-module",
-          //   icon: ArrowBigRight,
-          //   title: "YF POA Submission Status ",
-          //   link: "/admin/soepr/pOAreport",
-          // },
-          // {
-          //   type: "sub-module",
-          //   icon: ArrowBigRight,
-          //   title: "View SPC POA Reports",
-          //   link: "/admin/yf/poa1-data",
-          // },
-          // {
-          //   type: "sub-module",
-          //   icon: ArrowBigRight,
-          //   title: "SPC POA Defaulters List ",
-          //   link: "/admin/spc/poa-report",
-          // },
-          // {
-          //   type: "sub-module",
-          //   icon: ArrowBigRight,
-          //   title: "SPC POA Submission Status ",
-          //   link: "/admin/soepr/pOAreport",
-          // },
+
         ],
       },
       {
@@ -1145,32 +1043,7 @@ export const getSidebarItems = (user) => {
           },
         ],
       },
-      // {
-      //   type: "module",
-      //   icon: ArrowBigRight,
-      //   title: "PMU",
-      //   submodules: [
-         
-      //     {
-      //       type: "sub-module",
-      //       icon: ArrowBigRight,
-      //       title: "PMU POA Reports",
-      //       link: "/admin/soepr/poa1-data",
-      //     },
-      //     {
-      //       type: "sub-module",
-      //       icon: ArrowBigRight,
-      //       title: "POA Defaulters List ",
-      //       link: "/admin/soepr/poa-report",
-      //     },
-      //     {
-      //       type: "sub-module",
-      //       icon: ArrowBigRight,
-      //       title: "POA Submission Status ",
-      //       link: "/admin/soepr/pOAreport",
-      //     },
-      //   ],
-      // },
+    
       {
         type: "module",
         icon: ArrowBigRight,
