@@ -46,6 +46,7 @@ function Layout() {
     <>
       {/* {headerToRender} */}
       <Header />
+      <HeaderPGP />
       <ScrollToTop />
       <ScrollToTopButton />
       <Outlet />
